@@ -1,27 +1,27 @@
 include(FetchContent)
 
-function(freertos_fetch)
+function(freertos_fetch_kernel)
     FetchContent_Declare(
-        FreeRTOS
+        FreeRTOSKernel
         GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Kernel
         GIT_TAG        V10.4.1-kernel-only
         GIT_PROGRESS   TRUE
     )
-    set(FREERTOS FreeRTOS)
-    string(TOLOWER ${FREERTOS} FREERTOS_L)
+    set(FREERTOS_KERNEL FreeRTOSKernel)
+    string(TOLOWER ${FREERTOS_KERNEL} FREERTOS_KERNEL_L)
 
     if(FREERTOS_KERNEL_PATH)
         message(INFO "FREERTOS_KERNEL_PATH specified, skipping fetch")
     endif()
 
 
-    FetchContent_GetProperties(FREERTOS POPULATED FREERTOS_POPULATED)
-    if(NOT CUBE_POPULATED)
-        message("Cloning FreeRTOS")
+    FetchContent_GetProperties(FREERTOS_KERNEL POPULATED FREERTOS_KERNEL_POPULATED)
+    if(NOT FREERTOS_KERNEL_POPULATED)
+        message("Cloning FreeRTOS Kerne")
         set(FETCHCONTENT_QUIET FALSE) # To see progress
-        FetchContent_Populate(${FREERTOS})
+        FetchContent_Populate(${FREERTOS_KERNEL})
     endif()
 
-    set(FREERTOS_KERNEL_PATH ${${FREERTOS_L}_SOURCE_DIR} PARENT_SCOPE)
-    message("End function: Path = ${FREERTOS_KERNEL_PATH}, source=${${FREERTOS_L}_SOURCE_DIR}")
+    set(FREERTOS_KERNEL_PATH ${${FREERTOS_KERNEL_L}_SOURCE_DIR} PARENT_SCOPE)
+    message("End function: Path = ${FREERTOS_KERNEL_PATH}, source=${${FREERTOS_KERNEL_L}_SOURCE_DIR}")
 endfunction()
