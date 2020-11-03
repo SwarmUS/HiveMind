@@ -5,7 +5,6 @@ set(LIB_SOURCES
 )
 
 set(LIB_HEADERS
-    FreeRTOSConfig.h
 )
 
 add_library(${LIB_NAME} INTERFACE)
