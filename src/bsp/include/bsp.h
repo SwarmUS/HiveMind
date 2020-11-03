@@ -1,10 +1,15 @@
 #ifndef __BSP_H_
 #define __BSP_H_
 
-#define BSP_TEST 4;
-
-void init_chip();
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void blinky();
 
+void initGPIO();
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
 #endif // __BSP_H_

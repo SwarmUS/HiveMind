@@ -8,7 +8,6 @@
 
 int main(void) {
 
-  int test = BSP_TEST;
   blinky();
   vTaskStartScheduler();
   for (;;)
