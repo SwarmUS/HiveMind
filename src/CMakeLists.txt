@@ -1,5 +1,3 @@
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32_gcc.cmake)
-
 freertos_fetch_kernel()
 stm32_fetch_cmsis(F4)
 stm32_fetch_hal(F4)
@@ -18,7 +16,7 @@ set(PROJECT_SOURCES
     main.c
 )
 
-add_executable(stm32-freertos.elf ${PROJECT_SOURCES} stm32f4xx_hal_conf.h)
+add_executable(stm32-freertos.elf ${PROJECT_SOURCES})
 target_link_libraries(stm32-freertos.elf PRIVATE
     # Provided libraries
     FreeRTOS::Timers
