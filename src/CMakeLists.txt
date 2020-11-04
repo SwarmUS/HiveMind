@@ -12,3 +12,12 @@ target_link_libraries(stm32-freertos.elf
        SwarmUS::HiveMind::BSP 
 )
 
+target_compile_options(stm32-freertos.elf
+    PUBLIC
+        $<$<C_COMPILER_ID:GNU>:--specs=nosys.specs>
+)
+target_link_options(stm32-freertos.elf
+    PUBLIC
+        $<$<C_COMPILER_ID:GNU>:--specs=nosys.specs>
+)
+
