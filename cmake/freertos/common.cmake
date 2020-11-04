@@ -17,7 +17,7 @@ function(freertos_fetch_kernel)
 
     FetchContent_GetProperties(FREERTOS_KERNEL POPULATED FREERTOS_KERNEL_POPULATED)
     if(NOT FREERTOS_KERNEL_POPULATED)
-        message("Cloning FreeRTOS Kerne")
+        message("Cloning FreeRTOS Kernel")
         set(FETCHCONTENT_QUIET FALSE) # To see progress
         FetchContent_Populate(${FREERTOS_KERNEL})
     endif()
