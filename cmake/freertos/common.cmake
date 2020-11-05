@@ -23,5 +23,4 @@ function(freertos_fetch_kernel)
     endif()
 
     set(FREERTOS_KERNEL_PATH ${${FREERTOS_KERNEL_L}_SOURCE_DIR} PARENT_SCOPE)
-    message("End function: Path = ${FREERTOS_KERNEL_PATH}, source=${${FREERTOS_KERNEL_L}_SOURCE_DIR}")
 endfunction()

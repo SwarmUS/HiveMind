@@ -21,3 +21,12 @@ target_link_options(stm32-freertos.elf
         $<$<C_COMPILER_ID:GNU>:--specs=nosys.specs>
 )
 
+# Tests
+#
+#
+
+option(PACKAGE_TESTS "Build the tests" ON)
+if(PACKAGE_TESTS)
+    googletest_fetch()
+    enable_testing()
+endif()
