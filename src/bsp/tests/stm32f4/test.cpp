@@ -1,3 +1,11 @@
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-TEST(sample_test_case, sample_test) { EXPECT_EQ(1, 1); }
+
+class HalTestFixture : public testing::Test {
+
+};
+
+TEST_F(HalTestFixture, Register_Read_Address1_Returns1) {
+    ASSERT_EQ(1, 2);
+}
+
