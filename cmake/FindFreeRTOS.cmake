@@ -58,6 +58,23 @@ if(NOT (TARGET FreeRTOS::Timers))
     target_link_libraries(FreeRTOS::Timers INTERFACE FreeRTOS)
 endif()
 
+if(NOT (TARGET FreeRTOS::POSIX))
+    find_path(FreeRTOS_POSIX_PATH
+        NAMES portmacro.h
+        PATHS "${FREERTOS_KERNEL_PATH}/portable/ThirdParty/GCC/Posix"
+        NO_DEFAULT_PATH
+    )
+
+    add_library(FreeRTOS::POSIX INTERFACE IMPORTED)
+    target_link_libraries(FreeRTOS::POSIX INTERFACE FreeRTOS)
+    target_sources(FreeRTOS::POSIX INTERFACE 
+        "${FreeRTOS_POSIX_PATH}/port.c" 
+        "${FreeRTOS_POSIX_PATH}/utils/wait_for_event.c"
+    )
+    target_include_directories(FreeRTOS::POSIX INTERFACE "${FreeRTOS_POSIX_PATH}")
+
+endif()
+
 foreach(HEAP ${FreeRTOS_HEAPS})
     if(NOT (TARGET FreeRTOS::Heap::${HEAP}))
         add_library(FreeRTOS::Heap::${HEAP} INTERFACE IMPORTED)

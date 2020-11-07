@@ -6,23 +6,21 @@ set(PROJECT_SOURCES
 )
 
 
-if (CMAKE_CROSSCOMPILING)
-    add_executable(stm32-freertos.elf ${PROJECT_SOURCES})
+add_executable(stm32-freertos.elf ${PROJECT_SOURCES})
 
-    target_link_libraries(stm32-freertos.elf
-        PRIVATE
-        SwarmUS::HiveMind::BSP 
-    )
+target_link_libraries(stm32-freertos.elf
+    PRIVATE
+    SwarmUS::HiveMind::BSP 
+)
 
-    target_compile_options(stm32-freertos.elf
-        PUBLIC
-            $<$<C_COMPILER_ID:GNU>:--specs=nosys.specs>
-    )
-    target_link_options(stm32-freertos.elf
-        PUBLIC
-            $<$<C_COMPILER_ID:GNU>:--specs=nosys.specs>
-    )
-endif()
+target_compile_options(stm32-freertos.elf
+    PUBLIC
+        $<${COMPILE_STM32}:--specs=nosys.specs>
+)
+target_link_options(stm32-freertos.elf
+    PUBLIC
+        $<${COMPILE_STM32}:--specs=nosys.specs>
+)
 
 # Tests
 #
