@@ -5,4 +5,17 @@ find_program(CMAKE_C_COMPILER NAMES ${STM32_TARGET_TRIPLET}-gcc PATHS ${TOOLCHAI
 find_program(CMAKE_CXX_COMPILER NAMES ${STM32_TARGET_TRIPLET}-g++ PATHS ${TOOLCHAIN_BIN_PATH})
 find_program(CMAKE_ASM_COMPILER NAMES ${STM32_TARGET_TRIPLET}-gcc PATHS ${TOOLCHAIN_BIN_PATH})
 
+add_compile_options(
+    --specs=nosys.specs
+    -mcpu=cortex-m4 
+    -mfpu=fpv4-sp-d16 
+    -mfloat-abi=hard
+)
+add_link_options(
+    --specs=nosys.specs
+    -mcpu=cortex-m4 
+    -mfpu=fpv4-sp-d16
+    -mfloat-abi=hard
+)
+
 include(stm32/common)
