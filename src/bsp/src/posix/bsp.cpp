@@ -3,20 +3,17 @@
 #include <FreeRTOS.h>
 #include <FreeRTOSConfig.h>
 
+#include <stdio.h>
 #include <task.h>
 #include <timers.h>
-#include <stdio.h>
 
 void blinky() {
-  for (;;) {
+  while (1) {
+    printf("Light blinking\n");
     vTaskDelay(500);
-    printf("WOW");
   }
 }
 
-void initGPIO() {
+void initGPIO() {}
 
-}
-
-void init_chip() {
-}
+void init_chip() {}

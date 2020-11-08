@@ -16,7 +16,7 @@ add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
 
 find_package(FreeRTOS COMPONENTS
-            ARM_CM4F
+            NONE
             REQUIRED)
 
 target_include_directories(${LIB_NAME}

@@ -6,11 +6,13 @@
 
 #include <bsp.h>
 
-int main(void) {
+#include <stdio.h>
 
-  blinky();
+int main(void) {
+  xTaskCreate(blinky, "blinky", configMINIMAL_STACK_SIZE * 4, NULL,
+              tskIDLE_PRIORITY + 1, NULL);
   vTaskStartScheduler();
-  for (;;)
+  while (1)
     ;
 
   return 0;
@@ -22,7 +24,7 @@ void vApplicationIdleHook(void) {}
 
 void vApplicationMallocFailedHook(void) {
   taskDISABLE_INTERRUPTS();
-  for (;;)
+  while (1)
     ;
 }
 
@@ -31,6 +33,6 @@ void vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName) {
   (void)pxTask;
 
   taskDISABLE_INTERRUPTS();
-  for (;;)
+  while (1)
     ;
 }

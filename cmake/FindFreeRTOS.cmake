@@ -58,22 +58,6 @@ if(NOT (TARGET FreeRTOS::Timers))
     target_link_libraries(FreeRTOS::Timers INTERFACE FreeRTOS)
 endif()
 
-if(NOT (TARGET FreeRTOS::POSIX))
-    find_path(FreeRTOS_POSIX_PATH
-        NAMES portmacro.h
-        PATHS "${FREERTOS_KERNEL_PATH}/portable/ThirdParty/GCC/Posix"
-        NO_DEFAULT_PATH
-    )
-
-    add_library(FreeRTOS::POSIX INTERFACE IMPORTED)
-    target_link_libraries(FreeRTOS::POSIX INTERFACE FreeRTOS)
-    target_sources(FreeRTOS::POSIX INTERFACE 
-        "${FreeRTOS_POSIX_PATH}/port.c" 
-        "${FreeRTOS_POSIX_PATH}/utils/wait_for_event.c"
-    )
-    target_include_directories(FreeRTOS::POSIX INTERFACE "${FreeRTOS_POSIX_PATH}")
-
-endif()
 
 foreach(HEAP ${FreeRTOS_HEAPS})
     if(NOT (TARGET FreeRTOS::Heap::${HEAP}))
@@ -84,32 +68,63 @@ foreach(HEAP ${FreeRTOS_HEAPS})
 endforeach()
 
 foreach(PORT ${FreeRTOS_FIND_COMPONENTS})
-    find_path(FreeRTOS_${PORT}_PATH
-        NAMES portmacro.h
-        PATHS "${FREERTOS_KERNEL_PATH}/portable/GCC/${PORT}"
-        NO_DEFAULT_PATH
-    )
-    list(APPEND FreeRTOS_INCLUDE_DIRS "${FreeRTOS_${PORT}_PATH}")
-    
-    find_file(FreeRTOS_${PORT}_SOURCE
-        NAMES port.c
-        PATHS "${FreeRTOS_${PORT}_PATH}"
-        NO_DEFAULT_PATH
-    )
-    if(NOT (TARGET FreeRTOS::${PORT}))
-        add_library(FreeRTOS::${PORT} INTERFACE IMPORTED)
-        target_link_libraries(FreeRTOS::${PORT} INTERFACE FreeRTOS)
-        target_sources(FreeRTOS::${PORT} INTERFACE "${FreeRTOS_${PORT}_SOURCE}")
-        target_include_directories(FreeRTOS::${PORT} INTERFACE "${FreeRTOS_${PORT}_PATH}")
-    endif()
-    
-    if(FreeRTOS_${PORT}_PATH AND 
-       FreeRTOS_${PORT}_SOURCE AND 
-       FreeRTOS_COMMON_INCLUDE AND
-       FreeRTOS_SOURCE_DIR)
-       set(FreeRTOS_${PORT}_FOUND TRUE)
+    if(${PORT} STREQUAL NONE)
+        set(FreeRTOS_${PORT}_FOUND TRUE)
     else()
-       set(FreeRTOS_${PORT}_FOUND FALSE)
+        if(${PORT} STREQUAL POSIX)
+            find_path(FreeRTOS_${PORT}_PATH
+                NAMES portmacro.h
+                PATHS "${FREERTOS_KERNEL_PATH}/portable/ThirdParty/GCC/Posix"
+                NO_DEFAULT_PATH
+            )
+
+            list(APPEND FreeRTOS_INCLUDE_DIRS "${FreeRTOS_${PORT}_PATH}")
+            find_file(FreeRTOS_${PORT}_PORT_SOURCE
+                NAMES port.c
+                PATHS ${FreeRTOS_${PORT}_PATH}
+                NO_DEFAULT_PATH
+            )
+
+            find_file(FreeRTOS_${PORT}_EVENT_SOURCE
+                NAMES wait_for_event.c
+                PATHS ${FreeRTOS_${PORT}_PATH}/utils
+                NO_DEFAULT_PATH
+            )
+            if(FreeRTOS_${PORT}_PORT_SOURCE)
+                set(FreeRTOS_${PORT}_SOURCE ${FreeRTOS_${PORT}_PORT_SOURCE} ${FreeRTOS_${PORT}_EVENT_SOURCE})
+            endif()
+            
+        else() # Default port for gcc
+            find_path(FreeRTOS_${PORT}_PATH
+                NAMES portmacro.h
+                PATHS "${FREERTOS_KERNEL_PATH}/portable/GCC/${PORT}"
+                NO_DEFAULT_PATH
+            )
+            list(APPEND FreeRTOS_INCLUDE_DIRS "${FreeRTOS_${PORT}_PATH}")
+
+            find_file(FreeRTOS_${PORT}_SOURCE
+                NAMES port.c
+                PATHS "${FreeRTOS_${PORT}_PATH}"
+                NO_DEFAULT_PATH
+            )
+
+        endif()
+
+        if(NOT (TARGET FreeRTOS::${PORT}))
+            add_library(FreeRTOS::${PORT} INTERFACE IMPORTED)
+            target_link_libraries(FreeRTOS::${PORT} INTERFACE FreeRTOS)
+            target_sources(FreeRTOS::${PORT} INTERFACE "${FreeRTOS_${PORT}_SOURCE}")
+            target_include_directories(FreeRTOS::${PORT} INTERFACE "${FreeRTOS_${PORT}_PATH}")
+        endif()
+
+        if(FreeRTOS_${PORT}_PATH AND 
+            FreeRTOS_${PORT}_SOURCE AND 
+            FreeRTOS_COMMON_INCLUDE AND
+            FreeRTOS_SOURCE_DIR)
+            set(FreeRTOS_${PORT}_FOUND TRUE)
+        else()
+            set(FreeRTOS_${PORT}_FOUND FALSE)
+        endif()
     endif()
 endforeach()
 

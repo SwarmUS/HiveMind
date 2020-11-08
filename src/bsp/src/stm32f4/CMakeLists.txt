@@ -26,8 +26,6 @@ find_package(HAL COMPONENTS
 add_library(${LIB_NAME} ${LIB_SOURCES} ${LIB_PRIVATE_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
-message("HELLO ${BSP_INCLUDE_DIRECTORY}")
-
 target_include_directories(${LIB_NAME} 
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
