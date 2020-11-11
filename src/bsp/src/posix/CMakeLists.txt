@@ -16,7 +16,7 @@ add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 target_include_directories(${LIB_NAME} 
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-        ../../include
+        ${BSP_CMAKE_DIR}/include
 )
 
 

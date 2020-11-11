@@ -5,9 +5,9 @@ set(TEST_SOURCES
 add_executable(test_stm32 ${TEST_SOURCES})
 
 target_link_libraries(test_stm32
-    gtest
-    gtest_main
-    gmock
+        gtest
+        gtest_main
+        gmock
 )
 
 add_test(NAME test_stm32

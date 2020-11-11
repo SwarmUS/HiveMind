@@ -7,14 +7,14 @@ The HiveMind is the embedded application that runs on SwarmUS HiveBoard and uses
 ```
 mkdir build
 cd build
-cmake ../
+cmake ..
 make
 ```
 
-### Dependencies
+If you want to build for the embedded target, use the toolchain on your cmake build.
 
-You can avoid cloning all the dependencies to speed up the first cmake call by specifying the path. 
 ```
-cmake -DCMAKE_BUILD_TYPE=Debug -DCFREERTOS_KENEL_PATH=PATH -DCSTM32_CUBE_${FAMILY}_PATH=PATH <more_definition> ../
-make
+cmake -D CMAKE_TOOLCHAIN_FILE=../cmake/stm32_gcc.cmake .. 
 ```
+
+Note that as of now, the tests can only be build on the native target

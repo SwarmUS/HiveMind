@@ -68,6 +68,7 @@ foreach(HEAP ${FreeRTOS_HEAPS})
 endforeach()
 
 foreach(PORT ${FreeRTOS_FIND_COMPONENTS})
+
     if(${PORT} STREQUAL NONE)
         set(FreeRTOS_${PORT}_FOUND TRUE)
     else()

@@ -11,6 +11,7 @@ add_compile_options(
     -mfpu=fpv4-sp-d16 
     -mfloat-abi=hard
 )
+
 add_link_options(
     --specs=nosys.specs
     -mcpu=cortex-m4 
@@ -19,3 +20,6 @@ add_link_options(
 )
 
 include(stm32/common)
+
+set(COMPILE_STM32 1)
+set(ENABLE_TESTS OFF)

@@ -1,7 +1,6 @@
-#include "bsp.h"
+#include "bsp/bsp.h"
 
 #include <FreeRTOS.h>
-#include <FreeRTOSConfig.h>
 
 #include <stm32f4xx_hal.h>
 #include <task.h>

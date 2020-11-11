@@ -4,7 +4,7 @@
 #include <task.h>
 #include <timers.h>
 
-#include <bsp.h>
+#include <bsp/bsp.h>
 
 #include <stdio.h>
 

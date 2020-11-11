@@ -12,6 +12,6 @@ find_package(FreeRTOS COMPONENTS POSIX REQUIRED)
 
 target_link_libraries(${LIB_NAME}
     INTERFACE
-        FreeRTOS::POSIX
         Threads::Threads
+        FreeRTOS::POSIX
 )
