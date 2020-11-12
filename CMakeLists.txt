@@ -7,7 +7,7 @@ option(ENABLE_TESTS "Build the tests" ON)
 option(ALL_WARNINGS "Enables all warnings" 1)
 option(WARNING_ERROR "Enables warnings as errors" 1)
 
-set(COMPILE_STM32 0)
+set(COMPILE_STM32_F429ZI 0)
 
 set(WARNING_FLAG -Wall -Wextra -Wconversion -Wsign-conversion -pedantic)
 set(ERROR_WARNING_FLAG -Werror)

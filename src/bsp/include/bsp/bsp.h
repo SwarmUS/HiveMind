@@ -7,7 +7,7 @@ extern "C" {
 
 void blinky();
 
-void initGPIO();
+void init_chip();
 
 #ifdef __cplusplus
 }

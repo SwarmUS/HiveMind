@@ -15,11 +15,11 @@ stm32_fetch_hal(F4)
 stm32_fetch_cube(F4)
 
 find_package(CMSIS COMPONENTS
-            STM32F407VG 
+            STM32F429ZI
             REQUIRED)
 
 find_package(HAL COMPONENTS 
-            STM32F407VG
+            STM32F429ZI
             REQUIRED)
 
 
@@ -38,6 +38,9 @@ PUBLIC
         # Defined libraries
         SwarmUS::HiveMind::FreeRTOS
 
+        # Need to be public for the linker script
+        CMSIS::STM32::F429ZI
+
 PRIVATE
         #stm32
         STM32::NoSys
@@ -45,6 +48,11 @@ PRIVATE
         HAL::STM32::F4::RCC
         HAL::STM32::F4::GPIO
         HAL::STM32::F4::CORTEX
-        CMSIS::STM32::F407VG
+
 )
 
+
+add_custom_target(
+    flash
+    COMMAND openocd  -f ${OPENOCD_CFG_PATH} -c 'program $<TARGET_FILE:${EXECUTABLE_NAME}> verify exit'
+)

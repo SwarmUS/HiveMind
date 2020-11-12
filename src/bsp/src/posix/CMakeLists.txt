@@ -26,3 +26,7 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::FreeRTOS
 )
 
+add_custom_target(
+    run
+    COMMAND $<TARGET_FILE:${EXECUTABLE_NAME}>
+)
