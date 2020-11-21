@@ -24,7 +24,7 @@ include(stm32/common)
 
 set(COMPILE_STM32_F429ZI 1)
 set(ENABLE_TESTS OFF)
-set(OPENOCD_CFG_PATH ${STM32_CMAKE_DIR}/openocd/stm32_f4.cfg)
+set(OPENOCD_CFG_PATH ${PROJECT_SOURCE_DIR}/openocd/stm32_f4/stm32_f4.cfg)
 
 
 

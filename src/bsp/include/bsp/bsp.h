@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-void blinky();
+void blinky(void *);
 
 void init_chip();
 

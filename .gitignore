@@ -1,4 +1,11 @@
-build/
 .idea/
-cmake-build-debug/
 .vscode/
+
+cmake-build-debug/
+
+.builds/
+build/
+
+.cache/
+
+.dir-locals.el

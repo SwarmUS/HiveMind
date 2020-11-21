@@ -7,13 +7,11 @@
 #include <task.h>
 #include <timers.h>
 
-void blinky() {
+void blinky(void *ptr) {
   while (1) {
     printf("Light blinking\n");
     vTaskDelay(500);
   }
 }
-
-void initGPIO() {}
 
 void init_chip() {}

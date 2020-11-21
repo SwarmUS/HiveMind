@@ -4,12 +4,10 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 option(CROSS_COMPILE "Cross compile to stm32" 0)
 option(ENABLE_TESTS "Build the tests" ON)
-option(ALL_WARNINGS "Enables all warnings" 1)
-option(WARNING_ERROR "Enables warnings as errors" 1)
 
 set(COMPILE_STM32_F429ZI 0)
 
-set(WARNING_FLAG -Wall -Wextra -Wconversion -Wsign-conversion -pedantic)
+set(WARNING_FLAG -Wall -Wextra -Wconversion -Wsign-conversion -Wno-unused-variable -pedantic)
 set(ERROR_WARNING_FLAG -Werror)
 
 include(freertos/common)

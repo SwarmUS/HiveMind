@@ -7,11 +7,11 @@
 #include <timers.h>
 
 // STM32F4-Discovery green led - PD12
-#define LED_PORT                GPIOB
-#define LED_PIN                 GPIO_PIN_7
-#define LED_PORT_CLK_ENABLE     __HAL_RCC_GPIOB_CLK_ENABLE
+#define LED_PORT GPIOB
+#define LED_PIN GPIO_PIN_7
+#define LED_PORT_CLK_ENABLE __HAL_RCC_GPIOB_CLK_ENABLE
 
-void blinky() {
+void blinky(void *) {
   for (;;) {
     vTaskDelay(500);
     HAL_GPIO_TogglePin(LED_PORT, LED_PIN);

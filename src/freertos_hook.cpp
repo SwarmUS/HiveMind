@@ -2,22 +2,10 @@
 #include <FreeRTOSConfig.h>
 
 #include <task.h>
-#include <timers.h>
 
-#include <bsp/bsp.h>
-
-#include <stdio.h>
-
-int main(void) {
-  init_chip();
-  xTaskCreate(blinky, "blinky", configMINIMAL_STACK_SIZE * 4, NULL,
-              tskIDLE_PRIORITY + 1, NULL);
-  vTaskStartScheduler();
-  while (1)
-    ;
-
-  return 0;
-}
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void vApplicationTickHook(void) {}
 
@@ -37,3 +25,7 @@ void vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName) {
   while (1)
     ;
 }
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus

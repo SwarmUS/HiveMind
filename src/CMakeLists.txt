@@ -7,7 +7,9 @@ add_subdirectory(bsp)
 add_subdirectory(freertos)
 
 set(PROJECT_SOURCES
-    main.c
+    main.cpp
+
+    freertos_hook.cpp
 )
 
 add_executable(${EXECUTABLE_NAME} ${PROJECT_SOURCES})
@@ -15,4 +17,12 @@ target_link_libraries(${EXECUTABLE_NAME}
     PUBLIC
     SwarmUS::HiveMind::BSP 
 )
+target_compile_options(${EXECUTABLE_NAME}
+  PRIVATE
+  ${WARNING_FLAG}
+)
 
+target_link_options(${EXECUTABLE_NAME}
+  PRIVATE
+  ${WARNING_FLAG}
+)

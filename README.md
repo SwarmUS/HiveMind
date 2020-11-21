@@ -26,7 +26,7 @@ Note that as of now, the tests can only be built on the native target.
 Install [OpenOCD](http://openocd.org/). Then you can flash using the provided `make flash`command or directly via openocd.
 
 ```
-openocd -f cmake/openocd/stm32_f4.cfg -c "program build/src/hive-mind.elf verify reset exit"
+openocd -f ./openocd/stm32_f4/stm32_f4.cfg -c "program build/src/hive-mind.elf verify reset exit"
 ```
 
 ## Running tests
@@ -36,5 +36,5 @@ You can use `make test` or `ctest` to launch the tests.
 OpenOCD has a gdb server that defaults to port 3333, you can then connect to it using arm-none-eabi-gdb. The server can be launched using this command
 
 ```
-openocd -f ./cmake/openocd/stm32_f4.cfg -c init -c \"reset init\"
+openocd -f ./openocd/stm32_f4/stm32_f4.cfg -c init -c \"reset init\"
 ```
