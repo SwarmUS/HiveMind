@@ -2,13 +2,12 @@ cmake_minimum_required(VERSION 3.13)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-option(CROSS_COMPILE "Cross compile to stm32" 0)
+option(ENABLE_WARNINGS "Enable all warnings on build" ON)
 option(ENABLE_TESTS "Build the tests" ON)
 
 set(COMPILE_STM32_F429ZI 0)
 
 set(WARNING_FLAG -Wall -Wextra -Wconversion -Wsign-conversion -Wno-unused-variable -pedantic)
-set(ERROR_WARNING_FLAG -Werror)
 
 include(freertos/common)
 

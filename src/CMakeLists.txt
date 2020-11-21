@@ -19,10 +19,10 @@ target_link_libraries(${EXECUTABLE_NAME}
 )
 target_compile_options(${EXECUTABLE_NAME}
   PRIVATE
-  ${WARNING_FLAG}
+  $<$<BOOL:${ENABLE_WARNINGS}>:${WARNING_FLAG}>
 )
 
 target_link_options(${EXECUTABLE_NAME}
   PRIVATE
-  ${WARNING_FLAG}
+  $<$<BOOL:${ENABLE_WARNINGS}>:${WARNING_FLAG}>
 )
