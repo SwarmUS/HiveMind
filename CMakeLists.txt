@@ -9,6 +9,8 @@ set(COMPILE_STM32_F429ZI 0)
 
 set(WARNING_FLAG -Wall -Wextra -Wconversion -Wsign-conversion -Wno-unused-variable -pedantic)
 
+set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=-*,readability-*")
+
 include(freertos/common)
 
 project(hive-mind CXX C ASM)
