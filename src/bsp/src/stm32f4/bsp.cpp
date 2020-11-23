@@ -12,27 +12,27 @@
 #define LED_PORT_CLK_ENABLE __HAL_RCC_GPIOB_CLK_ENABLE
 
 void blinky(void *) {
-  for (;;) {
-    vTaskDelay(500);
-    HAL_GPIO_TogglePin(LED_PORT, LED_PIN);
-  }
+    for (;;) {
+        vTaskDelay(500);
+        HAL_GPIO_TogglePin(LED_PORT, LED_PIN);
+    }
 }
 
 void initGPIO() {
-  GPIO_InitTypeDef GPIO_Config;
+    GPIO_InitTypeDef GPIO_Config;
 
-  GPIO_Config.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_Config.Pull = GPIO_NOPULL;
-  GPIO_Config.Speed = GPIO_SPEED_FREQ_HIGH;
+    GPIO_Config.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_Config.Pull = GPIO_NOPULL;
+    GPIO_Config.Speed = GPIO_SPEED_FREQ_HIGH;
 
-  GPIO_Config.Pin = LED_PIN;
+    GPIO_Config.Pin = LED_PIN;
 
-  LED_PORT_CLK_ENABLE();
-  HAL_GPIO_Init(LED_PORT, &GPIO_Config);
+    LED_PORT_CLK_ENABLE();
+    HAL_GPIO_Init(LED_PORT, &GPIO_Config);
 }
 
 void init_chip() {
-  SystemInit();
-  HAL_Init();
-  initGPIO();
+    SystemInit();
+    HAL_Init();
+    initGPIO();
 }

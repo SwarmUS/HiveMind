@@ -9,7 +9,7 @@ set(LIB_HEADERS
     include/bsp/bsp.h
 )
 
-add_library(${LIB_NAME}  ${LIB_HEADERS})
+add_library(${LIB_NAME} STATIC ${LIB_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
 target_include_directories(${LIB_NAME}

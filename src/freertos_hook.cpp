@@ -12,18 +12,18 @@ void vApplicationTickHook(void) {}
 void vApplicationIdleHook(void) {}
 
 void vApplicationMallocFailedHook(void) {
-  taskDISABLE_INTERRUPTS();
-  while (1)
-    ;
+    taskDISABLE_INTERRUPTS();
+    while (1)
+        ;
 }
 
 void vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName) {
-  (void)pcTaskName;
-  (void)pxTask;
+    (void)pcTaskName;
+    (void)pxTask;
 
-  taskDISABLE_INTERRUPTS();
-  while (1)
-    ;
+    taskDISABLE_INTERRUPTS();
+    while (1)
+        ;
 }
 
 #ifdef __cplusplus

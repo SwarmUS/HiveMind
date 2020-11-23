@@ -8,10 +8,10 @@
 #include <timers.h>
 
 void blinky(void *ptr) {
-  while (1) {
-    printf("Light blinking\n");
-    vTaskDelay(500);
-  }
+    while (1) {
+        printf("Light blinking\n");
+        vTaskDelay(500);
+    }
 }
 
 void init_chip() {}
