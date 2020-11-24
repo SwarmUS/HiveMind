@@ -10,7 +10,6 @@
 
 void blinky(void* ptr) {
     while (true) {
-        void* wow = malloc(5);
         const int sleep = 500;
         printf("Light blinking\n");
         vTaskDelay(sleep);
