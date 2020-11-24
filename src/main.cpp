@@ -1,7 +1,6 @@
 #include <FreeRTOS.h>
 #include <FreeRTOSConfig.h>
 
-#include <bits/stdint-uintn.h>
 #include <task.h>
 #include <timers.h>
 

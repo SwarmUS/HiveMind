@@ -42,7 +42,7 @@ target_link_libraries(${LIB_NAME}
 
 
 # Removing warnings from freertos compilation on executable target
-if (NOT ENABLE_EXTERNAL_WARNINGS) 
+if (DISABLE_EXTERNAL_WARNINGS) 
     # We need to do this since the FreeRTOS::LIB_NAME are interfaces and not static libraries
     # Using GLOB_RECURSE is bad practice, but since it's an external lib and we don't add files during dev, it's fine
     file(GLOB_RECURSE ALL_FREERTOS_FILES

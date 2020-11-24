@@ -14,7 +14,7 @@ function(googletest_get_populate)
     endif()
 
     # Disable warnings only if external warnings is enabled
-    if(NOT ENABLE_EXTERNAL_WARNINGS)
+    if(DISABLE_EXTERNAL_WARNINGS)
         target_compile_options(gtest PRIVATE -w)
         set_target_properties(gtest PROPERTIES CXX_CLANG_TIDY "")
 
