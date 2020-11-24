@@ -11,8 +11,8 @@
 #define LED_PIN GPIO_PIN_7
 #define LED_PORT_CLK_ENABLE __HAL_RCC_GPIOB_CLK_ENABLE
 
-void blinky(void *) {
-    for (;;) {
+void blinky(void*) {
+    while (true) {
         vTaskDelay(500);
         HAL_GPIO_TogglePin(LED_PORT, LED_PIN);
     }

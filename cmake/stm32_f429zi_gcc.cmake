@@ -20,7 +20,7 @@ add_link_options(
     -mfloat-abi=hard
 )
 
-include(stm32/common)
+include(${PROJECT_SOURCE_DIR}/cmake/stm32/common.cmake)
 
 set(COMPILE_STM32_F429ZI 1)
 set(ENABLE_TESTS OFF)

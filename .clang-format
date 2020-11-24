@@ -8,3 +8,4 @@ AlwaysBreakTemplateDeclarations: true
 PenaltyReturnTypeOnItsOwnLine: 10000
 BreakConstructorInitializers: AfterColon
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
+PointerAlignment: Left

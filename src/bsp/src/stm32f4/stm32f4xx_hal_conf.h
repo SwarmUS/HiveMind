@@ -86,9 +86,10 @@ extern "C" {
 
 /* ########################## HSE/HSI Values adaptation ##################### */
 /**
- * @brief Adjust the value of External High Speed oscillator (HSE) used in your application.
- *        This value is used by the RCC HAL module to compute the system frequency
- *        (when HSE is used as system clock source, directly or through the PLL).
+ * @brief Adjust the value of External High Speed oscillator (HSE) used in your
+ * application. This value is used by the RCC HAL module to compute the system
+ * frequency (when HSE is used as system clock source, directly or through the
+ * PLL).
  */
 #if !defined(HSE_VALUE)
 #define HSE_VALUE 25000000U /*!< Value of the External oscillator in Hz */
@@ -100,8 +101,9 @@ extern "C" {
 
 /**
  * @brief Internal High Speed oscillator (HSI) value.
- *        This value is used by the RCC HAL module to compute the system frequency
- *        (when HSI is used as system clock source, directly or through the PLL).
+ *        This value is used by the RCC HAL module to compute the system
+ * frequency (when HSI is used as system clock source, directly or through the
+ * PLL).
  */
 #if !defined(HSI_VALUE)
 #define HSI_VALUE 16000000U /*!< Value of the Internal oscillator in Hz */
@@ -113,8 +115,8 @@ extern "C" {
 #if !defined(LSI_VALUE)
 #define LSI_VALUE 32000U /*!< LSI Typical Value in Hz */
 #endif /* LSI_VALUE */ /*!< Value of the Internal Low Speed oscillator in Hz                       \
-                            The real value may vary depending on the variations                    \
-                            in voltage and temperature. */
+                            The real value may vary depending on the                               \
+                          variations in voltage and temperature. */
 /**
  * @brief External Low Speed oscillator (LSE) value.
  */
@@ -128,8 +130,8 @@ extern "C" {
 
 /**
  * @brief External clock source for I2S peripheral
- *        This value is used by the I2S HAL module to compute the I2S clock source
- *        frequency, this source is inserted directly through I2S_CKIN pad.
+ *        This value is used by the I2S HAL module to compute the I2S clock
+ * source frequency, this source is inserted directly through I2S_CKIN pad.
  */
 #if !defined(EXTERNAL_CLOCK_VALUE)
 #define EXTERNAL_CLOCK_VALUE 12288000U /*!< Value of the External oscillator in Hz*/
@@ -227,8 +229,8 @@ extern "C" {
 
 /* Section 3: Common PHY Registers */
 
-#define PHY_BCR ((uint16_t)0x0000) /*!< Transceiver Basic Control Register   */
-#define PHY_BSR ((uint16_t)0x0001) /*!< Transceiver Basic Status Register    */
+#define PHY_BCR ((uint16_t)0x0000) /*!< Transceiver Basic Control Register */
+#define PHY_BSR ((uint16_t)0x0001) /*!< Transceiver Basic Status Register */
 
 #define PHY_RESET ((uint16_t)0x8000) /*!< PHY Reset */
 #define PHY_LOOPBACK ((uint16_t)0x4000) /*!< Select loop-back mode */
@@ -479,9 +481,9 @@ extern "C" {
  *         If expr is true, it returns no value.
  * @retval None
  */
-#define assert_param(expr) ((expr) ? (void)0U : assert_failed((uint8_t *)__FILE__, __LINE__))
+#define assert_param(expr) ((expr) ? (void)0U : assert_failed((uint8_t*)__FILE__, __LINE__))
 /* Exported functions ------------------------------------------------------- */
-void assert_failed(uint8_t *file, uint32_t line);
+void assert_failed(uint8_t* file, uint32_t line);
 #else
 #define assert_param(expr) ((void)0U)
 #endif /* USE_FULL_ASSERT */

@@ -1,0 +1,14 @@
+---
+Checks:          'clang-analyzer-*,modernize-*,bigprone-*,readability-*,portability-*,-modernize-use-nullptr,-modernize-use-trailing-return-type'
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+FormatStyle:     'file'
+User:            xavier
+CheckOptions:
+  - key:             modernize-loop-convert.MinConfidence
+    value:           reasonable
+  - key:             modernize-use-nullptr
+    value:           '0'
+...
+
