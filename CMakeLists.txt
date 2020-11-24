@@ -17,9 +17,10 @@ set(COMPILE_STM32_F429ZI 0)
 project(hive-mind CXX C ASM)
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
-# Warning flags constatnt
+# Warning flags constants
 set(WARNING_FLAG -Wall -Wextra -Wconversion -Wsign-conversion -Wno-unused-variable -Wpedantic)
 set(WARNING_AS_ERROR_FLAG -Werror)
+set(SANITIZE_FLAG -fsanitize=address,undefined,leak)
 
 # Includes
 include(clang-tools/clang-tidy)

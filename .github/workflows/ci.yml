@@ -16,6 +16,7 @@ jobs:
         mkdir -p build
         cd build
         cmake ..
+
     - name: build
       run: |
         cd build
@@ -26,6 +27,7 @@ jobs:
       run: |
         cd build
         ctest -V
+
     - name: format
       run: |
         cd build
@@ -35,11 +37,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
+    - name: Setup Toolchain
+      uses: fiam/arm-none-eabi-gcc@master
+      with:
+        release: '9-2020-q2' # The arm-none-eabi-gcc release to use.
+
     - name: prepare
       run: |
         mkdir -p build
         cd build
         cmake -D CMAKE_TOOLCHAIN_FILE=../cmake/stm32_f429zi_gcc.cmake ..
+
     - name: build
       run: |
         cd build

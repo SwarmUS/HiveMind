@@ -19,6 +19,7 @@ target_compile_options(${EXECUTABLE_NAME}
     PRIVATE
         $<$<BOOL:${ENABLE_WARNINGS}>:${WARNING_FLAG}>
         $<$<BOOL:${ENABLE_WARNINGS_AS_ERROR}>:${WARNING_AS_ERROR_FLAG}>
+        ${SANITIZE_FLAG}
 )
 
 add_subdirectory(bsp)
