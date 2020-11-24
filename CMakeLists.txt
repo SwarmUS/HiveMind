@@ -20,7 +20,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 # Warning flags constants
 set(WARNING_FLAG -Wall -Wextra -Wconversion -Wsign-conversion -Wno-unused-variable -Wpedantic)
 set(WARNING_AS_ERROR_FLAG -Werror)
-set(SANITIZE_FLAG -fsanitize=address,undefined,leak)
 
 # Includes
 include(clang-tools/clang-tidy)
