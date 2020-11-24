@@ -17,4 +17,14 @@ if(CLANG_FORMAT)
         -style=file
         ${ALL_SOURCE_FILES})
 
+    # target for CI
+    add_custom_target(
+        check-format
+        COMMAND !
+        clang-format
+        -output-replacements-xml
+        -style=file
+        ${ALL_SOURCE_FILES}
+        | grep -q "replacement offset")
+
 endif()

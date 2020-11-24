@@ -1,0 +1,46 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-native:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: prepare
+      run: |
+        mkdir -p build
+        cd build
+        cmake ..
+    - name: build
+      run: |
+        cd build
+        make -j
+
+    # Tests and format are run on native build
+    - name: tests
+      run: |
+        cd build
+        ctest -V
+    - name: format
+      run: |
+        cd build
+        make check-format
+
+  build-stm32:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: prepare
+      run: |
+        mkdir -p build
+        cd build
+        cmake -D CMAKE_TOOLCHAIN_FILE=../cmake/stm32_f429zi_gcc.cmake ..
+    - name: build
+      run: |
+        cd build
+        make -j
