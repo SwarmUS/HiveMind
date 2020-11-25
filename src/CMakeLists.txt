@@ -23,3 +23,9 @@ target_compile_options(${EXECUTABLE_NAME}
 
 add_subdirectory(bsp)
 add_subdirectory(freertos)
+
+
+# Removing warnings from freertos compilation on executable target
+if (DISABLE_EXTERNAL_WARNINGS) 
+    disable_freertos_warnings()
+endif()
