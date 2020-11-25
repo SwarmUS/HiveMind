@@ -16,13 +16,14 @@ if(CLANG_FORMAT)
         -style=file
         ${ALL_SOURCE_FILES})
 
-    # target for CI
+    # target for CI, --dry-run and Werror is not supported on clang-format 9
     add_custom_target(
         check-format
         COMMAND !
         clang-format
         -output-replacements-xml
         -style=file
-        ${ALL_SOURCE_FILES})
+        ${ALL_SOURCE_FILES}
+        | grep -q "replacement offset")
 
 endif()
