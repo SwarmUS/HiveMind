@@ -9,3 +9,6 @@ PenaltyReturnTypeOnItsOwnLine: 10000
 BreakConstructorInitializers: AfterColon
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 PointerAlignment: Left
+
+# Clang version mismatch fixes
+AlignTrailingComments: false
