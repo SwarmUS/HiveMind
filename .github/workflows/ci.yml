@@ -31,6 +31,7 @@ jobs:
     - name: format
       run: |
         cd build
+        clang-format --version
         make check-format
 
   build-stm32:

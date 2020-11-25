@@ -1,5 +1,4 @@
 find_program(CLANG_FORMAT "clang-format")
-
 if(CLANG_FORMAT)
     set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 

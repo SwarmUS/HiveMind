@@ -37,6 +37,8 @@ macro(disable_freertos_warnings)
         ${FreeRTOS_SOURCE_DIR}/*.[h]pp
         ${FreeRTOS_SOURCE_DIR}/*.[h]
     )
+    # Source files directory on target is not supported in cmake 3.16, only in 3.18
+    # So we need to make a marcro instead.
     set_source_files_properties(
         ${ALL_FREERTOS_FILES}
         PROPERTIES COMPILE_FLAGS
