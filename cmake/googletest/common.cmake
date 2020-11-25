@@ -13,7 +13,7 @@ function(googletest_get_populate)
         add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
     endif()
 
-    # Disable warnings only if external warnings is enabled
+    # Disable compiler warnings and clang-tidy
     if(DISABLE_EXTERNAL_WARNINGS)
         target_compile_options(gtest PRIVATE -w)
         set_target_properties(gtest PROPERTIES CXX_CLANG_TIDY "")
