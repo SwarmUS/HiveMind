@@ -32,6 +32,7 @@ jobs:
       run: |
         cd build
         clang-format --version
+        clang-format -output-replacements-xml -style=file ../src/main.cpp
         make check-format
 
   build-stm32:
