@@ -23,7 +23,6 @@ if(CLANG_FORMAT)
         clang-format
         -output-replacements-xml
         -style=file
-        ${ALL_SOURCE_FILES}
-        | grep -q "replacement offset")
+        ${ALL_SOURCE_FILES})
 
 endif()
