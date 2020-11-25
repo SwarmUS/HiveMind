@@ -30,6 +30,7 @@ jobs:
 
     - name: format
       run: |
+        python ./run-clang-format.py -r src
         cd build
         make check-format
 
