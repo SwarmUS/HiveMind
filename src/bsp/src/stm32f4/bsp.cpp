@@ -12,7 +12,6 @@
 #define LED_PORT_CLK_ENABLE __HAL_RCC_GPIOB_CLK_ENABLE
 
 void blinky(void* param) {
-    (void)param;
     const int toggle_delay = 500;
     while (true) {
         vTaskDelay(toggle_delay);

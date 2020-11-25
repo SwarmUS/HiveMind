@@ -4,7 +4,6 @@
 #include <FreeRTOSConfig.h>
 
 #include <cstdio>
-#include <cstdlib>
 #include <task.h>
 #include <timers.h>
 
