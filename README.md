@@ -35,7 +35,7 @@ openocd -f ./tools/openocd/stm32_f4/stm32_f4.cfg -c "program build/src/hive-mind
 You can use `make test` or `ctest` to launch the tests.
 
 ## Formatting
-You can run `make format` to match the formatting convention used.
+You can run `make format` and `make check-format` to match the formatting convention used.
 
 ## Debugging
 OpenOCD has a gdb server that defaults to port 3333, you can then connect to it using arm-none-eabi-gdb. The server can be launched using this command
