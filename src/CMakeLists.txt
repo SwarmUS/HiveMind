@@ -17,6 +17,7 @@ target_link_libraries(${EXECUTABLE_NAME}
       SwarmUS::HiveMind::Logger
 )
 
+add_subdirectory(bittybuzz)
 add_subdirectory(bsp)
 add_subdirectory(logger)
 add_subdirectory(freertos)
