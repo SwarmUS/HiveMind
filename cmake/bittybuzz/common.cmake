@@ -2,8 +2,9 @@ include(FetchContent)
 
 function(bittybuzz_fetch)
     FetchContent_Declare(
-    bittybuzz
-    GIT_REPOSITORY https://github.com/SwarmUS/BittyBuzz.git
+        bittybuzz
+        GIT_REPOSITORY https://github.com/SwarmUS/BittyBuzz.git
+        GIT_PROGRESS   TRUE
     )
 
     FetchContent_GetProperties(bittybuzz)
