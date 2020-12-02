@@ -17,12 +17,13 @@ jobs:
         cd build
         cmake ..
 
+    # Builds program and documentation
     - name: build
       run: |
         cd build
         make -j
 
-    # Tests and format are run on native build
+    # Tests and format run on native build
     - name: tests
       run: |
         cd build
@@ -32,6 +33,7 @@ jobs:
       run: |
         cd build
         make check-format
+
 
   build-stm32:
     runs-on: ubuntu-latest
