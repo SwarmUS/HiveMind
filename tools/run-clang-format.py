@@ -1,27 +1,4 @@
 #!/usr/bin/env python
-#
-# MIT License
-# Copyright (c) 2017 Guillaume Papin
-
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-#
-# See https://github.com/Sarcasm/run-clang-format for more information
 
 """A wrapper script around clang-format, suitable for linting multiple files
 and to use for continuous integration.
@@ -104,7 +81,8 @@ def list_files(files, recursive=False, extensions=None, exclude=None):
                         for x in dnames
                         if not fnmatch.fnmatch(os.path.join(dirpath, x), pattern)
                     ]
-                    fpaths = [x for x in fpaths if not fnmatch.fnmatch(x, pattern)]
+                    fpaths = [
+                        x for x in fpaths if not fnmatch.fnmatch(x, pattern)]
                 for f in fpaths:
                     ext = os.path.splitext(f)[1][1:]
                     if ext in extensions:
@@ -146,7 +124,8 @@ def run_clang_format_diff_wrapper(args, file):
     except DiffError:
         raise
     except Exception as e:
-        raise UnexpectedError("{}: {}: {}".format(file, e.__class__.__name__, e), e)
+        raise UnexpectedError("{}: {}: {}".format(
+            file, e.__class__.__name__, e), e)
 
 
 def run_clang_format_diff(args, file):
@@ -403,7 +382,8 @@ def main():
         pool = None
     else:
         pool = multiprocessing.Pool(njobs)
-        it = pool.imap_unordered(partial(run_clang_format_diff_wrapper, args), files)
+        it = pool.imap_unordered(
+            partial(run_clang_format_diff_wrapper, args), files)
         pool.close()
     while True:
         try:
