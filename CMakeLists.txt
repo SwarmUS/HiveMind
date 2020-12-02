@@ -24,6 +24,7 @@ set(WARNING_AS_ERROR_FLAG -Werror)
 # Includes
 include(clang-tools/clang-tidy)
 include(clang-tools/clang-format)
+include(doc/doxygen)
 
 # Testing
 if(ENABLE_TESTS)
