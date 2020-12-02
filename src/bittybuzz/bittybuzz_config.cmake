@@ -32,5 +32,5 @@ option(BBZ_BYTEWISE_ASSIGNMENT "Enables byte per byte assignment." OFF)
 # There is no implementation of the swarmlist broadcast on bittybuzz for now
 option(BBZ_DISABLE_SWARMLIST_BROADCASTS "Whether we disable the broadcasting of our swarmlist to neighboring robots." ON)
 
-# TODO: Check if we need it, I don't think we will compile the code in this project 
+# TODO: Check if we need it, I don't think we will compile the code in this project so the flag may not be necessary
 option(BBZ_DISABLE_PY_BEHAV "Disables Python behaviors of closures (make closure behave like in JavaScript)." OFF)
