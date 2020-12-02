@@ -1,8 +1,6 @@
 set(LIB_NAME "swarmus-hivemind-freertos-posix")
 set(LIB_ALIAS "SwarmUS::HiveMind::FreeRTOS::Platform")
 
-
-
 add_library(${LIB_NAME} INTERFACE)
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
