@@ -7,6 +7,8 @@ add_subdirectory(src)
 
 set(LIB_HEADERS
     include/bsp/bsp.h
+    include/bsp/ui.h
+    include/bsp/ui_impl.h
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS})

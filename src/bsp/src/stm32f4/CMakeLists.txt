@@ -2,11 +2,11 @@ set(LIB_NAME "swarmus-hivemind-bsp-stm32")
 set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform")
 
 set(LIB_SOURCES
-    bsp.cpp
+    src/bsp.cpp
 )
 
 set(LIB_PRIVATE_HEADERS
-    stm32f4xx_hal_conf.h
+    src/stm32f4xx_hal_conf.h
 )
 
 

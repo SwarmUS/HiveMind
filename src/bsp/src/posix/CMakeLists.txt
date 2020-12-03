@@ -2,7 +2,8 @@ set(LIB_NAME "swarmus-hivemind-bsp-posix")
 set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform")
 
 set(LIB_SOURCES
-    bsp.cpp
+    src/bsp.cpp
+    src/ui_impl.cpp
 )
 
 set(LIB_PRIVATE_HEADERS

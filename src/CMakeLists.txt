@@ -23,6 +23,7 @@ target_compile_options(${EXECUTABLE_NAME}
 
 add_subdirectory(bsp)
 add_subdirectory(freertos)
+add_subdirectory(logging)
 
 
 # Removing warnings from freertos compilation on executable target

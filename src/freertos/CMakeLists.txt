@@ -1,4 +1,4 @@
-set(LIB_NAME "freertos")
+set(LIB_NAME "swarmus-hivemind-freertos")
 set(LIB_ALIAS "SwarmUS::HiveMind::FreeRTOS")
 
 include(freertos/common)
