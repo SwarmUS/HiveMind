@@ -37,6 +37,9 @@ You can use `make test` or `ctest` to launch the tests.
 ## Formatting
 You can run `make format` and `make check-format` to match the formatting convention used.
 
+## Doc
+The doc will be built on `make all` target, if you need to only rebuild the doc, use `make doc`.
+
 ## Debugging
 OpenOCD has a gdb server that defaults to port 3333, you can then connect to it using arm-none-eabi-gdb. The server can be launched using this command
 
