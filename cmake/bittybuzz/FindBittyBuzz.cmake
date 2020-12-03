@@ -14,7 +14,6 @@ find_path(
 # Sources and headers are located at the same place
 list(APPEND BittyBuzz_INCLUDE_DIRS "${BittyBuzz_SOURCE_DIR}")
 
-message("HELLO THERE; ${BittyBuzz_SOURCE_DIR}/bittybuzz/config.h")
 # bzzinclude.h include files from "bittybuzz/" and not directly from folder
 configure_file(${BittyBuzz_SOURCE_DIR}/config.h.in ${BittyBuzz_SOURCE_DIR}/bittybuzz/config.h @ONLY)
 configure_file(${BittyBuzz_SOURCE_DIR}/bbzenums.h ${BittyBuzz_SOURCE_DIR}/bittybuzz/bbzenums.h COPYONLY)
@@ -59,20 +58,19 @@ set(BBZ_SOURCES
 )
 
 
-add_library(bittybuzz STATIC ${BBZ_SOURCES} ${BBZ_HEADERS})
-add_library(BittyBuzz ALIAS bittybuzz)
+add_library(BittyBuzz STATIC ${BBZ_SOURCES} ${BBZ_HEADERS})
 
-target_include_directories(bittybuzz
+target_include_directories(BittyBuzz
     PUBLIC
         ${BittyBuzz_INCLUDE_DIRS}
 )
 
 # Disable compiler warnings and clang-tidy
 if(DISABLE_EXTERNAL_WARNINGS)
-    target_compile_options(bittybuzz PRIVATE -w)
-    set_target_properties(bittybuzz PROPERTIES CXX_CLANG_TIDY "")
+    target_compile_options(BittyBuzz PRIVATE -w)
+    set_target_properties(BittyBuzz PROPERTIES CXX_CLANG_TIDY "")
 endif()
 
-find_package_handle_standard_args(bittybuzz
+find_package_handle_standard_args(BittyBuzz
     REQUIRED_VARS BittyBuzz_SOURCE_DIR
 )

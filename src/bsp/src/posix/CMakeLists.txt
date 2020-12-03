@@ -7,7 +7,6 @@ set(LIB_SOURCES
 )
 
 set(LIB_PRIVATE_HEADERS
-
 )
 
 add_library(${LIB_NAME} ${LIB_SOURCES} ${LIB_PRIVATE_HEADERS})
