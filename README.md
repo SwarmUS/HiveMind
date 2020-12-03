@@ -5,10 +5,10 @@ The HiveMind is the embedded application that runs on SwarmUS HiveBoard and uses
 ## Requirements
 
 - [Gcc](https://gcc.gnu.org/) or [arm-gcc-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) for the embedded targets.
-- clang-tools to match the style and warnings used in the project
-  -[clang-tidy](https://clang.llvm.org/extra/clang-tidy/) for additional compiler warnings
-  -[clang-format](https://clang.llvm.org/docs/ClangFormat.html) to match the coding style
-- [doxygen](https://github.com/doxygen/doxygen) and [graphviz](https://gitlab.com/graphviz/graphviz/) to generate the documentation
+- [Clang tools](https://clang.llvm.org/docs/ClangTools.html) are used to match the style and warnings used in the project
+    -[clang-format](https://clang.llvm.org/docs/ClangFormat.html) to match the coding style
+    -[clang-tidy](https://clang.llvm.org/extra/clang-tidy/) for additional compiler warnings
+- [Doxygen](https://github.com/doxygen/doxygen) and [graphviz](https://gitlab.com/graphviz/graphviz/) to generate the documentation
 
 
 ## Building
