@@ -2,6 +2,15 @@
 
 The HiveMind is the embedded application that runs on SwarmUS HiveBoard and uses the HiveSight.
 
+## Requirements
+
+- [Gcc](https://gcc.gnu.org/) or [arm-gcc-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) for the embedded targets.
+- clang-tools to match the style and warnings used in the project
+  -[clang-tidy](https://clang.llvm.org/extra/clang-tidy/) for additional compiler warnings
+  -[clang-format](https://clang.llvm.org/docs/ClangFormat.html) to match the coding style
+- [doxygen](https://github.com/doxygen/doxygen) and [graphviz](https://gitlab.com/graphviz/graphviz/) to generate the documentation
+
+
 ## Building
 
 If you have clang-tidy installed, the build will use it for static analysis.
@@ -15,7 +24,6 @@ make
 ```
 
 If you want to build for the embedded target, use the toolchain on your cmake build.
-Note that you need arm-gcc-none-eabi available in your path, you can find it [here](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
 
 ```
 cmake -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=../cmake/stm32_f429zi_gcc.cmake .. 
@@ -38,6 +46,7 @@ You can use `make test` or `ctest` to launch the tests.
 You can run `make format` and `make check-format` to match the formatting convention used.
 
 ## Doc
+The documentation is built using [doxygen](https://github.com/doxygen/doxygen).
 The doc will be built on `make all` target, if you need to only rebuild the doc, use `make doc`.
 
 ## Debugging

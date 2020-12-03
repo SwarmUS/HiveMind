@@ -36,5 +36,9 @@ if (DOXYGEN_FOUND)
         COMMENT "Generate HiveMind documentation")
 
 else()
-    message("Doxygen need to be installed to generate the doxygen documentation")
+    message(STATUS "Doxygen need to be installed to generate the doxygen documentation")
+
+    if(ENABLE_ERROR_ON_MISSING_TOOL)
+        message(FATAL_ERROR "Install doxygen or disable ENABLE_ERROR_ON_MISSING_TOOL ")
+    endif()
 endif()
