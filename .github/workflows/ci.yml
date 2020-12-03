@@ -30,6 +30,7 @@ jobs:
 
     - name: check-format
       run: |
+        sudo apt-get install -y doxygen
         cd build
         make check-format
 
