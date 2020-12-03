@@ -5,6 +5,7 @@ The HiveMind is the embedded application that runs on SwarmUS HiveBoard and uses
 ## Requirements
 
 - [Gcc](https://gcc.gnu.org/) or [arm-gcc-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) for the embedded targets.
+
 - [Clang tools](https://clang.llvm.org/docs/ClangTools.html) are used to match the style and warnings used in the project
     -[clang-format](https://clang.llvm.org/docs/ClangFormat.html) to match the coding style
     -[clang-tidy](https://clang.llvm.org/extra/clang-tidy/) for additional compiler warnings
@@ -22,6 +23,13 @@ cd build
 cmake -D CMAKE_BUILD_TYPE=Debug ..
 make
 ```
+
+If you don't want to use the build tools and warnings, you can disable them
+```
+cmake -DENABLE_ERROR_ON_MISSING_TOOL=OFF -DENABLE_WARNINGS_AS_ERROR=OFF -DENABLE_WARNINGS=OFF -DENABLE_CLANG_TIDY_CHECK=OFF ..
+
+```
+
 
 If you want to build for the embedded target, use the toolchain on your cmake build.
 
