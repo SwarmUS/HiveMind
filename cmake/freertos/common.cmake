@@ -1,5 +1,9 @@
 include(FetchContent)
 
+# Adding modules
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} PARENT_SCOPE)
+
 function(freertos_fetch_kernel)
     FetchContent_Declare(
         FreeRTOSKernel

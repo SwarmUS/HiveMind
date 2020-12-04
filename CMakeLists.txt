@@ -7,6 +7,7 @@ option(ENABLE_WARNINGS "Enable all warnings on build" ON)
 option(ENABLE_WARNINGS_AS_ERROR "Enable all warnings as errors" ON)
 option(ENABLE_TESTS "Build the tests" ON)
 option(ENABLE_CLANG_TIDY_CHECK "Enable clang tidy check on compilation" ON)
+option(ENABLE_ERROR_ON_MISSING_TOOL "If a tools (clang-tidy, clang-format, doxygen) is not disabled and not installed, throws error" ON)
 
 option(DISABLE_EXTERNAL_WARNINGS "Disables warnings from exernal libs (gtest, freertos, etc)" ON)
 
@@ -24,6 +25,7 @@ set(WARNING_AS_ERROR_FLAG -Werror)
 # Includes
 include(clang-tools/clang-tidy)
 include(clang-tools/clang-format)
+include(doc/doxygen)
 
 # Testing
 if(ENABLE_TESTS)

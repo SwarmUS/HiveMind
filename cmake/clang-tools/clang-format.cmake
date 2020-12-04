@@ -19,4 +19,10 @@ if(CLANG_FORMAT)
         --style=file
         ${SOURCE_DIR})
 
+else()
+    message(STATUS "clang-format NOT found!")
+
+    if(ENABLE_ERROR_ON_MISSING_TOOL)
+        message(FATAL_ERROR "Install clang-format or disable ENABLE_ERROR_ON_MISSING_TOOL ")
+    endif()
 endif()
