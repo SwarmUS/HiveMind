@@ -8,3 +8,4 @@ else()
         message(FATAL_ERROR "Install clang-tidy or disable ENABLE_ERROR_ON_MISSING_TOOL ")
     endif()
 endif()
+

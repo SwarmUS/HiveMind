@@ -6,12 +6,15 @@ include(freertos/common)
 freertos_fetch_kernel()
 add_subdirectory(platforms)
 
+set(LIB_SOURCE
+    freertos_hook.cpp
+ )
 
 set(LIB_HEADERS
     include/freertos/FreeRTOSConfig.h
 )
 
-add_library(${LIB_NAME} STATIC ${LIB_HEADERS})
+add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
 

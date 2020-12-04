@@ -27,3 +27,5 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::FreeRTOS
 )
 
+
+add_subdirectory(tests)
