@@ -31,7 +31,7 @@ class Logger {
      * @return Returns Ok on success, LowLevel if the level provided is lower than the current one
      *and Error if an error occured
      */
-    virtual int log(LogLevel level, const char* format, ...) = 0;
+    virtual LogRet log(LogLevel level, const char* format, ...) = 0;
 };
 
 #endif // __LOGGER_H_

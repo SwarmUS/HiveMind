@@ -15,7 +15,7 @@ class LoggerImpl : public Logger {
     LoggerImpl(LogLevel level, UI* ui);
     ~LoggerImpl() override {}
 
-    int log(LogLevel level, const char* format, ...) override;
+    LogRet log(LogLevel level, const char* format, ...) override;
 
   private:
     SemaphoreHandle_t m_semaphore;
