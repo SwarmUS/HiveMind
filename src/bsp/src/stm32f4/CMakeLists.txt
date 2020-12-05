@@ -6,7 +6,7 @@ set(LIB_SOURCES
 )
 
 set(LIB_PRIVATE_HEADERS
-    src/stm32f4xx_hal_conf.h
+    stm32f4xx_hal_conf.h
 )
 
 

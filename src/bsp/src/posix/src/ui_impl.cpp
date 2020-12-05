@@ -1,7 +1,10 @@
 #include "bsp/ui_impl.h"
 #include <stdarg.h>
+#include <stdio.h>
 
-int UIImpl::printf(const char* format, ...) {
+UIImpl::UIImpl() {}
+
+int UIImpl::print(const char* format, ...) {
 
     va_list args;
     va_start(args, format);

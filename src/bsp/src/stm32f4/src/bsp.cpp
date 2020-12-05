@@ -3,6 +3,7 @@
 #include <FreeRTOS.h>
 
 #include <stm32f4xx_hal.h>
+#include <stm32f4xx_hal_uart.h>
 #include <task.h>
 #include <timers.h>
 
@@ -32,8 +33,10 @@ void initGPIO() {
     HAL_GPIO_Init(LED_PORT, &GPIO_Config);
 }
 
+UART_HandleTypeDef huart_print;
 void init_chip() {
     SystemInit();
     HAL_Init();
     initGPIO();
+    HAL_UART_Init(huart_print);
 }

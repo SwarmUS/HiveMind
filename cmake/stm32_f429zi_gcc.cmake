@@ -20,7 +20,11 @@ add_link_options(
     -mfloat-abi=hard
 )
 
+
 include(stm32/common)
+# Adding module
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/stm32)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH})
 
 set(COMPILE_STM32_F429ZI 1)
 set(ENABLE_TESTS OFF)

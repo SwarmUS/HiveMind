@@ -23,7 +23,7 @@ class UI {
      * @return Matches the standard printf return. The total number of character returned or a
      *negative number on error
      */
-    virtual int printf(const char* format, ...) = 0;
+    virtual int print(const char* format, ...) = 0;
 };
 
 #endif // __UI_H_

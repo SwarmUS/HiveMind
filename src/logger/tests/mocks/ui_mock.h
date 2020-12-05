@@ -10,7 +10,7 @@ class UIMock : public UI {
     ~UIMock() {}
 
     // GMock des not support variable arguments, so lets mock it ourselves
-    int printf(const char* format, ...) override {
+    int print(const char* format, ...) override {
         va_list args;
         va_start(args, format);
         print_called++;
