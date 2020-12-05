@@ -4,7 +4,11 @@ set(TEST_SOURCES
     logger_unittests.cpp
 )
 
-add_executable(${TEST_NAME} ${TEST_SOURCES})
+set(TEST_HEADERS
+    mocks/ui_mock.h
+)
+
+add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})
 
 target_link_libraries(${TEST_NAME}
     PUBLIC
@@ -13,6 +17,8 @@ target_link_libraries(${TEST_NAME}
         gmock
 
         SwarmUS::HiveMind::BSP
+        SwarmUS::HiveMind::Logger
+        SwarmUS::HiveMind::FreeRTOS
 )
 
 add_test(NAME ${TEST_NAME}

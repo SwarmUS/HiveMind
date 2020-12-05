@@ -8,7 +8,6 @@ set(PROJECT_SOURCES
 )
 
 
-
 add_executable(${EXECUTABLE_NAME} ${PROJECT_SOURCES})
 target_link_libraries(${EXECUTABLE_NAME}
     PUBLIC
@@ -23,7 +22,7 @@ target_compile_options(${EXECUTABLE_NAME}
 
 add_subdirectory(bsp)
 add_subdirectory(freertos)
-add_subdirectory(logging)
+add_subdirectory(logger)
 
 
 # Removing warnings from freertos compilation on executable target

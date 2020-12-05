@@ -5,10 +5,9 @@
 
 class UIImpl : public UI {
   public:
-    UIImpl();
-    ~UIImpl();
+    ~UIImpl() override{};
 
-    int printf(const char* format, ...);
+    int printf(const char* format, ...) override;
 };
 
 #endif // __UI_IMPL_H_

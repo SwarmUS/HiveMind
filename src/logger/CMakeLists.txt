@@ -1,15 +1,16 @@
 set(LIB_NAME "swarmus-hivemind-logger")
-set(LIB_ALIAS "SwarmUS::HiveMind::logger")
+set(LIB_ALIAS "SwarmUS::HiveMind::Logger")
 
 set(LIB_SOURCES
-    src/logger.cpp
+    src/logger_impl.cpp
 )
 
 set(LIB_HEADERS
-    include/logging/logger.h
+    include/logger/logger.h
+    include/logger/logger_impl.h
 )
 
-add_library(${LIB_NAME} STATIC ${LIB_HEADERS})
+add_library(${LIB_NAME} STATIC ${LIB_HEADERS} ${LIB_SOURCES})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
 target_include_directories(${LIB_NAME}
@@ -26,6 +27,5 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::BSP
         SwarmUS::HiveMind::FreeRTOS
 )
-
 
 add_subdirectory(tests)

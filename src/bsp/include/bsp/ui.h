@@ -9,8 +9,7 @@
  */
 class UI {
   public:
-    UI();
-    ~UI();
+    virtual ~UI(){};
 
     /**
      * @brief Provides an interface to print to the console or serial port.

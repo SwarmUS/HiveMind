@@ -6,7 +6,7 @@ include(freertos/common)
 freertos_fetch_kernel()
 add_subdirectory(platforms)
 
-set(LIB_SOURCE
+set(LIB_SOURCES
     freertos_hook.cpp
  )
 
