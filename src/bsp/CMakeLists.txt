@@ -26,8 +26,3 @@ target_link_libraries(${LIB_NAME}
     PUBLIC
         SwarmUS::HiveMind::BSP::Platform
 )
-
-
-if (ENABLE_TESTS)
-    add_subdirectory(tests)
-endif()
