@@ -13,8 +13,8 @@ int LoggerImpl::log(LogLevel level, const char* format, ...) {
         va_start(args, format);
         int ret_value = m_ui->printf(format, args);
         va_end(args);
-
-        return ret_value;
+        if (ret_value >= 0)
+            return 0;
     }
 
     return -1;

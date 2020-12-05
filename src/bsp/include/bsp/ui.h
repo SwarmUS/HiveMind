@@ -15,9 +15,13 @@ class UI {
      * @brief Provides an interface to print to the console or serial port.
      * The arguemnts and return values matches the standard printf library
      *
-     * @param format text to be written, can contain format specifiers that will be replace by
-     *values specified in the additionnal arguments.
+     * @param [in] format Text to be written, can contain format specifiers that will be replace by
+     *values specified in the additionnal arguments, matches the standard printf function
      *
+     * @param [in] ... Additionnal arguments for the format parameter
+     *
+     * @return Matches the standard printf return. The total number of character returned or a
+     *negative number on error
      */
     virtual int printf(const char* format, ...) = 0;
 };
