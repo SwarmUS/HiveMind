@@ -44,7 +44,8 @@ target_include_directories(${LIB_NAME}
 )
 
 target_link_libraries(${LIB_NAME}
-    PUBLIC
+    PUBLIC 
+        CMSIS::STM32::F429ZI
         STM32::NoSys
         HAL::STM32::F4::RCC
         HAL::STM32::F4::GPIO
