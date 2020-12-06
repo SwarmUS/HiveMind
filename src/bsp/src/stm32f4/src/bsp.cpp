@@ -33,10 +33,8 @@ void initGPIO() {
     HAL_GPIO_Init(LED_PORT, &GPIO_Config);
 }
 
-UART_HandleTypeDef huart_print;
 void init_chip() {
     SystemInit();
     HAL_Init();
     initGPIO();
-    HAL_UART_Init(huart_print);
 }

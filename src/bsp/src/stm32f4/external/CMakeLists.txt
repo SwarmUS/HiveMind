@@ -1,0 +1,5 @@
+if (${COMPILE_STM32_F429ZI})
+    add_subdirectory(stm32f429zi)
+else()
+    message(FATAL_ERROR "The current board is not supported")
+endif()
