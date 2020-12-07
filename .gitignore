@@ -10,3 +10,5 @@ build
 .cache/
 
 .dir-locals.el
+
+src/bsp/src/stm32f4/external/stm32f429zi/stm32f429zi.gpdsc

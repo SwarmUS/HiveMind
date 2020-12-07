@@ -8,6 +8,8 @@ set(LIB_SOURCES
     Core/Src/usart.c
     Core/Src/main.c
     Core/Src/gpio.c
+    Core/Src/usb_otg.c
+    Core/Src/eth.c
 )
 
 set(LIB_HEADERS
@@ -16,6 +18,8 @@ set(LIB_HEADERS
     Core/Inc/usart.h
     Core/Inc/main.h
     Core/Inc/gpio.h
+    Core/Inc/usb_otg.h
+    Core/Inc/eth.h
 )
 
 stm32_fetch_cmsis(F4)
@@ -49,7 +53,14 @@ target_link_libraries(${LIB_NAME}
         STM32::NoSys
         HAL::STM32::F4::RCC
         HAL::STM32::F4::GPIO
+        HAL::STM32::F4::LL_RCC
+        HAL::STM32::F4::LL_GPIO
         HAL::STM32::F4::CORTEX
+        HAL::STM32::F4::ETH
+        HAL::STM32::F4::UART
+        HAL::STM32::F4::PCD
+        HAL::STM32::F4::LL_USB
+
 )
 
 # Removing warnings and compile options
