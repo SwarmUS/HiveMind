@@ -11,8 +11,9 @@ set(PROJECT_SOURCES
 add_executable(${EXECUTABLE_NAME} ${PROJECT_SOURCES})
 target_link_libraries(${EXECUTABLE_NAME}
     PUBLIC
+      stm32f4-linker
+      #SwarmUS::HiveMind::BSP::Linker
       SwarmUS::HiveMind::BSP 
-      SwarmUS::HiveMind::BSP::Linker
       SwarmUS::HiveMind::FreeRTOS
 )
 target_compile_options(${EXECUTABLE_NAME}

@@ -78,6 +78,7 @@ void NMI_Handler(void)
   }
   /* USER CODE END NonMaskableInt_IRQn 1 */
 }
+#include "usart.h"
 
 /**
   * @brief This function handles Hard fault interrupt.
@@ -90,6 +91,8 @@ void HardFault_Handler(void)
   while (1)
   {
     /* USER CODE BEGIN W1_HardFault_IRQn 0 */
+    HAL_UART_Transmit(&huart3, (uint8_t*)"I love boobies\n", sizeof("I love boobies\n"),
+                  HAL_MAX_DELAY);
     /* USER CODE END W1_HardFault_IRQn 0 */
   }
 }
@@ -124,6 +127,8 @@ void BusFault_Handler(void)
   }
 }
 
+
+
 /**
   * @brief This function handles Undefined instruction or illegal state.
   */
@@ -135,6 +140,7 @@ void UsageFault_Handler(void)
   while (1)
   {
     /* USER CODE BEGIN W1_UsageFault_IRQn 0 */
+
     /* USER CODE END W1_UsageFault_IRQn 0 */
   }
 }

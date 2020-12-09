@@ -66,33 +66,31 @@ target_link_libraries(${LIB_NAME}
 )
 
 # Removing warnings and compile options
-target_compile_options(${LIB_NAME}
-    PRIVATE
-        -w
-)
+if(DISABLE_EXTERNAL_WARNINGS)
+    target_compile_options(${LIB_NAME}
+        PRIVATE
+            -w
+    )
+    set_target_properties(${LIB_NAME} PROPERTIES CXX_CLANG_TIDY "")
+endif()
 
-# Linker library
-add_library(test OBJECT
-        Core/Src/stm32f4xx_it.c)
-target_include_directories(test
-   PUBLIC
-        Core/Inc
-)
-target_link_libraries(test
-    PUBLIC
-        CMSIS::STM32::F429ZI
-        HAL::STM32::F4::RCC)
-
+# Create the final interface library
 add_library(stm32f4-linker INTERFACE)
 add_library(${LIB_BSP_LINKER_ALIAS} ALIAS stm32f4-linker) # Provide alias for linker options
-
 set_target_properties(CMSIS::STM32::F429ZI PROPERTIES IMPORTED_GLOBAL TRUE)
+
+target_include_directories(stm32f4-linker
+    INTERFACE
+        Core/Inc
+)
+
+target_sources(stm32f4-linker 
+    INTERFACE
+    Core/Src/stm32f4xx_it.c)
 
 target_link_libraries(stm32f4-linker
     INTERFACE
         CMSIS::STM32::F429ZI
         STM32::NoSys
-        test
-        
-)
+        HAL::STM32::F4::RCC)
 
