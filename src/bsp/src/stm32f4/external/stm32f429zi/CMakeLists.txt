@@ -4,7 +4,7 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::STM32F4")
 set(LIB_SOURCES
     Core/Src/stm32f4xx_hal_msp.c
     # Core/Src/system_stm32f4xx.c Already provided by CMSIS, no need for it
-    Core/Src/stm32f4xx_it.c
+    # Core/Src/stm32f4xx_it.c Handled by the linker lib
     Core/Src/usart.c
     Core/Src/main.c
     Core/Src/gpio.c
@@ -22,6 +22,12 @@ set(LIB_HEADERS
     Core/Inc/eth.h
 )
 
+# Sources that needs to be global on the project
+# Ex: interrupts
+set(GLOBAL_SOURCES
+    Core/Src/stm32f4xx_it.c
+)
+
 stm32_fetch_cmsis(F4)
 stm32_fetch_hal(F4)
 stm32_fetch_cube(F4)
@@ -35,6 +41,27 @@ find_package(HAL COMPONENTS
             REQUIRED)
 
 
+# Creating the interface library
+add_library(stm32f4-linker INTERFACE)
+add_library(${LIB_BSP_LINKER_ALIAS} ALIAS stm32f4-linker) # Provide alias for linker options
+set_target_properties(CMSIS::STM32::F429ZI PROPERTIES IMPORTED_GLOBAL TRUE)
+
+target_sources(stm32f4-linker
+    INTERFACE
+        ${GLOBAL_SOURCES})
+
+target_include_directories(stm32f4-linker
+    INTERFACE
+        Core/Inc
+)
+
+target_link_libraries(stm32f4-linker
+    INTERFACE
+        CMSIS::STM32::F429ZI
+        STM32::NoSys
+        HAL::STM32::F4::RCC)
+
+# Actual bsp library
 add_library(${LIB_NAME} 
     STATIC
         ${LIB_SOURCES}
@@ -63,6 +90,9 @@ target_link_libraries(${LIB_NAME}
         HAL::STM32::F4::PCD
         HAL::STM32::F4::LL_USB
 
+    PRIVATE
+        stm32f4-linker
+
 )
 
 # Removing warnings and compile options
@@ -73,24 +103,4 @@ if(DISABLE_EXTERNAL_WARNINGS)
     )
     set_target_properties(${LIB_NAME} PROPERTIES CXX_CLANG_TIDY "")
 endif()
-
-# Create the final interface library
-add_library(stm32f4-linker INTERFACE)
-add_library(${LIB_BSP_LINKER_ALIAS} ALIAS stm32f4-linker) # Provide alias for linker options
-set_target_properties(CMSIS::STM32::F429ZI PROPERTIES IMPORTED_GLOBAL TRUE)
-
-target_include_directories(stm32f4-linker
-    INTERFACE
-        Core/Inc
-)
-
-target_sources(stm32f4-linker 
-    INTERFACE
-    Core/Src/stm32f4xx_it.c)
-
-target_link_libraries(stm32f4-linker
-    INTERFACE
-        CMSIS::STM32::F429ZI
-        STM32::NoSys
-        HAL::STM32::F4::RCC)
 
