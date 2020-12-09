@@ -3,7 +3,7 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::STM32F4")
 
 set(LIB_SOURCES
     Core/Src/stm32f4xx_hal_msp.c
-    Core/Src/system_stm32f4xx.c
+    # Core/Src/system_stm32f4xx.c Already provided by CMSIS, no need for it
     Core/Src/stm32f4xx_it.c
     Core/Src/usart.c
     Core/Src/main.c
@@ -35,10 +35,12 @@ find_package(HAL COMPONENTS
             REQUIRED)
 
 
-add_library(${LIB_NAME}
-    ${LIB_SOURCES}
-    ${LIB_HEADERS}
+add_library(${LIB_NAME} 
+    STATIC
+        ${LIB_SOURCES}
+        ${LIB_HEADERS}
 )
+
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
         
 target_include_directories(${LIB_NAME} 
@@ -69,7 +71,28 @@ target_compile_options(${LIB_NAME}
         -w
 )
 
-# Provide alias for linker
+# Linker library
+add_library(test OBJECT
+        Core/Src/stm32f4xx_it.c)
+target_include_directories(test
+   PUBLIC
+        Core/Inc
+)
+target_link_libraries(test
+    PUBLIC
+        CMSIS::STM32::F429ZI
+        HAL::STM32::F4::RCC)
+
+add_library(stm32f4-linker INTERFACE)
+add_library(${LIB_BSP_LINKER_ALIAS} ALIAS stm32f4-linker) # Provide alias for linker options
+
 set_target_properties(CMSIS::STM32::F429ZI PROPERTIES IMPORTED_GLOBAL TRUE)
-add_library(SwarmUS::HiveMind::BSP::STM32F4::Linker ALIAS CMSIS::STM32::F429ZI)
+
+target_link_libraries(stm32f4-linker
+    INTERFACE
+        CMSIS::STM32::F429ZI
+        STM32::NoSys
+        test
+        
+)
 
