@@ -38,5 +38,5 @@ add_custom_target(
     COMMAND openocd  -f ${OPENOCD_CFG_PATH} -c 'program $<TARGET_FILE:${EXECUTABLE_NAME}> verify exit'
 )
 
-add_subdirectory(external)
+add_subdirectory(hal)
 
