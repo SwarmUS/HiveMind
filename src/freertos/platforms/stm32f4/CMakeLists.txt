@@ -13,4 +13,9 @@ target_link_libraries(${LIB_NAME}
         FreeRTOS::ARM_CM4F
 )
 
+target_include_directories(${LIB_NAME}
+    INTERFACE
+        include
+)
+
             

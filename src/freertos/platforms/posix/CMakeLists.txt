@@ -13,3 +13,8 @@ target_link_libraries(${LIB_NAME}
         Threads::Threads
         FreeRTOS::POSIX
 )
+
+target_include_directories(${LIB_NAME}
+    INTERFACE
+        include
+)

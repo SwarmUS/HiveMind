@@ -26,6 +26,7 @@ set(LIB_HEADERS
 # Ex: interrupts
 set(GLOBAL_SOURCES
     Core/Src/stm32f4xx_it.c
+    Core/Src/stm32f4xx_hal_timebase_tim.c
 )
 
 stm32_fetch_cmsis(F4)
@@ -58,8 +59,10 @@ target_include_directories(stm32f4-linker
 target_link_libraries(stm32f4-linker
     INTERFACE
         CMSIS::STM32::F429ZI
-        STM32::NoSys
-        HAL::STM32::F4::RCC)
+        HAL::STM32::F4
+        HAL::STM32::F4::TIM
+        HAL::STM32::F4::TIMEx
+        STM32::NoSys)
 
 # Actual bsp library
 add_library(${LIB_NAME} 

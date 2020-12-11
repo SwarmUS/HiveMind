@@ -41,7 +41,8 @@
  *----------------------------------------------------------*/
 
 #include <stdint.h>
-extern uint32_t SystemCoreClock;
+
+#include <freertos_platform_config.h>
 
 #define configUSE_PREEMPTION 1
 #define configUSE_IDLE_HOOK 1
@@ -119,11 +120,5 @@ header file. */
         for (;;)                                                                                   \
             ;                                                                                      \
     }
-
-/* Definitions that map the FreeRTOS port interrupt handlers to their CMSIS
-standard names. */
-#define vPortSVCHandler SVC_Handler
-#define xPortPendSVHandler PendSV_Handler
-#define xPortSysTickHandler SysTick_Handler
 
 #endif /* FREERTOS_CONFIG_H */
