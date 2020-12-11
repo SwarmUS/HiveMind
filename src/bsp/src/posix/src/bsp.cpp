@@ -7,8 +7,9 @@
 #include <task.h>
 #include <timers.h>
 
-void blinky(void* ptr) {
+void blinky(void* param) {
     while (true) {
+        void* param2 = param;
         const int sleep = 500;
         printf("Light blinking\n");
         vTaskDelay(sleep);

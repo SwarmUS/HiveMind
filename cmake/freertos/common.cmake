@@ -48,4 +48,11 @@ macro(disable_freertos_warnings)
         PROPERTIES COMPILE_FLAGS
         -w #Disables all warnings
     )
+
+    set_source_files_properties(
+        ${ALL_FREERTOS_FILES}
+        PROPERTIES
+                CMAKE_CXX_CLANG_TIDY ""
+    )
+
 endmacro()

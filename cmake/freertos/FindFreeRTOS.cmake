@@ -31,7 +31,7 @@ if(NOT (TARGET FreeRTOS))
         "${FreeRTOS_SOURCE_DIR}/list.c"
         "${FreeRTOS_SOURCE_DIR}/queue.c"
     )
-    target_include_directories(FreeRTOS INTERFACE "${FreeRTOS_COMMON_INCLUDE}")
+    target_include_directories(FreeRTOS SYSTEM INTERFACE "${FreeRTOS_COMMON_INCLUDE}")
 endif()
 
 if(NOT (TARGET FreeRTOS::Coroutine))
@@ -115,7 +115,7 @@ foreach(PORT ${FreeRTOS_FIND_COMPONENTS})
             add_library(FreeRTOS::${PORT} INTERFACE IMPORTED)
             target_link_libraries(FreeRTOS::${PORT} INTERFACE FreeRTOS)
             target_sources(FreeRTOS::${PORT} INTERFACE "${FreeRTOS_${PORT}_SOURCE}")
-            target_include_directories(FreeRTOS::${PORT} INTERFACE "${FreeRTOS_${PORT}_PATH}")
+            target_include_directories(FreeRTOS::${PORT} SYSTEM INTERFACE "${FreeRTOS_${PORT}_PATH}")
         endif()
 
         if(FreeRTOS_${PORT}_PATH AND 

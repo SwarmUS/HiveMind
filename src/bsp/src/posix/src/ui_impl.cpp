@@ -1,8 +1,8 @@
 #include "bsp/ui_impl.h"
-#include <stdarg.h>
-#include <stdio.h>
+#include <cstdarg>
+#include <cstdio>
 
-UIImpl::UIImpl() {}
+UIImpl::UIImpl() = default;
 
 int UIImpl::print(const char* format, ...) {
 
@@ -12,4 +12,4 @@ int UIImpl::print(const char* format, ...) {
     va_end(args);
 
     return ret_value;
-};
+}

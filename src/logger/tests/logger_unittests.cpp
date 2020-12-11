@@ -7,8 +7,8 @@ class LoggerTestFixture : public testing::Test {
   protected:
     UIMock ui_mock;
     Logger* logger;
-    virtual void SetUp() { logger = new LoggerImpl(LogLevel::Info, &ui_mock); }
-    virtual void TearDown() { delete logger; }
+    void SetUp() override { logger = new LoggerImpl(LogLevel::Info, &ui_mock); }
+    void TearDown() override { delete logger; }
 };
 
 TEST_F(LoggerTestFixture, Logger_Log_Same_Level_Log_Once) {

@@ -4,7 +4,6 @@
 #include <stdint.h>
 extern uint32_t SystemCoreClock;
 
-
 /* Clock config that is platform dependent */
 #define configCPU_CLOCK_HZ (SystemCoreClock)
 #define configTICK_RATE_HZ ((TickType_t)1000)

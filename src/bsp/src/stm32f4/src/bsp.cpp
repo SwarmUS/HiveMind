@@ -33,5 +33,4 @@ void init_chip() {
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_USART3_UART_Init();
-
 }

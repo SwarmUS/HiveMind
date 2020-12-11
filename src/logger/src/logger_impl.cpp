@@ -1,6 +1,6 @@
 #include "logger/logger_impl.h"
 #include <bsp/ui.h>
-#include <stdarg.h>
+#include <cstdarg>
 
 LoggerImpl::LoggerImpl(LogLevel level, UI* ui) {
     this->m_log_level = level;
@@ -13,10 +13,10 @@ LogRet LoggerImpl::log(LogLevel level, const char* format, ...) {
         va_start(args, format);
         int ret_value = m_ui->print(format, args);
         va_end(args);
-        if (ret_value >= 0)
+        if (ret_value >= 0) {
             return LogRet::Ok;
-        else
-            return LogRet::Error;
+        }
+        return LogRet::Error;
     }
 
     return LogRet::LowLevel;
