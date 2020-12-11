@@ -12,6 +12,7 @@ set(LIB_SOURCES
 set(LIB_HEADERS
     Core/Inc/stm32f4xx_hal_conf.h
     Core/Inc/stm32f4xx_it.h
+    Core/Inc/hivemind_hal.h
     Core/Inc/usart.h
     Core/Inc/main.h
     Core/Inc/gpio.h

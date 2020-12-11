@@ -3,6 +3,7 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform")
 
 set(LIB_SOURCES
     src/bsp.cpp
+    src/ui_impl.cpp
 )
 
 set(LIB_PRIVATE_HEADERS

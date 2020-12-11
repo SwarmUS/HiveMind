@@ -16,6 +16,12 @@ The other is the "linker" library wich include
 
 
 What was done
+* The project is generated usgin GPDSC, just because it generates less files
 * The System clock is set to TIM1
-* The main is not generated
-* The Sys
+* The main function is not generated
+* The library files are used as reference, they don't copy in the project
+* The SysClock config function was added to the main.h
+* Some functions are not generated in NVIC->Code generation since they are provided by FreeRTOS
+    * System tick timer (SysTick_IRQn)
+    * Pendable request for system services (PenSV_IRQn)
+    * System service  call via SWI function (SVCall_IRQn)

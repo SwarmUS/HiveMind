@@ -3,5 +3,4 @@
 #include "usart.h"
 #include "gpio.h"
 
-
 UART_HandleTypeDef* huart_print = &huart3;
