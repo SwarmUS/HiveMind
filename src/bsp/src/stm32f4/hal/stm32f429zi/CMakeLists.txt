@@ -4,12 +4,9 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::STM32F4")
 set(LIB_SOURCES
     Core/Src/stm32f4xx_hal_msp.c
     # Core/Src/system_stm32f4xx.c Already provided by CMSIS, no need for it
-    # Core/Src/stm32f4xx_it.c Handled by the linker lib
     Core/Src/usart.c
     Core/Src/main.c
     Core/Src/gpio.c
-    Core/Src/usb_otg.c
-    Core/Src/eth.c
 )
 
 set(LIB_HEADERS
@@ -18,8 +15,6 @@ set(LIB_HEADERS
     Core/Inc/usart.h
     Core/Inc/main.h
     Core/Inc/gpio.h
-    Core/Inc/usb_otg.h
-    Core/Inc/eth.h
 )
 
 # Sources that needs to be global on the project

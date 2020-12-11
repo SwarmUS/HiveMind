@@ -13,7 +13,6 @@ set(LIB_PRIVATE_HEADERS
 add_library(${LIB_NAME} ${LIB_SOURCES} ${LIB_PRIVATE_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
-
 target_include_directories(${LIB_NAME} 
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
@@ -26,6 +25,10 @@ target_link_libraries(${LIB_NAME}
         # Defined libraries
         SwarmUS::HiveMind::FreeRTOS
 )
+
+# Mock linker library
+add_library(posix-linker INTERFACE)
+add_library(${LIB_BSP_LINKER_ALIAS} ALIAS posix-linker)
 
 add_custom_target(
     run

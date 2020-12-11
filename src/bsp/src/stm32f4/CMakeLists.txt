@@ -1,6 +1,5 @@
 set(LIB_NAME "swarmus-hivemind-bsp-stm32")
 set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform")
-set(LIB_BSP_LINKER_ALIAS "SwarmUS::HiveMind::BSP::Linker")
 
 set(LIB_SOURCES
     src/bsp.cpp

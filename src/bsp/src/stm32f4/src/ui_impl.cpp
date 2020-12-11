@@ -1,4 +1,6 @@
 #include "bsp/ui_impl.h"
 
 UIImpl::UIImpl() {}
-int UIImpl::print(const char* format, ...) {}
+int UIImpl::print(const char* format, ...) {
+    
+}

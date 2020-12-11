@@ -1,5 +1,6 @@
 set(LIB_NAME "swarmus-hivemind-bsp")
 set(LIB_ALIAS "SwarmUS::HiveMind::BSP")
+set(LIB_BSP_LINKER_ALIAS "SwarmUS::HiveMind::BSP::Linker")
 
 get_filename_component(BSP_CMAKE_DIR ${CMAKE_CURRENT_LIST_FILE} DIRECTORY)
 
