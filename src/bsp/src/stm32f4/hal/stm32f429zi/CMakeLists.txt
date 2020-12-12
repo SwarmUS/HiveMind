@@ -104,3 +104,17 @@ if(DISABLE_EXTERNAL_WARNINGS)
     set_target_properties(${LIB_NAME} PROPERTIES CXX_CLANG_TIDY "")
 endif()
 
+
+# Source files directory on target is not supported in cmake 3.16, only in 3.18
+# So we need to make a marcro instead.
+set_source_files_properties(
+    ${GLOBAL_SOURCES}
+    PROPERTIES COMPILE_FLAGS
+    -w #Disables all warnings
+)
+
+set_source_files_properties(
+    ${GLOBAL_SOURCES}
+    PROPERTIES
+            CMAKE_CXX_CLANG_TIDY ""
+)

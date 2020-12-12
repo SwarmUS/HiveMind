@@ -32,8 +32,11 @@ target_include_directories(${LIB_NAME}
 
 target_link_libraries(${LIB_NAME}
     PUBLIC
+    FreeRTOS::Coroutine
+    FreeRTOS::EventGroups
+    FreeRTOS::StreamBuffer
         FreeRTOS::Timers
-        FreeRTOS::Heap::1
+        FreeRTOS::Heap::3
         SwarmUS::HiveMind::FreeRTOS::Platform
 )
 

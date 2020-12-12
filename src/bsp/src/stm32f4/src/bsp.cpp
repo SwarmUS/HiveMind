@@ -1,10 +1,9 @@
 #include "bsp/bsp.h"
 
 #include <FreeRTOS.h>
+#include <hivemind_hal.h>
 #include <task.h>
 #include <timers.h>
-#include <hivemind_hal.h>
-
 
 void init_chip() {
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */

@@ -6,6 +6,14 @@ LoggerImpl::LoggerImpl(LogLevel level, UI* ui) {
     m_log_level = level;
     m_ui = ui;
     m_semaphore = xSemaphoreCreateBinary();
+
+    if (m_semaphore == NULL) {
+        ui->print("Error: Logger semaphore could not be created");
+        while (true) {
+        }
+    }
+
+    xSemaphoreGive(m_semaphore);
 }
 
 LoggerImpl::~LoggerImpl() { vSemaphoreDelete(m_semaphore); }
@@ -23,7 +31,7 @@ LogRet LoggerImpl::log(LogLevel level, const char* format, ...) {
             xSemaphoreGive(m_semaphore);
             return LogRet::Error;
         }
-        
+
         xSemaphoreGive(m_semaphore);
         return LogRet::LowLevel;
     }
