@@ -18,7 +18,7 @@ void vApplicationMallocFailedHook(void) {
 }
 
 // NOLINTNEXTLINE(readability-non-const-parameter)
-void vApplicationStackOverflowHook(TaskHandle_t pxTask, char* pcTaskName) {
+void vApplicationStackOverflowHook(TaskHandle_t xTask, char* pcTaskName) {
     // Using variables
     const void* taskName = pcTaskName;
     (void)pxTask;
