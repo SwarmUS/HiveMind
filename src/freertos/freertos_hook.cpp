@@ -21,7 +21,7 @@ void vApplicationMallocFailedHook(void) {
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char* pcTaskName) {
     // Using variables
     const void* taskName = pcTaskName;
-    (void)pxTask;
+    (void)xTask;
 
     taskDISABLE_INTERRUPTS();
     while (true) {
