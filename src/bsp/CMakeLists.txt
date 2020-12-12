@@ -33,7 +33,10 @@ target_compile_options(${LIB_NAME}
         $<$<BOOL:${ENABLE_WARNINGS_AS_ERROR}>:${WARNING_AS_ERROR_FLAG}>
 )
 
+# Removing warnings from freertos compilation on executable target
 if (DISABLE_EXTERNAL_WARNINGS) 
+    # Since set_source_files_properties is scoped only to targets in the curremt CMakeLists.txt
+    # we need to add it everywhere...
     disable_freertos_warnings()
 endif()
 

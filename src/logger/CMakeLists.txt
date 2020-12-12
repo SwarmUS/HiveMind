@@ -35,7 +35,10 @@ if (DISABLE_EXTERNAL_WARNINGS)
     disable_freertos_warnings()
 endif()
 
-if(ENABLE_TESTS)
-    add_subdirectory(tests)
+# Removing warnings from freertos compilation on executable target
+if (DISABLE_EXTERNAL_WARNINGS) 
+    # Since set_source_files_properties is scoped only to targets in the curremt CMakeLists.txt
+    # we need to add it everywhere...
+    disable_freertos_warnings()
 endif()
 
