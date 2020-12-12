@@ -36,3 +36,7 @@ target_link_libraries(${LIB_NAME}
         FreeRTOS::Heap::1
         SwarmUS::HiveMind::FreeRTOS::Platform
 )
+
+if (DISABLE_EXTERNAL_WARNINGS) 
+    disable_freertos_warnings()
+endif()

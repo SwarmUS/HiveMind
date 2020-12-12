@@ -1,6 +1,6 @@
 ---
-Checks:          'clang-analyzer-*,modernize-*,bigprone-*,readability-*,portability-*,performance-*,-modernize-use-nullptr,-modernize-use-trailing-return-type'
-WarningsAsErrors: 'clang-analyzer-*,modernize-*,bigprone-*,readability-*,portability-*,performance-*,-modernize-use-nullptr,-modernize-use-trailing-return-type'
+Checks:          'clang-analyzer-*,modernize-*,bigprone-*,readability-*,portability-*,performance-*,-modernize-avoid-c-arrays,-modernize-use-nullptr,-modernize-use-trailing-return-type'
+WarningsAsErrors: 'clang-analyzer-*,modernize-*,bigprone-*,readability-*,portability-*,performance-*,-modernize-avoid-c-arrays,-modernize-use-nullptr,-modernize-use-trailing-return-type'
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
 FormatStyle:     'file'

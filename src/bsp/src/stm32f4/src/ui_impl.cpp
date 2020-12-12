@@ -1,9 +1,9 @@
 #include "bsp/ui_impl.h"
 #include <hivemind_hal.h>
-#include <stdarg.h>
-#include <stdio.h>
+#include <cstdarg>
+#include <cstdio>
 
-UIImpl::UIImpl() {}
+UIImpl::UIImpl() = default;
 int UIImpl::print(const char* format, ...) {
     va_list args;
     va_start(args, format);
@@ -15,8 +15,6 @@ int UIImpl::print(const char* format, ...) {
     va_start(args, format);
     vsnprintf(string, string_size, format, args);
     va_end(args);
-
-    int test = 6;
 
     HAL_UART_Transmit(huart_print, (uint8_t*)string, string_size, HAL_MAX_DELAY);
 
