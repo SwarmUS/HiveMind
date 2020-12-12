@@ -14,10 +14,11 @@ add_compile_options(
 )
 
 add_link_options(
-    --specs=nosys.specs
+    --specs=nosys.specs   
     -mcpu=cortex-m4 
     -mfpu=fpv4-sp-d16
     -mfloat-abi=hard
+    -u _printf_float
 )
 
 

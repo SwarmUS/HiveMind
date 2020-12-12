@@ -13,7 +13,7 @@
 class LoggerImpl : public Logger {
   public:
     LoggerImpl(LogLevel level, UI* ui);
-    ~LoggerImpl() override {}
+    ~LoggerImpl() override;
 
     LogRet log(LogLevel level, const char* format, ...) override;
 

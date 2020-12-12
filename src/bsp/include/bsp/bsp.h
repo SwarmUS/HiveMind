@@ -5,8 +5,6 @@
 extern "C" {
 #endif
 
-void blinky(void* param);
-
 void init_chip();
 
 #ifdef __cplusplus

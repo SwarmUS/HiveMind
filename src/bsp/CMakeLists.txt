@@ -27,6 +27,7 @@ target_link_libraries(${LIB_NAME}
     PUBLIC
         SwarmUS::HiveMind::BSP::Platform
 )
+
 target_compile_options(${LIB_NAME}
     PRIVATE
         $<$<BOOL:${ENABLE_WARNINGS}>:${WARNING_FLAG}>
@@ -35,8 +36,8 @@ target_compile_options(${LIB_NAME}
 
 # Removing warnings from freertos compilation on executable target
 if (DISABLE_EXTERNAL_WARNINGS) 
-    # Since set_source_files_properties is scoped only to targets in the curremt CMakeLists.txt
-    # we need to add it everywhere...
+    # Since set_source_files_properties scope is only added in cmake 3.18
+    # we need to add it everywhere freertos is used
     disable_freertos_warnings()
 endif()
 

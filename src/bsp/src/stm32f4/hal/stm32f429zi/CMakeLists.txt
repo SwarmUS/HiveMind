@@ -19,10 +19,11 @@ set(LIB_HEADERS
 )
 
 # Sources that needs to be global on the project
-# Ex: interrupts
+# Ex: interrupts, syscalls
 set(GLOBAL_SOURCES
     Core/Src/stm32f4xx_it.c
     Core/Src/stm32f4xx_hal_timebase_tim.c
+    Core/Src/syscalls.c
 )
 
 stm32_fetch_cmsis(F4)

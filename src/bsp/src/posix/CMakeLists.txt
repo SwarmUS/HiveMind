@@ -26,6 +26,13 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::FreeRTOS
 )
 
+target_compile_options(${LIB_NAME}
+    PRIVATE
+        $<$<BOOL:${ENABLE_WARNINGS}>:${WARNING_FLAG}>
+        $<$<BOOL:${ENABLE_WARNINGS_AS_ERROR}>:${WARNING_AS_ERROR_FLAG}>
+)
+
+
 # Mock linker library
 add_library(posix-linker INTERFACE)
 add_library(${LIB_BSP_LINKER_ALIAS} ALIAS posix-linker)
@@ -34,3 +41,10 @@ add_custom_target(
     run
     COMMAND $<TARGET_FILE:${EXECUTABLE_NAME}>
 )
+
+# Removing warnings from freertos compilation on executable target
+if (DISABLE_EXTERNAL_WARNINGS) 
+    # Since set_source_files_properties scope is only added in cmake 3.18
+    # we need to add it everywhere freertos is used
+    disable_freertos_warnings()
+endif()

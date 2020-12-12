@@ -14,6 +14,7 @@ target_link_libraries(${EXECUTABLE_NAME}
       SwarmUS::HiveMind::BSP 
       SwarmUS::HiveMind::FreeRTOS
 )
+
 target_compile_options(${EXECUTABLE_NAME}
     PUBLIC
         $<$<BOOL:${ENABLE_WARNINGS}>:${WARNING_FLAG}>

@@ -33,10 +33,24 @@ target_link_libraries(${LIB_NAME}
 
 )
 
+target_compile_options(${LIB_NAME}
+    PRIVATE
+        $<$<BOOL:${ENABLE_WARNINGS}>:${WARNING_FLAG}>
+        $<$<BOOL:${ENABLE_WARNINGS_AS_ERROR}>:${WARNING_AS_ERROR_FLAG}>
+)
+
 add_custom_target(
     flash
     COMMAND openocd  -f ${OPENOCD_CFG_PATH} -c 'program $<TARGET_FILE:${EXECUTABLE_NAME}> verify exit'
 )
 
 add_subdirectory(hal)
+
+# Removing warnings from freertos compilation on executable target
+if (DISABLE_EXTERNAL_WARNINGS) 
+    # Since set_source_files_properties scope is only added in cmake 3.18
+    # we need to add it everywhere freertos is used
+    disable_freertos_warnings()
+endif()
+
 

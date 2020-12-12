@@ -25,3 +25,6 @@ What was done
     * System tick timer (SysTick_IRQn)
     * Pendable request for system services (PenSV_IRQn)
     * System service  call via SWI function (SVCall_IRQn)
+* A bit of code was added to the drivers
+    * Added __io_putchar definition
+    * Added syscall, you can probably just copy/paste

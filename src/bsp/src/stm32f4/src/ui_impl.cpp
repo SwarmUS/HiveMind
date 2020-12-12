@@ -1,22 +1,18 @@
 #include "bsp/ui_impl.h"
-#include <hivemind_hal.h>
 #include <cstdarg>
+#include <cstdint>
 #include <cstdio>
+#include <hivemind_hal.h>
 
 UIImpl::UIImpl() = default;
 int UIImpl::print(const char* format, ...) {
     va_list args;
     va_start(args, format);
-
-    int string_size = vsnprintf(NULL, 0, format, args) + 1;
-    char string[string_size];
-    va_end(args); // You can't use a va_list twice without reinitializing it
-
-    va_start(args, format);
-    vsnprintf(string, string_size, format, args);
+    int ret_value = printf(format, args);
     va_end(args);
 
-    HAL_UART_Transmit(huart_print, (uint8_t*)string, string_size, HAL_MAX_DELAY);
+    // Escape character to flush buffer
+    printf("\r\n");
 
-    return 0;
+    return ret_value;
 }
