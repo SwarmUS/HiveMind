@@ -30,7 +30,6 @@ function(freertos_fetch_kernel)
 endfunction()
 
 macro(disable_freertos_warnings)
-    message("TESTING ${FREERTOS_KERNEL_PATH}")  
     if(NOT FREERTOS_KERNEL_PATH)
       message(FATAL_ERROR "FREERTOS_KERNEL_PATH is not set, call this macro after fetching freertos kernel")
     endif()

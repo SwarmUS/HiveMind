@@ -79,19 +79,14 @@ target_include_directories(${LIB_NAME}
 target_link_libraries(${LIB_NAME}
     PUBLIC 
         CMSIS::STM32::F429ZI
-        STM32::NoSys
-        HAL::STM32::F4::RCC
-        HAL::STM32::F4::GPIO
-        HAL::STM32::F4::LL_RCC
-        HAL::STM32::F4::LL_GPIO
         HAL::STM32::F4::CORTEX
-        HAL::STM32::F4::ETH
-        HAL::STM32::F4::UART
-        HAL::STM32::F4::PCD
-        HAL::STM32::F4::LL_USB
+        STM32::NoSys
 
     PRIVATE
         stm32f4-linker
+        HAL::STM32::F4::RCC
+        HAL::STM32::F4::GPIO
+        HAL::STM32::F4::UART
 
 )
 

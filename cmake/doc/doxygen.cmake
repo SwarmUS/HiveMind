@@ -27,7 +27,7 @@ if (DOXYGEN_FOUND)
     set(DOXYGEN_DOT_TRANSPARENT YES)
     set(DOXYGEN_EXCLUDE_PATTERNS
         "*/tests/*"
-        "*/stm32f429zi/*")
+        "*/stm32f4/hal/*")
 
     if(ENABLE_WARNINGS_AS_ERROR )
         set(DOXYGEN_WARN_AS_ERROR YES)

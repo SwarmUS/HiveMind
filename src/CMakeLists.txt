@@ -17,7 +17,7 @@ target_link_libraries(${EXECUTABLE_NAME}
 )
 
 target_compile_options(${EXECUTABLE_NAME}
-    PUBLIC
+    PRIVATE
         $<$<BOOL:${ENABLE_WARNINGS}>:${WARNING_FLAG}>
         $<$<BOOL:${ENABLE_WARNINGS_AS_ERROR}>:${WARNING_AS_ERROR_FLAG}>
 )
@@ -25,11 +25,9 @@ target_compile_options(${EXECUTABLE_NAME}
 include(freertos/common)
 freertos_fetch_kernel()
 
-
 add_subdirectory(bsp)
 add_subdirectory(logger)
 add_subdirectory(freertos)
-
 
 # Removing warnings from interface libraries
 if (DISABLE_EXTERNAL_WARNINGS) 
