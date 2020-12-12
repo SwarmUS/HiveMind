@@ -7,7 +7,6 @@ set(PROJECT_SOURCES
     main.cpp
 )
 
-
 add_executable(${EXECUTABLE_NAME} ${PROJECT_SOURCES})
 target_link_libraries(${EXECUTABLE_NAME}
     PUBLIC
@@ -21,12 +20,15 @@ target_compile_options(${EXECUTABLE_NAME}
         $<$<BOOL:${ENABLE_WARNINGS_AS_ERROR}>:${WARNING_AS_ERROR_FLAG}>
 )
 
-add_subdirectory(bsp)
-add_subdirectory(freertos)
-add_subdirectory(logger)
-
-
+include(freertos/common)
+freertos_fetch_kernel()
 # Removing warnings from freertos compilation on executable target
 if (DISABLE_EXTERNAL_WARNINGS) 
     disable_freertos_warnings()
 endif()
+
+add_subdirectory(bsp)
+add_subdirectory(logger)
+add_subdirectory(freertos)
+
+

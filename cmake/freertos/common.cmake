@@ -30,16 +30,18 @@ function(freertos_fetch_kernel)
 endfunction()
 
 macro(disable_freertos_warnings)
-    if(FreeRTOS_SOURCE_DIR STREQUAL "")
-      message(FATAL_ERROR "FreeRTOS_SOURCE_DIR is not set, call this macro after fetching freertos kernel")
+    message("TESTING ${FREERTOS_KERNEL_PATH}")  
+    if(NOT FREERTOS_KERNEL_PATH)
+      message(FATAL_ERROR "FREERTOS_KERNEL_PATH is not set, call this macro after fetching freertos kernel")
     endif()
+
     # We need to do this since the FreeRTOS::LIB_NAME are interfaces and not static libraries
     # Using GLOB_RECURSE is bad practice, but since it's an external lib and we don't add files during dev, it's fine
     file(GLOB_RECURSE ALL_FREERTOS_FILES
-        ${FreeRTOS_SOURCE_DIR}/*.[ch]pp
-        ${FreeRTOS_SOURCE_DIR}/*.[ch]
-        ${FreeRTOS_SOURCE_DIR}/*.[h]pp
-        ${FreeRTOS_SOURCE_DIR}/*.[h]
+        ${FREERTOS_KERNEL_PATH}/*.[ch]pp
+        ${FREERTOS_KERNEL_PATH}/*.[ch]
+        ${FREERTOS_KERNEL_PATH}/*.[h]pp
+        ${FREERTOS_KERNEL_PATH}/*.[h]
     )
     # Source files directory on target is not supported in cmake 3.16, only in 3.18
     # So we need to make a marcro instead.
