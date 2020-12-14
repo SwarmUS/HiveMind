@@ -19,7 +19,7 @@ project(hive-mind CXX C ASM)
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
 # Warning flags constants
-set(WARNING_FLAG -Wall -Wextra -Wsign-conversion -Wno-unused-variable -Wpedantic)
+set(WARNING_FLAG -Wall -Wextra -Wsign-conversion -Wno-unused-variable -Wpedantic -fno-exceptions )
 set(WARNING_AS_ERROR_FLAG -Werror)
 
 # Includes
