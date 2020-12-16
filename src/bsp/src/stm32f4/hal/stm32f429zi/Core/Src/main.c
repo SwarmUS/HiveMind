@@ -21,6 +21,7 @@
 #include "main.h"
 #include "gpio.h"
 #include "usart.h"
+#include "hivemind_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -71,7 +72,7 @@ void SystemClock_Config(void);
 PUTCHAR_PROTOTYPE {
     /* Place your implementation of fputc here */
     /* e.g. write a character to the USART3 and Loop until the end of transmission */
-    HAL_UART_Transmit(&huart3, (uint8_t*)&ch, 1, HAL_MAX_DELAY);
+    HAL_UART_Transmit(HUART_PRINT, (uint8_t*)&ch, 1, HAL_MAX_DELAY);
 
     return ch;
 }

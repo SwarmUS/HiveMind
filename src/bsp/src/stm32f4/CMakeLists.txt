@@ -30,7 +30,6 @@ target_link_libraries(${LIB_NAME}
 
     PRIVATE
         SwarmUS::HiveMind::BSP::STM32F4
-
 )
 
 target_compile_options(${LIB_NAME}
