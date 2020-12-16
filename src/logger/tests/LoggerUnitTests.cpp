@@ -8,7 +8,7 @@ class LoggerTestFixture : public testing::Test {
     UserInterfaceMock* m_uiMock;
     Logger* m_logger;
     void SetUp() override {
-        int printCounter;
+        int printCounter = 0;
         m_uiMock = new UserInterfaceMock(printCounter);
         m_logger = new Logger(LogLevel::Info, *m_uiMock);
     }
