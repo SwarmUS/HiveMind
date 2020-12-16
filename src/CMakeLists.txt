@@ -4,7 +4,7 @@ if(${CMAKE_CROSSCOMPILING})
 endif()
 
 set(PROJECT_SOURCES
-    main.cpp
+    Main.cpp
 )
 
 add_executable(${EXECUTABLE_NAME} ${PROJECT_SOURCES})

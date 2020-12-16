@@ -1,14 +1,13 @@
-#include "logger/logger_impl.h"
-#include <bsp/ui.h>
+#include "logger/Logger.h"
+#include <bsp/IUserInterface.h>
 #include <cstdarg>
 
-LoggerImpl::LoggerImpl(LogLevel level, UI* ui) {
-    m_log_level = level;
-    m_ui = ui;
+Logger::Logger(LogLevel level, const IUserInterface& ui) : m_ui(ui) {
+    m_logLevel = level;
     m_semaphore = xSemaphoreCreateBinary();
 
     if (m_semaphore == NULL) {
-        ui->print("Error: Logger semaphore could not be created");
+        m_ui.print("Error: Logger semaphore could not be created");
         while (true) {
         }
     }
@@ -16,16 +15,16 @@ LoggerImpl::LoggerImpl(LogLevel level, UI* ui) {
     xSemaphoreGive(m_semaphore);
 }
 
-LoggerImpl::~LoggerImpl() { vSemaphoreDelete(m_semaphore); }
+Logger::~Logger() { vSemaphoreDelete(m_semaphore); }
 
-LogRet LoggerImpl::log(LogLevel level, const char* format, ...) {
+LogRet Logger::log(LogLevel level, const char* format, ...) const {
     if (xSemaphoreTake(m_semaphore, (TickType_t)10) == pdTRUE) {
-        if (level >= m_log_level) {
+        if (level >= m_logLevel) {
             va_list args;
             va_start(args, format);
-            int ret_value = m_ui->print(format, args);
+            int retValue = m_ui.print(format, args);
             va_end(args);
-            if (ret_value >= 0) {
+            if (retValue >= 0) {
                 return LogRet::Ok;
             }
             xSemaphoreGive(m_semaphore);

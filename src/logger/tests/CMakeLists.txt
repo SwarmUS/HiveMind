@@ -1,11 +1,11 @@
 set(TEST_NAME test_logger)
  
 set(TEST_SOURCES
-    logger_unittests.cpp
+    LoggerUnitTests.cpp
 )
 
 set(TEST_HEADERS
-    mocks/ui_mock.h
+    mocks/UserInterfaceMock.h
 )
 
 add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})

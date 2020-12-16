@@ -7,9 +7,10 @@ get_filename_component(BSP_CMAKE_DIR ${CMAKE_CURRENT_LIST_FILE} DIRECTORY)
 add_subdirectory(src)
 
 set(LIB_HEADERS
-    include/bsp/bsp.h
-    include/bsp/ui.h
-    include/bsp/ui_impl.h
+    include/bsp/BSP.h
+    include/bsp/IBSP.h
+    include/bsp/UserInterface.h
+    include/bsp/IUserInterface.h
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS})

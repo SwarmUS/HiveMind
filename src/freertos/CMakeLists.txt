@@ -6,7 +6,7 @@ add_subdirectory(platforms)
 
 
 set(LIB_SOURCES
-    freertos_hook.cpp
+    freertos_hooks.c
  )
 
 set(LIB_HEADERS

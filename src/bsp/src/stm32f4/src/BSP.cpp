@@ -1,11 +1,14 @@
-#include "bsp/bsp.h"
+#include "bsp/BSP.h"
 
 #include <FreeRTOS.h>
 #include <hivemind_hal.h>
 #include <task.h>
 #include <timers.h>
 
-void init_chip() {
+BSP::BSP() = default;
+BSP::~BSP() = default;
+
+void BSP::initChip() {
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
 
