@@ -6,11 +6,12 @@
 
 #include <bsp/BSP.h>
 #include <bsp/UserInterface.h>
+#include <cstdlib>
 #include <logger/Logger.h>
 
 void printThreadExample(void* param) {
     (void)param;
-    const int toggleDelay = 500;
+    const int toggleDelay = 10000;
 
     UserInterface ui = UserInterface();
     Logger logger = Logger(LogLevel::Debug, ui);

@@ -1,11 +1,11 @@
-set(TEST_NAME test-logger)
+set(TEST_NAME test-bsp-common)
  
 set(TEST_SOURCES
-    LoggerUnitTests.cpp
+    CircularBuffTests.cpp
 )
 
 set(TEST_HEADERS
-    mocks/UserInterfaceMock.h
+
 )
 
 add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})
@@ -15,10 +15,7 @@ target_link_libraries(${TEST_NAME}
         gtest
         gtest_main
         gmock
-
-        SwarmUS::HiveMind::BSP
-        SwarmUS::HiveMind::Logger
-        SwarmUS::HiveMind::FreeRTOS
+        SwarmUS::HiveMind::BSP::Common
 )
 
 add_test(NAME ${TEST_NAME}

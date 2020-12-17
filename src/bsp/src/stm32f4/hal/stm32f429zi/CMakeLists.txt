@@ -84,9 +84,12 @@ target_link_libraries(${LIB_NAME}
 
     PRIVATE
         stm32f4-linker
+
+        # Drivers
         HAL::STM32::F4::RCC
         HAL::STM32::F4::GPIO
         HAL::STM32::F4::UART
+        HAL::STM32::F4::DMA
 
 )
 

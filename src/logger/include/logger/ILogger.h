@@ -2,14 +2,30 @@
 #define __ILOGGER_H_
 
 /**
- * @brief The log level used for the logger;
+ * @brief The log level used for the logger
  */
-enum class LogLevel { Debug = 0, Info = 1, Warn = 2, Error = 3 };
+enum class LogLevel {
+    /** Log level to debug, prints everything*/
+    Debug = 0,
+    /** Log level to show basic info on state, etc*/
+    Info = 1,
+    /** Log level for warnings that don't cause application crash*/
+    Warn = 2,
+    /** Log level for unrecoverable error*/
+    Error = 3
+};
 
 /**
  * @brief The return value of the logger
  */
-enum class LogRet { Ok = 0, LowLevel = 1, Error = 2 };
+enum class LogRet {
+    /** Success return value */
+    Ok = 0,
+    /** Didn't log since the level of the logger is higher than the one provided in the function*/
+    LowLevel = 1,
+    /** An external error ocurred and the log failed */
+    Error = 2
+};
 
 /**
  * @brief A logger class with basic logging capabilities
@@ -28,8 +44,6 @@ class ILogger {
      *
      * @param [in] ... Additionnal arguments for the format parameter
      *
-     * @return Returns Ok on success, LowLevel if the level provided is lower than the current one
-     *and Error if an error occured
      */
     virtual LogRet log(LogLevel level, const char* format, ...) const = 0;
 };

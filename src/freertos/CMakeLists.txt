@@ -36,7 +36,7 @@ target_link_libraries(${LIB_NAME}
     FreeRTOS::EventGroups
     FreeRTOS::StreamBuffer
         FreeRTOS::Timers
-        FreeRTOS::Heap::3
+        FreeRTOS::Heap::4
         SwarmUS::HiveMind::FreeRTOS::Platform
 )
 

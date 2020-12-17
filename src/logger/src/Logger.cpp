@@ -8,8 +8,6 @@ Logger::Logger(LogLevel level, const IUserInterface& ui) : m_ui(ui) {
 
     if (m_semaphore == NULL) {
         m_ui.print("Error: Logger semaphore could not be created");
-        while (true) {
-        }
     }
 
     xSemaphoreGive(m_semaphore);

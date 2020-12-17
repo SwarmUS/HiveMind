@@ -1,5 +1,6 @@
 #MicroXplorer Configuration settings - do not modify
 Mcu.Family=STM32F4
+NVIC.USART3_IRQn=true\:0\:0\:false\:false\:true\:true\:true
 ProjectManager.MainLocation=Core/Src
 RCC.MCOFreq_Value=72000000
 PB13.GPIOParameters=GPIO_Label
