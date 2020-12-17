@@ -9,14 +9,15 @@ extern "C" {
 #include <stdint.h>
 
 /**
- *@brief A structure to manage a circular buffer
+ *@brief A structure to manage a circular buffer, you should never need to touch the data here, only
+ *use the associated function
  **/
 typedef struct {
-    uint8_t* data;
-    uint16_t size;
-    uint16_t readPos;
-    uint16_t writePos;
-    bool isFull;
+    uint8_t* m_data;
+    uint16_t m_size;
+    uint16_t m_readPos;
+    uint16_t m_writePos;
+    bool m_isFull;
 } CircularBuff;
 
 /**
@@ -113,7 +114,7 @@ CircularBuffRet CircularBuff_put(CircularBuff* circularBuff, const uint8_t* data
  * @param [out] data pointer where the value will be store
  *
  **/
-CircularBuffRet CircularBuff_readc(CircularBuff* circularBuff, uint8_t* data);
+CircularBuffRet CircularBuff_getc(CircularBuff* circularBuff, uint8_t* data);
 
 /**
  * @brief Read multiple bytes from the circular buffer
@@ -127,7 +128,7 @@ CircularBuffRet CircularBuff_readc(CircularBuff* circularBuff, uint8_t* data);
  * @return the actual number of bytes read from the buffer. Returns 0 if a pointer is null or the
  *circularBuff is not initialized
  **/
-uint16_t CircularBuff_read(CircularBuff* circularBuff, uint8_t* data, uint16_t length);
+uint16_t CircularBuff_get(CircularBuff* circularBuff, uint8_t* data, uint16_t length);
 
 /**
  * @brief Clears the buffer from data

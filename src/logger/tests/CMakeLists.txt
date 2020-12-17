@@ -16,9 +16,13 @@ target_link_libraries(${TEST_NAME}
         gtest_main
         gmock
 
-        SwarmUS::HiveMind::BSP
         SwarmUS::HiveMind::Logger
-        SwarmUS::HiveMind::FreeRTOS
+)
+
+target_compile_options(${LIB_NAME}
+    PRIVATE
+        $<$<BOOL:${ENABLE_WARNINGS}>:${WARNING_FLAG}>
+        $<$<BOOL:${ENABLE_WARNINGS_AS_ERROR}>:${WARNING_AS_ERROR_FLAG}>
 )
 
 add_test(NAME ${TEST_NAME}

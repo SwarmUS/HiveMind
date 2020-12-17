@@ -21,5 +21,5 @@ add_library(${LIB_CONFIG_ALIAS} ALIAS ${LIB_CONFIG_NAME})
 target_include_directories(${LIB_CONFIG_NAME}
     INTERFACE
         include
-        ${FREERTOS_KERNEL_PATH}/portable/GCC/
+        ${FREERTOS_KERNEL_PATH}/portable/ThirdParty/GCC/Posix
 )
