@@ -44,12 +44,3 @@ add_custom_target(
 )
 
 add_subdirectory(hal)
-
-# Removing warnings from freertos compilation on executable target
-if (DISABLE_EXTERNAL_WARNINGS) 
-    # Since set_source_files_properties scope is only added in cmake 3.18
-    # we need to add it everywhere freertos is used
-    disable_freertos_warnings()
-endif()
-
-

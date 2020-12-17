@@ -2,8 +2,10 @@ set(LIB_NAME "swarmus-hivemind-freertos")
 set(LIB_ALIAS "SwarmUS::HiveMind::FreeRTOS")
 
 
-add_subdirectory(platforms)
+include(freertos/common)
+freertos_fetch_kernel()
 
+add_subdirectory(platforms)
 
 set(LIB_SOURCES
     freertos_hooks.c
@@ -27,22 +29,28 @@ target_include_directories(${LIB_NAME}
        # Allows freertos to build properly
        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/freertos>
        $<INSTALL_INTERFACE:include>
-
+       ${FREERTOS_KERNEL_PATH}/include
 )
 
 target_link_libraries(${LIB_NAME}
     PUBLIC
-    FreeRTOS::Coroutine
-    FreeRTOS::EventGroups
-    FreeRTOS::StreamBuffer
+        SwarmUS::HiveMind::FreeRTOS::Platform::Config
+
+    PRIVATE    
+        SwarmUS::HiveMind::FreeRTOS::Platform
+
+        FreeRTOS::Coroutine
+        FreeRTOS::EventGroups
+        FreeRTOS::StreamBuffer
         FreeRTOS::Timers
         FreeRTOS::Heap::4
-        SwarmUS::HiveMind::FreeRTOS::Platform
+
 )
+
 
 # Removing warnings from freertos compilation on executable target
 if (DISABLE_EXTERNAL_WARNINGS) 
-    # Since set_source_files_properties scope is only added in cmake 3.18
-    # we need to add it everywhere freertos is used
-    disable_freertos_warnings()
+    target_compile_options(${LIB_NAME} PRIVATE -w)
+    set_target_properties(${LIB_NAME} PROPERTIES CXX_CLANG_TIDY "" )
+    set_target_properties(${LIB_NAME} PROPERTIES C_CLANG_TIDY "" )
 endif()

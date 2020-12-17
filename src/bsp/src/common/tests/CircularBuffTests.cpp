@@ -38,7 +38,6 @@ TEST_F(CircularBuffFixture, CircularBuff_Init_NullData) {
     EXPECT_EQ(ret, false);
 }
 
-
 TEST_F(CircularBuffFixture, CircularBuff_getFreeSize_Empty) {
     // Given
     // Then
@@ -59,7 +58,6 @@ TEST_F(CircularBuffFixture, CircularBuff_getFreeSize_Full) {
     EXPECT_EQ(ret, 0);
 }
 
-
 TEST_F(CircularBuffFixture, CircularBuff_getFreeSize_ReadHigherThanWrite) {
     // Given
     m_circularBuff.readPos = 5;
@@ -72,7 +70,6 @@ TEST_F(CircularBuffFixture, CircularBuff_getFreeSize_ReadHigherThanWrite) {
     EXPECT_EQ(ret, 1);
 }
 
-
 TEST_F(CircularBuffFixture, CircularBuff_getFreeSize_WriteHigherThanRead) {
     // Given
     m_circularBuff.readPos = 4;
@@ -82,7 +79,7 @@ TEST_F(CircularBuffFixture, CircularBuff_getFreeSize_WriteHigherThanRead) {
     uint16_t ret = CircularBuff_getFreeSize(&m_circularBuff);
 
     // Expect
-    EXPECT_EQ(ret, size-1);
+    EXPECT_EQ(ret, size - 1);
 }
 
 TEST_F(CircularBuffFixture, CircularBuff_getLength_Empty) {
@@ -126,7 +123,7 @@ TEST_F(CircularBuffFixture, CircularBuff_getLength_ReadHigherThanWrite) {
     uint16_t ret = CircularBuff_getLength(&m_circularBuff);
 
     // Expect
-    EXPECT_EQ(ret, size-1);
+    EXPECT_EQ(ret, size - 1);
 }
 
 TEST_F(CircularBuffFixture, CircularBuff_isFull_Empty) {
@@ -216,11 +213,11 @@ TEST_F(CircularBuffFixture, CircularBuff_put_Empty) {
     memset(m_data, 42, size);
 
     // Then
-    CircularBuffRet ret = CircularBuff_put(&m_circularBuff, m_data, (int)size/2);
+    CircularBuffRet ret = CircularBuff_put(&m_circularBuff, m_data, (int)size / 2);
 
     // Expect
-    EXPECT_EQ(m_circularBuff.writePos, (int)size/2);
-    EXPECT_EQ(m_circularBuff.data[size/2 - 1], 42);
-    EXPECT_EQ(m_circularBuff.data[size/2], 0);
+    EXPECT_EQ(m_circularBuff.writePos, (int)size / 2);
+    EXPECT_EQ(m_circularBuff.data[size / 2 - 1], 42);
+    EXPECT_EQ(m_circularBuff.data[size / 2], 0);
     EXPECT_EQ(ret, CircularBuff_Ret_Ok);
 }

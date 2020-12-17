@@ -10,31 +10,37 @@ bool CircularBuff_init(CircularBuff* circularBuff, uint8_t* buffer, uint16_t siz
     circularBuff->size = size;
     circularBuff->writePos = 0;
     circularBuff->readPos = 0;
+    circularBuff->isFull = false;
     return true;
 }
 
 uint16_t CircularBuff_getFreeSize(const CircularBuff* circularBuff) {
-    if (circularBuff == NULL || circularBuff->data == NULL)
+    if (circularBuff == NULL || circularBuff->data == NULL) {
         return 0;
+    }
+
+    if (circularBuff->isFull) {
+        return 0;
+    }
 
     return circularBuff->size - CircularBuff_getLength(circularBuff);
 }
 
 uint16_t CircularBuff_getLength(const CircularBuff* circularBuff) {
-    if (circularBuff == NULL || circularBuff->data == NULL)
+    if (circularBuff == NULL || circularBuff->data == NULL) {
         return 0;
+    }
+
+    if (circularBuff->isFull) {
+        return circularBuff->size;
+    }
 
     if (circularBuff->readPos > circularBuff->writePos)
         return circularBuff->size - (circularBuff->readPos - circularBuff->writePos);
     return circularBuff->writePos - circularBuff->readPos;
 }
 
-bool CircularBuff_isFull(const CircularBuff* circularBuff) {
-    if (circularBuff == NULL || circularBuff->data == NULL)
-        return true;
-
-    return CircularBuff_getLength(circularBuff) == circularBuff->size;
-}
+bool CircularBuff_isFull(const CircularBuff* circularBuff) { return circularBuff->isFull; }
 
 CircularBuffRet CircularBuff_putc(CircularBuff* circularBuff, uint8_t data) {
     if (circularBuff == NULL || circularBuff->data == NULL) {

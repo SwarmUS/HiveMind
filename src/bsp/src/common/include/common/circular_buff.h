@@ -16,6 +16,7 @@ typedef struct {
     uint16_t size;
     uint16_t readPos;
     uint16_t writePos;
+    bool isFull;
 } CircularBuff;
 
 /**
