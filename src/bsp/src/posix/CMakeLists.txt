@@ -26,12 +26,6 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::FreeRTOS
 )
 
-target_compile_options(${LIB_NAME}
-    PRIVATE
-        $<$<BOOL:${ENABLE_WARNINGS}>:${WARNING_FLAG}>
-        $<$<BOOL:${ENABLE_WARNINGS_AS_ERROR}>:${WARNING_AS_ERROR_FLAG}>
-)
-
 
 # Mock linker library
 add_library(posix-linker INTERFACE)

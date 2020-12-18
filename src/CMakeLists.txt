@@ -7,6 +7,7 @@ set(PROJECT_SOURCES
     Main.cpp
 )
 
+
 add_executable(${EXECUTABLE_NAME} ${PROJECT_SOURCES})
 target_link_libraries(${EXECUTABLE_NAME}
     PUBLIC
@@ -14,12 +15,6 @@ target_link_libraries(${EXECUTABLE_NAME}
       SwarmUS::HiveMind::BSP 
       SwarmUS::HiveMind::FreeRTOS
       SwarmUS::HiveMind::Logger
-)
-
-target_compile_options(${EXECUTABLE_NAME}
-    PRIVATE
-        $<$<BOOL:${ENABLE_WARNINGS}>:${WARNING_FLAG}>
-        $<$<BOOL:${ENABLE_WARNINGS_AS_ERROR}>:${WARNING_AS_ERROR_FLAG}>
 )
 
 add_subdirectory(bsp)

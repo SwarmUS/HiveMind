@@ -197,7 +197,6 @@ TEST_F(CircularBuffFixture, CircularBuff_putc_Full) {
 
 TEST_F(CircularBuffFixture, CircularBuff_putc_LoopBuff) {
     // Given
-    uint8_t read;
     m_circularBuff.m_readPos = 5;
     m_circularBuff.m_writePos = 8;
 
@@ -355,4 +354,18 @@ TEST_F(CircularBuffFixture, CircularBuff_get_Loops) {
     EXPECT_EQ(m_circularBuff.m_data[5], 42);
     EXPECT_EQ(m_circularBuff.m_readPos, (5 + size / 2) % size);
     EXPECT_EQ(ret, (int)(size / 2));
+}
+
+TEST_F(CircularBuffFixture, CircularBuff_clear_ClearBuff) {
+    // Given
+    m_circularBuff.m_writePos = 4;
+    m_circularBuff.m_readPos = 5;
+
+    // Then
+    bool ret = CircularBuff_clear(&m_circularBuff);
+
+    // Expect
+    EXPECT_EQ(m_circularBuff.m_readPos, 0);
+    EXPECT_EQ(m_circularBuff.m_writePos, 0);
+    EXPECT_EQ(ret, true);
 }

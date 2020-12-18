@@ -18,12 +18,6 @@ target_link_libraries(${TEST_NAME}
         SwarmUS::HiveMind::BSP::Common
 )
 
-target_compile_options(${LIB_NAME}
-    PRIVATE
-        $<$<BOOL:${ENABLE_WARNINGS}>:${WARNING_FLAG}>
-        $<$<BOOL:${ENABLE_WARNINGS_AS_ERROR}>:${WARNING_AS_ERROR_FLAG}>
-)
-
 add_test(NAME ${TEST_NAME}
          COMMAND ${TEST_NAME})
 

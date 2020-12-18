@@ -138,7 +138,7 @@ uint16_t CircularBuff_get(CircularBuff* circularBuff, uint8_t* data, uint16_t le
  * @return true if the operation was successfull, false if a null pointer or the circularBuff was
  *not initialized
  **/
-bool CircularBufer_clear(CircularBuff* circularBuff);
+bool CircularBuff_clear(CircularBuff* circularBuff);
 
 #ifdef __cplusplus
 }

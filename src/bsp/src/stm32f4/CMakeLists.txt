@@ -32,12 +32,6 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::BSP::STM32F4
 )
 
-target_compile_options(${LIB_NAME}
-    PRIVATE
-        $<$<BOOL:${ENABLE_WARNINGS}>:${WARNING_FLAG}>
-        $<$<BOOL:${ENABLE_WARNINGS_AS_ERROR}>:${WARNING_AS_ERROR_FLAG}>
-)
-
 add_custom_target(
     flash
     COMMAND openocd  -f ${OPENOCD_CFG_PATH} -c 'program $<TARGET_FILE:${EXECUTABLE_NAME}> verify exit'
