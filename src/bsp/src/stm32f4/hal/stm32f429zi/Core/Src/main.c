@@ -76,7 +76,7 @@ PUTCHAR_PROTOTYPE {
     HAL_UART_StateTypeDef uartState = HAL_UART_GetState(&huart3);
     if (uartState == HAL_UART_STATE_BUSY_TX || uartState == HAL_UART_STATE_BUSY_TX_RX) {
         ret = CircularBuff_putc(&cbuffUart3, ch);
-        if ( ret != CircularBuff_Ret_Ok) {
+        if (ret != CircularBuff_Ret_Ok) {
             uint8_t buffErrMsg[] = "UART3 buffer full, clearing\r\n";
             HAL_UART_Abort(&huart3);
             HAL_UART_Transmit(&huart3, buffErrMsg, sizeof(buffErrMsg), HAL_MAX_DELAY);

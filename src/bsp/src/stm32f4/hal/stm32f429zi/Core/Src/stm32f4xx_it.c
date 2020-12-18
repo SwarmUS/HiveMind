@@ -184,7 +184,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef* huart) {
     char uartSendBuff[uartSendBuffSize];
 
     if (huart == &huart3 && huart3.gState == HAL_UART_STATE_READY) {
-        volatile uint16_t  dataSize= CircularBuff_get(&cbuffUart3, uartSendBuff, uartSendBuffSize);
+        volatile uint16_t dataSize = CircularBuff_get(&cbuffUart3, uartSendBuff, uartSendBuffSize);
         if (dataSize > 0) {
             HAL_UART_Transmit_IT(&huart3, uartSendBuff, dataSize);
         }
