@@ -28,13 +28,15 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#include <common/circular_buff.h>
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN Private defines */
+#define CBUFF_HUART3_DATA_SIZE 1024
 
+extern CircularBuff cbuffUart3;
 /* USER CODE END Private defines */
 
 void MX_USART3_UART_Init(void);

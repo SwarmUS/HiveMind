@@ -11,7 +11,7 @@
 
 void printThreadExample(void* param) {
     (void)param;
-    const int toggleDelay = 10000;
+    const int toggleDelay = 1;
 
     UserInterface ui = UserInterface();
     Logger logger = Logger(LogLevel::Debug, ui);

@@ -59,7 +59,9 @@ target_link_libraries(stm32f4-linker
         HAL::STM32::F4
         HAL::STM32::F4::TIM
         HAL::STM32::F4::TIMEx
-        STM32::NoSys)
+        STM32::NoSys
+        
+        SwarmUS::HiveMind::BSP::Common)
 
 # Actual bsp library
 add_library(${LIB_NAME} 
@@ -81,7 +83,8 @@ target_link_libraries(${LIB_NAME}
         CMSIS::STM32::F429ZI
         HAL::STM32::F4::CORTEX
         STM32::NoSys
-
+        SwarmUS::HiveMind::BSP::Common
+   
     PRIVATE
         stm32f4-linker
 
@@ -90,6 +93,7 @@ target_link_libraries(${LIB_NAME}
         HAL::STM32::F4::GPIO
         HAL::STM32::F4::UART
         HAL::STM32::F4::DMA
+
 
 )
 

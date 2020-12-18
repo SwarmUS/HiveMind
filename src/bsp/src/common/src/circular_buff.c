@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-// TODO: Add assert instead of NULL checks 
+// TODO: Add assert instead of NULL checks
 bool CircularBuff_init(CircularBuff* circularBuff, uint8_t* buffer, uint16_t size) {
     if (circularBuff == NULL || buffer == NULL) {
         return false;
@@ -115,5 +115,6 @@ bool CircularBuff_clear(CircularBuff* circularBuff) {
 
     circularBuff->m_readPos = 0;
     circularBuff->m_writePos = 0;
+    circularBuff->m_isFull = false;
     return true;
 }

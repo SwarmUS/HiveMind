@@ -23,6 +23,8 @@
 #include "main.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "hivemind_hal.h"
+#include "usart.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -177,6 +179,17 @@ void USART3_IRQHandler(void) {
 }
 
 /* USER CODE BEGIN 1 */
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef* huart) {
+    const uint8_t uartSendBuffSize = 16;
+    char uartSendBuff[uartSendBuffSize];
+
+    if (huart == &huart3 && huart3.gState == HAL_UART_STATE_READY) {
+        volatile uint16_t  dataSize= CircularBuff_get(&cbuffUart3, uartSendBuff, uartSendBuffSize);
+        if (dataSize > 0) {
+            HAL_UART_Transmit_IT(&huart3, uartSendBuff, dataSize);
+        }
+    }
+}
 
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
