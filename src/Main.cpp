@@ -20,6 +20,7 @@ void printThreadExample(void* param) {
     while (true) {
         vTaskDelay(toggleDelay);
         ui.print("Hello world!");
+        ui.print("Goodbye Humanity!");
     }
 }
 

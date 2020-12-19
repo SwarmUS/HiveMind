@@ -180,7 +180,7 @@ void USART3_IRQHandler(void) {
 
 /* USER CODE BEGIN 1 */
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef* huart) {
-    const uint8_t uartSendBuffSize = 16;
+    const uint8_t uartSendBuffSize = 64;
     char uartSendBuff[uartSendBuffSize];
 
     if (huart == &huart3 && huart3.gState == HAL_UART_STATE_READY) {
