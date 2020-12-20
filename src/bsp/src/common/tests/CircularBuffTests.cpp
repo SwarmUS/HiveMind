@@ -313,7 +313,6 @@ TEST_F(CircularBuffFixture, CircularBuff_getc_LoopBuff) {
 TEST_F(CircularBuffFixture, CircularBuff_get_Empty) {
     // Given
     uint8_t data[size];
-    memset(m_circularBuff.m_data, 42, size);
 
     // Then
     uint16_t ret = CircularBuff_get(&m_circularBuff, data, (int)(size / 2));
@@ -321,7 +320,6 @@ TEST_F(CircularBuffFixture, CircularBuff_get_Empty) {
     // Expect
     EXPECT_EQ(ret, 0);
     EXPECT_EQ(m_circularBuff.m_readPos, 0);
-    EXPECT_EQ(m_circularBuff.m_data[0], 42);
 }
 
 TEST_F(CircularBuffFixture, CircularBuff_get_Full) {
@@ -356,6 +354,77 @@ TEST_F(CircularBuffFixture, CircularBuff_get_Loops) {
     EXPECT_EQ(ret, (int)(size / 2));
 }
 
+// SUTFF HERE
+//
+
+TEST_F(CircularBuffFixture, CircularBuff_getZeroCopy_Empty) {
+    // Given
+
+    // Then
+    ZeroCopyBuff ret = CircularBuff_getZeroCopy(&m_circularBuff, (int)(size / 2));
+
+    // Expect
+    EXPECT_EQ(ret.length, 0);
+    EXPECT_EQ(ret.status, CircularBuff_Ret_EmptyErr);
+    EXPECT_EQ(ret.data, m_circularBuff.m_data);
+    EXPECT_EQ(m_circularBuff.m_readPos, 0);
+}
+
+TEST_F(CircularBuffFixture, CircularBuff_getZeroCopy_Full) {
+    // Given
+    m_circularBuff.m_isFull = true;
+    m_circularBuff.m_readPos = 1;
+    m_circularBuff.m_writePos = 1;
+    uint16_t readSize = (int)(size / 2);
+
+    // Then
+    ZeroCopyBuff ret = CircularBuff_getZeroCopy(&m_circularBuff, readSize);
+
+    // Expect
+    EXPECT_EQ(ret.length, readSize);
+    EXPECT_EQ(ret.status, CircularBuff_Ret_Ok);
+    EXPECT_EQ(ret.data, m_circularBuff.m_data + 1);
+    EXPECT_EQ(m_circularBuff.m_readPos, readSize + 1);
+    EXPECT_EQ(m_circularBuff.m_isFull, false);
+}
+
+TEST_F(CircularBuffFixture, CircularBuff_getZeroCopy_FullReadZero) {
+    // Given
+    m_circularBuff.m_isFull = true;
+    m_circularBuff.m_readPos = 1;
+    m_circularBuff.m_writePos = 1;
+    uint16_t readSize = 0;
+
+    // Then
+    ZeroCopyBuff ret = CircularBuff_getZeroCopy(&m_circularBuff, readSize);
+
+    // Expect
+    EXPECT_EQ(ret.length, readSize);
+    EXPECT_EQ(ret.status, CircularBuff_Ret_Ok);
+    EXPECT_EQ(ret.data, m_circularBuff.m_data + 1);
+    EXPECT_EQ(m_circularBuff.m_readPos, 1);
+    EXPECT_EQ(m_circularBuff.m_isFull, true);
+}
+
+TEST_F(CircularBuffFixture, CircularBuff_getZeroCopy_Loops) {
+    // Given
+    m_circularBuff.m_writePos = 5;
+    m_circularBuff.m_readPos = 6;
+    m_circularBuff.m_isFull = true;
+    uint16_t readSize = (int)(size / 2);
+
+    // Then
+    ZeroCopyBuff ret = CircularBuff_getZeroCopy(&m_circularBuff, readSize);
+
+    // Expect
+    EXPECT_EQ(ret.length, size - 6);
+    EXPECT_EQ(ret.status, CircularBuff_Ret_Ok);
+    EXPECT_EQ(ret.data, m_circularBuff.m_data + 6);
+    EXPECT_EQ(m_circularBuff.m_readPos, 8);
+    EXPECT_EQ(m_circularBuff.m_isFull, false);
+}
+
+// END STUFF
 TEST_F(CircularBuffFixture, CircularBuff_clear_ClearBuff) {
     // Given
     m_circularBuff.m_writePos = 4;

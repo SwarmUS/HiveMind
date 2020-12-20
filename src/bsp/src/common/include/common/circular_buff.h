@@ -9,18 +9,6 @@ extern "C" {
 #include <stdint.h>
 
 /**
- *@brief A structure to manage a circular buffer, you should never need to touch the data here, only
- *use the associated function
- **/
-typedef struct {
-    uint8_t* m_data;
-    uint16_t m_size;
-    uint16_t m_readPos;
-    uint16_t m_writePos;
-    bool m_isFull;
-} CircularBuff;
-
-/**
  *@brief The return type of some function associated with the circular buffer to notify if the
  *operation was successfull or not*/
 typedef enum {
@@ -36,7 +24,33 @@ typedef enum {
 
     /** The operation was not successfull, the buffer is empty on a read operation*/
     CircularBuff_Ret_EmptyErr,
+
 } CircularBuffRet;
+
+/**
+ *@brief A structure to manage a circular buffer, you should never need to touch the data here, only
+ *use the associated function
+ **/
+typedef struct {
+    uint8_t* m_data;
+    uint16_t m_size;
+    uint16_t m_readPos;
+    uint16_t m_writePos;
+    bool m_isFull;
+} CircularBuff;
+
+/**
+ *@brief A structure to manage a buffer with a certain size, mainly to get data without copy
+ *
+ **/
+typedef struct {
+    /** A pointer to the data to access */
+    const uint8_t* data;
+    /** The length of the available data */
+    const uint16_t length;
+    /** The status of the operation */
+    const CircularBuffRet status;
+} ZeroCopyBuff;
 
 /**
  *
@@ -107,7 +121,7 @@ CircularBuffRet CircularBuff_putc(CircularBuff* circularBuff, uint8_t data);
 CircularBuffRet CircularBuff_put(CircularBuff* circularBuff, const uint8_t* data, uint16_t length);
 
 /**
- * @brief Read a byte from the circular buffer
+ * @brief Read a byte from the circular buffer, copy the value to the provided data buffer
  *
  * @param [in] circularBuff the buffer to operate on
  *
@@ -117,7 +131,7 @@ CircularBuffRet CircularBuff_put(CircularBuff* circularBuff, const uint8_t* data
 CircularBuffRet CircularBuff_getc(CircularBuff* circularBuff, uint8_t* data);
 
 /**
- * @brief Read multiple bytes from the circular buffer
+ * @brief Read multiple bytes from the circular buffer, copy the value to the provided data buffer
  *
  * @param [in] circularBuff the buffer to operate on
  *
@@ -129,6 +143,23 @@ CircularBuffRet CircularBuff_getc(CircularBuff* circularBuff, uint8_t* data);
  *circularBuff is not initialized
  **/
 uint16_t CircularBuff_get(CircularBuff* circularBuff, uint8_t* data, uint16_t length);
+
+/**
+ * @brief Read multiple bytes from the circular buffer without copy, you shouldn't modify the data
+ *of the buff. Mostly for DMA or ISR.
+ *
+ *@b Warning, since this is a ring buffer, it cannot loop using copy free, so you may need to call
+ *it twice to obtain all the data. First call will read all the data until the end of the buffer,
+ * then set the read pointer at the start. The second call with get the remaining data at the
+ *beginning of the buffer.
+ *
+ * @param [in] circularBuff the buffer to operate on
+ *
+ * @param [in] length to read
+ *
+ * @return A Buff struct, allowing you to access the data and get the return value
+ **/
+ZeroCopyBuff CircularBuff_getZeroCopy(CircularBuff* circularBuff, uint16_t length);
 
 /**
  * @brief Clears the buffer from data

@@ -18,9 +18,9 @@ void printThreadExample(void* param) {
 
     logger.log(LogLevel::Info, "Hello logger!");
     while (true) {
-        vTaskDelay(toggleDelay);
         ui.print("Hello world!");
-        ui.print("Goodbye Humanity!");
+        vTaskDelay(toggleDelay);
+        ui.print("Goodbye!");
     }
 }
 

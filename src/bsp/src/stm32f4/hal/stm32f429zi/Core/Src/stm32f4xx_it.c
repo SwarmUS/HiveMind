@@ -180,13 +180,13 @@ void USART3_IRQHandler(void) {
 
 /* USER CODE BEGIN 1 */
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef* huart) {
-    const uint8_t uartSendBuffSize = 64;
-    char uartSendBuff[uartSendBuffSize];
+    uint8_t sendByte;
 
-    if (huart == &huart3 && huart3.gState == HAL_UART_STATE_READY) {
-        volatile uint16_t dataSize = CircularBuff_get(&cbuffUart3, uartSendBuff, uartSendBuffSize);
-        if (dataSize > 0) {
-            HAL_UART_Transmit_IT(&huart3, uartSendBuff, dataSize);
+    if (huart == &huart3) {
+        uint16_t length = CircularBuff_getLength(&cbuffUart3);
+        ZeroCopyBuff ret = CircularBuff_getZeroCopy(&cbuffUart3, length);
+        if (ret.status == CircularBuff_Ret_Ok) {
+            HAL_UART_Transmit_IT(&huart3, ret.data, ret.length);
         }
     }
 }

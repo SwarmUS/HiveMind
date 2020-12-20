@@ -73,18 +73,17 @@ PUTCHAR_PROTOTYPE {
     /* Place your implementation of fputc here */
     /* e.g. write a character to the USART3 and Loop until the end of transmission */
     volatile CircularBuffRet ret;
-    HAL_UART_StateTypeDef uartState = HAL_UART_GetState(&huart3);
-    if (uartState == HAL_UART_STATE_BUSY_TX || uartState == HAL_UART_STATE_BUSY_TX_RX) {
+    if (HAL_UART_GetState(&huart3) == HAL_UART_STATE_READY) {
+        HAL_UART_Transmit_IT(&huart3, (uint8_t*)&ch, 1);
+    } else {
         ret = CircularBuff_putc(&cbuffUart3, ch);
+        // Error handling
         if (ret != CircularBuff_Ret_Ok) {
             uint8_t buffErrMsg[] = "UART3 buffer full, clearing\r\n";
             HAL_UART_Abort(&huart3);
             HAL_UART_Transmit(&huart3, buffErrMsg, sizeof(buffErrMsg), HAL_MAX_DELAY);
             CircularBuff_clear(&cbuffUart3);
         }
-
-    } else {
-        HAL_UART_Transmit_IT(&huart3, (uint8_t*)&ch, 1);
     }
     return ch;
 }

@@ -34,7 +34,7 @@ extern "C" {
 extern UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN Private defines */
-#define CBUFF_HUART3_DATA_SIZE 1024
+#define CBUFF_HUART3_DATA_SIZE 4096
 
 extern CircularBuff cbuffUart3;
 /* USER CODE END Private defines */
