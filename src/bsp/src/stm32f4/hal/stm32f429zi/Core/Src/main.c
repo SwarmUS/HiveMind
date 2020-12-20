@@ -80,6 +80,7 @@ PUTCHAR_PROTOTYPE {
         // Error handling
         if (ret != CircularBuff_Ret_Ok) {
             uint8_t buffErrMsg[] = "UART3 buffer full, clearing\r\n";
+            lastUart3TransferSize = 0;
             HAL_UART_Abort(&huart3);
             HAL_UART_Transmit(&huart3, buffErrMsg, sizeof(buffErrMsg), HAL_MAX_DELAY);
             CircularBuff_clear(&cbuffUart3);

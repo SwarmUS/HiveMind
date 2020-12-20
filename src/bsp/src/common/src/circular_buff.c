@@ -52,10 +52,11 @@ CircularBuffRet CircularBuff_putc(CircularBuff* circularBuff, uint8_t data) {
         return CircularBuff_Ret_SpaceErr;
     }
 
+    circularBuff->m_data[circularBuff->m_writePos++] = data;
+
     if (circularBuff->m_writePos >= circularBuff->m_size)
         circularBuff->m_writePos = 0;
 
-    circularBuff->m_data[circularBuff->m_writePos++] = data;
     if (circularBuff->m_writePos == circularBuff->m_readPos)
         circularBuff->m_isFull = true;
 
@@ -85,12 +86,13 @@ CircularBuffRet CircularBuff_getc(CircularBuff* circularBuff, uint8_t* data) {
         return CircularBuff_Ret_EmptyErr;
     }
 
+    *data = circularBuff->m_data[circularBuff->m_readPos++];
+
     if (circularBuff->m_readPos >= circularBuff->m_size)
         circularBuff->m_readPos = 0;
 
     circularBuff->m_isFull = false;
 
-    *data = circularBuff->m_data[circularBuff->m_readPos++];
     return CircularBuff_Ret_Ok;
 }
 
@@ -129,13 +131,25 @@ ZeroCopyBuff CircularBuff_getZeroCopy(CircularBuff* circularBuff, uint16_t lengt
                          .length = copySize,
                          .status = status};
 
+    return buff;
+}
+
+uint16_t CircularBuff_advance(CircularBuff* circularBuff, uint16_t length) {
+    uint16_t buffDataSize = CircularBuff_getLength(circularBuff);
+
+    if (circularBuff == NULL || circularBuff->m_data == NULL || buffDataSize == 0) {
+        return 0;
+    }
+
+    uint16_t copySize = length > buffDataSize ? buffDataSize : length;
+
     // Update the state
-    circularBuff->m_readPos = copySize > dataUntilLoop ? 0 : circularBuff->m_readPos + copySize;
-    if (length > 0) {
+    circularBuff->m_readPos = (circularBuff->m_readPos + copySize) % circularBuff->m_size;
+    if (copySize > 0) {
         circularBuff->m_isFull = false;
     }
 
-    return buff;
+    return copySize;
 }
 
 bool CircularBuff_clear(CircularBuff* circularBuff) {

@@ -34,7 +34,7 @@ target_link_libraries(${LIB_NAME}
 
 add_custom_target(
     flash
-    COMMAND openocd  -f ${OPENOCD_CFG_PATH} -c 'program $<TARGET_FILE:${EXECUTABLE_NAME}> verify exit'
+    COMMAND openocd  -f ${OPENOCD_CFG_PATH} -c 'program $<TARGET_FILE:${EXECUTABLE_NAME}> verify reset exit'
 )
 
 add_subdirectory(hal)

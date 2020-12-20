@@ -198,14 +198,14 @@ TEST_F(CircularBuffFixture, CircularBuff_putc_Full) {
 TEST_F(CircularBuffFixture, CircularBuff_putc_LoopBuff) {
     // Given
     m_circularBuff.m_readPos = 5;
-    m_circularBuff.m_writePos = 8;
+    m_circularBuff.m_writePos = size - 1;
 
     // Then
     CircularBuffRet ret = CircularBuff_putc(&m_circularBuff, 42);
 
     // Expect
-    EXPECT_EQ(m_circularBuff.m_writePos, 1);
-    EXPECT_EQ(m_circularBuff.m_data[0], 42);
+    EXPECT_EQ(m_circularBuff.m_writePos, 0);
+    EXPECT_EQ(m_circularBuff.m_data[size - 1], 42);
     EXPECT_EQ(ret, CircularBuff_Ret_Ok);
 }
 
@@ -298,15 +298,15 @@ TEST_F(CircularBuffFixture, CircularBuff_getc_LoopBuff) {
     // Given
     uint8_t data = 0;
     m_circularBuff.m_data[size - 1] = 42;
-    m_circularBuff.m_readPos = 8;
+    m_circularBuff.m_readPos = size - 1;
     m_circularBuff.m_writePos = 5;
 
     // Then
     CircularBuffRet ret = CircularBuff_getc(&m_circularBuff, &data);
 
     // Expect
-    EXPECT_EQ(m_circularBuff.m_readPos, 1);
-    EXPECT_EQ(m_circularBuff.m_data[size - 1], 42);
+    EXPECT_EQ(m_circularBuff.m_readPos, 0);
+    EXPECT_EQ(data, 42);
     EXPECT_EQ(ret, CircularBuff_Ret_Ok);
 }
 
@@ -354,9 +354,6 @@ TEST_F(CircularBuffFixture, CircularBuff_get_Loops) {
     EXPECT_EQ(ret, (int)(size / 2));
 }
 
-// SUTFF HERE
-//
-
 TEST_F(CircularBuffFixture, CircularBuff_getZeroCopy_Empty) {
     // Given
 
@@ -384,8 +381,8 @@ TEST_F(CircularBuffFixture, CircularBuff_getZeroCopy_Full) {
     EXPECT_EQ(ret.length, readSize);
     EXPECT_EQ(ret.status, CircularBuff_Ret_Ok);
     EXPECT_EQ(ret.data, m_circularBuff.m_data + 1);
-    EXPECT_EQ(m_circularBuff.m_readPos, readSize + 1);
-    EXPECT_EQ(m_circularBuff.m_isFull, false);
+    EXPECT_EQ(m_circularBuff.m_readPos, 1);
+    EXPECT_EQ(m_circularBuff.m_isFull, true); // Don't go forwards
 }
 
 TEST_F(CircularBuffFixture, CircularBuff_getZeroCopy_FullReadZero) {
@@ -410,7 +407,7 @@ TEST_F(CircularBuffFixture, CircularBuff_getZeroCopy_Loops) {
     // Given
     m_circularBuff.m_writePos = 5;
     m_circularBuff.m_readPos = 6;
-    m_circularBuff.m_isFull = true;
+    m_circularBuff.m_isFull = false;
     uint16_t readSize = (int)(size / 2);
 
     // Then
@@ -420,11 +417,58 @@ TEST_F(CircularBuffFixture, CircularBuff_getZeroCopy_Loops) {
     EXPECT_EQ(ret.length, size - 6);
     EXPECT_EQ(ret.status, CircularBuff_Ret_Ok);
     EXPECT_EQ(ret.data, m_circularBuff.m_data + 6);
-    EXPECT_EQ(m_circularBuff.m_readPos, 8);
+    EXPECT_EQ(m_circularBuff.m_readPos, 6);
     EXPECT_EQ(m_circularBuff.m_isFull, false);
 }
 
-// END STUFF
+TEST_F(CircularBuffFixture, CircularBuff_advance_Empty) {
+    // Given
+    m_circularBuff.m_writePos = 0;
+    m_circularBuff.m_readPos = 0;
+    m_circularBuff.m_isFull = false;
+    uint16_t advanceSize = (int)(size / 2);
+
+    // Then
+    uint16_t ret = CircularBuff_advance(&m_circularBuff, advanceSize);
+
+    // Expect
+    EXPECT_EQ(ret, 0);
+    EXPECT_EQ(m_circularBuff.m_readPos, 0);
+    EXPECT_EQ(m_circularBuff.m_isFull, false);
+}
+
+TEST_F(CircularBuffFixture, CircularBuff_advance_Full) {
+    // Given
+    m_circularBuff.m_writePos = 1;
+    m_circularBuff.m_readPos = 1;
+    m_circularBuff.m_isFull = true;
+    uint16_t advanceSize = (int)(size / 2);
+
+    // Then
+    uint16_t ret = CircularBuff_advance(&m_circularBuff, advanceSize);
+
+    // Expect
+    EXPECT_EQ(ret, advanceSize);
+    EXPECT_EQ(m_circularBuff.m_readPos, advanceSize + 1);
+    EXPECT_EQ(m_circularBuff.m_isFull, false);
+}
+
+TEST_F(CircularBuffFixture, CircularBuff_advance_Loop) {
+    // Given
+    m_circularBuff.m_writePos = 5;
+    m_circularBuff.m_readPos = 6;
+    m_circularBuff.m_isFull = true;
+    uint16_t advanceSize = (int)(size / 2);
+
+    // Then
+    uint16_t ret = CircularBuff_advance(&m_circularBuff, advanceSize);
+
+    // Expect
+    EXPECT_EQ(ret, advanceSize);
+    EXPECT_EQ(m_circularBuff.m_readPos, (6 + advanceSize) % size);
+    EXPECT_EQ(m_circularBuff.m_isFull, false);
+}
+
 TEST_F(CircularBuffFixture, CircularBuff_clear_ClearBuff) {
     // Given
     m_circularBuff.m_writePos = 4;

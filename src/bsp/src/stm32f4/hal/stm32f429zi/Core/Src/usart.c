@@ -23,7 +23,7 @@
 /* USER CODE BEGIN 0 */
 
 CircularBuff cbuffUart3;
-
+uint16_t lastUart3TransferSize = 0;
 static uint8_t cbuffUart3Data[CBUFF_HUART3_DATA_SIZE];
 
 /* USER CODE END 0 */

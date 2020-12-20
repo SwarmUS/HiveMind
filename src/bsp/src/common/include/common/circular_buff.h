@@ -146,12 +146,17 @@ uint16_t CircularBuff_get(CircularBuff* circularBuff, uint8_t* data, uint16_t le
 
 /**
  * @brief Read multiple bytes from the circular buffer without copy, you shouldn't modify the data
- *of the buff. Mostly for DMA or ISR.
+ *of the buff. Mostly for DMA or ISR. Does not make the read pointer go forward to avoir write
+ *during reads.
  *
  *@b Warning, since this is a ring buffer, it cannot loop using without copy, so you may need to
  *call it twice to obtain all the data. First call will read all the data until the end of the
  *buffer, then set the read pointer at the start. The second call with get the remaining data at the
  *beginning of the buffer.
+ *
+ *@b Warning The zero copy function does not increment the read pointer, since that would allow
+ *overwrite while you are using the read pointer. Use the CircularBuff_advance function when you are
+ *done with the read.
  *
  * @param [in] circularBuff the buffer to operate on
  *
@@ -160,6 +165,19 @@ uint16_t CircularBuff_get(CircularBuff* circularBuff, uint8_t* data, uint16_t le
  * @return A Buff struct, allowing you to access the data and get the return value
  **/
 ZeroCopyBuff CircularBuff_getZeroCopy(CircularBuff* circularBuff, uint16_t length);
+
+/**
+ * @brief Allows to go forward without reading data, mostly used with CircularBuff_getZeroCopy when
+ *you are done with the data.
+ *
+ * @param [in] circularBuff the buffer to operate on
+ *
+ * @param [in] length go forward a number of bytes
+ *
+ * @return the actual number of bytes advanced in the buffer. Returns 0 if a pointer is null or the
+ *circularBuff is not initialized
+ **/
+uint16_t CircularBuff_advance(CircularBuff* circularBuff, uint16_t length);
 
 /**
  * @brief Clears the buffer from data
