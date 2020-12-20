@@ -54,7 +54,7 @@ typedef struct {
 
 /**
  *
- * @brief Initialise the circular buffer struc
+ * @brief Initialise the circular buffer struct
  *
  * @param [in] circularBuff the struct to initialise
  *
