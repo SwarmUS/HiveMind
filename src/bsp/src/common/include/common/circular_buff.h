@@ -148,9 +148,9 @@ uint16_t CircularBuff_get(CircularBuff* circularBuff, uint8_t* data, uint16_t le
  * @brief Read multiple bytes from the circular buffer without copy, you shouldn't modify the data
  *of the buff. Mostly for DMA or ISR.
  *
- *@b Warning, since this is a ring buffer, it cannot loop using copy free, so you may need to call
- *it twice to obtain all the data. First call will read all the data until the end of the buffer,
- * then set the read pointer at the start. The second call with get the remaining data at the
+ *@b Warning, since this is a ring buffer, it cannot loop using without copy, so you may need to
+ *call it twice to obtain all the data. First call will read all the data until the end of the
+ *buffer, then set the read pointer at the start. The second call with get the remaining data at the
  *beginning of the buffer.
  *
  * @param [in] circularBuff the buffer to operate on
