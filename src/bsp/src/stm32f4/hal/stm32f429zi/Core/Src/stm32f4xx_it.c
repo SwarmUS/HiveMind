@@ -180,19 +180,5 @@ void USART3_IRQHandler(void) {
 
 /* USER CODE BEGIN 1 */
 
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef* huart) {
-    if (huart == &huart3) {
-        // Advance to the size of the last transfer
-        CircularBuff_advance(&cbuffUart3, lastUart3TransferSize);
-
-        // Send data
-        ZeroCopyBuff buff = CircularBuff_getZeroCopy(&cbuffUart3, UINT16_MAX);
-        if (buff.status == CircularBuff_Ret_Ok) {
-            HAL_UART_Transmit_IT(&huart3, buff.data, buff.length);
-            lastUart3TransferSize = buff.length;
-        }
-    }
-}
-
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

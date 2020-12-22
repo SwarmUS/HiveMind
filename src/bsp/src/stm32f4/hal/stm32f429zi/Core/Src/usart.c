@@ -52,9 +52,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle) {
     GPIO_InitTypeDef GPIO_InitStruct = {0};
     if (uartHandle->Instance == USART3) {
         /* USER CODE BEGIN USART3_MspInit 0 */
-
-        CircularBuff_init(&cbuffUart3, cbuffUart3Data, CBUFF_HUART3_DATA_SIZE);
-
         /* USER CODE END USART3_MspInit 0 */
         /* USART3 clock enable */
         __HAL_RCC_USART3_CLK_ENABLE();

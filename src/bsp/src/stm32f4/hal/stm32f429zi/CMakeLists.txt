@@ -1,6 +1,7 @@
 set(LIB_NAME "swarmus-hivemind-bsp-stm32f429zi")
 set(LIB_ALIAS "SwarmUS::HiveMind::BSP::STM32F4")
 
+
 set(LIB_SOURCES
     Core/Src/stm32f4xx_hal_msp.c
     # Core/Src/system_stm32f4xx.c Already provided by CMSIS, no need for it
@@ -19,11 +20,10 @@ set(LIB_HEADERS
 )
 
 # Sources that needs to be global on the project
-# Ex: interrupts, syscalls
+# Ex: interrupts, syscalls, callbacks
 set(GLOBAL_SOURCES
     Core/Src/stm32f4xx_it.c
     Core/Src/stm32f4xx_hal_timebase_tim.c
-    Core/Src/syscalls.c
 )
 
 stm32_fetch_cmsis(F4)
@@ -40,20 +40,20 @@ find_package(HAL COMPONENTS
 
 
 # Creating the interface library
-add_library(stm32f4-linker INTERFACE)
-add_library(${LIB_BSP_LINKER_ALIAS} ALIAS stm32f4-linker) # Provide alias for linker options
+add_library(stm32f429zi-linker INTERFACE)
+add_library(${LIB_HAL_LINKER_ALIAS} ALIAS stm32f429zi-linker) # Provide alias for linker options
 set_target_properties(CMSIS::STM32::F429ZI PROPERTIES IMPORTED_GLOBAL TRUE)
 
-target_sources(stm32f4-linker
+target_sources(stm32f429zi-linker
     INTERFACE
         ${GLOBAL_SOURCES})
 
-target_include_directories(stm32f4-linker
+target_include_directories(stm32f429zi-linker
     INTERFACE
         Core/Inc
 )
 
-target_link_libraries(stm32f4-linker
+target_link_libraries(stm32f429zi-linker
     INTERFACE
         CMSIS::STM32::F429ZI
         HAL::STM32::F4
@@ -86,7 +86,7 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::BSP::Common
    
     PRIVATE
-        stm32f4-linker
+        stm32f429zi-linker
 
         # Drivers
         HAL::STM32::F4::RCC

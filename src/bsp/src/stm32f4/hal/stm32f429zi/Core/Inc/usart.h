@@ -34,10 +34,7 @@ extern "C" {
 extern UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN Private defines */
-#define CBUFF_HUART3_DATA_SIZE 128
 
-extern CircularBuff cbuffUart3;
-extern uint16_t lastUart3TransferSize;
 /* USER CODE END Private defines */
 
 void MX_USART3_UART_Init(void);
