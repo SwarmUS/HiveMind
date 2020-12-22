@@ -7,10 +7,14 @@ function(googletest_get_populate)
     GIT_TAG        release-1.10.0
     )
 
-    FetchContent_GetProperties(googletest)
-    if(NOT googletest_POPULATED)
-        FetchContent_Populate(googletest)
-        add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
+    if (TARGET gtest)
+        message("gtest already provided by catkin")
+    else()
+        FetchContent_GetProperties(googletest)
+        if(NOT googletest_POPULATED)
+            FetchContent_Populate(googletest)
+            add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
+        endif()
     endif()
 
     # Disable compiler warnings and clang-tidy

@@ -8,7 +8,7 @@ option(ENABLE_WARNINGS_AS_ERROR "Enable all warnings as errors" ON)
 option(ENABLE_TESTS "Build the tests" ON)
 option(ENABLE_CLANG_TIDY_CHECK "Enable clang tidy check on compilation" ON)
 option(ENABLE_ERROR_ON_MISSING_TOOL "If a tools (clang-tidy, clang-format, doxygen) is not disabled and not installed, throws error" ON)
-
+option(USE_CATKIN ON)
 option(DISABLE_EXTERNAL_WARNINGS "Disables warnings from exernal libs (gtest, freertos, etc)" ON)
 
 # Init compile variable
@@ -31,15 +31,33 @@ if(ENABLE_WARNINGS_AS_ERROR)
   add_compile_options(${WARNING_AS_ERROR_FLAG})
 endif()
 
+#add_compile_options(-stdlib=libc++)
+
 # Includes
 include(clang-tools/clang-tidy)
 include(clang-tools/clang-format)
-include(doc/doxygen)
+#include(doc/doxygen)
+
+if(USE_CATKIN)
+  find_package(catkin REQUIRED COMPONENTS
+    roscpp
+    rospy
+    std_msgs
+    message_generation
+  )
+
+  include_directories(
+    ${catkin_INCLUDE_DIRS}
+  )
+
+  catkin_package()
+endif()
 
 # Testing
 if(ENABLE_TESTS)
+    message("TESTS")
     include(googletest/common)
-    enable_testing()
+    #enable_testing()
     googletest_get_populate()
 endif()
 

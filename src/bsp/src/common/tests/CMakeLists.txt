@@ -21,3 +21,8 @@ target_link_libraries(${TEST_NAME}
 add_test(NAME ${TEST_NAME}
          COMMAND ${TEST_NAME})
 
+#catkin_add_gtest(${TEST_NAME} ${TEST_SOURCES})
+#target_link_libraries(${TEST_NAME} 
+#${catkin_LIBRARIES}
+#SwarmUS::HiveMind::BSP::Common)
+

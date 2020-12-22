@@ -29,3 +29,5 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::BSP::Platform
 )
 
+set_target_properties(${LIB_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+
