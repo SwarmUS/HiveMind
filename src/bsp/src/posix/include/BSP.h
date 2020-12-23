@@ -10,6 +10,7 @@ class BSP : public IBSP {
     ~BSP() override;
 
     void initChip(int argc, char** argv) override;
+    ros::NodeHandle* getRosNodeHandle();
 
   private:
     ros::NodeHandle* m_rosNodeHandle;

@@ -14,7 +14,7 @@ option(DISABLE_EXTERNAL_WARNINGS "Disables warnings from exernal libs (gtest, fr
 set(COMPILE_STM32_F429ZI 0)
 
 # Define project
-project(hive-mind CXX C ASM)
+project(hive_mind CXX C ASM)
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
 # Warning flags constants
@@ -31,6 +31,7 @@ if(ENABLE_WARNINGS_AS_ERROR)
 endif()
 
 # Includes
+include(ros/generators.cmake)
 include(catkin/common)
 include(clang-tools/clang-tidy)
 include(clang-tools/clang-format)

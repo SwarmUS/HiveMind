@@ -12,6 +12,7 @@ set(LIB_PRIVATE_HEADERS
 
 add_library(${LIB_NAME} ${LIB_SOURCES} ${LIB_PRIVATE_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
+add_dependencies(${LIB_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 target_include_directories(${LIB_NAME} SYSTEM PRIVATE ${catkin_INCLUDE_DIRS})
 target_include_directories(${LIB_NAME}
@@ -20,7 +21,6 @@ target_include_directories(${LIB_NAME}
         ${BSP_CMAKE_DIR}/include
         include
 )
-
 
 target_link_libraries(${LIB_NAME}
     PUBLIC
