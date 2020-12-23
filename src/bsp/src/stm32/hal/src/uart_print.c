@@ -37,7 +37,6 @@ PUTCHAR_PROTOTYPE {
     return ch;
 }
 
-
 /** End prototype definitions **/
 
 /** Function definitions **/
@@ -46,7 +45,7 @@ void UartPrint_init() {
     CircularBuff_init(&cbuffUartPrint, cbuffUart3Data, CBUFF_HUART3_DATA_SIZE);
 }
 
-void UartPrint_sendTxCallback(){
+void UartPrint_sendTxCallback() {
     // Advance to the size of the last transfer
     CircularBuff_advance(&cbuffUartPrint, lastUartPrintTransferSize);
 
