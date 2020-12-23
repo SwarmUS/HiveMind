@@ -11,7 +11,7 @@
 
 void printThreadExample(void* param) {
     (void)param;
-    const int toggleDelay = 2;
+    const int toggleDelay = 2000;
 
     UserInterface ui = UserInterface();
     Logger logger = Logger(LogLevel::Debug, ui);
@@ -24,9 +24,9 @@ void printThreadExample(void* param) {
     }
 }
 
-int main() {
+int main(int argc, char** argv) {
     BSP bsp = BSP();
-    bsp.initChip();
+    bsp.initChip(argc, argv);
 
     xTaskCreate(printThreadExample, "print", configMINIMAL_STACK_SIZE * 4, NULL,
                 tskIDLE_PRIORITY + 1, NULL);

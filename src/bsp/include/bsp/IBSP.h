@@ -8,7 +8,7 @@ class IBSP {
     /**
      * @brief Initialise the chip for usage. Needs to be called early in the program.
      */
-    virtual void initChip() = 0;
+    virtual void initChip(int argc, char** argv) = 0;
 };
 
 #endif // __IBSP_H_

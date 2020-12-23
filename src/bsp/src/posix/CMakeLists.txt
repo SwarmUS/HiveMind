@@ -19,13 +19,14 @@ target_include_directories(${LIB_NAME}
         ${BSP_CMAKE_DIR}/include
 )
 
+target_include_directories(${LIB_NAME} SYSTEM PRIVATE ${catkin_INCLUDE_DIRS})
 
 target_link_libraries(${LIB_NAME}
     PUBLIC
         # Defined libraries
         SwarmUS::HiveMind::FreeRTOS
+        ${catkin_LIBRARIES}
 )
-
 
 # Mock linker library
 add_library(posix-linker INTERFACE)

@@ -8,7 +8,7 @@ option(ENABLE_WARNINGS_AS_ERROR "Enable all warnings as errors" ON)
 option(ENABLE_TESTS "Build the tests" ON)
 option(ENABLE_CLANG_TIDY_CHECK "Enable clang tidy check on compilation" ON)
 option(ENABLE_ERROR_ON_MISSING_TOOL "If a tools (clang-tidy, clang-format, doxygen) is not disabled and not installed, throws error" ON)
-option(USE_CATKIN ON)
+set(USE_CATKIN 1)
 option(DISABLE_EXTERNAL_WARNINGS "Disables warnings from exernal libs (gtest, freertos, etc)" ON)
 
 # Init compile variable
@@ -19,7 +19,7 @@ project(hive-mind CXX C ASM)
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
 # Warning flags constants
-set(WARNING_FLAG -Wall -Wextra -Wsign-conversion -Wuninitialized  -Wunused-variable -Wpedantic -fno-exceptions )
+set(WARNING_FLAG -Wall -Wextra -Wsign-conversion -Wuninitialized  -Wunused-variable -Wpedantic )
 set(WARNING_AS_ERROR_FLAG -Werror)
 
 # Generator expression doesn't work with clang-tidy, we need to make an IF statement manually
@@ -31,33 +31,25 @@ if(ENABLE_WARNINGS_AS_ERROR)
   add_compile_options(${WARNING_AS_ERROR_FLAG})
 endif()
 
-#add_compile_options(-stdlib=libc++)
+if(USE_CATKIN)
+    find_package(catkin REQUIRED COMPONENTS
+            roscpp
+            rospy
+            std_msgs
+            message_generation
+            )
+    catkin_package()
+endif()
 
 # Includes
 include(clang-tools/clang-tidy)
 include(clang-tools/clang-format)
-#include(doc/doxygen)
-
-if(USE_CATKIN)
-  find_package(catkin REQUIRED COMPONENTS
-    roscpp
-    rospy
-    std_msgs
-    message_generation
-  )
-
-  include_directories(
-    ${catkin_INCLUDE_DIRS}
-  )
-
-  catkin_package()
-endif()
+include(doc/doxygen)
 
 # Testing
 if(ENABLE_TESTS)
-    message("TESTS")
     include(googletest/common)
-    #enable_testing()
+    enable_testing()
     googletest_get_populate()
 endif()
 
