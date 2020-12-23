@@ -61,6 +61,7 @@ set(BBZ_SOURCES
 add_library(BittyBuzz STATIC ${BBZ_SOURCES} ${BBZ_HEADERS})
 
 target_include_directories(BittyBuzz
+    SYSTEM
     PUBLIC
         ${BittyBuzz_INCLUDE_DIRS}
 )
@@ -68,7 +69,7 @@ target_include_directories(BittyBuzz
 # Disable compiler warnings and clang-tidy
 if(DISABLE_EXTERNAL_WARNINGS)
     target_compile_options(BittyBuzz PRIVATE -w)
-    set_target_properties(BittyBuzz PROPERTIES CXX_CLANG_TIDY "")
+    set_target_properties(BittyBuzz PROPERTIES C_CLANG_TIDY "")
 endif()
 
 find_package_handle_standard_args(BittyBuzz
