@@ -1,5 +1,5 @@
-set(LIB_NAME "swarmus-hivemind-bsp-stm32f429zi")
-set(LIB_ALIAS "SwarmUS::HiveMind::BSP::STM32F4")
+set(LIB_NAME "swarmus-hivemind-hal-stm32f429zi")
+set(LIB_ALIAS "SwarmUS::HiveMind::HAL::STM32F4")
 
 
 set(LIB_SOURCES
@@ -59,9 +59,7 @@ target_link_libraries(stm32f429zi-linker
         HAL::STM32::F4
         HAL::STM32::F4::TIM
         HAL::STM32::F4::TIMEx
-        STM32::NoSys
-        
-        SwarmUS::HiveMind::BSP::Common)
+        STM32::NoSys)
 
 # Actual bsp library
 add_library(${LIB_NAME} 

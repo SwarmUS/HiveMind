@@ -1,6 +1,9 @@
-#include "uart_print.h"
-void Hal_init(){
-    UartPrint_init();
+#include "hal/hal.h"
+#include "hal/uart_print.h"
+#include "hivemind_hal.h"
+
+void Hal_init() {
+
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
 
@@ -10,4 +13,7 @@ void Hal_init(){
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_USART3_UART_Init();
+
+    /* Initialize UartPrint */
+    UartPrint_init();
 }

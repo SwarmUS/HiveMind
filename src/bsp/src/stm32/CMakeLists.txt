@@ -11,8 +11,8 @@ set(LIB_PRIVATE_HEADERS
 
 
 add_library(${LIB_NAME}
-  ${LIB_SOURCES}
-  ${LIB_PRIVATE_HEADERS}
+    ${LIB_SOURCES}
+    ${LIB_PRIVATE_HEADERS}
 )
 
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
@@ -29,7 +29,7 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::FreeRTOS
 
     PRIVATE
-        SwarmUS::HiveMind::BSP::STM32F4
+        SwarmUS::HiveMind::HAL
 )
 
 add_custom_target(

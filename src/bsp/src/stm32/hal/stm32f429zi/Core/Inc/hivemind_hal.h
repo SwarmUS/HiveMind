@@ -10,9 +10,7 @@ extern "C" {
 #include "stm32f4xx_hal_conf.h"
 #include "usart.h"
 
-
 #define HUART_PRINT (&huart3)
-
 
 void SystemClock_Config(void);
 
