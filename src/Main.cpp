@@ -4,7 +4,8 @@
 #include <task.h>
 #include <timers.h>
 
-#include <bsp/BSP.h>
+#include <bsp/BSPFactory.h>
+#include <bsp/IBSP.h>
 #include <bsp/UserInterface.h>
 #include <cstdlib>
 #include <logger/Logger.h>
@@ -25,8 +26,9 @@ void printThreadExample(void* param) {
 }
 
 int main(int argc, char** argv) {
-    BSP bsp = BSP();
-    bsp.initChip(argc, argv);
+    IBSP* bsp = BSPFactory::getBSP();
+
+    bsp->initChip(argc, argv);
 
     xTaskCreate(printThreadExample, "print", configMINIMAL_STACK_SIZE * 4, NULL,
                 tskIDLE_PRIORITY + 1, NULL);
