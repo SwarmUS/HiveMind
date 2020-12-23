@@ -16,7 +16,7 @@ static uint8_t cbuffUart3Data[CBUFF_HUART3_DATA_SIZE];
 #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE* f)
 #endif /* __GNUC__ */
 
-/** Callbacks and definitions **/
+/** Prototype definitions **/
 PUTCHAR_PROTOTYPE {
     /* Place your implementation of fputc here */
     /* e.g. write a character to the USART3 and Loop until the end of transmission */
@@ -37,26 +37,25 @@ PUTCHAR_PROTOTYPE {
     return ch;
 }
 
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef* huart) {
-    if (huart == HUART_PRINT) {
-        // Advance to the size of the last transfer
-        CircularBuff_advance(&cbuffUartPrint, lastUartPrintTransferSize);
 
-        // Send data
-        ZeroCopyBuff buff = CircularBuff_getZeroCopy(&cbuffUartPrint, UINT16_MAX);
-        if (buff.status == CircularBuff_Ret_Ok) {
-            HAL_UART_Transmit_IT(HUART_PRINT, (uint8_t*)buff.data, buff.length);
-            lastUartPrintTransferSize = buff.length;
-        }
-    }
-}
-
-/** End callbacks and definitions **/
+/** End prototype definitions **/
 
 /** Function definitions **/
 
 void UartPrint_init() {
     CircularBuff_init(&cbuffUartPrint, cbuffUart3Data, CBUFF_HUART3_DATA_SIZE);
+}
+
+void UartPrint_sendTxCallback(){
+    // Advance to the size of the last transfer
+    CircularBuff_advance(&cbuffUartPrint, lastUartPrintTransferSize);
+
+    // Send data
+    ZeroCopyBuff buff = CircularBuff_getZeroCopy(&cbuffUartPrint, UINT16_MAX);
+    if (buff.status == CircularBuff_Ret_Ok) {
+        HAL_UART_Transmit_IT(HUART_PRINT, (uint8_t*)buff.data, buff.length);
+        lastUartPrintTransferSize = buff.length;
+    }
 }
 
 /** End Function definitions **/

@@ -16,6 +16,7 @@ set(LIB_HEADERS
 # Ex: interrupts, syscalls, callbacks
 set(GLOBAL_SOURCES
     src/uart_print.c
+    src/uart.c
     src/syscalls.c
 )
 

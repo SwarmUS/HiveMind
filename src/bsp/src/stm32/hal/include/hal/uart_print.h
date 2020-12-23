@@ -13,6 +13,11 @@ extern "C" {
  */
 void UartPrint_init();
 
+/**
+ * @brief  Callback used on reception to send the data accumulated since the last send
+ */
+void UartPrint_sendTxCallback();
+
 #ifdef __cplusplus
 }
 #endif
