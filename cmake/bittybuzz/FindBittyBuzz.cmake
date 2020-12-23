@@ -66,6 +66,20 @@ target_include_directories(BittyBuzz
         ${BittyBuzz_INCLUDE_DIRS}
 )
 
+# Adding utils
+set(BBZ_UTILS_SOURCES
+        ${BittyBuzz_SOURCE_DIR}/exec/bo2bbo.c
+        ${BittyBuzz_SOURCE_DIR}/exec/kilo_bcodegen.c
+        ${BittyBuzz_SOURCE_DIR}/exec/zooids_bcodegen.c
+        ${BittyBuzz_SOURCE_DIR}/exec/crazyflie_bcodegen.c
+)
+foreach (bbz_exec_src ${BBZ_UTILS_SOURCES})
+    get_filename_component(bbz_excutable ${bbz_exec_src} NAME_WE)
+    add_executable(${bbz_executable} ${bbz_exec_src} ${BittyBuzz_SOURCE_DIR}/bbzfloat.c)
+    target_include_directories(${bbz_executable} PRIVATE ${BittyBuzz_SOURCE_DIR})
+    set_target_properties(${bbz_executable} PROPERTIES C_CLANG_TIDY "")
+endforeach ()
+
 # Disable compiler warnings and clang-tidy
 if(DISABLE_EXTERNAL_WARNINGS)
     target_compile_options(BittyBuzz PRIVATE -w)
@@ -75,3 +89,4 @@ endif()
 find_package_handle_standard_args(BittyBuzz
     REQUIRED_VARS BittyBuzz_SOURCE_DIR
 )
+
