@@ -9,11 +9,11 @@ bittybuzz_fetch()
 find_package(BittyBuzz)
 
 set(LIB_HEADERS
-    include/bittybuzz/bittybuzz.h
+    include/bittybuzz/BittyBuzz.h
 )
 
 set(LIB_SOURCES
-    src/bittybuzz.cpp
+    src/BittyBuzz.cpp
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_HEADERS})
