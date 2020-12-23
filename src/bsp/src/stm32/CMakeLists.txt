@@ -4,6 +4,7 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform")
 set(LIB_SOURCES
     src/BSP.cpp
     src/UserInterface.cpp
+    src/BSPFactory.cpp
 )
 
 set(LIB_PRIVATE_HEADERS

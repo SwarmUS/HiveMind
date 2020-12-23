@@ -116,6 +116,7 @@ foreach(PORT ${FreeRTOS_FIND_COMPONENTS})
             target_link_libraries(FreeRTOS::${PORT} INTERFACE FreeRTOS)
             target_sources(FreeRTOS::${PORT} INTERFACE "${FreeRTOS_${PORT}_SOURCE}")
             target_include_directories(FreeRTOS::${PORT} SYSTEM INTERFACE "${FreeRTOS_${PORT}_PATH}")
+            target_compile_options(FreeRTOS::${PORT} INTERFACE -fPIC)
         endif()
 
         if(FreeRTOS_${PORT}_PATH AND 
