@@ -8,6 +8,7 @@
 #include <bsp/UserInterface.h>
 #include <cstdlib>
 #include <logger/Logger.h>
+#include <bittybuzz/BittyBuzz.h>
 
 void printThreadExample(void* param) {
     (void)param;
@@ -15,6 +16,10 @@ void printThreadExample(void* param) {
 
     UserInterface ui = UserInterface();
     Logger logger = Logger(LogLevel::Debug, ui);
+
+    BittyBuzz bittybuzz = BittyBuzz();
+    bittybuzz.init();
+    bittybuzz.run();
 
     logger.log(LogLevel::Info, "Hello logger!");
     while (true) {

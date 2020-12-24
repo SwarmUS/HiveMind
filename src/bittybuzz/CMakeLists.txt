@@ -5,7 +5,6 @@ include(bittybuzz/common)
 include(bittybuzz_config.cmake) # not a module, need to specify "".cmake"
 
 bittybuzz_fetch()
-
 find_package(BittyBuzz)
 
 set(LIB_HEADERS
@@ -32,4 +31,9 @@ target_link_libraries(${LIB_NAME}
         BittyBuzz
         SwarmUS::HiveMind::BSP
         SwarmUS::HiveMind::FreeRTOS
+        bittybuzz-target
 )
+
+# BittyBuzz script
+
+bittybuzz_generate_bytecode(bittybuzz-target ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts/test.bzz ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts)

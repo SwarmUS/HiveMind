@@ -1,5 +1,4 @@
 include(FindPackageHandleStandardArgs)
-
 if(NOT BITTYBUZZ_SRC_PATH)
     message(ERROR "BITTYBUZZ_SRC_PATH not specified")
 endif()
@@ -11,12 +10,14 @@ find_path(
     NO_DEFAULT_PATH
 )
 
+include(${BITTYBUZZ_SRC_PATH}/src/cmake/BittyBuzzGeneratorFunctions.cmake)
+include(${BITTYBUZZ_SRC_PATH}/src/cmake/BittyBuzzFindBuzzPrgms.cmake)
+
 # Sources and headers are located at the same place
 list(APPEND BittyBuzz_INCLUDE_DIRS "${BittyBuzz_SOURCE_DIR}")
 
 # bzzinclude.h include files from "bittybuzz/" and not directly from folder
-configure_file(${BittyBuzz_SOURCE_DIR}/config.h.in ${BittyBuzz_SOURCE_DIR}/bittybuzz/config.h @ONLY)
-configure_file(${BittyBuzz_SOURCE_DIR}/bbzenums.h ${BittyBuzz_SOURCE_DIR}/bittybuzz/bbzenums.h COPYONLY)
+configure_file(${BittyBuzz_SOURCE_DIR}/config.h.in ${BittyBuzz_SOURCE_DIR}/config.h @ONLY)
 
 set(BBZ_HEADERS
         ${BittyBuzz_SOURCE_DIR}/bbzdarray.h
@@ -37,8 +38,8 @@ set(BBZ_HEADERS
         ${BittyBuzz_SOURCE_DIR}/bbzvm.h
         ${BittyBuzz_SOURCE_DIR}/bbzvstig.h
 
-        ${BittyBuzz_SOURCE_DIR}/bittybuzz/config.h
-        ${BittyBuzz_SOURCE_DIR}/bittybuzz/bbzenums.h
+        ${BittyBuzz_SOURCE_DIR}/config.h
+        ${BittyBuzz_SOURCE_DIR}/bbzenums.h
 )
 set(BBZ_SOURCES
         ${BittyBuzz_SOURCE_DIR}/bbzdarray.c
@@ -64,6 +65,8 @@ target_include_directories(BittyBuzz
     SYSTEM
     PUBLIC
         ${BittyBuzz_INCLUDE_DIRS}
+    PRIVATE
+        ${BITTYBUZZ_SRC_PATH}/src
 )
 
 # Adding utils
@@ -74,10 +77,11 @@ set(BBZ_UTILS_SOURCES
         ${BittyBuzz_SOURCE_DIR}/exec/crazyflie_bcodegen.c
 )
 foreach (bbz_exec_src ${BBZ_UTILS_SOURCES})
-    get_filename_component(bbz_excutable ${bbz_exec_src} NAME_WE)
+    get_filename_component(bbz_executable ${bbz_exec_src} NAME_WE)
     add_executable(${bbz_executable} ${bbz_exec_src} ${BittyBuzz_SOURCE_DIR}/bbzfloat.c)
-    target_include_directories(${bbz_executable} PRIVATE ${BittyBuzz_SOURCE_DIR})
+    target_include_directories(${bbz_executable} PRIVATE ${BITTYBUZZ_SRC_PATH}/src)
     set_target_properties(${bbz_executable} PROPERTIES C_CLANG_TIDY "")
+    target_compile_options(${bbz_executable} PRIVATE -w)
 endforeach ()
 
 # Disable compiler warnings and clang-tidy
