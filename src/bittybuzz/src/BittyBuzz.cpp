@@ -4,6 +4,7 @@
 #include <bsp/bsp_info.h>
 #include <task.h>
 #include <test_bytecode.h>
+//#include <util/bbzstring.h>
 
 bbzvm_t bbz_vm_obj;
 uint8_t bbzmsg_buf[11];
@@ -30,6 +31,12 @@ void bbz_func_call(uint16_t strid) {
 
 void bbz_err_receiver(bbzvm_error errcode) { printf("ERROR %d \n", errcode); }
 
+void bbz_test_print(){
+    //bbzvm_assert_lnum(0);
+    printf("Hello there");
+    bbzvm_ret0();
+}
+
 BittyBuzz::BittyBuzz() {}
 
 void BittyBuzz::init() {
@@ -40,6 +47,8 @@ void BittyBuzz::init() {
     bbzvm_set_error_receiver(bbz_err_receiver);
 
     bbzvm_set_bcode(bbz_bcodeFetcher, bcode_size);
+
+    //bbzvm_function_register(BBZSTRING_ID(print), bbz_test_print);
 
     vm->state = BBZVM_STATE_READY;
     bbz_func_call(__BBZSTRID_init);

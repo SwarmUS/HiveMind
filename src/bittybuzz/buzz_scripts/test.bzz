@@ -1,8 +1,17 @@
-wqt = 1
+wqttt = 1;
+test=0;
 
-if (wqt >= 0) {
-    wqt = 0
+function init() {
+    test=1;
+}
+
+if (wqttt >= 0) {
+    wqttt = 0;
 }
 else {
-    wqt = 0
+    wqttt = 0;
+}
+
+function step() {
+    print();
 }

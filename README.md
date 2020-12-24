@@ -63,3 +63,8 @@ OpenOCD has a gdb server that defaults to port 3333, you can then connect to it 
 ```
 openocd -f ./tools/openocd/stm32_f4/stm32_f4.cfg -c init -c \"reset init\"
 ```
+
+### TODO
+#### BittyBuzz
+* Force generation of dependencies
+* Extern C on generated .h file
