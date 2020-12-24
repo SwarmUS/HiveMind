@@ -66,5 +66,4 @@ openocd -f ./tools/openocd/stm32_f4/stm32_f4.cfg -c init -c \"reset init\"
 
 ### TODO
 #### BittyBuzz
-* Force generation of dependencies
 * Extern C on generated .h file
