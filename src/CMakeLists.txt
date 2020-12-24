@@ -4,28 +4,37 @@ if(${CMAKE_CROSSCOMPILING})
 endif()
 
 set(PROJECT_SOURCES
-    main.cpp
-    freertos_hook.cpp
+    Main.cpp
 )
-
 
 
 add_executable(${EXECUTABLE_NAME} ${PROJECT_SOURCES})
 target_link_libraries(${EXECUTABLE_NAME}
     PUBLIC
+      SwarmUS::HiveMind::BSP::Linker
       SwarmUS::HiveMind::BSP 
-)
-target_compile_options(${EXECUTABLE_NAME}
-    PRIVATE
-        $<$<BOOL:${ENABLE_WARNINGS}>:${WARNING_FLAG}>
-        $<$<BOOL:${ENABLE_WARNINGS_AS_ERROR}>:${WARNING_AS_ERROR_FLAG}>
+      SwarmUS::HiveMind::FreeRTOS
+      SwarmUS::HiveMind::Logger
 )
 
 add_subdirectory(bsp)
+add_subdirectory(logger)
 add_subdirectory(freertos)
 
-
-# Removing warnings from freertos compilation on executable target
+# Removing warnings from interface libraries
 if (DISABLE_EXTERNAL_WARNINGS) 
-    disable_freertos_warnings()
+
+    get_target_property(LINKER_SOURCES SwarmUS::HiveMind::BSP::Linker INTERFACE_SOURCES)
+    set_source_files_properties(
+        ${LINKER_SOURCES}
+        PROPERTIES COMPILE_FLAGS
+        -w #Disables all warnings
+    )
+    set_target_properties(
+        ${EXECUTABLE_NAME}
+        PROPERTIES C_CLANG_TIDY ""
+    )
 endif()
+
+
+

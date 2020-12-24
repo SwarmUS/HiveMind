@@ -19,8 +19,17 @@ project(hive-mind CXX C ASM)
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
 # Warning flags constants
-set(WARNING_FLAG -Wall -Wextra -Wconversion -Wsign-conversion -Wno-unused-variable -Wpedantic)
+set(WARNING_FLAG -Wall -Wextra -Wsign-conversion -Wuninitialized  -Wunused-variable -Wpedantic -fno-exceptions )
 set(WARNING_AS_ERROR_FLAG -Werror)
+
+# Generator expression doesn't work with clang-tidy, we need to make an IF statement manually
+if(ENABLE_WARNINGS)
+add_compile_options(${WARNING_FLAG})
+endif()
+
+if(ENABLE_WARNINGS_AS_ERROR)
+  add_compile_options(${WARNING_AS_ERROR_FLAG})
+endif()
 
 # Includes
 include(clang-tools/clang-tidy)

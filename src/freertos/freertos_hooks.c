@@ -1,6 +1,7 @@
 #include <FreeRTOS.h>
 #include <FreeRTOSConfig.h>
 
+#include <stdbool.h>
 #include <task.h>
 
 #ifdef __cplusplus
@@ -18,10 +19,10 @@ void vApplicationMallocFailedHook(void) {
 }
 
 // NOLINTNEXTLINE(readability-non-const-parameter)
-void vApplicationStackOverflowHook(TaskHandle_t pxTask, char* pcTaskName) {
+void vApplicationStackOverflowHook(TaskHandle_t xTask, char* pcTaskName) {
     // Using variables
     const void* taskName = pcTaskName;
-    (void)pxTask;
+    (void)xTask;
 
     taskDISABLE_INTERRUPTS();
     while (true) {

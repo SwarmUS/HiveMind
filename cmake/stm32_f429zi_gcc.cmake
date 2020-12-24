@@ -5,7 +5,6 @@ find_program(CMAKE_C_COMPILER NAMES ${STM32_TARGET_TRIPLET}-gcc PATHS ${TOOLCHAI
 find_program(CMAKE_CXX_COMPILER NAMES ${STM32_TARGET_TRIPLET}-g++ PATHS ${TOOLCHAIN_BIN_PATH})
 find_program(CMAKE_ASM_COMPILER NAMES ${STM32_TARGET_TRIPLET}-gcc PATHS ${TOOLCHAIN_BIN_PATH})
 
-
 add_compile_options(
     --specs=nosys.specs
     -mcpu=cortex-m4 
@@ -14,13 +13,18 @@ add_compile_options(
 )
 
 add_link_options(
-    --specs=nosys.specs
+    --specs=nosys.specs   
     -mcpu=cortex-m4 
     -mfpu=fpv4-sp-d16
     -mfloat-abi=hard
+    -u _printf_float
 )
 
+
 include(stm32/common)
+# Adding module
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/stm32)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH})
 
 set(COMPILE_STM32_F429ZI 1)
 set(ENABLE_TESTS OFF)

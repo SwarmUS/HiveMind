@@ -25,7 +25,9 @@ if (DOXYGEN_FOUND)
     set(DOXYGEN_DOT_GRAPH_MAX_NODES 100)
     set(DOXYGEN_MAX_DOT_GRAPH_DEPTH 0)
     set(DOXYGEN_DOT_TRANSPARENT YES)
-    set(DOXYGEN_EXCLUDE_PATTERNS "*/tests/*")
+    set(DOXYGEN_EXCLUDE_PATTERNS
+        "*/tests/*"
+        "*/hal/*/Core/*")
 
     if(ENABLE_WARNINGS_AS_ERROR )
         set(DOXYGEN_WARN_AS_ERROR YES)

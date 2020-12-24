@@ -1,12 +1,16 @@
 set(LIB_NAME "swarmus-hivemind-bsp")
 set(LIB_ALIAS "SwarmUS::HiveMind::BSP")
+set(LIB_BSP_LINKER_ALIAS "SwarmUS::HiveMind::BSP::Linker")
 
 get_filename_component(BSP_CMAKE_DIR ${CMAKE_CURRENT_LIST_FILE} DIRECTORY)
 
 add_subdirectory(src)
 
 set(LIB_HEADERS
-    include/bsp/bsp.h
+    include/bsp/BSP.h
+    include/bsp/IBSP.h
+    include/bsp/UserInterface.h
+    include/bsp/IUserInterface.h
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS})
@@ -21,11 +25,7 @@ target_include_directories(${LIB_NAME}
 )
 
 target_link_libraries(${LIB_NAME}
-    PUBLIC
+    PRIVATE
         SwarmUS::HiveMind::BSP::Platform
 )
 
-
-if (ENABLE_TESTS)
-    add_subdirectory(tests)
-endif()
