@@ -35,5 +35,4 @@ target_link_libraries(${LIB_NAME}
 )
 
 # BittyBuzz script
-
 bittybuzz_generate_bytecode(bittybuzz-target ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts/test.bzz ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts)

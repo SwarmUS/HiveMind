@@ -65,7 +65,6 @@ target_include_directories(BittyBuzz
     SYSTEM
     PUBLIC
         ${BittyBuzz_INCLUDE_DIRS}
-    PRIVATE
         ${BITTYBUZZ_SRC_PATH}/src
 )
 
