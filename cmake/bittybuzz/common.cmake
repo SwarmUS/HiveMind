@@ -42,9 +42,12 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_includes)
       COMMAND zooids_bcodegen ${BO_FILE} ${BHEADER_FILE}
       DEPENDS zooids_bcodegen bo2bbo ${BO_FILE})
 
-    add_custom_target(${_TARGET}_custom ALL DEPENDS ${BHEADER_FILE})
+    # Create custom target for dependency
+    add_custom_target(generate_${_TARGET} DEPENDS ${BHEADER_FILE})
+
+    # Create library with file
     add_library(${_TARGET} INTERFACE)
     target_include_directories(${_TARGET} INTERFACE ${CMAKE_CURRENT_BINARY_DIR})
-    add_dependencies(${_TARGET} ${BHEADER_FILE})
+    add_dependencies(${_TARGET} generate_${_TARGET})
 
  endfunction()

@@ -1,8 +1,8 @@
-x = 1
+wqt = 1
 
-if (x >= 0) {
-    x = 0
+if (wqt >= 0) {
+    wqt = 0
 }
 else {
-    x = 0
+    wqt = 0
 }
