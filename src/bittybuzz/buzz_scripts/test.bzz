@@ -1,17 +1,8 @@
-wqttt = 1;
-test=0;
-
 function init() {
-    test=1;
-}
-
-if (wqttt >= 0) {
-    wqttt = 0;
-}
-else {
-    wqttt = 0;
+    test = 0;
 }
 
 function step() {
-    print();
+    print(test);
+    test = test + 1;
 }

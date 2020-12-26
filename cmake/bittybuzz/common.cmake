@@ -29,27 +29,22 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_includes)
 
 
     # Parsing buzz file
-    add_custom_command( OUTPUT ${BASM_FILE}
+    add_custom_target(${_TARGET}_bzz_parse
             COMMAND ${BZZPAR} ${bzz_source} ${BASM_FILE} ${BITTYBUZZ_SRC_PATH}/src/bittybuzz/util/BittyBuzzStrings.bst)
 
     # Compiling buzz file
-    add_custom_command(OUTPUT ${BO_FILE} ${BDB_FILE}
+    add_custom_target(${_TARGET}_bzz_compile
       COMMAND ${BZZASM} ${BASM_FILE} ${BO_FILE} ${BDB_FILE}
-      DEPENDS ${BASM_FILE})
+      DEPENDS ${_TARGET}_bzz_parse)
 
     # Cross compiling
-    add_custom_command(OUTPUT ${BHEADER_FILE}
+    add_custom_target(${_TARGET}_bzz_cross_compile
       COMMAND zooids_bcodegen ${BO_FILE} ${BHEADER_FILE}
-      DEPENDS zooids_bcodegen bo2bbo ${BO_FILE})
-
-    add_custom_target(
-      ${_TARGET}-generated-header
-      DEPENDS ${BHEADER_FILE}
-    )
+      DEPENDS zooids_bcodegen bo2bbo ${_TARGET}_bzz_compile)
 
     # Create library with file
     add_library(${_TARGET} INTERFACE)
     target_include_directories(${_TARGET} INTERFACE ${CMAKE_CURRENT_BINARY_DIR})
-    add_dependencies(${_TARGET} ${_TARGET}-generated-header)
+    add_dependencies(${_TARGET} ${_TARGET}_bzz_cross_compile)
 
  endfunction()

@@ -3,8 +3,13 @@
 #include <bbzvm.h>
 #include <bsp/bsp_info.h>
 #include <task.h>
-#include <test_bytecode.h>
-//#include <util/bbzstring.h>
+#include <util/bbzstring.h>
+
+extern "C"
+{
+    #include <test_bytecode.h>
+}
+
 
 bbzvm_t bbz_vm_obj;
 uint8_t bbzmsg_buf[11];
@@ -32,8 +37,10 @@ void bbz_func_call(uint16_t strid) {
 void bbz_err_receiver(bbzvm_error errcode) { printf("ERROR %d \n", errcode); }
 
 void bbz_test_print(){
-    //bbzvm_assert_lnum(0);
-    printf("Hello there");
+    bbzvm_assert_lnum(1);
+    bbzobj_t* int_val = bbzheap_obj_at(bbzvm_locals_at(1));
+
+    printf("Hello, test value: %d", int_val->i.value);
     bbzvm_ret0();
 }
 
@@ -43,12 +50,13 @@ void BittyBuzz::init() {
     vm = &bbz_vm_obj;
     bbzringbuf_construct(&bbz_payload_buf, bbzmsg_buf, 1, 11);
 
+    // INIT
     bbzvm_construct(2);
     bbzvm_set_error_receiver(bbz_err_receiver);
-
     bbzvm_set_bcode(bbz_bcodeFetcher, bcode_size);
 
-    //bbzvm_function_register(BBZSTRING_ID(print), bbz_test_print);
+    // Function registration
+    bbzvm_function_register(BBZSTRING_ID(print), bbz_test_print);
 
     vm->state = BBZVM_STATE_READY;
     bbz_func_call(__BBZSTRID_init);
