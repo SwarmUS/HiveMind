@@ -1,15 +1,13 @@
-#include "bittybuzz/BittyBuzz.h"
+#include "bittybuzz/BittyBuzzVm.h"
 #include <FreeRTOS.h>
 #include <bbzvm.h>
 #include <bsp/bsp_info.h>
 #include <task.h>
 #include <util/bbzstring.h>
 
-extern "C"
-{
-    #include <test_bytecode.h>
+extern "C" {
+#include <test_bytecode.h>
 }
-
 
 bbzvm_t bbz_vm_obj;
 uint8_t bbzmsg_buf[11];
@@ -36,7 +34,7 @@ void bbz_func_call(uint16_t strid) {
 
 void bbz_err_receiver(bbzvm_error errcode) { printf("ERROR %d \n", errcode); }
 
-void bbz_test_print(){
+void bbz_test_print() {
     bbzvm_assert_lnum(1);
     bbzobj_t* int_val = bbzheap_obj_at(bbzvm_locals_at(1));
 
@@ -44,9 +42,7 @@ void bbz_test_print(){
     bbzvm_ret0();
 }
 
-BittyBuzz::BittyBuzz() {}
-
-void BittyBuzz::init() {
+void BittyBuzzVm::init() {
     vm = &bbz_vm_obj;
     bbzringbuf_construct(&bbz_payload_buf, bbzmsg_buf, 1, 11);
 
@@ -62,15 +58,17 @@ void BittyBuzz::init() {
     bbz_func_call(__BBZSTRID_init);
 }
 
-void BittyBuzz::run() {
+bool BittyBuzzVm::step() {
 
-    while (vm->state != BBZVM_STATE_ERROR) {
-        if (vm->state != BBZVM_STATE_ERROR) {
-            bbzvm_process_inmsgs();
-            bbz_func_call(__BBZSTRID_step);
-            bbzvm_process_outmsgs();
-        }
-
-        vTaskDelay(100);
+    if (vm->state != BBZVM_STATE_ERROR) {
+        bbzvm_process_inmsgs();
+        bbz_func_call(__BBZSTRID_step);
+        bbzvm_process_outmsgs();
     }
+
+    vTaskDelay(100);
+    return true;
 }
+
+bbzvm_state BittyBuzzVm::getSate() const { return vm->state; }
+bbzvm_error BittyBuzzVm::getError() const { return vm->error; }

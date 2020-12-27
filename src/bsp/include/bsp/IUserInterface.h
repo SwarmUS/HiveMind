@@ -23,7 +23,7 @@ class IUserInterface {
      *
      * @return Matches the standard printf return. The total number of characters is returned or a
      *negative number on error
-     */
+     * */
     virtual int print(const char* format, ...) const = 0;
 };
 

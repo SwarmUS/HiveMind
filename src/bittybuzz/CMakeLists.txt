@@ -13,11 +13,12 @@ bittybuzz_generate_bytecode(bittybuzz-target ${CMAKE_CURRENT_SOURCE_DIR}/buzz_sc
 
 
 set(LIB_HEADERS
-    include/bittybuzz/BittyBuzz.h
+    include/bittybuzz/BittyBuzzVm.h
+    include/bittybuzz/IBittyBuzzVm.h
 )
 
 set(LIB_SOURCES
-    src/BittyBuzz.cpp
+    src/BittyBuzzVm.cpp
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_HEADERS})
@@ -32,8 +33,9 @@ target_include_directories(${LIB_NAME}
 )
 
 target_link_libraries(${LIB_NAME}
-    PRIVATE
+    PUBLIC
         BittyBuzz
+    PRIVATE
         SwarmUS::HiveMind::BSP
         SwarmUS::HiveMind::FreeRTOS
         bittybuzz-target
