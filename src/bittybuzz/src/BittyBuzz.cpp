@@ -40,7 +40,7 @@ void bbz_test_print(){
     bbzvm_assert_lnum(1);
     bbzobj_t* int_val = bbzheap_obj_at(bbzvm_locals_at(1));
 
-    printf("Hello, test value: %d", int_val->i.value);
+    printf("Hello, test value: %d \n", int_val->i.value);
     bbzvm_ret0();
 }
 
