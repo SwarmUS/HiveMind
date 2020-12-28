@@ -14,25 +14,33 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          path: 'src/HiveMind'
+          path: 'catkin_ws/src/HiveMind'
       - name: build
         run: |
           ls -l
-          source /ros_entrypoint.sh
+          cd catkin_ws
+          ls -l
+          . /ros_entrypoint.sh
           catkin_make
 
       # Tests and format and doc are run on native build
       - name: tests
         run: |
+          . /ros_entrypoint.sh
+          cd catkin_ws
           ctest -V
 
       - name: check-format
         run: |
+          . /ros_entrypoint.sh
+          cd catkin_ws
           catkin_make check-format
 
       # Verifies that the doc is built
       - name: doc
         run: |
+          . /ros_entrypoint.sh
+          cd catkin_ws
           catkin_make doc
 
   build-stm32:
