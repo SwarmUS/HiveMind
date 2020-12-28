@@ -2,10 +2,9 @@ name: C/C++ CI
 
 on:
   push:
-    branches: [ master ros-build]
+    branches: [ master, feat/ros-build]
   pull_request:
     branches: [ master ]
-  workflow_dispatch:
 
 jobs:
   build-native:
