@@ -17,31 +17,31 @@ jobs:
           path: 'catkin_ws/src/HiveMind'
       - name: build
         run: |
-          ls -l
           cd catkin_ws
-          ls -l
           . /opt/ros/$ROS_DISTRO/setup.sh
           catkin_make
-          ls -l
 
       # Tests and format and doc are run on native build
       - name: tests
         run: |
-          . /opt/ros/$ROS_DISTRO/setup.sh
           cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          . ./devel/setup.sh
           ctest -V
 
       - name: check-format
         run: |
-          . /opt/ros/$ROS_DISTRO/setup.sh
           cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          . ./devel/setup.sh
           catkin_make check-format
 
       # Verifies that the doc is built
       - name: doc
         run: |
-          . /opt/ros/$ROS_DISTRO/setup.sh
           cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          . ./devel/setup.sh
           catkin_make doc
 
   build-stm32:

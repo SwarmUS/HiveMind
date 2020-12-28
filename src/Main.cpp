@@ -26,10 +26,7 @@ void printThreadExample(void* param) {
 }
 
 int main(int argc, char** argv) {
-    CmdLineArgs cmdLineArgs = {
-        argc,
-        argv
-    };
+    CmdLineArgs cmdLineArgs = {argc, argv};
 
     IBSP* bsp = BSPFactory::getBSP();
     bsp->initChip((void*)&cmdLineArgs);
