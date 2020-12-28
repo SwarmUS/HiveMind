@@ -1,6 +1,5 @@
 #include "bittybuzz/BittyBuzzVm.h"
 #include <FreeRTOS.h>
-#include <bbzvm.h>
 #include <bsp/bsp_info.h>
 #include <task.h>
 #include <util/bbzstring.h>
@@ -12,14 +11,6 @@ extern "C" {
 bbzvm_t bbz_vm_obj;
 uint8_t bbzmsg_buf[11];
 bbzmsg_payload_t bbz_payload_buf;
-
-uint8_t buf[4];
-const uint8_t* bbz_bcodeFetcher(bbzpc_t offset, uint8_t size) {
-    for (bbzpc_t i = 0; i < size; i++) {
-        buf[i] = bcode[i + offset];
-    }
-    return buf;
-}
 
 void bbz_func_call(uint16_t strid) {
     bbzvm_pushs(strid);
@@ -42,14 +33,15 @@ void bbz_test_print() {
     bbzvm_ret0();
 }
 
-void BittyBuzzVm::init() {
+BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode) : m_bytecode(bytecode) {
+
     vm = &bbz_vm_obj;
     bbzringbuf_construct(&bbz_payload_buf, bbzmsg_buf, 1, 11);
 
     // INIT
     bbzvm_construct(2);
     bbzvm_set_error_receiver(bbz_err_receiver);
-    bbzvm_set_bcode(bbz_bcodeFetcher, bcode_size);
+    bbzvm_set_bcode(m_bytecode.getBytecodeFetchFunction(), m_bytecode.getBytecodeLength());
 
     // Function registration
     bbzvm_function_register(BBZSTRING_ID(print), bbz_test_print);
@@ -64,10 +56,10 @@ bool BittyBuzzVm::step() {
         bbzvm_process_inmsgs();
         bbz_func_call(__BBZSTRID_step);
         bbzvm_process_outmsgs();
+        return true;
     }
 
-    vTaskDelay(100);
-    return true;
+    return false;
 }
 
 bbzvm_state BittyBuzzVm::getSate() const { return vm->state; }

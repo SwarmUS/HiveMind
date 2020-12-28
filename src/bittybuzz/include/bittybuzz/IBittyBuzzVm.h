@@ -3,15 +3,11 @@
 
 #include <bbzvm.h>
 
+/**
+ *@brief Manages BittyBuzz virtual machine */
 class IBittyBuzzVm {
   public:
     virtual ~IBittyBuzzVm() = default;
-
-    /**
-     * @brief Initialize the bittybuzz virtual machine and execute the init function in the buzz
-     * code
-     * */
-    virtual void init() = 0;
 
     /**
      * @brief Does one execution step in the virtual machine.  Thus execute the buzz code in the

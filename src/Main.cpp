@@ -4,6 +4,7 @@
 #include <task.h>
 #include <timers.h>
 
+#include <bittybuzz/BittyBuzzBytecode.h>
 #include <bittybuzz/BittyBuzzVm.h>
 #include <bsp/BSP.h>
 #include <bsp/UserInterface.h>
@@ -17,8 +18,8 @@ void printThreadExample(void* param) {
     UserInterface ui = UserInterface();
     Logger logger = Logger(LogLevel::Debug, ui);
 
-    BittyBuzzVm bittybuzz = BittyBuzzVm();
-    bittybuzz.init();
+    BittyBuzzBytecode bytecode;
+    BittyBuzzVm bittybuzz = BittyBuzzVm(bytecode);
     bittybuzz.step();
 
     logger.log(LogLevel::Info, "Hello logger!");

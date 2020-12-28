@@ -15,10 +15,14 @@ bittybuzz_generate_bytecode(bittybuzz-target ${CMAKE_CURRENT_SOURCE_DIR}/buzz_sc
 set(LIB_HEADERS
     include/bittybuzz/BittyBuzzVm.h
     include/bittybuzz/IBittyBuzzVm.h
+
+    include/bittybuzz/BittyBuzzBytecode.h
+    include/bittybuzz/IBittyBuzzBytecode.h
 )
 
 set(LIB_SOURCES
     src/BittyBuzzVm.cpp
+    src/BittyBuzzBytecode.cpp
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_HEADERS})
