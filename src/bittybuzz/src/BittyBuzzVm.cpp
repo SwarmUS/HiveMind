@@ -1,5 +1,6 @@
 #include "bittybuzz/BittyBuzzVm.h"
 #include <FreeRTOS.h>
+#include <bbzvm.h>
 #include <task.h>
 #include <util/bbzstring.h>
 
@@ -22,12 +23,14 @@ void bbz_func_call(uint16_t strid) {
         bbzvm_pushnil(); // Push self table
         bbzvm_push(l);
         bbzvm_closure_call(0);
+        bbzvm_pop();
     }
 }
 
 void bbz_err_receiver(bbzvm_error errcode) {
-    if(g_logger != NULL){
-        g_logger->log(LogLevel::Error, "BittyBuzz virtual machine error, error code: %d \n", errcode);
+    if (g_logger != NULL) {
+        g_logger->log(LogLevel::Error, "BittyBuzz virtual machine error, error code: %d \n",
+                      errcode);
     }
 }
 
