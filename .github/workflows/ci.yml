@@ -24,7 +24,10 @@ jobs:
       # Tests and format and doc are run on native build
       - name: tests
         run: |
-          cd catkin_ws/build/HiveMind
+          cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          . ./devel/setup.sh
+          cd build/HiveMind
           ctest -V
 
       - name: check-format
