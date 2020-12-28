@@ -20,26 +20,27 @@ jobs:
           ls -l
           cd catkin_ws
           ls -l
-          . /ros_entrypoint.sh
+          . /opt/ros/$ROS_DISTRO/setup.sh
           catkin_make
+          ls -l
 
       # Tests and format and doc are run on native build
       - name: tests
         run: |
-          . /ros_entrypoint.sh
+          . /opt/ros/$ROS_DISTRO/setup.sh
           cd catkin_ws
           ctest -V
 
       - name: check-format
         run: |
-          . /ros_entrypoint.sh
+          . /opt/ros/$ROS_DISTRO/setup.sh
           cd catkin_ws
           catkin_make check-format
 
       # Verifies that the doc is built
       - name: doc
         run: |
-          . /ros_entrypoint.sh
+          . /opt/ros/$ROS_DISTRO/setup.sh
           cd catkin_ws
           catkin_make doc
 
