@@ -5,8 +5,7 @@ on:
     branches: [ master ros-build]
   pull_request:
     branches: [ master ]
-  workflow_dispatch
-
+  workflow_dispatch:
 
 jobs:
   build-native:
