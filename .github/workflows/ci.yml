@@ -20,7 +20,7 @@ jobs:
           ls -l
           source /ros_entrypoint.sh
           catkin_make
-  
+
       # Tests and format and doc are run on native build
       - name: tests
         run: |
