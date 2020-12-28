@@ -44,8 +44,9 @@ void exampleTopicPublish(void* param) {
     }
 }
 
-void BSP::initChip(int argc, char** argv) {
-    ros::init(argc, argv, "hive_mind");
+void BSP::initChip(void* args) {
+    CmdLineArgs* cmdLineArgs = (CmdLineArgs*)args;
+    ros::init(cmdLineArgs->m_argc, cmdLineArgs->m_argv, "hive_mind");
 
     m_rosNodeHandle = new ros::NodeHandle();
 

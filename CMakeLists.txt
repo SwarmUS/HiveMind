@@ -19,11 +19,16 @@ set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
 # Warning flags constants
 set(WARNING_FLAG -Wall -Wextra -Wsign-conversion -Wuninitialized  -Wunused-variable -Wpedantic )
+set(WARNING_NO_EXCEPTION_FLAG -fno-exceptions)
 set(WARNING_AS_ERROR_FLAG -Werror)
 
 # Generator expression doesn't work with clang-tidy, we need to make an IF statement manually
 if(ENABLE_WARNINGS)
 add_compile_options(${WARNING_FLAG})
+    if(${CMAKE_CROSSCOMPILING})
+        # Only remove exception support for target as ROS uses exceptions
+        add_compile_options(${WARNING_NO_EXCEPTION_FLAG})
+    endif()
 endif()
 
 if(ENABLE_WARNINGS_AS_ERROR)

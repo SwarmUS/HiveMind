@@ -4,9 +4,8 @@
 BSP::BSP() = default;
 BSP::~BSP() = default;
 
-void BSP::initChip(int argc, char** argv) {
-    (void)argc;
-    (void)argv;
+void BSP::initChip(void* args) {
+    (void)args;
 
     Hal_init();
 }

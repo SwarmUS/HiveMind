@@ -26,9 +26,13 @@ void printThreadExample(void* param) {
 }
 
 int main(int argc, char** argv) {
-    IBSP* bsp = BSPFactory::getBSP();
+    CmdLineArgs cmdLineArgs = {
+        argc,
+        argv
+    };
 
-    bsp->initChip(argc, argv);
+    IBSP* bsp = BSPFactory::getBSP();
+    bsp->initChip((void*)&cmdLineArgs);
 
     xTaskCreate(printThreadExample, "print", configMINIMAL_STACK_SIZE * 4, NULL,
                 tskIDLE_PRIORITY + 1, NULL);
