@@ -116,7 +116,6 @@ foreach(PORT ${FreeRTOS_FIND_COMPONENTS})
             target_link_libraries(FreeRTOS::${PORT} INTERFACE FreeRTOS)
             target_sources(FreeRTOS::${PORT} INTERFACE "${FreeRTOS_${PORT}_SOURCE}")
             target_include_directories(FreeRTOS::${PORT} SYSTEM INTERFACE "${FreeRTOS_${PORT}_PATH}")
-            target_compile_options(FreeRTOS::${PORT} INTERFACE -fPIC)
         endif()
 
         if(FreeRTOS_${PORT}_PATH AND 
@@ -129,6 +128,10 @@ foreach(PORT ${FreeRTOS_FIND_COMPONENTS})
         endif()
     endif()
 endforeach()
+
+if(TARGET FreeRTOS::POSIX)
+    target_compile_options(FreeRTOS::POSIX INTERFACE -fPIC)
+endif()
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(FreeRTOS

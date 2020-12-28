@@ -53,8 +53,9 @@ void UartPrint_sendTxCallback() {
     ZeroCopyBuff buff = CircularBuff_getZeroCopy(&cbuffUartPrint, UINT16_MAX);
     if (buff.status == CircularBuff_Ret_Ok) {
         HAL_UART_Transmit_IT(HUART_PRINT, (uint8_t*)buff.data, buff.length);
-        lastUartPrintTransferSize = buff.length;
     }
+
+    lastUartPrintTransferSize = buff.length;
 }
 
 /** End Function definitions **/
