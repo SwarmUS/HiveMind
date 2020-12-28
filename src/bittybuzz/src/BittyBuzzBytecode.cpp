@@ -12,8 +12,8 @@ const uint8_t* bbz_bcodeFetcher(bbzpc_t offset, uint8_t size) {
     return buf;
 }
 
-bbzvm_bcode_fetch_fun BittyBuzzByteCode::getBytecodeFetchFunction() const {
+bbzvm_bcode_fetch_fun BittyBuzzBytecode::getBytecodeFetchFunction() const {
     return bbz_bcodeFetcher;
 }
 
-uint16_t BittyBuzzByteCode::getBytecodeLength() const { return bcode_size; }
+uint16_t BittyBuzzBytecode::getBytecodeLength() const { return bcode_size; }

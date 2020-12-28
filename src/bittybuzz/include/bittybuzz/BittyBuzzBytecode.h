@@ -10,7 +10,7 @@ class BittyBuzzBytecode : public IBittyBuzzBytecode {
   public:
     BittyBuzzBytecode() = default;
 
-    ~BittyBuzzBytecode();
+    ~BittyBuzzBytecode() = default;
 
     bbzvm_bcode_fetch_fun getBytecodeFetchFunction() const override;
 

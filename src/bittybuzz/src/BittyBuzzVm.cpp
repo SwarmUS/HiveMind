@@ -1,6 +1,5 @@
 #include "bittybuzz/BittyBuzzVm.h"
 #include <FreeRTOS.h>
-#include <bsp/bsp_info.h>
 #include <task.h>
 #include <util/bbzstring.h>
 
@@ -11,6 +10,9 @@ extern "C" {
 bbzvm_t bbz_vm_obj;
 uint8_t bbzmsg_buf[11];
 bbzmsg_payload_t bbz_payload_buf;
+
+// Need to use global since bittybuzz does not provide a way to pass context to callbacks
+const ILogger* g_logger;
 
 void bbz_func_call(uint16_t strid) {
     bbzvm_pushs(strid);
@@ -23,23 +25,30 @@ void bbz_func_call(uint16_t strid) {
     }
 }
 
-void bbz_err_receiver(bbzvm_error errcode) { printf("ERROR %d \n", errcode); }
+void bbz_err_receiver(bbzvm_error errcode) {
+    if(g_logger != NULL){
+        g_logger->log(LogLevel::Error, "BittyBuzz virtual machine error, error code: %d \n", errcode);
+    }
+}
 
 void bbz_test_print() {
-    bbzvm_assert_lnum(1);
-    bbzobj_t* int_val = bbzheap_obj_at(bbzvm_locals_at(1));
+    bbzvm_assert_lnum(1); // NOLINT
+    bbzobj_t* int_val = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
 
     printf("Hello, test value: %d \n", int_val->i.value);
     bbzvm_ret0();
 }
 
-BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode) : m_bytecode(bytecode) {
-
+BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
+                         const IBSP& bsp,
+                         const ILogger& logger) :
+    m_bytecode(bytecode), m_bsp(bsp), m_logger(logger) {
+    g_logger = &m_logger;
     vm = &bbz_vm_obj;
     bbzringbuf_construct(&bbz_payload_buf, bbzmsg_buf, 1, 11);
 
     // INIT
-    bbzvm_construct(2);
+    bbzvm_construct(m_bsp.getUUId());
     bbzvm_set_error_receiver(bbz_err_receiver);
     bbzvm_set_bcode(m_bytecode.getBytecodeFetchFunction(), m_bytecode.getBytecodeLength());
 

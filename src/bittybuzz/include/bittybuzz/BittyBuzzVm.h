@@ -3,10 +3,12 @@
 
 #include "bittybuzz/IBittyBuzzBytecode.h"
 #include "bittybuzz/IBittyBuzzVm.h"
+#include "bsp/IBSP.h"
+#include "logger/ILogger.h"
 
 class BittyBuzzVm : public IBittyBuzzVm {
   public:
-    BittyBuzzVm(const IBittyBuzzBytecode&);
+    BittyBuzzVm(const IBittyBuzzBytecode& bytecode, const IBSP& bsp, const ILogger& logger);
 
     ~BittyBuzzVm() override = default;
 
@@ -18,6 +20,8 @@ class BittyBuzzVm : public IBittyBuzzVm {
 
   private:
     const IBittyBuzzBytecode& m_bytecode;
+    const IBSP& m_bsp;
+    const ILogger& m_logger;
 };
 
 #endif // __BITTYBUZZVM_H_

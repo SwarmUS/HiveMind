@@ -22,7 +22,7 @@ set_default(BBZNEIGHBORS_MARK_TIME 4)
 
 option(BBZ_XTREME_MEMORY "Enables high memory-optimization." OFF)
 option(BBZ_USE_PRIORITY_SORT "Enables the use of priority sort on out-messages queue." OFF)
-option(BBZ_USE_FLOAT "Enables float type." OFF)
+option(BBZ_USE_FLOAT "Enables float type." ON)
 option(BBZ_DISABLE_NEIGHBORS "Disables the neighbors data structure and messages." OFF)
 option(BBZ_DISABLE_VSTIGS "Disables the virtual stigmergy data structure and messages." OFF)
 option(BBZ_DISABLE_SWARMS "Disables swarms data structures and messages." OFF)

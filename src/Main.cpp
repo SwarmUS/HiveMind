@@ -15,15 +15,18 @@ void printThreadExample(void* param) {
     (void)param;
     const int toggleDelay = 2;
 
+    BSP bsp = BSP();
+    bsp.initChip();
+
     UserInterface ui = UserInterface();
     Logger logger = Logger(LogLevel::Debug, ui);
 
     BittyBuzzBytecode bytecode;
-    BittyBuzzVm bittybuzz = BittyBuzzVm(bytecode);
-    bittybuzz.step();
+    BittyBuzzVm bittybuzz = BittyBuzzVm(bytecode, bsp, logger);
 
     logger.log(LogLevel::Info, "Hello logger!");
     while (true) {
+        bittybuzz.step();
         ui.print("Hello world!");
         vTaskDelay(toggleDelay);
         ui.print("Goodbye!");
@@ -31,8 +34,6 @@ void printThreadExample(void* param) {
 }
 
 int main() {
-    BSP bsp = BSP();
-    bsp.initChip();
 
     xTaskCreate(printThreadExample, "print", configMINIMAL_STACK_SIZE * 4, NULL,
                 tskIDLE_PRIORITY + 1, NULL);

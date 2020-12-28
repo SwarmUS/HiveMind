@@ -42,6 +42,7 @@ target_link_libraries(${LIB_NAME}
     PRIVATE
         SwarmUS::HiveMind::BSP
         SwarmUS::HiveMind::FreeRTOS
+        SwarmUS::HiveMind::Logger
         bittybuzz-target
 )
 
