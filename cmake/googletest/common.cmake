@@ -8,7 +8,7 @@ function(googletest_get_populate)
     )
 
     if (TARGET gtest)
-        message("-- gtest already provided by catkin. Skipping install")
+        message("-- gtest already provided by build system. Skipping install")
     else()
         FetchContent_GetProperties(googletest)
         if(NOT googletest_POPULATED)

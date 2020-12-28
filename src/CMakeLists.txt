@@ -8,7 +8,7 @@ set(PROJECT_SOURCES
 )
 
 add_executable(${EXECUTABLE_NAME} ${PROJECT_SOURCES})
-set_target_properties(${EXECUTABLE_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+#set_target_properties(${EXECUTABLE_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(${EXECUTABLE_NAME}
     PUBLIC
       SwarmUS::HiveMind::BSP::Linker

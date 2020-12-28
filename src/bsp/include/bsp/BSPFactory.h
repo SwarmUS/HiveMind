@@ -9,6 +9,9 @@ class BSPFactory {
     BSPFactory() = default;
     ~BSPFactory() = default;
 
+    /**
+     * @brief Return an instance of the platform dependent BSP.
+     */
     static IBSP* getBSP();
 };
 

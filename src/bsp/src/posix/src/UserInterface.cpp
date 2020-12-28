@@ -6,8 +6,7 @@
 int UserInterface::print(const char* format, ...) const {
     int retValue = 0;
 
-    // ROS logging methods do not return the standard printf value. So let's juste return -1
-    // if there was an error
+    // ROS logging methods do not return the standard printf value. So let's just return -1 if there was an error
     try {
         va_list args;
         va_start(args, format);

@@ -2,11 +2,11 @@
 <package format="2">
   <name>hive_mind</name>
   <version>0.0.0</version>
-  <description>The beginner_tutorials package</description>
+  <description>ROS node version of the HiveMind software running on HiveBoards</description>
 
-  <maintainer email="charles@todo.todo">charles</maintainer>
+  <maintainer email="swarmus@usherbrooke.ca">SwarmUS</maintainer>
 
-  <license>TODO</license>
+  <license>MIT</license>
 
   <exec_depend>message_runtime</exec_depend>
 
@@ -25,9 +25,6 @@
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
-
-  <test_depend>rosunit</test_depend>
-
   <export>
   </export>
 </package>

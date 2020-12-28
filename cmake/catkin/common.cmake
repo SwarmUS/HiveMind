@@ -1,4 +1,4 @@
-if(COMPILE_WITHOUT_CATKIN)
+if(${CMAKE_CROSSCOMPILING})
     message("-- Compiling for target without need for catkin")
     message("-- Skipping catkin related build steps")
 else()
@@ -16,6 +16,7 @@ else()
         ${ROS_MESSAGES_LIST}
     )
 
+   #TODO: Uncomment if service_generation is needed
    # add_service_files(
    #     DIRECTORY ros/srv
    #     FILES

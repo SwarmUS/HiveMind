@@ -4,7 +4,8 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform")
 set(LIB_SOURCES
     src/BSP.cpp
     src/UserInterface.cpp
-        src/BSPFactory.cpp)
+    src/BSPFactory.cpp
+)
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
@@ -12,6 +13,8 @@ set(LIB_PRIVATE_HEADERS
 
 add_library(${LIB_NAME} ${LIB_SOURCES} ${LIB_PRIVATE_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
+
+# Make ROS messages/services available in headers
 add_dependencies(${LIB_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 target_include_directories(${LIB_NAME} SYSTEM PRIVATE ${catkin_INCLUDE_DIRS})
