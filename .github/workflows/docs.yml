@@ -1,0 +1,43 @@
+name: Publish Documentation
+
+on:
+  push:
+    branches: [ master, feat/ros-build]
+
+jobs:
+  build-native:
+    runs-on: ubuntu-latest
+    container:
+      image: cquesnel/ros
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: 'catkin_ws/src/HiveMind'
+          persist-credentials: false
+      - name: build
+        run: |
+          cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          catkin_make
+
+      - name: generate
+        run: |
+          cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          . ./devel/setup.sh
+          catkin_make doc
+
+      - name: publish
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY_NAME: SwarmUS/HiveMind-Documentation
+          BRANCH: master
+          FOLDER: catkin_ws/build/HiveMind/doc/html
+          TARGET_FOLDER: docs
+          CLEAN: true
+        run: |
+          cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          . ./devel/setup.sh
+          catkin_make doc

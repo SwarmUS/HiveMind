@@ -21,7 +21,7 @@ jobs:
           . /opt/ros/$ROS_DISTRO/setup.sh
           catkin_make
 
-      # Tests and format and doc are run on native build
+      # Tests, check-format and doc are run on native build
       - name: tests
         run: |
           cd catkin_ws
