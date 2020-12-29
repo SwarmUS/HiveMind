@@ -23,6 +23,7 @@ LogRet Logger::log(LogLevel level, const char* format, ...) const {
             int retValue = m_ui.print(format, args);
             va_end(args);
             if (retValue >= 0) {
+                xSemaphoreGive(m_semaphore);
                 return LogRet::Ok;
             }
             xSemaphoreGive(m_semaphore);

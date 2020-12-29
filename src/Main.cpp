@@ -26,10 +26,9 @@ void printThreadExample(void* param) {
 
     logger.log(LogLevel::Info, "Hello logger!");
     while (true) {
-        bittybuzz.step();
-        ui.print("Hello world!");
+        logger.log(LogLevel::Info, "Hello world!");
         vTaskDelay(toggleDelay);
-        ui.print("Goodbye!");
+        bittybuzz.step();
     }
 }
 
