@@ -7,7 +7,11 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 find_package(FreeRTOS COMPONENTS POSIX REQUIRED)
 
-add_library(${LIB_NAME} INTERFACE)
+set(LIB_SOURCES
+    platform_freertos_hooks.c
+)
+
+add_library(${LIB_NAME} STATIC ${LIB_SOURCES})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
 target_link_libraries(${LIB_NAME}
