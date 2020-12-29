@@ -35,4 +35,4 @@ jobs:
           BRANCH: master
           FOLDER: catkin_ws/build/HiveMind/doc/html
           TARGET_FOLDER: docs
-          CLEAN: true
+          CLEAN: false
