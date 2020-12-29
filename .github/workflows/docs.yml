@@ -36,8 +36,3 @@ jobs:
           FOLDER: catkin_ws/build/HiveMind/doc/html
           TARGET_FOLDER: docs
           CLEAN: true
-        run: |
-          cd catkin_ws
-          . /opt/ros/$ROS_DISTRO/setup.sh
-          . ./devel/setup.sh
-          catkin_make doc
