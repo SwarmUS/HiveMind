@@ -1,8 +1,6 @@
 #include "bittybuzz/BittyBuzzBytecode.h"
+#include <functional>
 
-extern "C" {
-#include <test_bytecode.h>
-}
 
 uint8_t buf[4];
 const uint8_t* bbz_bcodeFetcher(bbzpc_t offset, uint8_t size) {
@@ -12,8 +10,24 @@ const uint8_t* bbz_bcodeFetcher(bbzpc_t offset, uint8_t size) {
     return buf;
 }
 
-bbzvm_bcode_fetch_fun BittyBuzzBytecode::getBytecodeFetchFunction() const {
-    return bbz_bcodeFetcher;
+BittyBuzzBytecode::BittyBuzzBytecode(const uint8_t* bytecode = bcode, const uint16_t bytecodeSize = bcode_size) {
+    m_bytecode = bcode;
+    m_bytecodeSize = bytecodeSize;
+
 }
 
-uint16_t BittyBuzzBytecode::getBytecodeLength() const { return bcode_size; }
+bbzvm_bcode_fetch_fun BittyBuzzBytecode::getBytecodeFetchFunction() const {
+
+    const uint8_t* (*test)(bbzpc_t offset, uint8_t size) =  [] (bbzpc_t offset, uint8_t size){
+        return (const uint8_t*) 1;
+    };
+
+
+    std::function<const uint8_t*(bbzpc_t, uint8_t)> test2([this] (bbzpc_t offset, uint8_t size){
+        return (const uint8_t*) 1;
+    });
+
+    test = test2;
+}
+
+uint16_t BittyBuzzBytecode::getBytecodeLength() const { return m_bytecodeSize; }

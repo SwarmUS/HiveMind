@@ -65,4 +65,3 @@ TEST_F(LoggerTestFixture, Logger_Log_ReleaseSemaphore) {
     EXPECT_EQ(ret, LogRet::Ok);
     EXPECT_EQ(m_uiMock->m_printCallCounter, 2);
 }
-
