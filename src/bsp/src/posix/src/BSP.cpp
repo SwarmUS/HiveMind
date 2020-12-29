@@ -9,7 +9,11 @@
 #include <timers.h>
 
 BSP::BSP() = default;
-BSP::~BSP() = default;
+BSP::~BSP() {
+    if (m_rosNodeHandle != NULL) {
+        delete m_rosNodeHandle;
+    }
+}
 
 /**
  * @brief Task that kills FreeRTOS when ROS node is stopped
