@@ -1,4 +1,4 @@
-set(TEST_NAME test-logger)
+set(TEST_NAME test-bittybuzz)
  
 set(TEST_SOURCES
     BittyBuzzBytecodeUnitTests.cpp

@@ -5,7 +5,6 @@
 
 class LoggerTestFixture : public testing::Test {
   protected:
-    friend class Logger;
     UserInterfaceMock* m_uiMock;
     Logger* m_logger;
     void SetUp() override {

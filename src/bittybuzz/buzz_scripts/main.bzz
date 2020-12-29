@@ -3,6 +3,6 @@ function init() {
 }
 
 function step() {
-    logNumber(test);
+    logInt(test);
     test = test + 1;
 }

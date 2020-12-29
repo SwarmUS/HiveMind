@@ -5,14 +5,17 @@
 #include "bittybuzz/IBittyBuzzBytecode.h"
 #include <bbzvm.h>
 #include <cstdint>
+#include <logger/ILogger.h>
 
 extern "C" {
-#include <test_bytecode.h>
+#include <main_bytecode.h>
 }
 
 class BittyBuzzBytecode : public IBittyBuzzBytecode {
   public:
-    BittyBuzzBytecode(const uint8_t* bytecode = bcode, uint16_t bytecodeSize = bcode_size);
+    BittyBuzzBytecode(const ILogger& logger,
+                      const uint8_t* bytecode = bcode,
+                      uint16_t bytecodeLength = bcode_size);
 
     ~BittyBuzzBytecode() = default;
 
@@ -23,6 +26,7 @@ class BittyBuzzBytecode : public IBittyBuzzBytecode {
   private:
     const uint8_t* m_bytecode;
     uint16_t m_bytecodeSize;
+    const ILogger& m_logger;
 };
 
 #endif // __BITTYBUZZBYTECODE_H_

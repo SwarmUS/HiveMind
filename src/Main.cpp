@@ -21,7 +21,7 @@ void printThreadExample(void* param) {
     UserInterface ui = UserInterface();
     Logger logger = Logger(LogLevel::Debug, ui);
 
-    BittyBuzzBytecode bytecode;
+    BittyBuzzBytecode bytecode(logger);
     BittyBuzzVm bittybuzz = BittyBuzzVm(bytecode, bsp, logger);
 
     logger.log(LogLevel::Info, "Hello logger!");

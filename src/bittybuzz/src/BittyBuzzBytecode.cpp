@@ -1,33 +1,42 @@
 #include "bittybuzz/BittyBuzzBytecode.h"
+#include "logger/ILogger.h"
 #include <functional>
 
+// TODO: Make a PR to bittybuzz to pass context
+static const ILogger* g_logger = NULL;
+const uint8_t* g_bittyBuzzBytecode = NULL;
+static uint8_t g_bittyBuzzBytecodeLength = 0;
 
-uint8_t buf[4];
+
 const uint8_t* bbz_bcodeFetcher(bbzpc_t offset, uint8_t size) {
-    for (bbzpc_t i = 0; i < size; i++) {
-        buf[i] = bcode[i + offset];
+    if (g_logger != NULL) {
+        if (offset + size > g_bittyBuzzBytecodeLength) {
+            g_logger->log(LogLevel::Error,
+                        "BittyBuzz virtual machine requested out of bound bytecode");
+        }
+        if (size > 4) {
+            g_logger->log(LogLevel::Warn,
+                        "BittyBuzz requested more than 4 bytes from the bytecode array");
+        }
     }
-    return buf;
+
+    return g_bittyBuzzBytecode + offset;
 }
 
-BittyBuzzBytecode::BittyBuzzBytecode(const uint8_t* bytecode = bcode, const uint16_t bytecodeSize = bcode_size) {
-    m_bytecode = bcode;
-    m_bytecodeSize = bytecodeSize;
+BittyBuzzBytecode::BittyBuzzBytecode(const ILogger& logger,
+                                     const uint8_t* bytecode,
+                                     const uint16_t bytecodeLength) :
+    m_logger(logger) {
+    m_bytecode = bytecode;
+    m_bytecodeSize = bytecodeLength;
 
+    g_bittyBuzzBytecode = bytecode;
+    g_bittyBuzzBytecodeLength = bytecodeLength;
+    g_logger = &logger;
 }
 
 bbzvm_bcode_fetch_fun BittyBuzzBytecode::getBytecodeFetchFunction() const {
-
-    const uint8_t* (*test)(bbzpc_t offset, uint8_t size) =  [] (bbzpc_t offset, uint8_t size){
-        return (const uint8_t*) 1;
-    };
-
-
-    std::function<const uint8_t*(bbzpc_t, uint8_t)> test2([this] (bbzpc_t offset, uint8_t size){
-        return (const uint8_t*) 1;
-    });
-
-    test = test2;
+    return bbz_bcodeFetcher;
 }
 
 uint16_t BittyBuzzBytecode::getBytecodeLength() const { return m_bytecodeSize; }

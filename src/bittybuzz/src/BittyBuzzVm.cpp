@@ -7,7 +7,7 @@
 #include <util/bbzstring.h>
 
 extern "C" {
-#include <test_bytecode.h>
+#include <main_bytecode.h>
 }
 
 bbzvm_t bbz_vm_obj;
@@ -18,17 +18,18 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                          const IBSP& bsp,
                          const ILogger& logger) :
     m_bytecode(bytecode), m_bsp(bsp), m_logger(logger) {
-    bbz_system::logger = &logger;
+    // Init global variable
     vm = &bbz_vm_obj;
-    bbzringbuf_construct(&bbz_payload_buf, bbzmsg_buf, 1, 11);
+    bbz_system::logger = &logger;
 
-    // Init
+    // Init vm
     bbzvm_construct(m_bsp.getUUId());
     bbzvm_set_error_receiver(bbz_system::errorReceiver);
     bbzvm_set_bcode(m_bytecode.getBytecodeFetchFunction(), m_bytecode.getBytecodeLength());
+    bbzringbuf_construct(&bbz_payload_buf, bbzmsg_buf, 1, 11);
 
     // Function registration
-    bbzvm_function_register(BBZSTRING_ID(logNumber), bbz_user_functions::logNumber);
+    bbzvm_function_register(BBZSTRING_ID(logInt), bbz_user_functions::logInt);
 
     vm->state = BBZVM_STATE_READY;
     bbz_system::functionCall(__BBZSTRID_init);

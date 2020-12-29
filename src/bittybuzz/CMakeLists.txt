@@ -9,7 +9,7 @@ bittybuzz_fetch()
 find_package(BittyBuzz)
 
 # BittyBuzz script bytecode generation
-bittybuzz_generate_bytecode(bittybuzz-target ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts/test.bzz ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts)
+bittybuzz_generate_bytecode(bittybuzz-target ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts/main.bzz ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts)
 
 
 set(LIB_HEADERS
@@ -46,10 +46,17 @@ target_include_directories(${LIB_NAME}
 target_link_libraries(${LIB_NAME}
     PUBLIC
         BittyBuzz
+        SwarmUS::HiveMind::Logger
+        # Need to be public for default parameters
+        bittybuzz-target
     PRIVATE
         SwarmUS::HiveMind::BSP
         SwarmUS::HiveMind::FreeRTOS
-        SwarmUS::HiveMind::Logger
-        bittybuzz-target
+
 )
+
+
+if(ENABLE_TESTS)
+    add_subdirectory(tests)
+endif()
 
