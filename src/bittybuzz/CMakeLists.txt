@@ -18,11 +18,17 @@ set(LIB_HEADERS
 
     include/bittybuzz/BittyBuzzBytecode.h
     include/bittybuzz/IBittyBuzzBytecode.h
+
+    src/private/include/BittyBuzzSystem.h
+    src/private/include/BittyBuzzUserFunctions.h
 )
 
 set(LIB_SOURCES
     src/BittyBuzzVm.cpp
     src/BittyBuzzBytecode.cpp
+
+    src/private/BittyBuzzSystem.cpp
+    src/private/BittyBuzzUserFunctions.cpp
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_HEADERS})
@@ -34,6 +40,7 @@ target_include_directories(${LIB_NAME}
         $<INSTALL_INTERFACE:include>
     PRIVATE
         src
+        src/private/include
 )
 
 target_link_libraries(${LIB_NAME}
