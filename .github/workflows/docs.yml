@@ -2,11 +2,11 @@ name: Publish Documentation
 
 on:
   push:
-    branches: [ master, feat/ros-build]
+    branches: [ master ]
 
 jobs:
   build-native:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     container:
       image: swarmus/embedded
     steps:
