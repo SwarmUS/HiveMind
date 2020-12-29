@@ -38,9 +38,11 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_includes)
       COMMAND ${BZZASM} ${BASM_FILE} ${BO_FILE} ${BDB_FILE}
       DEPENDS ${_TARGET}_bzz_parse)
 
+
     # Cross compiling
     add_custom_target(${_TARGET}_bzz_cross_compile
       COMMAND zooids_bcodegen ${BO_FILE} ${BHEADER_FILE}
+      WORKING_DIRECTORY $<TARGET_FILE_DIR:zooids_bcodegen>
       DEPENDS zooids_bcodegen bo2bbo ${_TARGET}_bzz_compile)
 
     # Create library with file

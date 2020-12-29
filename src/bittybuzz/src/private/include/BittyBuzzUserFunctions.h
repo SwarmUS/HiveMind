@@ -13,7 +13,7 @@ namespace bbz_user_functions {
     /**
      *@brief Logs a number value. Use it for sanity checks, it has no real production values
      *
-     * @details This closure expects one parameter: the number to log
+     *@details This closure expects one integer parameter: the number to log
      * */
     void logInt();
 

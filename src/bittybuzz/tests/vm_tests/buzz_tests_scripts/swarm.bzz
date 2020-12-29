@@ -1,0 +1,25 @@
+function init() {
+    s0 = swarm.create(0)
+    s1 = swarm.create(1)
+
+    # Join one or both swarms depending on ID value
+    s0.select(id == 1)
+    s1.select(id == 2)
+}
+
+function step() {
+    s0.exec(swarm_behavior)
+    s1.exec(swarm_behavior)
+}
+
+function swarm_behavior() {
+    # Switch behavior depending on the swarm executing the closure
+    if (swarm.id() == 0){
+        logInt(1);
+    }
+    else {
+        logInt(1);
+        logInt(1);
+    }
+
+}

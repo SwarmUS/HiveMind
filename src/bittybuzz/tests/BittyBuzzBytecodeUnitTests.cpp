@@ -2,7 +2,6 @@
 #include "mocks/LoggerInterfaceMock.h"
 #include <array>
 #include <cstring>
-#include <gtest/gtest-death-test.h>
 #include <gtest/gtest.h>
 
 class BittyBuzzBytecodeTestFixture : public testing::Test {

@@ -1,0 +1,7 @@
+function init() {
+    test = 42
+}
+
+function step() {
+    logInt(test);
+}

@@ -11,6 +11,11 @@
 #include <cstdlib>
 #include <logger/Logger.h>
 
+extern "C" {
+#include <main_bytecode.h>
+}
+
+
 void printThreadExample(void* param) {
     (void)param;
     const int toggleDelay = 2;
@@ -21,7 +26,7 @@ void printThreadExample(void* param) {
     UserInterface ui = UserInterface();
     Logger logger = Logger(LogLevel::Debug, ui);
 
-    BittyBuzzBytecode bytecode(logger);
+    BittyBuzzBytecode bytecode(logger, bcode, bcode_size);
     BittyBuzzVm bittybuzz = BittyBuzzVm(bytecode, bsp, logger);
 
     logger.log(LogLevel::Info, "Hello logger!");
