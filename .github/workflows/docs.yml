@@ -8,7 +8,7 @@ jobs:
   build-native:
     runs-on: ubuntu-latest
     container:
-      image: cquesnel/ros
+      image: swarmus/embedded
     steps:
       - uses: actions/checkout@v2
         with:
@@ -31,8 +31,9 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPOSITORY_NAME: SwarmUS/HiveMind-Documentation
-          BRANCH: master
+          BRANCH: gh-pages
           FOLDER: catkin_ws/build/HiveMind/doc/html
           TARGET_FOLDER: docs
-          CLEAN: false
+          CLEAN: true
+          SINGLE_COMMIT: true
+

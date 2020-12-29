@@ -10,7 +10,7 @@ jobs:
   build-native:
     runs-on: ubuntu-latest
     container:
-      image: cquesnel/ros
+      image: swarmus/embedded
     steps:
       - uses: actions/checkout@v2
         with:
@@ -48,7 +48,7 @@ jobs:
   build-stm32:
     runs-on: ubuntu-latest
     container:
-      image: cquesnel/ros
+      image: swarmus/embedded
     steps:
     - uses: actions/checkout@v2
 
