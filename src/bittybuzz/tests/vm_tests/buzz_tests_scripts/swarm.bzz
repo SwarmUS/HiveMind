@@ -8,11 +8,11 @@ function init() {
 }
 
 function step() {
-    s0.exec(swarm_behavior)
-    s1.exec(swarm_behavior)
+    s0.exec(swarmBehavior)
+    s1.exec(swarmBehavior)
 }
 
-function swarm_behavior() {
+function swarmBehavior() {
     # Switch behavior depending on the swarm executing the closure
     if (swarm.id() == 0){
         logInt(1);

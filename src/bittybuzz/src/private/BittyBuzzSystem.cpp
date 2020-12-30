@@ -15,7 +15,10 @@ void bbz_system::functionCall(uint16_t strid) {
 }
 
 void bbz_system::errorReceiver(bbzvm_error errcode) {
-    if (logger != NULL) {
-        logger->log(LogLevel::Error, "BittyBuzz virtual machine error, error code: %d \n", errcode);
+    if (bbz_system::logger != NULL) {
+        bbz_system::logger->log(
+            LogLevel::Error,
+            "BittyBuzz virtual machine error, pc: %d, stackptr: %d, state: %d error code: %d \n",
+            vm->pc, vm->stackptr, vm->state, errcode);
     }
 }

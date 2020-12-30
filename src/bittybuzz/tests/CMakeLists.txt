@@ -5,6 +5,7 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmInitAddTests.cpp
     vm_tests/BittyBuzzVmLogIntTests.cpp
     vm_tests/BittyBuzzVmNoStepTests.cpp
+    vm_tests/BittyBuzzVmUndefinedFunctionTests.cpp
     vm_tests/BittyBuzzVmSwarmTests.cpp
 )
 
@@ -29,6 +30,11 @@ bittybuzz_generate_bytecode(no-step
     ${BZZ_TEST_SCRIPTS_LOCATION}/noStep.bzz 
     ${BZZ_TEST_SCRIPTS_LOCATION})
 
+
+bittybuzz_generate_bytecode(undefined-function 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/undefinedFunction.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION})
+
 bittybuzz_generate_bytecode(swarm 
     ${BZZ_TEST_SCRIPTS_LOCATION}/swarm.bzz 
     ${BZZ_TEST_SCRIPTS_LOCATION})
@@ -47,6 +53,7 @@ target_link_libraries(${TEST_NAME}
         log-int
         init-add
         no-step
+        undefined-function 
         swarm
 )
 
