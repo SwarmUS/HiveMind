@@ -10,10 +10,10 @@ class BSP : public IBSP {
     ~BSP() override;
 
     void initChip(void* args) override;
-    ros::NodeHandle* getRosNodeHandle();
+    std::shared_ptr<ros::NodeHandle> getRosNodeHandle();
 
   private:
-    ros::NodeHandle* m_rosNodeHandle;
+    std::shared_ptr<ros::NodeHandle> m_rosNodeHandle;
 };
 
 #endif // __BSP_H_

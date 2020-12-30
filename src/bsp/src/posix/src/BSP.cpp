@@ -9,11 +9,7 @@
 #include <timers.h>
 
 BSP::BSP() = default;
-BSP::~BSP() {
-    if (m_rosNodeHandle != NULL) {
-        delete m_rosNodeHandle;
-    }
-}
+BSP::~BSP() = default;
 
 /**
  * @brief Task that kills FreeRTOS when ROS node is stopped
@@ -31,15 +27,14 @@ void rosWatcher(void* param) {
 }
 
 void exampleTopicPublish(void* param) {
-    (void)param;
     const int loopRate = 4000;
     hive_mind::ExampleMessage msg = hive_mind::ExampleMessage();
     msg.number = 0;
     msg.text = "Hello World";
 
-    BSP* bsp = (BSP*)(BSPContainer::getBSP());
+    std::shared_ptr<ros::NodeHandle>* nodeHandle = (std::shared_ptr<ros::NodeHandle>*)param;
     ros::Publisher publisher =
-        bsp->getRosNodeHandle()->advertise<hive_mind::ExampleMessage>("exampleTopic", 1000);
+        nodeHandle->get()->advertise<hive_mind::ExampleMessage>("exampleTopic", 1000);
 
     while (true) {
         publisher.publish(msg);
@@ -53,13 +48,13 @@ void BSP::initChip(void* args) {
     CmdLineArgs* cmdLineArgs = (CmdLineArgs*)args;
     ros::init(cmdLineArgs->m_argc, cmdLineArgs->m_argv, "hive_mind");
 
-    m_rosNodeHandle = new ros::NodeHandle();
+    m_rosNodeHandle = std::shared_ptr<ros::NodeHandle>(new ros::NodeHandle("~"));
 
     xTaskCreate(rosWatcher, "ros_watch", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1,
                 NULL);
 
-    xTaskCreate(exampleTopicPublish, "example_topic_publish", configMINIMAL_STACK_SIZE, NULL,
-                tskIDLE_PRIORITY + 1, NULL);
+    xTaskCreate(exampleTopicPublish, "example_topic_publish", configMINIMAL_STACK_SIZE,
+                &m_rosNodeHandle, tskIDLE_PRIORITY + 1, NULL);
 }
 
-ros::NodeHandle* BSP::getRosNodeHandle() { return m_rosNodeHandle; }
+std::shared_ptr<ros::NodeHandle> BSP::getRosNodeHandle() { return m_rosNodeHandle; }
