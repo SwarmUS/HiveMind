@@ -4,9 +4,10 @@
 
 // TODO: Make a PR to bittybuzz to pass context
 static const ILogger* g_logger = NULL;
-const uint8_t* g_bittyBuzzBytecode = NULL;
+static const uint8_t* g_bittyBuzzBytecode = NULL;
 static uint8_t g_bittyBuzzBytecodeLength = 0;
 
+uint8_t buf[4];
 const uint8_t* bbz_bcodeFetcher(bbzpc_t offset, uint8_t size) {
     if (g_logger != NULL) {
         if (offset + size > g_bittyBuzzBytecodeLength) {
@@ -18,7 +19,7 @@ const uint8_t* bbz_bcodeFetcher(bbzpc_t offset, uint8_t size) {
                           "BittyBuzz requested more than 4 bytes from the bytecode array");
         }
     }
-
+    
     return g_bittyBuzzBytecode + offset;
 }
 

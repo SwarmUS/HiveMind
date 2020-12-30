@@ -32,7 +32,6 @@ void printThreadExample(void* param) {
     logger.log(LogLevel::Info, "Hello logger!");
     while (true) {
         logger.log(LogLevel::Info, "Hello world!");
-        logger.log(LogLevel::Info, "Hello world! TEST %d", 1);
         vTaskDelay(toggleDelay);
         bittybuzz.step();
     }

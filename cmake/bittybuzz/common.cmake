@@ -26,7 +26,8 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_includes)
     set(BO_FILE   ${BZZ_BASEPATH}.bo)
     set(BDB_FILE  ${BZZ_BASEPATH}.bdb)    
     set(BASM_FILE ${BZZ_BASEPATH}.basm)
-    set(BHEADER_FILE  ${BZZ_BASEPATH}_bytecode.h)    
+    set(BHEADER_FILE  ${BZZ_BASEPATH}_bytecode.h)
+    set(BHEADER_FILE_TMP ${BHEADER_FILE}.tmp)
 
 
     # Parsing buzz file
@@ -41,7 +42,8 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_includes)
 
     # Cross compiling
     add_custom_target(${_TARGET}_bzz_cross_compile
-      COMMAND zooids_bcodegen ${BO_FILE} ${BHEADER_FILE}
+      COMMAND zooids_bcodegen ${BO_FILE} ${BHEADER_FILE_TMP}
+      COMMAND cmp --silent ${BHEADER_FILE_TMP} ${BHEADER_FILE} || cp ${BHEADER_FILE_TMP} ${BHEADER_FILE} 
       WORKING_DIRECTORY $<TARGET_FILE_DIR:zooids_bcodegen>
       DEPENDS zooids_bcodegen bo2bbo ${_TARGET}_bzz_compile)
 
