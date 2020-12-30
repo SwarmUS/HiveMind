@@ -15,7 +15,6 @@ extern "C" {
 #include <main_bytecode.h>
 }
 
-
 void printThreadExample(void* param) {
     (void)param;
     const int toggleDelay = 2;

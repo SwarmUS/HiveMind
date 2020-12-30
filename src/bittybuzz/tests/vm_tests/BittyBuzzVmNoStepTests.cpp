@@ -9,7 +9,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_NoStep_NoError) {
     // Then
     m_bittybuzzVm->step();
 
-    //Expect
+    // Expect
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
 }

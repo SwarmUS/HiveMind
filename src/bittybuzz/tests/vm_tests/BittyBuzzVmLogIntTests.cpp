@@ -9,9 +9,8 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_logInt_FunctionCalled) {
     // Then
     m_bittybuzzVm->step();
 
-    //Expect
+    // Expect
     EXPECT_EQ(logCounter, 1);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
-    
 }

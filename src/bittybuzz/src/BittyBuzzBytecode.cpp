@@ -19,7 +19,7 @@ const uint8_t* bbz_bcodeFetcher(bbzpc_t offset, uint8_t size) {
                           "BittyBuzz requested more than 4 bytes from the bytecode array");
         }
     }
-    
+
     return g_bittyBuzzBytecode + offset;
 }
 
@@ -33,8 +33,6 @@ BittyBuzzBytecode::BittyBuzzBytecode(const ILogger& logger,
 
     m_bytecode = bytecode;
     m_bytecodeSize = bytecodeLength;
-
-
 }
 
 bbzvm_bcode_fetch_fun BittyBuzzBytecode::getBytecodeFetchFunction() const {
