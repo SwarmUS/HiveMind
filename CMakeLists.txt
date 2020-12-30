@@ -51,10 +51,6 @@ if(ENABLE_TESTS)
     if (NOT GTEST_FOUND)
         googletest_get_populate()
     endif()
-
-    if(DISABLE_EXTERNAL_WARNINGS)
-        google_test_disable_external_warnings()
-    endif()
 endif()
 
 # Include src to compile
