@@ -68,13 +68,17 @@ else()
     message(FATAL_ERROR "The current board is not supported")
 endif()
 
-set_source_files_properties(
-    ${GLOBAL_SOURCES}
-    PROPERTIES COMPILE_FLAGS
-        -w #Disables all warnings
-)
 
-set_target_properties(
-    ${LIB_NAME}
-    PROPERTIES C_CLANG_TIDY ""
-)
+# Disable compiler warnings and clang-tidy for couple of files 
+if(DISABLE_EXTERNAL_WARNINGS)
+    set_source_files_properties(
+        ${GLOBAL_SOURCES}
+        PROPERTIES COMPILE_FLAGS
+            -w #Disables all warnings
+    )
+
+    set_target_properties(
+        ${LIB_NAME}
+        PROPERTIES C_CLANG_TIDY ""
+    )
+endif()
