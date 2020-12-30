@@ -23,6 +23,7 @@ void rosWatcher(void* param) {
     const int loopRate = 100;
 
     while (ros::ok()) {
+        ros::spinOnce();
         vTaskDelay(loopRate);
     }
 
