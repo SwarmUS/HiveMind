@@ -129,10 +129,6 @@ foreach(PORT ${FreeRTOS_FIND_COMPONENTS})
     endif()
 endforeach()
 
-if(TARGET FreeRTOS::POSIX)
-    target_compile_options(FreeRTOS::POSIX INTERFACE -fPIC)
-endif()
-
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(FreeRTOS
     REQUIRED_VARS FreeRTOS_INCLUDE_DIRS

@@ -2,7 +2,7 @@
 #include "ros/ros.h"
 #include <FreeRTOS.h>
 #include <FreeRTOSConfig.h>
-#include <bsp/BSPFactory.h>
+#include <bsp/BSPContainer.h>
 #include <hive_mind/ExampleMessage.h>
 #include <sstream>
 #include <task.h>
@@ -37,7 +37,7 @@ void exampleTopicPublish(void* param) {
     msg.number = 0;
     msg.text = "Hello World";
 
-    BSP* bsp = (BSP*)(BSPFactory::getBSP());
+    BSP* bsp = (BSP*)(BSPContainer::getBSP());
     ros::Publisher publisher =
         bsp->getRosNodeHandle()->advertise<hive_mind::ExampleMessage>("exampleTopic", 1000);
 

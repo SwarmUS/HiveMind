@@ -4,7 +4,7 @@
 #include <task.h>
 #include <timers.h>
 
-#include <bsp/BSPFactory.h>
+#include <bsp/BSPContainer.h>
 #include <bsp/IBSP.h>
 #include <bsp/UserInterface.h>
 #include <cstdlib>
@@ -28,7 +28,7 @@ void printThreadExample(void* param) {
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
-    IBSP* bsp = BSPFactory::getBSP();
+    IBSP* bsp = BSPContainer::getBSP();
     bsp->initChip((void*)&cmdLineArgs);
 
     xTaskCreate(printThreadExample, "print", configMINIMAL_STACK_SIZE * 4, NULL,

@@ -10,7 +10,7 @@ set(LIB_HEADERS
     include/bsp/IBSP.h
     include/bsp/UserInterface.h
     include/bsp/IUserInterface.h
-    include/bsp/BSPFactory.h
+        include/bsp/BSPContainer.h
     )
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS})

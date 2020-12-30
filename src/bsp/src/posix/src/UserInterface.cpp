@@ -4,18 +4,15 @@
 #include <ros/console.h>
 
 int UserInterface::print(const char* format, ...) const {
+    const int bufferSize = 1024;
+    char buffer[bufferSize];
     int retValue = 0;
 
-    // ROS logging methods do not return the standard printf value. So let's just return -1 if there
-    // was an error
-    try {
-        va_list args;
-        va_start(args, format);
-        ROS_INFO(format, args);
-        va_end(args);
-    } catch (const ros::Exception& e) {
-        retValue = -1;
-    }
+    va_list args;
+    va_start(args, format);
+    retValue = snprintf(buffer, bufferSize, format, args);
+    va_end(args);
 
+    ROS_INFO("%s", buffer);
     return retValue;
 }
