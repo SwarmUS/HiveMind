@@ -52,4 +52,6 @@ endif()
 # Include src to compile
 add_subdirectory(src)
 
-
+# Disable clang-tidy after generating all targets so it isn't used for other packages in the same catkin workspace
+set(CMAKE_CXX_CLANG_TIDY "")
+set(CMAKE_C_CLANG_TIDY "")
