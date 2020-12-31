@@ -1,3 +1,7 @@
+# ========================================
+# =            MAIN CLOSURES             =
+# ========================================
+
 function init() {
     # Create swarms
     s0 = swarm.create(0)
@@ -23,7 +27,7 @@ function swarm_behavior() {
     if (swarm.id() == 0) {
         logInt(1)
     }
-    else {
+    else if (swarm.id() == 1) {
         logInt(2)
         logInt(2)
     }

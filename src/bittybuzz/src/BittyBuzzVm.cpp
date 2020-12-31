@@ -14,6 +14,8 @@ bbzvm_t bbz_vm_obj;
 uint8_t bbzmsg_buf[11];
 bbzmsg_payload_t bbz_payload_buf;
 
+void dummy() {bbz_system::logger->log(LogLevel::Info, "HELLO WORLD"); bbzvm_ret0();}
+
 BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                          const IBSP& bsp,
                          const ILogger& logger) :
@@ -29,7 +31,8 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     bbzringbuf_construct(&bbz_payload_buf, bbzmsg_buf, 1, 11);
 
     // Function registration
-    bbzvm_function_register(BBZSTRING_ID(logInt), bbz_user_functions::logInt);
+    bbzvm_function_register(BBZSTRING_ID(logInt), dummy);
+    bbzvm_function_register(BBZSTRING_ID(logInt), dummy);
 
     vm->state = BBZVM_STATE_READY;
     bbz_system::functionCall(__BBZSTRID_init);
