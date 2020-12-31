@@ -46,10 +46,12 @@ include(doc/doxygen)
 if(ENABLE_TESTS)
     include(googletest/common)
     enable_testing()
-    find_package(GTest)
-
-    if (NOT GTEST_FOUND)
+    if(NOT TARGET gtest)
         googletest_get_populate()
+    endif()
+
+    if(DISABLE_EXTERNAL_WARNINGS)
+        googletest_disable_warnings()
     endif()
 endif()
 
