@@ -8,7 +8,7 @@ namespace BSPContainer {
 /**
  * @brief Return an instance of the platform dependent BSP.
  */
-IBSP* getBSP();
+IBSP& getBSP();
 } // namespace BSPContainer
 
 #endif // _BSPFACTORY_H
