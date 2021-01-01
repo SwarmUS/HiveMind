@@ -7,10 +7,9 @@ static const ILogger* g_logger = NULL;
 static const uint8_t* g_bittyBuzzBytecode = NULL;
 static uint8_t g_bittyBuzzBytecodeLength = 0;
 
-
 const uint8_t* bbz_bcodeFetcher(bbzpc_t offset, uint8_t size) {
     if (g_logger != NULL) {
-        if (offset + size - 1>= g_bittyBuzzBytecodeLength) {
+        if (offset + size - 1 >= g_bittyBuzzBytecodeLength) {
             g_logger->log(LogLevel::Error,
                           "BittyBuzz virtual machine requested out of bound bytecode");
         }

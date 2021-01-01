@@ -5,15 +5,12 @@
 #include <timers.h>
 
 #include <bittybuzz/BittyBuzzBytecode.h>
+#include <bittybuzz/BittyBuzzFactory.h>
 #include <bittybuzz/BittyBuzzVm.h>
 #include <bsp/BSP.h>
 #include <bsp/UserInterface.h>
 #include <cstdlib>
 #include <logger/Logger.h>
-
-extern "C" {
-#include <main_bytecode.h>
-}
 
 void printThreadExample(void* param) {
     (void)param;
@@ -25,8 +22,10 @@ void printThreadExample(void* param) {
     UserInterface ui = UserInterface();
     Logger logger = Logger(LogLevel::Debug, ui);
 
-    BittyBuzzBytecode bytecode(logger, bcode, bcode_size);
-    BittyBuzzVm bittybuzz = BittyBuzzVm(bytecode, bsp, logger);
+    BittyBuzzBytecode bytecode = BittyBuzzFactory::createBittyBuzzBytecode(logger);
+    auto functionRegisters = BittyBuzzFactory::createBittyBuzzFunctionRegisters();
+    BittyBuzzVm bittybuzz =
+        BittyBuzzVm(bytecode, bsp, logger, functionRegisters.data(), functionRegisters.size());
 
     logger.log(LogLevel::Info, "Hello logger!");
     while (true) {

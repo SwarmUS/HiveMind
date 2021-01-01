@@ -19,11 +19,16 @@ class BittyBuzzVmTestFixture : public testing::Test {
     int logCounter = 0;
 
     // Needs to be explicitly called since we use an overload
-    void SetUp(const uint8_t* bytecode, const uint16_t bytecodeLength, uint16_t boardId) {
+    void SetUp(const uint8_t* bytecode,
+               const uint16_t bytecodeLength,
+               uint16_t boardId,
+               const FunctionRegister* functionRegisters,
+               uint16_t lengthFunctionRegisters) {
         m_loggerMock = new LoggerInterfaceMock(logCounter);
         m_bspMock = new BSPInterfaceMock(boardId);
         m_bittybuzzBytecode = new BittyBuzzBytecode(*m_loggerMock, bytecode, bytecodeLength);
-        m_bittybuzzVm = new BittyBuzzVm(*m_bittybuzzBytecode, *m_bspMock, *m_loggerMock);
+        m_bittybuzzVm = new BittyBuzzVm(*m_bittybuzzBytecode, *m_bspMock, *m_loggerMock,
+                                        functionRegisters, lengthFunctionRegisters);
     }
 
     void TearDown() override {

@@ -19,13 +19,17 @@ set(LIB_HEADERS
     include/bittybuzz/BittyBuzzBytecode.h
     include/bittybuzz/IBittyBuzzBytecode.h
 
+    include/bittybuzz/BittyBuzzFactory.h
+
     src/private/include/BittyBuzzSystem.h
     src/private/include/BittyBuzzUserFunctions.h
+
 )
 
 set(LIB_SOURCES
     src/BittyBuzzVm.cpp
     src/BittyBuzzBytecode.cpp
+    src/BittyBuzzFactory.cpp
 
     src/private/BittyBuzzSystem.cpp
     src/private/BittyBuzzUserFunctions.cpp

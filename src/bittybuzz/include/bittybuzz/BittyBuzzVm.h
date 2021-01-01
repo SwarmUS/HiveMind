@@ -5,10 +5,21 @@
 #include "bittybuzz/IBittyBuzzVm.h"
 #include "bsp/IBSP.h"
 #include "logger/ILogger.h"
+#include <array>
+
+typedef struct {
+    uint8_t strId;
+    bbzvm_funp function;
+
+} FunctionRegister;
 
 class BittyBuzzVm : public IBittyBuzzVm {
   public:
-    BittyBuzzVm(const IBittyBuzzBytecode& bytecode, const IBSP& bsp, const ILogger& logger);
+    BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
+                const IBSP& bsp,
+                const ILogger& logger,
+                const FunctionRegister* functionRegisters,
+                uint16_t lengthFunctionRegisters);
 
     ~BittyBuzzVm() override = default;
 
@@ -22,6 +33,10 @@ class BittyBuzzVm : public IBittyBuzzVm {
     const IBittyBuzzBytecode& m_bytecode;
     const IBSP& m_bsp;
     const ILogger& m_logger;
+
+    bbzvm_t m_bbzVm;
+    uint8_t m_bbzMsgBuff[11];
+    bbzmsg_payload_t m_bbzPayloadBuff;
 };
 
 #endif // __BITTYBUZZVM_H_
