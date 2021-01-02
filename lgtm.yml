@@ -4,3 +4,13 @@ path_classifiers:
     - LICENSE
   test:
     - "src/*/tests/*.cpp" # tests are in src/MODULE/tests
+
+extraction:
+  cpp:
+    after_prepare:
+      - git clone https://github.com/MISTLab/Buzz.git /temp/buzz
+      - cd /temp/buzz
+      - mkdir build
+      - cmake ../src
+      - make
+      - export PATH=${PATH}:$(pwd)/buzz
