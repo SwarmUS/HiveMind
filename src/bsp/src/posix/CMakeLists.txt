@@ -4,27 +4,33 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform")
 set(LIB_SOURCES
     src/BSP.cpp
     src/UserInterface.cpp
+        src/BSPContainer.cpp
 )
 
 set(LIB_PRIVATE_HEADERS
+    include/BSP.h
 )
 
 add_library(${LIB_NAME} ${LIB_SOURCES} ${LIB_PRIVATE_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
-target_include_directories(${LIB_NAME} 
+# Make ROS messages/services available in headers
+add_dependencies(${LIB_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS})
+
+target_include_directories(${LIB_NAME} SYSTEM PRIVATE ${catkin_INCLUDE_DIRS})
+target_include_directories(${LIB_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         ${BSP_CMAKE_DIR}/include
+        include
 )
-
 
 target_link_libraries(${LIB_NAME}
     PUBLIC
         # Defined libraries
         SwarmUS::HiveMind::FreeRTOS
+        ${catkin_LIBRARIES}
 )
-
 
 # Mock linker library
 add_library(posix-linker INTERFACE)

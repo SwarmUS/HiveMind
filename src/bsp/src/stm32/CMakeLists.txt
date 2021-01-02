@@ -4,9 +4,11 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform")
 set(LIB_SOURCES
     src/BSP.cpp
     src/UserInterface.cpp
+        src/BSPContainer.cpp
 )
 
 set(LIB_PRIVATE_HEADERS
+    include/BSP.h
 )
 
 
@@ -21,6 +23,7 @@ target_include_directories(${LIB_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         ${BSP_CMAKE_DIR}/include
+        include
 )
 
 target_link_libraries(${LIB_NAME}

@@ -8,9 +8,7 @@ class BSP : public IBSP {
     BSP();
     ~BSP() override;
 
-    void initChip() override;
-
-    uint16_t getUUId() const override;
+    void initChip(void* args) override;
 };
 
 #endif // __BSP_H_
