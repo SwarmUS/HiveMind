@@ -5,8 +5,13 @@ set(LIB_CONFIG_ALIAS "SwarmUS::HiveMind::FreeRTOS::Platform::Config")
 
 find_package(FreeRTOS COMPONENTS ARM_CM4F REQUIRED)
 
+set(LIB_SOURCES
+    platform_freertos_hooks.c
+)
+
 add_library(${LIB_NAME} INTERFACE)
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
+target_sources(${LIB_NAME} INTERFACE ${LIB_SOURCES})
 
 target_link_libraries(${LIB_NAME}
     INTERFACE

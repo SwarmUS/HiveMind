@@ -2,6 +2,7 @@
 .vscode/
 
 cmake-build-debug/
+cmake-build-target/
 
 .builds/
 build/

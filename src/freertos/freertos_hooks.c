@@ -10,8 +10,6 @@ extern "C" {
 
 void vApplicationTickHook(void) {}
 
-void vApplicationIdleHook(void) {}
-
 void vApplicationMallocFailedHook(void) {
     taskDISABLE_INTERRUPTS();
     while (true) {

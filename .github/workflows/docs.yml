@@ -1,0 +1,43 @@
+name: Publish Documentation
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build-native:
+    runs-on: ubuntu-20.04
+    container:
+      image: swarmus/embedded
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: 'catkin_ws/src/HiveMind'
+          persist-credentials: false
+      - name: prepare
+        run: |
+          apt-get update && apt-get install -y rsync
+
+      - name: build
+        run: |
+          cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          catkin_make
+
+      - name: generate
+        run: |
+          cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          . ./devel/setup.sh
+          catkin_make doc
+
+      - name: publish
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: catkin_ws/build/HiveMind/doc/html
+          TARGET_FOLDER: docs
+          CLEAN: true
+          SINGLE_COMMIT: true
+

@@ -9,50 +9,51 @@ on:
 jobs:
   build-native:
     runs-on: ubuntu-20.04
+    container:
+      image: swarmus/embedded
     steps:
-    - uses: actions/checkout@v2
-    - name: prepare
-      run: |
-        sudo apt-get install -y clang-format clang-tidy doxygen graphviz
-        mkdir -p build
-        cd build
-        cmake ..
+      - uses: actions/checkout@v2
+        with:
+          path: 'catkin_ws/src/HiveMind'
+      - name: build
+        run: |
+          cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          catkin_make
 
-    - name: build
-      run: |
-        cd build
-        make -j
+      # Tests, check-format and doc are run on native build
+      - name: tests
+        run: |
+          cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          . ./devel/setup.sh
+          cd build/HiveMind
+          ctest -V
 
-    # Tests and format and doc are run on native build
-    - name: tests
-      run: |
-        cd build
-        ctest -V
+      - name: check-format
+        run: |
+          cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          . ./devel/setup.sh
+          catkin_make check-format
 
-    - name: check-format
-      run: |
-        cd build
-        make check-format
-
-    # Verifies that the doc is built
-    - name: doc
-      run: |
-        cd build
-        make doc
+      # Verifies that the doc is built
+      - name: doc
+        run: |
+          cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          . ./devel/setup.sh
+          catkin_make doc
 
   build-stm32:
     runs-on: ubuntu-latest
+    container:
+      image: swarmus/embedded
     steps:
     - uses: actions/checkout@v2
 
-    - name: Setup Toolchain
-      uses: fiam/arm-none-eabi-gcc@master
-      with:
-        release: '9-2020-q2' # The arm-none-eabi-gcc release to use.
-
     - name: prepare
       run: |
-        sudo apt-get install -y clang-format clang-tidy doxygen graphviz
         mkdir -p build
         cd build
         cmake -D CMAKE_TOOLCHAIN_FILE=../cmake/stm32_f429zi_gcc.cmake ..
