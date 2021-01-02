@@ -4,8 +4,9 @@
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_AddInt_NoError) {
     // Given
     uint16_t boardId = 42;
-    SetUp(bcode, bcode_size, boardId, NULL, 0);
-
+    std::array<FunctionRegister, 0> functionRegister = {};
+    SetUp(bcode, bcode_size, boardId, functionRegister);
+    
     // Then
     m_bittybuzzVm->step();
 

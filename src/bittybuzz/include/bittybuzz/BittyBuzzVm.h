@@ -7,6 +7,8 @@
 #include "logger/ILogger.h"
 #include <array>
 
+#define BBZ_MSG_BUFF_SIZE 16
+
 typedef struct {
     uint8_t strId;
     bbzvm_funp functionPtr;
@@ -15,11 +17,11 @@ typedef struct {
 
 class BittyBuzzVm : public IBittyBuzzVm {
   public:
+    template <typename Container>
     BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                 const IBSP& bsp,
                 const ILogger& logger,
-                const FunctionRegister* functionRegisters,
-                uint16_t lengthFunctionRegisters);
+                const Container& container);
 
     ~BittyBuzzVm() override = default;
 
@@ -35,8 +37,10 @@ class BittyBuzzVm : public IBittyBuzzVm {
     const ILogger& m_logger;
 
     bbzvm_t m_bbzVm;
-    uint8_t m_bbzMsgBuff[11];
+    std::array<uint8_t, BBZ_MSG_BUFF_SIZE> m_bbzMsgBuff;
     bbzmsg_payload_t m_bbzPayloadBuff;
 };
+
+#include "BittyBuzzVm.tpp"
 
 #endif // __BITTYBUZZVM_H_

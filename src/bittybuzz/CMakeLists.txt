@@ -16,6 +16,7 @@ bittybuzz_generate_bytecode(bittybuzz-target
 
 set(LIB_HEADERS
     include/bittybuzz/BittyBuzzVm.h
+    include/bittybuzz/BittyBuzzVm.tpp
     include/bittybuzz/IBittyBuzzVm.h
 
     include/bittybuzz/BittyBuzzBytecode.h

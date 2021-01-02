@@ -20,8 +20,8 @@ namespace BittyBuzzSystem {
      *@brief Call a bittybuzz function, check the function documentation and verify if you need to
      *pass parameter via the vm stack
      *
-     *@param [in] strid the string ID of the function*/
-    void functionCall(uint16_t strid);
+     *@param [in] stringId the string ID of the function*/
+    void functionCall(uint16_t stringId);
 
     /**
      *@brief Callback to handle errors on bittybuzz vm

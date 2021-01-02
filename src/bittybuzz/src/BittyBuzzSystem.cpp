@@ -2,8 +2,8 @@
 
 const ILogger* BittyBuzzSystem::logger = NULL;
 
-void BittyBuzzSystem::functionCall(uint16_t strid) {
-    bbzvm_pushs(strid);
+void BittyBuzzSystem::functionCall(uint16_t stringId) {
+    bbzvm_pushs(stringId);
     bbzheap_idx_t l = bbzvm_stack_at(0);
     bbzvm_pop();
     if (bbztable_get(vm->gsyms, l, &l)) {

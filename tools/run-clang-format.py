@@ -32,7 +32,7 @@ except ImportError:
     DEVNULL = open(os.devnull, "wb")
 
 
-DEFAULT_EXTENSIONS = "c,h,C,H,cpp,hpp,cc,hh,c++,h++,cxx,hxx"
+DEFAULT_EXTENSIONS = "c,h,C,H,cpp,hpp,cc,hh,c++,h++,cxx,hxx,tpp,txx,tt"
 DEFAULT_CLANG_FORMAT_IGNORE = ".clang-format-ignore"
 
 
@@ -81,8 +81,7 @@ def list_files(files, recursive=False, extensions=None, exclude=None):
                         for x in dnames
                         if not fnmatch.fnmatch(os.path.join(dirpath, x), pattern)
                     ]
-                    fpaths = [
-                        x for x in fpaths if not fnmatch.fnmatch(x, pattern)]
+                    fpaths = [x for x in fpaths if not fnmatch.fnmatch(x, pattern)]
                 for f in fpaths:
                     ext = os.path.splitext(f)[1][1:]
                     if ext in extensions:
@@ -124,8 +123,7 @@ def run_clang_format_diff_wrapper(args, file):
     except DiffError:
         raise
     except Exception as e:
-        raise UnexpectedError("{}: {}: {}".format(
-            file, e.__class__.__name__, e), e)
+        raise UnexpectedError("{}: {}: {}".format(file, e.__class__.__name__, e), e)
 
 
 def run_clang_format_diff(args, file):
@@ -382,8 +380,7 @@ def main():
         pool = None
     else:
         pool = multiprocessing.Pool(njobs)
-        it = pool.imap_unordered(
-            partial(run_clang_format_diff_wrapper, args), files)
+        it = pool.imap_unordered(partial(run_clang_format_diff_wrapper, args), files)
         pool.close()
     while True:
         try:

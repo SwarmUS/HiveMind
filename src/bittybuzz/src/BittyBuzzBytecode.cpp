@@ -31,11 +31,11 @@ BittyBuzzBytecode::BittyBuzzBytecode(const ILogger& logger,
     g_bittyBuzzBytecodeLength = bytecodeLength;
 
     m_bytecode = bytecode;
-    m_bytecodeSize = bytecodeLength;
+    m_bytecodeLength = bytecodeLength;
 }
 
 bbzvm_bcode_fetch_fun BittyBuzzBytecode::getBytecodeFetchFunction() const {
     return bbz_bcodeFetcher;
 }
 
-uint16_t BittyBuzzBytecode::getBytecodeLength() const { return m_bytecodeSize; }
+uint16_t BittyBuzzBytecode::getBytecodeLength() const { return m_bytecodeLength; }

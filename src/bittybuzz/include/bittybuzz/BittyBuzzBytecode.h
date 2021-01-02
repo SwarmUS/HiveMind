@@ -20,7 +20,7 @@ class BittyBuzzBytecode : public IBittyBuzzBytecode {
   private:
     const uint8_t* m_bytecode;
     const ILogger& m_logger;
-    uint16_t m_bytecodeSize;
+    uint16_t m_bytecodeLength;
 };
 
 #endif // __BITTYBUZZBYTECODE_H_
