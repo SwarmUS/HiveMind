@@ -10,7 +10,7 @@ extraction:
     after_prepare:
       - git clone https://github.com/MISTLab/Buzz.git /tmp/buzz
       - cd /tmp/buzz
-      - mkdir build
+      - mkdir build && cd build
       - cmake ../src
       - make
       - export PATH=${PATH}:$(pwd)/buzz
