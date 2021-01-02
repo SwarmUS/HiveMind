@@ -8,8 +8,8 @@ path_classifiers:
 extraction:
   cpp:
     after_prepare:
-      - git clone https://github.com/MISTLab/Buzz.git /temp/buzz
-      - cd /temp/buzz
+      - git clone https://github.com/MISTLab/Buzz.git /tmp/buzz
+      - cd /tmp/buzz
       - mkdir build
       - cmake ../src
       - make
