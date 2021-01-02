@@ -9,7 +9,7 @@
 
 typedef struct {
     uint8_t strId;
-    bbzvm_funp function;
+    bbzvm_funp functionPtr;
 
 } FunctionRegister;
 
