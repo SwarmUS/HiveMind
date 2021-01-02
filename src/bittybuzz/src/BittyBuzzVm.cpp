@@ -1,14 +1,8 @@
 #include "bittybuzz/BittyBuzzVm.h"
-#include "BittyBuzzSystem.h"
-#include "BittyBuzzUserFunctions.h"
+#include "bittybuzz/BittyBuzzSystem.h"
 #include <FreeRTOS.h>
 #include <bbzvm.h>
 #include <task.h>
-
-void dummy() {
-    bbz_system::logger->log(LogLevel::Info, "HELLO WORLD");
-    bbzvm_ret0();
-}
 
 BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                          const IBSP& bsp,

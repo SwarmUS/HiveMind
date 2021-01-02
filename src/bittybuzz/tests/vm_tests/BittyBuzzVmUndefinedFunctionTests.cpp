@@ -4,7 +4,7 @@
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_UndefinedFunction_LogCalledOnError) {
     // Given
     uint16_t boardId = 1;
-    SetUp(bcode, bcode_size, boardId);
+    SetUp(bcode, bcode_size, boardId, NULL, 0);
 
     // Then
     m_bittybuzzVm->step();

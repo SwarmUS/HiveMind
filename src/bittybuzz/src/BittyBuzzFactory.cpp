@@ -1,5 +1,5 @@
 #include "bittybuzz/BittyBuzzFactory.h"
-#include "BittyBuzzUserFunctions.h"
+#include "bittybuzz/BittyBuzzUserFunctions.h"
 #include "bittybuzz/BittyBuzzBytecode.h"
 
 extern "C" {

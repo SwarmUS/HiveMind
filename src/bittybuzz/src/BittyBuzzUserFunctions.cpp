@@ -1,5 +1,5 @@
-#include "BittyBuzzUserFunctions.h"
-#include "BittyBuzzSystem.h"
+#include "bittybuzz/BittyBuzzUserFunctions.h"
+#include "bittybuzz/BittyBuzzSystem.h"
 
 void bbz_user_functions::logInt() {
     bbzvm_assert_lnum(1); // NOLINT
