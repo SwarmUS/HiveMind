@@ -6,16 +6,19 @@ function init() {
     # Create swarms
     s0 = swarm.create(0)
     s1 = swarm.create(1)
+    s2 = swarm.create(2)
 
-    # Join one or both swarms depending on ID value
-    s0.select(id % 3 != 1)
-    s1.select(id % 3 != 0)
+    # Join a swarm depending on value
+    s0.select(id % 2 == 1) # Odd
+    s1.select(id % 2 == 0) # Even
+    s2.select(id == 3) # will join even and this one
 }
 
 function step() {
     # Make swarm execute behaviors
     s0.exec(swarm_behavior)
     s1.exec(swarm_behavior)
+    s2.exec(swarm_behavior)
 }
 
 # ========================================
@@ -30,5 +33,10 @@ function swarm_behavior() {
     else if (swarm.id() == 1) {
         logInt(2)
         logInt(2)
+    }
+    else if (swarm.id() == 2) {
+        logInt(3)
+        logInt(3)
+        logInt(3)
     }
 }
