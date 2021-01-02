@@ -1,11 +1,11 @@
 #include "BittyBuzzVmFixture.h"
-#include <swarm_bytecode.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
+#include <swarm_bytecode.h>
 
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledOnce) {
     // Given
     uint16_t boardId = 1;
-    FunctionRegister functionRegister = {BBZSTRID_logInt, bbz_user_functions::logInt};
+    FunctionRegister functionRegister = {BBZSTRID_logInt, BittyBuzzUserFunctions::logInt};
     SetUp(bcode, bcode_size, boardId, &functionRegister, 1);
     // Then
     m_bittybuzzVm->step();
@@ -19,7 +19,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledOnce) {
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledTwice) {
     // Given
     uint16_t boardId = 2;
-    FunctionRegister functionRegister = {BBZSTRID_logInt, bbz_user_functions::logInt};
+    FunctionRegister functionRegister = {BBZSTRID_logInt, BittyBuzzUserFunctions::logInt};
     SetUp(bcode, bcode_size, boardId, &functionRegister, 1);
 
     // Then
@@ -34,7 +34,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledTwice) {
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_InTwoSwarm_FunctionCalledQuad) {
     // Given
     uint16_t boardId = 3;
-    FunctionRegister functionRegister = {BBZSTRID_logInt, bbz_user_functions::logInt};
+    FunctionRegister functionRegister = {BBZSTRID_logInt, BittyBuzzUserFunctions::logInt};
     SetUp(bcode, bcode_size, boardId, &functionRegister, 1);
 
     // Then

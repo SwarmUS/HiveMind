@@ -4,13 +4,12 @@
 #include <bbzvm.h>
 #include <logger/ILogger.h>
 
-// Since the bittybuzz callbacks does not support context, we use a namespace instead of an class
-// object, could have been a static class or static function in class.
+// TODO: Change to a class once bittybuzz support passing context to function
 
 /**
  *@brief Namespace to help manage the bittybuzz system.
  **/
-namespace bbz_system {
+namespace BittyBuzzSystem {
 
     /**
      *@brief Logger used for error reception or user functions
@@ -30,6 +29,6 @@ namespace bbz_system {
      *@param [in] errcode the error code of the received error */
     void errorReceiver(bbzvm_error errcode);
 
-} // namespace bbz_system
+} // namespace BittyBuzzSystem
 
 #endif // __BITTYBUZZSYSTEM_H_

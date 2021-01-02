@@ -13,11 +13,11 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     m_bytecode(bytecode), m_bsp(bsp), m_logger(logger) {
     // Init global variable
     vm = &m_bbzVm;
-    bbz_system::logger = &logger;
+    BittyBuzzSystem::logger = &logger;
 
     // Init vm
     bbzvm_construct(m_bsp.getUUId());
-    bbzvm_set_error_receiver(bbz_system::errorReceiver);
+    bbzvm_set_error_receiver(BittyBuzzSystem::errorReceiver);
     bbzvm_set_bcode(m_bytecode.getBytecodeFetchFunction(), m_bytecode.getBytecodeLength());
     bbzringbuf_construct(&m_bbzPayloadBuff, m_bbzMsgBuff, 1, 11);
 
@@ -27,14 +27,14 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     }
 
     vm->state = BBZVM_STATE_READY;
-    bbz_system::functionCall(__BBZSTRID_init);
+    BittyBuzzSystem::functionCall(__BBZSTRID_init);
 }
 
 bool BittyBuzzVm::step() {
 
     if (vm->state != BBZVM_STATE_ERROR) {
         bbzvm_process_inmsgs();
-        bbz_system::functionCall(__BBZSTRID_step);
+        BittyBuzzSystem::functionCall(__BBZSTRID_step);
         bbzvm_process_outmsgs();
         return true;
     }

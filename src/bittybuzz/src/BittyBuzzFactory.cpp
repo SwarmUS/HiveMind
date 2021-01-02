@@ -1,6 +1,6 @@
 #include "bittybuzz/BittyBuzzFactory.h"
-#include "bittybuzz/BittyBuzzUserFunctions.h"
 #include "bittybuzz/BittyBuzzBytecode.h"
+#include "bittybuzz/BittyBuzzUserFunctions.h"
 
 extern "C" {
 #include "main_bytecode.h"
@@ -11,5 +11,5 @@ BittyBuzzBytecode BittyBuzzFactory::createBittyBuzzBytecode(const ILogger& logge
 }
 
 std::array<FunctionRegister, 1> BittyBuzzFactory::createBittyBuzzFunctionRegisters() {
-    return {{{BBZSTRID_logInt, bbz_user_functions::logInt}}};
+    return {{{BBZSTRID_logInt, BittyBuzzUserFunctions::logInt}}};
 }

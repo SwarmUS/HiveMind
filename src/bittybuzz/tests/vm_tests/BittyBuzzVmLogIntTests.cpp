@@ -1,12 +1,12 @@
 #include "BittyBuzzVmFixture.h"
-#include <logInt_bytecode.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
+#include <logInt_bytecode.h>
 
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_logInt_FunctionCalled) {
     // Given
     uint16_t boardId = 42;
 
-    FunctionRegister functionRegister = {BBZSTRID_logInt, bbz_user_functions::logInt};
+    FunctionRegister functionRegister = {BBZSTRID_logInt, BittyBuzzUserFunctions::logInt};
     SetUp(bcode, bcode_size, boardId, &functionRegister, 1);
 
     // Then

@@ -16,7 +16,7 @@ include(${BITTYBUZZ_SRC_PATH}/src/cmake/BittyBuzzFindBuzzPrgms.cmake)
 # Sources and headers are located at the same place
 list(APPEND BittyBuzz_INCLUDE_DIRS "${BittyBuzz_SOURCE_DIR}")
 
-# bzzinclude.h include files from "bittybuzz/" and not directly from folder
+# Create bittybuzz config file
 configure_file(${BittyBuzz_SOURCE_DIR}/config.h.in ${BittyBuzz_SOURCE_DIR}/config.h @ONLY)
 
 set(BBZ_HEADERS
@@ -27,7 +27,7 @@ set(BBZ_HEADERS
         ${BittyBuzz_SOURCE_DIR}/bbzinmsg.h
         ${BittyBuzz_SOURCE_DIR}/bbzmsg.h
         ${BittyBuzz_SOURCE_DIR}/bbzneighbors.h
-#        ${BittyBuzz_SOURCE_DIR}/bbzobjringbuf.h
+#        ${BittyBuzz_SOURCE_DIR}/bbzobjringbuf.h Not supported for now on bittybuzz
         ${BittyBuzz_SOURCE_DIR}/bbzoutmsg.h
         ${BittyBuzz_SOURCE_DIR}/bbzringbuf.h
         ${BittyBuzz_SOURCE_DIR}/bbzstrids.h
@@ -79,8 +79,10 @@ foreach (bbz_exec_src ${BBZ_UTILS_SOURCES})
     get_filename_component(bbz_executable ${bbz_exec_src} NAME_WE)
     add_executable(${bbz_executable} ${bbz_exec_src} ${BittyBuzz_SOURCE_DIR}/bbzfloat.c)
     target_include_directories(${bbz_executable} PRIVATE ${BITTYBUZZ_SRC_PATH}/src)
-    set_target_properties(${bbz_executable} PROPERTIES C_CLANG_TIDY "")
-    target_compile_options(${bbz_executable} PRIVATE -w)
+    if(DISABLE_EXTERNAL_WARNINGS)
+        set_target_properties(${bbz_executable} PROPERTIES C_CLANG_TIDY "")
+        target_compile_options(${bbz_executable} PRIVATE -w)
+    endif()
 endforeach ()
 
 # Disable compiler warnings and clang-tidy

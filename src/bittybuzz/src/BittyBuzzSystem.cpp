@@ -1,8 +1,8 @@
 #include "bittybuzz/BittyBuzzSystem.h"
 
-const ILogger* bbz_system::logger = NULL;
+const ILogger* BittyBuzzSystem::logger = NULL;
 
-void bbz_system::functionCall(uint16_t strid) {
+void BittyBuzzSystem::functionCall(uint16_t strid) {
     bbzvm_pushs(strid);
     bbzheap_idx_t l = bbzvm_stack_at(0);
     bbzvm_pop();
@@ -14,9 +14,9 @@ void bbz_system::functionCall(uint16_t strid) {
     }
 }
 
-void bbz_system::errorReceiver(bbzvm_error errcode) {
-    if (bbz_system::logger != NULL) {
-        bbz_system::logger->log(
+void BittyBuzzSystem::errorReceiver(bbzvm_error errcode) {
+    if (BittyBuzzSystem::logger != NULL) {
+        BittyBuzzSystem::logger->log(
             LogLevel::Error,
             "BittyBuzz virtual machine error, pc: %d, stackptr: %d, state: %d error code: %d \n",
             vm->pc, vm->stackptr, vm->state, errcode);
