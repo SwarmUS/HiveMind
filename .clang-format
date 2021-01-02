@@ -7,7 +7,7 @@ Standard: Cpp11
 IndentWidth: 4
 NamespaceIndentation: All
 ColumnLimit: 100
-
+AlignTrailingComments: false
 
 # Functions
 PenaltyReturnTypeOnItsOwnLine: 10000
@@ -22,6 +22,3 @@ AlwaysBreakTemplateDeclarations: true
 
 # Pointer
 PointerAlignment: Left
-
-# Clang version mismatch fixes
-AlignTrailingComments: false
