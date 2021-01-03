@@ -9,13 +9,12 @@
 #include <bsp/UserInterface.h>
 #include <cstdlib>
 #include <logger/Logger.h>
+#include <bittybuzz/BittyBuzzVm.h>
+#include <bittybuzz/BittyBuzzFactory.h>
 
 void printThreadExample(void* param) {
     (void)param;
     const int toggleDelay = 2000;
-
-    BSP bsp = BSP();
-    bsp.initChip();
 
     UserInterface ui = UserInterface();
     Logger logger = Logger(LogLevel::Debug, ui);
@@ -23,7 +22,7 @@ void printThreadExample(void* param) {
     BittyBuzzBytecode bytecode = BittyBuzzFactory::createBittyBuzzBytecode(logger);
     std::array<FunctionRegister, 1> functionRegisters =
         BittyBuzzFactory::createBittyBuzzFunctionRegisters();
-    BittyBuzzVm bittybuzz = BittyBuzzVm(bytecode, bsp, logger, functionRegisters);
+    BittyBuzzVm bittybuzz = BittyBuzzVm(bytecode, BSPContainer::getBSP(), logger, functionRegisters);
 
     logger.log(LogLevel::Info, "Hello logger!");
     while (true) {
