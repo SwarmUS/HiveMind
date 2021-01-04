@@ -45,7 +45,7 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_includes)
       COMMAND ${BBZ_zooids_bcodegen} ${BO_FILE} ${BHEADER_FILE_TMP}
       COMMAND cmp --silent ${BHEADER_FILE_TMP} ${BHEADER_FILE} || cp ${BHEADER_FILE_TMP} ${BHEADER_FILE} 
       WORKING_DIRECTORY ${BBZ_BINARY_PATH}
-      DEPENDS ${BBZ_zooids_bcodegen} ${BBZ_bo2bbo} ${_TARGET}_bzz_compile)
+      DEPENDS zooids_bcodegen bo2bbo ${_TARGET}_bzz_compile)
 
     # Create library with file
     add_library(${_TARGET} INTERFACE)
