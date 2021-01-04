@@ -17,6 +17,13 @@ typedef struct {
 
 class BittyBuzzVm : public IBittyBuzzVm {
   public:
+    /**
+     *@brief The constructor of the bbvm
+     *@param bytecode the bytecode that the vm will run
+     *@param bsp a reference to the bsp
+     *@param logger a reference to a logger
+     *@param container the provided iterator
+     *@tparam Container an iterator of any sort (stl container) that returns a FunctionRegister*/
     template <typename Container>
     BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                 const IBSP& bsp,
