@@ -10,7 +10,11 @@ extraction:
     after_prepare:
       - git clone https://github.com/MISTLab/Buzz.git /tmp/buzz
       - cd /tmp/buzz
+      - mkdir /tmp/buzz-install
       - mkdir build && cd build
-      - cmake ../src
+      - cmake -D CMAKE_INSTALL_PREFIX:PATH=/tmp/buzz-install ../src
       - make
-      - export PATH=${PATH}:$(pwd)/buzz
+      - make install
+      - export PATH=${PATH}:/tmp/buzz/bin
+      - export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/tmp/buzz/lib
+      - export CPATH=${CPATH}:/tmp/buzz/include
