@@ -69,6 +69,9 @@ target_include_directories(BittyBuzz
 )
 
 # Adding utils
+find_program(HOST_C_COMPILER gcc)
+set(BBZ_BINARY_PATH ${CMAKE_CURRENT_BINARY_DIR})
+set(BBZ_BINARY_PATH ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 set(BBZ_UTILS_SOURCES
         ${BittyBuzz_SOURCE_DIR}/exec/bo2bbo.c
         ${BittyBuzz_SOURCE_DIR}/exec/kilo_bcodegen.c
@@ -77,13 +80,12 @@ set(BBZ_UTILS_SOURCES
 )
 foreach (bbz_exec_src ${BBZ_UTILS_SOURCES})
     get_filename_component(bbz_executable ${bbz_exec_src} NAME_WE)
-    add_executable(${bbz_executable} ${bbz_exec_src} ${BittyBuzz_SOURCE_DIR}/bbzfloat.c)
-    target_include_directories(${bbz_executable} PRIVATE ${BITTYBUZZ_SRC_PATH}/src)
-    if(DISABLE_EXTERNAL_WARNINGS)
-        set_target_properties(${bbz_executable} PROPERTIES C_CLANG_TIDY "")
-        target_compile_options(${bbz_executable} PRIVATE -w)
-    endif()
+    add_custom_target(${bbz_executable} 
+        COMMAND ${HOST_C_COMPILER} ${bbz_exec_src} ${BittyBuzz_SOURCE_DIR}/bbzfloat.c -I ${BittyBuzz_SOURCE_DIR} -I ${BittyBuzz_SOURCE_DIR}/.. -o ${CMAKE_CURRENT_BINARY_DIR}/${bbz_executable})
+    set(BBZ_${bbz_executable} ${CMAKE_CURRENT_BINARY_DIR}/${bbz_executable})
+    set(BBZ_${bbz_executable} ${CMAKE_CURRENT_BINARY_DIR}/${bbz_executable} PARENT_SCOPE)
 endforeach ()
+
 
 # Disable compiler warnings and clang-tidy
 if(DISABLE_EXTERNAL_WARNINGS)

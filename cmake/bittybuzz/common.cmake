@@ -22,7 +22,6 @@ endfunction()
 
 function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_includes)
     get_filename_component(BZZ_BASENAME ${bzz_source} NAME_WE)
-    set(BZZ_BASEPATH "${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}")
 
     set(BO_FILE   ${BZZ_BASEPATH}.bo)
     set(BDB_FILE  ${BZZ_BASEPATH}.bdb)    
@@ -42,11 +41,12 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_includes)
 
 
     # Cross compiling and verifying that the file changed to prevent recompiling
+    message("TEST VAR VALUE ${BBZ_zooids_bcodegen}")
     add_custom_target(${_TARGET}_bzz_cross_compile
-      COMMAND zooids_bcodegen ${BO_FILE} ${BHEADER_FILE_TMP}
+      COMMAND ${BBZ_zooids_bcodegen} ${BO_FILE} ${BHEADER_FILE_TMP}
       COMMAND cmp --silent ${BHEADER_FILE_TMP} ${BHEADER_FILE} || cp ${BHEADER_FILE_TMP} ${BHEADER_FILE} 
-      WORKING_DIRECTORY $<TARGET_FILE_DIR:zooids_bcodegen>
-      DEPENDS zooids_bcodegen bo2bbo ${_TARGET}_bzz_compile)
+      WORKING_DIRECTORY ${BBZ_BINARY_PATH}
+      DEPENDS ${BBZ_zooids_bcodegen} ${BBZ_bo2bbo} ${_TARGET}_bzz_compile)
 
     # Create library with file
     add_library(${_TARGET} INTERFACE)
