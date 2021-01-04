@@ -23,12 +23,11 @@ endfunction()
 function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_includes)
     get_filename_component(BZZ_BASENAME ${bzz_source} NAME_WE)
 
-    set(BO_FILE   ${BZZ_BASEPATH}.bo)
-    set(BDB_FILE  ${BZZ_BASEPATH}.bdb)    
-    set(BASM_FILE ${BZZ_BASEPATH}.basm)
-    set(BHEADER_FILE  ${BZZ_BASEPATH}_bytecode.h)
+    set(BO_FILE   ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}.bo)
+    set(BDB_FILE  ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}.bdb)    
+    set(BASM_FILE ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}.basm)
+    set(BHEADER_FILE  ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}_bytecode.h)
     set(BHEADER_FILE_TMP ${BHEADER_FILE}.tmp)
-
 
     # Parsing buzz file
     add_custom_target(${_TARGET}_bzz_parse
