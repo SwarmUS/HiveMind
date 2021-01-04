@@ -9,6 +9,7 @@ extraction:
   cpp:
     after_prepare:
       - git clone https://github.com/MISTLab/Buzz.git /tmp/buzz
+      - sed -i 's/\/usr/\/tmp\/buzz-install' /tmp/buzz/src/utility/FindBuzz.cmake #Hack so it can find buzz compiler utils
       - cd /tmp/buzz
       - mkdir /tmp/buzz-install
       - mkdir build && cd build
