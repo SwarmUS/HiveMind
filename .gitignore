@@ -9,9 +9,10 @@ build/
 build
 
 .cache/
-
+.ccls-cache/
 .dir-locals.el
+compile_commands.json
 
 src/bsp/src/stm32f4/external/stm32f429zi/stm32f429zi.gpdsc
-
 *.gpdsc
+
