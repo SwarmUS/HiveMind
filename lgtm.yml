@@ -18,3 +18,5 @@ extraction:
       - export PATH=${PATH}:/tmp/buzz/bin
       - export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/tmp/buzz/lib
       - export CPATH=${CPATH}:/tmp/buzz/include
+
+      - cp -a /tmp/buzz-install/share/buzz/cmake/. ${LGTM_SRC}/cmake/bittybuzz/
