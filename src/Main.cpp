@@ -4,6 +4,8 @@
 #include <task.h>
 #include <timers.h>
 
+#include <bittybuzz/BittyBuzzFactory.h>
+#include <bittybuzz/BittyBuzzVm.h>
 #include <bsp/BSPContainer.h>
 #include <bsp/IBSP.h>
 #include <bsp/UserInterface.h>
@@ -17,11 +19,17 @@ void printThreadExample(void* param) {
     UserInterface ui = UserInterface();
     Logger logger = Logger(LogLevel::Debug, ui);
 
+    BittyBuzzBytecode bytecode = BittyBuzzFactory::createBittyBuzzBytecode(logger);
+    std::array<FunctionRegister, 1> functionRegisters =
+        BittyBuzzFactory::createBittyBuzzFunctionRegisters();
+    BittyBuzzVm bittybuzz =
+        BittyBuzzVm(bytecode, BSPContainer::getBSP(), logger, functionRegisters);
+
     logger.log(LogLevel::Info, "Hello logger!");
     while (true) {
-        ui.print("Hello world!");
+        logger.log(LogLevel::Info, "Hello world!");
         vTaskDelay(toggleDelay);
-        ui.print("Goodbye!");
+        bittybuzz.step();
     }
 }
 

@@ -1,14 +1,24 @@
+# Style
 BasedOnStyle: LLVM
 Language: Cpp
 Standard: Cpp11
+
+# Indent
 IndentWidth: 4
+NamespaceIndentation: All
 ColumnLimit: 100
-BinPackParameters: false
-AlwaysBreakTemplateDeclarations: true
+AlignTrailingComments: false
+
+# Functions
 PenaltyReturnTypeOnItsOwnLine: 10000
+BinPackParameters: false
+
+# Classes
 BreakConstructorInitializers: AfterColon
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
-PointerAlignment: Left
 
-# Clang version mismatch fixes
-AlignTrailingComments: false
+# Template
+AlwaysBreakTemplateDeclarations: true
+
+# Pointer
+PointerAlignment: Left

@@ -4,3 +4,19 @@ path_classifiers:
     - LICENSE
   test:
     - "src/*/tests/*.cpp" # tests are in src/MODULE/tests
+
+extraction:
+  cpp:
+    after_prepare:
+      - git clone https://github.com/MISTLab/Buzz.git /tmp/buzz
+      - sed -i 's/\/opt/\/tmp\/buzz-install/g' /tmp/buzz/src/utility/FindBuzz.cmake #Hack so it can find buzz compiler utils
+      - cd /tmp/buzz
+      - mkdir /tmp/buzz-install
+      - mkdir build && cd build
+      - cmake -D CMAKE_INSTALL_PREFIX:PATH=/tmp/buzz-install ../src
+      - make
+      - make install
+      - export PATH=${PATH}:/tmp/buzz-install/bin
+      - export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/tmp/buzz-install/lib
+      - export CPATH=${CPATH}:/tmp/buzz-install/include
+      - cp -a /tmp/buzz-install/share/buzz/cmake/. ${LGTM_SRC}/cmake/bittybuzz/

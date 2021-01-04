@@ -10,6 +10,7 @@ class BSP : public IBSP {
     ~BSP() override;
 
     void initChip(void* args) override;
+    uint16_t getUUId() const override;
     std::shared_ptr<ros::NodeHandle> getRosNodeHandle();
 
   private:

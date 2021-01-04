@@ -23,26 +23,44 @@ class LoggerTestFixture : public testing::Test {
 TEST_F(LoggerTestFixture, Logger_Log_Same_Level_Log_Once) {
     // Given
     // Then
-    m_logger->log(LogLevel::Info, "Info log");
+    LogRet ret = m_logger->log(LogLevel::Info, "Info log");
 
     // Expect
     EXPECT_EQ(m_uiMock->m_printCallCounter, 1);
+    EXPECT_EQ(ret, LogRet::Ok);
 }
 
 TEST_F(LoggerTestFixture, Logger_Log_Higher_Level_Log_Once) {
     // Given
     // Then
-    m_logger->log(LogLevel::Error, "Error log");
+    LogRet ret = m_logger->log(LogLevel::Error, "Error log");
 
     // Expect
     EXPECT_EQ(m_uiMock->m_printCallCounter, 1);
+    EXPECT_EQ(ret, LogRet::Ok);
 }
 
 TEST_F(LoggerTestFixture, Logger_Log_Lower_Level_No_Log) {
     // Given
     // Then
-    m_logger->log(LogLevel::Debug, "Debug log");
+    LogRet ret = m_logger->log(LogLevel::Debug, "Debug log");
 
     // Expect
     EXPECT_EQ(m_uiMock->m_printCallCounter, 0);
+    EXPECT_EQ(ret, LogRet::LowLevel);
+}
+
+TEST_F(LoggerTestFixture, Logger_Log_ReleaseSemaphore) {
+    // Given
+    // Then
+    LogRet ret = m_logger->log(LogLevel::Error, "Debug log");
+
+    // Expect
+    EXPECT_EQ(m_uiMock->m_printCallCounter, 1);
+    EXPECT_EQ(ret, LogRet::Ok);
+
+    // Call a second time and see if it's a success
+    ret = m_logger->log(LogLevel::Error, "Debug log");
+    EXPECT_EQ(ret, LogRet::Ok);
+    EXPECT_EQ(m_uiMock->m_printCallCounter, 2);
 }

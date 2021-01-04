@@ -58,3 +58,8 @@ void BSP::initChip(void* args) {
 }
 
 std::shared_ptr<ros::NodeHandle> BSP::getRosNodeHandle() { return m_rosNodeHandle; }
+
+uint16_t BSP::getUUId() const {
+    // TODO: Change do the ID is obtained from persistent memory or ROS command line argument
+    return 1;
+}

@@ -7,6 +7,8 @@ The HiveMind is the embedded application that runs on SwarmUS HiveBoard and uses
 * [ROS Noetic](http://wiki.ros.org/noetic/Installation/Ubuntu) for building the POSIX target
 * [Gcc](https://gcc.gnu.org/) or [arm-gcc-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) for the embedded targets.
 
+* [Buzz](https://github.com/MISTLab/Buzz) to compile the user buzz script.
+
 * [Clang tools](https://clang.llvm.org/docs/ClangTools.html) are used to match the style and warnings used in the project
     * [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to match the coding style
     * [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) for additional compiler warnings
@@ -71,3 +73,7 @@ OpenOCD has a gdb server that defaults to port 3333, you can then connect to it 
 ```
 openocd -f ./tools/openocd/stm32_f4/stm32_f4.cfg -c init -c \"reset init\"
 ```
+
+### TODO
+#### BittyBuzz
+* Extern C on generated .h file

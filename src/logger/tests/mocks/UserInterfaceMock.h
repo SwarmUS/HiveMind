@@ -7,6 +7,8 @@
 
 class UserInterfaceMock final : public IUserInterface {
   public:
+    int& m_printCallCounter;
+
     UserInterfaceMock(int& printCounter) : m_printCallCounter(printCounter) {}
     ~UserInterfaceMock() override = default;
 
@@ -18,8 +20,6 @@ class UserInterfaceMock final : public IUserInterface {
         va_end(args);
         return 0;
     }
-
-    int& m_printCallCounter;
 };
 
 #endif // __MOCK_UI_H_
