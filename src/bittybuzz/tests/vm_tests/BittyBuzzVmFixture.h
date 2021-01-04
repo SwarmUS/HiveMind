@@ -27,7 +27,8 @@ class BittyBuzzVmTestFixture : public testing::Test {
         m_loggerMock = new LoggerInterfaceMock(logCounter);
         m_bspMock = new BSPInterfaceMock(boardId);
         m_bittybuzzBytecode = new BittyBuzzBytecode(*m_loggerMock, bytecode, bytecodeLength);
-        m_bittybuzzVm = new BittyBuzzVm(*m_bittybuzzBytecode, *m_bspMock, *m_loggerMock,functionRegisters);
+        m_bittybuzzVm =
+            new BittyBuzzVm(*m_bittybuzzBytecode, *m_bspMock, *m_loggerMock, functionRegisters);
     }
 
     void TearDown() override {

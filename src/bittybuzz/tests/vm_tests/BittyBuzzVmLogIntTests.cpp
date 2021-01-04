@@ -6,7 +6,8 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_logInt_FunctionCalled) {
     // Given
     uint16_t boardId = 42;
 
-    std::array<FunctionRegister, 1> functionRegister = {{{BBZSTRID_logInt, BittyBuzzUserFunctions::logInt}}};
+    std::array<FunctionRegister, 1> functionRegister = {
+        {{BBZSTRID_logInt, BittyBuzzUserFunctions::logInt}}};
     SetUp(bcode, bcode_size, boardId, functionRegister);
 
     // Then

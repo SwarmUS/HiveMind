@@ -11,7 +11,7 @@ class BSPInterfaceMock final : public IBSP {
 
     BSPInterfaceMock(const uint16_t& boardId) : m_boardId(boardId) {}
 
-    void initChip(void* args) override {(void) args;}
+    void initChip(void* args) override { (void)args; }
 
     virtual uint16_t getUUId() const override { return m_boardId; }
 };

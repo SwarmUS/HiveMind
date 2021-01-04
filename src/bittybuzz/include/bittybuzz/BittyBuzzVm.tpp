@@ -2,8 +2,8 @@
 #ifndef __BITTYBUZZVM_TPP_
 #define __BITTYBUZZVM_TPP_
 
-#include "bittybuzz/BittyBuzzVm.h"
 #include "bittybuzz/BittyBuzzSystem.h"
+#include "bittybuzz/BittyBuzzVm.h"
 #include <bbzvm.h>
 
 template <typename Container>
