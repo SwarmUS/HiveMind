@@ -15,7 +15,7 @@ extraction:
       - cmake -D CMAKE_INSTALL_PREFIX:PATH=/tmp/buzz-install ../src
       - make
       - make install
-      - export PATH=${PATH}:/tmp/buzz-installbin
+      - export PATH=${PATH}:/tmp/buzz-install/bin
       - export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/tmp/buzz-install/lib
       - export CPATH=${CPATH}:/tmp/buzz-install/include
       - cp -a /tmp/buzz-install/share/buzz/cmake/. ${LGTM_SRC}/cmake/bittybuzz/
