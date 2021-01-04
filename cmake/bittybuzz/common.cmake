@@ -41,7 +41,6 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_includes)
 
 
     # Cross compiling and verifying that the file changed to prevent recompiling
-    message("TEST VAR VALUE ${BBZ_zooids_bcodegen}")
     add_custom_target(${_TARGET}_bzz_cross_compile
       COMMAND ${BBZ_zooids_bcodegen} ${BO_FILE} ${BHEADER_FILE_TMP}
       COMMAND cmp --silent ${BHEADER_FILE_TMP} ${BHEADER_FILE} || cp ${BHEADER_FILE_TMP} ${BHEADER_FILE} 
