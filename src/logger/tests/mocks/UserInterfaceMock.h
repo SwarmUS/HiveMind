@@ -20,6 +20,13 @@ class UserInterfaceMock final : public IUserInterface {
         va_end(args);
         return 0;
     }
+
+    int print(const char* format, va_list args) const override {
+        (void)format;
+        (void)args;
+        m_printCallCounter++;
+        return 0;
+    }
 };
 
 #endif // __MOCK_UI_H_
