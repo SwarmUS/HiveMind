@@ -9,6 +9,7 @@ class UserInterface : public IUserInterface {
     ~UserInterface() override = default;
 
     int print(const char* format, ...) const override;
+    int print(const char* format, va_list args) const override;
 };
 
 #endif // __USERINTERFACE_H_
