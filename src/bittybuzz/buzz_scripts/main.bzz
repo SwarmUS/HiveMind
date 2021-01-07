@@ -4,5 +4,8 @@ function init() {
 
 function step() {
     logInt(test)
+    var wow = "test2"
+    logTest("Test is very nice")
+    logTest(test2)
     test = test + 1
 }
