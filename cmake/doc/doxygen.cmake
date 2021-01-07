@@ -29,6 +29,12 @@ if (DOXYGEN_FOUND)
         "*/tests/*"
         "*/hal/*/Core/*")
 
+    if (${COMPILE_STM32_F429ZI})
+        LIST(APPEND DOXYGEN_EXCLUDE_PATTERNS "*/posix/*")
+    else()
+        LIST(APPEND DOXYGEN_EXCLUDE_PATTERNS "*/stm32/*")
+    endif()
+
     if(ENABLE_WARNINGS_AS_ERROR )
         set(DOXYGEN_WARN_AS_ERROR YES)
     endif()
