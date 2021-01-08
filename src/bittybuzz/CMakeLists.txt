@@ -11,7 +11,8 @@ find_package(BittyBuzz)
 # BittyBuzz script bytecode generation
 bittybuzz_generate_bytecode(bittybuzz-target
         ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts/main.bzz
-        ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts)
+        ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts
+        ${CMAKE_CURRENT_SOURCE_DIR}/bittybuzz.bst)
 
 
 set(LIB_HEADERS

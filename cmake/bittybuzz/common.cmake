@@ -20,18 +20,27 @@ function(bittybuzz_fetch)
 
 endfunction()
 
-function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_includes)
+function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst_list)
     get_filename_component(BZZ_BASENAME ${bzz_source} NAME_WE)
+    set(ENV{BUZZ_INCLUDE_PATH} "$ENV{BUZZ_INCLUDE_PATH}:bzz_include_list")
+    message("test: $ENV{BUZZ_INCLUDE_PATH}")
 
+    # Settings vars
     set(BO_FILE   ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}.bo)
     set(BDB_FILE  ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}.bdb)    
     set(BASM_FILE ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}.basm)
-    set(BST_FILE  ${BITTYBUZZ_SRC_PATH}/src/bittybuzz/util/BittyBuzzStrings.bst)
-    set(BASM_FILE_WITHOUT_SYMBOLS ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}_without_symbols.basm)
+    set(BST_FILE  ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}.bst)
     set(BHEADER_FILE  ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}_bytecode.h)
     set(BHEADER_FILE_TMP ${BHEADER_FILE}.tmp)
     set(BHEADER_STRING_FILE  ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}_string.h)
     set(BHEADER_STRING_FILE_TMP  ${BHEADER_STRING_FILE}.tmp)
+
+    # Concatenating BST files
+    configure_file(${BITTYBUZZ_SRC_PATH}/src/bittybuzz/util/BittyBuzzStrings.bst ${BST_FILE} COPYONLY)
+    foreach(BST_FILE ${bzz_bst_list}) 
+        file(READ ${BST_FILE} CONTENTS)
+        file(APPEND ${BST_FILE} "${CONTENTS}")
+    endforeach()
 
     # Parsing buzz file
     add_custom_target(${_TARGET}_bzz_parse
@@ -52,8 +61,7 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_includes)
       
     # Creating string header file
     add_custom_target(${_TARGET}_bzz_string
-    COMMAND ${BZZPAR} ${bzz_source} ${BASM_FILE_WITHOUT_SYMBOLS}
-    COMMAND ${PROJECT_SOURCE_DIR}/tools/extract_bzz_strings.sh ${BASM_FILE_WITHOUT_SYMBOLS} ${BHEADER_FILE} ${BHEADER_STRING_FILE_TMP}
+    COMMAND ${PROJECT_SOURCE_DIR}/tools/extract_bzz_strings.sh ${BASM_FILE} ${BHEADER_FILE} ${BST_FILE} ${BHEADER_STRING_FILE_TMP}
     COMMAND cmp --silent ${BHEADER_STRING_FILE_TMP} ${BHEADER_STRING_FILE} || cp ${BHEADER_STRING_FILE_TMP} ${BHEADER_STRING_FILE} 
     DEPENDS ${_TARGET}_bzz_cross_compile)
 
