@@ -15,6 +15,7 @@ std::optional<const char*> BittyBuzzStringResolver::getString(uint16_t stringId)
         // TODO: Is it really necessary?
         if (stringId != m_stringArray[stringIdIndex].first) {
             m_logger.log(LogLevel::Warn, "String resolver array was corrupted");
+            return {};
         }
         return m_stringArray[stringIdIndex].second;
     }
