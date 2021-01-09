@@ -4,6 +4,7 @@
 # The first one is the basm file with all the string symbols
 # The second one is the bst fle with only the system string symbols
 # The third one is the associate bytecode header file
+# The fourth one is the ouput header file 
  
 # Delete existing file
 echo "/* DO NOT EDIT */" > $4
