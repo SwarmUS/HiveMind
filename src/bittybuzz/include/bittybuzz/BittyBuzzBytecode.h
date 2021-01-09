@@ -18,9 +18,9 @@ class BittyBuzzBytecode : public IBittyBuzzBytecode {
     uint16_t getBytecodeLength() const override;
 
   private:
-    const uint8_t* m_bytecode;
     const ILogger& m_logger;
-    uint16_t m_bytecodeLength;
+    const uint8_t* m_bytecode;
+    const uint16_t m_bytecodeLength;
 };
 
 #endif // __BITTYBUZZBYTECODE_H_

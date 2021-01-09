@@ -23,8 +23,11 @@ set(LIB_HEADERS
     include/bittybuzz/BittyBuzzBytecode.h
     include/bittybuzz/IBittyBuzzBytecode.h
 
-    include/bittybuzz/BittyBuzzFactory.h
+    include/bittybuzz/BittyBuzzStringResolver.h
+    include/bittybuzz/IBittyBuzzStringResolver.h
+
     include/bittybuzz/BittyBuzzSystem.h
+    include/bittybuzz/BittyBuzzFactory.h
     include/bittybuzz/BittyBuzzUserFunctions.h
 
 )
@@ -32,9 +35,10 @@ set(LIB_HEADERS
 set(LIB_SOURCES
     src/BittyBuzzVm.cpp
     src/BittyBuzzBytecode.cpp
-    src/BittyBuzzFactory.cpp
+    src/BittyBuzzStringResolver.cpp
 
     src/BittyBuzzSystem.cpp
+    src/BittyBuzzFactory.cpp
     src/BittyBuzzUserFunctions.cpp
 )
 

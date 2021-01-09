@@ -22,8 +22,7 @@ endfunction()
 
 function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst_list)
     get_filename_component(BZZ_BASENAME ${bzz_source} NAME_WE)
-    set(ENV{BUZZ_INCLUDE_PATH} "$ENV{BUZZ_INCLUDE_PATH}:bzz_include_list")
-    message("test: $ENV{BUZZ_INCLUDE_PATH}")
+    set(ENV{BUZZ_INCLUDE_PATH} "$ENV{BUZZ_INCLUDE_PATH}:${bzz_include_list}")
 
     # Settings vars
     set(BO_FILE   ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}.bo)
@@ -36,10 +35,12 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
     set(BHEADER_STRING_FILE_TMP  ${BHEADER_STRING_FILE}.tmp)
 
     # Concatenating BST files
+    message("CONTENT ${BST_FILE}")
     configure_file(${BITTYBUZZ_SRC_PATH}/src/bittybuzz/util/BittyBuzzStrings.bst ${BST_FILE} COPYONLY)
-    foreach(BST_FILE ${bzz_bst_list}) 
-        file(READ ${BST_FILE} CONTENTS)
+    foreach(BST ${bzz_bst_list}) 
+        file(READ ${BST} CONTENTS)
         file(APPEND ${BST_FILE} "${CONTENTS}")
+        message("CONTENT ${CONTENTS}")
     endforeach()
 
     # Parsing buzz file
