@@ -8,11 +8,12 @@ include(bittybuzz_config.cmake) # not a module, need to specify "".cmake"
 bittybuzz_fetch()
 find_package(BittyBuzz)
 
+set(BITTYBUZZ_HIVEMIND_BST ${CMAKE_CURRENT_SOURCE_DIR}/bittybuzz.bst)
 # BittyBuzz script bytecode generation
 bittybuzz_generate_bytecode(bittybuzz-target
         ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts/main.bzz
         ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts
-        ${CMAKE_CURRENT_SOURCE_DIR}/bittybuzz.bst)
+        ${BITTYBUZZ_HIVEMIND_BST})
 
 
 set(LIB_HEADERS

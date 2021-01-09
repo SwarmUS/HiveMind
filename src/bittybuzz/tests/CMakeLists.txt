@@ -2,6 +2,8 @@ set(TEST_NAME test-bittybuzz)
  
 set(TEST_SOURCES
     BittyBuzzBytecodeUnitTests.cpp
+    BittyBuzzStringResolverUnitTests.cpp
+
     vm_tests/BittyBuzzVmInitAddTests.cpp
     vm_tests/BittyBuzzVmLogIntTests.cpp
     vm_tests/BittyBuzzVmNoStepTests.cpp
@@ -20,24 +22,29 @@ set(TEST_HEADERS
 set(BZZ_TEST_SCRIPTS_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/vm_tests/buzz_tests_scripts)
 bittybuzz_generate_bytecode(log-int 
     ${BZZ_TEST_SCRIPTS_LOCATION}/logInt.bzz 
-    ${BZZ_TEST_SCRIPTS_LOCATION})
+    ${BZZ_TEST_SCRIPTS_LOCATION}
+    ${BITTYBUZZ_HIVEMIND_BST})
 
 bittybuzz_generate_bytecode(init-add 
     ${BZZ_TEST_SCRIPTS_LOCATION}/initAdd.bzz 
-    ${BZZ_TEST_SCRIPTS_LOCATION})
+    ${BZZ_TEST_SCRIPTS_LOCATION}
+    ${BITTYBUZZ_HIVEMIND_BST})
 
 bittybuzz_generate_bytecode(no-step 
     ${BZZ_TEST_SCRIPTS_LOCATION}/noStep.bzz 
-    ${BZZ_TEST_SCRIPTS_LOCATION})
-
+    ${BZZ_TEST_SCRIPTS_LOCATION}
+    ${BITTYBUZZ_HIVEMIND_BST})
 
 bittybuzz_generate_bytecode(undefined-function 
     ${BZZ_TEST_SCRIPTS_LOCATION}/undefinedFunction.bzz 
-    ${BZZ_TEST_SCRIPTS_LOCATION})
+    ${BZZ_TEST_SCRIPTS_LOCATION}
+    ${BITTYBUZZ_HIVEMIND_BST})
 
 bittybuzz_generate_bytecode(swarm 
     ${BZZ_TEST_SCRIPTS_LOCATION}/swarm.bzz 
-    ${BZZ_TEST_SCRIPTS_LOCATION})
+    ${BZZ_TEST_SCRIPTS_LOCATION}
+    ${BITTYBUZZ_HIVEMIND_BST})
+
 
 add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})
 

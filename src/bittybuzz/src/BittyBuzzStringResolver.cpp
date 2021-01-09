@@ -19,5 +19,6 @@ std::optional<const char*> BittyBuzzStringResolver::getString(uint16_t stringId)
         return m_stringArray[stringIdIndex].second;
     }
 
+    m_logger.log(LogLevel::Warn, "Obtained stringid out of bound");
     return {};
 }

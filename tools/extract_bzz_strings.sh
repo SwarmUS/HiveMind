@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Takes 4 postional arguments
+# The first one is the basm file with all the string symbols
+# The second one is the bst fle with only the system string symbols
+# The third one is the associate bytecode header file
+ 
 # Delete existing file
 echo "/* DO NOT EDIT */" > $4
 echo "/* THIS IS A GENERATED FILE */" >> $4
@@ -10,7 +15,7 @@ echo "#ifndef __EXTRACTED_BBZSTRINGS_H__" >> $4
 echo "#define __EXTRACTED_BBZSTRINGS_H__" >> $4
 echo "" >> $4
 
-echo "#include \"$2\"" >> $4
+echo "#include \"$3\"" >> $4
 echo "" >> $4
 
 echo "#include <array>" >> $4
@@ -18,7 +23,7 @@ echo "#include <cstdint>" >> $4
 echo "#include <utility>" >> $4
 echo "" >> $4
 
-offset_size=$(grep "^\w" $3 | wc -l)
+offset_size=$(grep "^\w" $2 | wc -l)
 echo "#define BBZSTRING_OFFSET ($offset_size)" >> $4
 echo "" >> $4
 

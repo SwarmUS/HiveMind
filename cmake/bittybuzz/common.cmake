@@ -35,12 +35,10 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
     set(BHEADER_STRING_FILE_TMP  ${BHEADER_STRING_FILE}.tmp)
 
     # Concatenating BST files
-    message("CONTENT ${BST_FILE}")
     configure_file(${BITTYBUZZ_SRC_PATH}/src/bittybuzz/util/BittyBuzzStrings.bst ${BST_FILE} COPYONLY)
     foreach(BST ${bzz_bst_list}) 
         file(READ ${BST} CONTENTS)
         file(APPEND ${BST_FILE} "${CONTENTS}")
-        message("CONTENT ${CONTENTS}")
     endforeach()
 
     # Parsing buzz file
@@ -62,7 +60,7 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
       
     # Creating string header file
     add_custom_target(${_TARGET}_bzz_string
-    COMMAND ${PROJECT_SOURCE_DIR}/tools/extract_bzz_strings.sh ${BASM_FILE} ${BHEADER_FILE} ${BST_FILE} ${BHEADER_STRING_FILE_TMP}
+    COMMAND ${PROJECT_SOURCE_DIR}/tools/extract_bzz_strings.sh ${BASM_FILE} ${BST_FILE} ${BHEADER_FILE} ${BHEADER_STRING_FILE_TMP}
     COMMAND cmp --silent ${BHEADER_STRING_FILE_TMP} ${BHEADER_STRING_FILE} || cp ${BHEADER_STRING_FILE_TMP} ${BHEADER_STRING_FILE} 
     DEPENDS ${_TARGET}_bzz_cross_compile)
 

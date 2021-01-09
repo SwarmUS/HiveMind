@@ -1,5 +1,6 @@
 #include "bittybuzz/BittyBuzzBytecode.h"
 #include "mocks/LoggerInterfaceMock.h"
+
 #include <array>
 #include <cstring>
 #include <gtest/gtest.h>
@@ -20,7 +21,10 @@ class BittyBuzzBytecodeTestFixture : public testing::Test {
             new BittyBuzzBytecode(*m_loggerMock, m_bytecodeArray.data(), m_bytecodeArray.size());
     }
 
-    void TearDown() override { delete m_bytecode; }
+    void TearDown() override {
+        delete m_bytecode;
+        delete m_loggerMock;
+    }
 };
 
 TEST_F(BittyBuzzBytecodeTestFixture, BittyBuzzBytecode_getBytecodeFetchFunction_getFirstBytes) {
