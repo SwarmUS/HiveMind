@@ -82,3 +82,22 @@ TEST_F(BittyBuzzStringResolverTestFixture, BittyBuzzStringResolver_getString_get
     EXPECT_EQ(logCounter, 1);
     EXPECT_EQ(ret.operator bool(), false);
 }
+
+TEST_F(BittyBuzzStringResolverTestFixture, BittyBuzzStringResolver_getString_getCorruptedId) {
+    // Given
+    uint16_t stringId = 100;
+
+    // Recreating object since we can't edit m_array
+    std::array<std::pair<const uint16_t, const char*>, 3> array = {
+        {{98, "hello"}, {99, "world"}, {100, "hi"}}};
+
+    BittyBuzzStringResolver stringResolver =
+        BittyBuzzStringResolver(array.data(), array.size(), 99, *m_loggerMock);
+
+    // Then
+    std::optional<const char*> ret = stringResolver.getString(stringId);
+
+    // Expect
+    EXPECT_EQ(logCounter, 1);
+    EXPECT_EQ(ret.operator bool(), false);
+}
