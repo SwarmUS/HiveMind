@@ -1,6 +1,6 @@
 function init() {
-    a = 1
-    b = a +1
+    var a = 1
+    var b = a +1
 }
 
 function step() {
