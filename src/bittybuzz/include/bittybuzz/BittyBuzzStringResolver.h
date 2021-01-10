@@ -11,7 +11,7 @@ class BittyBuzzStringResolver : public IBittyBuzzStringResolver {
   public:
     BittyBuzzStringResolver(const std::pair<const uint16_t, const char*>* stringArray,
                             uint16_t arrayLength,
-                            uint16_t offset,
+                            uint16_t stringIdOffset,
                             const ILogger& logger);
 
     ~BittyBuzzStringResolver() override = default;
@@ -22,7 +22,7 @@ class BittyBuzzStringResolver : public IBittyBuzzStringResolver {
     const ILogger& m_logger;
     const std::pair<const uint16_t, const char*>* m_stringArray;
     const uint16_t m_arrayLength;
-    const uint16_t m_offset;
+    const uint16_t m_stringIdOffset;
 };
 
 #endif // __BITTYBUZZSTRINGRESOLVER_H_
