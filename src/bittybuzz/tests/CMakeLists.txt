@@ -23,8 +23,7 @@ set(BZZ_TEST_SCRIPTS_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/vm_tests/buzz_tests_sc
 
 set(LOGINT_BST ${BITTYBUZZ_HIVEMIND_BST} vm_tests/buzz_tests_scripts/logInt.bst)
 list(LENGTH LOGINT_BST TEST)
-message("WOOW ${LOGINT_BST}")
-message("WOOW3 ${TEST}")
+
 bittybuzz_generate_bytecode(log-int 
     ${BZZ_TEST_SCRIPTS_LOCATION}/logInt.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
