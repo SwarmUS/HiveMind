@@ -25,13 +25,10 @@ const uint8_t* bbz_bcodeFetcher(bbzpc_t offset, uint8_t size) {
 BittyBuzzBytecode::BittyBuzzBytecode(const ILogger& logger,
                                      const uint8_t* bytecode,
                                      const uint16_t bytecodeLength) :
-    m_logger(logger) {
+    m_logger(logger), m_bytecode(bytecode), m_bytecodeLength(bytecodeLength) {
     g_logger = &logger;
     g_bittyBuzzBytecode = bytecode;
     g_bittyBuzzBytecodeLength = bytecodeLength;
-
-    m_bytecode = bytecode;
-    m_bytecodeLength = bytecodeLength;
 }
 
 bbzvm_bcode_fetch_fun BittyBuzzBytecode::getBytecodeFetchFunction() const {

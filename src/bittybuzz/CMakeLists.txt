@@ -8,10 +8,12 @@ include(bittybuzz_config.cmake) # not a module, need to specify "".cmake"
 bittybuzz_fetch()
 find_package(BittyBuzz)
 
+set(BITTYBUZZ_HIVEMIND_BST ${CMAKE_CURRENT_SOURCE_DIR}/bittybuzz.bst)
 # BittyBuzz script bytecode generation
 bittybuzz_generate_bytecode(bittybuzz-target
         ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts/main.bzz
-        ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts)
+        ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts
+        ${BITTYBUZZ_HIVEMIND_BST})
 
 
 set(LIB_HEADERS
@@ -22,8 +24,11 @@ set(LIB_HEADERS
     include/bittybuzz/BittyBuzzBytecode.h
     include/bittybuzz/IBittyBuzzBytecode.h
 
-    include/bittybuzz/BittyBuzzFactory.h
+    include/bittybuzz/BittyBuzzStringResolver.h
+    include/bittybuzz/IBittyBuzzStringResolver.h
+
     include/bittybuzz/BittyBuzzSystem.h
+    include/bittybuzz/BittyBuzzFactory.h
     include/bittybuzz/BittyBuzzUserFunctions.h
 
 )
@@ -31,9 +36,10 @@ set(LIB_HEADERS
 set(LIB_SOURCES
     src/BittyBuzzVm.cpp
     src/BittyBuzzBytecode.cpp
-    src/BittyBuzzFactory.cpp
+    src/BittyBuzzStringResolver.cpp
 
     src/BittyBuzzSystem.cpp
+    src/BittyBuzzFactory.cpp
     src/BittyBuzzUserFunctions.cpp
 )
 

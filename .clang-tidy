@@ -4,7 +4,7 @@ WarningsAsErrors: 'clang-analyzer-*,modernize-*,bigprone-*,readability-*,portabi
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
 FormatStyle:     'file'
-User:            xavier
+User:            SwarmUS
 CheckOptions:
   - key:            modernize-loop-convert.MinConfidence
     value:          reasonable

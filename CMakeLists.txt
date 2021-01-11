@@ -16,6 +16,7 @@ set(COMPILE_STM32_F429ZI 0)
 # Define project
 project(hive_mind CXX C ASM)
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
+set (CMAKE_CXX_STANDARD 17)
 
 # Warning flags constants
 set(WARNING_FLAG -Wall -Wextra -Wsign-conversion -Wuninitialized  -Wunused-variable -Wpedantic )
