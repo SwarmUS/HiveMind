@@ -4,9 +4,10 @@
 
 #include "bittybuzz/BittyBuzzBytecode.h"
 #include "bittybuzz/BittyBuzzVm.h"
-#include "mocks/BSPInterfaceMock.h"
-#include "mocks/LoggerInterfaceMock.h"
 #include <gtest/gtest.h>
+#include <mocks/BSPInterfaceMock.h>
+#include <mocks/BittyBuzzStringResolverInterfaceMock.h>
+#include <mocks/LoggerInterfaceMock.h>
 
 class BittyBuzzVmTestFixture : public testing::Test {
   protected:
@@ -15,6 +16,7 @@ class BittyBuzzVmTestFixture : public testing::Test {
 
     LoggerInterfaceMock* m_loggerMock;
     BSPInterfaceMock* m_bspMock;
+    BittyBuzzStringResolverInterfaceMock m_bittyBuzzStringResolverMock;
 
     int logCounter = 0;
 
@@ -24,11 +26,13 @@ class BittyBuzzVmTestFixture : public testing::Test {
                const uint16_t bytecodeLength,
                uint16_t boardId,
                const Container& functionRegisters) {
+
         m_loggerMock = new LoggerInterfaceMock(logCounter);
         m_bspMock = new BSPInterfaceMock(boardId);
         m_bittybuzzBytecode = new BittyBuzzBytecode(*m_loggerMock, bytecode, bytecodeLength);
-        m_bittybuzzVm =
-            new BittyBuzzVm(*m_bittybuzzBytecode, *m_bspMock, *m_loggerMock, functionRegisters);
+
+        m_bittybuzzVm = new BittyBuzzVm(*m_bittybuzzBytecode, m_bittyBuzzStringResolverMock,
+                                        *m_bspMock, *m_loggerMock, functionRegisters);
     }
 
     void TearDown() override {

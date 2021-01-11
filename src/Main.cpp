@@ -20,10 +20,14 @@ void printThreadExample(void* param) {
     Logger logger = Logger(LogLevel::Debug, ui);
 
     BittyBuzzBytecode bytecode = BittyBuzzFactory::createBittyBuzzBytecode(logger);
-    std::array<FunctionRegister, 1> functionRegisters =
+    BittyBuzzStringResolver stringResolver =
+        BittyBuzzFactory::createBittyBuzzStringResolver(logger);
+
+    std::array<FunctionRegister, 2> functionRegisters =
         BittyBuzzFactory::createBittyBuzzFunctionRegisters();
+
     BittyBuzzVm bittybuzz =
-        BittyBuzzVm(bytecode, BSPContainer::getBSP(), logger, functionRegisters);
+        BittyBuzzVm(bytecode, stringResolver, BSPContainer::getBSP(), logger, functionRegisters);
 
     logger.log(LogLevel::Info, "Hello logger!");
     while (true) {
