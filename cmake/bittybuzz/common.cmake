@@ -14,6 +14,7 @@ function(bittybuzz_fetch)
     FetchContent_GetProperties(bittybuzz)
     if(NOT bittybuzz_POPULATED)
         message("Cloning BittyBuzz")
+        set(FETCHCONTENT_QUIET FALSE) # To see progress
         FetchContent_Populate(bittybuzz)
         set(BITTYBUZZ_SRC_PATH ${bittybuzz_SOURCE_DIR} PARENT_SCOPE)
     endif()
