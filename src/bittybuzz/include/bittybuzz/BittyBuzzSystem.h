@@ -6,6 +6,7 @@
 #include <logger/ILogger.h>
 
 // TODO: Change to a class once bittybuzz support passing context to function and make it a
+// dependency for the BBVM
 
 /**
  *@brief Namespace to help manage the bittybuzz system.
