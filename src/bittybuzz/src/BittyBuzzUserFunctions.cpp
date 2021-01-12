@@ -11,17 +11,17 @@ void BittyBuzzUserFunctions::logInt() {
 
 void BittyBuzzUserFunctions::logString() {
     bbzvm_assert_lnum(1); // NOLINT
-    bbzobj_t* string = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    bbzobj_t* bbzString = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
 
-    if (bbztype_isstring(*string) != 1) {
+    if (bbztype_isstring(*bbzString) != 1) {
         BittyBuzzSystem::logger->log(LogLevel::Warn, "BittyBuzz: Wrong argument type to logString");
     }
 
-    std::optional<const char*> optionChar =
-        BittyBuzzSystem::stringResolver->getString(string->s.value);
+    std::optional<const char*> optionString =
+        BittyBuzzSystem::stringResolver->getString(bbzString->s.value);
 
-    if (optionChar) {
-        BittyBuzzSystem::logger->log(LogLevel::Info, "BittyBuzz: %s", optionChar.value());
+    if (optionString) {
+        BittyBuzzSystem::logger->log(LogLevel::Info, "BittyBuzz: %s", optionString.value());
     } else {
         BittyBuzzSystem::logger->log(LogLevel::Warn, "BittyBuzz: String id not found");
     }

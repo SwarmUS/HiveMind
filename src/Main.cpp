@@ -23,8 +23,7 @@ void printThreadExample(void* param) {
     BittyBuzzStringResolver stringResolver =
         BittyBuzzFactory::createBittyBuzzStringResolver(logger);
 
-    std::array<FunctionRegister, 2> functionRegisters =
-        BittyBuzzFactory::createBittyBuzzFunctionRegisters();
+    auto functionRegisters = BittyBuzzFactory::createBittyBuzzFunctionRegisters();
 
     BittyBuzzVm bittybuzz =
         BittyBuzzVm(bytecode, stringResolver, BSPContainer::getBSP(), logger, functionRegisters);
