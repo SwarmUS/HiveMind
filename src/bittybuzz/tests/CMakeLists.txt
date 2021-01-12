@@ -4,11 +4,12 @@ set(TEST_SOURCES
     BittyBuzzBytecodeUnitTests.cpp
     BittyBuzzStringResolverUnitTests.cpp
 
+    vm_tests/BittyBuzzVmLogTests.cpp
     vm_tests/BittyBuzzVmInitAddTests.cpp
     vm_tests/BittyBuzzVmLogIntTests.cpp
     vm_tests/BittyBuzzVmNoStepTests.cpp
-    vm_tests/BittyBuzzVmUndefinedFunctionTests.cpp
     vm_tests/BittyBuzzVmSwarmTests.cpp
+    vm_tests/BittyBuzzVmUndefinedFunctionTests.cpp
 )
 
 set(TEST_HEADERS
@@ -21,9 +22,14 @@ set(TEST_HEADERS
 # bzz target definitions
 set(BZZ_TEST_SCRIPTS_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/vm_tests/buzz_tests_scripts)
 
+
+bittybuzz_generate_bytecode(log
+    ${BZZ_TEST_SCRIPTS_LOCATION}/log.bzz 
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
 set(LOGINT_BST ${BITTYBUZZ_HIVEMIND_BST} vm_tests/buzz_tests_scripts/logInt.bst)
 list(LENGTH LOGINT_BST TEST)
-
 bittybuzz_generate_bytecode(log-int 
     ${BZZ_TEST_SCRIPTS_LOCATION}/logInt.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
@@ -63,6 +69,7 @@ target_link_libraries(${TEST_NAME}
         SwarmUS::HiveMind::BittyBuzz
 
         # BittyBuzz code
+        log
         log-int
         init-add
         no-step

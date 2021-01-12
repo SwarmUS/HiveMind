@@ -19,6 +19,7 @@ class BittyBuzzVmTestFixture : public testing::Test {
     BittyBuzzStringResolverInterfaceMock m_bittyBuzzStringResolverMock;
 
     int logCounter = 0;
+    std::string logLastFormat;
 
     // Needs to be explicitly called since we use an overload
     template <typename Container>
@@ -27,7 +28,7 @@ class BittyBuzzVmTestFixture : public testing::Test {
                uint16_t boardId,
                const Container& functionRegisters) {
 
-        m_loggerMock = new LoggerInterfaceMock(logCounter);
+        m_loggerMock = new LoggerInterfaceMock(logCounter, logLastFormat);
         m_bspMock = new BSPInterfaceMock(boardId);
         m_bittybuzzBytecode = new BittyBuzzBytecode(*m_loggerMock, bytecode, bytecodeLength);
 

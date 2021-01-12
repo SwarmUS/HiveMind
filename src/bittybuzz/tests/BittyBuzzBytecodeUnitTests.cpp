@@ -11,12 +11,13 @@ class BittyBuzzBytecodeTestFixture : public testing::Test {
     BittyBuzzBytecode* m_bytecode;
     LoggerInterfaceMock* m_loggerMock;
     int logCounter = 0;
+    std::string logLastFormat;
 
     void SetUp() override {
         for (uint8_t i = 0; i < m_bytecodeArray.size(); i++) {
             m_bytecodeArray[i] = i;
         }
-        m_loggerMock = new LoggerInterfaceMock(logCounter);
+        m_loggerMock = new LoggerInterfaceMock(logCounter, logLastFormat);
         m_bytecode =
             new BittyBuzzBytecode(*m_loggerMock, m_bytecodeArray.data(), m_bytecodeArray.size());
     }

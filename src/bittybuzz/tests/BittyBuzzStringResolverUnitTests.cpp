@@ -9,11 +9,12 @@ class BittyBuzzStringResolverTestFixture : public testing::Test {
     BittyBuzzStringResolver* m_stringResolver;
     LoggerInterfaceMock* m_loggerMock;
     int logCounter = 0;
+    std::string logLastFormat;
     std::array<std::pair<const uint16_t, const char*>, 3> m_array = {
         {{99, "hello"}, {100, "world"}, {101, "hi"}}};
 
     void SetUp() override {
-        m_loggerMock = new LoggerInterfaceMock(logCounter);
+        m_loggerMock = new LoggerInterfaceMock(logCounter, logLastFormat);
         m_stringResolver =
             new BittyBuzzStringResolver(m_array.data(), m_array.size(), 99, *m_loggerMock);
     }
