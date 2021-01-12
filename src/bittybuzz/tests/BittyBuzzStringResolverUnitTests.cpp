@@ -68,7 +68,7 @@ TEST_F(BittyBuzzStringResolverTestFixture,
     std::optional<const char*> ret = m_stringResolver->getString(stringId);
 
     // Expect
-    EXPECT_EQ(logCounter, 1);
+    EXPECT_EQ(logCounter, 0);
     EXPECT_EQ(ret.operator bool(), false);
 }
 
@@ -79,7 +79,7 @@ TEST_F(BittyBuzzStringResolverTestFixture, BittyBuzzStringResolver_getString_get
     std::optional<const char*> ret = m_stringResolver->getString(stringId);
 
     // Expect
-    EXPECT_EQ(logCounter, 1);
+    EXPECT_EQ(logCounter, 0);
     EXPECT_EQ(ret.operator bool(), false);
 }
 

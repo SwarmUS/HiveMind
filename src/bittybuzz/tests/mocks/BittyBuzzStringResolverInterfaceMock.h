@@ -8,7 +8,7 @@ class BittyBuzzStringResolverInterfaceMock final : public IBittyBuzzStringResolv
   public:
     ~BittyBuzzStringResolverInterfaceMock() = default;
 
-    MOCK_METHOD(std::optional<const char*>, getString, (uint16_t stringId), (override));
+    MOCK_METHOD(std::optional<const char*>, getString, (uint16_t stringId), (const override));
 };
 
 #endif // __BITTYBUZZSTRINGRESOLVERINTERFACEMOCK_H_
