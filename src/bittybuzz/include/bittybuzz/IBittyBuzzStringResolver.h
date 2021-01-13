@@ -1,6 +1,7 @@
 #ifndef __IBITTYBUZZSTRINGRESOLVER_H_
 #define __IBITTYBUZZSTRINGRESOLVER_H_
 
+#include <cstdint>
 #include <optional>
 
 /**
@@ -13,7 +14,7 @@ class IBittyBuzzStringResolver {
     /**
      *@brief Get the string from the stringId
      **/
-    virtual std::optional<const char*> getString(uint16_t stringId) = 0;
+    virtual std::optional<const char*> getString(uint16_t stringId) const = 0;
 };
 
 #endif // __IBITTYBUZZSTRINGRESOLVER_H_

@@ -3,8 +3,7 @@
 #define __BITTYBUZZSTRINGRESOLVER_H_
 
 #include "IBittyBuzzStringResolver.h"
-#include "logger/ILogger.h"
-#include <cstdint>
+#include <logger/ILogger.h>
 #include <utility>
 
 class BittyBuzzStringResolver : public IBittyBuzzStringResolver {
@@ -16,7 +15,7 @@ class BittyBuzzStringResolver : public IBittyBuzzStringResolver {
 
     ~BittyBuzzStringResolver() override = default;
 
-    std::optional<const char*> getString(uint16_t stringId) override;
+    std::optional<const char*> getString(uint16_t stringId) const override;
 
   private:
     const ILogger& m_logger;

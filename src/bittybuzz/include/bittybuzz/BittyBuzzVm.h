@@ -1,11 +1,12 @@
 #ifndef __BITTYBUZZVM_H_
 #define __BITTYBUZZVM_H_
 
-#include "bittybuzz/IBittyBuzzBytecode.h"
-#include "bittybuzz/IBittyBuzzVm.h"
-#include "bsp/IBSP.h"
-#include "logger/ILogger.h"
+#include "IBittyBuzzBytecode.h"
+#include "IBittyBuzzStringResolver.h"
+#include "IBittyBuzzVm.h"
 #include <array>
+#include <bsp/IBSP.h>
+#include <logger/ILogger.h>
 
 #define BBZ_MSG_BUFF_SIZE 16
 
@@ -20,12 +21,14 @@ class BittyBuzzVm : public IBittyBuzzVm {
     /**
      *@brief The constructor of the bbvm
      *@param bytecode the bytecode that the vm will run
+     *@param stringResolver the string resolver used in the VM
      *@param bsp a reference to the bsp
      *@param logger a reference to a logger
      *@param container the provided iterator
      *@tparam Container an iterator of any sort (stl container) that returns a FunctionRegister*/
     template <typename Container>
     BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
+                const IBittyBuzzStringResolver& stringResolver,
                 const IBSP& bsp,
                 const ILogger& logger,
                 const Container& container);

@@ -1,6 +1,7 @@
 #include "bittybuzz/BittyBuzzSystem.h"
 
 const ILogger* BittyBuzzSystem::logger = NULL;
+const IBittyBuzzStringResolver* BittyBuzzSystem::stringResolver = NULL;
 
 void BittyBuzzSystem::functionCall(uint16_t stringId) {
     bbzvm_pushs(stringId);

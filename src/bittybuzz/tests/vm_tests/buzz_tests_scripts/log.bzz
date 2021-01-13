@@ -1,0 +1,6 @@
+function init() {
+}
+
+function step() {
+    log("Hello World!")
+}

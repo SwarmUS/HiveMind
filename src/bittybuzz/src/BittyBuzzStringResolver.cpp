@@ -10,7 +10,7 @@ BittyBuzzStringResolver::BittyBuzzStringResolver(
     m_arrayLength(arrayLength),
     m_stringIdOffset(stringIdOffset) {}
 
-std::optional<const char*> BittyBuzzStringResolver::getString(uint16_t stringId) {
+std::optional<const char*> BittyBuzzStringResolver::getString(uint16_t stringId) const {
     int32_t stringIdIndex = stringId - m_stringIdOffset;
 
     if (stringIdIndex >= 0 && stringIdIndex < m_arrayLength) {
@@ -23,6 +23,5 @@ std::optional<const char*> BittyBuzzStringResolver::getString(uint16_t stringId)
         return m_stringArray[stringIdIndex].second;
     }
 
-    m_logger.log(LogLevel::Warn, "Obtained stringid out of bound");
     return {};
 }

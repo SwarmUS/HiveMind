@@ -33,7 +33,7 @@ echo "#define BBZSTRING_ARRAY_SIZE ($array_size - BBZSTRING_OFFSET)" >> $4
 echo "" >> $4
 
 i=0
-echo "const std::array<const std::pair<const uint16_t, const char*>, BBZSTRING_ARRAY_SIZE> test = {{"  >> $4
+echo "const std::array<const std::pair<const uint16_t, const char*>, BBZSTRING_ARRAY_SIZE> g_bbzStringResolverArray = {{"  >> $4
 grep "^'" $1 | cut -c 2- | while read -r line
 do
     if [[ "$i" -ge $offset_size ]]; then
