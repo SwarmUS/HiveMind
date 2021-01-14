@@ -14,6 +14,7 @@ extraction:
         - python3-protobuf
 
     after_prepare:
+      # Buzz installation
       - git clone https://github.com/MISTLab/Buzz.git /tmp/buzz
       - sed -i 's/\/opt/\/tmp\/buzz-install/g' /tmp/buzz/src/utility/FindBuzz.cmake #Hack so it can find buzz compiler utils
       - cd /tmp/buzz
