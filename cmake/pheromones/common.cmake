@@ -18,7 +18,7 @@ function(pheromones_fetch_populate)
     set(PHEROMONES pheromones)
     string(TOLOWER ${PHEROMONES} PHEROMONES_L)
 
-    FetchContent_GetProperties(PHEROMONES POPULATED PHEROMONES_POPULATED)
+    FetchContent_GetProperties(${PHEROMONES} POPULATED PHEROMONES_POPULATED)
     if(NOT PHEROMONES_POPULATED)
         message("Cloning pheromones library")
         set(FETCHCONTENT_QUIET FALSE) # To see progress
