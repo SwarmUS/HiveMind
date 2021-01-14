@@ -7,6 +7,8 @@ set(PROJECT_SOURCES
     Main.cpp
 )
 
+pheromones_fetch_populate()
+
 add_executable(${EXECUTABLE_NAME} ${PROJECT_SOURCES})
 target_link_libraries(${EXECUTABLE_NAME}
     PUBLIC
@@ -15,6 +17,9 @@ target_link_libraries(${EXECUTABLE_NAME}
       SwarmUS::HiveMind::FreeRTOS
       SwarmUS::HiveMind::Logger
       SwarmUS::HiveMind::BittyBuzz
+
+      # Remove
+      SwarmUS::Pheromones::Example
 )
 
 add_subdirectory(bittybuzz)

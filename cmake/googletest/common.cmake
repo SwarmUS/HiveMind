@@ -1,6 +1,6 @@
 include(FetchContent)
 
-function(googletest_get_populate)
+function(googletest_fetch_populate)
     FetchContent_Declare(
         googletest
         GIT_REPOSITORY https://github.com/google/googletest.git

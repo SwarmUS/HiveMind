@@ -41,7 +41,6 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
     set(BHEADER_STRING_FILE_TMP  ${BHEADER_STRING_FILE}.tmp)
 
     # Concatenating BST files
-    message("FILE: ${bzz_bst_list}")
     configure_file(${BITTYBUZZ_SRC_PATH}/src/bittybuzz/util/BittyBuzzStrings.bst ${BST_FILE} COPYONLY)
     foreach(BST ${bzz_bst_list}) 
         file(READ ${BST} CONTENTS)
