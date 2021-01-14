@@ -10,12 +10,14 @@ function(pheromones_fetch_populate)
     endif()
 
     FetchContent_Declare(
-        pheromones
+        ${PROJECT_NAME}_pheromones
+
         GIT_REPOSITORY https://github.com/SwarmUS/Pheromones
-        GIT_TAG        01bd792711588c425fe0d5e540cbdcff746f5fec
+        GIT_TAG        c93b2ac
         GIT_PROGRESS   TRUE
     )
-    set(PHEROMONES pheromones)
+
+    set(PHEROMONES ${PROJECT_NAME}_pheromones)
     string(TOLOWER ${PHEROMONES} PHEROMONES_L)
 
     FetchContent_GetProperties(${PHEROMONES} POPULATED PHEROMONES_POPULATED)
@@ -23,8 +25,8 @@ function(pheromones_fetch_populate)
         message("Cloning pheromones library")
         set(FETCHCONTENT_QUIET FALSE) # To see progress
         FetchContent_Populate(${PHEROMONES})
+        add_subdirectory(${${PHEROMONES_L}_SOURCE_DIR} ${${PHEROMONES_L}_BINARY_DIR})
     endif()
-    add_subdirectory(${${PHEROMONES_L}_SOURCE_DIR} ${${PHEROMONES_L}_BINARY_DIR})
 
     # Removing warnings
     if (DISABLE_EXTERNAL_WARNINGS) 

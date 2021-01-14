@@ -24,9 +24,9 @@ function(freertos_fetch_kernel)
         message("Cloning FreeRTOS Kernel")
         set(FETCHCONTENT_QUIET FALSE) # To see progress
         FetchContent_Populate(${FREERTOS_KERNEL})
+        set(FREERTOS_KERNEL_PATH ${${FREERTOS_KERNEL_L}_SOURCE_DIR} PARENT_SCOPE)
     endif()
 
-    set(FREERTOS_KERNEL_PATH ${${FREERTOS_KERNEL_L}_SOURCE_DIR} PARENT_SCOPE)
 
     # Creates a .clang-tidy file with no virtually no checks
     if (DISABLE_EXTERNAL_WARNINGS) 

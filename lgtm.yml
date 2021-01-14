@@ -22,4 +22,4 @@ extraction:
       - cp -a /tmp/buzz-install/share/buzz/cmake/. ${LGTM_SRC}/cmake/bittybuzz/
 
       # Install protobuf deps
-      - pip install python3-protobuf
+      - pip3 install python3-protobuf
