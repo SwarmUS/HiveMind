@@ -13,6 +13,7 @@ The HiveMind is the embedded application that runs on SwarmUS HiveBoard and uses
     * [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to match the coding style
     * [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) for additional compiler warnings
 * [Doxygen](https://github.com/doxygen/doxygen) and [graphviz](https://gitlab.com/graphviz/graphviz/) to generate the documentation
+* [Protoc] and some python deps (https://github.com/doxygen/doxygen) to build [Pheromones](https://github.com/SwarmUS/Pheromones). Check Pheromones repo for more info
 
 
 ## Building
