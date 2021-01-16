@@ -4,18 +4,12 @@
 #include <logger/ILogger.h>
 #include <optional>
 
-// Prevents circular dependency
 class TCPClient;
 
-class SocketFactory {
-  public:
-    SocketFactory(const ILogger& logger);
-    ~SocketFactory() = default;
+namespace SocketFactory {
 
-    std::optional<TCPClient> createTCPClient(const char* address, int port) const;
+    std::optional<TCPClient> createTCPClient(const char* address, int port, const ILogger& logger);
 
-  private:
-    const ILogger& m_logger;
-};
+} // namespace SocketFactory
 
 #endif // __SOCKETFACTORY_H_

@@ -24,7 +24,8 @@ class TCPClient : public ITCPClient {
     const sockaddr_in m_address;
 
     friend std::optional<TCPClient> SocketFactory::createTCPClient(const char* address,
-                                                                   int port) const;
+                                                                   int port,
+                                                                   const ILogger& logger);
 };
 
 #endif // __TCPCLIENT_H_
