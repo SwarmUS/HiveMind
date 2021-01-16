@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include "crc.h"
 #include "dma.h"
 #include "gpio.h"
 #include "main.h"

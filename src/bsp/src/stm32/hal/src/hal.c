@@ -13,11 +13,16 @@ void Hal_init() {
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
 
-    MX_DMA_Init();
+    MX_CRC_Init();
 
+    MX_DMA_Init();
     MX_USART3_UART_Init();
     MX_USART2_UART_Init();
 
     /* Initialize UartPrint */
     UartPrint_init();
+}
+
+uint32_t Hal_calculateCRC32(const uint8_t* buffer, uint32_t length) {
+    return HAL_CRC_Calculate(&hcrc, (uint32_t*)buffer, length);
 }

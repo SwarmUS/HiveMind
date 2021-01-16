@@ -5,10 +5,20 @@
 extern "C" {
 #endif
 
+#include <stdint.h>
+
 /**
  * @brief  Inits the hal of the device
  */
 void Hal_init();
+
+/**
+ * @brief Calculates the 32bit CRC of the data
+ * @param buffer Pointer to data
+ * @param length Length of data
+ * @return CRC32
+ */
+uint32_t Hal_calculateCRC32(const uint8_t* buffer, uint32_t length);
 
 #ifdef __cplusplus
 }

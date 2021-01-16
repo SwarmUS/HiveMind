@@ -9,6 +9,7 @@ set(LIB_SOURCES
     Core/Src/main.c
     Core/Src/gpio.c
     Core/Src/dma.c
+    Core/Src/crc.c
 )
 
 set(LIB_HEADERS
@@ -19,6 +20,7 @@ set(LIB_HEADERS
     Core/Inc/main.h
     Core/Inc/gpio.h
     Core/Inc/dma.h
+    Core/Inc/crc.h
 )
 
 # Sources that needs to be global on the project
@@ -93,8 +95,7 @@ target_link_libraries(${LIB_NAME}
         HAL::STM32::F4::GPIO
         HAL::STM32::F4::UART
         HAL::STM32::F4::DMA
-
-
+        HAL::STM32::F4::CRC
 )
 
 # Removing warnings and compile options
