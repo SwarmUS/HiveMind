@@ -2,6 +2,7 @@
 #define _BSPFACTORY_H
 
 #include "bsp/IBSP.h"
+#include "bsp/IPhoneCommunication.h"
 #include "bsp/IUserInterface.h"
 
 namespace BSPContainer {
@@ -9,11 +10,7 @@ namespace BSPContainer {
      * @brief Return an instance of the platform dependent BSP.
      */
     IBSP& getBSP();
-
-    /**
-     * @brief Return an instance of the platform dependent UserInterface.
-     */
-    IUserInterface& getUserInterface();
+    IPhoneCommunication& getPhoneCommunication();
 } // namespace BSPContainer
 
 #endif // _BSPFACTORY_H

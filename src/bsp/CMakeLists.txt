@@ -11,6 +11,7 @@ set(LIB_HEADERS
     include/bsp/BSPContainer.h
 
     include/bsp/IUserInterface.h
+    include/bsp/IPhoneCommunication.h
 
     include/bsp/ITCPClient.h
     include/bsp/SocketContainer.h

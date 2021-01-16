@@ -4,14 +4,14 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform")
 set(LIB_SOURCES
     src/BSP.cpp
     src/UserInterface.cpp
-    src/BSPContainer.cpp
     src/SocketContainer.cpp
 )
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
     include/UserInterface.h
-)
+    include/PhoneCommunication.h
+        src/PhoneCommunication.cpp)
 
 
 add_library(${LIB_NAME}

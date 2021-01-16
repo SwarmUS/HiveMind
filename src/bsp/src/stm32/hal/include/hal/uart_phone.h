@@ -13,7 +13,7 @@ extern "C" {
  * @param length Number of bytes to transmit
  * @return True if success. Otherwise, false
  */
-bool UartPhone_transmitBuffer(char* buffer, uint16_t length);
+bool UartPhone_transmitBuffer(const uint8_t* buffer, uint16_t length);
 
 /**
  * @brief Initiates a DMA reception to the given buffer from the phone UART port
@@ -23,7 +23,7 @@ bool UartPhone_transmitBuffer(char* buffer, uint16_t length);
  * finished
  * @return True if success. Otherwise, false
  */
-bool UartPhone_receiveDMA(char* buffer, uint16_t length, void (*cpltCallback)());
+bool UartPhone_receiveDMA(const uint8_t* buffer, uint16_t length, void (*cpltCallback)());
 
 /**
  * @brief Callback used when reception has finished. Calls the user callback provided in

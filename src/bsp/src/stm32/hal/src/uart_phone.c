@@ -2,7 +2,7 @@
 
 void (*rxCpltCallbackFct)() = NULL;
 
-bool UartPhone_transmitBuffer(char* buffer, uint16_t length) {
+bool UartPhone_transmitBuffer(const uint8_t* buffer, uint16_t length) {
     bool ret = true;
 
     if (HAL_UART_GetState(HUART_PRINT) == HAL_UART_STATE_READY) {
@@ -14,7 +14,7 @@ bool UartPhone_transmitBuffer(char* buffer, uint16_t length) {
     return false;
 }
 
-bool UartPhone_receiveDMA(char* buffer, uint16_t length, void (*cpltCallback)()) {
+bool UartPhone_receiveDMA(const uint8_t* buffer, uint16_t length, void (*cpltCallback)()) {
     bool ret = true;
 
     if (HAL_UART_GetState(HUART_PRINT) == HAL_UART_STATE_READY) {

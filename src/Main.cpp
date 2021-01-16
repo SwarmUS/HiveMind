@@ -39,6 +39,10 @@ void printThreadExample(void* param) {
         logger.log(LogLevel::Info, "Hello world!");
         vTaskDelay(toggleDelay);
         bittybuzz.step();
+
+        IPhoneCommunication& phone = BSPContainer::getPhoneCommunication();
+        uint8_t bytes[] = {0x01, 0x02, 0x03, 0x04};
+        phone.sendBytes(bytes, 4);
     }
 }
 
