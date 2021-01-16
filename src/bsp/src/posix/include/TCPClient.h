@@ -10,9 +10,9 @@ class TCPClient : public ITCPClient {
   public:
     ~TCPClient() override;
 
-    void receive(uint8_t* data, uint16_t length) override;
+    int receive(uint8_t* data, uint16_t length) override;
 
-    void send(const uint8_t data, uint16_t length) override;
+    int send(const uint8_t* data, uint16_t length) override;
 
     bool close() override;
 
@@ -20,7 +20,7 @@ class TCPClient : public ITCPClient {
     TCPClient(int socket, sockaddr_in address, const ILogger& logger);
 
     const ILogger& m_logger;
-    const int m_socket;
+    const int m_socketFd;
     const sockaddr_in m_address;
 
     friend std::optional<TCPClient> SocketFactory::createTCPClient(const char* address,

@@ -1,29 +1,29 @@
 #include "TCPClient.h"
 #include <arpa/inet.h>
+#include <cstdio>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <unistd.h>
 
-TCPClient::TCPClient(int socket, sockaddr_in address, const ILogger& logger) : m_logger(logger), m_socket(socket), m_address(address)
-{}
+TCPClient::TCPClient(int socket, sockaddr_in address, const ILogger& logger) :
+    m_logger(logger), m_socketFd(socket), m_address(address) {}
 
-// TCPClient::TCPClient(std::string address, int port, const ILogger& logger) : m_logger(logger) {
+TCPClient::~TCPClient() { TCPClient::close(); }
 
-//     // Creating the socket
-//     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-//     if (sockfd < 0) {
-//         m_logger.log(LogLevel::Error, "Could not open socket");
-//     }
+int TCPClient::receive(uint8_t* data, uint16_t length) {
+    return ::recv(m_socketFd, data, length, 0);
+}
 
-//     // Creating the server address
-//     struct sockaddr_in serverAddr {};
-//     serverAddr.sin_family = AF_INET;
-//     serverAddr.sin_port = htons(port);
-//     serverAddr.sin_addr.s_addr = inet_addr(address.c_str());
+int TCPClient::send(const uint8_t* data, uint16_t length) {
+    return ::send(m_socketFd, data, length, 0);
+}
 
-//     // Connect the socket
-//     if (connect(sockfd, (sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
-//         m_logger.log(LogLevel::Error, "Could not connect to server %s : %d", address.c_str(), port);
-//     }
-// }
+bool TCPClient::close() {
+    int ret = ::close(m_socketFd);
+    if (ret == 0) {
+        return true;
+    }
+    return false;
+}

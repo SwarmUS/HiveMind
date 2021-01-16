@@ -16,8 +16,10 @@ class ITCPClient {
      *@param [out] data buffer for the reception of the data
      *
      *@param [in] length maximum size of the data buffer
+     *
+     *@return the number of bytes received or -1 on error
      **/
-    virtual void receive(uint8_t* data, uint16_t length) = 0;
+    virtual int receive(uint8_t* data, uint16_t length) = 0;
 
     /**
      *@brief Sends data to the remote server
@@ -25,8 +27,10 @@ class ITCPClient {
      *@param [in] data buffer  to send to the remote server
      *
      *@param [in] length data size of the data buffer
+     *
+     *@return the number of bytes sent or -1 on error
      **/
-    virtual void send(const uint8_t data, uint16_t length) = 0;
+    virtual int send(const uint8_t* data, uint16_t length) = 0;
 
     /**
      *@brief Closes the socket
