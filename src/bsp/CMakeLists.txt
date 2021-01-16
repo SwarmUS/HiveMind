@@ -8,10 +8,14 @@ add_subdirectory(src)
 
 set(LIB_HEADERS
     include/bsp/IBSP.h
-    include/bsp/UserInterface.h
+    include/bsp/BSPContainer.h
+
     include/bsp/IUserInterface.h
-        include/bsp/BSPContainer.h
-    )
+    include/bsp/UserInterface.h
+
+    include/bsp/ITCPClient.h
+
+)
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})

@@ -2,7 +2,7 @@
 #define __BSP_H_
 
 #include "bsp/IBSP.h"
-#include "ros/ros.h"
+#include <ros/ros.h>
 
 class BSP : public IBSP {
   public:
