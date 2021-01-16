@@ -10,7 +10,7 @@ set(LIB_SOURCES
 set(LIB_HEADERS
     include/hal/hal.h
     include/hal/uart_print.h
-)
+        include/hal/uart_phone.h)
 
 # Sources that needs to be global on the project
 # Ex: interrupts, syscalls, callbacks
@@ -18,6 +18,7 @@ set(GLOBAL_SOURCES
     src/uart_print.c
     src/uart.c
     src/syscalls.c
+    src/uart_phone.c
 )
 
 # Creating the interface library
