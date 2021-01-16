@@ -11,8 +11,10 @@ void Hal_init() {
     SystemClock_Config();
 
     /* Initialize all configured peripherals */
+    MX_DMA_Init();
     MX_GPIO_Init();
     MX_USART3_UART_Init();
+    MX_USART2_UART_Init();
 
     /* Initialize UartPrint */
     UartPrint_init();

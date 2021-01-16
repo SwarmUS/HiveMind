@@ -8,6 +8,7 @@ set(LIB_SOURCES
     Core/Src/usart.c
     Core/Src/main.c
     Core/Src/gpio.c
+    Core/Src/dma.c
 )
 
 set(LIB_HEADERS
@@ -17,6 +18,7 @@ set(LIB_HEADERS
     Core/Inc/usart.h
     Core/Inc/main.h
     Core/Inc/gpio.h
+    Core/Inc/dma.h
 )
 
 # Sources that needs to be global on the project

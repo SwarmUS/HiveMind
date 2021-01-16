@@ -5,12 +5,14 @@
 extern "C" {
 #endif
 
+#include "dma.h"
 #include "gpio.h"
 #include "main.h"
 #include "stm32f4xx_hal_conf.h"
 #include "usart.h"
 
 #define HUART_PRINT (&huart3)
+#define HUART_PHONE (&huart2)
 
 void SystemClock_Config(void);
 

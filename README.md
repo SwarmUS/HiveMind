@@ -75,6 +75,16 @@ OpenOCD has a gdb server that defaults to port 3333, you can then connect to it 
 openocd -f ./tools/openocd/stm32_f4/stm32_f4.cfg -c init -c \"reset init\"
 ```
 
+### External connections
+#### Cellphone
+The firmware has been configured with the following pins for the uart connection to a cellphone
+| RX  | TX  |
+| --- | --- |
+| PD6 | PD5 |
+
+![alt text](https://os.mbed.com/media/uploads/jeromecoutant/nucleo_f429zi_zio_left_2019_8_29.png "NUCLEO CONNECTION")
+
+
 ### TODO
 #### BittyBuzz
 * Extern C on generated .h file
