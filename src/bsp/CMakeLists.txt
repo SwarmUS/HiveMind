@@ -15,8 +15,10 @@ set(LIB_HEADERS
 
     include/bsp/ITCPClient.h
     include/bsp/SocketContainer.h
-
 )
+
+set(LIB_SOURCES
+    TCPClientWrapper.cpp)
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
