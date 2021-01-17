@@ -3,16 +3,20 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform")
 
 set(LIB_SOURCES
     src/BSP.cpp
-    src/UserInterface.cpp
     src/BSPContainer.cpp
+
+    src/UserInterface.cpp
+
     src/TCPClient.cpp
+    src/SocketContainer.cpp
     src/SocketFactory.cpp
+
 )
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
-    include/TCPClient.h
     include/SocketFactory.h
+    include/TCPClient.h
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_PRIVATE_HEADERS})

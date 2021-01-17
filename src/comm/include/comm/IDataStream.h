@@ -1,16 +1,19 @@
-#ifndef __ITCPCLIENT_H_
-#define __ITCPCLIENT_H_
+#ifndef __IDATASTREAM_H_
+#define __IDATASTREAM_H_
 
 #include <cstdint>
 
 /**
- *@brief class to manage a tcp client socket */
-class ITCPClient {
+ *@brief Class to represent a biderectional stream of data
+ *
+ **/
+class IDataStream {
+
   public:
-    virtual ~ITCPClient() = default;
+    virtual ~IDataStream() = default;
 
     /**
-     *@brief Receives data from the remote server
+     *@brief Receives data from the stream
      *
      *@param [out] data buffer for the reception of the data
      *
@@ -21,7 +24,7 @@ class ITCPClient {
     virtual int32_t receive(uint8_t* data, uint16_t length) = 0;
 
     /**
-     *@brief Sends data to the remote server
+     *@brief Sends data to the stream
      *
      *@param [in] data buffer  to send to the remote server
      *
@@ -30,14 +33,6 @@ class ITCPClient {
      *@return the number of bytes sent or -1 on error
      **/
     virtual int32_t send(const uint8_t* data, uint16_t length) = 0;
-
-    /**
-     *@brief Closes the socket
-     *
-     *@return true if the operation was successful, false if not (i.e. the socket was already
-     *closed)
-     **/
-    virtual bool close() = 0;
 };
 
-#endif // __ITCPCLIENT_H_
+#endif // __IDATASTREAM_H_

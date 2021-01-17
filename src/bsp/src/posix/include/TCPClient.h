@@ -1,31 +1,28 @@
 #ifndef __TCPCLIENT_H_
 #define __TCPCLIENT_H_
 
-#include "SocketFactory.h"
 #include "bsp/ITCPClient.h"
 #include <logger/ILogger.h>
 #include <netinet/in.h>
 
 class TCPClient : public ITCPClient {
   public:
+    TCPClient(int socket, sockaddr_in address, const ILogger& logger);
+
     ~TCPClient() override;
 
-    int receive(uint8_t* data, uint16_t length) override;
+    int32_t receive(uint8_t* data, uint16_t length) override;
 
-    int send(const uint8_t* data, uint16_t length) override;
+    int32_t send(const uint8_t* data, uint16_t length) override;
 
     bool close() override;
 
-  private:
-    TCPClient(int socket, sockaddr_in address, const ILogger& logger);
 
+  private:
     const ILogger& m_logger;
     const int m_socketFd;
     const sockaddr_in m_address;
 
-    friend std::optional<TCPClient> SocketFactory::createTCPClient(const char* address,
-                                                                   int port,
-                                                                   const ILogger& logger);
 };
 
 #endif // __TCPCLIENT_H_

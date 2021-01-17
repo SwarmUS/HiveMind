@@ -2,7 +2,7 @@
 #include "BSP.h"
 
 IBSP& BSPContainer::getBSP() {
-    static BSP bsp;
+    static BSP s_bsp;
 
-    return bsp;
+    return s_bsp;
 }

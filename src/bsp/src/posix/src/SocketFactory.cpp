@@ -1,7 +1,6 @@
 #include "SocketFactory.h"
 #include "TCPClient.h"
 #include <arpa/inet.h>
-#include <logger/ILogger.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sys/socket.h>

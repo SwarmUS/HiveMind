@@ -14,6 +14,7 @@ set(LIB_HEADERS
     include/bsp/UserInterface.h
 
     include/bsp/ITCPClient.h
+    include/bsp/SocketContainer.h
 
 )
 

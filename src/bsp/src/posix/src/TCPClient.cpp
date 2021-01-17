@@ -12,11 +12,11 @@ TCPClient::TCPClient(int socket, sockaddr_in address, const ILogger& logger) :
 
 TCPClient::~TCPClient() { TCPClient::close(); }
 
-int TCPClient::receive(uint8_t* data, uint16_t length) {
+int32_t TCPClient::receive(uint8_t* data, uint16_t length) {
     return ::recv(m_socketFd, data, length, 0);
 }
 
-int TCPClient::send(const uint8_t* data, uint16_t length) {
+int32_t TCPClient::send(const uint8_t* data, uint16_t length) {
     return ::send(m_socketFd, data, length, 0);
 }
 
