@@ -4,16 +4,118 @@
 #include <cstdio>
 #include <cstring>
 
-void PhoneCommunication::sendBytes(const uint8_t* bytes, uint16_t length) {
-    *txBuffer = length;
-    uint32_t crc = Hal_calculateCRC32(bytes, length);
-    memcpy((txBuffer + sizeof(length)), &crc, sizeof(crc));
-    memcpy((txBuffer + sizeof(length) + sizeof(crc)), bytes, length);
+#include <FreeRTOS.h>
+#include <FreeRTOSConfig.h>
+#include <sstream>
+#include <task.h>
 
-    bool ret = UartPhone_transmitBuffer(txBuffer, length + sizeof(length) + sizeof(crc));
-    if (!ret) {
-        printf("Could not transmit to phone!");
+void phoneCommunication_C_txCpltCallback(void* phoneCommunicationInstance) {
+    static_cast<PhoneCommunication*>(phoneCommunicationInstance)->txCpltCallback();
+}
+
+void phoneCommunication_C_rxCpltCallback(void* phoneCommunicationInstance) {
+    static_cast<PhoneCommunication*>(phoneCommunicationInstance)->rxCpltCallback();
+}
+
+void rosWatcher(void* param) {
+    const int loopRate = 5;
+
+    while (true) {
+        static_cast<PhoneCommunication*>(param)->process();
+        vTaskDelay(loopRate);
     }
 }
+
+PhoneCommunication::PhoneCommunication() {
+    m_busy = false;
+    m_rxState = RxState::waitForHeader;
+
+    m_uartSemaphore = xSemaphoreCreateBinary();
+
+    //    if (m_semaphore == NULL) {
+    //        m_ui.print("Error: Logger semaphore could not be created");
+    //    }
+
+    xSemaphoreGive(m_uartSemaphore);
+
+    // TODO: Define priorities in a central place
+    xTaskCreate(rosWatcher, "phone_communication_process", configMINIMAL_STACK_SIZE, (void*)this,
+                tskIDLE_PRIORITY + 1, NULL);
+
+    UartPhone_receiveDMA(m_rxHeader, PHONE_COMMUNICATION_HEADER_LENGTH,
+                         (void (*)(void*))(&phoneCommunication_C_rxCpltCallback), (void*)this);
+}
+
+bool PhoneCommunication::sendBytes(const uint8_t* bytes, uint16_t length) {
+    bool ret = true;
+    if (m_busy) {
+        ret = false;
+    } else {
+        *m_txBuffer = length;
+        volatile uint32_t crc = Hal_calculateCRC32(bytes, length);
+        memcpy((m_txBuffer + sizeof(length)), (const void*)&crc, sizeof(crc));
+        memcpy((m_txBuffer + sizeof(length) + sizeof(crc)), bytes, length);
+
+        if (xSemaphoreTake(m_uartSemaphore, (TickType_t)10) == pdTRUE) {
+            ret = UartPhone_transmitBuffer(m_txBuffer, length + sizeof(length) + sizeof(crc),
+                                           (void (*)(void*))(&phoneCommunication_C_txCpltCallback),
+                                           (void*)this);
+
+            xSemaphoreGive(m_uartSemaphore);
+        }
+
+        if (ret == false) {
+            // TODO: Log error
+        }
+    }
+    return ret;
+}
+
+void PhoneCommunication::rxCpltCallback() {
+    switch (m_rxState) {
+    case RxState::waitForHeader:
+        m_rxLength = *(uint16_t*)m_rxHeader;
+        m_rxCrc = *(uint32_t*)(m_rxHeader + sizeof(m_rxLength));
+        m_rxState = RxState::waitForPayload;
+        UartPhone_receiveDMA(m_rxBuffer, m_rxLength,
+                             (void (*)(void*))(&phoneCommunication_C_rxCpltCallback), (void*)this);
+        break;
+
+    case RxState::waitForPayload:
+        m_rxState = RxState::checkIntegrity;
+        break;
+    default:
+        break;
+    }
+}
+
+void PhoneCommunication::process() {
+    if (m_rxState == RxState::checkIntegrity) {
+        uint32_t calculatedCrc = Hal_calculateCRC32(m_rxBuffer, m_rxLength);
+        int i;
+        if (calculatedCrc == m_rxCrc) {
+            i = 0;
+            // TODO: Callback
+        } else {
+            i = 1;
+            // TODO: Log error
+        }
+
+        int x = i + 1;
+        (void)x;
+        m_rxState = RxState::waitForHeader;
+
+        if (xSemaphoreTake(m_uartSemaphore, (TickType_t)10) == pdTRUE) {
+            UartPhone_receiveDMA(m_rxHeader, PHONE_COMMUNICATION_HEADER_LENGTH,
+                                 (void (*)(void*))(&phoneCommunication_C_rxCpltCallback),
+                                 (void*)this);
+
+            xSemaphoreGive(m_uartSemaphore);
+        }
+    }
+}
+
 void PhoneCommunication::registerCallback() { return; }
-bool PhoneCommunication::isBusy() { return false; }
+bool PhoneCommunication::isBusy() { return m_busy; }
+
+void PhoneCommunication::txCpltCallback() { m_busy = false; }
