@@ -10,6 +10,7 @@ function(freertos_fetch_kernel)
         GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Kernel
         GIT_TAG        V10.4.1-kernel-only
         GIT_PROGRESS   TRUE
+        GIT_REMOTE_UPDATE_STRATEGY CHECKOUT
     )
     set(FREERTOS_KERNEL FreeRTOSKernel)
     string(TOLOWER ${FREERTOS_KERNEL} FREERTOS_KERNEL_L)
