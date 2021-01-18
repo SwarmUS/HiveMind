@@ -29,13 +29,14 @@ Check the cmake options for more information.
 ```
 mkdir build
 cd build
-cmake -D CMAKE_BUILD_TYPE=Debug ..
+cmake ..
 make
 ```
 
-If you don't want to use the build tools and warnings, you can disable them
+### Development
+If you want all the warnings used by the team, use this command for cmake build generation
 ```
-cmake -DENABLE_ERROR_ON_MISSING_TOOL=OFF -DENABLE_WARNINGS_AS_ERROR=OFF -DENABLE_WARNINGS=OFF -DENABLE_CLANG_TIDY_CHECK=OFF ..
+cmake -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_CLANG_TIDY_CHECK=ON -DENABLE_TESTS=ON -DCMAKE_BUILD_TYPE=Debug ..
 
 ```
 
