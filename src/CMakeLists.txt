@@ -24,7 +24,6 @@ target_link_libraries(${EXECUTABLE_NAME}
 
 add_subdirectory(bittybuzz)
 add_subdirectory(bsp)
-add_subdirectory(comm)
 add_subdirectory(freertos)
 add_subdirectory(logger)
 
