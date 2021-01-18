@@ -2,6 +2,7 @@
 #define __SOCKETCONTAINER_H_
 
 #include "ITCPClient.h"
+#include "TCPClientWrapper.h"
 #include <logger/ILogger.h>
 #include <optional>
 

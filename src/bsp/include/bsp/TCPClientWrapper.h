@@ -19,7 +19,7 @@ class TCPClientWrapper : public ITCPClient {
 
 
   private:
-    const ITCPClient& m_client
+    const ITCPClient& m_client;
 
 };
 
