@@ -8,6 +8,7 @@
 #include <bittybuzz/BittyBuzzVm.h>
 #include <bsp/BSPContainer.h>
 #include <bsp/IBSP.h>
+#include <bsp/SocketContainer.h>
 #include <bsp/UserInterface.h>
 #include <cstdlib>
 #include <logger/Logger.h>
@@ -18,6 +19,11 @@ void printThreadExample(void* param) {
 
     UserInterface ui = UserInterface();
     Logger logger = Logger(LogLevel::Debug, ui);
+
+    auto socket = SocketContainer::getHostClientSocket("127.0.0.1", 5555, logger);
+    if (socket) {
+        socket.value().send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORD"));
+    }
 
     BittyBuzzBytecode bytecode = BittyBuzzFactory::createBittyBuzzBytecode(logger);
     BittyBuzzStringResolver stringResolver =
