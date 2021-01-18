@@ -17,10 +17,8 @@ class TCPClientWrapper : public ITCPClient {
 
     bool close() override;
 
-
   private:
     const ITCPClient& m_client;
-
 };
 
 #endif // __TCPClientWrapperWRAPPER_H_

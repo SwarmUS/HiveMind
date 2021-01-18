@@ -17,12 +17,10 @@ class TCPClient : public ITCPClient {
 
     bool close() override;
 
-
   private:
     const ILogger& m_logger;
     const int m_socketFd;
     const sockaddr_in m_address;
-
 };
 
 #endif // __TCPCLIENT_H_
