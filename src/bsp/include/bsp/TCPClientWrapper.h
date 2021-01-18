@@ -3,7 +3,6 @@
 
 #include "bsp/ITCPClient.h"
 #include <logger/ILogger.h>
-#include <netinet/in.h>
 
 /**
  *@brief A TCP client wrapper that is as a common socket between platforms.

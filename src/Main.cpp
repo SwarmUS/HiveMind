@@ -50,6 +50,7 @@ int main(int argc, char** argv) {
 
     xTaskCreate(printThreadExample, "print", configMINIMAL_STACK_SIZE * 4, NULL,
                 tskIDLE_PRIORITY + 1, NULL);
+                
     vTaskStartScheduler();
 
     return 0;
