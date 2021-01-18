@@ -1,7 +1,5 @@
 #include "SocketFactory.h"
-#include "BSP.h"
 #include "TCPClient.h"
-#include "bsp/BSPContainer.h"
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <netinet/in.h>
