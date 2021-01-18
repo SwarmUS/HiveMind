@@ -5,6 +5,8 @@ The HiveMind is the embedded application that runs on SwarmUS HiveBoard and uses
 ## Requirements
 
 * [ROS Noetic](http://wiki.ros.org/noetic/Installation/Ubuntu) for building the POSIX target
+  * [ROS melodic](http://wiki.ros.org/melodic/Installation/Ubuntu) should compile and run normally, but you won't be able to compile the tests since it comes with googletest 1.8 and not 1.10
+
 * [Gcc](https://gcc.gnu.org/) or [arm-gcc-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) for the embedded targets.
 
 * [Buzz](https://github.com/MISTLab/Buzz) to compile the user buzz script.
@@ -13,7 +15,7 @@ The HiveMind is the embedded application that runs on SwarmUS HiveBoard and uses
     * [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to match the coding style
     * [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) for additional compiler warnings
 * [Doxygen](https://github.com/doxygen/doxygen) and [graphviz](https://gitlab.com/graphviz/graphviz/) to generate the documentation
-* [Protoc] and some python deps (https://github.com/doxygen/doxygen) to build [Pheromones](https://github.com/SwarmUS/Pheromones). Check Pheromones repo for more info
+* [Protoc](https://developers.google.com/protocol-buffers) and some python deps to build [Pheromones](https://github.com/SwarmUS/Pheromones). Check Pheromones repo for more info
 
 
 ## Building
