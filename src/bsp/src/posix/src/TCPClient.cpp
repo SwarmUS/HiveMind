@@ -10,6 +10,8 @@
 TCPClient::TCPClient(int socket, sockaddr_in address, const ILogger& logger) :
     m_logger(logger), m_socketFd(socket), m_address(address) {}
 
+TCPClient::TCPClient(const TCPClient& client): m_logger(client.m_logger), m_socketFd(client.m_socketFd), m_address(client.m_address) {}
+
 TCPClient::~TCPClient() { TCPClient::close(); }
 
 int32_t TCPClient::receive(uint8_t* data, uint16_t length) {

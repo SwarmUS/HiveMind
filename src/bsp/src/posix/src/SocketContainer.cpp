@@ -4,15 +4,18 @@
 #include "bsp/TCPClientWrapper.h"
 #include <functional>
 
-std::optional<std::reference_wrapper<TCPClientWrapper>> SocketContainer::getHostClientSocket(
-    const char* address, int port, const ILogger& logger) {
+std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket(const char* address,
+                                                                     int port,
+                                                                     const ILogger& logger) {
+    static std::optional<TCPClient> s_clientSocket = {};
 
-    static std::optional<TCPClient> socket = SocketFactory::createTCPClient(address, port, logger);
-    if (socket) {
-        ITCPClient& test3 = socket.value();
-        TCPClientWrapper test = TCPClientWrapper(test3);
-        std::reference_wrapper<TCPClientWrapper> test2 = test;
-        return test2;
+    if (!s_clientSocket) {
+        std::optional<TCPClient> socket = SocketFactory::createTCPClient(address, port, logger);
+
+        if (socket) {
+            s_clientSocket.emplace(socket.value());
+            return TCPClientWrapper(s_clientSocket.value());
+        }
     }
 
     return {};
