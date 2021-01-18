@@ -9,13 +9,11 @@
 /**@brief Containes the sockets for the application*/
 namespace SocketContainer {
     /**
-     * @brief Return an instance of the platform dependent BSP.
+     * @brief Return an instance of the TPCClient wrapper that contains a platform dependent socket.
      *
-     * @b Warning note that if you make multiple request, you will obtaine multiple TCPClientWrapper
-     * objects, but under the hood, it's the same socket reference
      */
     std::optional<TCPClientWrapper> getHostClientSocket(const char* address,
-                                                        int port,
+                                                        uint32_t port,
                                                         const ILogger& logger);
 } // namespace SocketContainer
 

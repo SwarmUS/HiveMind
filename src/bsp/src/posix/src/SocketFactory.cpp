@@ -7,7 +7,7 @@
 #include <sys/types.h>
 
 std::optional<TCPClient> SocketFactory::createTCPClient(const char* address,
-                                                        int port,
+                                                        uint32_t port,
                                                         const ILogger& logger) {
 
     // Creating the socket

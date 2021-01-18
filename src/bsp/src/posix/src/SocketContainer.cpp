@@ -3,7 +3,7 @@
 #include "TCPClient.h"
 
 std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket(const char* address,
-                                                                     int port,
+                                                                     uint32_t port,
                                                                      const ILogger& logger) {
 
     static std::optional<TCPClient> s_clientSocket = {};
