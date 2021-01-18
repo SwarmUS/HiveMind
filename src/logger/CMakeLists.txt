@@ -3,11 +3,13 @@ set(LIB_ALIAS "SwarmUS::HiveMind::Logger")
 
 set(LIB_SOURCES
     src/Logger.cpp
+    src/LoggerContainer.cpp
 )
 
 set(LIB_HEADERS
     include/logger/ILogger.h
     include/logger/Logger.h
+    include/logger/LoggerContainer.h
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS} ${LIB_SOURCES})

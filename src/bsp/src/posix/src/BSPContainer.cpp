@@ -1,6 +1,6 @@
 #include "bsp/BSPContainer.h"
 #include "BSP.h"
-#include "bsp/UserInterface.h"
+#include "UserInterface.h"
 
 IBSP& BSPContainer::getBSP() {
     static BSP s_bsp;

@@ -9,19 +9,18 @@
 #include <bsp/BSPContainer.h>
 #include <bsp/IBSP.h>
 #include <bsp/SocketContainer.h>
-#include <bsp/UserInterface.h>
 #include <cstdlib>
 #include <logger/Logger.h>
+#include <logger/LoggerContainer.h>
 
 void printThreadExample(void* param) {
     (void)param;
     const int toggleDelay = 2000;
 
-    UserInterface ui = UserInterface();
-    Logger logger = Logger(LogLevel::Debug, ui);
+    ILogger& logger = LoggerContainer::getLogger();
 
-    std::optional<TCPClientWrapper> socket =
-        SocketContainer::getHostClientSocket("127.0.0.1", 5555, logger);
+    std::optional<TCPClientWrapper> socket = SocketContainer::getHostClientSocket();
+
     if (socket) {
         socket.value().send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORD"));
     }

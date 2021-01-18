@@ -10,6 +10,7 @@ set(LIB_SOURCES
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
+    include/UserInterface.h
 )
 
 

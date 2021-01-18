@@ -3,7 +3,7 @@
 #include "SocketFactory.h"
 #include "TCPClient.h"
 #include "bsp/BSPContainer.h"
-#include "logger/LoggerContainer.h"
+#include <logger/LoggerContainer.h>
 
 std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket() {
 
@@ -11,14 +11,13 @@ std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket() {
     static std::optional<TCPClientWrapper> s_wrapper = {};
 
     if (!s_clientSocket) {
-        std::string address;
-        int port;
 
         BSP& bsp = static_cast<BSP&>(BSPContainer::getBSP());
         std::shared_ptr<ros::NodeHandle> handle = bsp.getRosNodeHandle();
 
-        handle->getParam("host_address", address);
-        handle->getParam("host_port", port);
+        std::string address = handle->param("host_address", std::string("127.0.0.1"));
+        int port = handle->param("host_port", 5555);
+        ILogger& logger = LoggerContainer::getLogger();
 
         std::optional<TCPClient> socket =
             SocketFactory::createTCPClient(address.c_str(), (uint32_t)port, logger);
