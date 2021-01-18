@@ -4,7 +4,8 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform")
 set(LIB_SOURCES
     src/BSP.cpp
     src/UserInterface.cpp
-        src/BSPContainer.cpp
+    src/BSPContainer.cpp
+    src/SocketContainer.cpp
 )
 
 set(LIB_PRIVATE_HEADERS
@@ -30,6 +31,7 @@ target_link_libraries(${LIB_NAME}
     PUBLIC
         # Defined libraries
         SwarmUS::HiveMind::FreeRTOS
+        SwarmUS::HiveMind::Logger
 
     PRIVATE
         SwarmUS::HiveMind::HAL

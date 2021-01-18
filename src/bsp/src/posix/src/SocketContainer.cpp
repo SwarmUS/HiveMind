@@ -1,7 +1,6 @@
 #include "bsp/SocketContainer.h"
 #include "SocketFactory.h"
 #include "TCPClient.h"
-#include <functional>
 
 std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket(const char* address,
                                                                      int port,
