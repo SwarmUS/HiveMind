@@ -20,7 +20,8 @@ void printThreadExample(void* param) {
     UserInterface ui = UserInterface();
     Logger logger = Logger(LogLevel::Debug, ui);
 
-    auto socket = SocketContainer::getHostClientSocket("127.0.0.1", 5555, logger);
+    std::optional<TCPClientWrapper> socket =
+        SocketContainer::getHostClientSocket("127.0.0.1", 5555, logger);
     if (socket) {
         socket.value().send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORD"));
     }

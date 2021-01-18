@@ -12,9 +12,8 @@ namespace SocketContainer {
      * @brief Return an instance of the TPCClient wrapper that contains a platform dependent socket.
      *
      */
-    std::optional<TCPClientWrapper> getHostClientSocket(const char* address,
-                                                        uint32_t port,
-                                                        const ILogger& logger);
+    std::optional<TCPClientWrapper> getHostClientSocket();
+
 } // namespace SocketContainer
 
 #endif // __SOCKETCONTAINER_H_
