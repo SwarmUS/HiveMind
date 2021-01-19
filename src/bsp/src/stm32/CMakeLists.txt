@@ -10,8 +10,8 @@ set(LIB_SOURCES
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
     include/UserInterface.h
-    include/PhoneCommunication.h
-        src/PhoneCommunication.cpp)
+        include/HostUart.h
+        src/HostUart.cpp include/CRC.h src/CRC.cpp)
 
 
 add_library(${LIB_NAME}

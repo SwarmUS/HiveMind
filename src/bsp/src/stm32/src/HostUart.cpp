@@ -1,32 +1,29 @@
-#include "PhoneCommunication.h"
+#include "HostUart.h"
 #include "hal/hal.h"
 #include "hal/uart_phone.h"
+#include <FreeRTOSConfig.h>
 #include <cstdio>
 #include <cstring>
-
-#include <FreeRTOS.h>
-#include <FreeRTOSConfig.h>
-#include <sstream>
 #include <task.h>
 
 void phoneCommunication_C_txCpltCallback(void* phoneCommunicationInstance) {
-    static_cast<PhoneCommunication*>(phoneCommunicationInstance)->txCpltCallback();
+    static_cast<HostUart*>(phoneCommunicationInstance)->txCpltCallback();
 }
 
 void phoneCommunication_C_rxCpltCallback(void* phoneCommunicationInstance) {
-    static_cast<PhoneCommunication*>(phoneCommunicationInstance)->rxCpltCallback();
+    static_cast<HostUart*>(phoneCommunicationInstance)->rxCpltCallback();
 }
 
 void rosWatcher(void* param) {
     const int loopRate = 5;
 
     while (true) {
-        static_cast<PhoneCommunication*>(param)->process();
+        static_cast<HostUart*>(param)->process();
         vTaskDelay(loopRate);
     }
 }
 
-PhoneCommunication::PhoneCommunication() {
+HostUart::HostUart(ICRC& crc) : m_crc(crc) {
     m_busy = false;
     m_rxState = RxState::waitForHeader;
 
@@ -42,17 +39,17 @@ PhoneCommunication::PhoneCommunication() {
     xTaskCreate(rosWatcher, "phone_communication_process", configMINIMAL_STACK_SIZE, (void*)this,
                 tskIDLE_PRIORITY + 1, NULL);
 
-    UartPhone_receiveDMA(m_rxHeader, PHONE_COMMUNICATION_HEADER_LENGTH,
+    UartPhone_receiveDMA(m_rxHeader, HOS_UART_HEADER_LENGTH,
                          (void (*)(void*))(&phoneCommunication_C_rxCpltCallback), (void*)this);
 }
 
-bool PhoneCommunication::sendBytes(const uint8_t* bytes, uint16_t length) {
+bool HostUart::sendBytes(const uint8_t* bytes, uint16_t length) {
     bool ret = true;
     if (m_busy) {
         ret = false;
     } else {
         *m_txBuffer = length;
-        volatile uint32_t crc = Hal_calculateCRC32(bytes, length);
+        volatile uint32_t crc = m_crc.calculateCRC32(bytes, length);
         memcpy((m_txBuffer + sizeof(length)), (const void*)&crc, sizeof(crc));
         memcpy((m_txBuffer + sizeof(length) + sizeof(crc)), bytes, length);
 
@@ -71,7 +68,7 @@ bool PhoneCommunication::sendBytes(const uint8_t* bytes, uint16_t length) {
     return ret;
 }
 
-void PhoneCommunication::rxCpltCallback() {
+void HostUart::rxCpltCallback() {
     switch (m_rxState) {
     case RxState::waitForHeader:
         m_rxLength = *(uint16_t*)m_rxHeader;
@@ -89,9 +86,9 @@ void PhoneCommunication::rxCpltCallback() {
     }
 }
 
-void PhoneCommunication::process() {
+void HostUart::process() {
     if (m_rxState == RxState::checkIntegrity) {
-        uint32_t calculatedCrc = Hal_calculateCRC32(m_rxBuffer, m_rxLength);
+        uint32_t calculatedCrc = m_crc.calculateCRC32(m_rxBuffer, m_rxLength);
         int i;
         if (calculatedCrc == m_rxCrc) {
             i = 0;
@@ -106,7 +103,7 @@ void PhoneCommunication::process() {
         m_rxState = RxState::waitForHeader;
 
         if (xSemaphoreTake(m_uartSemaphore, (TickType_t)10) == pdTRUE) {
-            UartPhone_receiveDMA(m_rxHeader, PHONE_COMMUNICATION_HEADER_LENGTH,
+            UartPhone_receiveDMA(m_rxHeader, HOS_UART_HEADER_LENGTH,
                                  (void (*)(void*))(&phoneCommunication_C_rxCpltCallback),
                                  (void*)this);
 
@@ -115,7 +112,7 @@ void PhoneCommunication::process() {
     }
 }
 
-void PhoneCommunication::registerCallback() { return; }
-bool PhoneCommunication::isBusy() { return m_busy; }
+void HostUart::registerCallback() { return; }
+bool HostUart::isBusy() { return m_busy; }
 
-void PhoneCommunication::txCpltCallback() { m_busy = false; }
+void HostUart::txCpltCallback() { m_busy = false; }

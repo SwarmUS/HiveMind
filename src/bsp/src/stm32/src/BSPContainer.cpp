@@ -1,7 +1,8 @@
 #include "bsp/BSPContainer.h"
 #include "BSP.h"
+#include "CRC.h"
+#include "HostUart.h"
 #include "UserInterface.h"
-#include "PhoneCommunication.h"
 
 IBSP& BSPContainer::getBSP() {
     static BSP bsp;
@@ -9,14 +10,18 @@ IBSP& BSPContainer::getBSP() {
     return bsp;
 }
 
+IHostUart& BSPContainer::getHostUart() {
+    static HostUart s_hostUart(getCRC());
 IUserInterface& BSPContainer::getUserInterface() {
     static UserInterface s_ui;
     return s_ui;
 }
 
 
-IPhoneCommunication& BSPContainer::getPhoneCommunication() {
-    static PhoneCommunication phoneCommunication;
+    return s_hostUart;
+}
 
-    return phoneCommunication;
+ICRC& BSPContainer::getCRC() {
+    static CRC s_CRC;
+    return s_CRC;
 }

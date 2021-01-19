@@ -1,17 +1,19 @@
-#ifndef __PHONECOMMUNICATION_H__
-#define __PHONECOMMUNICATION_H__
+#ifndef __HOSTUART_H__
+#define __HOSTUART_H__
 
-#define PHONE_COMMUNICATION_MAX_LENGTH 65536
-#define PHONE_COMMUNICATION_HEADER_LENGTH 6
-
-#include "bsp/IPhoneCommunication.h"
+#include "bsp/ICRC.h"
+#include "bsp/IHostUart.h"
 #include <FreeRTOS.h>
+#include <cstdint>
 #include <semphr.h>
 
-class PhoneCommunication : public IPhoneCommunication {
+#define HOST_UART_MAX_MESSAGE_LENGTH UINT16_MAX
+#define HOS_UART_HEADER_LENGTH 6
+
+class HostUart : public IHostUart {
   public:
-    PhoneCommunication();
-    ~PhoneCommunication() = default;
+    explicit HostUart(ICRC& crc);
+    ~HostUart() = default;
 
     bool sendBytes(const uint8_t* bytes, uint16_t length) override;
     void registerCallback() override;
@@ -25,11 +27,13 @@ class PhoneCommunication : public IPhoneCommunication {
   private:
     enum RxState { waitForHeader, waitForPayload, checkIntegrity };
 
-    bool m_busy;
-    uint8_t m_txBuffer[PHONE_COMMUNICATION_MAX_LENGTH];
-    uint8_t m_rxBuffer[PHONE_COMMUNICATION_MAX_LENGTH];
+    ICRC& m_crc;
 
-    uint8_t m_rxHeader[PHONE_COMMUNICATION_HEADER_LENGTH];
+    bool m_busy;
+    uint8_t m_txBuffer[HOST_UART_MAX_MESSAGE_LENGTH];
+    uint8_t m_rxBuffer[HOST_UART_MAX_MESSAGE_LENGTH];
+
+    uint8_t m_rxHeader[HOS_UART_HEADER_LENGTH];
     uint16_t m_rxLength;
     uint32_t m_rxCrc;
     RxState m_rxState;
@@ -40,4 +44,4 @@ class PhoneCommunication : public IPhoneCommunication {
     void rxCpltCallback();
 };
 
-#endif //__PHONECOMMUNICATION_H__
+#endif //__HOSTUART_H__
