@@ -14,7 +14,7 @@ void phoneCommunication_C_rxCpltCallback(void* phoneCommunicationInstance) {
 }
 
 void messageNotifier(void* param) {
-    const int loopRate = 5;
+    const int loopRate = 50;
 
     while (true) {
         static_cast<HostUart*>(param)->process();
@@ -33,7 +33,7 @@ HostUart::HostUart(ICRC& crc, ILogger& logger) :
     xSemaphoreGive(m_uartSemaphore);
 
     // TODO: Define priorities in a central place
-    xTaskCreate(messageNotifier, "phone_communication_process", configMINIMAL_STACK_SIZE,
+    xTaskCreate(messageNotifier, "phone_communication_process", configMINIMAL_STACK_SIZE * 3,
                 (void*)this, tskIDLE_PRIORITY + 1, NULL);
 
     UartPhone_receiveDMA(m_rxHeader, HOS_UART_HEADER_LENGTH,
@@ -88,7 +88,7 @@ void HostUart::process() {
     if (m_rxState == RxState::checkIntegrity) {
         uint32_t calculatedCrc = m_crc.calculateCRC32(m_rxBuffer, m_rxLength);
         if (calculatedCrc == m_rxCrc) {
-            // TODO: Callback
+            m_logger.log(LogLevel::Info, "Received UART message of %d bytes", m_rxLength);
         } else {
             m_logger.log(LogLevel::Warn, "Received UART message with incorrect CRC. Discarding.");
         }
