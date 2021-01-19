@@ -24,8 +24,8 @@ target_link_libraries(${EXECUTABLE_NAME}
 
 add_subdirectory(bittybuzz)
 add_subdirectory(bsp)
-add_subdirectory(logger)
 add_subdirectory(freertos)
+add_subdirectory(logger)
 
 # Removing warnings from interface libraries
 if (DISABLE_EXTERNAL_WARNINGS) 

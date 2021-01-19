@@ -3,15 +3,24 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform")
 
 set(LIB_SOURCES
     src/BSP.cpp
+    src/BSPContainer.cpp
+
     src/UserInterface.cpp
-        src/BSPContainer.cpp
+
+    src/TCPClient.cpp
+    src/SocketContainer.cpp
+    src/SocketFactory.cpp
+
 )
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
+    include/UserInterface.h
+    include/SocketFactory.h
+    include/TCPClient.h
 )
 
-add_library(${LIB_NAME} ${LIB_SOURCES} ${LIB_PRIVATE_HEADERS})
+add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_PRIVATE_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
 # Make ROS messages/services available in headers
@@ -29,6 +38,7 @@ target_link_libraries(${LIB_NAME}
     PUBLIC
         # Defined libraries
         SwarmUS::HiveMind::FreeRTOS
+        SwarmUS::HiveMind::Logger
         ${catkin_LIBRARIES}
 )
 

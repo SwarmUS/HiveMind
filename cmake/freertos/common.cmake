@@ -7,9 +7,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} PARENT_SCOPE)
 function(freertos_fetch_kernel)
     FetchContent_Declare(
         FreeRTOSKernel
-        GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Kernel
-        GIT_TAG        V10.4.1-kernel-only
-        GIT_PROGRESS   TRUE
+        URL https://github.com/FreeRTOS/FreeRTOS-Kernel/archive/V10.4.1-kernel-only.tar.gz
+        URL_MD5 ef00a4f9261a2214ccafdfd01a7c2075
     )
     set(FREERTOS_KERNEL FreeRTOSKernel)
     string(TOLOWER ${FREERTOS_KERNEL} FREERTOS_KERNEL_L)
