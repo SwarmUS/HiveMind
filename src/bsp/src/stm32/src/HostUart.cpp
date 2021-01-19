@@ -1,5 +1,4 @@
 #include "HostUart.h"
-#include "hal/hal.h"
 #include "hal/uart_phone.h"
 #include <FreeRTOSConfig.h>
 #include <cstdio>
@@ -23,15 +22,13 @@ void messageNotifier(void* param) {
     }
 }
 
-HostUart::HostUart(ICRC& crc) : m_crc(crc) {
-    m_busy = false;
-    m_rxState = RxState::waitForHeader;
-
+HostUart::HostUart(ICRC& crc, ILogger& logger) :
+    m_crc(crc), m_logger(logger), m_busy(false), m_rxState(RxState::waitForHeader) {
     m_uartSemaphore = xSemaphoreCreateBinary();
 
-    //    if (m_semaphore == NULL) {
-    //        m_ui.print("Error: Logger semaphore could not be created");
-    //    }
+    if (m_uartSemaphore == NULL) {
+        m_logger.log(LogLevel::Error, "Host UART semaphore could not be created");
+    }
 
     xSemaphoreGive(m_uartSemaphore);
 
@@ -44,9 +41,10 @@ HostUart::HostUart(ICRC& crc) : m_crc(crc) {
 }
 
 bool HostUart::sendBytes(const uint8_t* bytes, uint16_t length) {
-    bool ret = true;
+    bool ret = false;
     if (m_busy) {
         ret = false;
+        m_logger.log(LogLevel::Warn, "Host UART is already busy. Aborting send.");
     } else {
         *m_txBuffer = length;
         volatile uint32_t crc = m_crc.calculateCRC32(bytes, length);
@@ -61,8 +59,8 @@ bool HostUart::sendBytes(const uint8_t* bytes, uint16_t length) {
             xSemaphoreGive(m_uartSemaphore);
         }
 
-        if (ret == false) {
-            // TODO: Log error
+        if (!ret) {
+            m_logger.log(LogLevel::Warn, "Could not send message to host over UART");
         }
     }
     return ret;
@@ -89,17 +87,12 @@ void HostUart::rxCpltCallback() {
 void HostUart::process() {
     if (m_rxState == RxState::checkIntegrity) {
         uint32_t calculatedCrc = m_crc.calculateCRC32(m_rxBuffer, m_rxLength);
-        int i;
         if (calculatedCrc == m_rxCrc) {
-            i = 0;
             // TODO: Callback
         } else {
-            i = 1;
-            // TODO: Log error
+            m_logger.log(LogLevel::Warn, "Received UART message with incorrect CRC. Discarding.");
         }
 
-        int x = i + 1;
-        (void)x;
         m_rxState = RxState::waitForHeader;
 
         if (xSemaphoreTake(m_uartSemaphore, (TickType_t)10) == pdTRUE) {

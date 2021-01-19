@@ -5,6 +5,7 @@
 #include "bsp/IHostUart.h"
 #include <FreeRTOS.h>
 #include <cstdint>
+#include <logger/ILogger.h>
 #include <semphr.h>
 
 #define HOST_UART_MAX_MESSAGE_LENGTH UINT16_MAX
@@ -12,8 +13,8 @@
 
 class HostUart : public IHostUart {
   public:
-    explicit HostUart(ICRC& crc);
-    ~HostUart() = default;
+    explicit HostUart(ICRC& crc, ILogger& logger);
+    ~HostUart() override = default;
 
     bool sendBytes(const uint8_t* bytes, uint16_t length) override;
     void registerCallback() override;
@@ -28,6 +29,7 @@ class HostUart : public IHostUart {
     enum RxState { waitForHeader, waitForPayload, checkIntegrity };
 
     ICRC& m_crc;
+    ILogger& m_logger;
 
     bool m_busy;
     uint8_t m_txBuffer[HOST_UART_MAX_MESSAGE_LENGTH];

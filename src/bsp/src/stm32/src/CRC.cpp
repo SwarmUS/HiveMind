@@ -3,6 +3,7 @@
 
 CRC::CRC() {
     m_semaphore = xSemaphoreCreateBinary();
+
     xSemaphoreGive(m_semaphore);
 }
 

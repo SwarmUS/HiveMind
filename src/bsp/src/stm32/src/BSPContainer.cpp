@@ -3,6 +3,7 @@
 #include "CRC.h"
 #include "HostUart.h"
 #include "UserInterface.h"
+#include "logger/LoggerContainer.h"
 
 IBSP& BSPContainer::getBSP() {
     static BSP bsp;
@@ -16,7 +17,7 @@ IUserInterface& BSPContainer::getUserInterface() {
 }
 
 IHostUart& BSPContainer::getHostUart() {
-    static HostUart s_hostUart(getCRC());
+    static HostUart s_hostUart(getCRC(), LoggerContainer::getLogger());
 
     return s_hostUart;
 }
