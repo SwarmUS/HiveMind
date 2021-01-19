@@ -12,6 +12,11 @@ namespace BSPContainer {
      */
     IBSP& getBSP();
 
+    /**
+     * @brief Return an instance of the platform dependent UserInterface.
+     */
+    IUserInterface& getUserInterface();
+
     IHostUart& getHostUart();
 
     ICRC& getCRC();

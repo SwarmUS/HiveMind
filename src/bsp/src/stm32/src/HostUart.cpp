@@ -14,7 +14,7 @@ void phoneCommunication_C_rxCpltCallback(void* phoneCommunicationInstance) {
     static_cast<HostUart*>(phoneCommunicationInstance)->rxCpltCallback();
 }
 
-void rosWatcher(void* param) {
+void messageNotifier(void* param) {
     const int loopRate = 5;
 
     while (true) {
@@ -36,8 +36,8 @@ HostUart::HostUart(ICRC& crc) : m_crc(crc) {
     xSemaphoreGive(m_uartSemaphore);
 
     // TODO: Define priorities in a central place
-    xTaskCreate(rosWatcher, "phone_communication_process", configMINIMAL_STACK_SIZE, (void*)this,
-                tskIDLE_PRIORITY + 1, NULL);
+    xTaskCreate(messageNotifier, "phone_communication_process", configMINIMAL_STACK_SIZE,
+                (void*)this, tskIDLE_PRIORITY + 1, NULL);
 
     UartPhone_receiveDMA(m_rxHeader, HOS_UART_HEADER_LENGTH,
                          (void (*)(void*))(&phoneCommunication_C_rxCpltCallback), (void*)this);

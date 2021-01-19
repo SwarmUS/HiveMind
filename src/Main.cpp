@@ -40,9 +40,9 @@ void printThreadExample(void* param) {
         vTaskDelay(toggleDelay);
         bittybuzz.step();
 
-        IPhoneCommunication& phone = BSPContainer::getPhoneCommunication();
+        IHostUart& hostUart = BSPContainer::getHostUart();
         uint8_t bytes[] = {0x01, 0x02, 0x03, 0x04};
-        phone.sendBytes(bytes, 4);
+        hostUart.sendBytes(bytes, 4);
     }
 }
 
@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
     IBSP& bsp = BSPContainer::getBSP();
     bsp.initChip((void*)&cmdLineArgs);
 
-    xTaskCreate(printThreadExample, "print", configMINIMAL_STACK_SIZE * 4, NULL,
+    xTaskCreate(printThreadExample, "print", configMINIMAL_STACK_SIZE * 10, NULL,
                 tskIDLE_PRIORITY + 1, NULL);
 
     vTaskStartScheduler();
