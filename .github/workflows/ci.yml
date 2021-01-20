@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build-native:
+  build-noetic:
     runs-on: ubuntu-20.04
     container:
       image: swarmus/embedded
@@ -61,3 +61,18 @@ jobs:
       run: |
         cd build
         make -j
+
+  # Verfies that we can still build on melodic
+  build-melodic:
+    runs-on: ubuntu-20.04
+    container:
+      image: ros/melodic-core-stretch
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        path: 'catkin_ws/src/HiveMind'
+    - name: build
+      run: |
+        cd catkin_ws
+        . /opt/ros/$ROS_DISTRO/setup.sh
+        catkin_make 
