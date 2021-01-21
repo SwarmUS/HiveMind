@@ -8,9 +8,6 @@
 #include <logger/ILogger.h>
 #include <semphr.h>
 
-#define HOST_UART_MAX_MESSAGE_LENGTH UINT16_MAX
-#define HOST_UART_HEADER_LENGTH 6
-
 class HostUart : public IHostUart {
   public:
     explicit HostUart(ICRC& crc, ILogger& logger);

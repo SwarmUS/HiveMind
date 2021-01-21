@@ -3,6 +3,9 @@
 
 #include <cstdint>
 
+#define HOST_UART_MAX_MESSAGE_LENGTH UINT16_MAX
+#define HOST_UART_HEADER_LENGTH 6
+
 class IHostUart {
   public:
     virtual ~IHostUart() = default;
