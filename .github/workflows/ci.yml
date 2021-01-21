@@ -67,16 +67,11 @@ jobs:
     runs-on: ubuntu-20.04
     container:
       # Container of ros with ubuntu 18.04
-      image: ros:melodic-ros-core-bionic
+      image: swarmus/ros-melodic
     steps:
     - uses: actions/checkout@v2
       with:
         path: 'catkin_ws/src/HiveMind'
-    # convert to container
-    - name: prepare
-      run: |
-        apt update
-        apt install gcc
     - name: build
       run: |
         cd catkin_ws
