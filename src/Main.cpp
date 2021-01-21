@@ -51,8 +51,6 @@ int main(int argc, char** argv) {
 
     IBSP& bsp = BSPContainer::getBSP();
     bsp.initChip((void*)&cmdLineArgs);
-    IHostUart& hostUart = BSPContainer::getHostUart();
-    (void)hostUart;
 
     xTaskCreate(printThreadExample, "print", configMINIMAL_STACK_SIZE * 8, NULL,
                 tskIDLE_PRIORITY + 1, NULL);

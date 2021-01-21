@@ -18,12 +18,12 @@ class HostUart : public IHostUart {
 
     void process();
 
-    friend void hostUart_C_txCpltCallback(void* phoneCommunicationInstance);
-    friend void hostUart_C_rxCpltCallback(void* phoneCommunicationInstance);
+    friend void hostUart_C_txCpltCallback(void* hostUartInstance);
+    friend void hostUart_C_rxCpltCallback(void* hostUartInstance);
 
   private:
-    enum RxState { WaitForHeader, WaitForPayload, CheckIntegrity };
-    enum TxState { Idle, SendHeader, SendPayload };
+    enum RxState { Rx_Idle, Rx_WaitForHeader, Rx_WaitForPayload, Rx_CheckIntegrity };
+    enum TxState { Tx_Idle, Tx_SendHeader, Tx_SendPayload };
 
     ICRC& m_crc;
     ILogger& m_logger;
@@ -41,6 +41,7 @@ class HostUart : public IHostUart {
 
     SemaphoreHandle_t m_uartSemaphore;
 
+    void startHeaderListen();
     void txCpltCallback();
     void rxCpltCallback();
 };

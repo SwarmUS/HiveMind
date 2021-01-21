@@ -19,8 +19,6 @@ void Hal_init() {
     MX_USART3_UART_Init();
     MX_USART2_UART_Init();
 
-    __HAL_UART_ENABLE_IT(HUART_HOST, UART_IT_IDLE);
-
     /* Initialize UartPrint */
     UartPrint_init();
 }
