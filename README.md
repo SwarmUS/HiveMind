@@ -5,6 +5,10 @@ The HiveMind is the embedded application that runs on SwarmUS HiveBoard and uses
 ## Requirements
 
 * [ROS Noetic](http://wiki.ros.org/noetic/Installation/Ubuntu) for building the POSIX target
+  * [ROS melodic](http://wiki.ros.org/melodic/Installation/Ubuntu) should compile and run normally if you have cmake 3.13, but you won't be able to compile the tests since it comes with googletest 1.8 and not 1.10
+
+* [CMake](https://cmake.org/) 3.13
+
 * [Gcc](https://gcc.gnu.org/) or [arm-gcc-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) for the embedded targets.
 
 * [Buzz](https://github.com/MISTLab/Buzz) to compile the user buzz script.
@@ -13,7 +17,7 @@ The HiveMind is the embedded application that runs on SwarmUS HiveBoard and uses
     * [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to match the coding style
     * [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) for additional compiler warnings
 * [Doxygen](https://github.com/doxygen/doxygen) and [graphviz](https://gitlab.com/graphviz/graphviz/) to generate the documentation
-* [Protoc] and some python deps (https://github.com/doxygen/doxygen) to build [Pheromones](https://github.com/SwarmUS/Pheromones). Check Pheromones repo for more info
+* [Protoc](https://developers.google.com/protocol-buffers) and some python deps to build [Pheromones](https://github.com/SwarmUS/Pheromones). Check Pheromones repo for more info
 
 
 ## Building
@@ -29,13 +33,14 @@ Check the cmake options for more information.
 ```
 mkdir build
 cd build
-cmake -D CMAKE_BUILD_TYPE=Debug ..
+cmake ..
 make
 ```
 
-If you don't want to use the build tools and warnings, you can disable them
+### Development
+If you want all the warnings used by the team, use this command for cmake build generation
 ```
-cmake -DENABLE_ERROR_ON_MISSING_TOOL=OFF -DENABLE_WARNINGS_AS_ERROR=OFF -DENABLE_WARNINGS=OFF -DENABLE_CLANG_TIDY_CHECK=OFF ..
+cmake -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_CLANG_TIDY_CHECK=ON -DENABLE_TESTS=ON -DCMAKE_BUILD_TYPE=Debug ..
 
 ```
 
