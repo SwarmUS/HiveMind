@@ -3,11 +3,12 @@ cmake_minimum_required(VERSION 3.13)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # Options
-option(ENABLE_WARNINGS "Enable all warnings on build" ON)
-option(ENABLE_WARNINGS_AS_ERROR "Enable all warnings as errors" ON)
-option(ENABLE_TESTS "Build the tests" ON)
-option(ENABLE_CLANG_TIDY_CHECK "Enable clang tidy check on compilation" ON)
-option(ENABLE_ERROR_ON_MISSING_TOOL "If a tools (clang-tidy, clang-format, doxygen) is not disabled and not installed, throws error" ON)
+option(ENABLE_WARNINGS "Enable all warnings on build" OFF)
+option(ENABLE_WARNINGS_AS_ERROR "Enable all warnings as errors" OFF)
+option(ENABLE_TESTS "Build the tests" OFF)
+option(ENABLE_CLANG_TIDY_CHECK "Enable clang tidy check on compilation" OFF)
+option(ENABLE_ERROR_ON_MISSING_TOOL "If a tools (clang-tidy, clang-format, doxygen) is not disabled and not installed, throws error" OFF)
+
 option(DISABLE_EXTERNAL_WARNINGS "Disables warnings from exernal libs (gtest, freertos, etc)" ON)
 
 # Init compile variable
