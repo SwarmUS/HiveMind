@@ -5,7 +5,8 @@ The HiveMind is the embedded application that runs on SwarmUS HiveBoard and uses
 ## Requirements
 
 * [ROS Noetic](http://wiki.ros.org/noetic/Installation/Ubuntu) for building the POSIX target
-  * [ROS melodic](http://wiki.ros.org/melodic/Installation/Ubuntu) should compile and run normally, but you won't be able to compile the tests since it comes with googletest 1.8 and not 1.10
+  * [ROS melodic](http://wiki.ros.org/melodic/Installation/Ubuntu) should compile and run normally if you have cmake 3.13, but you won't be able to compile the tests since it comes with googletest 1.8 and not 1.10
+
 
 * [Gcc](https://gcc.gnu.org/) or [arm-gcc-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) for the embedded targets.
 
