@@ -12,7 +12,7 @@ class IHostUart {
 
     /**
      * @brief Sends a buffer to the Host via UART by prepending with the length and the CRC32
-     * (non-blocking)
+     * (non-blocking and thread-safe)
      * @param buffer Pointer to the data to send
      * @param length Number of bytes to send
      * @return True if transfer started. False otherwise.

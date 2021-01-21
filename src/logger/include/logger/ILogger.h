@@ -35,7 +35,7 @@ class ILogger {
     virtual ~ILogger() = default;
 
     /**
-     * @brief Logs if the provided level is higher than the current log level
+     * @brief Logs if the provided level is higher than the current log level (Thread-safe)
      *
      * @param [in] level the log level of the current call
      *

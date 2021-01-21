@@ -8,7 +8,7 @@ class ICRC {
     virtual ~ICRC() = default;
 
     /**
-     * @brief Calculates the CRC32 of a buffer
+     * @brief Calculates the CRC32 of a buffer (Thread-safe)
      * @param data Pointer to the buffer
      * @param length Length of buffer in bytes
      * @return CRC32

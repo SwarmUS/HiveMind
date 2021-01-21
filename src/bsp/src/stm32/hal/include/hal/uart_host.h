@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 /**
- * @brief Initiates a DMA transfer of the given buffer to the phone UART port
+ * @brief Initiates a DMA transfer of the given buffer to the UART port
  * @param buffer Pointer to the buffer to transmit
  * @param length Number of bytes to transmit
  * @param cpltCallback Function pointer to the callback function, called when the transmission is
@@ -22,7 +22,7 @@ bool UartHost_transmitBuffer(const uint8_t* buffer,
                              void* instance);
 
 /**
- * @brief Initiates a DMA reception to the given buffer from the phone UART port
+ * @brief Initiates a DMA reception to the given buffer from the UART port
  * @param buffer Pointer to a buffer to store the data into
  * @param length Number of bytes to read
  * @param cpltCallback Function pointer to the callback function, called when the reception is

@@ -2,6 +2,7 @@
 #include "hal/hal.h"
 
 CRC::CRC() {
+    // TODO: Make static
     m_semaphore = xSemaphoreCreateBinary();
 
     xSemaphoreGive(m_semaphore);

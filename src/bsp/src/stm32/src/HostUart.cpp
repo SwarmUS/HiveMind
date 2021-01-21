@@ -24,6 +24,7 @@ void HostUart_processTask(void* param) {
 
 HostUart::HostUart(ICRC& crc, ILogger& logger) :
     m_crc(crc), m_logger(logger), m_txState(TxState::Tx_Idle), m_rxState(RxState::Rx_Idle) {
+    // TODO: Make static
     m_uartSemaphore = xSemaphoreCreateBinary();
 
     if (m_uartSemaphore == NULL) {
