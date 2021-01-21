@@ -13,7 +13,7 @@ extern "C" {
 #include "usart.h"
 
 #define HUART_PRINT (&huart3)
-#define HUART_PHONE (&huart2)
+#define HUART_HOST (&huart2)
 
 void SystemClock_Config(void);
 

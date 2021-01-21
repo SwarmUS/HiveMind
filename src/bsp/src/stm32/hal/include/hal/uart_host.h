@@ -1,5 +1,5 @@
-#ifndef __UART_PHONE_H__
-#define __UART_PHONE_H__
+#ifndef __UART_HOST_H__
+#define __UART_HOST_H__
 
 #include "hivemind_hal.h"
 
@@ -16,10 +16,10 @@ extern "C" {
  * @param instance Pointer to the class instance in which to call the callback
  * @return True if success. Otherwise, false
  */
-bool UartPhone_transmitBuffer(const uint8_t* buffer,
-                              uint16_t length,
-                              void (*cpltCallback)(void*),
-                              void* instance);
+bool UartHost_transmitBuffer(const uint8_t* buffer,
+                             uint16_t length,
+                             void (*cpltCallback)(void*),
+                             void* instance);
 
 /**
  * @brief Initiates a DMA reception to the given buffer from the phone UART port
@@ -30,24 +30,24 @@ bool UartPhone_transmitBuffer(const uint8_t* buffer,
  * @param instance Pointer to the class instance in which to call the callback
  * @return True if success. Otherwise, false
  */
-bool UartPhone_receiveDMA(const uint8_t* buffer,
-                          uint16_t length,
-                          void (*cpltCallback)(void*),
-                          void* instance);
+bool UartHost_receiveDMA(const uint8_t* buffer,
+                         uint16_t length,
+                         void (*cpltCallback)(void*),
+                         void* instance);
 
 /**
  * @brief Callback used when reception has finished. Calls the user callback provided in
- * UartPhone_receiveDMA()
+ * UartHost_receiveDMA()
  */
-void UartPhone_rxCallback();
+void UartHost_rxCallback();
 
 /**
  * @brief Callback used when transmission has finished. Calls the user callback provided in
- * UartPhone_transmitBuffer()
+ * UartHost_transmitBuffer()
  */
-void UartPhone_txCallback();
+void UartHost_txCallback();
 
 #ifdef __cplusplus
 }
 #endif
-#endif //__UART_PHONE_H__
+#endif //__UART_HOST_H__

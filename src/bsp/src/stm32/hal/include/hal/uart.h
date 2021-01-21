@@ -7,8 +7,6 @@ extern "C" {
 
 #include "usart.h"
 
-void UART_IRQHandler(UART_HandleTypeDef* huart);
-
 #ifdef __cplusplus
 }
 #endif

@@ -42,7 +42,7 @@ void printThreadExample(void* param) {
 
         IHostUart& hostUart = BSPContainer::getHostUart();
         uint8_t bytes[] = {0x01, 0x02, 0x03, 0x04};
-        hostUart.sendBytes(bytes, 4);
+        hostUart.send(bytes, 4);
     }
 }
 

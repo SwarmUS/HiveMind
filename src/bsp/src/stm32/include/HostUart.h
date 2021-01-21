@@ -9,33 +9,35 @@
 #include <semphr.h>
 
 #define HOST_UART_MAX_MESSAGE_LENGTH UINT16_MAX
-#define HOS_UART_HEADER_LENGTH 6
+#define HOST_UART_HEADER_LENGTH 6
 
 class HostUart : public IHostUart {
   public:
     explicit HostUart(ICRC& crc, ILogger& logger);
     ~HostUart() override = default;
 
-    bool sendBytes(const uint8_t* bytes, uint16_t length) override;
-    void registerCallback() override;
+    bool send(const uint8_t* buffer, uint16_t length) override;
     bool isBusy() override;
 
     void process();
 
-    friend void phoneCommunication_C_txCpltCallback(void* phoneCommunicationInstance);
-    friend void phoneCommunication_C_rxCpltCallback(void* phoneCommunicationInstance);
+    friend void hostUart_C_txCpltCallback(void* phoneCommunicationInstance);
+    friend void hostUart_C_rxCpltCallback(void* phoneCommunicationInstance);
 
   private:
-    enum RxState { waitForHeader, waitForPayload, checkIntegrity };
+    enum RxState { WaitForHeader, WaitForPayload, CheckIntegrity };
+    enum TxState { Idle, SendHeader, SendPayload };
 
     ICRC& m_crc;
     ILogger& m_logger;
 
-    bool m_busy;
-    uint8_t m_txBuffer[HOST_UART_MAX_MESSAGE_LENGTH];
-    uint8_t m_rxBuffer[HOST_UART_MAX_MESSAGE_LENGTH];
+    TxState m_txState;
+    uint8_t m_txLength;
+    uint8_t m_txHeader[HOST_UART_HEADER_LENGTH];
+    const uint8_t* m_txBuffer;
 
-    uint8_t m_rxHeader[HOS_UART_HEADER_LENGTH];
+    uint8_t m_rxBuffer[HOST_UART_MAX_MESSAGE_LENGTH];
+    uint8_t m_rxHeader[HOST_UART_HEADER_LENGTH];
     uint16_t m_rxLength;
     uint32_t m_rxCrc;
     RxState m_rxState;

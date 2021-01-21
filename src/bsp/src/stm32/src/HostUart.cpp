@@ -1,20 +1,20 @@
 #include "HostUart.h"
-#include "hal/uart_phone.h"
+#include "hal/uart_host.h"
 #include <FreeRTOSConfig.h>
 #include <cstdio>
 #include <cstring>
 #include <task.h>
 
-void phoneCommunication_C_txCpltCallback(void* phoneCommunicationInstance) {
+void hostUart_C_txCpltCallback(void* phoneCommunicationInstance) {
     static_cast<HostUart*>(phoneCommunicationInstance)->txCpltCallback();
 }
 
-void phoneCommunication_C_rxCpltCallback(void* phoneCommunicationInstance) {
+void hostUart_C_rxCpltCallback(void* phoneCommunicationInstance) {
     static_cast<HostUart*>(phoneCommunicationInstance)->rxCpltCallback();
 }
 
-void messageNotifier(void* param) {
-    const int loopRate = 50;
+void HostUart_processTask(void* param) {
+    const int loopRate = 5;
 
     while (true) {
         static_cast<HostUart*>(param)->process();
@@ -23,7 +23,7 @@ void messageNotifier(void* param) {
 }
 
 HostUart::HostUart(ICRC& crc, ILogger& logger) :
-    m_crc(crc), m_logger(logger), m_busy(false), m_rxState(RxState::waitForHeader) {
+    m_crc(crc), m_logger(logger), m_txState(TxState::Idle), m_rxState(RxState::WaitForHeader) {
     m_uartSemaphore = xSemaphoreCreateBinary();
 
     if (m_uartSemaphore == NULL) {
@@ -32,52 +32,76 @@ HostUart::HostUart(ICRC& crc, ILogger& logger) :
 
     xSemaphoreGive(m_uartSemaphore);
 
-    // TODO: Define priorities in a central place
-    xTaskCreate(messageNotifier, "phone_communication_process", configMINIMAL_STACK_SIZE * 3,
+    // TODO: Define priorities in a central place (probably in the main cleanup task)
+    xTaskCreate(HostUart_processTask, "host_uart_process", configMINIMAL_STACK_SIZE * 3,
                 (void*)this, tskIDLE_PRIORITY + 1, NULL);
 
-    UartPhone_receiveDMA(m_rxHeader, HOS_UART_HEADER_LENGTH,
-                         (void (*)(void*))(&phoneCommunication_C_rxCpltCallback), (void*)this);
+    UartHost_receiveDMA(m_rxHeader, HOST_UART_HEADER_LENGTH,
+                        (void (*)(void*))(&hostUart_C_rxCpltCallback), (void*)this);
 }
 
-bool HostUart::sendBytes(const uint8_t* bytes, uint16_t length) {
+bool HostUart::send(const uint8_t* buffer, uint16_t length) {
     bool ret = false;
-    if (m_busy) {
-        ret = false;
+
+    if (m_txState != TxState::Idle) {
         m_logger.log(LogLevel::Warn, "Host UART is already busy. Aborting send.");
-    } else {
-        *m_txBuffer = length;
-        volatile uint32_t crc = m_crc.calculateCRC32(bytes, length);
-        memcpy((m_txBuffer + sizeof(length)), (const void*)&crc, sizeof(crc));
-        memcpy((m_txBuffer + sizeof(length) + sizeof(crc)), bytes, length);
-
-        if (xSemaphoreTake(m_uartSemaphore, (TickType_t)10) == pdTRUE) {
-            ret = UartPhone_transmitBuffer(m_txBuffer, length + sizeof(length) + sizeof(crc),
-                                           (void (*)(void*))(&phoneCommunication_C_txCpltCallback),
-                                           (void*)this);
-
-            xSemaphoreGive(m_uartSemaphore);
-        }
-
-        if (!ret) {
-            m_logger.log(LogLevel::Warn, "Could not send message to host over UART");
-        }
+        return false;
     }
+
+    m_txLength = length;
+    m_txBuffer = buffer;
+
+    uint32_t crc = m_crc.calculateCRC32(buffer, length);
+    *(uint16_t*)m_txHeader = length;
+    *(uint32_t*)(m_txHeader + sizeof(length)) = crc;
+
+    if (xSemaphoreTake(m_uartSemaphore, (TickType_t)10) == pdTRUE) {
+        ret = UartHost_transmitBuffer(m_txHeader, HOST_UART_HEADER_LENGTH,
+                                      (void (*)(void*))(&hostUart_C_txCpltCallback), (void*)this);
+
+        xSemaphoreGive(m_uartSemaphore);
+    }
+
+    if (ret) {
+        m_txState = TxState::SendHeader;
+    } else {
+        m_logger.log(LogLevel::Warn, "Could not send message to host over UART");
+    }
+
     return ret;
+}
+
+void HostUart::txCpltCallback() {
+    switch (m_txState) {
+    case TxState::SendHeader:
+        UartHost_transmitBuffer(m_txBuffer, m_txLength,
+                                (void (*)(void*))(&hostUart_C_txCpltCallback), (void*)this);
+        m_txState = TxState::SendPayload;
+        break;
+
+    case TxState::SendPayload:
+        m_txState = TxState::Idle;
+        break;
+
+        // Should never get to this state. If it does, reset the driver to send a new message.
+    default:
+        m_txState = TxState::Idle;
+        break;
+    }
 }
 
 void HostUart::rxCpltCallback() {
     switch (m_rxState) {
-    case RxState::waitForHeader:
+    case RxState::WaitForHeader:
         m_rxLength = *(uint16_t*)m_rxHeader;
         m_rxCrc = *(uint32_t*)(m_rxHeader + sizeof(m_rxLength));
-        m_rxState = RxState::waitForPayload;
-        UartPhone_receiveDMA(m_rxBuffer, m_rxLength,
-                             (void (*)(void*))(&phoneCommunication_C_rxCpltCallback), (void*)this);
+        m_rxState = RxState::WaitForPayload;
+        UartHost_receiveDMA(m_rxBuffer, m_rxLength, (void (*)(void*))(&hostUart_C_rxCpltCallback),
+                            (void*)this);
         break;
 
-    case RxState::waitForPayload:
-        m_rxState = RxState::checkIntegrity;
+    case RxState::WaitForPayload:
+        m_rxState = RxState::CheckIntegrity;
         break;
     default:
         break;
@@ -85,7 +109,7 @@ void HostUart::rxCpltCallback() {
 }
 
 void HostUart::process() {
-    if (m_rxState == RxState::checkIntegrity) {
+    if (m_rxState == RxState::CheckIntegrity) {
         uint32_t calculatedCrc = m_crc.calculateCRC32(m_rxBuffer, m_rxLength);
         if (calculatedCrc == m_rxCrc) {
             m_logger.log(LogLevel::Info, "Received UART message of %d bytes", m_rxLength);
@@ -93,19 +117,15 @@ void HostUart::process() {
             m_logger.log(LogLevel::Warn, "Received UART message with incorrect CRC. Discarding.");
         }
 
-        m_rxState = RxState::waitForHeader;
+        m_rxState = RxState::WaitForHeader;
 
         if (xSemaphoreTake(m_uartSemaphore, (TickType_t)10) == pdTRUE) {
-            UartPhone_receiveDMA(m_rxHeader, HOS_UART_HEADER_LENGTH,
-                                 (void (*)(void*))(&phoneCommunication_C_rxCpltCallback),
-                                 (void*)this);
+            UartHost_receiveDMA(m_rxHeader, HOST_UART_HEADER_LENGTH,
+                                (void (*)(void*))(&hostUart_C_rxCpltCallback), (void*)this);
 
             xSemaphoreGive(m_uartSemaphore);
         }
     }
 }
 
-void HostUart::registerCallback() { return; }
-bool HostUart::isBusy() { return m_busy; }
-
-void HostUart::txCpltCallback() { m_busy = false; }
+bool HostUart::isBusy() { return m_txState != TxState::Idle; }

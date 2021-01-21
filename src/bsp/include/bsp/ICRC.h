@@ -7,6 +7,12 @@ class ICRC {
   public:
     virtual ~ICRC() = default;
 
+    /**
+     * @brief Calculates the CRC32 of a buffer
+     * @param data Pointer to the buffer
+     * @param length Length of buffer in bytes
+     * @return CRC32
+     */
     virtual uint32_t calculateCRC32(const void* data, uint32_t length) = 0;
 };
 

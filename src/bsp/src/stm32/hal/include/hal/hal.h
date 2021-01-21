@@ -15,7 +15,7 @@ void Hal_init();
 /**
  * @brief Calculates the 32bit CRC of the data
  * @param buffer Pointer to data
- * @param length Length of data
+ * @param length Length of data in bytes
  * @return CRC32
  */
 uint32_t Hal_calculateCRC32(const uint8_t* buffer, uint32_t length);

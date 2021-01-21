@@ -19,13 +19,14 @@ void Hal_init() {
     MX_USART3_UART_Init();
     MX_USART2_UART_Init();
 
-    __HAL_UART_ENABLE_IT(HUART_PHONE, UART_IT_IDLE);
+    __HAL_UART_ENABLE_IT(HUART_HOST, UART_IT_IDLE);
 
     /* Initialize UartPrint */
     UartPrint_init();
 }
 
 uint32_t Hal_calculateCRC32(const uint8_t* buffer, uint32_t length) {
+    // TODO: Determine what we do if we have a buffer that is not a multiple of 32 bytes
     // The HAL_CRC function takes the number of 32 bit words and not the number of bytes
     return HAL_CRC_Calculate(&hcrc, (uint32_t*)buffer, length >> 2);
 }
