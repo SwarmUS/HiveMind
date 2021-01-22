@@ -3,14 +3,18 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform")
 
 set(LIB_SOURCES
     src/BSP.cpp
-    src/UserInterface.cpp
     src/BSPContainer.cpp
+    src/UserInterface.cpp
     src/SocketContainer.cpp
+    src/HostUart.cpp
+    src/CRC.cpp
 )
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
     include/UserInterface.h
+    include/HostUart.h
+    include/CRC.h
 )
 
 

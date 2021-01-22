@@ -1,19 +1,32 @@
 #ifndef _BSPFACTORY_H
 #define _BSPFACTORY_H
 
+#include "ICRC.h"
 #include "bsp/IBSP.h"
+#include "bsp/IHostUart.h"
 #include "bsp/IUserInterface.h"
 
 namespace BSPContainer {
     /**
-     * @brief Return an instance of the platform dependent BSP.
+     * @brief Returns an instance of the platform dependent BSP.
      */
     IBSP& getBSP();
 
     /**
-     * @brief Return an instance of the platform dependent UserInterface.
+     * @brief Returns an instance of the platform dependent UserInterface.
      */
     IUserInterface& getUserInterface();
+
+    /**
+     * @brief Returns an instance of the Host UART driver.
+     */
+    IHostUart& getHostUart();
+
+    /**
+     * @brief Returns an instance of the CRC driver.
+     */
+    ICRC& getCRC();
+
 } // namespace BSPContainer
 
 #endif // _BSPFACTORY_H

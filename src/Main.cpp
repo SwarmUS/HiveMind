@@ -39,6 +39,10 @@ void printThreadExample(void* param) {
         logger.log(LogLevel::Info, "Hello world!");
         vTaskDelay(toggleDelay);
         bittybuzz.step();
+
+        IHostUart& hostUart = BSPContainer::getHostUart();
+        uint8_t bytes[] = {0x01, 0x02, 0x03, 0x04};
+        hostUart.send(bytes, 4);
     }
 }
 
@@ -48,7 +52,7 @@ int main(int argc, char** argv) {
     IBSP& bsp = BSPContainer::getBSP();
     bsp.initChip((void*)&cmdLineArgs);
 
-    xTaskCreate(printThreadExample, "print", configMINIMAL_STACK_SIZE * 4, NULL,
+    xTaskCreate(printThreadExample, "print", configMINIMAL_STACK_SIZE * 8, NULL,
                 tskIDLE_PRIORITY + 1, NULL);
 
     vTaskStartScheduler();
