@@ -23,7 +23,7 @@ class IHostUart {
      * @brief Checks if driver is already busy transmitting data.
      * @return True if in use. False otherwise
      */
-    virtual bool isBusy() = 0;
+    virtual bool isBusy() const = 0;
 
     // TODO: Method to register a callback so we can be notified when a message is received.
     // (Depending on which notification scheme we choose to use)

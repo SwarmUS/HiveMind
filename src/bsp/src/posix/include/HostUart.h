@@ -9,7 +9,7 @@ class HostUart : public IHostUart {
     ~HostUart() override = default;
 
     bool send(const uint8_t* buffer, uint16_t length) override;
-    bool isBusy() override;
+    bool isBusy() const override;
 };
 
 #endif //__HOSTUART_H__

@@ -14,7 +14,7 @@ class HostUart : public IHostUart {
     ~HostUart() override = default;
 
     bool send(const uint8_t* buffer, uint16_t length) override;
-    bool isBusy() override;
+    bool isBusy() const override;
 
     void process();
 
@@ -22,8 +22,8 @@ class HostUart : public IHostUart {
     friend void hostUart_C_rxCpltCallback(void* hostUartInstance);
 
   private:
-    enum RxState { Rx_Idle, Rx_WaitForHeader, Rx_WaitForPayload, Rx_CheckIntegrity };
-    enum TxState { Tx_Idle, Tx_SendHeader, Tx_SendPayload };
+    enum class RxState { Idle, WaitForHeader, WaitForPayload, CheckIntegrity };
+    enum class TxState { Idle, SendHeader, SendPayload };
 
     ICRC& m_crc;
     ILogger& m_logger;

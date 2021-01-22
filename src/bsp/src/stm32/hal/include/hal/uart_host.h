@@ -8,6 +8,12 @@ extern "C" {
 #endif
 
 /**
+ * @brief Typedef for pointer function used as callback for uart operation
+ * @param instance Pointer to the C++ class instance in which to call the function
+ */
+typedef void (*uartCallbackFct)(void* instance);
+
+/**
  * @brief Initiates a DMA transfer of the given buffer to the UART port
  * @param buffer Pointer to the buffer to transmit
  * @param length Number of bytes to transmit
@@ -18,7 +24,7 @@ extern "C" {
  */
 bool UartHost_transmitBuffer(const uint8_t* buffer,
                              uint16_t length,
-                             void (*cpltCallback)(void*),
+                             uartCallbackFct cpltCallback,
                              void* instance);
 
 /**
@@ -32,7 +38,7 @@ bool UartHost_transmitBuffer(const uint8_t* buffer,
  */
 bool UartHost_receiveDMA(const uint8_t* buffer,
                          uint16_t length,
-                         void (*cpltCallback)(void*),
+                         uartCallbackFct cpltCallback,
                          void* instance);
 
 /**

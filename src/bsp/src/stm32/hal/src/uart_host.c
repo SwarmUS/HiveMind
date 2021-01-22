@@ -1,13 +1,13 @@
 #include "hal/uart_host.h"
 
-void (*rxCpltCallbackFct)(void*) = NULL;
-void* rxCallbackInstance = NULL;
-void (*txCpltCallbackFct)(void*) = NULL;
-void* txCallbackInstance = NULL;
+static uartCallbackFct rxCpltCallbackFct = NULL;
+static uartCallbackFct txCpltCallbackFct = NULL;
+static void* rxCallbackInstance = NULL;
+static void* txCallbackInstance = NULL;
 
 bool UartHost_transmitBuffer(const uint8_t* buffer,
                              uint16_t length,
-                             void (*cpltCallback)(void*),
+                             uartCallbackFct cpltCallback,
                              void* instance) {
     bool ret = true;
 
@@ -26,7 +26,7 @@ bool UartHost_transmitBuffer(const uint8_t* buffer,
 
 bool UartHost_receiveDMA(const uint8_t* buffer,
                          uint16_t length,
-                         void (*cpltCallback)(void*),
+                         uartCallbackFct cpltCallback,
                          void* instance) {
     bool ret = true;
 
