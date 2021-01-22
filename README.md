@@ -22,7 +22,7 @@ The HiveMind is the embedded application that runs on SwarmUS HiveBoard and uses
 
 ## Building
 Before building any target other than for the embedded target, the ROS environment variables need to be sourced by running the command 
-or adding them to `.bashrc` otherwise the build will fail.
+or adding them to `.bashrc` otherwise the ROS build will fail.
 ```
 source /opt/ros/noetic/setup.bash
 ```
@@ -39,11 +39,19 @@ make
 
 ### Development
 If you want all the warnings used by the team, use this command for cmake build generation
+
 ```
 cmake -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_CLANG_TIDY_CHECK=ON -DENABLE_TESTS=ON -DCMAKE_BUILD_TYPE=Debug ..
 
 ```
 
+or using catkin
+
+```
+cd catkin_ws
+catkin_make -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_CLANG_TIDY_CHECK=ON -DENABLE_TESTS=ON -DCMAKE_BUILD_TYPE=Debug ..
+
+```
 
 If you want to build for the embedded target, use the toolchain on your cmake build.
 
@@ -52,6 +60,15 @@ cmake -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=../cmake/stm32_f429zi_gc
 ```
 
 Note that as of now, the tests can only be built on the native target.
+
+## Running 
+You can run the ROS build using this command
+
+```
+roslaunch hive_mind hive_mind.launch
+```
+
+you can edit, or create a new launch file, to change the parameters
 
 ## Flashing
 

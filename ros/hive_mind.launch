@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+    <!-- Generic launch file for a hivemind node -->
+    <!-- Template to be used for further more complexed setups -->
+    <launch>
+        <!-- Simple node -->
+        <node name="hive_mind" pkg="hive_mind" type="hive_mind"  output="screen" >
+            <param name="host_tcp_address" value="127.0.0.1" />
+            <param name="host_tcp_port" value="5555" />
+        </node>
+</launch>
