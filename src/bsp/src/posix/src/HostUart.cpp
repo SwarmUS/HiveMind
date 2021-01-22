@@ -7,4 +7,4 @@ bool HostUart::send(const uint8_t* buffer, uint16_t length) {
     return true;
 }
 
-bool HostUart::isBusy() { return false; }
+bool HostUart::isBusy() const { return false; }

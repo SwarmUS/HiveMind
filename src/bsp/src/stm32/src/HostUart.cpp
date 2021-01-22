@@ -51,11 +51,11 @@ bool HostUart::send(const uint8_t* buffer, uint16_t length) {
     m_txBuffer = buffer;
 
     uint32_t crc = m_crc.calculateCRC32(buffer, length);
-    *(uint16_t*)m_txHeader = length;
-    *(uint32_t*)(m_txHeader + sizeof(length)) = crc;
+    *(uint16_t*)m_txHeader.data() = length;
+    *(uint32_t*)(m_txHeader.data() + sizeof(length)) = crc;
 
     if (xSemaphoreTake(m_uartSemaphore, (TickType_t)10) == pdTRUE) {
-        ret = UartHost_transmitBuffer(m_txHeader, HOST_UART_HEADER_LENGTH,
+        ret = UartHost_transmitBuffer(m_txHeader.data(), m_txHeader.size(),
                                       (uartCallbackFct)(&hostUart_C_txCpltCallback), (void*)this);
 
         xSemaphoreGive(m_uartSemaphore);
@@ -72,7 +72,7 @@ bool HostUart::send(const uint8_t* buffer, uint16_t length) {
 
 void HostUart::startHeaderListen() {
     if (xSemaphoreTake(m_uartSemaphore, (TickType_t)10) == pdTRUE) {
-        UartHost_receiveDMA(m_rxHeader, HOST_UART_HEADER_LENGTH,
+        UartHost_receiveDMA(m_rxHeader.data(), m_rxHeader.size(),
                             (uartCallbackFct)(&hostUart_C_rxCpltCallback), (void*)this);
 
         m_rxState = RxState::WaitForHeader;
@@ -105,11 +105,11 @@ void HostUart::txCpltCallback() {
 void HostUart::rxCpltCallback() {
     switch (m_rxState) {
     case RxState::WaitForHeader:
-        m_rxLength = *(uint16_t*)m_rxHeader;
-        m_rxCrc = *(uint32_t*)(m_rxHeader + sizeof(m_rxLength));
+        m_rxLength = *(uint16_t*)m_rxHeader.data();
+        m_rxCrc = *(uint32_t*)(m_rxHeader.data() + sizeof(m_rxLength));
         m_rxState = RxState::WaitForPayload;
-        UartHost_receiveDMA(m_rxBuffer, m_rxLength, (uartCallbackFct)(&hostUart_C_rxCpltCallback),
-                            (void*)this);
+        UartHost_receiveDMA(m_rxBuffer.data(), m_rxLength,
+                            (uartCallbackFct)(&hostUart_C_rxCpltCallback), (void*)this);
         break;
 
     case RxState::WaitForPayload:
@@ -122,7 +122,7 @@ void HostUart::rxCpltCallback() {
 
 void HostUart::process() {
     if (m_rxState == RxState::CheckIntegrity) {
-        uint32_t calculatedCrc = m_crc.calculateCRC32(m_rxBuffer, m_rxLength);
+        uint32_t calculatedCrc = m_crc.calculateCRC32(m_rxBuffer.data(), m_rxLength);
         if (calculatedCrc == m_rxCrc) {
             m_logger.log(LogLevel::Debug, "Received UART message of %d bytes", m_rxLength);
         } else {
