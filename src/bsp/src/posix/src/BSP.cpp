@@ -2,6 +2,7 @@
 #include "ros/ros.h"
 #include <FreeRTOS.h>
 #include <FreeRTOSConfig.h>
+#include <TCPUartMock.h>
 #include <bsp/BSPContainer.h>
 #include <hive_mind/ExampleMessage.h>
 #include <sstream>
@@ -22,6 +23,9 @@ void rosWatcher(void* param) {
         ros::spinOnce();
         vTaskDelay(loopRate);
     }
+
+    TCPUartMock& uartMock = static_cast<TCPUartMock&>(BSPContainer::getHostUart());
+    uartMock.close();
 
     vTaskEndScheduler();
 }
@@ -50,7 +54,11 @@ void BSP::initChip(void* args) {
 
     m_rosNodeHandle = std::shared_ptr<ros::NodeHandle>(new ros::NodeHandle("~"));
 
-    xTaskCreate(rosWatcher, "ros_watch", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1,
+    TCPUartMock& tcpUart = static_cast<TCPUartMock&>(BSPContainer::getHostUart());
+    int port = m_rosNodeHandle->param("uart_mock_port", 0);
+    tcpUart.openSocket(port);
+
+    xTaskCreate(rosWatcher, "ros_watch", configMINIMAL_STACK_SIZE * 2, NULL, tskIDLE_PRIORITY + 1,
                 NULL);
 
     xTaskCreate(exampleTopicPublish, "example_topic_publish", configMINIMAL_STACK_SIZE,

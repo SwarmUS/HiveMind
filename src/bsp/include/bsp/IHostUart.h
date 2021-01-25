@@ -20,6 +20,14 @@ class IHostUart {
     virtual bool send(const uint8_t* buffer, uint16_t length) = 0;
 
     /**
+     * @brief Receives up to an amount of data from the UART port
+     * @param buffer Pointer to the buffer in which to put the received data
+     * @param length Maximum length of data to receive
+     * @return Number of bytes received or -1 in case of an error
+     */
+    virtual int32_t receive(uint8_t* buffer, uint16_t length) const = 0;
+
+    /**
      * @brief Checks if driver is already busy transmitting data.
      * @return True if in use. False otherwise
      */

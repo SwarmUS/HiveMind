@@ -1,7 +1,8 @@
 #include "bsp/BSPContainer.h"
 #include "BSP.h"
-#include "HostUart.h"
+#include "TCPUartMock.h"
 #include "UserInterface.h"
+#include "logger/LoggerContainer.h"
 
 IBSP& BSPContainer::getBSP() {
     static BSP s_bsp;
@@ -15,6 +16,6 @@ IUserInterface& BSPContainer::getUserInterface() {
 }
 
 IHostUart& BSPContainer::getHostUart() {
-    static HostUart s_hostUart(12345);
+    static TCPUartMock s_hostUart(LoggerContainer::getLogger());
     return s_hostUart;
 }

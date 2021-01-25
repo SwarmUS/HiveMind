@@ -17,7 +17,7 @@ IUserInterface& BSPContainer::getUserInterface() {
 }
 
 IHostUart& BSPContainer::getHostUart() {
-    static HostUart s_hostUart(getCRC(), LoggerContainer::getLogger());
+    static TCPUartMock s_hostUart(getCRC(), LoggerContainer::getLogger());
 
     return s_hostUart;
 }
