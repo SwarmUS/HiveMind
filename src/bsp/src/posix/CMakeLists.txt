@@ -19,7 +19,7 @@ set(LIB_PRIVATE_HEADERS
     include/SocketFactory.h
     include/TCPClient.h
     include/HostUart.h
-        src/HostUart.cpp)
+        src/HostUart.cpp include/TCPServerMonitor.h src/TCPServerMonitor.cpp)
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_PRIVATE_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})

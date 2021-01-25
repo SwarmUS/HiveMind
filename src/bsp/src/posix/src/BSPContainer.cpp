@@ -15,6 +15,6 @@ IUserInterface& BSPContainer::getUserInterface() {
 }
 
 IHostUart& BSPContainer::getHostUart() {
-    static HostUart s_hostUart;
+    static HostUart s_hostUart(12345);
     return s_hostUart;
 }
