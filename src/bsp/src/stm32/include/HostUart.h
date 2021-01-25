@@ -1,4 +1,4 @@
-#ifndef __TCPUARTMOCK_H__
+#ifndef __HOSTUART_H__
 #define __HOSTUART_H__
 
 #include "bsp/ICRC.h"
@@ -48,4 +48,4 @@ class HostUart : public IHostUart {
     void rxCpltCallback();
 };
 
-#endif //__TCPUARTMOCK_H__
+#endif //__HOSTUART_H__

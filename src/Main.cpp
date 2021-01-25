@@ -41,7 +41,6 @@ void printThreadExample(void* param) {
         bittybuzz.step();
 
         IHostUart& hostUart = BSPContainer::getHostUart();
-        // uint8_t bytes[] = {0x01, 0x02, 0x03, 0x04};
         hostUart.send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORLD"));
     }
 }
