@@ -70,7 +70,10 @@ bool HostUart::send(const uint8_t* buffer, uint16_t length) {
     return ret;
 }
 
-int32_t HostUart::receive(uint8_t* buffer, uint16_t length) const { return 0; }
+int32_t HostUart::receive(uint8_t* buffer, uint16_t length) const {
+    // TODO: Implement
+    return 0;
+}
 
 void HostUart::startHeaderListen() {
     if (xSemaphoreTake(m_uartSemaphore, (TickType_t)10) == pdTRUE) {

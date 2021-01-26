@@ -24,9 +24,6 @@ void rosWatcher(void* param) {
         vTaskDelay(loopRate);
     }
 
-    TCPUartMock& uartMock = static_cast<TCPUartMock&>(BSPContainer::getHostUart());
-    uartMock.close();
-
     vTaskEndScheduler();
 }
 

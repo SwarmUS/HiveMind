@@ -1,16 +1,14 @@
 #include "TCPUartMock.h"
 #include "BSPUtils.h"
-#include <BSP.h>
 #include <FreeRTOS.h>
 #include <FreeRTOSConfig.h>
-#include <bsp/BSPContainer.h>
 #include <cstring>
 #include <ros/ros.h>
 #include <task.h>
 
 void TCPUartMock_listenTask(void* param) { static_cast<TCPUartMock*>(param)->waitForClient(); }
 
-TCPUartMock::TCPUartMock(ILogger& logger) : m_logger(logger), m_hasClient(false), m_port(0) {}
+TCPUartMock::TCPUartMock(ILogger& logger) : m_logger(logger), m_port(0) {}
 
 TCPUartMock::~TCPUartMock() { close(); }
 
@@ -48,19 +46,19 @@ void TCPUartMock::openSocket(int port) {
 }
 
 bool TCPUartMock::send(const uint8_t* buffer, uint16_t length) {
-    if (!m_hasClient) {
+    if (!m_clientFd) {
         return false;
     }
 
-    return ::send(m_clientFd, buffer, length, 0) >= 0;
+    return ::send(m_clientFd.value(), buffer, length, 0) == (int)length;
 }
 
 int32_t TCPUartMock::receive(uint8_t* buffer, uint16_t length) const {
-    if (!m_hasClient) {
+    if (!m_clientFd) {
         return -1;
     }
 
-    int32_t ret = ::recv(m_clientFd, buffer, length, 0);
+    int32_t ret = ::recv(m_clientFd.value(), buffer, length, 0);
     if (ret == 0) {
         // TODO: If we ever want to handle client reconnection in the simulation, do it here
         m_logger.log(LogLevel::Warn,
@@ -73,8 +71,8 @@ int32_t TCPUartMock::receive(uint8_t* buffer, uint16_t length) const {
 bool TCPUartMock::isBusy() const { return false; }
 
 void TCPUartMock::close() const {
-    if (m_hasClient) {
-        ::close(m_clientFd);
+    if (m_clientFd) {
+        ::close(m_clientFd.value());
     }
 
     if (m_serverFd) {
@@ -96,6 +94,5 @@ void TCPUartMock::waitForClient() {
         m_logger.log(LogLevel::Error, "TCP UART mock: Client acceptation failed");
     } else {
         m_logger.log(LogLevel::Info, "TCP UART mock: Client connected");
-        m_hasClient = true;
     }
 }

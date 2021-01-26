@@ -4,6 +4,7 @@
 #include "bsp/IHostUart.h"
 #include <logger/ILogger.h>
 #include <netinet/in.h>
+#include <optional>
 #include <sys/socket.h>
 
 class TCPUartMock : public IHostUart {
@@ -22,8 +23,9 @@ class TCPUartMock : public IHostUart {
 
   private:
     ILogger& m_logger;
-    bool m_hasClient;
-    int m_serverFd{}, m_clientFd{}, m_port;
+
+    int m_serverFd{}, m_port;
+    std::optional<int> m_clientFd;
     int m_addressLength{};
     struct sockaddr_in m_address {};
 
