@@ -70,6 +70,11 @@ bool HostUart::send(const uint8_t* buffer, uint16_t length) {
     return ret;
 }
 
+int32_t HostUart::receive(uint8_t* buffer, uint16_t length) const {
+    // TODO: Implement
+    return 0;
+}
+
 void HostUart::startHeaderListen() {
     if (xSemaphoreTake(m_uartSemaphore, (TickType_t)10) == pdTRUE) {
         UartHost_receiveDMA(m_rxHeader.data(), m_rxHeader.size(),

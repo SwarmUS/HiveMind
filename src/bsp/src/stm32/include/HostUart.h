@@ -15,6 +15,7 @@ class HostUart : public IHostUart {
     ~HostUart() override = default;
 
     bool send(const uint8_t* buffer, uint16_t length) override;
+    int32_t receive(uint8_t* buffer, uint16_t length) const override;
     bool isBusy() const override;
 
     void process();
@@ -31,14 +32,11 @@ class HostUart : public IHostUart {
 
     TxState m_txState;
     uint8_t m_txLength;
-    // uint8_t m_txHeader[HOST_UART_HEADER_LENGTH];
     std::array<uint8_t, HOST_UART_HEADER_LENGTH> m_txHeader;
     const uint8_t* m_txBuffer;
 
     std::array<uint8_t, HOST_UART_MAX_MESSAGE_LENGTH> m_rxBuffer;
     std::array<uint8_t, HOST_UART_HEADER_LENGTH> m_rxHeader;
-    // uint8_t m_rxBuffer[HOST_UART_MAX_MESSAGE_LENGTH];
-    // uint8_t m_rxHeader[HOST_UART_HEADER_LENGTH];
     uint16_t m_rxLength;
     uint32_t m_rxCrc;
     RxState m_rxState;

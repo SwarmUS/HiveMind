@@ -10,7 +10,8 @@ set(LIB_SOURCES
     src/TCPClient.cpp
     src/SocketContainer.cpp
     src/SocketFactory.cpp
-
+    src/BSPUtils.cpp
+    src/TCPUartMock.cpp
 )
 
 set(LIB_PRIVATE_HEADERS
@@ -18,8 +19,8 @@ set(LIB_PRIVATE_HEADERS
     include/UserInterface.h
     include/SocketFactory.h
     include/TCPClient.h
-    include/HostUart.h
-        src/HostUart.cpp)
+    include/TCPUartMock.h
+    include/BSPUtils.h )
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_PRIVATE_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})

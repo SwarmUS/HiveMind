@@ -19,6 +19,8 @@ jobs:
         run: |
           cd catkin_ws
           . /opt/ros/$ROS_DISTRO/setup.sh
+          rosdep update
+          rosdep install --from-paths src --ignore-src -r -y
           catkin_make -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_CLANG_TIDY_CHECK=ON -DENABLE_TESTS=ON
       # Tests, check-format and doc are run on native build
       - name: tests
