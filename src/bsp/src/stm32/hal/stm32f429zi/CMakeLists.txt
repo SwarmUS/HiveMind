@@ -42,6 +42,9 @@ find_package(HAL COMPONENTS
             STM32F429ZI
             REQUIRED)
 
+find_package(CMSIS_RTOS COMPONENTS
+            STM32F429ZI
+            REQUIRED)
 
 # Creating the interface library
 add_library(stm32f429zi-linker INTERFACE)
@@ -86,6 +89,8 @@ target_link_libraries(${LIB_NAME}
         HAL::STM32::F4::CORTEX
         STM32::NoSys
         SwarmUS::HiveMind::BSP::Common
+        CMSIS::STM32::F4::RTOS_V2
+        SwarmUS::HiveMind::FreeRTOS
    
     PRIVATE
         stm32f429zi-linker
