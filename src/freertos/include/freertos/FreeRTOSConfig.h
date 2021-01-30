@@ -44,11 +44,17 @@
 
 #include <freertos_platform_config.h>
 
+/*
+ * The CMSIS-RTOS V2 FreeRTOS wrapper is dependent on the heap implementation used
+ * by the application thus the correct define need to be enabled below (only used if heap 1 or 5)
+ */
+#define USE_FreeRTOS_HEAP_3
+
 #define configUSE_PREEMPTION 1
 #define configUSE_IDLE_HOOK 1
 #define configUSE_TICK_HOOK 1
-#define configMAX_PRIORITIES (5)
-#define configMINIMAL_STACK_SIZE ((unsigned short)130)
+#define configMAX_PRIORITIES (56)
+#define configMINIMAL_STACK_SIZE ((unsigned short)128)
 #define configTOTAL_HEAP_SIZE ((size_t)(8 * 1024)) // Using heap3 so it's ingored anyway2
 #define configMAX_TASK_NAME_LEN (10)
 #define configUSE_TRACE_FACILITY 1
@@ -62,6 +68,7 @@
 #define configUSE_APPLICATION_TASK_TAG 0
 #define configUSE_COUNTING_SEMAPHORES 1
 #define configGENERATE_RUN_TIME_STATS 0
+#define configSUPPORT_STATIC_ALLOCATION 1
 
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES 0

@@ -57,6 +57,13 @@ foreach(COMP ${CMSIS_RTOS_FIND_COMPONENTS})
     )
     list(APPEND CMSIS_RTOS_INCLUDE_DIRS ${CMSIS_${FAMILY}${CORE_U}_CMSIS_RTOS2_PATH})
 
+    # For some reason, cmsis_os2.c uses signed char* for vApplicationStackOverflowHook() while FreeRTOS uses char*
+    # This causes compilation to fail, when using a c++ compiler. This changes this signature before compiling to ensure
+    # everything works.
+    file(READ "${CMSIS_${FAMILY}${CORE_U}_CMSIS_RTOS2_PATH}/cmsis_os2.c" INPUT_TEXT)
+    string(REPLACE "signed char" "char" INPUT_TEXT "${INPUT_TEXT}")
+    file(WRITE "${CMSIS_${FAMILY}${CORE_U}_CMSIS_RTOS2_PATH}/cmsis_os2.c" "${INPUT_TEXT}")
+
     if(NOT (TARGET CMSIS::STM32::${FAMILY}${CORE_C}::RTOS_V2))
         add_library(CMSIS::STM32::${FAMILY}${CORE_C}::RTOS_V2 INTERFACE IMPORTED)
         target_include_directories(CMSIS::STM32::${FAMILY}${CORE_C}::RTOS_V2 INTERFACE "${CMSIS_${FAMILY}${CORE_U}_CMSIS_RTOS2_PATH}")
