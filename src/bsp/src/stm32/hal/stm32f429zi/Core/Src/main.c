@@ -23,6 +23,7 @@
 #include "crc.h"
 #include "dma.h"
 #include "gpio.h"
+#include "lwip.h"
 #include "usart.h"
 
 /* Private includes ----------------------------------------------------------*/

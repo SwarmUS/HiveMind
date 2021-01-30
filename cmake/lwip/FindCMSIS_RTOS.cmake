@@ -70,8 +70,6 @@ foreach(COMP ${CMSIS_RTOS_FIND_COMPONENTS})
         target_sources(CMSIS::STM32::${FAMILY}${CORE_C}::RTOS_V2 INTERFACE "${CMSIS_${FAMILY}${CORE_U}_CMSIS_RTOS2_PATH}/cmsis_os2.c")
     endif()
     set(CMSIS_RTOS_${COMP}_FOUND true)
-
-    message("CMSIS::STM32::${FAMILY}${CORE_C}::RTOS_V2")
 endforeach()
 
 include(FindPackageHandleStandardArgs)

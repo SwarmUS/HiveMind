@@ -1,6 +1,7 @@
 #include "hal/hal.h"
 #include "hal/uart_print.h"
 #include "hivemind_hal.h"
+#include "lwip.h"
 
 void Hal_init() {
 
@@ -21,6 +22,8 @@ void Hal_init() {
 
     /* Initialize UartPrint */
     UartPrint_init();
+
+    MX_LWIP_Init();
 }
 
 uint32_t Hal_calculateCRC32(const uint8_t* buffer, uint32_t length) {
