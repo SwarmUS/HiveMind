@@ -82,6 +82,7 @@ target_link_libraries(stm32f429zi-linker
         STM32::NoSys
         CMSIS::STM32::F4::LWIP
         CMSIS::STM32::F4::RTOS_V2
+        SwarmUS::HiveMind::FreeRTOS
         )
 
 # Actual bsp library
@@ -111,8 +112,6 @@ target_link_libraries(${LIB_NAME}
         HAL::STM32::F4::CORTEX
         STM32::NoSys
         SwarmUS::HiveMind::BSP::Common
-
-        SwarmUS::HiveMind::FreeRTOS
 
     PRIVATE
         stm32f429zi-linker

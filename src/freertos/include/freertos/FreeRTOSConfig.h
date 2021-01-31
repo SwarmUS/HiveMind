@@ -44,12 +44,6 @@
 
 #include <freertos_platform_config.h>
 
-/*
- * The CMSIS-RTOS V2 FreeRTOS wrapper is dependent on the heap implementation used
- * by the application thus the correct define need to be enabled below (only used if heap 1 or 5)
- */
-#define USE_FreeRTOS_HEAP_3
-
 #define configUSE_PREEMPTION 1
 #define configUSE_IDLE_HOOK 1
 #define configUSE_TICK_HOOK 1
