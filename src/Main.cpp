@@ -10,10 +10,12 @@
 #include <bsp/IBSP.h>
 #include <bsp/SocketContainer.h>
 #include <cstdlib>
+#include <hivemind-host/FunctionCallRequestDTO.h>
 #include <logger/Logger.h>
 #include <logger/LoggerContainer.h>
 
 void printThreadExample(void* param) {
+    auto test = FunctionCallArgumentDTO();
     (void)param;
     const int toggleDelay = 2000;
 
