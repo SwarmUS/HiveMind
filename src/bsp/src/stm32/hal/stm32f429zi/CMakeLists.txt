@@ -21,6 +21,10 @@ set(LIB_HEADERS
     Core/Inc/gpio.h
     Core/Inc/dma.h
     Core/Inc/crc.h
+
+    LWIP/App/lwip.h
+    LWIP/Target/ethernetif.h
+    LWIP/Target/lwipopts.h
 )
 
 # Sources that needs to be global on the project
@@ -28,6 +32,9 @@ set(LIB_HEADERS
 set(GLOBAL_SOURCES
     Core/Src/stm32f4xx_it.c
     Core/Src/stm32f4xx_hal_timebase_tim.c
+
+    LWIP/Target/ethernetif.c
+    LWIP/App/lwip.c
 )
 
 stm32_fetch_cmsis(F4)
@@ -42,6 +49,13 @@ find_package(HAL COMPONENTS
             STM32F429ZI
             REQUIRED)
 
+find_package(CMSIS_RTOS COMPONENTS
+            STM32F429ZI
+            REQUIRED)
+
+find_package(LWIP COMPONENTS
+            STM32F429ZI
+            REQUIRED)
 
 # Creating the interface library
 add_library(stm32f429zi-linker INTERFACE)
@@ -55,6 +69,8 @@ target_sources(stm32f429zi-linker
 target_include_directories(stm32f429zi-linker
     INTERFACE
         Core/Inc
+        LWIP/App
+        LWIP/Target
 )
 
 target_link_libraries(stm32f429zi-linker
@@ -63,7 +79,11 @@ target_link_libraries(stm32f429zi-linker
         HAL::STM32::F4
         HAL::STM32::F4::TIM
         HAL::STM32::F4::TIMEx
-        STM32::NoSys)
+        STM32::NoSys
+        CMSIS::STM32::F4::LWIP
+        CMSIS::STM32::F4::RTOS_V2
+        SwarmUS::HiveMind::FreeRTOS
+        )
 
 # Actual bsp library
 add_library(${LIB_NAME} 
@@ -78,6 +98,12 @@ target_include_directories(${LIB_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         Core/Inc
+
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        LWIP/App
+
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        LWIP/Target
 )
 
 target_link_libraries(${LIB_NAME}
@@ -86,7 +112,7 @@ target_link_libraries(${LIB_NAME}
         HAL::STM32::F4::CORTEX
         STM32::NoSys
         SwarmUS::HiveMind::BSP::Common
-   
+
     PRIVATE
         stm32f429zi-linker
 
@@ -96,6 +122,7 @@ target_link_libraries(${LIB_NAME}
         HAL::STM32::F4::UART
         HAL::STM32::F4::DMA
         HAL::STM32::F4::CRC
+        HAL::STM32::F4::ETH
 )
 
 # Removing warnings and compile options

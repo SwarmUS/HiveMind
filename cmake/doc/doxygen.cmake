@@ -27,7 +27,8 @@ if (DOXYGEN_FOUND)
     set(DOXYGEN_DOT_TRANSPARENT YES)
     set(DOXYGEN_EXCLUDE_PATTERNS
         "*/tests/*"
-        "*/hal/*/Core/*")
+        "*/hal/*/Core/*"
+        "*/hal/*/LWIP/*")
 
     if (${COMPILE_STM32_F429ZI})
         LIST(APPEND DOXYGEN_EXCLUDE_PATTERNS "*/posix/*")

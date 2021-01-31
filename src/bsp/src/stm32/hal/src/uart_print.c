@@ -2,7 +2,7 @@
 
 #include "hal/uart_print.h"
 
-#define CBUFF_HUART3_DATA_SIZE 128
+#define CBUFF_HUART3_DATA_SIZE 2048
 
 CircularBuff cbuffUartPrint;
 uint16_t lastUartPrintTransferSize = 0;
