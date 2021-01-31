@@ -7,7 +7,7 @@ set(PROJECT_SOURCES
     Main.cpp
 )
 
-pheromones_fetch_populate()
+propolis_fetch_populate()
 
 add_executable(${EXECUTABLE_NAME} ${PROJECT_SOURCES})
 target_link_libraries(${EXECUTABLE_NAME}
@@ -18,8 +18,8 @@ target_link_libraries(${EXECUTABLE_NAME}
       SwarmUS::HiveMind::Logger
       SwarmUS::HiveMind::BittyBuzz
 
-      # Remove
-      SwarmUS::Pheromones::Example
+      # remove
+      SwarmUS::Propolis::Pheromones::HiveMind::Host
 )
 
 add_subdirectory(bittybuzz)

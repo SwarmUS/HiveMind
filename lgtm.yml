@@ -9,7 +9,7 @@ extraction:
   cpp:
     prepare:
       packages:
-        # Pheromones deps
+        # Propolis deps
         - protobuf-compiler
         - python3-protobuf
 
