@@ -37,7 +37,7 @@ uint16_t CircularBuff_getLength(const CircularBuff* circularBuff) {
         return circularBuff->m_size;
     }
 
-    if (circularBuff->m_readPos > circularBuff->m_writePos){
+    if (circularBuff->m_readPos > circularBuff->m_writePos) {
         return circularBuff->m_size - (circularBuff->m_readPos - circularBuff->m_writePos);
     }
     return circularBuff->m_writePos - circularBuff->m_readPos;

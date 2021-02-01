@@ -14,7 +14,8 @@ void BittyBuzzUserFunctions::logString() {
     bbzobj_t* bbzString = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
 
     if (bbztype_isstring(*bbzString) != 1) {
-        BittyBuzzSystem::g_logger->log(LogLevel::Warn, "BittyBuzz: Wrong argument type to logString");
+        BittyBuzzSystem::g_logger->log(LogLevel::Warn,
+                                       "BittyBuzz: Wrong argument type to logString");
     }
 
     std::optional<const char*> optionString =
