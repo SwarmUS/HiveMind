@@ -40,7 +40,7 @@ endif()
 # Includes
 include(ros/generators.cmake)
 include(catkin/common)
-include(pheromones/common)
+include(propolis/common)
 include(clang-tools/clang-tidy)
 include(clang-tools/clang-format)
 include(doc/doxygen)
