@@ -10,32 +10,36 @@ find_package(LWIP COMPONENTS
         REQUIRED)
 
 add_library(${LIB_NAME} STATIC)
-
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
 target_include_directories(${LIB_NAME}
-    PUBLIC
+    SYSTEM PUBLIC
         Target
-    PRIVATE
+
+    SYSTEM PRIVATE
         ../Core/Inc
-    )
+
+    SYSTEM PUBLIC
+        $<INSTALL_INTERFACE:include>
+        ${lwip_INC}/
+)
 
 target_link_libraries(${LIB_NAME}
-    PUBLIC
-        CMSIS::STM32::F4::LWIP
-        CMSIS::STM32::F4::LWIP::IPV4
-        CMSIS::STM32::F4::RTOS_V2
-        SwarmUS::HiveMind::FreeRTOS
-
     PRIVATE
         CMSIS::STM32::F429ZI
         HAL::STM32::F4
         HAL::STM32::F4::ETH
+
+        CMSIS::STM32::F4::RTOS_V2
+        CMSIS::STM32::F4::LWIP
+        CMSIS::STM32::F4::LWIP::IPV4
+        SwarmUS::HiveMind::HAL::Linker::STM32F4
+        SwarmUS::HiveMind::BSP::Common
     )
 
 if (ENABLE_TARGET_IPERF_SERVER)
     target_link_libraries(${LIB_NAME}
-        PUBLIC
+        PRIVATE
             CMSIS::STM32::F4::LWIP::IPERF
     )
 endif()

@@ -120,9 +120,9 @@ void MX_LWIP_Init(void) {
     attributes.stack_size = INTERFACE_THREAD_STACK_SIZE;
     attributes.priority = osPriorityBelowNormal;
     osThreadNew(ethernetif_set_link, &link_arg, &attributes);
-    /* USER CODE END OS_THREAD_NEW_CMSIS_RTOS_V2 */
+/* USER CODE END OS_THREAD_NEW_CMSIS_RTOS_V2 */
 
-    /* USER CODE BEGIN 3 */
+/* USER CODE BEGIN 3 */
 #ifdef IPERF_SERVER
     lwiperf_start_tcp_server_default(NULL, NULL);
 #endif

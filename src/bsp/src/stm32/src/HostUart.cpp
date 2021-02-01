@@ -71,6 +71,8 @@ bool HostUart::send(const uint8_t* buffer, uint16_t length) {
 }
 
 int32_t HostUart::receive(uint8_t* buffer, uint16_t length) const {
+    (void)buffer;
+    (void)length;
     // TODO: Implement
     return 0;
 }

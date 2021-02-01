@@ -11,6 +11,7 @@ set(LIB_SOURCES
     Core/Src/dma.c
     Core/Src/crc.c
     LWIP/App/lwip.c
+    LWIP/Target/ethernetif.c
 )
 
 set(LIB_HEADERS
@@ -30,7 +31,6 @@ set(LIB_HEADERS
 set(GLOBAL_SOURCES
     Core/Src/stm32f4xx_it.c
     Core/Src/stm32f4xx_hal_timebase_tim.c
-    LWIP/Target/ethernetif.c
 )
 
 stm32_fetch_cmsis(F4)
@@ -69,6 +69,7 @@ target_link_libraries(stm32f429zi-linker
         HAL::STM32::F4::TIMEx
         STM32::NoSys
         SwarmUS::HiveMind::LWIP
+        CMSIS::STM32::F4::RTOS_V2
         )
 
 # Actual bsp library
@@ -106,6 +107,7 @@ target_link_libraries(${LIB_NAME}
         HAL::STM32::F4::DMA
         HAL::STM32::F4::CRC
         SwarmUS::HiveMind::LWIP
+        CMSIS::STM32::F4::RTOS_V2
 )
 
 add_subdirectory(LWIP)

@@ -64,11 +64,28 @@ foreach(COMP ${CMSIS_RTOS_FIND_COMPONENTS})
     string(REPLACE "signed char" "char" INPUT_TEXT "${INPUT_TEXT}")
     file(WRITE "${CMSIS_${FAMILY}${CORE_U}_CMSIS_RTOS2_PATH}/cmsis_os2.c" "${INPUT_TEXT}")
 
+    set(LIB_NAME_RTOS "cmsis_stm32_${FAMILY}${CORE_U}_rtos_v2")
+    set(LIB_ALIAS_RTOS "CMSIS::STM32::${FAMILY}${CORE_C}::RTOS_V2")
+
     if(NOT (TARGET CMSIS::STM32::${FAMILY}${CORE_C}::RTOS_V2))
-        add_library(CMSIS::STM32::${FAMILY}${CORE_C}::RTOS_V2 INTERFACE IMPORTED)
-        target_include_directories(CMSIS::STM32::${FAMILY}${CORE_C}::RTOS_V2 INTERFACE "${CMSIS_${FAMILY}${CORE_U}_CMSIS_RTOS2_PATH}")
-        target_sources(CMSIS::STM32::${FAMILY}${CORE_C}::RTOS_V2 INTERFACE "${CMSIS_${FAMILY}${CORE_U}_CMSIS_RTOS2_PATH}/cmsis_os2.c")
+        add_library(${LIB_NAME_RTOS} STATIC "${CMSIS_${FAMILY}${CORE_U}_CMSIS_RTOS2_PATH}/cmsis_os2.c")
+        add_library(${LIB_ALIAS_RTOS} ALIAS ${LIB_NAME_RTOS})
+
+        target_include_directories(${LIB_NAME_RTOS} SYSTEM PUBLIC "${CMSIS_${FAMILY}${CORE_U}_CMSIS_RTOS2_PATH}")
+        target_link_libraries(${LIB_NAME_RTOS}
+            PUBLIC
+                SwarmUS::HiveMind::FreeRTOS
+            PRIVATE
+                CMSIS::STM32::F429ZI
+            )
     endif()
+
+    if (DISABLE_EXTERNAL_WARNINGS)
+        target_compile_options(${LIB_NAME_RTOS} PRIVATE -w)
+        set_target_properties(${LIB_NAME_RTOS} PROPERTIES CXX_CLANG_TIDY "" )
+        set_target_properties(${LIB_NAME_RTOS} PROPERTIES C_CLANG_TIDY "" )
+    endif()
+
     set(CMSIS_RTOS_${COMP}_FOUND true)
 endforeach()
 
