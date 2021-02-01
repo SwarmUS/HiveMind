@@ -1,6 +1,6 @@
 ---
-Checks:          'clang-analyzer-*,modernize-*,bigprone-*,readability-*,portability-*,performance-*,-modernize-avoid-c-arrays,-modernize-use-nullptr,-modernize-use-trailing-return-type'
-WarningsAsErrors: 'clang-analyzer-*,modernize-*,bigprone-*,readability-*,portability-*,performance-*,-modernize-avoid-c-arrays,-modernize-use-nullptr,-modernize-use-trailing-return-type'
+Checks:          'clang-analyzer-*,modernize-*,bigprone-*,readability-*,portability-*,performance-*,-modernize-avoid-c-arrays,-modernize-use-nullptr,-modernize-use-auto, -readability-magic-numbers, -modernize-use-trailing-return-type'
+WarningsAsErrors: 'clang-analyzer-*,modernize-*,bigprone-*,readability-*,portability-*,performance-*,-modernize-avoid-c-arrays,-modernize-use-nullptr,-modernize-use-auto, -readability-magic-numbers. -modernize-use-trailing-return-type'
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
 FormatStyle:     'file'
@@ -11,8 +11,6 @@ CheckOptions:
   - key:            readability-identifier-naming.ClassCase
     value:          CamelCase
   - key:            readability-identifier-naming.VariableCase
-    value:          camelBack
-  - key:            readability-identifier-naming.FunctionCase
     value:          camelBack
   - key:            readability-identifier-naming.ParameterCase
     value:          camelBack
@@ -29,11 +27,9 @@ CheckOptions:
   - key:            readability-identifier-naming.GlobalVariablePrefix
     value:          g_
   - key:            readability-identifier-naming.GlobalConstantCase
-    value:          UPPER_CASE
+    value:          camelBack
   - key:            readability-identifier-naming.GlobalConstantPrefix
-    value:          gs_
+    value:          gc_
   - key:            readability-identifier-naming.MacroDefinitionCase
     value:          UPPER_CASE
-  - key:            readability-identifier-naming.MacroDefinitionIgnoredRegexp
-    value:          *STM*
 ...

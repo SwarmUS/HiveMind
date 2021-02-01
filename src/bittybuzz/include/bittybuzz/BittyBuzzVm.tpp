@@ -15,8 +15,8 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     m_bytecode(bytecode), m_bsp(bsp), m_logger(logger) {
     // Init global variable
     vm = &m_bbzVm;
-    BittyBuzzSystem::logger = &logger;
-    BittyBuzzSystem::stringResolver = &stringResolver;
+    BittyBuzzSystem::g_logger = &logger;
+    BittyBuzzSystem::g_stringResolver = &stringResolver;
 
     // Init vm
     bbzvm_construct(m_bsp.getUUId());

@@ -16,7 +16,8 @@ std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket() {
         std::shared_ptr<ros::NodeHandle> handle = bsp.getRosNodeHandle();
 
         std::string address = handle->param("host_tcp_address", std::string("127.0.0.1"));
-        int port = handle->param("host_tcp_port", 5555);
+        const int defaultPort = 5555;
+        int port = handle->param("host_tcp_port", defaultPort);
         ILogger& logger = LoggerContainer::getLogger();
 
         std::optional<TCPClient> socket =

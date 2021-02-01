@@ -37,8 +37,9 @@ uint16_t CircularBuff_getLength(const CircularBuff* circularBuff) {
         return circularBuff->m_size;
     }
 
-    if (circularBuff->m_readPos > circularBuff->m_writePos)
+    if (circularBuff->m_readPos > circularBuff->m_writePos){
         return circularBuff->m_size - (circularBuff->m_readPos - circularBuff->m_writePos);
+    }
     return circularBuff->m_writePos - circularBuff->m_readPos;
 }
 
@@ -54,11 +55,13 @@ CircularBuffRet CircularBuff_putc(CircularBuff* circularBuff, uint8_t data) {
 
     circularBuff->m_data[circularBuff->m_writePos++] = data;
 
-    if (circularBuff->m_writePos >= circularBuff->m_size)
+    if (circularBuff->m_writePos >= circularBuff->m_size) {
         circularBuff->m_writePos = 0;
+    }
 
-    if (circularBuff->m_writePos == circularBuff->m_readPos)
+    if (circularBuff->m_writePos == circularBuff->m_readPos) {
         circularBuff->m_isFull = true;
+    }
 
     return CircularBuff_Ret_Ok;
 }
@@ -88,8 +91,9 @@ CircularBuffRet CircularBuff_getc(CircularBuff* circularBuff, uint8_t* data) {
 
     *data = circularBuff->m_data[circularBuff->m_readPos++];
 
-    if (circularBuff->m_readPos >= circularBuff->m_size)
+    if (circularBuff->m_readPos >= circularBuff->m_size) {
         circularBuff->m_readPos = 0;
+    }
 
     circularBuff->m_isFull = false;
 

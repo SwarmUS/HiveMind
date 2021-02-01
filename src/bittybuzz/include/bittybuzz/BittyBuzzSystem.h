@@ -16,12 +16,12 @@ namespace BittyBuzzSystem {
     /**
      *@brief Logger used for error reception or user functions
      **/
-    extern const ILogger* logger;
+    extern const ILogger* g_logger;
 
     /**
      *@brief String resolver used for user functions
      **/
-    extern const IBittyBuzzStringResolver* stringResolver;
+    extern const IBittyBuzzStringResolver* g_stringResolver;
     /**
      *@brief Call a bittybuzz function, check the function documentation and verify if you need to
      *pass parameter via the vm stack
