@@ -51,8 +51,8 @@ int main(int argc, char** argv) {
     IBSP& bsp = BSPContainer::getBSP();
     bsp.initChip((void*)&cmdLineArgs);
 
-    xTaskCreate(printThreadExample, "print", configMINIMAL_STACK_SIZE * 8, NULL,
-                tskIDLE_PRIORITY + 1, NULL);
+    const uint32_t stackSize = configMINIMAL_STACK_SIZE * 8;
+    xTaskCreate(printThreadExample, "print", stackSize, NULL, tskIDLE_PRIORITY + 1, NULL);
 
     vTaskStartScheduler();
 

@@ -34,8 +34,9 @@ void exampleTopicPublish(void* param) {
     msg.text = "Hello World";
 
     std::shared_ptr<ros::NodeHandle>* nodeHandle = (std::shared_ptr<ros::NodeHandle>*)param;
+    const uint32_t queueSize = 1000;
     ros::Publisher publisher =
-        nodeHandle->get()->advertise<hive_mind::ExampleMessage>("exampleTopic", 1000);
+        nodeHandle->get()->advertise<hive_mind::ExampleMessage>("exampleTopic", queueSize);
 
     while (true) {
         publisher.publish(msg);
@@ -49,7 +50,7 @@ void BSP::initChip(void* args) {
     CmdLineArgs* cmdLineArgs = (CmdLineArgs*)args;
     ros::init(cmdLineArgs->m_argc, cmdLineArgs->m_argv, "hive_mind");
 
-    m_rosNodeHandle = std::shared_ptr<ros::NodeHandle>(new ros::NodeHandle("~"));
+    m_rosNodeHandle = std::make_shared<ros::NodeHandle>("~");
 
     TCPUartMock& tcpUart = static_cast<TCPUartMock&>(BSPContainer::getHostUart());
     int port = m_rosNodeHandle->param("uart_mock_port", 0);

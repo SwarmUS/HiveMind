@@ -9,7 +9,7 @@ class TCPClient : public ITCPClient {
   public:
     TCPClient(int socket, sockaddr_in address, const ILogger& logger);
 
-    ~TCPClient() override;
+    ~TCPClient() override = default;
 
     int32_t receive(uint8_t* data, uint16_t length) override;
 
