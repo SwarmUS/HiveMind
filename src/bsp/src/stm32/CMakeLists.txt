@@ -8,13 +8,16 @@ set(LIB_SOURCES
     src/SocketContainer.cpp
     src/HostUart.cpp
     src/CRC.cpp
-    src/TCPClient.cpp)
+    src/SocketFactory.cpp
+    src/TCPClient.cpp
+)
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
     include/UserInterface.h
     include/HostUart.h
     include/CRC.h
+    include/SocketFactory.h
     include/TCPClient.h
 )
 
