@@ -67,6 +67,12 @@ foreach(COMP ${LWIP_FIND_COMPONENTS})
         target_sources(CMSIS::STM32::${FAMILY}${CORE_C}::LWIP INTERFACE "${lwipnoapps_SRCS}")
     endif()
 
+    if (NOT (TARGET CMSIS::STM32::${FAMILY}${CORE_C}::LWIP::IPERF))
+        add_library(CMSIS::STM32::${FAMILY}${CORE_C}::LWIP::IPERF INTERFACE IMPORTED)
+        target_include_directories(CMSIS::STM32::${FAMILY}${CORE_C}::LWIP::IPERF INTERFACE "${lwip_INC}")
+        target_sources(CMSIS::STM32::${FAMILY}${CORE_C}::LWIP::IPERF INTERFACE "${lwipiperf_SRCS}")
+    endif()
+
     list(APPEND LWIP_SRC_DIRS ${lwipnoapps_SRCS})
     set(LWIP_${COMP}_FOUND true)
 endforeach()

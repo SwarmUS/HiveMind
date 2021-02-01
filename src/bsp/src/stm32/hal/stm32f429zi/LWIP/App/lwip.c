@@ -28,7 +28,9 @@
 #include <string.h>
 
 /* USER CODE BEGIN 0 */
-
+#ifdef IPERF_SERVER
+#include <lwip/apps/lwiperf.h>
+#endif
 /* USER CODE END 0 */
 /* Private function prototypes -----------------------------------------------*/
 /* ETH Variables initialization ----------------------------------------------*/
@@ -121,7 +123,9 @@ void MX_LWIP_Init(void) {
     /* USER CODE END OS_THREAD_NEW_CMSIS_RTOS_V2 */
 
     /* USER CODE BEGIN 3 */
-
+#ifdef IPERF_SERVER
+    lwiperf_start_tcp_server_default(NULL, NULL);
+#endif
     /* USER CODE END 3 */
 }
 

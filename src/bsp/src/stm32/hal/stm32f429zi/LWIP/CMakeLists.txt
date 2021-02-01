@@ -32,6 +32,13 @@ target_link_libraries(${LIB_NAME}
         HAL::STM32::F4::ETH
     )
 
+if (ENABLE_TARGET_IPERF_SERVER)
+    target_link_libraries(${LIB_NAME}
+        PUBLIC
+            CMSIS::STM32::F4::LWIP::IPERF
+    )
+endif()
+
 # Removing warnings and compile options
 if (DISABLE_EXTERNAL_WARNINGS)
     target_compile_options(${LIB_NAME} PRIVATE -w)
