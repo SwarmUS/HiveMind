@@ -13,7 +13,7 @@ function(propolis_fetch_populate)
         ${PROJECT_NAME}_propolis
 
         GIT_REPOSITORY https://github.com/SwarmUS/Propolis
-        GIT_TAG        feat/SWARINFO-154_pheromones-serealization-lib
+        GIT_TAG        21e63e9
         GIT_PROGRESS   TRUE
     )
 
