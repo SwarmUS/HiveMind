@@ -14,9 +14,10 @@ add_library(${LIB_NAME} STATIC)
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
 target_include_directories(${LIB_NAME}
+    PUBLIC
+        Target
     PRIVATE
         ../Core/Inc
-        Target
     )
 
 target_link_libraries(${LIB_NAME}

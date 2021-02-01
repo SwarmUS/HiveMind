@@ -8,13 +8,14 @@ set(LIB_SOURCES
     src/SocketContainer.cpp
     src/HostUart.cpp
     src/CRC.cpp
-)
+    src/TCPClient.cpp)
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
     include/UserInterface.h
     include/HostUart.h
     include/CRC.h
+    include/TCPClient.h
 )
 
 
@@ -40,6 +41,7 @@ target_link_libraries(${LIB_NAME}
 
     PRIVATE
         SwarmUS::HiveMind::HAL
+        SwarmUS::HiveMind::LWIP
 )
 
 add_custom_target(
