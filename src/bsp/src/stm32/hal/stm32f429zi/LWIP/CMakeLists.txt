@@ -23,6 +23,7 @@ target_include_directories(${LIB_NAME}
 target_link_libraries(${LIB_NAME}
     PUBLIC
         CMSIS::STM32::F4::LWIP
+        CMSIS::STM32::F4::LWIP::IPV4
         CMSIS::STM32::F4::RTOS_V2
         SwarmUS::HiveMind::FreeRTOS
 
