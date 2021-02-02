@@ -1,9 +1,6 @@
 #include "SocketFactory.h"
 #include "TCPClient.h"
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
+#include <lwip/sockets.h>
 #include <sys/types.h>
 
 std::optional<TCPClient> SocketFactory::createTCPClient(const char* address,
@@ -11,7 +8,7 @@ std::optional<TCPClient> SocketFactory::createTCPClient(const char* address,
                                                         const ILogger& logger) {
 
     // Creating the socket
-    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    int sockfd = lwip_socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
         logger.log(LogLevel::Error, "Could not open socket");
         return {};
@@ -24,7 +21,7 @@ std::optional<TCPClient> SocketFactory::createTCPClient(const char* address,
     serverAddr.sin_addr.s_addr = inet_addr(address);
 
     // Connect the socket
-    if (connect(sockfd, (sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
+    if (lwip_connect(sockfd, (sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
         logger.log(LogLevel::Info, "Could not connect to server %s : %d", address, port);
         return {};
     }

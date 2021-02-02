@@ -8,6 +8,8 @@ set(LIB_SOURCES
     src/SocketContainer.cpp
     src/HostUart.cpp
     src/CRC.cpp
+    src/SocketFactory.cpp
+    src/TCPClient.cpp
 )
 
 set(LIB_PRIVATE_HEADERS
@@ -15,6 +17,8 @@ set(LIB_PRIVATE_HEADERS
     include/UserInterface.h
     include/HostUart.h
     include/CRC.h
+    include/SocketFactory.h
+    include/TCPClient.h
 )
 
 
@@ -40,6 +44,7 @@ target_link_libraries(${LIB_NAME}
 
     PRIVATE
         SwarmUS::HiveMind::HAL
+        SwarmUS::HiveMind::LWIP
 )
 
 add_custom_target(

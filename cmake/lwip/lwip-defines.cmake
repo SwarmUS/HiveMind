@@ -219,12 +219,8 @@ set(lwip_INC
 # All LWIP files without apps
 set(lwipnoapps_SRCS
         ${lwipcore_SRCS}
-        ${lwipcore4_SRCS}
-        ${lwipcore6_SRCS}
         ${lwipapi_SRCS}
         ${lwipnetif_SRCS}
-        ${lwipsixlowpan_SRCS}
-        ${lwipppp_SRCS}
         ${lwipsys_SRCS}
         )
 

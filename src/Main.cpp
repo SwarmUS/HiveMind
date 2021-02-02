@@ -22,7 +22,7 @@ void printThreadExample(void* param) {
     std::optional<TCPClientWrapper> socket = SocketContainer::getHostClientSocket();
 
     if (socket) {
-        socket.value().send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORD"));
+        socket.value().send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORlD"));
     }
 
     BittyBuzzBytecode bytecode = BittyBuzzFactory::createBittyBuzzBytecode(logger);

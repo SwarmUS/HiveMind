@@ -28,7 +28,6 @@
 #include <string.h>
 
 /* USER CODE BEGIN 0 */
-
 /* USER CODE END 0 */
 /* Private function prototypes -----------------------------------------------*/
 /* ETH Variables initialization ----------------------------------------------*/
@@ -121,7 +120,6 @@ void MX_LWIP_Init(void) {
     /* USER CODE END OS_THREAD_NEW_CMSIS_RTOS_V2 */
 
     /* USER CODE BEGIN 3 */
-
     /* USER CODE END 3 */
 }
 

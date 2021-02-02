@@ -10,6 +10,8 @@ set(LIB_SOURCES
     Core/Src/gpio.c
     Core/Src/dma.c
     Core/Src/crc.c
+    LWIP/App/lwip.c
+    LWIP/Target/ethernetif.c
 )
 
 set(LIB_HEADERS
@@ -21,10 +23,7 @@ set(LIB_HEADERS
     Core/Inc/gpio.h
     Core/Inc/dma.h
     Core/Inc/crc.h
-
     LWIP/App/lwip.h
-    LWIP/Target/ethernetif.h
-    LWIP/Target/lwipopts.h
 )
 
 # Sources that needs to be global on the project
@@ -32,9 +31,6 @@ set(LIB_HEADERS
 set(GLOBAL_SOURCES
     Core/Src/stm32f4xx_it.c
     Core/Src/stm32f4xx_hal_timebase_tim.c
-
-    LWIP/Target/ethernetif.c
-    LWIP/App/lwip.c
 )
 
 stm32_fetch_cmsis(F4)
@@ -46,14 +42,6 @@ find_package(CMSIS COMPONENTS
             REQUIRED)
 
 find_package(HAL COMPONENTS 
-            STM32F429ZI
-            REQUIRED)
-
-find_package(CMSIS_RTOS COMPONENTS
-            STM32F429ZI
-            REQUIRED)
-
-find_package(LWIP COMPONENTS
             STM32F429ZI
             REQUIRED)
 
@@ -80,9 +68,8 @@ target_link_libraries(stm32f429zi-linker
         HAL::STM32::F4::TIM
         HAL::STM32::F4::TIMEx
         STM32::NoSys
-        CMSIS::STM32::F4::LWIP
+        SwarmUS::HiveMind::LWIP
         CMSIS::STM32::F4::RTOS_V2
-        SwarmUS::HiveMind::FreeRTOS
         )
 
 # Actual bsp library
@@ -101,9 +88,6 @@ target_include_directories(${LIB_NAME}
 
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         LWIP/App
-
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-        LWIP/Target
 )
 
 target_link_libraries(${LIB_NAME}
@@ -122,8 +106,11 @@ target_link_libraries(${LIB_NAME}
         HAL::STM32::F4::UART
         HAL::STM32::F4::DMA
         HAL::STM32::F4::CRC
-        HAL::STM32::F4::ETH
+        SwarmUS::HiveMind::LWIP
+        CMSIS::STM32::F4::RTOS_V2
 )
+
+add_subdirectory(LWIP)
 
 # Removing warnings and compile options
 if (DISABLE_EXTERNAL_WARNINGS) 

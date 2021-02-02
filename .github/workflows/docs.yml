@@ -22,6 +22,8 @@ jobs:
         run: |
           cd catkin_ws
           . /opt/ros/$ROS_DISTRO/setup.sh
+          rosdep update
+          rosdep install --from-paths src --ignore-src -r -y
           catkin_make -DENABLE_ERROR_ON_MISSING_TOOL=ON
 
       - name: generate

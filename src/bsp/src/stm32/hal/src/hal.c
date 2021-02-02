@@ -3,6 +3,10 @@
 #include "hivemind_hal.h"
 #include "lwip.h"
 
+#ifdef IPERF_SERVER
+#include <lwip/apps/lwiperf.h>
+#endif
+
 void Hal_init() {
 
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
@@ -24,6 +28,10 @@ void Hal_init() {
     UartPrint_init();
 
     MX_LWIP_Init();
+
+#ifdef IPERF_SERVER
+    lwiperf_start_tcp_server_default(NULL, NULL);
+#endif
 }
 
 uint32_t Hal_calculateCRC32(const uint8_t* buffer, uint32_t length) {

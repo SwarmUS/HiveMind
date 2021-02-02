@@ -11,6 +11,8 @@ option(ENABLE_ERROR_ON_MISSING_TOOL "If a tools (clang-tidy, clang-format, doxyg
 
 option(DISABLE_EXTERNAL_WARNINGS "Disables warnings from exernal libs (gtest, freertos, etc)" ON)
 
+option(ENABLE_TARGET_IPERF_SERVER "Starts an iperf server on the target device for network monitoring" OFF)
+
 # Init compile variable
 set(COMPILE_STM32_F429ZI 0)
 
@@ -35,6 +37,11 @@ endif()
 
 if(ENABLE_WARNINGS_AS_ERROR)
   add_compile_options(${WARNING_AS_ERROR_FLAG})
+endif()
+
+if(ENABLE_TARGET_IPERF_SERVER)
+    # Must be set before including any source files
+    add_definitions(-DIPERF_SERVER)
 endif()
 
 # Includes

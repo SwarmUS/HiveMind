@@ -30,6 +30,4 @@ CheckOptions:
     value:          camelBack
   - key:            readability-identifier-naming.GlobalConstantPrefix
     value:          gc_
-  - key:            readability-identifier-naming.MacroDefinitionCase
-    value:          UPPER_CASE
 ...

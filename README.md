@@ -98,6 +98,18 @@ openocd -f ./tools/openocd/stm32_f4/stm32_f4.cfg -c init -c \"reset init\"
 ```
 
 ### External connections
+#### Ethernet port
+The firmware assigns a static IP of 192.168.1.10 to the device with a subnet mask of 255.255.255.0.
+The host computer is expected to have the IP 192.168.1.101 (WILL BE CONFIGURABLE LATER ON) and a TCP socket
+opened on port 5555.
+
+The ethernet speed can be measured with [iperf 2](https://iperf.fr/iperf-download.php).
+To open the server on the device, simply build with the `ENABLE_TARGET_IPERF_SERVER` CMake option:
+```
+cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_TARGET_IPERF_SERVER -DCMAKE_TOOLCHAIN_FILE=../cmake/stm32_f429zi_gcc.cmake .. 
+```
+
+
 #### Cellphone
 The firmware has been configured with the following pins for the uart connection to a cellphone
 | RX  | TX  |

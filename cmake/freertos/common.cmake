@@ -26,16 +26,4 @@ function(freertos_fetch_kernel)
         set(FREERTOS_KERNEL_PATH ${${FREERTOS_KERNEL_L}_SOURCE_DIR} PARENT_SCOPE)
     endif()
 
-
-    # Creates a .clang-tidy file with no virtually no checks
-    if (DISABLE_EXTERNAL_WARNINGS) 
-        file(WRITE "${${FREERTOS_KERNEL_L}_SOURCE_DIR}/.clang-tidy" 
-"
----
-Checks: '-*,llvm-twine-local'
-...
-"
-        )
-    endif()
-
 endfunction()

@@ -25,7 +25,6 @@ if(CLANG_TIDY_EXE AND ENABLE_CLANG_TIDY_CHECK)
     
     #Setting clang tidy
     set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE};--extra-arg=-gcc-toolchain" CACHE STRING "" FORCE)
-    set(CMAKE_C_CLANG_TIDY "${CLANG_TIDY_EXE};--extra-arg=-gcc-toolchain" CACHE STRING "" FORCE)
 
 else()
     message(STATUS "clang-tidy NOT found!")
