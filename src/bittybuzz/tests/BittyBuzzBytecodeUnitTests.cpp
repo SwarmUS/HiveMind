@@ -10,14 +10,14 @@ class BittyBuzzBytecodeTestFixture : public testing::Test {
     std::array<uint8_t, 8> m_bytecodeArray;
     BittyBuzzBytecode* m_bytecode;
     LoggerInterfaceMock* m_loggerMock;
-    int logCounter = 0;
-    std::string logLastFormat;
+    int m_logCounter = 0;
+    std::string m_logLastFormat;
 
     void SetUp() override {
         for (uint8_t i = 0; i < m_bytecodeArray.size(); i++) {
             m_bytecodeArray[i] = i;
         }
-        m_loggerMock = new LoggerInterfaceMock(logCounter, logLastFormat);
+        m_loggerMock = new LoggerInterfaceMock(m_logCounter, m_logLastFormat);
         m_bytecode =
             new BittyBuzzBytecode(*m_loggerMock, m_bytecodeArray.data(), m_bytecodeArray.size());
     }
@@ -38,7 +38,7 @@ TEST_F(BittyBuzzBytecodeTestFixture, BittyBuzzBytecode_getBytecodeFetchFunction_
     for (uint8_t i = 0; i < 3; i++) {
         EXPECT_EQ(buff[i], i);
     }
-    EXPECT_EQ(logCounter, 0);
+    EXPECT_EQ(m_logCounter, 0);
 }
 
 TEST_F(BittyBuzzBytecodeTestFixture, BittyBuzzBytecode_getBytecodeFetchFunction_getLastBytes) {
@@ -52,7 +52,7 @@ TEST_F(BittyBuzzBytecodeTestFixture, BittyBuzzBytecode_getBytecodeFetchFunction_
         EXPECT_EQ(buff[i], i + m_bytecodeArray.size() - 3);
     }
 
-    EXPECT_EQ(logCounter, 0);
+    EXPECT_EQ(m_logCounter, 0);
 }
 
 TEST_F(BittyBuzzBytecodeTestFixture,
@@ -63,7 +63,7 @@ TEST_F(BittyBuzzBytecodeTestFixture,
     const uint8_t* buff = fun(0, 5);
     // Expect
     EXPECT_EQ(buff, m_bytecodeArray.data());
-    EXPECT_EQ(logCounter, 1);
+    EXPECT_EQ(m_logCounter, 1);
 }
 
 TEST_F(BittyBuzzBytecodeTestFixture,
@@ -74,7 +74,7 @@ TEST_F(BittyBuzzBytecodeTestFixture,
     const uint8_t* buff = fun(9999, 2);
     // Expect
     EXPECT_EQ(buff, m_bytecodeArray.data() + 9999);
-    EXPECT_EQ(logCounter, 1);
+    EXPECT_EQ(m_logCounter, 1);
 }
 
 TEST_F(BittyBuzzBytecodeTestFixture, BittyBuzzBytecode_getBytecodeLength_getLength) {

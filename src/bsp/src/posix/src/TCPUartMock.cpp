@@ -6,7 +6,10 @@
 #include <ros/ros.h>
 #include <task.h>
 
-void TCPUartMock_listenTask(void* param) { static_cast<TCPUartMock*>(param)->waitForClient(); }
+void TCPUartMock_listenTask(void* param) {
+    auto* test = static_cast<TCPUartMock*>(param);
+    test->waitForClient();
+}
 
 TCPUartMock::TCPUartMock(ILogger& logger) : m_logger(logger), m_port(0) {}
 
@@ -41,8 +44,9 @@ void TCPUartMock::openSocket(int port) {
 
     m_logger.log(LogLevel::Info, "UART TCP mock server waiting for client on port %d", m_port);
 
-    xTaskCreate(TCPUartMock_listenTask, "tcp_uart_mock_listen", configMINIMAL_STACK_SIZE * 100,
-                (void*)this, tskIDLE_PRIORITY + 1, NULL);
+    const uint32_t stackSize = configMINIMAL_STACK_SIZE * 100;
+    xTaskCreate(TCPUartMock_listenTask, "tcp_uart_mock_listen", stackSize, (void*)this,
+                tskIDLE_PRIORITY + 1, NULL);
 }
 
 bool TCPUartMock::send(const uint8_t* buffer, uint16_t length) {
@@ -75,7 +79,7 @@ void TCPUartMock::close() const {
         ::close(m_clientFd.value());
     }
 
-    if (m_serverFd) {
+    if (m_serverFd != 0) {
         ::close(m_serverFd);
     }
 }
