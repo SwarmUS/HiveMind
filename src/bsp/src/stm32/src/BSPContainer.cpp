@@ -6,9 +6,9 @@
 #include "logger/LoggerContainer.h"
 
 IBSP& BSPContainer::getBSP() {
-    static BSP bsp;
+    static BSP s_bsp;
 
-    return bsp;
+    return s_bsp;
 }
 
 IUserInterface& BSPContainer::getUserInterface() {
@@ -23,7 +23,7 @@ IHostUart& BSPContainer::getHostUart() {
 }
 
 ICRC& BSPContainer::getCRC() {
-    static CRC s_CRC;
+    static CRC s_crc;
 
-    return s_CRC;
+    return s_crc;
 }
