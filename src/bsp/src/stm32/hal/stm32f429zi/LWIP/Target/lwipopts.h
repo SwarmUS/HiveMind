@@ -115,6 +115,8 @@ extern "C" {
 #define CHECKSUM_CHECK_ICMP6 0
 /*-----------------------------------------------------------------------------*/
 /* USER CODE BEGIN 1 */
+// Hack because lwip redefines typedef _ssize_t which is already defined by arm if SSIZE_MAX doesn't
+// exist
 #include <limits.h>
 #define SSIZE_MAX INT_MAX
 /* USER CODE END 1 */

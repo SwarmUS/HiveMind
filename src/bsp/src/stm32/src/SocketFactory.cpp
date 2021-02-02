@@ -22,7 +22,7 @@ std::optional<TCPClient> SocketFactory::createTCPClient(const char* address,
 
     // Connect the socket
     if (lwip_connect(sockfd, (sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
-        logger.log(LogLevel::Error, "Could not connect to server %s : %d", address, port);
+        logger.log(LogLevel::Info, "Could not connect to server %s : %d", address, port);
         return {};
     }
 
