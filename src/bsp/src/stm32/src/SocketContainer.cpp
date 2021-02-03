@@ -1,5 +1,6 @@
 #include "bsp/SocketContainer.h"
 #include "SocketFactory.h"
+#include "bsp/SettingsContainer.h"
 #include "logger/LoggerContainer.h"
 #include <TCPClient.h>
 
@@ -11,13 +12,11 @@ std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket() {
     if (!s_clientSocket) {
 
         ILogger& logger = LoggerContainer::getLogger();
+        std::string hostAddress = SettingsContainer::GetHostIP();
+        const uint32_t port = SettingsContainer::GetHostPort();
 
-        // TODO: Migrate settings to a settings manager that could provide a common interface
-        // for settings between all builds. Would allow this class to be in bsp/common
-        const char* hostAddress = "192.168.1.101";
-        const uint32_t port = 5555;
-
-        std::optional<TCPClient> socket = SocketFactory::createTCPClient(hostAddress, port, logger);
+        std::optional<TCPClient> socket =
+            SocketFactory::createTCPClient(hostAddress.c_str(), port, logger);
 
         if (socket) {
             s_clientSocket.emplace(socket.value());

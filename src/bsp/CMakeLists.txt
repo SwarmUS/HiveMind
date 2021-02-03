@@ -15,7 +15,7 @@ set(LIB_HEADERS
     include/bsp/ICRC.h
 
     include/bsp/ITCPClient.h
-    include/bsp/SocketContainer.h)
+    include/bsp/SocketContainer.h include/bsp/SettingsContainer.h)
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
