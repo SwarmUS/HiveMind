@@ -1,9 +1,8 @@
 #include "bsp/SocketContainer.h"
-#include "BSP.h"
 #include "SocketFactory.h"
 #include "TCPClient.h"
-#include "bsp/BSPContainer.h"
-#include <logger/LoggerContainer.h>
+#include "bsp/SettingsContainer.h"
+#include "logger/LoggerContainer.h"
 
 std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket() {
 
@@ -12,16 +11,12 @@ std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket() {
 
     if (!s_clientSocket) {
 
-        BSP& bsp = static_cast<BSP&>(BSPContainer::getBSP());
-        std::shared_ptr<ros::NodeHandle> handle = bsp.getRosNodeHandle();
-
-        std::string address = handle->param("host_tcp_address", std::string("127.0.0.1"));
-        const int defaultPort = 5555;
-        int port = handle->param("host_tcp_port", defaultPort);
         ILogger& logger = LoggerContainer::getLogger();
+        std::string hostAddress = SettingsContainer::GetHostIP();
+        const uint32_t port = SettingsContainer::GetHostPort();
 
         std::optional<TCPClient> socket =
-            SocketFactory::createTCPClient(address.c_str(), (uint32_t)port, logger);
+            SocketFactory::createTCPClient(hostAddress.c_str(), port, logger);
 
         if (socket) {
             s_clientSocket.emplace(socket.value());

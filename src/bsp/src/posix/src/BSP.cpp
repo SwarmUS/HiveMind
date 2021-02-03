@@ -1,13 +1,12 @@
 #include "BSP.h"
+#include "bsp/SettingsContainer.h"
 #include "ros/ros.h"
 #include <FreeRTOS.h>
 #include <FreeRTOSConfig.h>
 #include <TCPUartMock.h>
 #include <bsp/BSPContainer.h>
 #include <hive_mind/ExampleMessage.h>
-#include <sstream>
 #include <task.h>
-#include <timers.h>
 
 BSP::BSP() = default;
 BSP::~BSP() = default;
@@ -65,7 +64,4 @@ void BSP::initChip(void* args) {
 
 std::shared_ptr<ros::NodeHandle> BSP::getRosNodeHandle() { return m_rosNodeHandle; }
 
-uint16_t BSP::getUUId() const {
-    // TODO: Change do the ID is obtained from persistent memory or ROS command line argument
-    return 1;
-}
+uint16_t BSP::getUUId() const { return SettingsContainer::GetUUID(); }
