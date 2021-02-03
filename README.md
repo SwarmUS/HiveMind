@@ -100,8 +100,6 @@ openocd -f ./tools/openocd/stm32_f4/stm32_f4.cfg -c init -c \"reset init\"
 ### External connections
 #### Ethernet port
 The firmware assigns a static IP of 192.168.1.10 to the device with a subnet mask of 255.255.255.0.
-The host computer is expected to have the IP 192.168.1.101 (WILL BE CONFIGURABLE LATER ON) and a TCP socket
-opened on port 5555.
 
 The ethernet speed can be measured with [iperf 2](https://iperf.fr/iperf-download.php).
 To open the server on the device, simply build with the `ENABLE_TARGET_IPERF_SERVER` CMake option:
@@ -119,6 +117,21 @@ The firmware has been configured with the following pins for the uart connection
 ![alt text](https://os.mbed.com/media/uploads/jeromecoutant/nucleo_f429zi_zio_left_2019_8_29.png "NUCLEO CONNECTION")
 
 
-### TODO
-#### BittyBuzz
-* Extern C on generated .h file
+### Configuration
+Different firmware settings can be configured at build time (for the STM32 target) or runtime (for the ROS target).
+
+#### STM32 Target
+CMake variables can be used to override certain default firmware settings.
+| Variable  | Default value   |
+| ---       | ---             | 
+| UUID      | 1               |
+| HOST_PORT | 5555            |
+| HOST_IP   | 192.168.1.101   |
+
+#### ROS Target
+ROS launch parameters are used to configure variables.
+| Variable          | Default value   |
+| ---               | ---             |
+| board_uuid        | 1               |
+| host_tcp_port     | 5555            |
+| host_tcp_address  | 127.0.0.1       |
