@@ -53,7 +53,6 @@ class BittyBuzzTask : public AbstractTask<8 * configMINIMAL_STACK_SIZE> {
     BittyBuzzStringResolver m_stringResolver;
     BittyBuzzVm m_bittybuzzVm;
 
-
     void task() override {
         while (true) {
 
@@ -94,11 +93,12 @@ class HostTCPCommTask : public AbstractTask<configMINIMAL_STACK_SIZE> {
     void task() override {
 
         // Wait for connection
-        while(true){
+        while (true) {
             if (std::optional<TCPClientWrapper> socket = SocketContainer::getHostClientSocket()) {
                 while (true) {
-                    auto ret = socket.value().send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORLD"));
-                    (void) ret;
+                    auto ret =
+                        socket.value().send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORLD"));
+                    (void)ret;
                     vTaskDelay(1000);
                 }
             }
