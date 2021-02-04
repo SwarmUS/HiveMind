@@ -18,14 +18,14 @@ uint16_t SettingsContainer::GetUUID() {
 
 uint32_t SettingsContainer::GetHostPort() {
     auto handle = getRosNodeHandle();
-    uint32_t port = handle->param("host_port", 5555);
+    uint32_t port = (uint32_t)handle->param("host_port", 5555);
 
     return port;
 }
 
-std::string SettingsContainer::GetHostIP() {
+uint8_t SettingsContainer::GetHostIP(char* buf, uint8_t length) {
     auto handle = getRosNodeHandle();
     std::string address = handle->param("host_tcp_address", std::string("127.0.0.1"));
 
-    return address;
+    return snprintf(buf, length, "%s", address.c_str());
 }

@@ -124,7 +124,7 @@ Different firmware settings can be configured at build time (for the STM32 targe
 CMake variables can be used to override certain default firmware settings.
 | Variable  | Default value   |
 | ---       | ---             | 
-| UUID      | 1               |
+| UUID      | 1 (0 is reserved for broadcast)|
 | HOST_PORT | 5555            |
 | HOST_IP   | 192.168.1.101   |
 
@@ -132,6 +132,6 @@ CMake variables can be used to override certain default firmware settings.
 ROS launch parameters are used to configure variables.
 | Variable          | Default value   |
 | ---               | ---             |
-| board_uuid        | 1               |
+| board_uuid        | 1 (0 is reserved for broadcast) |
 | host_tcp_port     | 5555            |
 | host_tcp_address  | 127.0.0.1       |
