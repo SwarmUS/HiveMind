@@ -32,13 +32,15 @@ class LoggerTask : public AbstractTask<configMINIMAL_STACK_SIZE> {
     }
 };
 
-class BittyBuzzTask : public AbstractTask<4 * configMINIMAL_STACK_SIZE> {
+class BittyBuzzTask : public AbstractTask<8 * configMINIMAL_STACK_SIZE> {
   public:
     BittyBuzzTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority),
         m_logger(LoggerContainer::getLogger()),
-        m_bittybuzzVm(BittyBuzzFactory::createBittyBuzzBytecode(m_logger),
-                      BittyBuzzFactory::createBittyBuzzStringResolver(m_logger),
+        m_bytecode(BittyBuzzFactory::createBittyBuzzBytecode(m_logger)),
+        m_stringResolver(BittyBuzzFactory::createBittyBuzzStringResolver(m_logger)),
+        m_bittybuzzVm(m_bytecode,
+                      m_stringResolver,
                       BSPContainer::getBSP(),
                       m_logger,
                       BittyBuzzFactory::createBittyBuzzFunctionRegisters()) {}
@@ -47,7 +49,10 @@ class BittyBuzzTask : public AbstractTask<4 * configMINIMAL_STACK_SIZE> {
 
   private:
     ILogger& m_logger;
+    BittyBuzzBytecode m_bytecode;
+    BittyBuzzStringResolver m_stringResolver;
     BittyBuzzVm m_bittybuzzVm;
+
 
     void task() override {
         while (true) {
@@ -87,17 +92,16 @@ class HostTCPCommTask : public AbstractTask<configMINIMAL_STACK_SIZE> {
 
   private:
     void task() override {
-        std::optional<TCPClientWrapper> socket;
-        while (!socket) {
-            std::optional<TCPClientWrapper> tmpSocket = SocketContainer::getHostClientSocket();
-            if (tmpSocket) {
-                socket.emplace(tmpSocket.value());
-            }
-        }
 
-        while (true) {
-            socket.value().send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORD"));
-            vTaskDelay(1000);
+        // Wait for connection
+        while(true){
+            if (std::optional<TCPClientWrapper> socket = SocketContainer::getHostClientSocket()) {
+                while (true) {
+                    auto ret = socket.value().send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORLD"));
+                    (void) ret;
+                    vTaskDelay(1000);
+                }
+            }
         }
     }
 };
