@@ -10,7 +10,8 @@ set(LIB_SOURCES
     src/CRC.cpp
     src/SocketFactory.cpp
     src/TCPClient.cpp
-)
+    src/SettingsContainer.cpp
+    )
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
@@ -19,8 +20,11 @@ set(LIB_PRIVATE_HEADERS
     include/CRC.h
     include/SocketFactory.h
     include/TCPClient.h
-)
+    include/DefaultSettings.h
+    )
 
+include(DefaultSettings.cmake)
+configure_file(include/DefaultSettings.in.h include/DefaultSettings.h)
 
 add_library(${LIB_NAME}
     ${LIB_SOURCES}
@@ -34,6 +38,9 @@ target_include_directories(${LIB_NAME}
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         ${BSP_CMAKE_DIR}/include
         include
+
+        #Include the generated DefaultSettings.h
+        ${CMAKE_CURRENT_BINARY_DIR}/include
 )
 
 target_link_libraries(${LIB_NAME}

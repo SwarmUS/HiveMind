@@ -4,6 +4,8 @@
     <launch>
         <!-- Simple node -->
         <node name="hive_mind" pkg="hive_mind" type="hive_mind"  output="screen" >
+            <param name="board_uuid" value="1" />
+
             <param name="host_tcp_address" value="127.0.0.1" />
             <param name="host_tcp_port" value="5555" />
 

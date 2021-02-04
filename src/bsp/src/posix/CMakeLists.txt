@@ -12,6 +12,7 @@ set(LIB_SOURCES
     src/SocketFactory.cpp
     src/BSPUtils.cpp
     src/TCPUartMock.cpp
+    src/SettingsContainer.cpp
 )
 
 set(LIB_PRIVATE_HEADERS

@@ -1,9 +1,8 @@
 #include "bsp/SocketContainer.h"
-#include "BSP.h"
 #include "SocketFactory.h"
 #include "TCPClient.h"
-#include "bsp/BSPContainer.h"
-#include <logger/LoggerContainer.h>
+#include "bsp/SettingsContainer.h"
+#include "logger/LoggerContainer.h"
 
 std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket() {
 
@@ -12,16 +11,15 @@ std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket() {
 
     if (!s_clientSocket) {
 
-        BSP& bsp = static_cast<BSP&>(BSPContainer::getBSP());
-        std::shared_ptr<ros::NodeHandle> handle = bsp.getRosNodeHandle();
-
-        std::string address = handle->param("host_tcp_address", std::string("127.0.0.1"));
-        const int defaultPort = 5555;
-        int port = handle->param("host_tcp_port", defaultPort);
         ILogger& logger = LoggerContainer::getLogger();
+        const uint32_t port = SettingsContainer::GetHostPort();
+        char address[MAX_IP_LENGTH];
+        if (SettingsContainer::GetHostIP(address, (uint8_t)MAX_IP_LENGTH) == 0) {
+            logger.log(LogLevel::Error, "IP string too big for buffer");
+            return s_wrapper;
+        }
 
-        std::optional<TCPClient> socket =
-            SocketFactory::createTCPClient(address.c_str(), (uint32_t)port, logger);
+        std::optional<TCPClient> socket = SocketFactory::createTCPClient(address, port, logger);
 
         if (socket) {
             s_clientSocket.emplace(socket.value());
