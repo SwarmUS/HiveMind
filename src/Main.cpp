@@ -14,7 +14,7 @@
 #include <logger/Logger.h>
 #include <logger/LoggerContainer.h>
 
-class LoggerTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
+class LoggerTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
   public:
     LoggerTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
@@ -65,7 +65,7 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class HostUartCommTask : public AbstractTask<6*configMINIMAL_STACK_SIZE> {
+class HostUartCommTask : public AbstractTask<2*configMINIMAL_STACK_SIZE> {
   public:
     HostUartCommTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority) {}
@@ -82,7 +82,7 @@ class HostUartCommTask : public AbstractTask<6*configMINIMAL_STACK_SIZE> {
     }
 };
 
-class HostTCPCommTask : public AbstractTask<6*configMINIMAL_STACK_SIZE> {
+class HostTCPCommTask : public AbstractTask<2*configMINIMAL_STACK_SIZE> {
   public:
     HostTCPCommTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority) {}
@@ -116,12 +116,12 @@ int main(int argc, char** argv) {
 
     static LoggerTask s_loggerTask("logger", tskIDLE_PRIORITY + 1);
     static BittyBuzzTask s_bittybuzzTask("bittybuzz", tskIDLE_PRIORITY + 1);
-    //static HostUartCommTask s_uartTask("uart", tskIDLE_PRIORITY + 1);
+    static HostUartCommTask s_uartTask("uart", tskIDLE_PRIORITY + 1);
     static HostTCPCommTask s_tcpTask("tcp", tskIDLE_PRIORITY + 1);
 
     s_loggerTask.start();
     s_bittybuzzTask.start();
-    //s_uartTask.start();
+    s_uartTask.start();
     s_tcpTask.start();
 
     vTaskStartScheduler();
