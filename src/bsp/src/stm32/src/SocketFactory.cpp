@@ -5,7 +5,7 @@
 
 std::optional<TCPClient> SocketFactory::createTCPClient(const char* address,
                                                         uint32_t port,
-                                                        const ILogger& logger) {
+                                                        ILogger& logger) {
 
     // Creating the socket
     int sockfd = lwip_socket(AF_INET, SOCK_STREAM, 0);
