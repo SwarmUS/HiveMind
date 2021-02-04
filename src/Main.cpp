@@ -65,7 +65,7 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class HostUartCommTask : public AbstractTask<2*configMINIMAL_STACK_SIZE> {
+class HostUartCommTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
   public:
     HostUartCommTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority) {}
@@ -82,7 +82,7 @@ class HostUartCommTask : public AbstractTask<2*configMINIMAL_STACK_SIZE> {
     }
 };
 
-class HostTCPCommTask : public AbstractTask<2*configMINIMAL_STACK_SIZE> {
+class HostTCPCommTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
   public:
     HostTCPCommTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority) {}
