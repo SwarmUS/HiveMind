@@ -14,7 +14,7 @@ namespace BittyBuzzFactory {
      * @param logger the logger to inject in the BittyBuzzBytecode
      *
      * */
-    BittyBuzzBytecode createBittyBuzzBytecode(const ILogger& logger);
+    BittyBuzzBytecode createBittyBuzzBytecode(ILogger& logger);
 
     /**
      * @brief Creates a BittyBuzzStringResolver with the main.bzz bytecode
@@ -22,7 +22,7 @@ namespace BittyBuzzFactory {
      * @param logger the logger to inject in the BittyBuzzStringResolver
      *
      * */
-    BittyBuzzStringResolver createBittyBuzzStringResolver(const ILogger& logger);
+    BittyBuzzStringResolver createBittyBuzzStringResolver(ILogger& logger);
 
     /**
      * @brief Creates an array of FunctionRegister associated with the code from main.bzz

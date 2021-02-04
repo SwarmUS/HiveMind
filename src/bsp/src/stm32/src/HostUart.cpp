@@ -3,6 +3,7 @@
 #include <FreeRTOSConfig.h>
 #include <cstdio>
 #include <cstring>
+#include <freertos-utils/LockGuard.h>
 #include <task.h>
 
 void hostUart_C_txCpltCallback(void* hostUartInstance) {
@@ -23,25 +24,19 @@ void HostUart_processTask(void* param) {
 }
 
 HostUart::HostUart(ICRC& crc, ILogger& logger) :
-    m_crc(crc), m_logger(logger), m_txState(TxState::Idle), m_rxState(RxState::Idle) {
-    // TODO: Make static
-    m_uartSemaphore = xSemaphoreCreateBinary();
+    m_crc(crc),
+    m_logger(logger),
+    m_hostUartTask("host_uart_process", tskIDLE_PRIORITY + 1, HostUart_processTask, this),
+    m_txState(TxState::Idle),
+    m_rxState(RxState::Idle),
+    m_uartMutex(10) {
 
-    if (m_uartSemaphore == NULL) {
-        m_logger.log(LogLevel::Error, "Host UART semaphore could not be created");
-    }
-
-    xSemaphoreGive(m_uartSemaphore);
     startHeaderListen();
 
-    // TODO: Define priorities in a central place (probably in the main cleanup task)
-    xTaskCreate(HostUart_processTask, "host_uart_process", configMINIMAL_STACK_SIZE * 3,
-                (void*)this, tskIDLE_PRIORITY + 1, NULL);
+    m_hostUartTask.start();
 }
 
 bool HostUart::send(const uint8_t* buffer, uint16_t length) {
-    bool ret = false;
-
     if (m_txState != TxState::Idle) {
         m_logger.log(LogLevel::Warn, "Host UART is already busy. Aborting send.");
         return false;
@@ -54,12 +49,9 @@ bool HostUart::send(const uint8_t* buffer, uint16_t length) {
     *(uint16_t*)m_txHeader.data() = length;
     *(uint32_t*)(m_txHeader.data() + sizeof(length)) = crc;
 
-    if (xSemaphoreTake(m_uartSemaphore, (TickType_t)10) == pdTRUE) {
-        ret = UartHost_transmitBuffer(m_txHeader.data(), m_txHeader.size(),
-                                      (uartCallbackFct)(&hostUart_C_txCpltCallback), (void*)this);
-
-        xSemaphoreGive(m_uartSemaphore);
-    }
+    LockGuard lock(m_uartMutex);
+    bool ret = UartHost_transmitBuffer(m_txHeader.data(), m_txHeader.size(),
+                                       (uartCallbackFct)(&hostUart_C_txCpltCallback), (void*)this);
 
     if (ret) {
         m_txState = TxState::SendHeader;
@@ -78,13 +70,14 @@ int32_t HostUart::receive(uint8_t* buffer, uint16_t length) const {
 }
 
 void HostUart::startHeaderListen() {
-    if (xSemaphoreTake(m_uartSemaphore, (TickType_t)10) == pdTRUE) {
+
+    if (m_uartMutex.lock()) {
         UartHost_receiveDMA(m_rxHeader.data(), m_rxHeader.size(),
                             (uartCallbackFct)(&hostUart_C_rxCpltCallback), (void*)this);
 
         m_rxState = RxState::WaitForHeader;
 
-        xSemaphoreGive(m_uartSemaphore);
+        m_uartMutex.unlock();
     } else {
         m_rxState = RxState::Idle;
     }

@@ -13,7 +13,7 @@ function(propolis_fetch_populate)
         ${PROJECT_NAME}_propolis
 
         GIT_REPOSITORY https://github.com/SwarmUS/Propolis
-        GIT_TAG        21e63e9
+        GIT_TAG        feat/SWARINFO-162_stack_library_freertos
         GIT_PROGRESS   TRUE
     )
 
@@ -29,13 +29,13 @@ function(propolis_fetch_populate)
         FetchContent_Populate(${PROPOLIS})
 
         list(APPEND CMAKE_MODULE_PATH ${${PROPOLIS_L}_SOURCE_DIR}/cmake/)
-        add_subdirectory(${${PROPOLIS_L}_SOURCE_DIR}/src/pheromones ${${PROPOLIS_L}_BINARY_DIR})
+        add_subdirectory(${${PROPOLIS_L}_SOURCE_DIR}/src/pheromones ${${PROPOLIS_L}_BINARY_DIR}/pheromones)
+        add_subdirectory(${${PROPOLIS_L}_SOURCE_DIR}/src/freertos ${${PROPOLIS_L}_BINARY_DIR}/freertos)
 
         # Removing warnings from freertos compilation on executable target
         if (DISABLE_EXTERNAL_WARNINGS) 
             target_compile_options(swarmus-propolis-pheromones-hivemind-host PRIVATE -w)
             set_target_properties(swarmus-propolis-pheromones-hivemind-host PROPERTIES CXX_CLANG_TIDY "" )
-            set_target_properties(swarmus-propolis-pheromones-hivemind-host PROPERTIES C_CLANG_TIDY "" )
         endif()
 
     endif()

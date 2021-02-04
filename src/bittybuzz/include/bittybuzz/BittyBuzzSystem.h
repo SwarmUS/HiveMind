@@ -16,7 +16,7 @@ namespace BittyBuzzSystem {
     /**
      *@brief Logger used for error reception or user functions
      **/
-    extern const ILogger* g_logger;
+    extern ILogger* g_logger;
 
     /**
      *@brief String resolver used for user functions

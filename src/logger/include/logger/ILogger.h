@@ -45,7 +45,7 @@ class ILogger {
      * @param [in] ... Additionnal arguments for the format parameter
      *
      */
-    virtual LogRet log(LogLevel level, const char* format, ...) const = 0;
+    virtual LogRet log(LogLevel level, const char* format, ...) = 0;
 };
 
 #endif // __ILOGGER_H_

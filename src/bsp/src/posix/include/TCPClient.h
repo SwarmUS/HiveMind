@@ -7,7 +7,7 @@
 
 class TCPClient : public ITCPClient {
   public:
-    TCPClient(int socket, sockaddr_in address, const ILogger& logger);
+    TCPClient(int socket, sockaddr_in address, ILogger& logger);
 
     ~TCPClient() override = default;
 
@@ -18,7 +18,7 @@ class TCPClient : public ITCPClient {
     bool close() override;
 
   private:
-    const ILogger& m_logger;
+    ILogger& m_logger;
     const int m_socketFd;
     const sockaddr_in m_address;
 };

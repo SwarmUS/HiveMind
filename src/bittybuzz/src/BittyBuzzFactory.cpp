@@ -6,11 +6,11 @@ extern "C" {
 #include <main_string.h>
 }
 
-BittyBuzzBytecode BittyBuzzFactory::createBittyBuzzBytecode(const ILogger& logger) {
+BittyBuzzBytecode BittyBuzzFactory::createBittyBuzzBytecode(ILogger& logger) {
     return BittyBuzzBytecode(logger, bcode, bcode_size);
 }
 
-BittyBuzzStringResolver BittyBuzzFactory::createBittyBuzzStringResolver(const ILogger& logger) {
+BittyBuzzStringResolver BittyBuzzFactory::createBittyBuzzStringResolver(ILogger& logger) {
     return BittyBuzzStringResolver(g_bbzStringResolverArray.data(), g_bbzStringResolverArray.size(),
                                    BBZSTRING_OFFSET, logger);
 }

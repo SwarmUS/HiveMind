@@ -10,40 +10,97 @@
 #include <bsp/IBSP.h>
 #include <bsp/SocketContainer.h>
 #include <cstdlib>
+#include <freertos-utils/AbstractTask.h>
 #include <logger/Logger.h>
 #include <logger/LoggerContainer.h>
 
-void printThreadExample(void* param) {
-    (void)param;
-    const int toggleDelay = 2000;
+class LoggerTask : public AbstractTask<configMINIMAL_STACK_SIZE> {
+  public:
+    LoggerTask(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
 
-    ILogger& logger = LoggerContainer::getLogger();
+    ~LoggerTask() override = default;
 
-    std::optional<TCPClientWrapper> socket = SocketContainer::getHostClientSocket();
+  private:
+    ILogger& m_logger;
 
-    if (socket) {
-        socket.value().send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORlD"));
+    void task() override {
+        while (true) {
+            m_logger.log(LogLevel::Info, "Hello logger");
+            vTaskDelay(2000);
+        }
     }
+};
 
-    BittyBuzzBytecode bytecode = BittyBuzzFactory::createBittyBuzzBytecode(logger);
-    BittyBuzzStringResolver stringResolver =
-        BittyBuzzFactory::createBittyBuzzStringResolver(logger);
+class BittyBuzzTask : public AbstractTask<4 * configMINIMAL_STACK_SIZE> {
+  public:
+    BittyBuzzTask(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority),
+        m_logger(LoggerContainer::getLogger()),
+        m_bittybuzzVm(BittyBuzzFactory::createBittyBuzzBytecode(m_logger),
+                      BittyBuzzFactory::createBittyBuzzStringResolver(m_logger),
+                      BSPContainer::getBSP(),
+                      m_logger,
+                      BittyBuzzFactory::createBittyBuzzFunctionRegisters()) {}
 
-    auto functionRegisters = BittyBuzzFactory::createBittyBuzzFunctionRegisters();
+    ~BittyBuzzTask() override = default;
 
-    BittyBuzzVm bittybuzz =
-        BittyBuzzVm(bytecode, stringResolver, BSPContainer::getBSP(), logger, functionRegisters);
+  private:
+    ILogger& m_logger;
+    BittyBuzzVm m_bittybuzzVm;
 
-    logger.log(LogLevel::Info, "Hello logger!");
-    while (true) {
-        logger.log(LogLevel::Info, "Hello world!");
-        vTaskDelay(toggleDelay);
-        bittybuzz.step();
+    void task() override {
+        while (true) {
 
+            if (!m_bittybuzzVm.step()) {
+                m_logger.log(LogLevel::Error, "BBZVM failed to step! state: %d err: %d",
+                             m_bittybuzzVm.getSate(), m_bittybuzzVm.getError());
+            }
+            vTaskDelay(1000);
+        }
+    }
+};
+
+class HostUartCommTask : public AbstractTask<configMINIMAL_STACK_SIZE> {
+  public:
+    HostUartCommTask(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority) {}
+
+    ~HostUartCommTask() override = default;
+
+  private:
+    void task() override {
         IHostUart& hostUart = BSPContainer::getHostUart();
-        hostUart.send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORLD"));
+        while (true) {
+            hostUart.send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORLD"));
+            vTaskDelay(1000);
+        }
     }
-}
+};
+
+class HostTCPCommTask : public AbstractTask<configMINIMAL_STACK_SIZE> {
+  public:
+    HostTCPCommTask(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority) {}
+
+    ~HostTCPCommTask() override = default;
+
+  private:
+    void task() override {
+        std::optional<TCPClientWrapper> socket;
+        while (!socket) {
+            std::optional<TCPClientWrapper> tmpSocket = SocketContainer::getHostClientSocket();
+            if (tmpSocket) {
+                socket.emplace(tmpSocket.value());
+            }
+        }
+
+        while (true) {
+            socket.value().send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORD"));
+            vTaskDelay(1000);
+        }
+    }
+};
 
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
@@ -51,8 +108,15 @@ int main(int argc, char** argv) {
     IBSP& bsp = BSPContainer::getBSP();
     bsp.initChip((void*)&cmdLineArgs);
 
-    const uint32_t stackSize = configMINIMAL_STACK_SIZE * 8;
-    xTaskCreate(printThreadExample, "print", stackSize, NULL, tskIDLE_PRIORITY + 1, NULL);
+    LoggerTask loggerTask("logger", tskIDLE_PRIORITY + 1);
+    BittyBuzzTask bittybuzzTask("bittybuzz", tskIDLE_PRIORITY + 1);
+    HostUartCommTask uartTask("uart", tskIDLE_PRIORITY + 1);
+    HostTCPCommTask tcpTask("uart", tskIDLE_PRIORITY + 1);
+
+    loggerTask.start();
+    bittybuzzTask.start();
+    uartTask.start();
+    tcpTask.start();
 
     vTaskStartScheduler();
 

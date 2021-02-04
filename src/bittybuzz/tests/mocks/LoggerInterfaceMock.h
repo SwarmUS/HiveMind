@@ -16,7 +16,7 @@ class LoggerInterfaceMock final : public ILogger {
         m_logCallCounter(logCounter), m_logLastFormat(logLastFormat) {}
     ~LoggerInterfaceMock() override = default;
 
-    LogRet log(LogLevel level, const char* format, ...) const override {
+    LogRet log(LogLevel level, const char* format, ...) override {
         (void)level;
         const int bufferSize = 1024;
         char buffer[bufferSize];
