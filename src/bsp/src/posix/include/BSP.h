@@ -2,6 +2,7 @@
 #define __BSP_H_
 
 #include "bsp/IBSP.h"
+#include <freertos-utils/BaseTask.h>
 #include <ros/ros.h>
 
 class BSP : public IBSP {
@@ -15,6 +16,8 @@ class BSP : public IBSP {
 
   private:
     std::shared_ptr<ros::NodeHandle> m_rosNodeHandle;
+    BaseTask<2 * configMINIMAL_STACK_SIZE> m_rosWatchTask;
+    BaseTask<configMINIMAL_STACK_SIZE> m_exampleTopicPublishTask;
 };
 
 #endif // __BSP_H_

@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-TCPClient::TCPClient(int socket, sockaddr_in address, const ILogger& logger) :
+TCPClient::TCPClient(int socket, sockaddr_in address, ILogger& logger) :
     m_logger(logger), m_socketFd(socket), m_address(address) {}
 
 int32_t TCPClient::receive(uint8_t* data, uint16_t length) {

@@ -3,7 +3,7 @@
 #include <functional>
 
 // TODO: Make a PR to bittybuzz to pass context
-static const ILogger* g_logger = NULL;
+static ILogger* g_logger = NULL;
 static const uint8_t* g_bittyBuzzBytecode = NULL;
 static uint16_t g_bittyBuzzBytecodeLength = 0;
 
@@ -22,7 +22,7 @@ const uint8_t* bbz_bcodeFetcher(bbzpc_t offset, uint8_t size) {
     return g_bittyBuzzBytecode + offset;
 }
 
-BittyBuzzBytecode::BittyBuzzBytecode(const ILogger& logger,
+BittyBuzzBytecode::BittyBuzzBytecode(ILogger& logger,
                                      const uint8_t* bytecode,
                                      const uint16_t bytecodeLength) :
     m_logger(logger), m_bytecode(bytecode), m_bytecodeLength(bytecodeLength) {

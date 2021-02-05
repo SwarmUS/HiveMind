@@ -4,7 +4,7 @@ BittyBuzzStringResolver::BittyBuzzStringResolver(
     const std::pair<const uint16_t, const char*>* stringArray,
     uint16_t arrayLength,
     uint16_t stringIdOffset,
-    const ILogger& logger) :
+    ILogger& logger) :
     m_logger(logger),
     m_stringArray(stringArray),
     m_arrayLength(arrayLength),

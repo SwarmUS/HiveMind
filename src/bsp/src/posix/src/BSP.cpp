@@ -8,9 +8,6 @@
 #include <hive_mind/ExampleMessage.h>
 #include <task.h>
 
-BSP::BSP() = default;
-BSP::~BSP() = default;
-
 /**
  * @brief Task that kills FreeRTOS when ROS node is stopped
  */
@@ -45,6 +42,12 @@ void exampleTopicPublish(void* param) {
     }
 }
 
+BSP::BSP() :
+    m_rosWatchTask("ros_watch", tskIDLE_PRIORITY + 1, rosWatcher, NULL),
+    m_exampleTopicPublishTask("ros_watch", tskIDLE_PRIORITY + 1, rosWatcher, &m_rosNodeHandle) {}
+
+BSP::~BSP() = default;
+
 void BSP::initChip(void* args) {
     CmdLineArgs* cmdLineArgs = (CmdLineArgs*)args;
     ros::init(cmdLineArgs->m_argc, cmdLineArgs->m_argv, "hive_mind");
@@ -55,11 +58,8 @@ void BSP::initChip(void* args) {
     int port = m_rosNodeHandle->param("uart_mock_port", 0);
     tcpUart.openSocket(port);
 
-    xTaskCreate(rosWatcher, "ros_watch", configMINIMAL_STACK_SIZE * 2, NULL, tskIDLE_PRIORITY + 1,
-                NULL);
-
-    xTaskCreate(exampleTopicPublish, "example_topic_publish", configMINIMAL_STACK_SIZE,
-                &m_rosNodeHandle, tskIDLE_PRIORITY + 1, NULL);
+    m_rosWatchTask.start();
+    m_exampleTopicPublishTask.start();
 }
 
 std::shared_ptr<ros::NodeHandle> BSP::getRosNodeHandle() { return m_rosNodeHandle; }

@@ -9,7 +9,7 @@
 
 class BittyBuzzBytecode : public IBittyBuzzBytecode {
   public:
-    BittyBuzzBytecode(const ILogger& logger, const uint8_t* bytecode, uint16_t bytecodeLength);
+    BittyBuzzBytecode(ILogger& logger, const uint8_t* bytecode, uint16_t bytecodeLength);
 
     ~BittyBuzzBytecode() = default;
 
@@ -18,7 +18,7 @@ class BittyBuzzBytecode : public IBittyBuzzBytecode {
     uint16_t getBytecodeLength() const override;
 
   private:
-    const ILogger& m_logger;
+    ILogger& m_logger;
     const uint8_t* m_bytecode;
     const uint16_t m_bytecodeLength;
 };

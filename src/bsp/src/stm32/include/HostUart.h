@@ -6,8 +6,9 @@
 #include <FreeRTOS.h>
 #include <array>
 #include <cstdint>
+#include <freertos-utils/BaseTask.h>
+#include <freertos-utils/Mutex.h>
 #include <logger/ILogger.h>
-#include <semphr.h>
 
 class HostUart : public IHostUart {
   public:
@@ -30,6 +31,8 @@ class HostUart : public IHostUart {
     ICRC& m_crc;
     ILogger& m_logger;
 
+    BaseTask<configMINIMAL_STACK_SIZE * 3> m_hostUartTask;
+
     TxState m_txState;
     uint8_t m_txLength;
     std::array<uint8_t, HOST_UART_HEADER_LENGTH> m_txHeader;
@@ -41,7 +44,7 @@ class HostUart : public IHostUart {
     uint32_t m_rxCrc;
     RxState m_rxState;
 
-    SemaphoreHandle_t m_uartSemaphore;
+    Mutex m_uartMutex;
 
     void startHeaderListen();
     void txCpltCallback();

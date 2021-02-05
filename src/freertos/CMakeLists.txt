@@ -22,6 +22,9 @@ find_package(FreeRTOS COMPONENTS
             NONE
             REQUIRED)
 
+# Wraps the interface library in a static library
+get_target_property(FREERTOS_UTILS_INCLUDES SwarmUS::Propolis::FreeRTOS::Static::Utils INTERFACE_INCLUDE_DIRECTORIES)
+
 target_include_directories(${LIB_NAME}
     PUBLIC
        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -30,6 +33,7 @@ target_include_directories(${LIB_NAME}
        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/freertos>
        $<INSTALL_INTERFACE:include>
        ${FREERTOS_KERNEL_PATH}/include
+       ${FREERTOS_UTILS_INCLUDES}
 )
 
 target_link_libraries(${LIB_NAME}
@@ -38,6 +42,7 @@ target_link_libraries(${LIB_NAME}
 
     PRIVATE    
         SwarmUS::HiveMind::FreeRTOS::Platform
+        SwarmUS::Propolis::FreeRTOS::Static::Utils
 
         FreeRTOS::Coroutine
         FreeRTOS::EventGroups

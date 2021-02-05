@@ -8,9 +8,7 @@ class TCPClient;
 
 namespace SocketFactory {
 
-    std::optional<TCPClient> createTCPClient(const char* address,
-                                             uint32_t port,
-                                             const ILogger& logger);
+    std::optional<TCPClient> createTCPClient(const char* address, uint32_t port, ILogger& logger);
 
 } // namespace SocketFactory
 

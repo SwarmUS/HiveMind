@@ -30,7 +30,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
     BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                 const IBittyBuzzStringResolver& stringResolver,
                 const IBSP& bsp,
-                const ILogger& logger,
+                ILogger& logger,
                 const Container& container);
 
     ~BittyBuzzVm() override = default;
@@ -44,7 +44,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
   private:
     const IBittyBuzzBytecode& m_bytecode;
     const IBSP& m_bsp;
-    const ILogger& m_logger;
+    ILogger& m_logger;
 
     bbzvm_t m_bbzVm;
     std::array<uint8_t, BBZ_MSG_BUFF_SIZE> m_bbzMsgBuff;

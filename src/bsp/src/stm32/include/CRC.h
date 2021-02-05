@@ -3,17 +3,18 @@
 
 #include "bsp/ICRC.h"
 #include <FreeRTOS.h>
+#include <freertos-utils/Mutex.h>
 #include <semphr.h>
 
 class CRC : public ICRC {
   public:
     CRC();
-    ~CRC() override;
+    ~CRC() override = default;
 
     uint32_t calculateCRC32(const void* data, uint32_t length) override;
 
   private:
-    SemaphoreHandle_t m_semaphore;
+    Mutex m_mutex;
 };
 
 #endif //__CRC_H__

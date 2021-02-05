@@ -3,6 +3,7 @@
 #include <FreeRTOS.h>
 #include <FreeRTOSConfig.h>
 #include <cstring>
+#include <freertos-utils/BaseTask.h>
 #include <ros/ros.h>
 #include <task.h>
 
@@ -11,7 +12,10 @@ void TCPUartMock_listenTask(void* param) {
     test->waitForClient();
 }
 
-TCPUartMock::TCPUartMock(ILogger& logger) : m_logger(logger), m_port(0) {}
+TCPUartMock::TCPUartMock(ILogger& logger) :
+    m_logger(logger),
+    m_listenTask("tcp_uart_mock_listen", tskIDLE_PRIORITY + 1, TCPUartMock_listenTask, this),
+    m_port(0) {}
 
 TCPUartMock::~TCPUartMock() { close(); }
 
@@ -42,11 +46,12 @@ void TCPUartMock::openSocket(int port) {
         return;
     }
 
-    m_logger.log(LogLevel::Info, "UART TCP mock server waiting for client on port %d", m_port);
+    if (m_listenTask.start()) {
+        m_logger.log(LogLevel::Info, "UART TCP mock server waiting for client on port %d", m_port);
+    } else {
 
-    const uint32_t stackSize = configMINIMAL_STACK_SIZE * 100;
-    xTaskCreate(TCPUartMock_listenTask, "tcp_uart_mock_listen", stackSize, (void*)this,
-                tskIDLE_PRIORITY + 1, NULL);
+        m_logger.log(LogLevel::Info, "UART TCP mock already listening on port %d", m_port);
+    }
 }
 
 bool TCPUartMock::send(const uint8_t* buffer, uint16_t length) {

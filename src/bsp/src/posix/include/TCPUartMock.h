@@ -2,6 +2,7 @@
 #define __TCPUARTMOCK_H__
 
 #include "bsp/IHostUart.h"
+#include <freertos-utils/BaseTask.h>
 #include <logger/ILogger.h>
 #include <netinet/in.h>
 #include <optional>
@@ -23,6 +24,8 @@ class TCPUartMock : public IHostUart {
 
   private:
     ILogger& m_logger;
+
+    BaseTask<configMINIMAL_STACK_SIZE * 2> m_listenTask;
 
     int m_serverFd{}, m_port;
     std::optional<int> m_clientFd;
