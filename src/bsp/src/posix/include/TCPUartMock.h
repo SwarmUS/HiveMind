@@ -25,7 +25,7 @@ class TCPUartMock : public IHostUart {
   private:
     ILogger& m_logger;
 
-    BaseTask<configMINIMAL_STACK_SIZE * 100> m_listenTask;
+    BaseTask<configMINIMAL_STACK_SIZE * 2> m_listenTask;
 
     int m_serverFd{}, m_port;
     std::optional<int> m_clientFd;
