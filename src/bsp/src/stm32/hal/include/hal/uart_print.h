@@ -1,7 +1,6 @@
 #ifndef __UART_PRINT_H__
 #define __UART_PRINT_H__
 
-#include "common/circular_buff.h"
 #include "hivemind_hal.h"
 
 #ifdef __cplusplus

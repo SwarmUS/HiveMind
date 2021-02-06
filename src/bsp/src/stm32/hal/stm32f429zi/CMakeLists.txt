@@ -95,7 +95,7 @@ target_link_libraries(${LIB_NAME}
         CMSIS::STM32::F429ZI
         HAL::STM32::F4::CORTEX
         STM32::NoSys
-        SwarmUS::HiveMind::BSP::Common
+        SwarmUS::Propolis::C::Common
 
     PRIVATE
         stm32f429zi-linker
