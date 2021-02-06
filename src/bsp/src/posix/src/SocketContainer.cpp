@@ -12,9 +12,9 @@ std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket() {
     if (!s_clientSocket) {
 
         ILogger& logger = LoggerContainer::getLogger();
-        const uint32_t port = SettingsContainer::GetHostPort();
+        const uint32_t port = SettingsContainer::getHostPort();
         char address[MAX_IP_LENGTH];
-        if (SettingsContainer::GetHostIP(address, (uint8_t)MAX_IP_LENGTH) == 0) {
+        if (SettingsContainer::getHostIP(address, (uint8_t)MAX_IP_LENGTH) == 0) {
             logger.log(LogLevel::Error, "IP string too big for buffer");
             return s_wrapper;
         }

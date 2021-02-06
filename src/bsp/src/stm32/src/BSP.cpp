@@ -11,4 +11,4 @@ void BSP::initChip(void* args) {
     Hal_init();
 }
 
-uint16_t BSP::getUUId() const { return SettingsContainer::GetUUID(); }
+uint16_t BSP::getUUId() const { return SettingsContainer::getUUID(); }
