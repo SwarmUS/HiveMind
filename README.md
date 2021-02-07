@@ -127,6 +127,7 @@ CMake variables can be used to override certain default firmware settings.
 | UUID      | 1 (0 is reserved for broadcast)|
 | HOST_PORT | 5555            |
 | HOST_IP   | 192.168.1.101   |
+| LOG_LEVEL | Info            |
 
 #### ROS Target
 ROS launch parameters are used to configure variables.
@@ -135,3 +136,4 @@ ROS launch parameters are used to configure variables.
 | board_uuid        | 1 (0 is reserved for broadcast) |
 | host_tcp_port     | 5555            |
 | host_tcp_address  | 127.0.0.1       |
+| log_level         | Info            |

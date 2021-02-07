@@ -33,6 +33,7 @@ uint8_t SettingsContainer::getHostIP(char* buf, uint8_t length) {
 LogLevel SettingsContainer::getLogLevel() {
     auto handle = getRosNodeHandle();
     std::string logLevel = handle->param("log_level", std::string("Info"));
+    printf("loglevel %s", logLevel.c_str());
 
     if (logLevel == "Debug") {
         return LogLevel::Debug;
@@ -40,10 +41,10 @@ LogLevel SettingsContainer::getLogLevel() {
     if (logLevel == "Info") {
         return LogLevel::Info;
     }
-    if (logLevel == "Warn") {
+    if (logLevel == "Warn" || logLevel == "Warning") {
         return LogLevel::Warn;
     }
-    if (logLevel == "Error") {
+    if (logLevel == "Error" || logLevel == "Err") {
         return LogLevel::Error;
     }
 
