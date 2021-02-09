@@ -1,11 +1,12 @@
 #ifndef __ITCPCLIENT_H_
 #define __ITCPCLIENT_H_
 
+#include <common/IProtobufStream.h>
 #include <cstdint>
 
 /**
  *@brief class to manage a tcp client socket */
-class ITCPClient {
+class ITCPClient : public IProtobufStream {
   public:
     virtual ~ITCPClient() = default;
 
@@ -16,9 +17,9 @@ class ITCPClient {
      *
      *@param [in] length maximum size of the data buffer
      *
-     *@return the number of bytes received or -1 on error
+     *@return true if the operation was successful, false if not
      **/
-    virtual int32_t receive(uint8_t* data, uint16_t length) = 0;
+    virtual bool receive(uint8_t* data, uint16_t length) = 0;
 
     /**
      *@brief Sends data to the remote server
@@ -27,9 +28,9 @@ class ITCPClient {
      *
      *@param [in] length data size of the data buffer
      *
-     *@return the number of bytes sent or -1 on error
+     *@return true if the operation was successful, false if not
      **/
-    virtual int32_t send(const uint8_t* data, uint16_t length) = 0;
+    virtual bool send(const uint8_t* data, uint16_t length) = 0;
 
     /**
      *@brief Closes the socket

@@ -23,7 +23,6 @@ class LoggerTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
 
   private:
     ILogger& m_logger;
-
     void task() override {
         while (true) {
             m_logger.log(LogLevel::Info, "Hello logger");
@@ -82,19 +81,50 @@ class HostUartCommTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
     }
 };
 
+class TCPReadDemoTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+  public:
+    TCPReadDemoTask(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
+
+    ~TCPReadDemoTask() override = default;
+
+  private:
+    ILogger& m_logger;
+    void task() override {
+
+        uint8_t buffer[20];
+        buffer[sizeof(buffer) - 1] = 0;
+
+        // Wait for connection
+        while (true) {
+            if (std::optional<TCPClientWrapper> socket = SocketContainer::getHostClientSocket()) {
+                while (true) {
+                    auto ret = socket.value().receive(buffer, sizeof(buffer) - 1);
+                    (void)ret;
+                    m_logger.log(LogLevel::Info, "TCP RX: %s", buffer);
+                }
+            }
+            // Retry connection every 2s
+            vTaskDelay(2000);
+        }
+    }
+};
+
 class HostTCPCommTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
   public:
-    HostTCPCommTask(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority) {}
+    HostTCPCommTask(const char* taskName, UBaseType_t priority, TCPReadDemoTask& tcpReadTask) :
+        AbstractTask(taskName, priority), m_tcpReadDemoTask(tcpReadTask) {}
 
     ~HostTCPCommTask() override = default;
 
   private:
+    TCPReadDemoTask& m_tcpReadDemoTask;
     void task() override {
 
         // Wait for connection
         while (true) {
             if (std::optional<TCPClientWrapper> socket = SocketContainer::getHostClientSocket()) {
+                m_tcpReadDemoTask.start();
                 while (true) {
                     auto ret =
                         socket.value().send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORLD"));
@@ -114,13 +144,14 @@ int main(int argc, char** argv) {
     IBSP& bsp = BSPContainer::getBSP();
     bsp.initChip((void*)&cmdLineArgs);
 
-    static LoggerTask s_loggerTask("logger", tskIDLE_PRIORITY + 1);
-    static BittyBuzzTask s_bittybuzzTask("bittybuzz", tskIDLE_PRIORITY + 1);
+    // static LoggerTask s_loggerTask("logger", tskIDLE_PRIORITY + 1);
+    // static BittyBuzzTask s_bittybuzzTask("bittybuzz", tskIDLE_PRIORITY + 1);
     static HostUartCommTask s_uartTask("uart", tskIDLE_PRIORITY + 1);
-    static HostTCPCommTask s_tcpTask("tcp", tskIDLE_PRIORITY + 1);
+    static TCPReadDemoTask s_tcpReadTask("tcp_read", tskIDLE_PRIORITY + 1);
+    static HostTCPCommTask s_tcpTask("tcp", tskIDLE_PRIORITY + 1, s_tcpReadTask);
 
-    s_loggerTask.start();
-    s_bittybuzzTask.start();
+    // s_loggerTask.start();
+    // s_bittybuzzTask.start();
     s_uartTask.start();
     s_tcpTask.start();
 

@@ -11,9 +11,9 @@ class TCPClient : public ITCPClient {
 
     ~TCPClient() override = default;
 
-    int32_t receive(uint8_t* data, uint16_t length) override;
+    bool receive(uint8_t* data, uint16_t length) override;
 
-    int32_t send(const uint8_t* data, uint16_t length) override;
+    bool send(const uint8_t* data, uint16_t length) override;
 
     bool close() override;
 
