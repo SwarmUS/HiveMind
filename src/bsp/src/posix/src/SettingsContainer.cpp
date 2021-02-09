@@ -40,12 +40,12 @@ LogLevel SettingsContainer::getLogLevel() {
     if (logLevel == "Info") {
         return LogLevel::Info;
     }
-    if (logLevel == "Warn" || logLevel == "Warning") {
+    if (logLevel == "Warn") {
         return LogLevel::Warn;
     }
-    if (logLevel == "Error" || logLevel == "Err") {
+    if (logLevel == "Error") {
         return LogLevel::Error;
     }
 
-    return LogLevel::Debug;
+    return LogLevel::Info;
 }

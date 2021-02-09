@@ -1,8 +1,7 @@
 #ifndef __DEFAULTSETTINGS_H__
 #define __DEFAULTSETTINGS_H__
 // clang-format off
-//
-//
+
 #include <logger/ILogger.h>
 
 /**
