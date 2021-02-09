@@ -13,7 +13,7 @@ function(propolis_fetch_populate)
         ${PROJECT_NAME}_propolis
 
         GIT_REPOSITORY https://github.com/SwarmUS/Propolis
-        GIT_TAG        feat/SWARINFO-152_clean-main-add-c-commonlib
+        GIT_TAG        194029c
         GIT_PROGRESS   TRUE
     )
 
