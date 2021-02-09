@@ -34,7 +34,7 @@ target_link_libraries(${LIB_NAME}
         CMSIS::STM32::F4::LWIP
         CMSIS::STM32::F4::LWIP::IPV4
         SwarmUS::HiveMind::HAL::Linker::STM32F4
-        SwarmUS::HiveMind::BSP::Common
+        SwarmUS::Propolis::C::Common
     )
 
 if (ENABLE_TARGET_IPERF_SERVER)

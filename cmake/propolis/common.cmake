@@ -13,7 +13,7 @@ function(propolis_fetch_populate)
         ${PROJECT_NAME}_propolis
 
         GIT_REPOSITORY https://github.com/SwarmUS/Propolis
-        GIT_TAG        0d026f3
+        GIT_TAG        194029c
         GIT_PROGRESS   TRUE
     )
 
@@ -29,8 +29,7 @@ function(propolis_fetch_populate)
         FetchContent_Populate(${PROPOLIS})
 
         list(APPEND CMAKE_MODULE_PATH ${${PROPOLIS_L}_SOURCE_DIR}/cmake/)
-        add_subdirectory(${${PROPOLIS_L}_SOURCE_DIR}/src/pheromones ${${PROPOLIS_L}_BINARY_DIR}/pheromones)
-        add_subdirectory(${${PROPOLIS_L}_SOURCE_DIR}/src/freertos ${${PROPOLIS_L}_BINARY_DIR}/freertos)
+        add_subdirectory(${${PROPOLIS_L}_SOURCE_DIR}/src ${${PROPOLIS_L}_BINARY_DIR})
 
         # Removing warnings from freertos compilation on executable target
         if (DISABLE_EXTERNAL_WARNINGS) 

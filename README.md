@@ -120,6 +120,14 @@ The firmware has been configured with the following pins for the uart connection
 ### Configuration
 Different firmware settings can be configured at build time (for the STM32 target) or runtime (for the ROS target).
 
+#### Log level
+It's possible to change the log level, check how to configure the build depending on the platform. Here are the levels available:
+
+* Debug
+* Info
+* Warn
+* Error
+
 #### STM32 Target
 CMake variables can be used to override certain default firmware settings.
 | Variable  | Default value   |
@@ -127,6 +135,7 @@ CMake variables can be used to override certain default firmware settings.
 | UUID      | 1 (0 is reserved for broadcast)|
 | HOST_PORT | 5555            |
 | HOST_IP   | 192.168.1.101   |
+| LOG_LEVEL | Info            |
 
 #### ROS Target
 ROS launch parameters are used to configure variables.
@@ -135,3 +144,5 @@ ROS launch parameters are used to configure variables.
 | board_uuid        | 1 (0 is reserved for broadcast) |
 | host_tcp_port     | 5555            |
 | host_tcp_address  | 127.0.0.1       |
+| log_level         | Info            |
+

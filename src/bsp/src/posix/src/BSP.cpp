@@ -64,4 +64,4 @@ void BSP::initChip(void* args) {
 
 std::shared_ptr<ros::NodeHandle> BSP::getRosNodeHandle() { return m_rosNodeHandle; }
 
-uint16_t BSP::getUUId() const { return SettingsContainer::GetUUID(); }
+uint16_t BSP::getUUId() const { return SettingsContainer::getUUID(); }

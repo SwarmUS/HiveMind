@@ -1,6 +1,7 @@
 #ifndef __SOCKETFACTORY_H_
 #define __SOCKETFACTORY_H_
 
+#include <cstdint>
 #include <logger/ILogger.h>
 #include <optional>
 

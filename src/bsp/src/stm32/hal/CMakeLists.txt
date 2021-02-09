@@ -33,7 +33,7 @@ target_sources(stm32f4-linker
 target_link_libraries(stm32f4-linker
     INTERFACE
         SwarmUS::HiveMind::HAL::Linker::STM32F4
-        SwarmUS::HiveMind::BSP::Common)
+        SwarmUS::Propolis::C::Common)
 
 target_include_directories(stm32f4-linker
     INTERFACE

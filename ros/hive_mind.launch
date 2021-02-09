@@ -11,5 +11,7 @@
 
             <!-- Set port to 0 to disable server -->
             <param name="uart_mock_port" value="12345" />
+
+            <param name="log_level" value="Info" />
         </node>
 </launch>
