@@ -26,6 +26,7 @@ add_subdirectory(bittybuzz)
 add_subdirectory(bsp)
 add_subdirectory(freertos)
 add_subdirectory(logger)
+add_subdirectory(message-handler)
 
 # Removing warnings from interface libraries
 if (DISABLE_EXTERNAL_WARNINGS) 
