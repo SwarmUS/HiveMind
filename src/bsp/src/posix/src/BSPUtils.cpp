@@ -1,14 +1,13 @@
 #include "BSPUtils.h"
-#include <csignal>
 
-void BSPUtils::blockSignals() {
+sigset_t BSPUtils::blockSignals() {
     sigset_t mask;
+    sigset_t omask;
+
     sigfillset(&mask);
-    sigprocmask(SIG_SETMASK, &mask, nullptr);
+    pthread_sigmask(SIG_SETMASK, &mask, &omask);
+
+    return omask;
 }
 
-void BSPUtils::unblockSignals() {
-    sigset_t mask;
-    sigemptyset(&mask);
-    sigprocmask(SIG_SETMASK, &mask, nullptr);
-}
+void BSPUtils::unblockSignals(sigset_t omask) { pthread_sigmask(SIG_SETMASK, &omask, nullptr); }

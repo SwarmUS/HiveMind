@@ -16,7 +16,7 @@ class HostUart : public IHostUart {
     ~HostUart() override = default;
 
     bool send(const uint8_t* buffer, uint16_t length) override;
-    int32_t receive(uint8_t* buffer, uint16_t length) const override;
+    bool receive(uint8_t* buffer, uint16_t length) const override;
     bool isBusy() const override;
 
     void process();

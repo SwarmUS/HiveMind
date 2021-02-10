@@ -1,5 +1,7 @@
 if (${COMPILE_STM32_F429ZI})
     add_subdirectory(stm32)
+    MESSAGE("******************STM32")
 else()
     add_subdirectory(posix)
+    MESSAGE("******************POSIX")
 endif()

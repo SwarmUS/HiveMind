@@ -64,7 +64,34 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class HostUartCommTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+class UARTReadTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+  public:
+    UARTReadTask(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
+
+    ~UARTReadTask() override = default;
+
+  private:
+    ILogger& m_logger;
+    void task() override {
+
+        uint8_t buffer[5];
+        buffer[sizeof(buffer) - 1] = 0;
+
+        // Wait for connection
+        while (true) {
+            auto& uart = BSPContainer::getHostUart();
+            if (uart.receive(buffer, sizeof(buffer) - 1)) {
+                m_logger.log(LogLevel::Info, "UART RX: %s", buffer);
+            } else {
+                // Probably failed because no client connected
+                vTaskDelay(2000);
+            }
+        }
+    }
+};
+
+class HostUartCommTask : public AbstractTask<100 * configMINIMAL_STACK_SIZE> {
   public:
     HostUartCommTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority) {}
@@ -74,6 +101,9 @@ class HostUartCommTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
   private:
     void task() override {
         IHostUart& hostUart = BSPContainer::getHostUart();
+        uint8_t buffer[5];
+        buffer[sizeof(buffer) - 1] = 0;
+
         while (true) {
             hostUart.send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORLD"));
             vTaskDelay(1000);
@@ -92,7 +122,7 @@ class TCPReadDemoTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
     ILogger& m_logger;
     void task() override {
 
-        uint8_t buffer[20];
+        uint8_t buffer[5];
         buffer[sizeof(buffer) - 1] = 0;
 
         // Wait for connection
@@ -144,14 +174,16 @@ int main(int argc, char** argv) {
     IBSP& bsp = BSPContainer::getBSP();
     bsp.initChip((void*)&cmdLineArgs);
 
-    // static LoggerTask s_loggerTask("logger", tskIDLE_PRIORITY + 1);
-    // static BittyBuzzTask s_bittybuzzTask("bittybuzz", tskIDLE_PRIORITY + 1);
+    static LoggerTask s_loggerTask("logger", tskIDLE_PRIORITY + 1);
+    static BittyBuzzTask s_bittybuzzTask("bittybuzz", tskIDLE_PRIORITY + 1);
+    static UARTReadTask s_uartReadTask("uart_read", tskIDLE_PRIORITY + 1);
     static HostUartCommTask s_uartTask("uart", tskIDLE_PRIORITY + 1);
     static TCPReadDemoTask s_tcpReadTask("tcp_read", tskIDLE_PRIORITY + 1);
     static HostTCPCommTask s_tcpTask("tcp", tskIDLE_PRIORITY + 1, s_tcpReadTask);
 
-    // s_loggerTask.start();
-    // s_bittybuzzTask.start();
+    s_loggerTask.start();
+    s_bittybuzzTask.start();
+    s_uartReadTask.start();
     s_uartTask.start();
     s_tcpTask.start();
 

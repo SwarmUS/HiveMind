@@ -62,11 +62,11 @@ bool HostUart::send(const uint8_t* buffer, uint16_t length) {
     return ret;
 }
 
-int32_t HostUart::receive(uint8_t* buffer, uint16_t length) const {
+bool HostUart::receive(uint8_t* buffer, uint16_t length) const {
     (void)buffer;
     (void)length;
     // TODO: Implement
-    return 0;
+    return false;
 }
 
 void HostUart::startHeaderListen() {

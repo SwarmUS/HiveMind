@@ -8,21 +8,43 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+void rxThread(TmpThread* context) {
+    BSPUtils::blockSignals();
+
+    while (true) {
+        std::unique_lock<std::mutex> lock(context->m_recvMutex);
+        context->m_startRecvSignal.wait(lock);
+
+        context->m_recvRet =
+            ::recv(context->m_socketFd, context->m_recvBuffer, context->m_recvLength, MSG_WAITALL);
+        context->m_recvEndedSignal.notify_one();
+    }
+}
+
 TCPClient::TCPClient(int socket, sockaddr_in address, ILogger& logger) :
-    m_logger(logger), m_socketFd(socket), m_address(address) {}
+    m_logger(logger), m_socketFd(socket), m_address(address) {
+    m_thread = new TmpThread();
+    m_thread->m_socketFd = socket;
+    m_thread->m_rxThread = std::thread(rxThread, this);
+}
 
 bool TCPClient::receive(uint8_t* data, uint16_t length) {
-    BSPUtils::blockSignals();
-    ssize_t ret = ::recv(m_socketFd, data, length, MSG_WAITALL);
-    BSPUtils::unblockSignals();
+    std::unique_lock<std::mutex> lock(m_thread->m_recvMutex);
 
-    return ret == length;
+    m_thread->m_recvBuffer = data;
+    m_thread->m_recvLength = length;
+
+    m_thread->m_startRecvSignal.notify_one();
+    lock.unlock(); // Allow thread to do it's process
+    m_thread->m_recvEndedSignal.wait(lock);
+
+    return m_thread->m_recvRet == length;
 }
 
 bool TCPClient::send(const uint8_t* data, uint16_t length) {
-    BSPUtils::blockSignals();
+    sigset_t mask = BSPUtils::blockSignals();
     ssize_t ret = ::send(m_socketFd, data, length, 0);
-    BSPUtils::unblockSignals();
+    BSPUtils::unblockSignals(mask);
 
     return ret == length;
 }
