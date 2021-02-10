@@ -10,7 +10,7 @@
 
 class IHostUart : public IProtobufStream {
   public:
-    ~IHostUart() override = default;
+    virtual ~IHostUart() = default;
 
     /**
      * @brief Sends a buffer to the Host via UART by prepending with the length and the CRC32
@@ -19,7 +19,7 @@ class IHostUart : public IProtobufStream {
      * @param length Number of bytes to send
      * @return True if transfer started. False otherwise.
      */
-    bool send(const uint8_t* buffer, uint16_t length) override = 0;
+    virtual bool send(const uint8_t* buffer, uint16_t length) = 0;
 
     /**
      * @brief Receives up to an amount of data from the UART port
@@ -27,7 +27,7 @@ class IHostUart : public IProtobufStream {
      * @param length Maximum length of data to receive
      * @return True if success, false otherwise.
      */
-    bool receive(uint8_t* buffer, uint16_t length) override = 0;
+    virtual bool receive(uint8_t* buffer, uint16_t length) = 0;
 
     /**
      * @brief Checks if driver is already busy transmitting data.

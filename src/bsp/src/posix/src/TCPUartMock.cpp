@@ -17,7 +17,7 @@ void TCPUartMock_listenTask(void* param) {
 
 TCPUartMock::TCPUartMock(ILogger& logger) :
     m_logger(logger),
-    m_listenTask("tcp_uart_mock_listen", tskIDLE_PRIORITY + 10, TCPUartMock_listenTask, this),
+    m_listenTask("tcp_uart_mock_listen", tskIDLE_PRIORITY + 1, TCPUartMock_listenTask, this),
     m_port(0) {}
 
 TCPUartMock::~TCPUartMock() { close(); }
