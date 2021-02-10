@@ -3,11 +3,14 @@ set(LIB_ALIAS "SwarmUS::HiveMind::MessageHandler")
 
 set(LIB_SOURCES
     src/MessageDispatcher.cpp
+    src/MessageSender.cpp
 )
 
 set(LIB_HEADERS
     include/message-handler/MessageDispatcher.h
     include/message-handler/IMessageDispatcher.h
+
+    include/message-handler/MessageSender.h
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS} ${LIB_SOURCES})
@@ -24,6 +27,7 @@ target_include_directories(${LIB_NAME}
 
 target_link_libraries(${LIB_NAME}
     PUBLIC
+        SwarmUS::HiveMind::BSP
         SwarmUS::HiveMind::Logger
         SwarmUS::Propolis::Cpp::Common
         SwarmUS::Propolis::Pheromones::HiveMind::Host
