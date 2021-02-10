@@ -4,7 +4,8 @@
 #include <common/IProtobufStream.h>
 #include <cstdint>
 
-#define HOST_UART_MAX_MESSAGE_LENGTH UINT16_MAX
+#define HOST_UART_MAX_MESSAGE_LENGTH 1024
+#define HOST_UART_STREAM_SIZE 4096
 #define HOST_UART_HEADER_LENGTH 6
 
 class IHostUart : public IProtobufStream {
