@@ -91,7 +91,7 @@ class UARTReadTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class HostUartCommTask : public AbstractTask<100 * configMINIMAL_STACK_SIZE> {
+class HostUartCommTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
   public:
     HostUartCommTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority) {}

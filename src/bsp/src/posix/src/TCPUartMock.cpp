@@ -2,48 +2,23 @@
 #include "BSPUtils.h"
 #include <FreeRTOS.h>
 #include <FreeRTOSConfig.h>
-#include <cstring>
 #include <freertos-utils/BaseTask.h>
 #include <ros/ros.h>
 #include <task.h>
-#include <thread>
 
 void TCPUartMock_listenTask(void* param) {
     auto* test = static_cast<TCPUartMock*>(param);
     test->waitForClient();
-}
-
-// FreeRTOS on Linux doesn't work very well with system calls. These threads prevent the kernel
-// from hanging on the blocking socket calls.
-void rxThread(TCPUartMock* context) {
-    BSPUtils::blockSignals();
 
     while (true) {
-        std::unique_lock<std::mutex> lock(context->m_recvMutex);
-        context->m_startRecvSignal.wait(lock);
-
-        context->m_recvRet = ::recv(context->m_clientFd.value(), context->m_recvBuffer,
-                                    context->m_recvLength, MSG_WAITALL);
-        context->m_recvEndedSignal.notify_one();
+        vTaskDelay(1000);
     }
-}
-
-void acceptThread(TCPUartMock* context) {
-    BSPUtils::blockSignals();
-
-    std::lock_guard<std::mutex> lock(context->m_acceptMutex);
-    context->m_clientFd = ::accept(context->m_serverFd, (struct sockaddr*)&(context->m_address),
-                                   (socklen_t*)&(context->m_addressLength));
-
-    context->m_acceptEndedSignal.notify_one();
 }
 
 TCPUartMock::TCPUartMock(ILogger& logger) :
     m_logger(logger),
-    m_listenTask("tcp_uart_mock_listen", tskIDLE_PRIORITY + 1, TCPUartMock_listenTask, this),
-    m_port(0) {
-    m_rxThread = std::thread(rxThread, this);
-}
+    m_listenTask("tcp_uart_mock_listen", tskIDLE_PRIORITY + 10, TCPUartMock_listenTask, this),
+    m_port(0) {}
 
 TCPUartMock::~TCPUartMock() { close(); }
 
@@ -87,10 +62,8 @@ bool TCPUartMock::send(const uint8_t* buffer, uint16_t length) {
         return false;
     }
 
-    sigset_t mask = BSPUtils::blockSignals();
-    ssize_t ret = ::send(m_clientFd.value(), buffer, length, 0);
-    BSPUtils::unblockSignals(mask);
-
+    auto ret = BSPUtils::sysCallWrapper<ssize_t>(
+        [&]() { return ::send(m_clientFd.value(), buffer, length, 0); });
     return ret == length;
 }
 
@@ -99,22 +72,16 @@ bool TCPUartMock::receive(uint8_t* buffer, uint16_t length) {
         return false;
     }
 
-    std::unique_lock<std::mutex> lock(m_recvMutex);
+    auto ret = BSPUtils::sysCallWrapper<ssize_t>(
+        [&]() { return ::recv(m_clientFd.value(), buffer, length, MSG_WAITALL); });
 
-    m_recvBuffer = buffer;
-    m_recvLength = length;
-
-    m_startRecvSignal.notify_one();
-    lock.unlock(); // Allow thread to do it's process
-    m_recvEndedSignal.wait(lock);
-
-    if (m_recvRet == 0) {
+    if (ret == 0) {
         // TODO: If we ever want to handle client reconnection in the simulation, do it here
         m_logger.log(LogLevel::Warn,
                      "Error while reading UART socket. Client has probably disconnected");
     }
 
-    return m_recvRet == length;
+    return ret == length;
 }
 
 bool TCPUartMock::isBusy() const { return false; }
@@ -135,9 +102,9 @@ void TCPUartMock::waitForClient() {
         return;
     }
 
-    //    m_acceptThread = std::thread(acceptThread, this);
-    //    std::unique_lock<std::mutex> lock(m_acceptMutex);
-    //    m_acceptEndedSignal.wait(lock);
+    m_clientFd = BSPUtils::sysCallWrapper<int>([&]() {
+        return ::accept(m_serverFd, (struct sockaddr*)&m_address, (socklen_t*)&m_addressLength);
+    });
 
     if (m_clientFd < 0) {
         m_logger.log(LogLevel::Error, "TCP UART mock: Client acceptation failed");

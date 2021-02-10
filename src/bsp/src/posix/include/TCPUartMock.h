@@ -24,31 +24,16 @@ class TCPUartMock : public IHostUart {
     void close() const;
 
     friend void TCPUartMock_listenTask(void* param);
-    friend void rxThread(TCPUartMock* context);
-    friend void acceptThread(TCPUartMock* context);
 
   private:
     ILogger& m_logger;
 
-    BaseTask<configMINIMAL_STACK_SIZE * 100> m_listenTask;
+    BaseTask<configMINIMAL_STACK_SIZE * 2> m_listenTask;
 
     int m_serverFd{}, m_port;
     std::optional<int> m_clientFd;
     int m_addressLength{};
     struct sockaddr_in m_address {};
-
-    std::thread m_rxThread;
-    std::mutex m_recvMutex;
-    std::condition_variable m_startRecvSignal;
-    std::condition_variable m_recvEndedSignal;
-
-    std::thread m_acceptThread;
-    std::mutex m_acceptMutex;
-    std::condition_variable m_acceptEndedSignal;
-
-    uint8_t* m_recvBuffer;
-    uint16_t m_recvLength;
-    ssize_t m_recvRet;
 
     void waitForClient();
 };
