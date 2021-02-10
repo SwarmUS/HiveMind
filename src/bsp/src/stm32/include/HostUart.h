@@ -44,6 +44,7 @@ class HostUart : public IHostUart {
 
     Mutex m_streamMutex;
     std::array<uint8_t, HOST_UART_STREAM_SIZE> m_streamMemory;
+    TaskHandle_t m_receivingTaskHandle;
     CircularBuff m_stream;
 
     uint16_t m_rxLength;
@@ -55,6 +56,8 @@ class HostUart : public IHostUart {
     void startHeaderListen();
     void txCpltCallback();
     void rxCpltCallback();
+
+    void addPacketToStream();
 };
 
 #endif //__HOSTUART_H__
