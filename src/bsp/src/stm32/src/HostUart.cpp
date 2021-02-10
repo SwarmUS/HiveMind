@@ -45,7 +45,7 @@ bool HostUart::send(const uint8_t* buffer, uint16_t length) {
         return false;
     }
 
-    if (buffer == NULL || length > m_txBuffer.size()) {
+    if (buffer == nullptr || length > m_txBuffer.size()) {
         m_logger.log(LogLevel::Warn, "Invalid parameters for UART send");
         return false;
     }
@@ -71,7 +71,7 @@ bool HostUart::send(const uint8_t* buffer, uint16_t length) {
 }
 
 bool HostUart::receive(uint8_t* buffer, uint16_t length) {
-    if (buffer == NULL || length > m_streamMemory.size()) {
+    if (buffer == nullptr || length > m_streamMemory.size()) {
         m_logger.log(LogLevel::Warn, "Invalid parameters for UART receive");
         return false;
     }

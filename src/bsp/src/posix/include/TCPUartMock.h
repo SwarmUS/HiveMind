@@ -8,8 +8,6 @@
 #include <mutex>
 #include <netinet/in.h>
 #include <optional>
-#include <sys/socket.h>
-#include <thread>
 
 class TCPUartMock : public IHostUart {
   public:

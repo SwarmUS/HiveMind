@@ -11,8 +11,7 @@ set(LIB_SOURCES
     src/SocketContainer.cpp
     src/SocketFactory.cpp
     src/TCPUartMock.cpp
-    src/SettingsContainer.cpp
-        )
+    src/SettingsContainer.cpp)
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h

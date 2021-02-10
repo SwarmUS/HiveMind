@@ -76,7 +76,7 @@ class UARTReadTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
     void task() override {
 
         uint8_t buffer[5];
-        buffer[sizeof(buffer) - 1] = 0;
+        buffer[sizeof(buffer) - 1] = '\0';
 
         // Wait for connection
         while (true) {
@@ -101,8 +101,6 @@ class HostUartCommTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
   private:
     void task() override {
         IHostUart& hostUart = BSPContainer::getHostUart();
-        uint8_t buffer[5];
-        buffer[sizeof(buffer) - 1] = 0;
 
         while (true) {
             hostUart.send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORLD"));
@@ -129,8 +127,7 @@ class TCPReadDemoTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
         while (true) {
             if (std::optional<TCPClientWrapper> socket = SocketContainer::getHostClientSocket()) {
                 while (true) {
-                    auto ret = socket.value().receive(buffer, sizeof(buffer) - 1);
-                    (void)ret;
+                    socket.value().receive(buffer, sizeof(buffer) - 1);
                     m_logger.log(LogLevel::Info, "TCP RX: %s", buffer);
                 }
             }

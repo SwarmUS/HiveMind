@@ -10,6 +10,7 @@ void TCPUartMock_listenTask(void* param) {
     auto* test = static_cast<TCPUartMock*>(param);
     test->waitForClient();
 
+    // Keep task alive to prevent kernel from halting
     while (true) {
         vTaskDelay(1000);
     }

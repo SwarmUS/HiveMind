@@ -3,7 +3,6 @@
 #include "TCPClient.h"
 #include "bsp/SettingsContainer.h"
 #include "logger/LoggerContainer.h"
-#include <optional>
 
 std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket() {
 
