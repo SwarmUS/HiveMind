@@ -18,8 +18,7 @@ set(LIB_PRIVATE_HEADERS
     include/UserInterface.h
     include/SocketFactory.h
     include/TCPClient.h
-    include/TCPUartMock.h
-    include/BSPUtils.h)
+    include/TCPUartMock.h)
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_PRIVATE_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
@@ -38,7 +37,7 @@ target_include_directories(${LIB_NAME}
 target_link_libraries(${LIB_NAME}
     PUBLIC
         # Defined libraries
-        SwarmUS::HiveMind::FreeRTOS
+        SwarmUS::HiveMind::OS
         SwarmUS::HiveMind::Logger
         ${catkin_LIBRARIES}
     PRIVATE

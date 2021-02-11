@@ -24,7 +24,7 @@ target_include_directories(${LIB_NAME}
 target_link_libraries(${LIB_NAME}
     PUBLIC
         SwarmUS::HiveMind::BSP
-        SwarmUS::HiveMind::FreeRTOS
+        SwarmUS::HiveMind::OS
 )
 
 if(ENABLE_TESTS)

@@ -1,9 +1,8 @@
 #include "HostUart.h"
 #include "hal/uart_host.h"
-#include <FreeRTOSConfig.h>
+#include <LockGuard.h>
 #include <cstdio>
 #include <cstring>
-#include <freertos-utils/LockGuard.h>
 #include <task.h>
 
 void hostUart_C_txCpltCallback(void* hostUartInstance) {

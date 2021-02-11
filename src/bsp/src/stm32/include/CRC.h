@@ -3,7 +3,7 @@
 
 #include "bsp/ICRC.h"
 #include <FreeRTOS.h>
-#include <freertos-utils/Mutex.h>
+#include <Mutex.h>
 #include <semphr.h>
 
 class CRC : public ICRC {

@@ -1,6 +1,6 @@
 #include "CRC.h"
 #include "hal/hal.h"
-#include <freertos-utils/LockGuard.h>
+#include <LockGuard.h>
 
 CRC::CRC() : m_mutex(10) {}
 

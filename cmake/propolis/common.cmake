@@ -13,7 +13,7 @@ function(propolis_fetch_populate)
         ${PROJECT_NAME}_propolis
 
         GIT_REPOSITORY https://github.com/SwarmUS/Propolis
-        GIT_TAG        7e02b6d
+        GIT_TAG     origin/feat/SWARINFO-202_Linux-Threads
         GIT_PROGRESS   TRUE
     )
 

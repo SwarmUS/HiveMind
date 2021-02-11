@@ -1,12 +1,10 @@
 #include "BSP.h"
 #include "bsp/SettingsContainer.h"
 #include "ros/ros.h"
-#include <FreeRTOS.h>
-#include <FreeRTOSConfig.h>
 #include <TCPUartMock.h>
+#include <Task.h>
 #include <bsp/BSPContainer.h>
 #include <hive_mind/ExampleMessage.h>
-#include <task.h>
 
 /**
  * @brief Task that kills FreeRTOS when ROS node is stopped
@@ -17,10 +15,8 @@ void rosWatcher(void* param) {
 
     while (ros::ok()) {
         ros::spinOnce();
-        vTaskDelay(loopRate);
+        Task::delay(loopRate);
     }
-
-    vTaskEndScheduler();
 }
 
 void exampleTopicPublish(void* param) {
@@ -38,13 +34,14 @@ void exampleTopicPublish(void* param) {
         publisher.publish(msg);
         msg.number++;
 
-        vTaskDelay(loopRate);
+        Task::delay(loopRate);
     }
 }
 
 BSP::BSP() :
     m_rosWatchTask("ros_watch", tskIDLE_PRIORITY + 1, rosWatcher, NULL),
-    m_exampleTopicPublishTask("ros_watch", tskIDLE_PRIORITY + 1, rosWatcher, &m_rosNodeHandle) {}
+    m_exampleTopicPublishTask(
+        "ros_watch", tskIDLE_PRIORITY + 1, exampleTopicPublish, &m_rosNodeHandle) {}
 
 BSP::~BSP() = default;
 
@@ -55,7 +52,7 @@ void BSP::initChip(void* args) {
     m_rosNodeHandle = std::make_shared<ros::NodeHandle>("~");
 
     TCPUartMock& tcpUart = static_cast<TCPUartMock&>(BSPContainer::getHostUart());
-    int port = m_rosNodeHandle->param("uart_mock_port", 0);
+    int port = m_rosNodeHandle->param("uart_mock_port", 12345);
     tcpUart.openSocket(port);
 
     m_rosWatchTask.start();

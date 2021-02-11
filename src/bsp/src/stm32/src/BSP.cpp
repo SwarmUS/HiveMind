@@ -1,5 +1,6 @@
 #include "BSP.h"
 #include "bsp/SettingsContainer.h"
+#include <FreeRTOS.h>
 #include <hal/hal.h>
 
 BSP::BSP() = default;

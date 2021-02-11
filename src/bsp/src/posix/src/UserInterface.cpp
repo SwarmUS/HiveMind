@@ -1,5 +1,4 @@
 #include "UserInterface.h"
-#include <FreeRTOS.h>
 #include <cstdio>
 #include <ros/console.h>
 
@@ -18,9 +17,7 @@ int UserInterface::print(const char* format, va_list args) const {
 
     int retValue = vsnprintf(buffer, bufferSize, format, args);
 
-    vPortEnterCritical();
     ROS_INFO("%s", buffer);
-    vPortExitCritical();
 
     return retValue;
 }

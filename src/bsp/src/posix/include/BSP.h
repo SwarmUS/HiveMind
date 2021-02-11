@@ -2,7 +2,7 @@
 #define __BSP_H_
 
 #include "bsp/IBSP.h"
-#include <freertos-utils/BaseTask.h>
+#include <BaseTask.h>
 #include <ros/ros.h>
 
 class BSP : public IBSP {
