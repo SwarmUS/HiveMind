@@ -30,7 +30,7 @@ bool MessageDispatcher::deserializeAndDispatch() {
     }
 
     // Could not find the destination
-    m_logger.log(LogLevel::Warn, "Destination could not be found");
+    m_logger.log(LogLevel::Warn, "Fail to deserialize message");
     return false;
 }
 
