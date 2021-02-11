@@ -1,0 +1,14 @@
+#ifndef __HIVEMINDHOSTSERIALIZERINTERFACEMOCK_H_
+#define __HIVEMINDHOSTSERIALIZERINTERFACEMOCK_H_
+
+#include <gmock/gmock.h>
+#include <hivemind-host/IHiveMindHostSerializer.h>
+
+class HiveMindHostSerializerInterfaceMock final : public IHiveMindHostSerializer {
+  public:
+    ~HiveMindHostSerializerInterfaceMock() override = default;
+
+    MOCK_METHOD(bool, serializeToStream, (const MessageDTO& message), (override));
+};
+
+#endif // __HIVEMINDHOSTSERIALIZERINTERFACEMOCK_H_

@@ -17,15 +17,14 @@ target_link_libraries(${EXECUTABLE_NAME}
       SwarmUS::HiveMind::FreeRTOS
       SwarmUS::HiveMind::Logger
       SwarmUS::HiveMind::BittyBuzz
-
-      # remove
-      SwarmUS::Propolis::Pheromones::HiveMind::Host
+      SwarmUS::HiveMind::MessageHandler 
 )
 
 add_subdirectory(bittybuzz)
 add_subdirectory(bsp)
 add_subdirectory(freertos)
 add_subdirectory(logger)
+add_subdirectory(message-handler)
 
 # Removing warnings from interface libraries
 if (DISABLE_EXTERNAL_WARNINGS) 
