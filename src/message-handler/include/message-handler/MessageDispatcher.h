@@ -13,7 +13,7 @@ class MessageDispatcher : IMessageDispatcher {
                       ICircularQueue<MessageDTO>& hostOutputQ,
                       ICircularQueue<MessageDTO>& remoteOutputQ,
                       IHiveMindHostDeserializer& deserializer,
-                      const uint16_t uuid,
+                      const uint16_t bspUuid,
                       ILogger& m_logger);
 
     ~MessageDispatcher() override = default;
@@ -25,7 +25,7 @@ class MessageDispatcher : IMessageDispatcher {
     ICircularQueue<MessageDTO>& m_hostOutputQueue;
     ICircularQueue<MessageDTO>& m_remoteOutputQueue;
     IHiveMindHostDeserializer& m_deserializer;
-    const uint16_t m_uuid;
+    const uint16_t m_bspUuid;
     ILogger& m_logger;
 
     // handling funciton

@@ -5,13 +5,13 @@ MessageDispatcher::MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
                                      ICircularQueue<MessageDTO>& hostOutputQ,
                                      ICircularQueue<MessageDTO>& remoteOutputQ,
                                      IHiveMindHostDeserializer& deserializer,
-                                     uint16_t uuid,
+                                     uint16_t bspUuid,
                                      ILogger& logger) :
     m_buzzOutputQueue(buzzOutputQ),
     m_hostOutputQueue(hostOutputQ),
     m_remoteOutputQueue(remoteOutputQ),
     m_deserializer(deserializer),
-    m_uuid(uuid),
+    m_bspUuid(bspUuid),
     m_logger(logger) {}
 
 bool MessageDispatcher::deserializeAndDispatch() {
@@ -19,7 +19,7 @@ bool MessageDispatcher::deserializeAndDispatch() {
     if (m_deserializer.deserializeFromStream(message)) {
 
         uint32_t destinationId = message.getDestinationId();
-        if (destinationId == m_uuid) {
+        if (destinationId == m_bspUuid) {
             return dispatchMessage(message);
         }
 
