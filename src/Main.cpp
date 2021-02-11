@@ -2,7 +2,6 @@
 #include <FreeRTOSConfig.h>
 
 #include <task.h>
-#include <timers.h>
 
 #include <bittybuzz/BittyBuzzFactory.h>
 #include <bittybuzz/BittyBuzzVm.h>
@@ -11,25 +10,13 @@
 #include <bsp/SocketContainer.h>
 #include <cstdlib>
 #include <freertos-utils/AbstractTask.h>
+#include <hivemind-host/HiveMindHostDeserializer.h>
+#include <hivemind-host/HiveMindHostSerializer.h>
 #include <logger/Logger.h>
 #include <logger/LoggerContainer.h>
-
-class LoggerTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
-  public:
-    LoggerTask(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
-
-    ~LoggerTask() override = default;
-
-  private:
-    ILogger& m_logger;
-    void task() override {
-        while (true) {
-            m_logger.log(LogLevel::Info, "Hello logger");
-            vTaskDelay(2000);
-        }
-    }
-};
+#include <message-handler/MessageDispatcher.h>
+#include <message-handler/MessageHandlerContainer.h>
+#include <message-handler/MessageSender.h>
 
 class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
   public:
@@ -64,103 +51,113 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class UARTReadTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+class UartMessageDispatcher : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+
   public:
-    UARTReadTask(const char* taskName, UBaseType_t priority) :
+    UartMessageDispatcher(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
 
-    ~UARTReadTask() override = default;
+    ~UartMessageDispatcher() override = default;
+
+    void task() override {
+        auto& uart = BSPContainer::getHostUart();
+        HiveMindHostDeserializer deserializer(uart);
+        MessageDispatcher messageDispatcher(
+            MessageHandlerContainer::getBuzzMsgQueue(), MessageHandlerContainer::getHostMsgQueue(),
+            MessageHandlerContainer::getRemoteMsgQueue(), deserializer,
+            BSPContainer::getBSP().getUUId(), m_logger);
+
+        while (true) {
+            if (!messageDispatcher.deserializeAndDispatch()) {
+                m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch uart");
+            }
+        }
+    }
 
   private:
     ILogger& m_logger;
-    void task() override {
-
-        uint8_t buffer[5];
-        buffer[sizeof(buffer) - 1] = '\0';
-
-        // Wait for connection
-        while (true) {
-            auto& uart = BSPContainer::getHostUart();
-            if (uart.receive(buffer, sizeof(buffer) - 1)) {
-                m_logger.log(LogLevel::Info, "UART RX: %s", buffer);
-            } else {
-                // Probably failed because no client connected
-                vTaskDelay(2000);
-            }
-        }
-    }
 };
 
-class HostUartCommTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+class TCPMessageDispatcher : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+
   public:
-    HostUartCommTask(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority) {}
-
-    ~HostUartCommTask() override = default;
-
-  private:
-    void task() override {
-        IHostUart& hostUart = BSPContainer::getHostUart();
-
-        while (true) {
-            hostUart.send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORLD"));
-            vTaskDelay(1000);
-        }
-    }
-};
-
-class TCPReadDemoTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
-  public:
-    TCPReadDemoTask(const char* taskName, UBaseType_t priority) :
+    TCPMessageDispatcher(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
 
-    ~TCPReadDemoTask() override = default;
+    ~TCPMessageDispatcher() override = default;
 
   private:
     ILogger& m_logger;
+
     void task() override {
+        auto socket = SocketContainer::getHostClientSocket();
 
-        uint8_t buffer[5];
-        buffer[sizeof(buffer) - 1] = 0;
+        if (socket) {
+            HiveMindHostDeserializer deserializer(socket.value());
+            MessageDispatcher messageDispatcher(MessageHandlerContainer::getBuzzMsgQueue(),
+                                                MessageHandlerContainer::getHostMsgQueue(),
+                                                MessageHandlerContainer::getRemoteMsgQueue(),
+                                                deserializer, BSPContainer::getBSP().getUUId(),
+                                                m_logger);
 
-        // Wait for connection
-        while (true) {
-            if (std::optional<TCPClientWrapper> socket = SocketContainer::getHostClientSocket()) {
-                while (true) {
-                    socket.value().receive(buffer, sizeof(buffer) - 1);
-                    m_logger.log(LogLevel::Info, "TCP RX: %s", buffer);
+            while (true) {
+                if (!messageDispatcher.deserializeAndDispatch()) {
+                    m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch TCP");
                 }
             }
-            // Retry connection every 2s
-            vTaskDelay(2000);
         }
     }
 };
 
-class HostTCPCommTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+class UartMessageSender : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
   public:
-    HostTCPCommTask(const char* taskName, UBaseType_t priority, TCPReadDemoTask& tcpReadTask) :
-        AbstractTask(taskName, priority), m_tcpReadDemoTask(tcpReadTask) {}
+    UartMessageSender(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
 
-    ~HostTCPCommTask() override = default;
+    ~UartMessageSender() override = default;
 
   private:
-    TCPReadDemoTask& m_tcpReadDemoTask;
-    void task() override {
+    ILogger& m_logger;
 
-        // Wait for connection
+    void task() override {
+        // TODO: check if uart is connected
+        auto& uart = BSPContainer::getHostUart();
+        HiveMindHostSerializer serializer(uart);
+
+        // TODO: For now the uart is considered remote
+        MessageSender messageSender(MessageHandlerContainer::getRemoteMsgQueue(), serializer,
+                                    m_logger);
+
         while (true) {
-            if (std::optional<TCPClientWrapper> socket = SocketContainer::getHostClientSocket()) {
-                m_tcpReadDemoTask.start();
-                while (true) {
-                    auto ret =
-                        socket.value().send((const uint8_t*)"HELLO WORLD", sizeof("HELLO WORLD"));
-                    (void)ret;
-                    vTaskDelay(1000);
+            if (!messageSender.processAndSerialize()) {
+                m_logger.log(LogLevel::Warn, "Fail to process/serialize to uart");
+            }
+        }
+    }
+};
+
+class TCPMessageSender : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+  public:
+    TCPMessageSender(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
+
+    ~TCPMessageSender() override = default;
+
+  private:
+    ILogger& m_logger;
+
+    void task() override {
+        auto socket = SocketContainer::getHostClientSocket();
+        if (socket) {
+            HiveMindHostSerializer serializer(socket.value());
+            MessageSender messageSender(MessageHandlerContainer::getRemoteMsgQueue(), serializer,
+                                        m_logger);
+
+            while (true) {
+                if (!messageSender.processAndSerialize()) {
+                    m_logger.log(LogLevel::Warn, "Fail to process/serialize to tcp");
                 }
             }
-            // Retry connection every 2s
-            vTaskDelay(2000);
         }
     }
 };
@@ -171,18 +168,17 @@ int main(int argc, char** argv) {
     IBSP& bsp = BSPContainer::getBSP();
     bsp.initChip((void*)&cmdLineArgs);
 
-    static LoggerTask s_loggerTask("logger", tskIDLE_PRIORITY + 1);
     static BittyBuzzTask s_bittybuzzTask("bittybuzz", tskIDLE_PRIORITY + 1);
-    static UARTReadTask s_uartReadTask("uart_read", tskIDLE_PRIORITY + 1);
-    static HostUartCommTask s_uartTask("uart", tskIDLE_PRIORITY + 1);
-    static TCPReadDemoTask s_tcpReadTask("tcp_read", tskIDLE_PRIORITY + 1);
-    static HostTCPCommTask s_tcpTask("tcp", tskIDLE_PRIORITY + 1, s_tcpReadTask);
+    static UartMessageDispatcher s_uartDispatchTask("uart_dispatch", tskIDLE_PRIORITY + 1);
+    static TCPMessageDispatcher s_tcpDispatchTask("tcp_dispatch", tskIDLE_PRIORITY + 1);
+    static UartMessageSender s_uartMessageSender("uart_send", tskIDLE_PRIORITY + 1);
+    static TCPMessageSender s_tcpMessageSender("uart_send", tskIDLE_PRIORITY + 1);
 
-    s_loggerTask.start();
     s_bittybuzzTask.start();
-    s_uartReadTask.start();
-    s_uartTask.start();
-    s_tcpTask.start();
+    s_uartDispatchTask.start();
+    s_tcpDispatchTask.start();
+    s_uartMessageSender.start();
+    s_tcpMessageSender.start();
 
     vTaskStartScheduler();
 

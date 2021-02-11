@@ -18,6 +18,7 @@ add_link_options(
     -mfpu=fpv4-sp-d16
     -mfloat-abi=hard
     -u _printf_float
+    -Wl,--print-memory-usage
 )
 
 
