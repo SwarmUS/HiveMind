@@ -1,15 +1,11 @@
-#include <FreeRTOS.h>
-#include <FreeRTOSConfig.h>
-
-#include <task.h>
-
+#include <AbstractTask.h>
+#include <Task.h>
 #include <bittybuzz/BittyBuzzFactory.h>
 #include <bittybuzz/BittyBuzzVm.h>
 #include <bsp/BSPContainer.h>
 #include <bsp/IBSP.h>
 #include <bsp/SocketContainer.h>
 #include <cstdlib>
-#include <freertos-utils/AbstractTask.h>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <logger/Logger.h>

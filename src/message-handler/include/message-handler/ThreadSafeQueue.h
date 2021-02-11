@@ -1,8 +1,8 @@
 #ifndef __THREADSAFEQUEUE_H_
 #define __THREADSAFEQUEUE_H_
 
+#include <LockGuard.h>
 #include <cpp-common/ICircularQueue.h>
-#include <freertos-utils/LockGuard.h>
 
 // TODO: move in another lib, it doesn't really belong here
 /**
