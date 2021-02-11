@@ -1,5 +1,5 @@
-set(LIB_NAME "swarmus-hivemind-freertos")
-set(LIB_ALIAS "SwarmUS::HiveMind::FreeRTOS")
+set(LIB_NAME "swarmus-hivemind-os")
+set(LIB_ALIAS "SwarmUS::HiveMind::OS")
 
 
 include(freertos/common)
@@ -23,7 +23,7 @@ find_package(FreeRTOS COMPONENTS
             REQUIRED)
 
 # Wraps the interface library in a static library
-get_target_property(FREERTOS_UTILS_INCLUDES SwarmUS::Propolis::FreeRTOS::Static::Utils INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(PROPOLIS_OS_INCLUDES SwarmUS::Propolis::OS::FreeRTOS INTERFACE_INCLUDE_DIRECTORIES)
 
 target_include_directories(${LIB_NAME}
     PUBLIC
@@ -33,7 +33,7 @@ target_include_directories(${LIB_NAME}
        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/freertos>
        $<INSTALL_INTERFACE:include>
        ${FREERTOS_KERNEL_PATH}/include
-       ${FREERTOS_UTILS_INCLUDES}
+       ${PROPOLIS_OS_INCLUDES}
 )
 
 target_link_libraries(${LIB_NAME}
@@ -42,7 +42,7 @@ target_link_libraries(${LIB_NAME}
 
     PRIVATE    
         SwarmUS::HiveMind::FreeRTOS::Platform
-        SwarmUS::Propolis::FreeRTOS::Static::Utils
+        SwarmUS::Propolis::OS::FreeRTOS
 
         FreeRTOS::Coroutine
         FreeRTOS::EventGroups

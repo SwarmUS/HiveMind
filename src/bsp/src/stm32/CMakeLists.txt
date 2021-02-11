@@ -46,7 +46,7 @@ target_include_directories(${LIB_NAME}
 target_link_libraries(${LIB_NAME}
     PUBLIC
         # Defined libraries
-        SwarmUS::HiveMind::FreeRTOS
+        SwarmUS::HiveMind::OS
         SwarmUS::HiveMind::Logger
 
     PRIVATE

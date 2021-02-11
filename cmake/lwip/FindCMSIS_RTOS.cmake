@@ -74,7 +74,7 @@ foreach(COMP ${CMSIS_RTOS_FIND_COMPONENTS})
         target_include_directories(${LIB_NAME_RTOS} SYSTEM PUBLIC "${CMSIS_${FAMILY}${CORE_U}_CMSIS_RTOS2_PATH}")
         target_link_libraries(${LIB_NAME_RTOS}
             PUBLIC
-                SwarmUS::HiveMind::FreeRTOS
+                SwarmUS::HiveMind::OS
             PRIVATE
                 CMSIS::STM32::F429ZI
             )

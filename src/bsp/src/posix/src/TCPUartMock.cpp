@@ -1,19 +1,12 @@
 #include "TCPUartMock.h"
-#include "BSPUtils.h"
-#include <FreeRTOS.h>
-#include <FreeRTOSConfig.h>
-#include <freertos-utils/BaseTask.h>
+#include <BaseTask.h>
+#include <Task.h>
+#include <logger/Logger.h>
 #include <ros/ros.h>
-#include <task.h>
 
 void TCPUartMock_listenTask(void* param) {
     auto* test = static_cast<TCPUartMock*>(param);
     test->waitForClient();
-
-    // Keep task alive to prevent kernel from halting
-    while (true) {
-        vTaskDelay(1000);
-    }
 }
 
 TCPUartMock::TCPUartMock(ILogger& logger) :
@@ -63,9 +56,7 @@ bool TCPUartMock::send(const uint8_t* buffer, uint16_t length) {
         return false;
     }
 
-    auto ret = BSPUtils::sysCallWrapper<ssize_t>(
-        [&]() { return ::send(m_clientFd.value(), buffer, length, 0); });
-    return ret == length;
+    return ::send(m_clientFd.value(), buffer, length, 0) == length;
 }
 
 bool TCPUartMock::receive(uint8_t* buffer, uint16_t length) {
@@ -73,8 +64,7 @@ bool TCPUartMock::receive(uint8_t* buffer, uint16_t length) {
         return false;
     }
 
-    auto ret = BSPUtils::sysCallWrapper<ssize_t>(
-        [&]() { return ::recv(m_clientFd.value(), buffer, length, MSG_WAITALL); });
+    auto ret = ::recv(m_clientFd.value(), buffer, length, MSG_WAITALL);
 
     if (ret == 0) {
         // TODO: If we ever want to handle client reconnection in the simulation, do it here
@@ -103,9 +93,7 @@ void TCPUartMock::waitForClient() {
         return;
     }
 
-    m_clientFd = BSPUtils::sysCallWrapper<int>([&]() {
-        return ::accept(m_serverFd, (struct sockaddr*)&m_address, (socklen_t*)&m_addressLength);
-    });
+    m_clientFd = ::accept(m_serverFd, (struct sockaddr*)&m_address, (socklen_t*)&m_addressLength);
 
     if (m_clientFd < 0) {
         m_logger.log(LogLevel::Error, "TCP UART mock: Client acceptation failed");

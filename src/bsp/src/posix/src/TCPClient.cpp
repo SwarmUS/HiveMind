@@ -1,27 +1,17 @@
 #include "TCPClient.h"
-#include <BSPUtils.h>
-#include <arpa/inet.h>
-#include <cstdio>
-#include <netdb.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
-#include <sys/types.h>
 #include <unistd.h>
 
 TCPClient::TCPClient(int socket, sockaddr_in address, ILogger& logger) :
     m_logger(logger), m_socketFd(socket), m_address(address) {}
 
 bool TCPClient::receive(uint8_t* data, uint16_t length) {
-    auto ret = BSPUtils::sysCallWrapper<ssize_t>(
-        [&]() { return ::recv(m_socketFd, data, length, MSG_WAITALL); });
-
-    return ret == length;
+    return ::recv(m_socketFd, data, length, MSG_WAITALL) == length;
 }
 
 bool TCPClient::send(const uint8_t* data, uint16_t length) {
-    auto ret =
-        BSPUtils::sysCallWrapper<ssize_t>([&]() { return ::send(m_socketFd, data, length, 0); });
-    return ret == length;
+    return ::send(m_socketFd, data, length, 0) == length;
 }
 
 bool TCPClient::close() {

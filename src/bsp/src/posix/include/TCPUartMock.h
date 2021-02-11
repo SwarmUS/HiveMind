@@ -2,8 +2,8 @@
 #define __TCPUARTMOCK_H__
 
 #include "bsp/IHostUart.h"
+#include <BaseTask.h>
 #include <condition_variable>
-#include <freertos-utils/BaseTask.h>
 #include <logger/ILogger.h>
 #include <mutex>
 #include <netinet/in.h>

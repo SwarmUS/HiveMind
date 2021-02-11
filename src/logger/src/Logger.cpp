@@ -1,7 +1,7 @@
 #include "logger/Logger.h"
+#include <LockGuard.h>
 #include <bsp/IUserInterface.h>
 #include <cstdarg>
-#include <freertos-utils/LockGuard.h>
 
 Logger::Logger(LogLevel level, const IUserInterface& ui) : m_ui(ui), m_mutex(10) {
     m_logLevel = level;

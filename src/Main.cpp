@@ -1,15 +1,11 @@
-#include <FreeRTOS.h>
-#include <FreeRTOSConfig.h>
-
-#include <task.h>
-
+#include <AbstractTask.h>
+#include <Task.h>
 #include <bittybuzz/BittyBuzzFactory.h>
 #include <bittybuzz/BittyBuzzVm.h>
 #include <bsp/BSPContainer.h>
 #include <bsp/IBSP.h>
 #include <bsp/SocketContainer.h>
 #include <cstdlib>
-#include <freertos-utils/AbstractTask.h>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <logger/Logger.h>
@@ -46,7 +42,7 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
                 m_logger.log(LogLevel::Error, "BBZVM failed to step! state: %d err: %d",
                              m_bittybuzzVm.getSate(), m_bittybuzzVm.getError());
             }
-            vTaskDelay(1000);
+            Task::delay(1000);
         }
     }
 };
@@ -180,7 +176,7 @@ int main(int argc, char** argv) {
     s_uartMessageSender.start();
     s_tcpMessageSender.start();
 
-    vTaskStartScheduler();
+    Task::startScheduler();
 
     return 0;
 }

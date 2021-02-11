@@ -4,9 +4,7 @@
 #include "logger/ILogger.h"
 #include <bsp/IUserInterface.h>
 
-#include <FreeRTOS.h>
-#include <freertos-utils/Mutex.h>
-#include <semphr.h>
+#include <Mutex.h>
 
 class Logger : public ILogger {
   public:

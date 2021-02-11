@@ -3,12 +3,12 @@
 
 #include "bsp/ICRC.h"
 #include "bsp/IHostUart.h"
+#include <BaseTask.h>
 #include <FreeRTOS.h>
+#include <Mutex.h>
 #include <array>
 #include <c-common/circular_buff.h>
 #include <cstdint>
-#include <freertos-utils/BaseTask.h>
-#include <freertos-utils/Mutex.h>
 #include <logger/ILogger.h>
 
 class HostUart : public IHostUart {

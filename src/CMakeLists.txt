@@ -14,7 +14,7 @@ target_link_libraries(${EXECUTABLE_NAME}
     PUBLIC
       SwarmUS::HiveMind::BSP::Linker
       SwarmUS::HiveMind::BSP 
-      SwarmUS::HiveMind::FreeRTOS
+      SwarmUS::HiveMind::OS
       SwarmUS::HiveMind::Logger
       SwarmUS::HiveMind::BittyBuzz
       SwarmUS::HiveMind::MessageHandler 
@@ -22,7 +22,7 @@ target_link_libraries(${EXECUTABLE_NAME}
 
 add_subdirectory(bittybuzz)
 add_subdirectory(bsp)
-add_subdirectory(freertos)
+add_subdirectory(os)
 add_subdirectory(logger)
 add_subdirectory(message-handler)
 
