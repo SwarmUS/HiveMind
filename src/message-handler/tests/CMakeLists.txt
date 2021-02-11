@@ -2,9 +2,15 @@ set(TEST_NAME test-message-handler)
  
 set(TEST_SOURCES
     MessageSenderUnitTests.cpp
+    MessageDispatcherUnitTests.cpp
 )
 
 set(TEST_HEADERS
+  mocks/CircularQueueInterfaceMock.h
+  mocks/HiveMindHostDeserializerInterfaceMock.h
+  mocks/HiveMindHostSerializerInterfaceMock.h
+  mocks/LoggerInterfaceMock.h
+
 )
 
 add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})

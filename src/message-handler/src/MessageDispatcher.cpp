@@ -5,29 +5,28 @@ MessageDispatcher::MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
                                      ICircularQueue<MessageDTO>& hostOutputQ,
                                      ICircularQueue<MessageDTO>& remoteOutputQ,
                                      IHiveMindHostDeserializer& deserializer,
+                                     uint16_t uuid,
                                      ILogger& logger) :
     m_buzzOutputQueue(buzzOutputQ),
     m_hostOutputQueue(hostOutputQ),
     m_remoteOutputQueue(remoteOutputQ),
     m_deserializer(deserializer),
+    m_uuid(uuid),
     m_logger(logger) {}
-
 
 bool MessageDispatcher::deserializeAndDispatch() {
     MessageDTO message;
     if (m_deserializer.deserializeFromStream(message)) {
 
         uint32_t destinationId = message.getDestinationId();
-        if (destinationId == SettingsContainer::getUUID() ) {
+        if (destinationId == m_uuid) {
             return dispatchMessage(message);
         }
 
         // Message is for a remote host
-    
         m_logger.log(LogLevel::Debug, "Message sent to remote queue");
         m_remoteOutputQueue.push(message);
         return true;
-
     }
 
     // Could not find the destination
@@ -35,7 +34,8 @@ bool MessageDispatcher::deserializeAndDispatch() {
     return false;
 }
 
-bool MessageDispatcher::dispatchUserCall(const MessageDTO& message, const UserCallDestinationDTO& dest) {
+bool MessageDispatcher::dispatchUserCall(const MessageDTO& message,
+                                         const UserCallDestinationDTO& dest) {
     // Sending to the appropriate destination
     switch (dest) {
     case UserCallDestinationDTO::BUZZ:
@@ -55,7 +55,8 @@ bool MessageDispatcher::dispatchUserCall(const MessageDTO& message, const UserCa
     }
 }
 
-bool MessageDispatcher::dispatchUserCallRequest(const MessageDTO& message, const UserCallRequestDTO& request) {
+bool MessageDispatcher::dispatchUserCallRequest(const MessageDTO& message,
+                                                const UserCallRequestDTO& request) {
     UserCallDestinationDTO userCallDestination = request.getDestination();
     return dispatchUserCall(message, userCallDestination);
 }
@@ -95,5 +96,3 @@ bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
     }
     return false;
 }
-
-

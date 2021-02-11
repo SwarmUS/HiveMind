@@ -8,7 +8,7 @@ class HiveMindHostDeserializerInterfaceMock final : public IHiveMindHostDeserial
   public:
     ~HiveMindHostDeserializerInterfaceMock() override = default;
 
-    MOCK_METHOD(bool, deserializeFromStream, (MessageDTO & message), (overrdie));
+    MOCK_METHOD(bool, deserializeFromStream, (MessageDTO & message), (override));
 };
 
 #endif // __HIVEMINDHOSTDESERIALIZERINTERFACEMOCK_H_

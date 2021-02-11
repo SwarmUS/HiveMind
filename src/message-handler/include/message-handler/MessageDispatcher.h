@@ -13,6 +13,7 @@ class MessageDispatcher {
                       ICircularQueue<MessageDTO>& hostOutputQ,
                       ICircularQueue<MessageDTO>& remoteOutputQ,
                       IHiveMindHostDeserializer& deserializer,
+                      const uint16_t uuid,
                       ILogger& m_logger);
 
     ~MessageDispatcher() = default;
@@ -24,6 +25,7 @@ class MessageDispatcher {
     ICircularQueue<MessageDTO>& m_hostOutputQueue;
     ICircularQueue<MessageDTO>& m_remoteOutputQueue;
     IHiveMindHostDeserializer& m_deserializer;
+    const uint16_t m_uuid;
     ILogger& m_logger;
 
     // handling funciton
