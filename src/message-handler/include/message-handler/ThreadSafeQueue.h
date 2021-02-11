@@ -7,7 +7,7 @@
 template <typename T>
 class ThreadSafeQueue : public ICircularQueue<T> {
   public:
-    ThreadSafeQueue(ICircularQueue<T>& queue) : m_queue(queue) {}
+    ThreadSafeQueue(ICircularQueue<T>& queue) : m_queue(queue), m_mutex(10) {}
 
     ~ThreadSafeQueue() override = default;
 

@@ -7,7 +7,7 @@
 #include <hivemind-host/MessageDTO.h>
 #include <logger/ILogger.h>
 
-class MessageDispatcher {
+class MessageDispatcher : IMessageDispatcher {
   public:
     MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
                       ICircularQueue<MessageDTO>& hostOutputQ,
@@ -16,9 +16,9 @@ class MessageDispatcher {
                       const uint16_t uuid,
                       ILogger& m_logger);
 
-    ~MessageDispatcher() = default;
+    ~MessageDispatcher() override = default;
 
-    bool deserializeAndDispatch();
+    bool deserializeAndDispatch() override;
 
   private:
     ICircularQueue<MessageDTO>& m_buzzOutputQueue;

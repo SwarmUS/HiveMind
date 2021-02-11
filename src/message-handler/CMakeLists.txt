@@ -4,13 +4,19 @@ set(LIB_ALIAS "SwarmUS::HiveMind::MessageHandler")
 set(LIB_SOURCES
     src/MessageDispatcher.cpp
     src/MessageSender.cpp
+    src/MessageHandlerContainer.cpp
 )
 
 set(LIB_HEADERS
     include/message-handler/MessageDispatcher.h
     include/message-handler/IMessageDispatcher.h
 
+    include/message-handler/IMessageSender.h
     include/message-handler/MessageSender.h
+
+    include/message-handler/MessageHandlerContainer.h
+
+    include/message-handler/ThreadSafeQueue.h
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS} ${LIB_SOURCES})
