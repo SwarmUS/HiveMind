@@ -5,6 +5,7 @@
 #include "bsp/IHostUart.h"
 #include <FreeRTOS.h>
 #include <array>
+#include <c-common/circular_buff.h>
 #include <cstdint>
 #include <freertos-utils/BaseTask.h>
 #include <freertos-utils/Mutex.h>
@@ -16,7 +17,7 @@ class HostUart : public IHostUart {
     ~HostUart() override = default;
 
     bool send(const uint8_t* buffer, uint16_t length) override;
-    int32_t receive(uint8_t* buffer, uint16_t length) const override;
+    bool receive(uint8_t* buffer, uint16_t length) override;
     bool isBusy() const override;
 
     void process();
@@ -36,10 +37,16 @@ class HostUart : public IHostUart {
     TxState m_txState;
     uint8_t m_txLength;
     std::array<uint8_t, HOST_UART_HEADER_LENGTH> m_txHeader;
-    const uint8_t* m_txBuffer;
-
-    std::array<uint8_t, HOST_UART_MAX_MESSAGE_LENGTH> m_rxBuffer;
     std::array<uint8_t, HOST_UART_HEADER_LENGTH> m_rxHeader;
+
+    std::array<uint8_t, HOST_UART_MAX_MESSAGE_LENGTH> m_txBuffer;
+    std::array<uint8_t, HOST_UART_MAX_MESSAGE_LENGTH> m_rxBuffer;
+
+    Mutex m_streamMutex;
+    std::array<uint8_t, HOST_UART_STREAM_SIZE> m_streamMemory;
+    TaskHandle_t m_receivingTaskHandle;
+    CircularBuff m_stream;
+
     uint16_t m_rxLength;
     uint32_t m_rxCrc;
     RxState m_rxState;
@@ -49,6 +56,8 @@ class HostUart : public IHostUart {
     void startHeaderListen();
     void txCpltCallback();
     void rxCpltCallback();
+
+    void addPacketToStream();
 };
 
 #endif //__HOSTUART_H__

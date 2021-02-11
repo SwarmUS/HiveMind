@@ -2,8 +2,12 @@
 #define __TCPCLIENT_H_
 
 #include "bsp/ITCPClient.h"
+#include <condition_variable>
 #include <logger/ILogger.h>
+#include <mutex>
 #include <netinet/in.h>
+#include <optional>
+#include <thread>
 
 class TCPClient : public ITCPClient {
   public:
@@ -11,16 +15,18 @@ class TCPClient : public ITCPClient {
 
     ~TCPClient() override = default;
 
-    int32_t receive(uint8_t* data, uint16_t length) override;
+    bool receive(uint8_t* data, uint16_t length) override;
 
-    int32_t send(const uint8_t* data, uint16_t length) override;
+    bool send(const uint8_t* data, uint16_t length) override;
 
     bool close() override;
 
+    friend void rxThread(TCPClient* context);
+
   private:
     ILogger& m_logger;
-    const int m_socketFd;
-    const sockaddr_in m_address;
+    const int m_socketFd{};
+    const sockaddr_in m_address{};
 };
 
 #endif // __TCPCLIENT_H_

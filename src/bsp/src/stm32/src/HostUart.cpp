@@ -28,8 +28,11 @@ HostUart::HostUart(ICRC& crc, ILogger& logger) :
     m_logger(logger),
     m_hostUartTask("host_uart_process", tskIDLE_PRIORITY + 1, HostUart_processTask, this),
     m_txState(TxState::Idle),
+    m_streamMutex(10),
     m_rxState(RxState::Idle),
     m_uartMutex(10) {
+
+    CircularBuff_init(&m_stream, m_streamMemory.data(), m_streamMemory.size());
 
     startHeaderListen();
 
@@ -42,8 +45,13 @@ bool HostUart::send(const uint8_t* buffer, uint16_t length) {
         return false;
     }
 
+    if (buffer == nullptr || length > m_txBuffer.size()) {
+        m_logger.log(LogLevel::Warn, "Invalid parameters for UART send");
+        return false;
+    }
+
     m_txLength = length;
-    m_txBuffer = buffer;
+    memcpy(m_txBuffer.data(), buffer, length);
 
     uint32_t crc = m_crc.calculateCRC32(buffer, length);
     *(uint16_t*)m_txHeader.data() = length;
@@ -62,11 +70,22 @@ bool HostUart::send(const uint8_t* buffer, uint16_t length) {
     return ret;
 }
 
-int32_t HostUart::receive(uint8_t* buffer, uint16_t length) const {
-    (void)buffer;
-    (void)length;
-    // TODO: Implement
-    return 0;
+bool HostUart::receive(uint8_t* buffer, uint16_t length) {
+    if (buffer == nullptr || length > m_streamMemory.size()) {
+        m_logger.log(LogLevel::Warn, "Invalid parameters for UART receive");
+        return false;
+    }
+
+    m_receivingTaskHandle = xTaskGetCurrentTaskHandle();
+    while (CircularBuff_getLength(&m_stream) < length) {
+        // Gets notified everytime a new packet is appended to stream
+        ulTaskNotifyTake(pdTRUE, 500);
+    }
+    m_receivingTaskHandle = NULL;
+
+    LockGuard lock = LockGuard(m_streamMutex);
+    CircularBuff_get(&m_stream, buffer, length);
+    return true;
 }
 
 void HostUart::startHeaderListen() {
@@ -86,7 +105,7 @@ void HostUart::startHeaderListen() {
 void HostUart::txCpltCallback() {
     switch (m_txState) {
     case TxState::SendHeader:
-        UartHost_transmitBuffer(m_txBuffer, m_txLength,
+        UartHost_transmitBuffer(m_txBuffer.data(), m_txLength,
                                 (uartCallbackFct)(&hostUart_C_txCpltCallback), (void*)this);
         m_txState = TxState::SendPayload;
         break;
@@ -124,14 +143,32 @@ void HostUart::process() {
     if (m_rxState == RxState::CheckIntegrity) {
         uint32_t calculatedCrc = m_crc.calculateCRC32(m_rxBuffer.data(), m_rxLength);
         if (calculatedCrc == m_rxCrc) {
-            m_logger.log(LogLevel::Debug, "Received UART message of %d bytes", m_rxLength);
+            if (CircularBuff_getFreeSize(&m_stream) >= m_rxLength) {
+                // TODO: Send ACK
+                addPacketToStream();
+            } else {
+                // TODO: Send NACK (buffer full)
+                m_logger.log(LogLevel::Warn, "UART stream full. Discarding received packet.");
+            }
+
         } else {
+            // TODO: Send NACK (invalid CRC)
             m_logger.log(LogLevel::Warn, "Received UART message with incorrect CRC. Discarding.");
         }
 
         startHeaderListen();
     } else if (m_rxState == RxState::Idle) {
         startHeaderListen();
+    }
+}
+
+void HostUart::addPacketToStream() {
+    LockGuard lock = LockGuard(m_streamMutex);
+    CircularBuff_put(&m_stream, m_rxBuffer.data(), m_rxLength);
+
+    // Notify task that is waiting on stream that a new packet is available
+    if (m_receivingTaskHandle != NULL) {
+        xTaskNotifyGive(m_receivingTaskHandle);
     }
 }
 

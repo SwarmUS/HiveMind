@@ -2,7 +2,6 @@
 #include "BSPUtils.h"
 #include <FreeRTOS.h>
 #include <FreeRTOSConfig.h>
-#include <cstring>
 #include <freertos-utils/BaseTask.h>
 #include <ros/ros.h>
 #include <task.h>
@@ -10,6 +9,11 @@
 void TCPUartMock_listenTask(void* param) {
     auto* test = static_cast<TCPUartMock*>(param);
     test->waitForClient();
+
+    // Keep task alive to prevent kernel from halting
+    while (true) {
+        vTaskDelay(1000);
+    }
 }
 
 TCPUartMock::TCPUartMock(ILogger& logger) :
@@ -59,22 +63,26 @@ bool TCPUartMock::send(const uint8_t* buffer, uint16_t length) {
         return false;
     }
 
-    return ::send(m_clientFd.value(), buffer, length, 0) == (int)length;
+    auto ret = BSPUtils::sysCallWrapper<ssize_t>(
+        [&]() { return ::send(m_clientFd.value(), buffer, length, 0); });
+    return ret == length;
 }
 
-int32_t TCPUartMock::receive(uint8_t* buffer, uint16_t length) const {
+bool TCPUartMock::receive(uint8_t* buffer, uint16_t length) {
     if (!m_clientFd) {
-        return -1;
+        return false;
     }
 
-    int32_t ret = ::recv(m_clientFd.value(), buffer, length, 0);
+    auto ret = BSPUtils::sysCallWrapper<ssize_t>(
+        [&]() { return ::recv(m_clientFd.value(), buffer, length, MSG_WAITALL); });
+
     if (ret == 0) {
         // TODO: If we ever want to handle client reconnection in the simulation, do it here
         m_logger.log(LogLevel::Warn,
                      "Error while reading UART socket. Client has probably disconnected");
     }
 
-    return ret;
+    return ret == length;
 }
 
 bool TCPUartMock::isBusy() const { return false; }
@@ -95,9 +103,9 @@ void TCPUartMock::waitForClient() {
         return;
     }
 
-    BSPUtils::blockSignals();
-    m_clientFd = ::accept(m_serverFd, (struct sockaddr*)&m_address, (socklen_t*)&m_addressLength);
-    BSPUtils::unblockSignals();
+    m_clientFd = BSPUtils::sysCallWrapper<int>([&]() {
+        return ::accept(m_serverFd, (struct sockaddr*)&m_address, (socklen_t*)&m_addressLength);
+    });
 
     if (m_clientFd < 0) {
         m_logger.log(LogLevel::Error, "TCP UART mock: Client acceptation failed");

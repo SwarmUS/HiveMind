@@ -13,13 +13,9 @@ class TCPClientWrapper : public ITCPClient {
 
     ~TCPClientWrapper() override { TCPClientWrapper::close(); };
 
-    int32_t receive(uint8_t* data, uint16_t length) override {
-        return m_client.receive(data, length);
-    }
+    bool receive(uint8_t* data, uint16_t length) override { return m_client.receive(data, length); }
 
-    int32_t send(const uint8_t* data, uint16_t length) override {
-        return m_client.send(data, length);
-    }
+    bool send(const uint8_t* data, uint16_t length) override { return m_client.send(data, length); }
 
     bool close() override { return m_client.close(); }
 

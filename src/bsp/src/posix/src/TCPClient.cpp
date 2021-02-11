@@ -1,4 +1,5 @@
 #include "TCPClient.h"
+#include <BSPUtils.h>
 #include <arpa/inet.h>
 #include <cstdio>
 #include <netdb.h>
@@ -10,12 +11,17 @@
 TCPClient::TCPClient(int socket, sockaddr_in address, ILogger& logger) :
     m_logger(logger), m_socketFd(socket), m_address(address) {}
 
-int32_t TCPClient::receive(uint8_t* data, uint16_t length) {
-    return ::recv(m_socketFd, data, length, 0);
+bool TCPClient::receive(uint8_t* data, uint16_t length) {
+    auto ret = BSPUtils::sysCallWrapper<ssize_t>(
+        [&]() { return ::recv(m_socketFd, data, length, MSG_WAITALL); });
+
+    return ret == length;
 }
 
-int32_t TCPClient::send(const uint8_t* data, uint16_t length) {
-    return ::send(m_socketFd, data, length, 0);
+bool TCPClient::send(const uint8_t* data, uint16_t length) {
+    auto ret =
+        BSPUtils::sysCallWrapper<ssize_t>([&]() { return ::send(m_socketFd, data, length, 0); });
+    return ret == length;
 }
 
 bool TCPClient::close() {

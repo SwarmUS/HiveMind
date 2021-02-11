@@ -1,12 +1,14 @@
 #ifndef __IHOSTUART_H__
 #define __IHOSTUART_H__
 
+#include <common/IProtobufStream.h>
 #include <cstdint>
 
-#define HOST_UART_MAX_MESSAGE_LENGTH UINT16_MAX
+#define HOST_UART_MAX_MESSAGE_LENGTH 1024
+#define HOST_UART_STREAM_SIZE 4096
 #define HOST_UART_HEADER_LENGTH 6
 
-class IHostUart {
+class IHostUart : public IProtobufStream {
   public:
     virtual ~IHostUart() = default;
 
@@ -23,18 +25,15 @@ class IHostUart {
      * @brief Receives up to an amount of data from the UART port
      * @param buffer Pointer to the buffer in which to put the received data
      * @param length Maximum length of data to receive
-     * @return Number of bytes received or -1 in case of an error
+     * @return True if success, false otherwise.
      */
-    virtual int32_t receive(uint8_t* buffer, uint16_t length) const = 0;
+    virtual bool receive(uint8_t* buffer, uint16_t length) = 0;
 
     /**
      * @brief Checks if driver is already busy transmitting data.
      * @return True if in use. False otherwise
      */
     virtual bool isBusy() const = 0;
-
-    // TODO: Method to register a callback so we can be notified when a message is received.
-    // (Depending on which notification scheme we choose to use)
 };
 
 #endif //__IHOSTUART_H__

@@ -2,11 +2,12 @@
 #define __TCPUARTMOCK_H__
 
 #include "bsp/IHostUart.h"
+#include <condition_variable>
 #include <freertos-utils/BaseTask.h>
 #include <logger/ILogger.h>
+#include <mutex>
 #include <netinet/in.h>
 #include <optional>
-#include <sys/socket.h>
 
 class TCPUartMock : public IHostUart {
   public:
@@ -15,7 +16,7 @@ class TCPUartMock : public IHostUart {
 
     void openSocket(int port);
 
-    int32_t receive(uint8_t* buffer, uint16_t length) const override;
+    bool receive(uint8_t* buffer, uint16_t length) override;
     bool send(const uint8_t* buffer, uint16_t length) override;
     bool isBusy() const override;
     void close() const;
