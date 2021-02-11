@@ -4,6 +4,9 @@
 #include <cpp-common/ICircularQueue.h>
 #include <freertos-utils/LockGuard.h>
 
+// TODO: move in another lib, it doesn't really belong here
+/**
+ *@brief A queue that is thread safe */
 template <typename T>
 class ThreadSafeQueue : public ICircularQueue<T> {
   public:

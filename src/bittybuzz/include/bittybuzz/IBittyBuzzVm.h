@@ -13,7 +13,7 @@ class IBittyBuzzVm {
      * @brief Does one execution step in the virtual machine.  Thus execute the buzz code in the
      * step function
      *
-     * @return true if the operation was successfull, false if not.
+     * @return true if the operation was successful, false if not.
      * */
     virtual bool step() = 0;
 
