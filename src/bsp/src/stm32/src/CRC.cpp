@@ -11,3 +11,7 @@ uint32_t CRC::calculateCRC32(const void* data, uint32_t length) {
     crc = Hal_calculateCRC32((const uint8_t*)data, length);
     return crc;
 }
+
+uint8_t CRC::calculateCRC8(const void* data, uint32_t length) {
+    return UINT8_MAX; // TODO: use function from propolis
+}

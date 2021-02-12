@@ -59,6 +59,9 @@
 
 /* External variables --------------------------------------------------------*/
 extern ETH_HandleTypeDef heth;
+extern DMA_HandleTypeDef hdma_spi5_rx;
+extern DMA_HandleTypeDef hdma_spi5_tx;
+extern SPI_HandleTypeDef hspi5;
 extern DMA_HandleTypeDef hdma_usart2_rx;
 extern DMA_HandleTypeDef hdma_usart2_tx;
 extern UART_HandleTypeDef huart2;
@@ -157,6 +160,19 @@ void DebugMon_Handler(void) {
 /******************************************************************************/
 
 /**
+ * @brief This function handles EXTI line0 interrupt.
+ */
+void EXTI0_IRQHandler(void) {
+    /* USER CODE BEGIN EXTI0_IRQn 0 */
+
+    /* USER CODE END EXTI0_IRQn 0 */
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
+    /* USER CODE BEGIN EXTI0_IRQn 1 */
+
+    /* USER CODE END EXTI0_IRQn 1 */
+}
+
+/**
  * @brief This function handles DMA1 stream5 global interrupt.
  */
 void DMA1_Stream5_IRQHandler(void) {
@@ -222,6 +238,32 @@ void USART3_IRQHandler(void) {
 }
 
 /**
+ * @brief This function handles DMA2 stream3 global interrupt.
+ */
+void DMA2_Stream3_IRQHandler(void) {
+    /* USER CODE BEGIN DMA2_Stream3_IRQn 0 */
+
+    /* USER CODE END DMA2_Stream3_IRQn 0 */
+    HAL_DMA_IRQHandler(&hdma_spi5_rx);
+    /* USER CODE BEGIN DMA2_Stream3_IRQn 1 */
+
+    /* USER CODE END DMA2_Stream3_IRQn 1 */
+}
+
+/**
+ * @brief This function handles DMA2 stream4 global interrupt.
+ */
+void DMA2_Stream4_IRQHandler(void) {
+    /* USER CODE BEGIN DMA2_Stream4_IRQn 0 */
+
+    /* USER CODE END DMA2_Stream4_IRQn 0 */
+    HAL_DMA_IRQHandler(&hdma_spi5_tx);
+    /* USER CODE BEGIN DMA2_Stream4_IRQn 1 */
+
+    /* USER CODE END DMA2_Stream4_IRQn 1 */
+}
+
+/**
  * @brief This function handles Ethernet global interrupt.
  */
 void ETH_IRQHandler(void) {
@@ -232,6 +274,19 @@ void ETH_IRQHandler(void) {
     /* USER CODE BEGIN ETH_IRQn 1 */
 
     /* USER CODE END ETH_IRQn 1 */
+}
+
+/**
+ * @brief This function handles SPI5 global interrupt.
+ */
+void SPI5_IRQHandler(void) {
+    /* USER CODE BEGIN SPI5_IRQn 0 */
+
+    /* USER CODE END SPI5_IRQn 0 */
+    HAL_SPI_IRQHandler(&hspi5);
+    /* USER CODE BEGIN SPI5_IRQn 1 */
+
+    /* USER CODE END SPI5_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

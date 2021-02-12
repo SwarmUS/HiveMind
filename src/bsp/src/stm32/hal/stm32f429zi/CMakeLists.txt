@@ -10,6 +10,7 @@ set(LIB_SOURCES
     Core/Src/gpio.c
     Core/Src/dma.c
     Core/Src/crc.c
+    Core/Src/spi.c
     LWIP/App/lwip.c
     LWIP/Target/ethernetif.c
 )
@@ -23,6 +24,7 @@ set(LIB_HEADERS
     Core/Inc/gpio.h
     Core/Inc/dma.h
     Core/Inc/crc.h
+    Core/Inc/spi.h
     LWIP/App/lwip.h
 )
 
@@ -70,6 +72,7 @@ target_link_libraries(stm32f429zi-linker
         STM32::NoSys
         SwarmUS::HiveMind::LWIP
         CMSIS::STM32::F4::RTOS_V2
+        HAL::STM32::F4::SPI
         )
 
 # Actual bsp library
@@ -106,6 +109,7 @@ target_link_libraries(${LIB_NAME}
         HAL::STM32::F4::UART
         HAL::STM32::F4::DMA
         HAL::STM32::F4::CRC
+        HAL::STM32::F4::SPI
         SwarmUS::HiveMind::LWIP
         CMSIS::STM32::F4::RTOS_V2
 )

@@ -11,6 +11,7 @@ set(LIB_SOURCES
     src/SocketFactory.cpp
     src/TCPClient.cpp
     src/SettingsContainer.cpp
+    src/SpiEsp.cpp
     )
 
 set(LIB_PRIVATE_HEADERS
@@ -21,6 +22,8 @@ set(LIB_PRIVATE_HEADERS
     include/SocketFactory.h
     include/TCPClient.h
     include/DefaultSettings.h
+    include/SpiEsp.h
+    include/SpiHeader.h
     )
 
 include(DefaultSettings.cmake)
