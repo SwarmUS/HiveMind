@@ -21,6 +21,8 @@ class TCPUartMock : public IHostUart {
     bool isBusy() const override;
     void close() const;
 
+    bool isConnected() const override { return m_clientFd.has_value(); }
+
     friend void TCPUartMock_listenTask(void* param);
 
   private:

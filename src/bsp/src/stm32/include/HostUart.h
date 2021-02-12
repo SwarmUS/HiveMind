@@ -20,6 +20,8 @@ class HostUart : public IHostUart {
     bool receive(uint8_t* buffer, uint16_t length) override;
     bool isBusy() const override;
 
+    bool isConnected() const override { return true; }
+
     void process();
 
     friend void hostUart_C_txCpltCallback(void* hostUartInstance);

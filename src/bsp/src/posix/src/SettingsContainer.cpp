@@ -18,7 +18,7 @@ uint16_t SettingsContainer::getUUID() {
 
 uint32_t SettingsContainer::getHostPort() {
     auto handle = getRosNodeHandle();
-    uint32_t port = (uint32_t)handle->param("host_port", 5555);
+    uint32_t port = (uint32_t)handle->param("host_port", 55551);
 
     return port;
 }
