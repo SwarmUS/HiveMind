@@ -34,6 +34,12 @@ class IHostUart : public IProtobufStream {
      * @return True if in use. False otherwise
      */
     virtual bool isBusy() const = 0;
+
+    /**
+     * @brief Tells if client is connected to the port
+     * @return True if connected, else otherwise
+     */
+    virtual bool isConnected() const = 0;
 };
 
 #endif //__IHOSTUART_H__

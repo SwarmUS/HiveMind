@@ -8,9 +8,10 @@ MessageSender::MessageSender(ICircularQueue<MessageDTO>& inputQueue,
 bool MessageSender::processAndSerialize() {
     const std::optional<std::reference_wrapper<const MessageDTO>> message = m_inputQueue.peek();
     if (message) {
-
-        return m_serializer.serializeToStream(message.value());
+        bool ret = m_serializer.serializeToStream(message.value());
+        m_inputQueue.pop();
+        return ret;
     }
 
-    return false;
+    return true;
 }

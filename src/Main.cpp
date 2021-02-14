@@ -47,7 +47,7 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class UartMessageDispatcher : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+class UartMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
 
   public:
     UartMessageDispatcher(const char* taskName, UBaseType_t priority) :
@@ -57,16 +57,23 @@ class UartMessageDispatcher : public AbstractTask<2 * configMINIMAL_STACK_SIZE> 
 
     void task() override {
         auto& uart = BSPContainer::getHostUart();
-        HiveMindHostDeserializer deserializer(uart);
-        MessageDispatcher messageDispatcher(
-            MessageHandlerContainer::getBuzzMsgQueue(), MessageHandlerContainer::getHostMsgQueue(),
-            MessageHandlerContainer::getRemoteMsgQueue(), deserializer,
-            BSPContainer::getBSP().getUUId(), m_logger);
 
         while (true) {
-            if (!messageDispatcher.deserializeAndDispatch()) {
-                m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch uart");
+            if (uart.isConnected()) {
+                HiveMindHostDeserializer deserializer(uart);
+                MessageDispatcher messageDispatcher(MessageHandlerContainer::getBuzzMsgQueue(),
+                                                    MessageHandlerContainer::getHostMsgQueue(),
+                                                    MessageHandlerContainer::getRemoteMsgQueue(),
+                                                    deserializer, BSPContainer::getBSP().getUUId(),
+                                                    m_logger);
+
+                while (true) {
+                    if (!messageDispatcher.deserializeAndDispatch()) {
+                        m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch uart");
+                    }
+                }
             }
+            Task::delay(500);
         }
     }
 
@@ -74,7 +81,7 @@ class UartMessageDispatcher : public AbstractTask<2 * configMINIMAL_STACK_SIZE> 
     ILogger& m_logger;
 };
 
-class TCPMessageDispatcher : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+class TCPMessageDispatcher : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
 
   public:
     TCPMessageDispatcher(const char* taskName, UBaseType_t priority) :
@@ -86,26 +93,28 @@ class TCPMessageDispatcher : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
     ILogger& m_logger;
 
     void task() override {
-        auto socket = SocketContainer::getHostClientSocket();
+        while (true) {
+            auto socket = SocketContainer::getHostClientSocket();
+            if (socket) {
+                HiveMindHostDeserializer deserializer(socket.value());
+                MessageDispatcher messageDispatcher(MessageHandlerContainer::getBuzzMsgQueue(),
+                                                    MessageHandlerContainer::getHostMsgQueue(),
+                                                    MessageHandlerContainer::getRemoteMsgQueue(),
+                                                    deserializer, BSPContainer::getBSP().getUUId(),
+                                                    m_logger);
 
-        if (socket) {
-            HiveMindHostDeserializer deserializer(socket.value());
-            MessageDispatcher messageDispatcher(MessageHandlerContainer::getBuzzMsgQueue(),
-                                                MessageHandlerContainer::getHostMsgQueue(),
-                                                MessageHandlerContainer::getRemoteMsgQueue(),
-                                                deserializer, BSPContainer::getBSP().getUUId(),
-                                                m_logger);
-
-            while (true) {
-                if (!messageDispatcher.deserializeAndDispatch()) {
-                    m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch TCP");
+                while (true) {
+                    if (!messageDispatcher.deserializeAndDispatch()) {
+                        m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch TCP");
+                    }
                 }
             }
+            Task::delay(500);
         }
     }
 };
 
-class UartMessageSender : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+class UartMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     UartMessageSender(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
@@ -116,23 +125,29 @@ class UartMessageSender : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
     ILogger& m_logger;
 
     void task() override {
-        // TODO: check if uart is connected
         auto& uart = BSPContainer::getHostUart();
-        HiveMindHostSerializer serializer(uart);
-
-        // TODO: For now the uart is considered remote
-        MessageSender messageSender(MessageHandlerContainer::getRemoteMsgQueue(), serializer,
-                                    m_logger);
 
         while (true) {
-            if (!messageSender.processAndSerialize()) {
-                m_logger.log(LogLevel::Warn, "Fail to process/serialize to uart");
+            if (uart.isConnected()) {
+
+                HiveMindHostSerializer serializer(uart);
+
+                // TODO: For now the uart is considered remote
+                MessageSender messageSender(MessageHandlerContainer::getRemoteMsgQueue(),
+                                            serializer, m_logger);
+
+                while (true) {
+                    if (!messageSender.processAndSerialize()) {
+                        m_logger.log(LogLevel::Warn, "Fail to process/serialize to uart");
+                    }
+                }
             }
+            Task::delay(500);
         }
     }
 };
 
-class TCPMessageSender : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+class TCPMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     TCPMessageSender(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
@@ -143,17 +158,20 @@ class TCPMessageSender : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
     ILogger& m_logger;
 
     void task() override {
-        auto socket = SocketContainer::getHostClientSocket();
-        if (socket) {
-            HiveMindHostSerializer serializer(socket.value());
-            MessageSender messageSender(MessageHandlerContainer::getRemoteMsgQueue(), serializer,
-                                        m_logger);
+        while (true) {
+            auto socket = SocketContainer::getHostClientSocket();
+            if (socket) {
+                HiveMindHostSerializer serializer(socket.value());
+                MessageSender messageSender(MessageHandlerContainer::getHostMsgQueue(), serializer,
+                                            m_logger);
 
-            while (true) {
-                if (!messageSender.processAndSerialize()) {
-                    m_logger.log(LogLevel::Warn, "Fail to process/serialize to tcp");
+                while (true) {
+                    if (!messageSender.processAndSerialize()) {
+                        m_logger.log(LogLevel::Warn, "Fail to process/serialize to tcp");
+                    }
                 }
             }
+            Task::delay(500);
         }
     }
 };

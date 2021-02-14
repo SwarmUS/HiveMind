@@ -33,7 +33,7 @@ TEST_F(MessageSenderFixture, MessageSender_processAndSerialize_validMessage) {
     EXPECT_TRUE(ret);
 }
 
-TEST_F(MessageSenderFixture, MessageSender_processAndSerialize_invalidMessage) {
+TEST_F(MessageSenderFixture, MessageSender_processAndSerialize_emptyMessage) {
     // Given
     const std::optional<std::reference_wrapper<const MessageDTO>> emptyMessage = {};
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(emptyMessage));
@@ -43,7 +43,7 @@ TEST_F(MessageSenderFixture, MessageSender_processAndSerialize_invalidMessage) {
     bool ret = m_messageSender->processAndSerialize();
 
     // Expect
-    EXPECT_FALSE(ret);
+    EXPECT_TRUE(ret);
 }
 
 TEST_F(MessageSenderFixture, MessageSender_processAndSerialize_invalidDeserialization) {
