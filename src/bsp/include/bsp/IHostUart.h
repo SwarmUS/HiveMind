@@ -35,6 +35,10 @@ class IHostUart : public IProtobufStream {
      */
     virtual bool isBusy() const = 0;
 
+    /**
+     * @brief Tells if client is connected to the port
+     * @return True if connected, else otherwise
+     */
     virtual bool isConnected() const = 0;
 };
 
