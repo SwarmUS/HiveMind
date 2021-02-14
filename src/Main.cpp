@@ -158,8 +158,6 @@ class TCPMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     ILogger& m_logger;
 
     void task() override {
-        Task::delay(10000);
-
         while (true) {
             auto socket = SocketContainer::getHostClientSocket();
             if (socket) {

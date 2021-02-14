@@ -3,12 +3,15 @@
 #include "TCPClient.h"
 #include "bsp/SettingsContainer.h"
 #include "logger/LoggerContainer.h"
+#include "LockGuard.h"
 
 std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket() {
 
     static std::optional<TCPClient> s_clientSocket = {};
     static std::optional<TCPClientWrapper> s_wrapper = {};
+    static Mutex s_mutex = Mutex(500);
 
+    LockGuard lock = LockGuard(s_mutex);
     if (!s_clientSocket) {
 
         ILogger& logger = LoggerContainer::getLogger();
