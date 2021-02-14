@@ -1,9 +1,9 @@
 #include "bsp/SocketContainer.h"
+#include "LockGuard.h"
 #include "SocketFactory.h"
 #include "TCPClient.h"
 #include "bsp/SettingsContainer.h"
 #include "logger/LoggerContainer.h"
-#include "LockGuard.h"
 
 std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket() {
 
