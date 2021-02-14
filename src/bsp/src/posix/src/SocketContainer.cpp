@@ -9,6 +9,7 @@ std::optional<TCPClientWrapper> SocketContainer::getHostClientSocket() {
 
     static std::optional<TCPClient> s_clientSocket = {};
     static std::optional<TCPClientWrapper> s_wrapper = {};
+    // TODO: Make mutex blocking (add portMAXDelay to Propolis for posix build)
     static Mutex s_mutex = Mutex(500);
 
     LockGuard lock = LockGuard(s_mutex);
