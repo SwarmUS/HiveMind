@@ -1,2 +1,11 @@
 log
 logInt
+isNil
+isInt
+isFloat
+isString
+isTable
+isClosure
+isLambdaClosure
+isNativeClosure
+isUserData

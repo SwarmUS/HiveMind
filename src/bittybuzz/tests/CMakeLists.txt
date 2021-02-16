@@ -10,6 +10,7 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmNoStepTests.cpp
     vm_tests/BittyBuzzVmSwarmTests.cpp
     vm_tests/BittyBuzzVmUndefinedFunctionTests.cpp
+    vm_tests/BittyBuzzVmIsNil.cpp
 )
 
 set(TEST_HEADERS
@@ -57,6 +58,11 @@ bittybuzz_generate_bytecode(swarm
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${SWARM_BST}")
 
+bittybuzz_generate_bytecode(isNil 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/isNil.bzz 
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
 
 add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})
 
@@ -75,6 +81,7 @@ target_link_libraries(${TEST_NAME}
         no-step
         undefined-function 
         swarm
+        isNil
 )
 
 add_test(NAME ${TEST_NAME}

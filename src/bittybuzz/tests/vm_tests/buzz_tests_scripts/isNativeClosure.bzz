@@ -1,0 +1,21 @@
+function init() {
+}
+
+
+function step() {
+    var nilVal = nil;
+    var intVal = 42;
+    var floatVal = 42.24;
+    var stringVal = "Hello";
+    var tableVal = {0=42, 1=43};
+    var nativeClosureVal = functionType;
+    var lambdaClosureVal = function(){};
+
+    assertFalse(isNativeClosure(nilVal));
+    assertFalse(isNativeClosure(intVal));
+    assertFalse(isNativeClosure(floatVal));
+    assertFalse(isNativeClosure(stringVal));
+    assertFalse(isNativeClosure(tableVal));
+    assertTrue(isNativeClosure(nativeClosureVal));
+    assertFalse(isNativeClosure(lambdaClosureVal));
+}
