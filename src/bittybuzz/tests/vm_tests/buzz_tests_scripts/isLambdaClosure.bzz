@@ -1,6 +1,8 @@
-function init() {
+function functionType() {
 }
 
+function init() {
+}
 
 function step() {
     var nilVal = nil;

@@ -21,7 +21,6 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmIsTableTests.cpp
     vm_tests/BittyBuzzVmIsClosureTests.cpp
     vm_tests/BittyBuzzVmIsLambdaClosureTests.cpp
-    vm_tests/BittyBuzzVmIsNativeClosureTests.cpp
 )
 
 set(TEST_HEADERS
@@ -104,11 +103,6 @@ bittybuzz_generate_bytecode(isLambdaClosure
     ${BZZ_TEST_SCRIPTS_LOCATION}/isLambdaClosure.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
-  
-bittybuzz_generate_bytecode(isNativeClosure 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/isNativeClosure.bzz 
-    "${BZZ_TEST_SCRIPTS_LOCATION}"
-    "${BITTYBUZZ_HIVEMIND_BST}")
 
 
 add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})
@@ -135,7 +129,6 @@ target_link_libraries(${TEST_NAME}
         isTable
         isClosure
         isLambdaClosure
-        isNativeClosure
 )
 
 add_test(NAME ${TEST_NAME}

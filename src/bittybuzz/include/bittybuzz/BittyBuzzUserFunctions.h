@@ -72,13 +72,6 @@ namespace BittyBuzzUserFunctions {
     void isLambdaClosure();
 
     /**
-     *@brief Checks if a variable is a native closure, named closure
-     *@details This closure expects one parameter, the variable to verify the type, pushes 1 on
-     *true, 0 on false
-     * */
-    void isNativeClosure();
-
-    /**
      *@brief Checks if a variable is a user data structure
      *@details This closure expects one parameter, the variable to verify the type, pushes 1 on
      *true, 0 on false

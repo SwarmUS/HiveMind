@@ -7,5 +7,4 @@ isString
 isTable
 isClosure
 isLambdaClosure
-isNativeClosure
 isUserData
