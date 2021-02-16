@@ -71,7 +71,6 @@ namespace BittyBuzzUserFunctions {
      * */
     void isLambdaClosure();
 
-
 } // namespace BittyBuzzUserFunctions
 
 #endif // __BITTYBUZZUSERFUNCTIONS_H_

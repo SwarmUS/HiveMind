@@ -25,5 +25,3 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isLambdaClosure) {
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
 }
-
-
