@@ -26,6 +26,5 @@ std::array<FunctionRegister, 10> BittyBuzzFactory::createBittyBuzzFunctionRegist
         {BBZSTRID_isTable, BittyBuzzUserFunctions::isTable},
         {BBZSTRID_isClosure, BittyBuzzUserFunctions::isClosure},
         {BBZSTRID_isLambdaClosure, BittyBuzzUserFunctions::isLambdaClosure},
-        {BBZSTRID_isUserData, BittyBuzzUserFunctions::isUserData},
     }};
 }

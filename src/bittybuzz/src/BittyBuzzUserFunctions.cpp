@@ -92,12 +92,3 @@ void BittyBuzzUserFunctions::isLambdaClosure() {
 
     bbzvm_ret1();
 }
-
-void BittyBuzzUserFunctions::isUserData() {
-    bbzvm_assert_lnum(1); // NOLINT
-    bbzobj_t* bbzObj = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-
-    bbzvm_pushi(bbztype_isuserdata(*bbzObj));
-
-    bbzvm_ret1();
-}
