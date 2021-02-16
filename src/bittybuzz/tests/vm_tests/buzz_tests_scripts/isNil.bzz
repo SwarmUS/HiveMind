@@ -1,3 +1,6 @@
+function functionType() {
+}
+
 function init() {
 }
 
@@ -7,7 +10,7 @@ function step() {
     var intVal = 42;
     var floatVal = 42.24;
     var stringVal = "Hello";
-    var tableVal = {0=42, 1=43};
+    var tableVal = {};
     var nativeClosureVal = functionType;
     var lambdaClosureVal = function(){};
 

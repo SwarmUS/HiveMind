@@ -2,14 +2,14 @@
 #include "BittyBuzzVmTestsUtils.h"
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
-#include <isNil_bytecode.h>
+#include <isString_bytecode.h>
 
-TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isNil) {
+TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isString) {
     // Given
     uint16_t boardId = 42;
 
     std::array<FunctionRegister, 3> functionRegister = {
-        {{BBZSTRID_isNil, BittyBuzzUserFunctions::isNil},
+        {{BBZSTRID_isString, BittyBuzzUserFunctions::isString},
          {BBZSTRID_assertTrue, buzzAssertTrue},
          {BBZSTRID_assertFalse, buzzAssertFalse}}};
 

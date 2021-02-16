@@ -2,14 +2,14 @@
 #include "BittyBuzzVmTestsUtils.h"
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
-#include <isNil_bytecode.h>
+#include <isLambdaClosure_bytecode.h>
 
-TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isNil) {
+TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isLambdaClosure) {
     // Given
     uint16_t boardId = 42;
 
     std::array<FunctionRegister, 3> functionRegister = {
-        {{BBZSTRID_isNil, BittyBuzzUserFunctions::isNil},
+        {{BBZSTRID_isLambdaClosure, BittyBuzzUserFunctions::isLambdaClosure},
          {BBZSTRID_assertTrue, buzzAssertTrue},
          {BBZSTRID_assertFalse, buzzAssertFalse}}};
 
@@ -25,3 +25,5 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isNil) {
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
 }
+
+

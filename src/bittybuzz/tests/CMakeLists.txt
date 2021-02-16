@@ -1,8 +1,11 @@
 set(TEST_NAME test-bittybuzz)
  
 set(TEST_SOURCES
+    
     BittyBuzzBytecodeUnitTests.cpp
     BittyBuzzStringResolverUnitTests.cpp
+
+    vm_tests/BittyBuzzVmTestsUtils.cpp
 
     vm_tests/BittyBuzzVmLogTests.cpp
     vm_tests/BittyBuzzVmInitAddTests.cpp
@@ -10,7 +13,15 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmNoStepTests.cpp
     vm_tests/BittyBuzzVmSwarmTests.cpp
     vm_tests/BittyBuzzVmUndefinedFunctionTests.cpp
-    vm_tests/BittyBuzzVmIsNil.cpp
+
+    vm_tests/BittyBuzzVmIsNilTests.cpp
+    vm_tests/BittyBuzzVmIsIntTests.cpp
+    vm_tests/BittyBuzzVmIsFloatTests.cpp
+    vm_tests/BittyBuzzVmIsStringTests.cpp
+    vm_tests/BittyBuzzVmIsTableTests.cpp
+    vm_tests/BittyBuzzVmIsClosureTests.cpp
+    vm_tests/BittyBuzzVmIsLambdaClosureTests.cpp
+    vm_tests/BittyBuzzVmIsNativeClosureTests.cpp
 )
 
 set(TEST_HEADERS
@@ -18,6 +29,7 @@ set(TEST_HEADERS
     mocks/LoggerInterfaceMock.h
     
     vm_tests/BittyBuzzVmFixture.h
+    vm_tests/BittyBuzzVmTestsUtils.h
 )
 
 # bzz target definitions
@@ -63,6 +75,41 @@ bittybuzz_generate_bytecode(isNil
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
+bittybuzz_generate_bytecode(isInt 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/isInt.bzz 
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
+bittybuzz_generate_bytecode(isFloat 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/isFloat.bzz 
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
+bittybuzz_generate_bytecode(isString 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/isString.bzz 
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
+bittybuzz_generate_bytecode(isTable 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/isTable.bzz 
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
+bittybuzz_generate_bytecode(isClosure 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/isClosure.bzz 
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
+bittybuzz_generate_bytecode(isLambdaClosure 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/isLambdaClosure.bzz 
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+  
+bittybuzz_generate_bytecode(isNativeClosure 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/isNativeClosure.bzz 
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
 
 add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})
 
@@ -82,6 +129,13 @@ target_link_libraries(${TEST_NAME}
         undefined-function 
         swarm
         isNil
+        isInt
+        isFloat
+        isString
+        isTable
+        isClosure
+        isLambdaClosure
+        isNativeClosure
 )
 
 add_test(NAME ${TEST_NAME}
