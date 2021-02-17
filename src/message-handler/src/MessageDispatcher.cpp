@@ -34,21 +34,20 @@ bool MessageDispatcher::deserializeAndDispatch() {
     return false;
 }
 
-bool MessageDispatcher::dispatchUserCall(const MessageDTO& message,
-                                         const UserCallDestinationDTO& dest) {
+bool MessageDispatcher::dispatchUserCall(const MessageDTO& message, const UserCallTargetDTO& dest) {
     // Sending to the appropriate destination
     switch (dest) {
-    case UserCallDestinationDTO::BUZZ:
+    case UserCallTargetDTO::BUZZ:
         m_logger.log(LogLevel::Debug, "Message sent to buzz queue");
         m_buzzOutputQueue.push(message);
         return true;
-    case UserCallDestinationDTO::HOST:
+    case UserCallTargetDTO::HOST:
         m_logger.log(LogLevel::Debug, "Message sent to host queue");
         m_hostOutputQueue.push(message);
         return true;
 
     // Discard the message if unknown
-    case UserCallDestinationDTO::UNKNOWN:
+    case UserCallTargetDTO::UNKNOWN:
     default:
         m_logger.log(LogLevel::Warn, "Unknown user call destination");
         return false;
@@ -57,13 +56,13 @@ bool MessageDispatcher::dispatchUserCall(const MessageDTO& message,
 
 bool MessageDispatcher::dispatchUserCallRequest(const MessageDTO& message,
                                                 const UserCallRequestDTO& request) {
-    UserCallDestinationDTO userCallDestination = request.getDestination();
+    UserCallTargetDTO userCallDestination = request.getDestination();
     return dispatchUserCall(message, userCallDestination);
 }
 
 bool MessageDispatcher::dispatchUserCallResponse(const MessageDTO& message,
                                                  const UserCallResponseDTO& response) {
-    UserCallDestinationDTO userCallDestination = response.getDestination();
+    UserCallTargetDTO userCallDestination = response.getDestination();
     return dispatchUserCall(message, userCallDestination);
 }
 
