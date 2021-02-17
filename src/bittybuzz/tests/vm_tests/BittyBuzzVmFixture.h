@@ -1,7 +1,7 @@
-
 #ifndef __BITTYBUZZVMTESTFIXTURE_H_
 #define __BITTYBUZZVMTESTFIXTURE_H_
 
+#include "BittyBuzzVmTestsUtils.h"
 #include "bittybuzz/BittyBuzzBytecode.h"
 #include "bittybuzz/BittyBuzzVm.h"
 #include <gtest/gtest.h>
@@ -27,6 +27,9 @@ class BittyBuzzVmTestFixture : public testing::Test {
                const uint16_t bytecodeLength,
                uint16_t boardId,
                const Container& functionRegisters) {
+
+        g_assertTrueCallCount = 0;
+        g_assertFalseCallCount = 0;
 
         m_loggerMock = new LoggerInterfaceMock(logCounter, logLastFormat);
         m_bspMock = new BSPInterfaceMock(boardId);
