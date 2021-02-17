@@ -26,7 +26,7 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
 
     // Function registration
     for (FunctionRegister functionRegister : container) {
-        bbzvm_function_register(functionRegister.strId, functionRegister.functionPtr);
+        bbzvm_function_register(functionRegister.m_strId, functionRegister.m_functionPtr);
     }
 
     vm->state = BBZVM_STATE_READY;

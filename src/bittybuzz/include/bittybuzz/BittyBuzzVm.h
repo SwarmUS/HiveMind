@@ -10,11 +10,16 @@
 
 #define BBZ_MSG_BUFF_SIZE 16
 
-typedef struct {
-    uint8_t strId;
-    bbzvm_funp functionPtr;
+struct FunctionRegister {
+  public:
+    FunctionRegister(uint8_t strId, bbzvm_funp functionPtr) :
+        m_strId(strId), m_functionPtr(functionPtr) {}
+    uint8_t m_strId;
+    bbzvm_funp m_functionPtr;
 
-} FunctionRegister;
+  private:
+    FunctionRegister();
+};
 
 class BittyBuzzVm : public IBittyBuzzVm {
   public:
