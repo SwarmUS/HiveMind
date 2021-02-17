@@ -10,10 +10,9 @@
 
 #define BBZ_MSG_BUFF_SIZE 16
 
-struct FunctionRegister {
+class FunctionRegister {
   public:
-    FunctionRegister(uint8_t strId, bbzvm_funp functionPtr) :
-        m_strId(strId), m_functionPtr(functionPtr) {}
+    FunctionRegister(uint8_t strId, bbzvm_funp functionPtr);
     uint8_t m_strId;
     bbzvm_funp m_functionPtr;
 
