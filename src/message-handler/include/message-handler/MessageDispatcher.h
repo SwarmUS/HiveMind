@@ -29,7 +29,7 @@ class MessageDispatcher : IMessageDispatcher {
     ILogger& m_logger;
 
     // handling funciton
-    bool dispatchUserCall(const MessageDTO& message, const UserCallDestinationDTO& dest);
+    bool dispatchUserCall(const MessageDTO& message, const UserCallTargetDTO& dest);
     bool dispatchUserCallRequest(const MessageDTO& message, const UserCallRequestDTO& request);
     bool dispatchUserCallResponse(const MessageDTO& message, const UserCallResponseDTO& response);
     bool dispatchRequest(const MessageDTO& message, const RequestDTO& request);

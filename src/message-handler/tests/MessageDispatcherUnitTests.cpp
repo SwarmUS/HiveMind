@@ -27,11 +27,13 @@ class MessageDispatcherFixture : public testing::Test {
 
     void SetUp() override {
         m_fRequest = new FunctionCallRequestDTO(NULL, NULL, 0);
-        m_uRequest = new UserCallRequestDTO(UserCallDestinationDTO::BUZZ, *m_fRequest);
+        m_uRequest =
+            new UserCallRequestDTO(UserCallTargetDTO::HOST, UserCallTargetDTO::BUZZ, *m_fRequest);
         m_request = new RequestDTO(1, *m_uRequest);
 
         m_fResponse = new FunctionCallResponseDTO(GenericResponseStatusDTO::Ok, "");
-        m_uResponse = new UserCallResponseDTO(UserCallDestinationDTO::BUZZ, *m_fResponse);
+        m_uResponse =
+            new UserCallResponseDTO(UserCallTargetDTO::HOST, UserCallTargetDTO::BUZZ, *m_fResponse);
         m_response = new ResponseDTO(1, *m_uResponse);
 
         m_messageDispatcher = new MessageDispatcher(m_buzzQueue, m_hostQueue, m_remoteQueue,
@@ -85,7 +87,26 @@ TEST_F(MessageDispatcherFixture, MessageSender_deserializeAndDispatch_invalidUse
 
 TEST_F(MessageDispatcherFixture, MessageSender_deserializeAndDispatch_validUserCallRequest_host) {
     // Given
-    UserCallRequestDTO uRequest(UserCallDestinationDTO::HOST, *m_fRequest);
+    UserCallRequestDTO uRequest(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_fRequest);
+    RequestDTO request(1, uRequest);
+    m_message = MessageDTO(m_srcUuid, m_uuid, request);
+
+    EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
+    EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(1);
+    EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
+    // Then
+    bool ret = m_messageDispatcher->deserializeAndDispatch();
+
+    // Expect
+    EXPECT_TRUE(ret);
+}
+
+TEST_F(MessageDispatcherFixture, MessageSender_deserializeAndDispatch_UnknownSource_validUserCall) {
+    // Given
+    UserCallRequestDTO uRequest(UserCallTargetDTO::UNKNOWN, UserCallTargetDTO::HOST, *m_fRequest);
     RequestDTO request(1, uRequest);
     m_message = MessageDTO(m_srcUuid, m_uuid, request);
 
@@ -104,7 +125,7 @@ TEST_F(MessageDispatcherFixture, MessageSender_deserializeAndDispatch_validUserC
 
 TEST_F(MessageDispatcherFixture, MessageSender_deserializeAndDispatch_invalidUserCallRequest_host) {
     // Given
-    UserCallRequestDTO uRequest(UserCallDestinationDTO::HOST, *m_fRequest);
+    UserCallRequestDTO uRequest(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_fRequest);
     RequestDTO request(1, uRequest);
     m_message = MessageDTO(m_srcUuid, m_uuid, request);
 
@@ -125,7 +146,7 @@ TEST_F(MessageDispatcherFixture, MessageSender_deserializeAndDispatch_invalidUse
 TEST_F(MessageDispatcherFixture,
        MessageSender_deserializeAndDispatch_validUserCallRequest_Unknown_returnfalse) {
     // Given
-    UserCallRequestDTO uRequest(UserCallDestinationDTO::UNKNOWN, *m_fRequest);
+    UserCallRequestDTO uRequest(UserCallTargetDTO::HOST, UserCallTargetDTO::UNKNOWN, *m_fRequest);
     RequestDTO request(1, uRequest);
     m_message = MessageDTO(m_srcUuid, m_uuid, request);
 
@@ -178,12 +199,6 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_FALSE(ret);
 }
 
-// -------------------------------- SEGREGATE --------------------
-//
-//
-//
-//
-//
 TEST_F(MessageDispatcherFixture, MessageSender_deserializeAndDispatch_validUserCallResponse_buzz) {
     // Given
     m_message = MessageDTO(m_srcUuid, m_uuid, *m_response);
@@ -221,7 +236,27 @@ TEST_F(MessageDispatcherFixture,
 
 TEST_F(MessageDispatcherFixture, MessageSender_deserializeAndDispatch_validUserCallResponse_host) {
     // Given
-    UserCallResponseDTO uResponse(UserCallDestinationDTO::HOST, *m_fResponse);
+    UserCallResponseDTO uResponse(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_fResponse);
+    ResponseDTO response(1, uResponse);
+    m_message = MessageDTO(m_srcUuid, m_uuid, response);
+
+    EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
+    EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(1);
+    EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
+    // Then
+    bool ret = m_messageDispatcher->deserializeAndDispatch();
+
+    // Expect
+    EXPECT_TRUE(ret);
+}
+
+TEST_F(MessageDispatcherFixture, MessageSender_deserializeAndDispatch_unknownSource_valid) {
+    // Given
+    UserCallResponseDTO uResponse(UserCallTargetDTO::UNKNOWN, UserCallTargetDTO::HOST,
+                                  *m_fResponse);
     ResponseDTO response(1, uResponse);
     m_message = MessageDTO(m_srcUuid, m_uuid, response);
 
@@ -241,7 +276,7 @@ TEST_F(MessageDispatcherFixture, MessageSender_deserializeAndDispatch_validUserC
 TEST_F(MessageDispatcherFixture,
        MessageSender_deserializeAndDispatch_invalidUserCallResponse_host) {
     // Given
-    UserCallResponseDTO uResponse(UserCallDestinationDTO::HOST, *m_fResponse);
+    UserCallResponseDTO uResponse(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_fResponse);
     ResponseDTO response(1, uResponse);
     m_message = MessageDTO(m_srcUuid, m_uuid, response);
 
@@ -260,9 +295,10 @@ TEST_F(MessageDispatcherFixture,
 }
 
 TEST_F(MessageDispatcherFixture,
-       MessageSender_deserializeAndDispatch_validUserCallResponse_Unknown_returnfalse) {
+       MessageSender_deserializeAndDispatch_validUserCallResponse_UnknownDestination_returnfalse) {
     // Given
-    UserCallResponseDTO uResponse(UserCallDestinationDTO::UNKNOWN, *m_fResponse);
+    UserCallResponseDTO uResponse(UserCallTargetDTO::HOST, UserCallTargetDTO::UNKNOWN,
+                                  *m_fResponse);
     ResponseDTO response(1, uResponse);
     m_message = MessageDTO(m_srcUuid, m_uuid, response);
 
