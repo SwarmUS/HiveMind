@@ -31,12 +31,15 @@ set(LIB_HEADERS
     include/bittybuzz/BittyBuzzFactory.h
     include/bittybuzz/BittyBuzzUserFunctions.h
 
+    include/bittybuzz/BittyBuzzFunctionRegister.h
+
 )
 
 set(LIB_SOURCES
     src/BittyBuzzVm.cpp
     src/BittyBuzzBytecode.cpp
     src/BittyBuzzStringResolver.cpp
+    src/BittyBuzzFunctionRegister.cpp
 
     src/BittyBuzzSystem.cpp
     src/BittyBuzzFactory.cpp
@@ -52,6 +55,7 @@ target_include_directories(${LIB_NAME}
         $<INSTALL_INTERFACE:include>
     PRIVATE
         src
+        include/bittybuzz
 )
 
 target_link_libraries(${LIB_NAME}
