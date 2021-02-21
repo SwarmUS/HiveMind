@@ -4,11 +4,11 @@
 #include <FreeRTOSConfig.h>
 #include <cstring>
 
-#define WORD_TO_BYTE(word) ((uint32_t) (word << 2U))
-#define BYTE_TO_WORD(byte) ((uint8_t) (byte >> 2U))
+#define WORD_TO_BYTE(word) ((uint32_t)(word << 2U))
+#define BYTE_TO_WORD(byte) ((uint8_t)(byte >> 2U))
 
 void task(void* instance) {
-    constexpr uint loopRate = 30;
+    constexpr uint loopRate = 5;
     while (true) {
         static_cast<SpiEsp*>(instance)->execute();
         vTaskDelay(loopRate);
@@ -96,7 +96,7 @@ void SpiEsp::execute() {
         }
         // This will be sent on next header. Payload has priority over headers.
         m_inboundMessage.m_sizeBytes = WORD_TO_BYTE(m_inboundHeader->txSizeWord);
-        if (m_inboundMessage.m_sizeBytes ==  WORD_TO_BYTE(m_outboundHeader.rxSizeWord) &&
+        if (m_inboundMessage.m_sizeBytes == WORD_TO_BYTE(m_outboundHeader.rxSizeWord) &&
             m_inboundMessage.m_sizeBytes != 0) {
             rxLengthBytes = WORD_TO_BYTE(m_inboundHeader->txSizeWord);
             m_outboundHeader.systemState.stmSystemState.failedCrc = 0;
