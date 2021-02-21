@@ -4,6 +4,7 @@ set(TEST_SOURCES
     
     BittyBuzzBytecodeUnitTests.cpp
     BittyBuzzStringResolverUnitTests.cpp
+    BittyBuzzFunctionRegisterUnitTests.cpp
 
     vm_tests/BittyBuzzVmTestsUtils.cpp
 

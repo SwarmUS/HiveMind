@@ -1,10 +1,10 @@
 #include "BittyBuzzFunctionRegister.h"
 #include <cstring>
 
-BittyBuzzFunctionRegister::BittyBuzzFunctionRegister() {}
+BittyBuzzFunctionRegister::BittyBuzzFunctionRegister() = default;
 
 bool BittyBuzzFunctionRegister::registerFunction(const char* functionName, uint16_t functionId) {
-    if (m_functionRegistersLength >= m_maxSize - 1) {
+    if (m_functionRegistersLength >= m_maxSize) {
         return false;
     }
     std::string_view functionNameView(functionName);

@@ -10,13 +10,16 @@ class BittyBuzzFunctionRegister {
   public:
     BittyBuzzFunctionRegister();
     ~BittyBuzzFunctionRegister() = default;
+
     bool registerFunction(const char* functionName, uint16_t functionId);
+
     std::optional<uint16_t> getFunctionId(const char* functionName);
 
-  private:
     constexpr static uint16_t m_maxSize = 8;
+
+  private:
     std::array<std::tuple<size_t, uint16_t>, m_maxSize> m_functionRegisters;
-    uint16_t m_functionRegistersLength;
+    uint16_t m_functionRegistersLength = 0;
 };
 
 #endif // __BITTYBUZZFUNCTIONREGISTER_H_
