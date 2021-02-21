@@ -4,6 +4,9 @@
 #include <FreeRTOSConfig.h>
 #include <cstring>
 
+#define WORD_TO_BYTE(word) ((uint32_t) (word << 2U))
+#define BYTE_TO_WORD(byte) ((uint8_t) (byte >> 2U))
+
 void task(void* instance) {
     constexpr uint loopRate = 30;
     while (true) {
@@ -83,7 +86,7 @@ void SpiEsp::execute() {
             m_rxState = receiveState::ERROR;
             break;
         }
-        if (m_inboundHeader->rxSizeWord << 2U == m_outboundMessage.m_sizeBytes &&
+        if (WORD_TO_BYTE(m_inboundHeader->rxSizeWord) == m_outboundMessage.m_sizeBytes &&
             m_outboundMessage.m_sizeBytes != 0) {
             m_logger.log(LogLevel::Debug, "Received valid header. Can now send payload");
             m_txState = transmitState::SENDING_PAYLOAD;
@@ -92,10 +95,10 @@ void SpiEsp::execute() {
             m_logger.log(LogLevel::Debug, "Received valid header but cannot send payload");
         }
         // This will be sent on next header. Payload has priority over headers.
-        m_inboundMessage.m_sizeBytes = m_inboundHeader->txSizeWord << 2U;
-        if (m_inboundMessage.m_sizeBytes == m_outboundHeader.rxSizeWord << 2U &&
+        m_inboundMessage.m_sizeBytes = WORD_TO_BYTE(m_inboundHeader->txSizeWord);
+        if (m_inboundMessage.m_sizeBytes ==  WORD_TO_BYTE(m_outboundHeader.rxSizeWord) &&
             m_inboundMessage.m_sizeBytes != 0) {
-            rxLengthBytes = m_inboundHeader->txSizeWord << 2U;
+            rxLengthBytes = WORD_TO_BYTE(m_inboundHeader->txSizeWord);
             m_outboundHeader.systemState.stmSystemState.failedCrc = 0;
             m_rxState = receiveState::RECEIVING_PAYLOAD;
         } else {
@@ -104,7 +107,7 @@ void SpiEsp::execute() {
         }
         break;
     case receiveState::RECEIVING_PAYLOAD:
-        rxLengthBytes = m_inboundHeader->txSizeWord << 2U;
+        rxLengthBytes = WORD_TO_BYTE(m_inboundHeader->txSizeWord);
         break;
     case receiveState::VALIDATE_CRC:
         if (m_crc.calculateCRC32(m_inboundMessage.m_data.data(),
