@@ -13,9 +13,11 @@ set(LIB_HEADERS
     include/bsp/IUserInterface.h
     include/bsp/IHostUart.h
     include/bsp/ICRC.h
+    include/bsp/ISpiEsp.h
 
     include/bsp/ITCPClient.h
-    include/bsp/SocketContainer.h include/bsp/SettingsContainer.h)
+    include/bsp/SocketContainer.h
+    include/bsp/SettingsContainer.h)
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})

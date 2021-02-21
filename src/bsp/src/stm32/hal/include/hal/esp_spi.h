@@ -13,7 +13,7 @@ extern "C" {
  * @brief Typedef for pointer function used as callback for spi operation
  * @param instance Pointer to the C++ class instance in which to call the function
  */
-typedef void (*spiCallbackFct)(void* instance);
+typedef void (*spiCallbackFct_t)(void* context);
 
 /**
  * @brief Initiates a DMA transfer of the given buffer to the SPI port of the esp
@@ -21,13 +21,13 @@ typedef void (*spiCallbackFct)(void* instance);
  * @param length Number of bytes to transmit
  * @param cpltCallback Function pointer to the callback function, called when the transmission is
  * finished
- * @param instance Pointer to the class instance in which to call the callback
+ * @param context Pointer to the class instance in which to call the callback
  * @return True if success. Otherwise, false
  */
 bool EspSpi_TransmitDMA(const uint8_t* buffer,
                         uint16_t length,
-                        spiCallbackFct cpltCallback,
-                        void* instance);
+                        spiCallbackFct_t cpltCallback,
+                        void* context);
 
 /**
  * @brief Initiates a DMA reception to the given buffer from the spi port of the esp
@@ -35,29 +35,30 @@ bool EspSpi_TransmitDMA(const uint8_t* buffer,
  * @param length Number of bytes to read
  * @param cpltCallback Function pointer to the callback function, called when the reception is
  * finished
- * @param instance Pointer to the class instance in which to call the callback
+ * @param context Pointer to the class instance in which to call the callback
  * @return True if success. Otherwise, false
  */
 bool EspSpi_ReceiveDma(const uint8_t* buffer,
                        uint16_t length,
-                       spiCallbackFct cpltCallback,
-                       void* instance);
+                       spiCallbackFct_t cpltCallback,
+                       void* context);
 
 /**
  * @brief Initiates a bidirection DMA transmission and reception to the given buffers from the spi
  * port of the esp
- * @param buffer Pointer to a buffer to store the data into
- * @param length Number of bytes to read
+ * @param txBuffer Pointer to the buffer to transmit
+ * @param rxBuffer Pointer to a the buffer to store the data into
+ * @param lengthBytes Number of bytes to send and receive
  * @param cpltCallback Function pointer to the callback function, called when the reception is
  * finished
- * @param instance Pointer to the class instance in which to call the callback
+ * @param context Pointer to the class instance in which to call the callback
  * @return True if success. Otherwise, false
  */
 bool EspSpi_TransmitReceiveDma(const uint8_t* txBuffer,
                                const uint8_t* rxBuffer,
                                uint16_t lengthBytes,
-                               spiCallbackFct cpltCallback,
-                               void* instance);
+                               spiCallbackFct_t cpltCallback,
+                               void* context);
 
 /**
  * @brief Callback used when reception has finished. Calls the user callback provided in

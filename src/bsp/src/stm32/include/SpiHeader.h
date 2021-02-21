@@ -2,7 +2,7 @@
 #define SPI_HEADER_H
 
 #include <cstdint>
-namespace EspSpi {
+namespace EspHeader {
 
     struct EspSystemState {
         uint8_t connected : 1;
@@ -23,19 +23,15 @@ namespace EspSpi {
         uint8_t rawValue;
     };
 
-    struct HeaderStruct {
+    struct Header {
         SystemState systemState;
         uint8_t txSizeWord;
         uint8_t rxSizeWord;
         uint8_t crc8; // might be removed in the future
     };
 
-    const uint8_t headerSize = sizeof(HeaderStruct);
+    const uint8_t sizeBytes = sizeof(Header);
 
-    union Header {
-        HeaderStruct headerStruct;
-        uint8_t bytes[headerSize];
-    };
-} // namespace EspSpi
+} // namespace EspHeader
 
 #endif // SPI_HEADER_H

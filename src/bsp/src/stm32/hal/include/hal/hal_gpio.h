@@ -7,9 +7,9 @@ extern "C" {
 
 #include "gpio.h"
 
-typedef void (*gpioCallbackFct)(void* instance);
+typedef void (*gpioCallbackFct_t)(void* instance);
 
-void setEspCallback(gpioCallbackFct fct, void* instance);
+void setEspCallback(gpioCallbackFct_t fct, void* instance);
 
 #ifdef __cplusplus
 }

@@ -57,19 +57,26 @@ void MX_GPIO_Init(void) {
     __HAL_RCC_GPIOD_CLK_ENABLE();
 
     /*Configure GPIO pin Output Level */
-    HAL_GPIO_WritePin(GPIOB, LD1_Pin | LD3_Pin | LD2_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_SET);
 
     /*Configure GPIO pin Output Level */
-    HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOB, LD1_Pin | LD3_Pin | LD2_Pin, GPIO_PIN_RESET);
 
     /*Configure GPIO pin Output Level */
     HAL_GPIO_WritePin(USB_PowerSwitchOn_GPIO_Port, USB_PowerSwitchOn_Pin, GPIO_PIN_RESET);
 
-    /*Configure GPIO pins : PCPin PCPin */
-    GPIO_InitStruct.Pin = USER_Btn_Pin | WROOM_USER0_Pin;
+    /*Configure GPIO pin : PtPin */
+    GPIO_InitStruct.Pin = USER_Btn_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    HAL_GPIO_Init(USER_Btn_GPIO_Port, &GPIO_InitStruct);
+
+    /*Configure GPIO pin : PtPin */
+    GPIO_InitStruct.Pin = ESP_CS_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    HAL_GPIO_Init(ESP_CS_GPIO_Port, &GPIO_InitStruct);
 
     /*Configure GPIO pins : PBPin PBPin PBPin */
     GPIO_InitStruct.Pin = LD1_Pin | LD3_Pin | LD2_Pin;
@@ -78,12 +85,18 @@ void MX_GPIO_Init(void) {
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-    /*Configure GPIO pins : PGPin PGPin */
-    GPIO_InitStruct.Pin = ESP_CS_Pin | USB_PowerSwitchOn_Pin;
+    /*Configure GPIO pin : PtPin */
+    GPIO_InitStruct.Pin = ESP_USER0_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+    GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+    HAL_GPIO_Init(ESP_USER0_GPIO_Port, &GPIO_InitStruct);
+
+    /*Configure GPIO pin : PtPin */
+    GPIO_InitStruct.Pin = USB_PowerSwitchOn_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+    HAL_GPIO_Init(USB_PowerSwitchOn_GPIO_Port, &GPIO_InitStruct);
 
     /*Configure GPIO pin : PtPin */
     GPIO_InitStruct.Pin = USB_OverCurrent_Pin;
@@ -106,8 +119,8 @@ void MX_GPIO_Init(void) {
     HAL_GPIO_Init(USB_VBUS_GPIO_Port, &GPIO_InitStruct);
 
     /* EXTI interrupt init*/
-    HAL_NVIC_SetPriority(EXTI0_IRQn, 5, 0);
-    HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+    HAL_NVIC_SetPriority(EXTI1_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(EXTI1_IRQn);
 }
 
 /* USER CODE BEGIN 2 */

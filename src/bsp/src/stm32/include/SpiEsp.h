@@ -20,7 +20,7 @@ class SpiEsp : public ISpiEsp {
 
     void execute();
 
-  protected:
+  private:
     ICRC& m_crc;
     ILogger& m_logger;
 
@@ -39,19 +39,14 @@ class SpiEsp : public ISpiEsp {
         uint16_t m_sizeBytes;
     } m_inboundMessage, m_outboundMessage;
 
-    EspSpi::Header m_outboundHeader, *m_inboundHeader;
+    EspHeader::Header m_outboundHeader;
+    EspHeader::Header* m_inboundHeader;
 
-  private:
-    static void espInterruptCallback(void* instance);
-    static void espTxCallback(void* instance);
-    static void espRxCallback(void* instance);
-    static void espTxRxCallback(void* instance);
+    static void espInterruptCallback(void* context);
+    static void espTxRxCallback(void* context);
 
     void updateOutboundHeader();
     bool m_inboundRequest;
-
-    StaticSemaphore_t m_semaphoreBuffer;
-    SemaphoreHandle_t m_semaphore;
 
     std::array<uint8_t*, 1024> m_stackData;
     StaticTask_t m_stackBuffer;

@@ -1,6 +1,7 @@
 #include "CRC.h"
 #include "hal/hal.h"
 #include <LockGuard.h>
+#include <c-common/software_crc.h>
 
 CRC::CRC() : m_mutex(10) {}
 
@@ -13,5 +14,5 @@ uint32_t CRC::calculateCRC32(const void* data, uint32_t length) {
 }
 
 uint8_t CRC::calculateCRC8(const void* data, uint32_t length) {
-    return UINT8_MAX; // TODO: use function from propolis
+    return calculateCRC8_software(data, length);
 }

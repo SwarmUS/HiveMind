@@ -30,6 +30,6 @@ ICRC& BSPContainer::getCRC() {
 }
 
 ISpiEsp& BSPContainer::getSpiEsp() {
-    static SpiEsp s_SpiEsp(getCRC(), LoggerContainer::getLogger());
-    return s_SpiEsp;
+    static SpiEsp s_spiEsp(getCRC(), LoggerContainer::getLogger());
+    return s_spiEsp;
 }
