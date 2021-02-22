@@ -1,19 +1,19 @@
 #ifndef __BITTYBUZZFUNCTIONREGISTER_H_
 #define __BITTYBUZZFUNCTIONREGISTER_H_
 
+#include "IBittyBuzzFunctionRegister.h"
 #include <cstdint>
 #include <functional>
-#include <optional>
 #include <tuple>
 
-class BittyBuzzFunctionRegister {
+class BittyBuzzFunctionRegister : IBittyBuzzFunctionRegister {
   public:
     BittyBuzzFunctionRegister();
     ~BittyBuzzFunctionRegister() = default;
 
-    bool registerFunction(const char* functionName, uint16_t functionId);
+    bool registerFunction(const char* functionName, uint16_t functionId) override;
 
-    std::optional<uint16_t> getFunctionId(const char* functionName);
+    std::optional<uint16_t> getFunctionId(const char* functionName) const override;
 
     constexpr static uint16_t m_maxSize = 8;
 

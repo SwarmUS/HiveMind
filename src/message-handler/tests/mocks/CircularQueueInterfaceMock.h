@@ -5,9 +5,9 @@
 #include <gmock/gmock.h>
 
 template <typename T>
-class CircularQueueInterfaceMack final : public ICircularQueue<T> {
+class CircularQueueInterfaceMock final : public ICircularQueue<T> {
   public:
-    ~CircularQueueInterfaceMack() = default;
+    ~CircularQueueInterfaceMock() = default;
 
     MOCK_METHOD(std::optional<const char*>, getString, (uint16_t stringId), (const override));
 

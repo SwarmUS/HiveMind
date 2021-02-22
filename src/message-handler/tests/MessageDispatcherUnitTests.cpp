@@ -7,9 +7,9 @@ class MessageDispatcherFixture : public testing::Test {
   protected:
     MessageDispatcher* m_messageDispatcher;
 
-    CircularQueueInterfaceMack<MessageDTO> m_buzzQueue;
-    CircularQueueInterfaceMack<MessageDTO> m_hostQueue;
-    CircularQueueInterfaceMack<MessageDTO> m_remoteQueue;
+    CircularQueueInterfaceMock<MessageDTO> m_buzzQueue;
+    CircularQueueInterfaceMock<MessageDTO> m_hostQueue;
+    CircularQueueInterfaceMock<MessageDTO> m_remoteQueue;
     HiveMindHostDeserializerInterfaceMock m_deserializerMock;
     LoggerInterfaceMock m_loggerMock;
     MessageDTO m_message;

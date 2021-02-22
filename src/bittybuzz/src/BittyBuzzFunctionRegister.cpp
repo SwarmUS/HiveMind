@@ -15,7 +15,7 @@ bool BittyBuzzFunctionRegister::registerFunction(const char* functionName, uint1
     return true;
 }
 
-std::optional<uint16_t> BittyBuzzFunctionRegister::getFunctionId(const char* functionName) {
+std::optional<uint16_t> BittyBuzzFunctionRegister::getFunctionId(const char* functionName) const {
     std::string_view functionNameView(functionName);
     size_t functionNameHash = std::hash<std::string_view>{}(functionNameView);
 

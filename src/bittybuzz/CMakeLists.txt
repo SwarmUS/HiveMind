@@ -62,6 +62,8 @@ target_link_libraries(${LIB_NAME}
     PUBLIC
         BittyBuzz
         SwarmUS::HiveMind::Logger
+        SwarmUS::Propolis::Cpp::Common
+        SwarmUS::Propolis::Pheromones::HiveMind::Host
 
     PRIVATE
         SwarmUS::HiveMind::BSP
