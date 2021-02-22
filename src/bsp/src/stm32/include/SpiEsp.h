@@ -5,9 +5,9 @@
 #include "bsp/ICRC.h"
 #include "bsp/ISpiEsp.h"
 #include "logger/ILogger.h"
-#include <FreeRTOS.h>
+#include <BaseTask.h>
+#include <Task.h>
 #include <array>
-#include <semphr.h>
 
 class SpiEsp : public ISpiEsp {
   public:
@@ -21,6 +21,7 @@ class SpiEsp : public ISpiEsp {
     void execute();
 
   private:
+    BaseTask<configMINIMAL_STACK_SIZE * 3> m_driverTask;
     ICRC& m_crc;
     ILogger& m_logger;
 
@@ -47,10 +48,6 @@ class SpiEsp : public ISpiEsp {
 
     void updateOutboundHeader();
     bool m_inboundRequest;
-
-    std::array<uint8_t*, 1024> m_stackData;
-    StaticTask_t m_stackBuffer;
-    TaskHandle_t m_taskHandle;
 
     bool m_isBusy;
 };

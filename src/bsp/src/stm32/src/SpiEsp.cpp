@@ -1,21 +1,25 @@
 #include "SpiEsp.h"
 #include "hal/esp_spi.h"
 #include "hal/hal_gpio.h"
-#include <FreeRTOSConfig.h>
 #include <cstring>
 
+/** These macros are used to convert the units of the size of a buffer from a number of words to a
+ * number of bytes and conversely from a size in bytes to a number of words.
+ */
 #define WORD_TO_BYTE(word) ((uint32_t)(word << 2U))
 #define BYTE_TO_WORD(byte) ((uint8_t)(byte >> 2U))
 
-void task(void* instance) {
+void task(void* context) {
     constexpr uint loopRate = 5;
     while (true) {
-        static_cast<SpiEsp*>(instance)->execute();
-        vTaskDelay(loopRate);
+        static_cast<SpiEsp*>(context)->execute();
+        Task::delay(loopRate);
     }
 }
 
-SpiEsp::SpiEsp(ICRC& crc, ILogger& logger) : m_crc(crc), m_logger(logger) {
+SpiEsp::SpiEsp(ICRC& crc, ILogger& logger) :
+    m_driverTask("spi_driver", tskIDLE_PRIORITY + 1, task, this), m_crc(crc), m_logger(logger) {
+
     m_txState = transmitState::IDLE;
     m_rxState = receiveState::IDLE;
     m_inboundMessage = {};
@@ -25,8 +29,8 @@ SpiEsp::SpiEsp(ICRC& crc, ILogger& logger) : m_crc(crc), m_logger(logger) {
 
     setEspCallback(SpiEsp::espInterruptCallback, this);
 
-    m_taskHandle = xTaskCreateStatic(task, "esp_spi_driver_task", 1024U, this, 1U,
-                                     (StackType_t*)m_stackData.data(), &m_stackBuffer);
+    // Starts the task
+    m_driverTask.start();
 }
 
 bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
@@ -153,7 +157,7 @@ void SpiEsp::execute() {
         m_txState != transmitState::ERROR && m_rxState != receiveState::ERROR) {
         HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_RESET);
         uint32_t finalSize = std::max(txLengthBytes, rxLengthBytes);
-        memset(m_inboundMessage.m_data.data(), 0, ESP_SPI_MAX_MESSAGE_LENGTH);
+        m_inboundMessage.m_data.fill(0);
         EspSpi_TransmitReceiveDma(txBuffer, m_inboundMessage.m_data.data(), finalSize,
                                   SpiEsp::espTxRxCallback, this);
     }
@@ -161,8 +165,8 @@ void SpiEsp::execute() {
 
 void SpiEsp::updateOutboundHeader() {
     // TODO: get actual system state
-    m_outboundHeader.rxSizeWord = m_inboundMessage.m_sizeBytes >> 2U;
-    m_outboundHeader.txSizeWord = m_outboundMessage.m_sizeBytes >> 2U;
+    m_outboundHeader.rxSizeWord = BYTE_TO_WORD(m_inboundMessage.m_sizeBytes);
+    m_outboundHeader.txSizeWord = BYTE_TO_WORD(m_outboundMessage.m_sizeBytes);
     m_outboundHeader.crc8 = m_crc.calculateCRC8(&m_outboundHeader, EspHeader::sizeBytes - 1);
     if (m_outboundHeader.txSizeWord == 0) {
         m_isBusy = false;
@@ -187,7 +191,10 @@ void SpiEsp::espTxRxCallback(void* context) {
         instance->m_rxState = receiveState::VALIDATE_CRC;
         break;
     default:
-        // other states will not be present on this callback
+        // This should never be called. The state machine should never be in any other state during
+        // the ISR.
+        instance->m_logger.log(LogLevel::Error, "Interrupted called on invalid state");
+        instance->m_txState = transmitState::ERROR;
         break;
     }
 
