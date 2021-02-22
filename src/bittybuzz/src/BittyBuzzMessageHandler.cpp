@@ -1,4 +1,6 @@
 #include "BittyBuzzMessageHandler.h"
+#include "BittyBuzzSystem.h"
+#include "bbzvm.h"
 
 BittyBuzzMessageHandler::BittyBuzzMessageHandler(const IBittyBuzzFunctionRegister& functionRegister,
                                                  ICircularQueue<MessageDTO>& inboundQueue,
@@ -10,7 +12,46 @@ BittyBuzzMessageHandler::BittyBuzzMessageHandler(const IBittyBuzzFunctionRegiste
 bool BittyBuzzMessageHandler::processMessage() { return true; }
 
 bool BittyBuzzMessageHandler::handleFunctionCallRequest(const MessageDTO& message,
-                                                        const FunctionCallRequestDTO& request) {}
+                                                        const FunctionCallRequestDTO& request) {
+
+    std::optional<uint16_t> functionId =
+        m_functionRegister.getFunctionId(request.getFunctionName());
+
+    if (functionId) {
+
+        const std::array<FunctionCallArgumentDTO,
+                         FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>& args =
+            request.getArguments();
+
+        // Pushing bbz table for arguments
+        bbzheap_idx_t table = bbztable_new();
+
+        for (uint16_t i = 0; i < request.getArgumentsLength(); i++) {
+            // Buzz table index
+            bbzheap_idx_t tableIdx = bbzint_new((int16_t)i);
+
+            const std::variant<std::monostate, int64_t, float>& arg = args[i].getArgument();
+
+            if (const int64_t* intVal = std::get_if<int64_t>(&arg)) {
+                bbzheap_idx_t bbzIntVal = bbzint_new(*intVal);
+                bbztable_set(table, tableIdx, bbzIntVal);
+            }
+
+            else if (const float* floatVal = std::get_if<float>(&arg)) {
+                bbzheap_idx_t bbzFloatVal = bbzfloat_new(*floatVal);
+                bbztable_set(table, tableIdx, bbzFloatVal);
+            }
+        }
+
+        bbzvm_push(table);
+        BittyBuzzSystem::functionCall(functionId.value());
+
+        // Send response
+        return true;
+    }
+
+    return false;
+}
 
 bool BittyBuzzMessageHandler::handleUserCallRequest(const MessageDTO& message,
                                                     const UserCallRequestDTO& request) {
@@ -23,7 +64,11 @@ bool BittyBuzzMessageHandler::handleUserCallRequest(const MessageDTO& message,
 }
 
 bool BittyBuzzMessageHandler::handleUserCallResponse(const MessageDTO& message,
-                                                     const UserCallResponseDTO& response) {}
+                                                     const UserCallResponseDTO& response) {
+    (void)message;
+    (void)response;
+    return true;
+}
 
 bool BittyBuzzMessageHandler::handleRequest(const MessageDTO& message, const RequestDTO& request) {
     const std::variant<std::monostate, UserCallRequestDTO>& variantReq = request.getRequest();
