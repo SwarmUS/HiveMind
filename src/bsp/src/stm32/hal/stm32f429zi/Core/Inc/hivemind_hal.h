@@ -27,6 +27,7 @@ extern "C" {
 #elif ESP_SOC
 #define ESP_SPI (&hspi5)
 #endif
+#define DW_SPI (&hspi4)
 
 void SystemClock_Config(void);
 

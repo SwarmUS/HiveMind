@@ -215,6 +215,19 @@ void DMA1_Stream6_IRQHandler(void) {
 }
 
 /**
+ * @brief This function handles EXTI line[9:5] interrupts.
+ */
+void EXTI9_5_IRQHandler(void) {
+    /* USER CODE BEGIN EXTI9_5_IRQn 0 */
+
+    /* USER CODE END EXTI9_5_IRQn 0 */
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_7);
+    /* USER CODE BEGIN EXTI9_5_IRQn 1 */
+
+    /* USER CODE END EXTI9_5_IRQn 1 */
+}
+
+/**
  * @brief This function handles TIM1 update interrupt and TIM10 global interrupt.
  */
 void TIM1_UP_TIM10_IRQHandler(void) {
@@ -254,6 +267,7 @@ void USART3_IRQHandler(void) {
 }
 
 /**
+<<<<<<< master
  * @brief This function handles DMA1 stream7 global interrupt.
  */
 void DMA1_Stream7_IRQHandler(void) {
@@ -264,6 +278,18 @@ void DMA1_Stream7_IRQHandler(void) {
     /* USER CODE BEGIN DMA1_Stream7_IRQn 1 */
 
     /* USER CODE END DMA1_Stream7_IRQn 1 */
+=======
+ * @brief This function handles EXTI line[15:10] interrupts.
+ */
+void EXTI15_10_IRQHandler(void) {
+    /* USER CODE BEGIN EXTI15_10_IRQn 0 */
+
+    /* USER CODE END EXTI15_10_IRQn 0 */
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
+    /* USER CODE BEGIN EXTI15_10_IRQn 1 */
+
+    /* USER CODE END EXTI15_10_IRQn 1 */
+>>>>>>> Port
 }
 
 /**

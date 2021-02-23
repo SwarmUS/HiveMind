@@ -36,13 +36,46 @@
 //     __restore_intstate()
 // ---------------------------------------------------------------------------
 
+#define DECAIRQ_EXTI_IRQn (EXTI_LINE_7)
+
+/**
+ * @brief  Checks whether the specified EXTI line is enabled or not.
+ * @param  EXTI_Line: specifies the EXTI line to check.
+ *   This parameter can be:
+ *     @arg EXTI_Linex: External interrupt line x where x(0..19)
+ * @retval The "enable" state of EXTI_Line (SET or RESET).
+ */
+ITStatus EXTI_GetITEnStatus(uint32_t x) {
+    return ((NVIC->ISER[(((uint32_t)x) >> 5UL)] & (uint32_t)(1UL << (((uint32_t)x) & 0x1FUL))) ==
+            (uint32_t)RESET)
+               ? (RESET)
+               : (SET);
+}
+
+/* @fn      port_DisableEXT_IRQ
+ * @brief   wrapper to disable DW_IRQ pin IRQ
+ *          in current implementation it disables all IRQ from lines 5:9
+ * */
+__INLINE void port_DisableEXT_IRQ(void) { NVIC_DisableIRQ(DECAIRQ_EXTI_IRQn); }
+
+/* @fn      port_EnableEXT_IRQ
+ * @brief   wrapper to enable DW_IRQ pin IRQ
+ *          in current implementation it enables all IRQ from lines 5:9
+ * */
+__INLINE void port_EnableEXT_IRQ(void) { NVIC_EnableIRQ(DECAIRQ_EXTI_IRQn); }
+
+/* @fn      port_GetEXT_IRQStatus
+ * @brief   wrapper to read a DW_IRQ pin IRQ status
+ * */
+__INLINE uint32_t port_GetEXT_IRQStatus(void) { return EXTI_GetITEnStatus(DECAIRQ_EXTI_IRQn); }
+
 /*!
  * ------------------------------------------------------------------------------------------------------------------
  * Function: decamutexon()
  *
- * Description: This function should disable interrupts. This is called at the start of a critical
- * section It returns the irq state before disable, this value is used to re-enable in decamutexoff
- * call
+ * Description: This function should disable interrupts. This is called at the start of a
+ * critical section It returns the irq state before disable, this value is used to re-enable in
+ * decamutexoff call
  *
  * Note: The body of this function is defined in deca_mutex.c and is platform specific
  *
@@ -77,11 +110,11 @@ decaIrqStatus_t decamutexon(void) {
  *
  * returns the state of the DW1000 interrupt
  */
-void decamutexoff(decaIrqStatus_t s) // put a function here that re-enables the interrupt at the end
-                                     // of the critical section
+void decamutexoff(decaIrqStatus_t s) // put a function here that re-enables the interrupt at the
+                                     // end of the critical section
 {
-    if (s) { // need to check the port state as we can't use level sensitive interrupt on the STM
-             // ARM
+    if (s) { // need to check the port state as we can't use level sensitive interrupt on the
+             // STM ARM
         port_EnableEXT_IRQ();
     }
 }

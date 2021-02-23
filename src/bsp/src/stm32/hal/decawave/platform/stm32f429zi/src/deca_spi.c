@@ -17,8 +17,6 @@
 #include "port.h"
 #include "stm32f4xx_hal_def.h"
 
-extern SPI_HandleTypeDef hspi1; /*clocked from 72MHz*/
-
 /*!
  * ------------------------------------------------------------------------------------------------------------------
  * Function: writetospi()
@@ -35,15 +33,16 @@ int writetospi(uint16_t headerLength,
     decaIrqStatus_t stat;
     stat = decamutexon();
 
-    while (HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY) {
+    while (HAL_SPI_GetState(DW_SPI) != HAL_SPI_STATE_READY) {
     }
 
-    HAL_GPIO_WritePin(DW_NSS_GPIO_Port, DW_NSS_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(DW_A_NSS_GPIO_Port, DW_A_NSS_Pin, GPIO_PIN_RESET);
 
-    HAL_SPI_Transmit(&hspi1, (uint8_t*)&headerBuffer[0], headerLength, HAL_MAX_DELAY);
-    HAL_SPI_Transmit(&hspi1, (uint8_t*)&bodyBuffer[0], bodyLength, HAL_MAX_DELAY);
+    HAL_SPI_Transmit(DW_SPI, (uint8_t*)&headerBuffer[0], headerLength, HAL_MAX_DELAY);
+    HAL_SPI_Transmit(DW_SPI, (uint8_t*)&bodyBuffer[0], bodyLength, HAL_MAX_DELAY);
 
-    HAL_GPIO_WritePin(DW_NSS_GPIO_Port, DW_NSS_Pin, GPIO_PIN_SET); /**< Put chip select line high */
+    HAL_GPIO_WritePin(DW_A_NSS_GPIO_Port, DW_A_NSS_Pin,
+                      GPIO_PIN_SET); /**< Put chip select line high */
 
     decamutexoff(stat);
 
@@ -69,36 +68,37 @@ int readfromspi(uint16_t headerLength,
     stat = decamutexon();
 
     /* Blocking: Check whether previous transfer has been finished */
-    while (HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY)
+    while (HAL_SPI_GetState(DW_SPI) != HAL_SPI_STATE_READY)
         ;
 
-    HAL_GPIO_WritePin(DW_NSS_GPIO_Port, DW_NSS_Pin,
+    HAL_GPIO_WritePin(DW_A_NSS_GPIO_Port, DW_A_NSS_Pin,
                       GPIO_PIN_RESET); /**< Put chip select line low */
 
     /* Send header */
     for (i = 0; i < headerLength; i++) {
-        HAL_SPI_Transmit(&hspi1, (uint8_t*)&headerBuffer[i], 1, HAL_MAX_DELAY); // No timeout
+        HAL_SPI_Transmit(DW_SPI, (uint8_t*)&headerBuffer[i], 1, HAL_MAX_DELAY); // No timeout
     }
 
     /* for the data buffer use LL functions directly as the HAL SPI read function
      * has issue reading single bytes */
     while (readlength-- > 0) {
         /* Wait until TXE flag is set to send data */
-        while (__HAL_SPI_GET_FLAG(&hspi1, SPI_FLAG_TXE) == RESET) {
+        while (__HAL_SPI_GET_FLAG(DW_SPI, SPI_FLAG_TXE) == RESET) {
         }
 
-        hspi1.Instance->DR = 0; /* set output to 0 (MOSI), this is necessary for
+        DW_SPI->Instance->DR = 0; /* set output to 0 (MOSI), this is necessary for
         e.g. when waking up DW1000 from DEEPSLEEP via dwt_spicswakeup() function.
         */
 
         /* Wait until RXNE flag is set to read data */
-        while (__HAL_SPI_GET_FLAG(&hspi1, SPI_FLAG_RXNE) == RESET) {
+        while (__HAL_SPI_GET_FLAG(DW_SPI, SPI_FLAG_RXNE) == RESET) {
         }
 
-        (*readBuffer++) = hspi1.Instance->DR; // copy data read form (MISO)
+        (*readBuffer++) = DW_SPI->Instance->DR; // copy data read form (MISO)
     }
 
-    HAL_GPIO_WritePin(DW_NSS_GPIO_Port, DW_NSS_Pin, GPIO_PIN_SET); /**< Put chip select line high */
+    HAL_GPIO_WritePin(DW_A_NSS_GPIO_Port, DW_A_NSS_Pin,
+                      GPIO_PIN_SET); /**< Put chip select line high */
 
     decamutexoff(stat);
 

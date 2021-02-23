@@ -62,6 +62,7 @@ void Error_Handler(void);
 #define DW_A_GPIO6_GPIO_Port GPIOE
 #define USER_Btn_Pin GPIO_PIN_13
 #define USER_Btn_GPIO_Port GPIOC
+#define USER_Btn_EXTI_IRQn EXTI15_10_IRQn
 #define MCO_Pin GPIO_PIN_0
 #define MCO_GPIO_Port GPIOH
 #define ESP_CS_Pin GPIO_PIN_0
@@ -87,6 +88,7 @@ void Error_Handler(void);
 #define ESP_USER0_EXTI_IRQn EXTI1_IRQn
 #define DW_A_IRQ_Pin GPIO_PIN_7
 #define DW_A_IRQ_GPIO_Port GPIOE
+#define DW_A_IRQ_EXTI_IRQn EXTI9_5_IRQn
 #define DW_A_NSS_Pin GPIO_PIN_11
 #define DW_A_NSS_GPIO_Port GPIOE
 #define DW_A_NRST_Pin GPIO_PIN_10
