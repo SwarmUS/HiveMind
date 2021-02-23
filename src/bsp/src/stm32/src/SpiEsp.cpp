@@ -6,8 +6,8 @@
 /** These macros are used to convert the units of the size of a buffer from a number of words to a
  * number of bytes and conversely from a size in bytes to a number of words.
  */
-#define WORD_TO_BYTE(word) ((uint32_t)(word << 2U))
-#define BYTE_TO_WORD(byte) ((uint8_t)(byte >> 2U))
+#define WORDS_TO_BYTES(word) ((uint32_t)(word << 2U))
+#define BYTES_TO_WORDS(byte) ((uint8_t)(byte >> 2U))
 
 void task(void* context) {
     constexpr uint loopRate = 5;
@@ -18,7 +18,7 @@ void task(void* context) {
 }
 
 SpiEsp::SpiEsp(ICRC& crc, ILogger& logger) :
-    m_driverTask("spi_driver", tskIDLE_PRIORITY + 1, task, this), m_crc(crc), m_logger(logger) {
+    m_driverTask("esp_spi_driver", tskIDLE_PRIORITY + 1, task, this), m_crc(crc), m_logger(logger) {
 
     m_txState = transmitState::IDLE;
     m_rxState = receiveState::IDLE;
@@ -90,7 +90,7 @@ void SpiEsp::execute() {
             m_rxState = receiveState::ERROR;
             break;
         }
-        if (WORD_TO_BYTE(m_inboundHeader->rxSizeWord) == m_outboundMessage.m_sizeBytes &&
+        if (WORDS_TO_BYTES(m_inboundHeader->rxSizeWord) == m_outboundMessage.m_sizeBytes &&
             m_outboundMessage.m_sizeBytes != 0) {
             m_logger.log(LogLevel::Debug, "Received valid header. Can now send payload");
             m_txState = transmitState::SENDING_PAYLOAD;
@@ -99,10 +99,10 @@ void SpiEsp::execute() {
             m_logger.log(LogLevel::Debug, "Received valid header but cannot send payload");
         }
         // This will be sent on next header. Payload has priority over headers.
-        m_inboundMessage.m_sizeBytes = WORD_TO_BYTE(m_inboundHeader->txSizeWord);
-        if (m_inboundMessage.m_sizeBytes == WORD_TO_BYTE(m_outboundHeader.rxSizeWord) &&
+        m_inboundMessage.m_sizeBytes = WORDS_TO_BYTES(m_inboundHeader->txSizeWord);
+        if (m_inboundMessage.m_sizeBytes == WORDS_TO_BYTES(m_outboundHeader.rxSizeWord) &&
             m_inboundMessage.m_sizeBytes != 0) {
-            rxLengthBytes = WORD_TO_BYTE(m_inboundHeader->txSizeWord);
+            rxLengthBytes = WORDS_TO_BYTES(m_inboundHeader->txSizeWord);
             m_outboundHeader.systemState.stmSystemState.failedCrc = 0;
             m_rxState = receiveState::RECEIVING_PAYLOAD;
         } else {
@@ -111,7 +111,7 @@ void SpiEsp::execute() {
         }
         break;
     case receiveState::RECEIVING_PAYLOAD:
-        rxLengthBytes = WORD_TO_BYTE(m_inboundHeader->txSizeWord);
+        rxLengthBytes = WORDS_TO_BYTES(m_inboundHeader->txSizeWord);
         break;
     case receiveState::VALIDATE_CRC:
         if (m_crc.calculateCRC32(m_inboundMessage.m_data.data(),
@@ -165,8 +165,8 @@ void SpiEsp::execute() {
 
 void SpiEsp::updateOutboundHeader() {
     // TODO: get actual system state
-    m_outboundHeader.rxSizeWord = BYTE_TO_WORD(m_inboundMessage.m_sizeBytes);
-    m_outboundHeader.txSizeWord = BYTE_TO_WORD(m_outboundMessage.m_sizeBytes);
+    m_outboundHeader.rxSizeWord = BYTES_TO_WORDS(m_inboundMessage.m_sizeBytes);
+    m_outboundHeader.txSizeWord = BYTES_TO_WORDS(m_outboundMessage.m_sizeBytes);
     m_outboundHeader.crc8 = m_crc.calculateCRC8(&m_outboundHeader, EspHeader::sizeBytes - 1);
     if (m_outboundHeader.txSizeWord == 0) {
         m_isBusy = false;

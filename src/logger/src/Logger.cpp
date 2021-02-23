@@ -8,9 +8,8 @@ Logger::Logger(LogLevel level, const IUserInterface& ui) : m_ui(ui), m_mutex(10)
 }
 
 LogRet Logger::log(LogLevel level, const char* format, ...) {
-    LockGuard lock = LockGuard(m_mutex);
-
     if (level >= m_logLevel) {
+        LockGuard lock = LockGuard(m_mutex);
         va_list args;
         va_start(args, format);
         int retValue = m_ui.print(format, args);
