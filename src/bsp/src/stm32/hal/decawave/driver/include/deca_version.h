@@ -14,7 +14,8 @@
 #define _DECA_VERSION_H_
 
 //
-// The DW1000 device driver is separately version numbered to any version the application using it may have
+// The DW1000 device driver is separately version numbered to any version the application using it
+// may have
 //
 // Two symbols are defined here: one hexadecimal value and one string that includes the hex bytes.
 // Both should be updated together in a consistent way when the software is being modified.
@@ -26,7 +27,7 @@
 // Quantity AA is updated for major changes that will need user code changes
 //
 
-#define DW1000_DRIVER_VERSION               0x050100
-#define DW1000_DEVICE_DRIVER_VER_STRING     "DW1000 Device Driver Version 05.01.00"
+#define DW1000_DRIVER_VERSION 0x050100
+#define DW1000_DEVICE_DRIVER_VER_STRING "DW1000 Device Driver Version 05.01.00"
 
 #endif

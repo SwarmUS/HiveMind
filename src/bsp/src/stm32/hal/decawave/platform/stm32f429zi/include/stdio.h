@@ -36,7 +36,7 @@ void stdio_init(UART_HandleTypeDef* huart);
  * @param[in] data Pointer to null terminated string
  * @return Number of bytes transmitted or -1 if an error occured
  */
-int stdio_write(const char *data);
+int stdio_write(const char* data);
 
 #ifdef __cplusplus
 }
