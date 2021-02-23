@@ -12,6 +12,7 @@
  */
 
 #include "deca_device_api.h"
+#include "hivemind_hal.h"
 #include "main.h"
 #include "port.h"
 #include "stm32f4xx_hal_def.h"

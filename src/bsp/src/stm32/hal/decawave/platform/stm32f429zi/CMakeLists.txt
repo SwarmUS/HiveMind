@@ -7,14 +7,11 @@ set(LIB_SOURCES
         src/deca_sleep.c
         src/deca_spi.c
         src/port.c
-        src/stdio.c
     )
 
 set(LIB_HEADERS
-        include/deca_spi.h
         include/port.h
         include/sleep.h
-        include/stdio.h
     )
 
 
