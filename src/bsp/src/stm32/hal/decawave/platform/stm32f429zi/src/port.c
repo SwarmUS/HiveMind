@@ -94,7 +94,8 @@ int peripherals_init(void) {
 
 /* @fn    spi_peripheral_init
  * */
-void spi_peripheral_init() { /* SPI's has been initialized in the CubeMx code, see main.c */ }
+void spi_peripheral_init() { /* SPI's has been initialized in the CubeMx code, see main.c */
+}
 
 /**
  * @brief  Checks whether the specified EXTI line is enabled or not.

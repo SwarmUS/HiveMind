@@ -11,36 +11,12 @@
  * @author Decawave
  */
 
-#include "deca_spi.h"
 #include "deca_device_api.h"
 #include "main.h"
 #include "port.h"
 #include "stm32f4xx_hal_def.h"
 
 extern SPI_HandleTypeDef hspi1; /*clocked from 72MHz*/
-
-/****************************************************************************/ /**
-                                                                                *
-                                                                                *                              DW1000
-                                                                                *SPI section
-                                                                                *
-                                                                                *******************************************************************************/
-/*!
- * ------------------------------------------------------------------------------------------------------------------
- * Function: openspi()
- * Low level abstract function to open and initialise access to the SPI device.
- * returns 0 for success, or -1 for error
- */
-int openspi(/*SPI_TypeDef* SPIx*/) { return 0; } // end openspi()
-
-/*!
- * ------------------------------------------------------------------------------------------------------------------
- * Function: closespi()
- *
- * Low level abstract function to close the the SPI device.
- * returns 0 for success, or -1 for error
- */
-int closespi(void) { return 0; } // end closespi()
 
 /*!
  * ------------------------------------------------------------------------------------------------------------------

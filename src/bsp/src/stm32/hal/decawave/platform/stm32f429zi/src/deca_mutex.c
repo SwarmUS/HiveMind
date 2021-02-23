@@ -28,7 +28,7 @@
 //
 //     This mutex dependent on HW port.
 //	   If HW port uses EXT_IRQ line to receive ready/busy status from DW1000 then mutex should
-//use this signal
+// use this signal
 //     If HW port not use EXT_IRQ line (i.e. SW polling) then no necessary for decamutex(on/off)
 //
 //	   For critical section use this mutex instead
