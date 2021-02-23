@@ -14,6 +14,14 @@ class ICRC {
      * @return CRC32
      */
     virtual uint32_t calculateCRC32(const void* data, uint32_t length) = 0;
+
+    /**
+     * @brief Calculates the CRC8 of a buffer
+     * @param data Pointer to the buffer
+     * @param length Length of buffer in bytes
+     * @return CRC8
+     */
+    virtual uint8_t calculateCRC8(const void* data, uint32_t length) = 0;
 };
 
 #endif //__ICRC_H__

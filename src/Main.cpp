@@ -176,6 +176,28 @@ class TCPMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
+class SPIMessageSender : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+  public:
+    SPIMessageSender(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
+
+    ~SPIMessageSender() override = default;
+
+  private:
+    ILogger& m_logger;
+
+    void task() override {
+        auto& spi = BSPContainer::getSpiEsp();
+        while (true) {
+            if (!spi.isBusy()) {
+                const char message[] = "Sending message to ESP from task";
+                spi.send((uint8_t*)message, sizeof(message));
+            }
+            Task::delay(100);
+        }
+    }
+};
+
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
@@ -187,12 +209,14 @@ int main(int argc, char** argv) {
     static TCPMessageDispatcher s_tcpDispatchTask("tcp_dispatch", tskIDLE_PRIORITY + 1);
     static UartMessageSender s_uartMessageSender("uart_send", tskIDLE_PRIORITY + 1);
     static TCPMessageSender s_tcpMessageSender("uart_send", tskIDLE_PRIORITY + 1);
+    static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
 
     s_bittybuzzTask.start();
     s_uartDispatchTask.start();
     s_tcpDispatchTask.start();
     s_uartMessageSender.start();
     s_tcpMessageSender.start();
+    s_spiMessageSender.start();
 
     Task::startScheduler();
 

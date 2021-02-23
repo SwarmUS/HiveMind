@@ -1,5 +1,6 @@
 #include "bsp/BSPContainer.h"
 #include "BSP.h"
+#include "SpiEsp.h"
 #include "TCPUartMock.h"
 #include "UserInterface.h"
 #include "logger/LoggerContainer.h"
@@ -18,4 +19,9 @@ IUserInterface& BSPContainer::getUserInterface() {
 IHostUart& BSPContainer::getHostUart() {
     static TCPUartMock s_hostUart(LoggerContainer::getLogger());
     return s_hostUart;
+}
+
+ISpiEsp& BSPContainer::getSpiEsp() {
+    static SpiEspMock s_spiEsp;
+    return s_spiEsp;
 }

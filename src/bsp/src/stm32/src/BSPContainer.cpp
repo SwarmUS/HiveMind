@@ -2,6 +2,7 @@
 #include "BSP.h"
 #include "CRC.h"
 #include "HostUart.h"
+#include "SpiEsp.h"
 #include "UserInterface.h"
 #include "logger/LoggerContainer.h"
 
@@ -26,4 +27,9 @@ ICRC& BSPContainer::getCRC() {
     static CRC s_crc;
 
     return s_crc;
+}
+
+ISpiEsp& BSPContainer::getSpiEsp() {
+    static SpiEsp s_spiEsp(getCRC(), LoggerContainer::getLogger());
+    return s_spiEsp;
 }

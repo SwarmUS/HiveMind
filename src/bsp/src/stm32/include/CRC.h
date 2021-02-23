@@ -12,6 +12,7 @@ class CRC : public ICRC {
     ~CRC() override = default;
 
     uint32_t calculateCRC32(const void* data, uint32_t length) override;
+    uint8_t calculateCRC8(const void* data, uint32_t length) override;
 
   private:
     Mutex m_mutex;
