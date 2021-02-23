@@ -20,9 +20,7 @@
 
 extern SPI_HandleTypeDef hspi1;
 
-
 static volatile uint32_t signalResetDone;
-
 
 /* @fn    portGetTickCnt
  * @brief wrapper for to read a SysTickTimer, which is incremented with
@@ -302,4 +300,3 @@ void port_set_deca_isr(port_deca_isr_t deca_isr) {
         port_EnableEXT_IRQ();
     }
 }
-

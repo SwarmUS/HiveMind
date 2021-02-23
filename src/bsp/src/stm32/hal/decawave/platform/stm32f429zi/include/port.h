@@ -81,7 +81,6 @@ typedef enum {
     LEDn
 } led_t;
 
-
 #if !(EXTI9_5_IRQn)
 #define DECAIRQ_EXTI_IRQn (23)
 #else
@@ -112,7 +111,6 @@ typedef enum {
 #define TA_SW1_8 GPIO_PIN_5
 #define TA_SW1_GPIO GPIOC
 
-
 #define GPIO_ResetBits(x, y) HAL_GPIO_WritePin(x, y, RESET)
 #define GPIO_SetBits(x, y) HAL_GPIO_WritePin(x, y, SET)
 #define GPIO_ReadInputDataBit(x, y) HAL_GPIO_ReadPin(x, y)
@@ -126,7 +124,6 @@ typedef enum {
 #define port_SPIy_set_chip_select() HAL_GPIO_WritePin(LCD_NSS_GPIO_Port, LCD_NSS_Pin, GPIO_PIN_SET)
 #define port_SPIy_clear_chip_select()                                                              \
     HAL_GPIO_WritePin(LCD_NSS_GPIO_Port, LCD_NSS_Pin, GPIO_PIN_RESET)
-
 
 void Sleep(uint32_t Delay);
 unsigned long portGetTickCnt(void);
@@ -169,3 +166,5 @@ HAL_StatusTypeDef flush_report_buff(void);
 #ifdef __cplusplus
 }
 #endif
+
+#endif // PORT_H

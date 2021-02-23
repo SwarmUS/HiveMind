@@ -934,8 +934,9 @@ extern "C" {
 #define GIRQE8 GIRQx8 /* Value 1 = enable, 0 = disable */
 
 /* offset from GPIO_CTRL in bytes */
-#define GPIO_ISEN_OFFSET 0x14 /* sub-register 0x14 is the GPIO interrupt sense selection register  \
-                               */
+#define GPIO_ISEN_OFFSET                                                                           \
+    0x14 /* sub-register 0x14 is the GPIO interrupt sense selection register                       \
+          */
 #define GPIO_ISEN_LEN (4)
 #define GPIO_ISEN_MASK GPIO_IRQE_MASK
 #define GISEN0                                                                                     \
@@ -951,8 +952,9 @@ extern "C" {
 #define GISEN8 GIRQx8 /* Value 0 = High or Rising-Edge, 1 = Low or falling-edge */
 
 /* offset from GPIO_CTRL in bytes */
-#define GPIO_IMODE_OFFSET 0x18 /* sub-register 0x18 is the GPIO interrupt mode selection register  \
-                                */
+#define GPIO_IMODE_OFFSET                                                                          \
+    0x18 /* sub-register 0x18 is the GPIO interrupt mode selection register                        \
+          */
 #define GPIO_IMODE_LEN (4)
 #define GPIO_IMODE_MASK GPIO_IRQE_MASK
 #define GIMOD0                                                                                     \
@@ -1142,18 +1144,24 @@ extern "C" {
 #define RF_TXCTRL_LEN (4)
 #define RF_TXCTRL_TXMTUNE_MASK 0x000001E0UL /* Transmit mixer tuning register */
 #define RF_TXCTRL_TXTXMQ_MASK 0x00000E00UL /* Transmit mixer Q-factor tuning register */
-#define RF_TXCTRL_CH1 0x00005C40UL /* 32-bit value to program to Sub-Register 0x28:0C � RF_TXCTRL \
-                                    */
-#define RF_TXCTRL_CH2 0x00045CA0UL /* 32-bit value to program to Sub-Register 0x28:0C � RF_TXCTRL \
-                                    */
-#define RF_TXCTRL_CH3 0x00086CC0UL /* 32-bit value to program to Sub-Register 0x28:0C � RF_TXCTRL \
-                                    */
-#define RF_TXCTRL_CH4 0x00045C80UL /* 32-bit value to program to Sub-Register 0x28:0C � RF_TXCTRL \
-                                    */
-#define RF_TXCTRL_CH5 0x001E3FE0UL /* 32-bit value to program to Sub-Register 0x28:0C � RF_TXCTRL \
-                                    */
-#define RF_TXCTRL_CH7 0x001E7DE0UL /* 32-bit value to program to Sub-Register 0x28:0C � RF_TXCTRL \
-                                    */
+#define RF_TXCTRL_CH1                                                                              \
+    0x00005C40UL /* 32-bit value to program to Sub-Register 0x28:0C � RF_TXCTRL                  \
+                  */
+#define RF_TXCTRL_CH2                                                                              \
+    0x00045CA0UL /* 32-bit value to program to Sub-Register 0x28:0C � RF_TXCTRL                  \
+                  */
+#define RF_TXCTRL_CH3                                                                              \
+    0x00086CC0UL /* 32-bit value to program to Sub-Register 0x28:0C � RF_TXCTRL                  \
+                  */
+#define RF_TXCTRL_CH4                                                                              \
+    0x00045C80UL /* 32-bit value to program to Sub-Register 0x28:0C � RF_TXCTRL                  \
+                  */
+#define RF_TXCTRL_CH5                                                                              \
+    0x001E3FE0UL /* 32-bit value to program to Sub-Register 0x28:0C � RF_TXCTRL                  \
+                  */
+#define RF_TXCTRL_CH7                                                                              \
+    0x001E7DE0UL /* 32-bit value to program to Sub-Register 0x28:0C � RF_TXCTRL                  \
+                  */
 
 /* offset from RF_CONF in bytes */
 #define RF_STATUS_OFFSET 0x2C
@@ -1186,8 +1194,9 @@ extern "C" {
 #define TC_SARL_SAR_LTEMP_OFFSET (4) /* Latest SAR reading for Temperature level */
 #define TC_SARW_SAR_WTEMP_OFFSET                                                                   \
     0x06 /* SAR reading of Temperature level taken at last wakeup event */
-#define TC_SARW_SAR_WVBAT_OFFSET 0x07 /* SAR reading of Voltage level taken at last wakeup event   \
-                                       */
+#define TC_SARW_SAR_WVBAT_OFFSET                                                                   \
+    0x07 /* SAR reading of Voltage level taken at last wakeup event                                \
+          */
 
 #define TC_PGCCTRL_OFFSET 0x08 /* Pulse Generator Calibration control */
 #define TC_PGCCTRL_LEN (1)
@@ -1292,8 +1301,9 @@ extern "C" {
 #define AON_WCFG_ONW_LDC                                                                           \
     0x0040 /* On Wake-up load configurations from the AON memory into the host interface register  \
               set */
-#define AON_WCFG_ONW_L64P 0x0080 /* On Wake-up load the Length64 receiver operating parameter set  \
-                                  */
+#define AON_WCFG_ONW_L64P                                                                          \
+    0x0080 /* On Wake-up load the Length64 receiver operating parameter set                        \
+            */
 #define AON_WCFG_PRES_SLEEP                                                                        \
     0x0100 /* Preserve Sleep. This bit determines what the DW1000 does with respect to the ARXSLP  \
               and ATXSLP sleep controls */
@@ -1560,8 +1570,9 @@ extern "C" {
 #define EVC_OVR_MASK 0x0FFF
 
 /* offset from DIG_DIAG_ID in bytes */
-#define EVC_STO_OFFSET 0x10 /* The EVC_STO field is a 12-bit counter of SFD Timeout Error events   \
-                             */
+#define EVC_STO_OFFSET                                                                             \
+    0x10 /* The EVC_STO field is a 12-bit counter of SFD Timeout Error events                      \
+          */
 #define EVC_OVR_LEN (2)
 #define EVC_OVR_MASK 0x0FFF
 /* offset from DIG_DIAG_ID in bytes */
