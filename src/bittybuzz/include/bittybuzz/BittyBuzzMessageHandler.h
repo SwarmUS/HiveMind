@@ -21,12 +21,14 @@ class BittyBuzzMessageHandler {
     ICircularQueue<MessageDTO>& m_outboundQueue;
 
     // handling funciton
-    bool handleFunctionCallRequest(const MessageDTO& message,
-                                   const FunctionCallRequestDTO& request);
-    bool handleUserCallRequest(const MessageDTO& message, const UserCallRequestDTO& request);
+    FunctionCallResponseDTO handleFunctionCallRequest(
+        const FunctionCallRequestDTO& functionRequest);
+    std::optional<UserCallResponseDTO> handleUserCallRequest(const UserCallRequestDTO& userRequest);
+    std::optional<ResponseDTO> handleRequest(const RequestDTO& request);
+
     bool handleUserCallResponse(const MessageDTO& message, const UserCallResponseDTO& response);
-    bool handleRequest(const MessageDTO& message, const RequestDTO& request);
     bool handleResponse(const MessageDTO& message, const ResponseDTO& response);
+
     bool handleMessage(const MessageDTO& message);
 };
 

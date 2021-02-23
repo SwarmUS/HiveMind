@@ -1,5 +1,4 @@
 #include "MessageDispatcher.h"
-#include <bsp/SettingsContainer.h>
 
 MessageDispatcher::MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
                                      ICircularQueue<MessageDTO>& hostOutputQ,
@@ -25,8 +24,7 @@ bool MessageDispatcher::deserializeAndDispatch() {
 
         // Message is for a remote host
         m_logger.log(LogLevel::Debug, "Message sent to remote queue");
-        m_remoteOutputQueue.push(message);
-        return true;
+        return m_remoteOutputQueue.push(message);
     }
 
     // Could not find the destination
@@ -39,12 +37,10 @@ bool MessageDispatcher::dispatchUserCall(const MessageDTO& message, const UserCa
     switch (dest) {
     case UserCallTargetDTO::BUZZ:
         m_logger.log(LogLevel::Debug, "Message sent to buzz queue");
-        m_buzzOutputQueue.push(message);
-        return true;
+        return m_buzzOutputQueue.push(message);
     case UserCallTargetDTO::HOST:
         m_logger.log(LogLevel::Debug, "Message sent to host queue");
-        m_hostOutputQueue.push(message);
-        return true;
+        return m_hostOutputQueue.push(message);
 
     // Discard the message if unknown
     case UserCallTargetDTO::UNKNOWN:
@@ -70,27 +66,34 @@ bool MessageDispatcher::dispatchRequest(const MessageDTO& message, const Request
 
     const std::variant<std::monostate, UserCallRequestDTO>& variantReq = request.getRequest();
 
-    if (const UserCallRequestDTO* uReq = std::get_if<UserCallRequestDTO>(&variantReq)) {
+    if (const auto* uReq = std::get_if<UserCallRequestDTO>(&variantReq)) {
         return dispatchUserCallRequest(message, *uReq);
     }
     return false;
 }
 
 bool MessageDispatcher::dispatchResponse(const MessageDTO& message, const ResponseDTO& response) {
-    const std::variant<std::monostate, UserCallResponseDTO>& variantResp = response.getResponse();
+    const std::variant<std::monostate, GenericResponseDTO, UserCallResponseDTO>& variantResp =
+        response.getResponse();
 
-    if (const UserCallResponseDTO* uResp = std::get_if<UserCallResponseDTO>(&variantResp)) {
+    if (const auto* uResp = std::get_if<UserCallResponseDTO>(&variantResp)) {
         return dispatchUserCallResponse(message, *uResp);
     }
-    return false;
+    // Unknow response, just pipe it to the host since it won't be recognized by buzz since it uses
+    // the same lib, note that generic response is included here. Buzz don't need a generic response
+    if (message.getDestinationId() == m_bspUuid) {
+        return m_hostOutputQueue.push(message);
+    }
+    // Not recognized and not for here, send it to remote
+    return m_remoteOutputQueue.push(message);
 }
 
 bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
     const std::variant<std::monostate, RequestDTO, ResponseDTO>& variantMsg = message.getMessage();
-    if (const RequestDTO* request = std::get_if<RequestDTO>(&variantMsg)) {
+    if (const auto* request = std::get_if<RequestDTO>(&variantMsg)) {
         return dispatchRequest(message, *request);
     }
-    if (const ResponseDTO* response = std::get_if<ResponseDTO>(&variantMsg)) {
+    if (const auto* response = std::get_if<ResponseDTO>(&variantMsg)) {
         return dispatchResponse(message, *response);
     }
     return false;

@@ -1,6 +1,7 @@
 #include "BittyBuzzMessageHandler.h"
 #include "BittyBuzzSystem.h"
 #include "bbzvm.h"
+#include <bsp/SettingsContainer.h>
 
 BittyBuzzMessageHandler::BittyBuzzMessageHandler(const IBittyBuzzFunctionRegister& functionRegister,
                                                  ICircularQueue<MessageDTO>& inboundQueue,
@@ -11,22 +12,22 @@ BittyBuzzMessageHandler::BittyBuzzMessageHandler(const IBittyBuzzFunctionRegiste
 
 bool BittyBuzzMessageHandler::processMessage() { return true; }
 
-bool BittyBuzzMessageHandler::handleFunctionCallRequest(const MessageDTO& message,
-                                                        const FunctionCallRequestDTO& request) {
+FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
+    const FunctionCallRequestDTO& functionRequest) {
 
     std::optional<uint16_t> functionId =
-        m_functionRegister.getFunctionId(request.getFunctionName());
+        m_functionRegister.getFunctionId(functionRequest.getFunctionName());
 
     if (functionId) {
 
         const std::array<FunctionCallArgumentDTO,
                          FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>& args =
-            request.getArguments();
+            functionRequest.getArguments();
 
         // Pushing bbz table for arguments
         bbzheap_idx_t table = bbztable_new();
 
-        for (uint16_t i = 0; i < request.getArgumentsLength(); i++) {
+        for (uint16_t i = 0; i < functionRequest.getArgumentsLength(); i++) {
             // Buzz table index
             bbzheap_idx_t tableIdx = bbzint_new((int16_t)i);
 
@@ -46,37 +47,45 @@ bool BittyBuzzMessageHandler::handleFunctionCallRequest(const MessageDTO& messag
         bbzvm_push(table);
         BittyBuzzSystem::functionCall(functionId.value());
 
-        // Send response
-        return true;
+        // response
+        return FunctionCallResponseDTO(GenericResponseStatusDTO::Ok, "");
     }
-
-    return false;
+    return FunctionCallResponseDTO(GenericResponseStatusDTO::BadRequest, "");
 }
 
-bool BittyBuzzMessageHandler::handleUserCallRequest(const MessageDTO& message,
-                                                    const UserCallRequestDTO& request) {
-    const std::variant<std::monostate, FunctionCallRequestDTO>& variantReq = request.getRequest();
+std::optional<UserCallResponseDTO> BittyBuzzMessageHandler::handleUserCallRequest(
+    const UserCallRequestDTO& userRequest) {
 
+    const std::variant<std::monostate, FunctionCallRequestDTO>& variantReq =
+        userRequest.getRequest();
     if (const FunctionCallRequestDTO* fReq = std::get_if<FunctionCallRequestDTO>(&variantReq)) {
-        return handleFunctionCallRequest(message, *fReq);
+
+        // Response
+        FunctionCallResponseDTO fResponse = handleFunctionCallRequest(*fReq);
+
+        return UserCallResponseDTO(UserCallTargetDTO::BUZZ, userRequest.getSource(), fResponse);
     }
-    return false;
+    return {};
+}
+
+std::optional<ResponseDTO> BittyBuzzMessageHandler::handleRequest(const RequestDTO& request) {
+    const std::variant<std::monostate, UserCallRequestDTO>& variantReq = request.getRequest();
+
+    if (const UserCallRequestDTO* uReq = std::get_if<UserCallRequestDTO>(&variantReq)) {
+        std::optional<UserCallResponseDTO> uResponse = handleUserCallRequest(*uReq);
+        if (uResponse) {
+            return ResponseDTO(request.getId(), uResponse.value());
+        }
+    }
+    return {};
 }
 
 bool BittyBuzzMessageHandler::handleUserCallResponse(const MessageDTO& message,
                                                      const UserCallResponseDTO& response) {
+    // TODO: handle user call response
     (void)message;
     (void)response;
     return true;
-}
-
-bool BittyBuzzMessageHandler::handleRequest(const MessageDTO& message, const RequestDTO& request) {
-    const std::variant<std::monostate, UserCallRequestDTO>& variantReq = request.getRequest();
-
-    if (const UserCallRequestDTO* uReq = std::get_if<UserCallRequestDTO>(&variantReq)) {
-        return handleUserCallRequest(message, *uReq);
-    }
-    return false;
 }
 
 bool BittyBuzzMessageHandler::handleResponse(const MessageDTO& message,
@@ -92,8 +101,21 @@ bool BittyBuzzMessageHandler::handleResponse(const MessageDTO& message,
 bool BittyBuzzMessageHandler::handleMessage(const MessageDTO& message) {
     const std::variant<std::monostate, RequestDTO, ResponseDTO>& variantMsg = message.getMessage();
     if (const RequestDTO* request = std::get_if<RequestDTO>(&variantMsg)) {
-        return handleRequest(message, *request);
+        // Handling request
+        std::optional<ResponseDTO> response = handleRequest(*request);
+        if (response) {
+
+            // Sending response
+            MessageDTO responseMessage(SettingsContainer::getUUID(), message.getSourceId(),
+                                       response.value());
+            m_outboundQueue.push(responseMessage);
+            return true;
+        }
+
+        // Fail to match request
+        return false;
     }
+
     if (const ResponseDTO* response = std::get_if<ResponseDTO>(&variantMsg)) {
         return handleResponse(message, *response);
     }
