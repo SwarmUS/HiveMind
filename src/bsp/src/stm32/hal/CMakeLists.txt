@@ -69,7 +69,7 @@ target_include_directories(${LIB_NAME}
         src
 )
 
-
+add_subdirectory(decawave)
 if (${COMPILE_STM32_F429ZI})
     add_subdirectory(stm32f429zi)
 else()
