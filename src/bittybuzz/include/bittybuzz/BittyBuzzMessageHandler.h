@@ -4,12 +4,15 @@
 #include "IBittyBuzzFunctionRegister.h"
 #include <cpp-common/ICircularQueue.h>
 #include <hivemind-host/MessageDTO.h>
+#include <logger/ILogger.h>
 
 class BittyBuzzMessageHandler {
   public:
     BittyBuzzMessageHandler(const IBittyBuzzFunctionRegister& functionRegister,
                             ICircularQueue<MessageDTO>& inboundQueue,
-                            ICircularQueue<MessageDTO>& outBoundQueue);
+                            ICircularQueue<MessageDTO>& outBoundQueue,
+                            uint16_t bspuuid,
+                            ILogger& logger);
 
     ~BittyBuzzMessageHandler() = default;
 
@@ -19,15 +22,18 @@ class BittyBuzzMessageHandler {
     const IBittyBuzzFunctionRegister& m_functionRegister;
     ICircularQueue<MessageDTO>& m_inboundQueue;
     ICircularQueue<MessageDTO>& m_outboundQueue;
+    const uint16_t m_uuid;
+    ILogger& m_logger;
 
     // handling funciton
     FunctionCallResponseDTO handleFunctionCallRequest(
         const FunctionCallRequestDTO& functionRequest);
-    std::optional<UserCallResponseDTO> handleUserCallRequest(const UserCallRequestDTO& userRequest);
-    std::optional<ResponseDTO> handleRequest(const RequestDTO& request);
+    UserCallResponseDTO handleUserCallRequest(const UserCallRequestDTO& userRequest);
+    ResponseDTO handleRequest(const RequestDTO& request);
 
-    bool handleUserCallResponse(const MessageDTO& message, const UserCallResponseDTO& response);
-    bool handleResponse(const MessageDTO& message, const ResponseDTO& response);
+    static bool handleUserCallResponse(const UserCallResponseDTO& response);
+    static bool handleGenericResponse(const GenericResponseDTO& response);
+    static bool handleResponse(const ResponseDTO& response);
 
     bool handleMessage(const MessageDTO& message);
 };

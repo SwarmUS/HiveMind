@@ -5,12 +5,24 @@
 
 BittyBuzzMessageHandler::BittyBuzzMessageHandler(const IBittyBuzzFunctionRegister& functionRegister,
                                                  ICircularQueue<MessageDTO>& inboundQueue,
-                                                 ICircularQueue<MessageDTO>& outBoundQueue) :
+                                                 ICircularQueue<MessageDTO>& outBoundQueue,
+                                                 uint16_t bspuuid,
+                                                 ILogger& logger) :
     m_functionRegister(functionRegister),
     m_inboundQueue(inboundQueue),
-    m_outboundQueue(outBoundQueue) {}
+    m_outboundQueue(outBoundQueue),
+    m_uuid(bspuuid),
+    m_logger(logger) {}
 
-bool BittyBuzzMessageHandler::processMessage() { return true; }
+bool BittyBuzzMessageHandler::processMessage() {
+    const auto message = m_inboundQueue.peek();
+
+    if (message) {
+        return handleMessage(message.value());
+    }
+
+    return true;
+}
 
 FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
     const FunctionCallRequestDTO& functionRequest) {
@@ -53,71 +65,78 @@ FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
     return FunctionCallResponseDTO(GenericResponseStatusDTO::BadRequest, "");
 }
 
-std::optional<UserCallResponseDTO> BittyBuzzMessageHandler::handleUserCallRequest(
+UserCallResponseDTO BittyBuzzMessageHandler::handleUserCallRequest(
     const UserCallRequestDTO& userRequest) {
 
     const std::variant<std::monostate, FunctionCallRequestDTO>& variantReq =
         userRequest.getRequest();
-    if (const FunctionCallRequestDTO* fReq = std::get_if<FunctionCallRequestDTO>(&variantReq)) {
+    if (const auto* fReq = std::get_if<FunctionCallRequestDTO>(&variantReq)) {
 
         // Response
         FunctionCallResponseDTO fResponse = handleFunctionCallRequest(*fReq);
 
         return UserCallResponseDTO(UserCallTargetDTO::BUZZ, userRequest.getSource(), fResponse);
     }
-    return {};
+
+    return UserCallResponseDTO(
+        UserCallTargetDTO::BUZZ, userRequest.getSource(),
+        GenericResponseDTO(GenericResponseStatusDTO::BadRequest, "Unknown UC"));
 }
 
-std::optional<ResponseDTO> BittyBuzzMessageHandler::handleRequest(const RequestDTO& request) {
+ResponseDTO BittyBuzzMessageHandler::handleRequest(const RequestDTO& request) {
     const std::variant<std::monostate, UserCallRequestDTO>& variantReq = request.getRequest();
 
-    if (const UserCallRequestDTO* uReq = std::get_if<UserCallRequestDTO>(&variantReq)) {
+    if (const auto* uReq = std::get_if<UserCallRequestDTO>(&variantReq)) {
         std::optional<UserCallResponseDTO> uResponse = handleUserCallRequest(*uReq);
         if (uResponse) {
             return ResponseDTO(request.getId(), uResponse.value());
         }
     }
-    return {};
+    return ResponseDTO(request.getId(),
+                       GenericResponseDTO(GenericResponseStatusDTO::BadRequest, "Unknown REQ"));
 }
 
-bool BittyBuzzMessageHandler::handleUserCallResponse(const MessageDTO& message,
-                                                     const UserCallResponseDTO& response) {
-    // TODO: handle user call response
-    (void)message;
+bool BittyBuzzMessageHandler::handleUserCallResponse(const UserCallResponseDTO& response) {
+    // TODO: handle user call response,
     (void)response;
     return true;
 }
 
-bool BittyBuzzMessageHandler::handleResponse(const MessageDTO& message,
-                                             const ResponseDTO& response) {
-    const std::variant<std::monostate, UserCallResponseDTO>& variantResp = response.getResponse();
+bool BittyBuzzMessageHandler::handleGenericResponse(const GenericResponseDTO& response) {
+    // TODO: handle generic response
+    (void)response;
+    return true;
+}
 
-    if (const UserCallResponseDTO* uResp = std::get_if<UserCallResponseDTO>(&variantResp)) {
-        return handleUserCallResponse(message, *uResp);
+bool BittyBuzzMessageHandler::handleResponse(const ResponseDTO& response) {
+    const std::variant<std::monostate, GenericResponseDTO, UserCallResponseDTO>& variantResp =
+        response.getResponse();
+
+    if (const auto* uResp = std::get_if<UserCallResponseDTO>(&variantResp)) {
+        return handleUserCallResponse(*uResp);
+    }
+    if (const auto* gResp = std::get_if<GenericResponseDTO>(&variantResp)) {
+        return handleGenericResponse(*gResp);
     }
     return false;
 }
 
 bool BittyBuzzMessageHandler::handleMessage(const MessageDTO& message) {
     const std::variant<std::monostate, RequestDTO, ResponseDTO>& variantMsg = message.getMessage();
-    if (const RequestDTO* request = std::get_if<RequestDTO>(&variantMsg)) {
-        // Handling request
-        std::optional<ResponseDTO> response = handleRequest(*request);
-        if (response) {
 
-            // Sending response
-            MessageDTO responseMessage(SettingsContainer::getUUID(), message.getSourceId(),
-                                       response.value());
-            m_outboundQueue.push(responseMessage);
-            return true;
-        }
+    // Handling request
+    if (const auto* request = std::get_if<RequestDTO>(&variantMsg)) {
+        ResponseDTO response = handleRequest(*request);
 
-        // Fail to match request
-        return false;
+        // Sending response
+        MessageDTO responseMessage(SettingsContainer::getUUID(), message.getSourceId(), response);
+        m_outboundQueue.push(responseMessage);
+        return true;
     }
 
-    if (const ResponseDTO* response = std::get_if<ResponseDTO>(&variantMsg)) {
-        return handleResponse(message, *response);
+    // Handle response
+    if (const auto* response = std::get_if<ResponseDTO>(&variantMsg)) {
+        return handleResponse(*response);
     }
     return false;
 }
