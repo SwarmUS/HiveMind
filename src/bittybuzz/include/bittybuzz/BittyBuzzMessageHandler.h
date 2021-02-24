@@ -10,7 +10,8 @@ class BittyBuzzMessageHandler {
   public:
     BittyBuzzMessageHandler(const IBittyBuzzFunctionRegister& functionRegister,
                             ICircularQueue<MessageDTO>& inboundQueue,
-                            ICircularQueue<MessageDTO>& outBoundQueue,
+                            ICircularQueue<MessageDTO>& hostQueue,
+                            ICircularQueue<MessageDTO>& remoteQueue,
                             uint16_t bspuuid,
                             ILogger& logger);
 
@@ -21,7 +22,8 @@ class BittyBuzzMessageHandler {
   private:
     const IBittyBuzzFunctionRegister& m_functionRegister;
     ICircularQueue<MessageDTO>& m_inboundQueue;
-    ICircularQueue<MessageDTO>& m_outboundQueue;
+    ICircularQueue<MessageDTO>& m_hostQueue;
+    ICircularQueue<MessageDTO>& m_remoteQueue;
     const uint16_t m_uuid;
     ILogger& m_logger;
 

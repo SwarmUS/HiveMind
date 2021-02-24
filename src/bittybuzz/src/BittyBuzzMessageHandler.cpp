@@ -5,12 +5,14 @@
 
 BittyBuzzMessageHandler::BittyBuzzMessageHandler(const IBittyBuzzFunctionRegister& functionRegister,
                                                  ICircularQueue<MessageDTO>& inboundQueue,
-                                                 ICircularQueue<MessageDTO>& outBoundQueue,
+                                                 ICircularQueue<MessageDTO>& hostQueue,
+                                                 ICircularQueue<MessageDTO>& remoteQueue,
                                                  uint16_t bspuuid,
                                                  ILogger& logger) :
     m_functionRegister(functionRegister),
     m_inboundQueue(inboundQueue),
-    m_outboundQueue(outBoundQueue),
+    m_hostQueue(hostQueue),
+    m_remoteQueue(remoteQueue),
     m_uuid(bspuuid),
     m_logger(logger) {}
 
@@ -128,9 +130,15 @@ bool BittyBuzzMessageHandler::handleMessage(const MessageDTO& message) {
     if (const auto* request = std::get_if<RequestDTO>(&variantMsg)) {
         ResponseDTO response = handleRequest(*request);
 
-        // Sending response
-        MessageDTO responseMessage(SettingsContainer::getUUID(), message.getSourceId(), response);
-        m_outboundQueue.push(responseMessage);
+        MessageDTO responseMessage(m_uuid, message.getSourceId(), response);
+
+        if (responseMessage.getDestinationId() == m_uuid) {
+            // Sending response to host
+            m_hostQueue.push(responseMessage);
+        } else {
+            // Sending response to remote
+            m_remoteQueue.push(responseMessage);
+        }
         return true;
     }
 
