@@ -4,23 +4,30 @@
 #include <bsp/SettingsContainer.h>
 
 BittyBuzzMessageHandler::BittyBuzzMessageHandler(const IBittyBuzzFunctionRegister& functionRegister,
-                                                 ICircularQueue<MessageDTO>& inboundQueue,
+                                                 ICircularQueue<MessageDTO>& inputQueue,
                                                  ICircularQueue<MessageDTO>& hostQueue,
                                                  ICircularQueue<MessageDTO>& remoteQueue,
                                                  uint16_t bspuuid,
                                                  ILogger& logger) :
     m_functionRegister(functionRegister),
-    m_inboundQueue(inboundQueue),
+    m_inputQueue(inputQueue),
     m_hostQueue(hostQueue),
     m_remoteQueue(remoteQueue),
     m_uuid(bspuuid),
     m_logger(logger) {}
 
 bool BittyBuzzMessageHandler::processMessage() {
-    const auto message = m_inboundQueue.peek();
+    const auto message = m_inputQueue.peek();
 
     if (message) {
-        return handleMessage(message.value());
+        m_inputQueue.pop();
+        const MessageDTO& messageDTO = message.value();
+        if (messageDTO.getDestinationId() == m_uuid) {
+            return handleMessage(message.value());
+        }
+
+        m_logger.log(LogLevel::Warn, "Message destination id does not match");
+        return false;
     }
 
     return true;
@@ -73,7 +80,6 @@ UserCallResponseDTO BittyBuzzMessageHandler::handleUserCallRequest(
     const std::variant<std::monostate, FunctionCallRequestDTO>& variantReq =
         userRequest.getRequest();
     if (const auto* fReq = std::get_if<FunctionCallRequestDTO>(&variantReq)) {
-
         // Response
         FunctionCallResponseDTO fResponse = handleFunctionCallRequest(*fReq);
 
@@ -134,12 +140,11 @@ bool BittyBuzzMessageHandler::handleMessage(const MessageDTO& message) {
 
         if (responseMessage.getDestinationId() == m_uuid) {
             // Sending response to host
-            m_hostQueue.push(responseMessage);
-        } else {
-            // Sending response to remote
-            m_remoteQueue.push(responseMessage);
+            return m_hostQueue.push(responseMessage);
         }
-        return true;
+
+        // Sending response to remote
+        return m_remoteQueue.push(responseMessage);
     }
 
     // Handle response
