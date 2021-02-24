@@ -57,6 +57,7 @@ add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 target_link_libraries(${LIB_NAME}
     PUBLIC
         SwarmUS::HiveMind::HAL::STM32F4
+        SwarmUS::HiveMind::HAL::Decawave
     PRIVATE
         stm32f4-linker
 )

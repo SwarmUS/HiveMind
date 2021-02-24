@@ -64,6 +64,7 @@ extern DMA_HandleTypeDef hdma_spi3_rx;
 extern DMA_HandleTypeDef hdma_spi3_tx;
 extern DMA_HandleTypeDef hdma_spi5_rx;
 extern DMA_HandleTypeDef hdma_spi5_tx;
+extern SPI_HandleTypeDef hspi4;
 extern SPI_HandleTypeDef hspi5;
 extern DMA_HandleTypeDef hdma_usart2_rx;
 extern DMA_HandleTypeDef hdma_usart2_tx;
@@ -332,6 +333,7 @@ void ETH_IRQHandler(void) {
 }
 
 /**
+<<<<<<< master
  * @brief This function handles USB On The Go FS global interrupt.
  */
 void OTG_FS_IRQHandler(void) {
@@ -342,6 +344,18 @@ void OTG_FS_IRQHandler(void) {
     /* USER CODE BEGIN OTG_FS_IRQn 1 */
 
     /* USER CODE END OTG_FS_IRQn 1 */
+=======
+ * @brief This function handles SPI4 global interrupt.
+ */
+void SPI4_IRQHandler(void) {
+    /* USER CODE BEGIN SPI4_IRQn 0 */
+
+    /* USER CODE END SPI4_IRQn 0 */
+    HAL_SPI_IRQHandler(&hspi4);
+    /* USER CODE BEGIN SPI4_IRQn 1 */
+
+    /* USER CODE END SPI4_IRQn 1 */
+>>>>>>> wip
 }
 
 /**

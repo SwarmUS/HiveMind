@@ -31,6 +31,7 @@ DMA_HandleTypeDef hdma_spi3_tx;
 DMA_HandleTypeDef hdma_spi5_rx;
 DMA_HandleTypeDef hdma_spi5_tx;
 
+<<<<<<< master
 /* SPI3 init function */
 void MX_SPI3_Init(void) {
 
@@ -47,6 +48,24 @@ void MX_SPI3_Init(void) {
     hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
     hspi3.Init.CRCPolynomial = 10;
     if (HAL_SPI_Init(&hspi3) != HAL_OK) {
+=======
+/* SPI4 init function */
+void MX_SPI4_Init(void) {
+
+    hspi4.Instance = SPI4;
+    hspi4.Init.Mode = SPI_MODE_MASTER;
+    hspi4.Init.Direction = SPI_DIRECTION_2LINES;
+    hspi4.Init.DataSize = SPI_DATASIZE_8BIT;
+    hspi4.Init.CLKPolarity = SPI_POLARITY_HIGH;
+    hspi4.Init.CLKPhase = SPI_PHASE_2EDGE;
+    hspi4.Init.NSS = SPI_NSS_SOFT;
+    hspi4.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
+    hspi4.Init.FirstBit = SPI_FIRSTBIT_MSB;
+    hspi4.Init.TIMode = SPI_TIMODE_DISABLE;
+    hspi4.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+    hspi4.Init.CRCPolynomial = 10;
+    if (HAL_SPI_Init(&hspi4) != HAL_OK) {
+>>>>>>> wip
         Error_Handler();
     }
 }
@@ -128,7 +147,14 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle) {
 
         __HAL_LINKDMA(spiHandle, hdmatx, hdma_spi3_tx);
 
+<<<<<<< master
         /* USER CODE BEGIN SPI3_MspInit 1 */
+=======
+        /* SPI4 interrupt Init */
+        HAL_NVIC_SetPriority(SPI4_IRQn, 5, 0);
+        HAL_NVIC_EnableIRQ(SPI4_IRQn);
+        /* USER CODE BEGIN SPI4_MspInit 1 */
+>>>>>>> wip
 
         /* USER CODE END SPI3_MspInit 1 */
     } else if (spiHandle->Instance == SPI5) {
@@ -211,10 +237,16 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle) {
         */
         HAL_GPIO_DeInit(GPIOC, GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12);
 
+<<<<<<< master
         /* SPI3 DMA DeInit */
         HAL_DMA_DeInit(spiHandle->hdmarx);
         HAL_DMA_DeInit(spiHandle->hdmatx);
         /* USER CODE BEGIN SPI3_MspDeInit 1 */
+=======
+        /* SPI4 interrupt Deinit */
+        HAL_NVIC_DisableIRQ(SPI4_IRQn);
+        /* USER CODE BEGIN SPI4_MspDeInit 1 */
+>>>>>>> wip
 
         /* USER CODE END SPI3_MspDeInit 1 */
     } else if (spiHandle->Instance == SPI5) {

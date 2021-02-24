@@ -2,6 +2,7 @@
 #include "hal/uart_print.h"
 #include "hivemind_hal.h"
 #include "lwip.h"
+#include "port.h"
 #include "usb_device.h"
 
 #ifdef IPERF_SERVER
@@ -27,12 +28,16 @@ void Hal_init() {
     MX_USART2_UART_Init();
     MX_SPI3_Init();
     MX_SPI5_Init();
+    MX_SPI4_Init();
     MX_USB_DEVICE_Init();
 
     /* Initialize UartPrint */
     UartPrint_init();
 
     MX_LWIP_Init();
+
+    decawave_reset();
+    decawave_setSlowRate();
 #ifdef IPERF_SERVER
     lwiperf_start_tcp_server_default(NULL, NULL);
 #endif
