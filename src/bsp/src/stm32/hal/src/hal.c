@@ -23,6 +23,7 @@ void Hal_init() {
     MX_DMA_Init();
     MX_USART3_UART_Init();
     MX_USART2_UART_Init();
+    MX_SPI3_Init();
     MX_SPI5_Init();
 
     /* Initialize UartPrint */
