@@ -2,15 +2,16 @@
 
 ILogger* BittyBuzzSystem::g_logger = NULL;
 const IBittyBuzzStringResolver* BittyBuzzSystem::g_stringResolver = NULL;
+IBittyBuzzFunctionRegister* BittyBuzzSystem::g_functionRegister = NULL;
 
-void BittyBuzzSystem::functionCall(uint16_t stringId) {
+void BittyBuzzSystem::functionCall(uint16_t stringId, uint16_t argc) {
     bbzvm_pushs(stringId);
     bbzheap_idx_t l = bbzvm_stack_at(0);
     bbzvm_pop();
     if (bbztable_get(vm->gsyms, l, &l) == 1) {
         bbzvm_pushnil(); // Push self table
         bbzvm_push(l);
-        bbzvm_closure_call(0);
+        bbzvm_closure_call(argc);
         bbzvm_pop();
     }
 }

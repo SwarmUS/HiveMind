@@ -68,14 +68,13 @@ class BittyBuzzMessageHandlerFixture : public testing::Test {
         // VM setup, needs to be instanciated so we can do operations on the VM
         // I though about using an interface for the VM, but an interface for the WHOLE bittybuzz
         // api is a bit much
-
         EXPECT_CALL(m_bittybuzzBytecode, getBytecodeLength).WillRepeatedly(testing::Return(0));
         EXPECT_CALL(m_bittybuzzBytecode, getBytecodeFetchFunction)
             .WillRepeatedly(testing::Return(mockbcodeFetcher));
         m_bspMock = new BSPInterfaceMock(m_uuid);
-        m_bittybuzzVmMock = new BittyBuzzVm(m_bittybuzzBytecode, m_bittyBuzzStringResolverMock,
-                                            m_messageHandlerMock, *m_bspMock, *m_loggerMock,
-                                            std::array<FunctionRegister, 0>{});
+        m_bittybuzzVmMock = new BittyBuzzVm(
+            m_bittybuzzBytecode, m_bittyBuzzStringResolverMock, m_messageHandlerMock,
+            m_functionRegisterMock, *m_bspMock, *m_loggerMock, std::array<FunctionRegister, 0>{});
         // Message Handler
         m_bbzMessageHandler = new BittyBuzzMessageHandler(
             m_functionRegisterMock, m_inputQueueMock, m_hostOutputQueueMock,

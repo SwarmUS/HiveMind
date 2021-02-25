@@ -67,8 +67,10 @@ FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
             }
         }
 
+        // TODO: Migrate to variable number of arguments once we know the number beforehand (at
+        // registration), will avoid the user messing with tables
         bbzvm_push(table);
-        BittyBuzzSystem::functionCall(functionId.value());
+        BittyBuzzSystem::functionCall(functionId.value(), 1);
 
         // response
         return FunctionCallResponseDTO(GenericResponseStatusDTO::Ok, "");

@@ -27,7 +27,7 @@ namespace BittyBuzzFactory {
     /**
      * @brief Creates an array of FunctionRegister associated with the code from main.bzz
      * */
-    std::array<FunctionRegister, 9> createBittyBuzzFunctionRegisters();
+    std::array<FunctionRegister, 10> createBittyBuzzFunctionRegisters();
 } // namespace BittyBuzzFactory
 
 #endif // __BITTYBUZZFACTORY_H_

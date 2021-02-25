@@ -9,7 +9,7 @@ bool BittyBuzzVm::step() {
 
     if (vm->state != BBZVM_STATE_ERROR) {
         bbzvm_process_inmsgs();
-        BittyBuzzSystem::functionCall(__BBZSTRID_step);
+        BittyBuzzSystem::functionCall(__BBZSTRID_step, 0);
         bbzvm_process_outmsgs();
         for (uint16_t i = 0; i < m_messageHandler.messageQueueLength(); i++) {
             if (!m_messageHandler.processMessage()) {

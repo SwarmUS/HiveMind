@@ -1,0 +1,10 @@
+function functionType() {
+    assertTrue(1);
+}
+
+function init() {
+    registerFunction("functionType", functionType);
+}
+
+function step() {
+}

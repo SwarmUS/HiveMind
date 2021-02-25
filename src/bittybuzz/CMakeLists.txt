@@ -15,7 +15,6 @@ bittybuzz_generate_bytecode(bittybuzz-target
         ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts
         ${BITTYBUZZ_HIVEMIND_BST})
 
-
 set(LIB_HEADERS
     include/bittybuzz/BittyBuzzVm.h
     include/bittybuzz/BittyBuzzVm.tpp

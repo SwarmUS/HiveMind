@@ -7,3 +7,4 @@ isString
 isTable
 isClosure
 isLambdaClosure
+registerFunction
