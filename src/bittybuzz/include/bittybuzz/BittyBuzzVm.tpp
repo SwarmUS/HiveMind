@@ -9,10 +9,11 @@
 template <typename Container>
 BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                          const IBittyBuzzStringResolver& stringResolver,
+                         IBittyBuzzMessageHandler& messageHandler,
                          const IBSP& bsp,
                          ILogger& logger,
                          const Container& container) :
-    m_bytecode(bytecode), m_bsp(bsp), m_logger(logger) {
+    m_bytecode(bytecode), m_bsp(bsp), m_messageHandler(messageHandler), m_logger(logger) {
     // Init global variable
     vm = &m_bbzVm;
     BittyBuzzSystem::g_logger = &logger;

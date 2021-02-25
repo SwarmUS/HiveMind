@@ -2,11 +2,12 @@
 #define __BITTYBUZZMESSAGEHANDLER_H_
 
 #include "IBittyBuzzFunctionRegister.h"
+#include "IBittyBuzzMessageHandler.h"
 #include <cpp-common/ICircularQueue.h>
 #include <hivemind-host/MessageDTO.h>
 #include <logger/ILogger.h>
 
-class BittyBuzzMessageHandler {
+class BittyBuzzMessageHandler : public IBittyBuzzMessageHandler {
   public:
     BittyBuzzMessageHandler(const IBittyBuzzFunctionRegister& functionRegister,
                             ICircularQueue<MessageDTO>& inputQueue,
@@ -15,9 +16,11 @@ class BittyBuzzMessageHandler {
                             uint16_t bspuuid,
                             ILogger& logger);
 
-    ~BittyBuzzMessageHandler() = default;
+    ~BittyBuzzMessageHandler() override = default;
 
-    bool processMessage();
+    bool processMessage() override;
+
+    uint16_t messageQueueLength() const override;
 
   private:
     const IBittyBuzzFunctionRegister& m_functionRegister;

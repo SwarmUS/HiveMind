@@ -6,7 +6,7 @@
 #include <functional>
 #include <tuple>
 
-class BittyBuzzFunctionRegister : IBittyBuzzFunctionRegister {
+class BittyBuzzFunctionRegister : public IBittyBuzzFunctionRegister {
   public:
     BittyBuzzFunctionRegister();
     ~BittyBuzzFunctionRegister() = default;

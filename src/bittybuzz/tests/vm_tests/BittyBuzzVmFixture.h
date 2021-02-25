@@ -4,10 +4,11 @@
 #include "BittyBuzzVmTestsUtils.h"
 #include "bittybuzz/BittyBuzzBytecode.h"
 #include "bittybuzz/BittyBuzzVm.h"
+#include "mocks/BSPInterfaceMock.h"
+#include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
+#include "mocks/BittyBuzzStringResolverInterfaceMock.h"
+#include "mocks/LoggerInterfaceMock.h"
 #include <gtest/gtest.h>
-#include <mocks/BSPInterfaceMock.h>
-#include <mocks/BittyBuzzStringResolverInterfaceMock.h>
-#include <mocks/LoggerInterfaceMock.h>
 
 class BittyBuzzVmTestFixture : public testing::Test {
   protected:
@@ -17,6 +18,7 @@ class BittyBuzzVmTestFixture : public testing::Test {
     LoggerInterfaceMock* m_loggerMock;
     BSPInterfaceMock* m_bspMock;
     BittyBuzzStringResolverInterfaceMock m_bittyBuzzStringResolverMock;
+    BittyBuzzMessageHandlerInterfaceMock m_bittyBuzzMessageHandlerMock;
 
     int logCounter = 0;
     std::string logLastFormat;
@@ -36,7 +38,8 @@ class BittyBuzzVmTestFixture : public testing::Test {
         m_bittybuzzBytecode = new BittyBuzzBytecode(*m_loggerMock, bytecode, bytecodeLength);
 
         m_bittybuzzVm = new BittyBuzzVm(*m_bittybuzzBytecode, m_bittyBuzzStringResolverMock,
-                                        *m_bspMock, *m_loggerMock, functionRegisters);
+                                        m_bittyBuzzMessageHandlerMock, *m_bspMock, *m_loggerMock,
+                                        functionRegisters);
     }
 
     void TearDown() override {

@@ -30,6 +30,7 @@ set(TEST_HEADERS
     mocks/LoggerInterfaceMock.h
     mocks/CircularQueueInterfaceMock.h
     mocks/BittyBuzzFunctionRegisterInterfaceMock.h
+    mocks/BittyBuzzMessageHandlerInterfaceMock.h
     
     vm_tests/BittyBuzzVmFixture.h
     vm_tests/BittyBuzzVmTestsUtils.h

@@ -33,6 +33,8 @@ bool BittyBuzzMessageHandler::processMessage() {
     return true;
 }
 
+uint16_t BittyBuzzMessageHandler::messageQueueLength() const { return m_inputQueue.getLength(); }
+
 FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
     const FunctionCallRequestDTO& functionRequest) {
 
@@ -151,5 +153,6 @@ bool BittyBuzzMessageHandler::handleMessage(const MessageDTO& message) {
     if (const auto* response = std::get_if<ResponseDTO>(&variantMsg)) {
         return handleResponse(*response);
     }
+
     return false;
 }

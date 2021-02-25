@@ -2,6 +2,7 @@
 #include "mocks/BSPInterfaceMock.h"
 #include "mocks/BittyBuzzBytecodeInterfaceMock.h"
 #include "mocks/BittyBuzzFunctionRegisterInterfaceMock.h"
+#include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include "mocks/CircularQueueInterfaceMock.h"
 #include "mocks/LoggerInterfaceMock.h"
@@ -25,6 +26,7 @@ class BittyBuzzMessageHandlerFixture : public testing::Test {
 
     LoggerInterfaceMock* m_loggerMock;
     BittyBuzzFunctionRegisterInterfaceMock m_functionRegisterMock;
+    BittyBuzzMessageHandlerInterfaceMock m_messageHandlerMock;
     CircularQueueInterfaceMock<MessageDTO> m_inputQueueMock;
     CircularQueueInterfaceMock<MessageDTO> m_hostOutputQueueMock;
     CircularQueueInterfaceMock<MessageDTO> m_remoteOutputQueueMock;
@@ -71,9 +73,9 @@ class BittyBuzzMessageHandlerFixture : public testing::Test {
         EXPECT_CALL(m_bittybuzzBytecode, getBytecodeFetchFunction)
             .WillRepeatedly(testing::Return(mockbcodeFetcher));
         m_bspMock = new BSPInterfaceMock(m_uuid);
-        m_bittybuzzVmMock =
-            new BittyBuzzVm(m_bittybuzzBytecode, m_bittyBuzzStringResolverMock, *m_bspMock,
-                            *m_loggerMock, std::array<FunctionRegister, 0>{});
+        m_bittybuzzVmMock = new BittyBuzzVm(m_bittybuzzBytecode, m_bittyBuzzStringResolverMock,
+                                            m_messageHandlerMock, *m_bspMock, *m_loggerMock,
+                                            std::array<FunctionRegister, 0>{});
         // Message Handler
         m_bbzMessageHandler = new BittyBuzzMessageHandler(
             m_functionRegisterMock, m_inputQueueMock, m_hostOutputQueueMock,
@@ -97,6 +99,33 @@ class BittyBuzzMessageHandlerFixture : public testing::Test {
         delete m_response;
     }
 };
+/*
+ * Message Queue length
+ * */
+
+TEST_F(BittyBuzzMessageHandlerFixture, BittyBuzzMessageHandler_messageQueueLength_0) {
+    // Given
+    uint16_t queueLength = 0;
+    EXPECT_CALL(m_inputQueueMock, getLength).Times(1).WillOnce(testing::Return(queueLength));
+
+    // Then
+    uint16_t ret = m_bbzMessageHandler->messageQueueLength();
+
+    // Expect
+    EXPECT_EQ(ret, queueLength);
+}
+
+TEST_F(BittyBuzzMessageHandlerFixture, BittyBuzzMessageHandler_messageQueueLength_42) {
+    // Given
+    uint16_t queueLength = 42;
+    EXPECT_CALL(m_inputQueueMock, getLength).Times(1).WillOnce(testing::Return(queueLength));
+
+    // Then
+    uint16_t ret = m_bbzMessageHandler->messageQueueLength();
+
+    // Expect
+    EXPECT_EQ(ret, queueLength);
+}
 /*
 ** REQUESTS
 */

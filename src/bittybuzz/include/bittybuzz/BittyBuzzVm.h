@@ -2,6 +2,7 @@
 #define __BITTYBUZZVM_H_
 
 #include "IBittyBuzzBytecode.h"
+#include "IBittyBuzzMessageHandler.h"
 #include "IBittyBuzzStringResolver.h"
 #include "IBittyBuzzVm.h"
 #include <array>
@@ -26,6 +27,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
      *@brief The constructor of the bbvm
      *@param bytecode the bytecode that the vm will run
      *@param stringResolver the string resolver used in the VM
+     *@param messageHandler a reference to a buzz message handler, called on step
      *@param bsp a reference to the bsp
      *@param logger a reference to a logger
      *@param container the provided iterator
@@ -33,6 +35,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
     template <typename Container>
     BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                 const IBittyBuzzStringResolver& stringResolver,
+                IBittyBuzzMessageHandler& messageHandler,
                 const IBSP& bsp,
                 ILogger& logger,
                 const Container& container);
@@ -48,6 +51,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
   private:
     const IBittyBuzzBytecode& m_bytecode;
     const IBSP& m_bsp;
+    IBittyBuzzMessageHandler& m_messageHandler;
     ILogger& m_logger;
 
     bbzvm_t m_bbzVm;

@@ -27,15 +27,17 @@ set(LIB_HEADERS
     include/bittybuzz/BittyBuzzStringResolver.h
     include/bittybuzz/IBittyBuzzStringResolver.h
 
-    include/bittybuzz/BittyBuzzSystem.h
-    include/bittybuzz/BittyBuzzFactory.h
-    include/bittybuzz/BittyBuzzUserFunctions.h
-
     include/bittybuzz/BittyBuzzFunctionRegister.h
     include/bittybuzz/IBittyBuzzFunctionRegister.h
 
 
     include/bittybuzz/BittyBuzzMessageHandler.h
+    include/bittybuzz/IBittyBuzzMessageHandler.h
+
+    include/bittybuzz/BittyBuzzSystem.h
+    include/bittybuzz/BittyBuzzFactory.h
+    include/bittybuzz/BittyBuzzContainer.h
+    include/bittybuzz/BittyBuzzUserFunctions.h
 )
 
 set(LIB_SOURCES
@@ -47,6 +49,7 @@ set(LIB_SOURCES
 
     src/BittyBuzzSystem.cpp
     src/BittyBuzzFactory.cpp
+    src/BittyBuzzContainer.cpp
     src/BittyBuzzUserFunctions.cpp
 )
 
@@ -66,6 +69,7 @@ target_link_libraries(${LIB_NAME}
     PUBLIC
         BittyBuzz
         SwarmUS::HiveMind::Logger
+        SwarmUS::HiveMind::MessageHandler
         SwarmUS::Propolis::Cpp::Common
         SwarmUS::Propolis::Pheromones::HiveMind::Host
 

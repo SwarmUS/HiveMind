@@ -1,6 +1,8 @@
 #include <AbstractTask.h>
 #include <Task.h>
+#include <bittybuzz/BittyBuzzContainer.h>
 #include <bittybuzz/BittyBuzzFactory.h>
+#include <bittybuzz/BittyBuzzMessageHandler.h>
 #include <bittybuzz/BittyBuzzVm.h>
 #include <bsp/BSPContainer.h>
 #include <bsp/IBSP.h>
@@ -23,6 +25,7 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
         m_stringResolver(BittyBuzzFactory::createBittyBuzzStringResolver(m_logger)),
         m_bittybuzzVm(m_bytecode,
                       m_stringResolver,
+                      BittyBuzzContainer::getBBZMessageHandler(),
                       BSPContainer::getBSP(),
                       m_logger,
                       BittyBuzzFactory::createBittyBuzzFunctionRegisters()) {}
