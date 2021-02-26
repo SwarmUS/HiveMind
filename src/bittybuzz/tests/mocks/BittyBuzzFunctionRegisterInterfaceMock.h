@@ -10,11 +10,11 @@ class BittyBuzzFunctionRegisterInterfaceMock : public IBittyBuzzFunctionRegister
 
     MOCK_METHOD(bool,
                 registerFunction,
-                (const char* functionName, uint16_t functionId),
+                (const char* functionName, bbzheap_idx_t functionId),
                 (override));
 
-    MOCK_METHOD(std::optional<uint16_t>,
-                getFunctionId,
+    MOCK_METHOD(std::optional<bbzheap_idx_t>,
+                getFunctionHeapIdx,
                 (const char* functionName),
                 (const override));
 };

@@ -9,9 +9,10 @@ bool BittyBuzzVm::step() {
 
     if (vm->state != BBZVM_STATE_ERROR) {
         bbzvm_process_inmsgs();
-        BittyBuzzSystem::functionCall(__BBZSTRID_step, 0);
+        BittyBuzzSystem::functionCall(__BBZSTRID_step);
         bbzvm_process_outmsgs();
-        for (uint16_t i = 0; i < m_messageHandler.messageQueueLength(); i++) {
+        uint16_t messagesLength = m_messageHandler.messageQueueLength();
+        for (uint16_t i = 0; i < messagesLength; i++) {
             if (!m_messageHandler.processMessage()) {
                 m_logger.log(LogLevel::Warn,
                              "BBVM: Could not process message or the queue is full");

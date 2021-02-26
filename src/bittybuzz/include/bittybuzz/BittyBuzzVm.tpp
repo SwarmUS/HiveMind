@@ -33,7 +33,7 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     }
 
     vm->state = BBZVM_STATE_READY;
-    BittyBuzzSystem::functionCall(__BBZSTRID_init, 0);
+    BittyBuzzSystem::functionCall(__BBZSTRID_init);
 }
 
 #endif // __BITTYBUZZVM_TPP_

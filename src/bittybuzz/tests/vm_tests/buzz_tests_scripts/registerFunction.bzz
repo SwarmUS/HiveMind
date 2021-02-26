@@ -1,4 +1,4 @@
-function registeredFunction() {
+function registeredFunction(tableArg) {
     assertTrue(1);
 }
 

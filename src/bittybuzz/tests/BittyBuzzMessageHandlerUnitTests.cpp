@@ -139,12 +139,12 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     MessageDTO message = MessageDTO(m_uuid, m_uuid, *m_request);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
-    std::optional<uint16_t> functionId = 1;
+    std::optional<bbzheap_idx_t> functionHeapIdx = 1;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_))
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_))
         .Times(1)
-        .WillOnce(testing::Return(functionId));
+        .WillOnce(testing::Return(functionHeapIdx));
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -170,12 +170,12 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     MessageDTO message = MessageDTO(m_uuid, m_uuid, *m_request);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
-    std::optional<uint16_t> functionId = 1;
+    std::optional<bbzheap_idx_t> functionHeapIdx = 1;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_))
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_))
         .Times(1)
-        .WillOnce(testing::Return(functionId));
+        .WillOnce(testing::Return(functionHeapIdx));
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -202,12 +202,12 @@ TEST_F(
     MessageDTO message = MessageDTO(m_uuid, m_uuid, *m_request);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
-    std::optional<uint16_t> functionId = {};
+    std::optional<bbzheap_idx_t> functionHeapIdx = {};
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_))
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_))
         .Times(1)
-        .WillOnce(testing::Return(functionId));
+        .WillOnce(testing::Return(functionHeapIdx));
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -234,12 +234,12 @@ TEST_F(
     MessageDTO message = MessageDTO(m_uuid, m_uuid, *m_request);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
-    std::optional<uint16_t> functionId = {};
+    std::optional<bbzheap_idx_t> functionHeapIdx = {};
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_))
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_))
         .Times(1)
-        .WillOnce(testing::Return(functionId));
+        .WillOnce(testing::Return(functionHeapIdx));
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -269,7 +269,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_)).Times(0);
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_)).Times(0);
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -299,7 +299,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_)).Times(0);
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_)).Times(0);
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -328,7 +328,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_)).Times(0);
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_)).Times(0);
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -356,7 +356,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_)).Times(0);
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_)).Times(0);
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -384,12 +384,12 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     MessageDTO message = MessageDTO(m_srcUuid, m_uuid, *m_request);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
-    std::optional<uint16_t> functionId = 1;
+    std::optional<bbzheap_idx_t> functionHeapIdx = 1;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_))
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_))
         .Times(1)
-        .WillOnce(testing::Return(functionId));
+        .WillOnce(testing::Return(functionHeapIdx));
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -415,12 +415,12 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     MessageDTO message = MessageDTO(m_srcUuid, m_uuid, *m_request);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
-    std::optional<uint16_t> functionId = 1;
+    std::optional<bbzheap_idx_t> functionHeapIdx = 1;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_))
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_))
         .Times(1)
-        .WillOnce(testing::Return(functionId));
+        .WillOnce(testing::Return(functionHeapIdx));
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -447,12 +447,12 @@ TEST_F(
     MessageDTO message = MessageDTO(m_srcUuid, m_uuid, *m_request);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
-    std::optional<uint16_t> functionId = {};
+    std::optional<bbzheap_idx_t> functionHeapIdx = {};
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_))
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_))
         .Times(1)
-        .WillOnce(testing::Return(functionId));
+        .WillOnce(testing::Return(functionHeapIdx));
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -479,12 +479,12 @@ TEST_F(
     MessageDTO message = MessageDTO(m_srcUuid, m_uuid, *m_request);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
-    std::optional<uint16_t> functionId = {};
+    std::optional<bbzheap_idx_t> functionHeapIdx = {};
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_))
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_))
         .Times(1)
-        .WillOnce(testing::Return(functionId));
+        .WillOnce(testing::Return(functionHeapIdx));
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -514,7 +514,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_)).Times(0);
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_)).Times(0);
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -544,7 +544,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_)).Times(0);
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_)).Times(0);
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -573,7 +573,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_)).Times(0);
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_)).Times(0);
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -601,7 +601,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_)).Times(0);
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_)).Times(0);
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -632,7 +632,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_)).Times(0);
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_)).Times(0);
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -655,7 +655,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_)).Times(0);
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_)).Times(0);
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -678,7 +678,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_)).Times(0);
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_)).Times(0);
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -702,7 +702,7 @@ TEST_F(BittyBuzzMessageHandlerFixture, BittyBuzzMessageHandler_processMessage_in
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_)).Times(0);
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_)).Times(0);
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
@@ -723,7 +723,7 @@ TEST_F(BittyBuzzMessageHandlerFixture, BittyBuzzMessageHandler_processMessage_no
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = {};
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_functionRegisterMock, getFunctionId(testing::_)).Times(0);
+    EXPECT_CALL(m_functionRegisterMock, getFunctionHeapIdx(testing::_)).Times(0);
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(0);
     EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);

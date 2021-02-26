@@ -34,6 +34,11 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_integration_registerFunction_callOnMe
         {{BBZSTRID_assertTrue, buzzAssertTrue},
          {BBZSTRID_registerFunction, BittyBuzzUserFunctions::registerFuntion}}};
 
+    EXPECT_CALL(inputQueueMock, peek).Times(1).WillOnce(testing::Return(message));
+    EXPECT_CALL(inputQueueMock, pop).Times(1);
+    EXPECT_CALL(inputQueueMock, getLength).Times(1).WillOnce(testing::Return(1));
+    EXPECT_CALL(hostOutputQueueMock, push(testing::_)).Times(1);
+
     SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &functionRegister,
           functionRegisters);
 

@@ -2,6 +2,7 @@
 #define __BITTYBUZZFUNCTIONREGISTER_H_
 
 #include "IBittyBuzzFunctionRegister.h"
+#include <bbzvm.h>
 #include <cstdint>
 #include <functional>
 #include <tuple>
@@ -11,14 +12,14 @@ class BittyBuzzFunctionRegister : public IBittyBuzzFunctionRegister {
     BittyBuzzFunctionRegister();
     ~BittyBuzzFunctionRegister() = default;
 
-    bool registerFunction(const char* functionName, uint16_t functionId) override;
+    bool registerFunction(const char* functionName, bbzheap_idx_t functionHeapIdx) override;
 
-    std::optional<uint16_t> getFunctionId(const char* functionName) const override;
+    std::optional<bbzheap_idx_t> getFunctionHeapIdx(const char* functionName) const override;
 
     constexpr static uint16_t m_maxSize = 8;
 
   private:
-    std::array<std::tuple<size_t, uint16_t>, m_maxSize> m_functionRegisters;
+    std::array<std::tuple<size_t, bbzheap_idx_t>, m_maxSize> m_functionRegisters;
     uint16_t m_functionRegistersLength = 0;
 };
 

@@ -30,12 +30,11 @@ namespace BittyBuzzSystem {
     extern IBittyBuzzFunctionRegister* g_functionRegister;
 
     /**
-     *@brief Call a bittybuzz function, check the function documentation and verify if you need to
-     *pass parameter via the vm stack
+     *@brief Call a bittybuzz function that takes not arguments (init, step, etc),
      *
      *@param [in] stringId the string ID of the function
-     *@param[in] argc the number of arguments of the function call */
-    void functionCall(uint16_t stringId, uint16_t argc);
+     */
+    void functionCall(uint16_t stringId);
 
     /**
      *@brief Callback to handle errors on bittybuzz vm

@@ -32,11 +32,12 @@ void BittyBuzzUserFunctions::logString() {
 void BittyBuzzUserFunctions::registerFuntion() {
     bbzvm_assert_lnum(2); // NOLINT
     bbzobj_t* bbzFunctionName = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    bbzobj_t* bbzFunctionClosure = bbzheap_obj_at(bbzvm_locals_at(2)); // NOLINT
+    bbzheap_idx_t bbzClosureHeapIdx = bbzvm_locals_at(2); // NOLINT
+    bbzobj_t* bbzClosure = bbzheap_obj_at(bbzClosureHeapIdx); // NOLINT
 
     // TODO: add support for labda, use make_permanent to avoid gc
-    if (bbztype_isstring(*bbzFunctionName) != 1 && bbztype_isclosure(*bbzFunctionClosure) != 1 &&
-        bbztype_isclosurelambda(*bbzFunctionClosure) == 1) {
+    if (bbztype_isstring(*bbzFunctionName) != 1 && bbztype_isclosure(*bbzClosure) != 1 &&
+        bbztype_isclosurelambda(*bbzClosure) == 1) {
         BittyBuzzSystem::g_logger->log(LogLevel::Info,
                                        "BBZ: invalid type while registering function");
         return;
@@ -49,7 +50,7 @@ void BittyBuzzUserFunctions::registerFuntion() {
         // Store the function name
         // TODO: add support for table with arg name as key and
         BittyBuzzSystem::g_functionRegister->registerFunction(optionString.value(),
-                                                              bbzFunctionClosure->s.value);
+                                                              bbzClosureHeapIdx);
 
     } else {
 
