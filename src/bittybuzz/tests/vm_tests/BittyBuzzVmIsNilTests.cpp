@@ -1,6 +1,6 @@
 #include "BittyBuzzVmFixture.h"
 #include "BittyBuzzVmTestsUtils.h"
-#include "mocks/BittyBuzzFunctionRegisterInterfaceMock.h"
+#include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
 #include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include <bittybuzz/BittyBuzzUserFunctions.h>
@@ -12,7 +12,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isNil) {
     uint16_t boardId = 42;
     BittyBuzzMessageHandlerInterfaceMock messageHandlerMock;
     BittyBuzzStringResolverInterfaceMock stringResolverMock;
-    BittyBuzzFunctionRegisterInterfaceMock functionRegisterMock;
+    BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
@@ -22,7 +22,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isNil) {
          {BBZSTRID_assertFalse, buzzAssertFalse}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &functionRegisterMock, functionRegister);
+          &closureRegisterMock, functionRegister);
 
     // Then
     m_bittybuzzVm->step();

@@ -1,12 +1,12 @@
-#include "BittyBuzzFunctionRegister.h"
+#include "BittyBuzzClosureRegister.h"
 #include <bbzvm.h>
 #include <cstring>
 
-BittyBuzzFunctionRegister::BittyBuzzFunctionRegister() = default;
+BittyBuzzClosureRegister::BittyBuzzClosureRegister() = default;
 
-bool BittyBuzzFunctionRegister::registerFunction(const char* functionName,
-                                                 bbzheap_idx_t functionHeapIdx) {
-    if (m_functionRegistersLength >= m_maxSize) {
+bool BittyBuzzClosureRegister::registerFunction(const char* functionName,
+                                                bbzheap_idx_t functionHeapIdx) {
+    if (m_closureRegistersLength >= m_maxSize) {
         return false;
     }
 
@@ -21,19 +21,19 @@ bool BittyBuzzFunctionRegister::registerFunction(const char* functionName,
 
     // Making object permanent
     bbzheap_obj_make_permanent(*closure);
-    m_functionRegisters[m_functionRegistersLength] =
+    m_closureRegisters[m_closureRegistersLength] =
         std::make_tuple(functionNameHash, functionHeapIdx);
-    m_functionRegistersLength++;
+    m_closureRegistersLength++;
     return true;
 }
 
-std::optional<bbzheap_idx_t> BittyBuzzFunctionRegister::getFunctionHeapIdx(
+std::optional<bbzheap_idx_t> BittyBuzzClosureRegister::getFunctionHeapIdx(
     const char* functionName) const {
     std::string_view functionNameView(functionName);
     size_t functionNameHash = std::hash<std::string_view>{}(functionNameView);
 
-    for (uint16_t i = 0; i < m_functionRegistersLength; i++) {
-        auto [hash, functionHeapIdx] = m_functionRegisters[i];
+    for (uint16_t i = 0; i < m_closureRegistersLength; i++) {
+        auto [hash, functionHeapIdx] = m_closureRegisters[i];
         if (functionNameHash == hash) {
             return functionHeapIdx;
         }

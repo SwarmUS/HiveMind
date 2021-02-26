@@ -1,7 +1,7 @@
 #ifndef __BITTYBUZZMESSAGEHANDLER_H_
 #define __BITTYBUZZMESSAGEHANDLER_H_
 
-#include "IBittyBuzzFunctionRegister.h"
+#include "IBittyBuzzClosureRegister.h"
 #include "IBittyBuzzMessageHandler.h"
 #include <cpp-common/ICircularQueue.h>
 #include <hivemind-host/MessageDTO.h>
@@ -9,7 +9,7 @@
 
 class BittyBuzzMessageHandler : public IBittyBuzzMessageHandler {
   public:
-    BittyBuzzMessageHandler(const IBittyBuzzFunctionRegister& functionRegister,
+    BittyBuzzMessageHandler(const IBittyBuzzClosureRegister& closureRegister,
                             ICircularQueue<MessageDTO>& inputQueue,
                             ICircularQueue<MessageDTO>& hostQueue,
                             ICircularQueue<MessageDTO>& remoteQueue,
@@ -23,7 +23,7 @@ class BittyBuzzMessageHandler : public IBittyBuzzMessageHandler {
     uint16_t messageQueueLength() const override;
 
   private:
-    const IBittyBuzzFunctionRegister& m_functionRegister;
+    const IBittyBuzzClosureRegister& m_closureRegister;
     ICircularQueue<MessageDTO>& m_inputQueue;
     ICircularQueue<MessageDTO>& m_hostQueue;
     ICircularQueue<MessageDTO>& m_remoteQueue;

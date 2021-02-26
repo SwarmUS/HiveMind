@@ -1,12 +1,12 @@
-#ifndef __BITTYBUZZFUNCTIONREGISTERINTERFACEMOCK_H_
-#define __BITTYBUZZFUNCTIONREGISTERINTERFACEMOCK_H_
+#ifndef __BITTYBUZZCLOSUREREGISTERINTERFACEMOCK_H_
+#define __BITTYBUZZCLOSUREREGISTERINTERFACEMOCK_H_
 
-#include <bittybuzz/IBittyBuzzFunctionRegister.h>
+#include <bittybuzz/IBittyBuzzClosureRegister.h>
 #include <gmock/gmock.h>
 
-class BittyBuzzFunctionRegisterInterfaceMock : public IBittyBuzzFunctionRegister {
+class BittyBuzzClosureRegisterInterfaceMock : public IBittyBuzzClosureRegister {
   public:
-    ~BittyBuzzFunctionRegisterInterfaceMock() override = default;
+    ~BittyBuzzClosureRegisterInterfaceMock() override = default;
 
     MOCK_METHOD(bool,
                 registerFunction,
@@ -19,4 +19,4 @@ class BittyBuzzFunctionRegisterInterfaceMock : public IBittyBuzzFunctionRegister
                 (const override));
 };
 
-#endif // __BITTYBUZZFUNCTIONREGISTERINTERFACEMOCK_H_
+#endif // __BITTYBUZZCLOSUREREGISTERINTERFACEMOCK_H_

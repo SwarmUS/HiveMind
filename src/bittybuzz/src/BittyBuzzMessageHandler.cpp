@@ -3,13 +3,13 @@
 #include "bbzvm.h"
 #include <bsp/SettingsContainer.h>
 
-BittyBuzzMessageHandler::BittyBuzzMessageHandler(const IBittyBuzzFunctionRegister& functionRegister,
+BittyBuzzMessageHandler::BittyBuzzMessageHandler(const IBittyBuzzClosureRegister& closureRegister,
                                                  ICircularQueue<MessageDTO>& inputQueue,
                                                  ICircularQueue<MessageDTO>& hostQueue,
                                                  ICircularQueue<MessageDTO>& remoteQueue,
                                                  uint16_t bspuuid,
                                                  ILogger& logger) :
-    m_functionRegister(functionRegister),
+    m_closureRegister(closureRegister),
     m_inputQueue(inputQueue),
     m_hostQueue(hostQueue),
     m_remoteQueue(remoteQueue),
@@ -39,7 +39,7 @@ FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
     const FunctionCallRequestDTO& functionRequest) {
 
     std::optional<bbzheap_idx_t> functionHeapIdx =
-        m_functionRegister.getFunctionHeapIdx(functionRequest.getFunctionName());
+        m_closureRegister.getFunctionHeapIdx(functionRequest.getFunctionName());
 
     if (functionHeapIdx) {
 

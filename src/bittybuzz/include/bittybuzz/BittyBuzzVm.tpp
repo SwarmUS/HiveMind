@@ -10,7 +10,7 @@ template <typename Container>
 BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                          const IBittyBuzzStringResolver& stringResolver,
                          IBittyBuzzMessageHandler& messageHandler,
-                         IBittyBuzzFunctionRegister& functionRegister,
+                         IBittyBuzzClosureRegister& closureRegister,
                          const IBSP& bsp,
                          ILogger& logger,
                          const Container& container) :
@@ -19,7 +19,7 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     vm = &m_bbzVm;
     BittyBuzzSystem::g_logger = &logger;
     BittyBuzzSystem::g_stringResolver = &stringResolver;
-    BittyBuzzSystem::g_functionRegister = &functionRegister;
+    BittyBuzzSystem::g_closureRegister = &closureRegister;
 
     // Init vm
     bbzvm_construct(m_bsp.getUUId());

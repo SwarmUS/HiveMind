@@ -4,7 +4,7 @@ set(TEST_SOURCES
     
     BittyBuzzBytecodeUnitTests.cpp
     BittyBuzzStringResolverUnitTests.cpp
-    BittyBuzzFunctionRegisterUnitTests.cpp
+    BittyBuzzClosureRegisterUnitTests.cpp
     BittyBuzzMessageHandlerUnitTests.cpp
 
     vm_tests/BittyBuzzVmTestsUtils.cpp
@@ -31,7 +31,7 @@ set(TEST_HEADERS
     mocks/BSPInterfaceMock.h
     mocks/LoggerInterfaceMock.h
     mocks/CircularQueueInterfaceMock.h
-    mocks/BittyBuzzFunctionRegisterInterfaceMock.h
+    mocks/BittyBuzzClosureRegisterInterfaceMock.h
     mocks/BittyBuzzMessageHandlerInterfaceMock.h
     
     vm_tests/BittyBuzzVmFixture.h

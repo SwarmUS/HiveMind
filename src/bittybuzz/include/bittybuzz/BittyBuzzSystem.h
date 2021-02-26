@@ -1,7 +1,7 @@
 #ifndef __BITTYBUZZSYSTEM_H_
 #define __BITTYBUZZSYSTEM_H_
 
-#include "IBittyBuzzFunctionRegister.h"
+#include "IBittyBuzzClosureRegister.h"
 #include "IBittyBuzzStringResolver.h"
 #include <bbzvm.h>
 #include <logger/ILogger.h>
@@ -27,7 +27,7 @@ namespace BittyBuzzSystem {
     /**
      *@brief Function register used by the BBVM to register new functions
      **/
-    extern IBittyBuzzFunctionRegister* g_functionRegister;
+    extern IBittyBuzzClosureRegister* g_closureRegister;
 
     /**
      *@brief Call a bittybuzz function that takes not arguments (init, step, etc),

@@ -1,5 +1,5 @@
 #include "BittyBuzzVmFixture.h"
-#include "mocks/BittyBuzzFunctionRegisterInterfaceMock.h"
+#include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
 #include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include <bittybuzz/BittyBuzzUserFunctions.h>
@@ -10,14 +10,14 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledOnce) {
     uint16_t boardId = 1;
     BittyBuzzMessageHandlerInterfaceMock messageHandlerMock;
     BittyBuzzStringResolverInterfaceMock stringResolverMock;
-    BittyBuzzFunctionRegisterInterfaceMock functionRegisterMock;
+    BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     std::array<FunctionRegister, 1> functionRegister = {
         {{BBZSTRID_logInt, BittyBuzzUserFunctions::logInt}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &functionRegisterMock, functionRegister);
+          &closureRegisterMock, functionRegister);
     // Then
     m_bittybuzzVm->step();
 
@@ -32,13 +32,13 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledTwice) {
     uint16_t boardId = 2;
     BittyBuzzMessageHandlerInterfaceMock messageHandlerMock;
     BittyBuzzStringResolverInterfaceMock stringResolverMock;
-    BittyBuzzFunctionRegisterInterfaceMock functionRegisterMock;
+    BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     std::array<FunctionRegister, 1> functionRegister = {
         {{BBZSTRID_logInt, BittyBuzzUserFunctions::logInt}}};
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &functionRegisterMock, functionRegister);
+          &closureRegisterMock, functionRegister);
 
     // Then
     m_bittybuzzVm->step();
@@ -54,13 +54,13 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_InTwoSwarm_FunctionCalledQuad) 
     uint16_t boardId = 3;
     BittyBuzzMessageHandlerInterfaceMock messageHandlerMock;
     BittyBuzzStringResolverInterfaceMock stringResolverMock;
-    BittyBuzzFunctionRegisterInterfaceMock functionRegisterMock;
+    BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     std::array<FunctionRegister, 1> functionRegister = {
         {{BBZSTRID_logInt, BittyBuzzUserFunctions::logInt}}};
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &functionRegisterMock, functionRegister);
+          &closureRegisterMock, functionRegister);
 
     // Then
     m_bittybuzzVm->step();

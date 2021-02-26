@@ -1,19 +1,19 @@
-#ifndef __IBITTYBUZZFUNCTIONREGISTER_H_
-#define __IBITTYBUZZFUNCTIONREGISTER_H_
+#ifndef __IBITTYBUZZCLOSUREREGISTER_H_
+#define __IBITTYBUZZCLOSUREREGISTER_H_
 
 #include <bbzvm.h>
 #include <optional>
 
 /**
- *@brief A class to register buzz function id and associate them with a string. */
-class IBittyBuzzFunctionRegister {
+ *@brief A class to register buzz function/closures id and associate them with a string. */
+class IBittyBuzzClosureRegister {
   public:
-    virtual ~IBittyBuzzFunctionRegister() = default;
+    virtual ~IBittyBuzzClosureRegister() = default;
 
     /**
      *@brief register un function to the list
      *@param functionName the name of the function
-     *@param functionHeapIdx a pointer to the heap to the function. When registering, the function
+     *@param functionHeapIdx a pointer to the heap to the closure. When registering, the function
      *will be made permanent.
      *@return true on success, false if not (i.e. no more space in the list, or the heapidx is not a
      *closure)*/
@@ -26,4 +26,4 @@ class IBittyBuzzFunctionRegister {
     virtual std::optional<bbzheap_idx_t> getFunctionHeapIdx(const char* functionName) const = 0;
 };
 
-#endif // __IBITTYBUZZFUNCTIONREGISTER_H_
+#endif // __IBITTYBUZZCLOSUREREGISTER_H_

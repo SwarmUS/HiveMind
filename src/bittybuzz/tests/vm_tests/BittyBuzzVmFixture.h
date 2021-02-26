@@ -28,7 +28,7 @@ class BittyBuzzVmTestFixture : public testing::Test {
                uint16_t boardId,
                IBittyBuzzStringResolver* bittyBuzzStringResolver,
                IBittyBuzzMessageHandler* bittyBuzzMessageHandler,
-               IBittyBuzzFunctionRegister* bittyBuzzFunctionRegister,
+               IBittyBuzzClosureRegister* bittyBuzzClosureRegister,
                const Container& container) {
 
         g_assertTrueCallCount = 0;
@@ -39,7 +39,7 @@ class BittyBuzzVmTestFixture : public testing::Test {
         m_bittybuzzBytecode = new BittyBuzzBytecode(*m_loggerMock, bytecode, bytecodeLength);
 
         m_bittybuzzVm = new BittyBuzzVm(*m_bittybuzzBytecode, *bittyBuzzStringResolver,
-                                        *bittyBuzzMessageHandler, *bittyBuzzFunctionRegister,
+                                        *bittyBuzzMessageHandler, *bittyBuzzClosureRegister,
                                         *m_bspMock, *m_loggerMock, container);
     }
 

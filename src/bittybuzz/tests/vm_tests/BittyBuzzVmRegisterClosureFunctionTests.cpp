@@ -1,7 +1,7 @@
 #include "BittyBuzzVmFixture.h"
 #include "BittyBuzzVmTestsUtils.h"
 #include "mocks/CircularQueueInterfaceMock.h"
-#include <bittybuzz/BittyBuzzFunctionRegister.h>
+#include <bittybuzz/BittyBuzzClosureRegister.h>
 #include <bittybuzz/BittyBuzzMessageHandler.h>
 #include <bittybuzz/BittyBuzzStringResolver.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
@@ -17,12 +17,12 @@ TEST_F(BittyBuzzVmTestFixture,
     CircularQueueInterfaceMock<MessageDTO> hostOutputQueueMock;
     CircularQueueInterfaceMock<MessageDTO> remoteOutputQueueMock;
 
-    BittyBuzzFunctionRegister functionRegister;
+    BittyBuzzClosureRegister closureRegister;
     BittyBuzzStringResolver stringResolver(g_bbzStringResolverArray.data(),
                                            g_bbzStringResolverArray.size(), BBZSTRING_OFFSET,
                                            *m_loggerMock);
 
-    BittyBuzzMessageHandler messageHandler(functionRegister, inputQueueMock, hostOutputQueueMock,
+    BittyBuzzMessageHandler messageHandler(closureRegister, inputQueueMock, hostOutputQueueMock,
                                            remoteOutputQueueMock, boardId, *m_loggerMock);
 
     FunctionCallRequestDTO fRequest(stringResolver.getString(BBZSTRID_registeredFunction).value(),
@@ -31,7 +31,7 @@ TEST_F(BittyBuzzVmTestFixture,
     RequestDTO request(1, uRequest);
     MessageDTO message(boardId, boardId, request);
 
-    std::array<FunctionRegister, 2> functionRegisters = {
+    std::array<FunctionRegister, 2> closureRegisters = {
         {{BBZSTRID_assertTrue, buzzAssertTrue},
          {BBZSTRID_registerFunction, BittyBuzzUserFunctions::registerFuntion}}};
 
@@ -40,8 +40,8 @@ TEST_F(BittyBuzzVmTestFixture,
     EXPECT_CALL(inputQueueMock, getLength).Times(1).WillOnce(testing::Return(1));
     EXPECT_CALL(hostOutputQueueMock, push(testing::_)).Times(1);
 
-    SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &functionRegister,
-          functionRegisters);
+    SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &closureRegister,
+          closureRegisters);
 
     // Then
     // Garbage collecting to make sure the pointer is still valid

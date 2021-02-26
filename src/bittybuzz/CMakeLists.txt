@@ -26,8 +26,8 @@ set(LIB_HEADERS
     include/bittybuzz/BittyBuzzStringResolver.h
     include/bittybuzz/IBittyBuzzStringResolver.h
 
-    include/bittybuzz/BittyBuzzFunctionRegister.h
-    include/bittybuzz/IBittyBuzzFunctionRegister.h
+    include/bittybuzz/BittyBuzzClosureRegister.h
+    include/bittybuzz/IBittyBuzzClosureRegister.h
 
 
     include/bittybuzz/BittyBuzzMessageHandler.h
@@ -43,7 +43,7 @@ set(LIB_SOURCES
     src/BittyBuzzVm.cpp
     src/BittyBuzzBytecode.cpp
     src/BittyBuzzStringResolver.cpp
-    src/BittyBuzzFunctionRegister.cpp
+    src/BittyBuzzClosureRegister.cpp
     src/BittyBuzzMessageHandler.cpp
 
     src/BittyBuzzSystem.cpp
