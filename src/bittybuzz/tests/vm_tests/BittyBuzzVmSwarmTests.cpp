@@ -13,7 +13,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledOnce) {
     BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
-    std::array<FunctionRegister, 1> functionRegister = {
+    std::array<UserFunctionRegister, 1> functionRegister = {
         {{BBZSTRID_logInt, BittyBuzzUserFunctions::logInt}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
@@ -35,7 +35,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledTwice) {
     BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
-    std::array<FunctionRegister, 1> functionRegister = {
+    std::array<UserFunctionRegister, 1> functionRegister = {
         {{BBZSTRID_logInt, BittyBuzzUserFunctions::logInt}}};
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, functionRegister);
@@ -57,7 +57,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_InTwoSwarm_FunctionCalledQuad) 
     BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
-    std::array<FunctionRegister, 1> functionRegister = {
+    std::array<UserFunctionRegister, 1> functionRegister = {
         {{BBZSTRID_logInt, BittyBuzzUserFunctions::logInt}}};
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, functionRegister);

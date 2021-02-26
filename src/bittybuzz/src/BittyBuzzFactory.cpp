@@ -15,7 +15,7 @@ BittyBuzzStringResolver BittyBuzzFactory::createBittyBuzzStringResolver(ILogger&
                                    BBZSTRING_OFFSET, logger);
 }
 
-std::array<FunctionRegister, 10> BittyBuzzFactory::createBittyBuzzFunctionRegisters() {
+std::array<UserFunctionRegister, 10> BittyBuzzFactory::createBittyBuzzFunctionRegisters() {
     return {{
         {BBZSTRID_log, BittyBuzzUserFunctions::logString},
         {BBZSTRID_logInt, BittyBuzzUserFunctions::logInt},

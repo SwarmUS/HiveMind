@@ -38,10 +38,10 @@ uint16_t BittyBuzzMessageHandler::messageQueueLength() const { return m_inputQue
 FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
     const FunctionCallRequestDTO& functionRequest) {
 
-    std::optional<bbzheap_idx_t> functionHeapIdx =
-        m_closureRegister.getFunctionHeapIdx(functionRequest.getFunctionName());
+    std::optional<bbzheap_idx_t> closureHeapIdx =
+        m_closureRegister.getClosureHeapIdx(functionRequest.getFunctionName());
 
-    if (functionHeapIdx) {
+    if (closureHeapIdx) {
 
         const std::array<FunctionCallArgumentDTO,
                          FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>& args =
@@ -70,7 +70,7 @@ FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
         // TODO: Migrate to variable number of arguments once we know the number beforehand (at
         // registration), will avoid the user messing with tables (if possible)
         bbzvm_pushnil(); // Push self table
-        bbzvm_push(functionHeapIdx.value());
+        bbzvm_push(closureHeapIdx.value());
         bbzvm_push(table);
         bbzvm_closure_call(1);
         bbzvm_pop(); // Pop seldf table

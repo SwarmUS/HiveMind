@@ -28,7 +28,7 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     bbzringbuf_construct(&m_bbzPayloadBuff, m_bbzMsgBuff.data(), 1, m_bbzMsgBuff.size());
 
     // Function registration
-    for (FunctionRegister functionRegister : container) {
+    for (UserFunctionRegister functionRegister : container) {
         bbzvm_function_register(functionRegister.m_strId, functionRegister.m_functionPtr);
     }
 

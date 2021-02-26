@@ -12,9 +12,9 @@ class BittyBuzzClosureRegister : public IBittyBuzzClosureRegister {
     BittyBuzzClosureRegister();
     ~BittyBuzzClosureRegister() = default;
 
-    bool registerFunction(const char* functionName, bbzheap_idx_t functionHeapIdx) override;
+    bool registerClosure(const char* functionName, bbzheap_idx_t closureHeapIdx) override;
 
-    std::optional<bbzheap_idx_t> getFunctionHeapIdx(const char* functionName) const override;
+    std::optional<bbzheap_idx_t> getClosureHeapIdx(const char* functionName) const override;
 
     constexpr static uint16_t m_maxSize = 8;
 

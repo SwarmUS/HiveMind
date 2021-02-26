@@ -16,7 +16,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isInt) {
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
-    std::array<FunctionRegister, 3> functionRegister = {
+    std::array<UserFunctionRegister, 3> functionRegister = {
         {{BBZSTRID_isInt, BittyBuzzUserFunctions::isInt},
          {BBZSTRID_assertTrue, buzzAssertTrue},
          {BBZSTRID_assertFalse, buzzAssertFalse}}};

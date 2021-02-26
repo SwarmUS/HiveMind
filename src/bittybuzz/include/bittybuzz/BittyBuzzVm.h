@@ -12,14 +12,14 @@
 
 #define BBZ_MSG_BUFF_SIZE 16
 
-class FunctionRegister {
+class UserFunctionRegister {
   public:
-    FunctionRegister(uint8_t strId, bbzvm_funp functionPtr);
+    UserFunctionRegister(uint8_t strId, bbzvm_funp functionPtr);
     uint8_t m_strId;
     bbzvm_funp m_functionPtr;
 
   private:
-    FunctionRegister();
+    UserFunctionRegister();
 };
 
 class BittyBuzzVm : public IBittyBuzzVm {

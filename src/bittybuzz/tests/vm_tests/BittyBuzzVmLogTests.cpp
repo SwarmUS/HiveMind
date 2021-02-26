@@ -15,7 +15,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_log_FunctionCalled) {
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
-    std::array<FunctionRegister, 1> functionRegister = {
+    std::array<UserFunctionRegister, 1> functionRegister = {
         {{BBZSTRID_log, BittyBuzzUserFunctions::logString}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,

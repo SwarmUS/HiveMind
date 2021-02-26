@@ -12,7 +12,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_NoStep_NoError) {
     BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
-    std::array<FunctionRegister, 0> functionRegister = {};
+    std::array<UserFunctionRegister, 0> functionRegister = {};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, functionRegister);

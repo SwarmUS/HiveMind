@@ -49,8 +49,8 @@ void BittyBuzzUserFunctions::registerFuntion() {
     if (optionString) {
         // Store the function name
         // TODO: add support for table with arg name as key and
-        BittyBuzzSystem::g_closureRegister->registerFunction(optionString.value(),
-                                                             bbzClosureHeapIdx);
+        BittyBuzzSystem::g_closureRegister->registerClosure(optionString.value(),
+                                                            bbzClosureHeapIdx);
 
     } else {
 
