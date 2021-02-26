@@ -1,0 +1,6 @@
+function init() {
+    registerFunction("registeredLambda", function(tableArg){assertTrue(1);});
+}
+
+function step() {
+}

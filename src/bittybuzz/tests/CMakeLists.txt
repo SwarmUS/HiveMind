@@ -15,7 +15,8 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmNoStepTests.cpp
     vm_tests/BittyBuzzVmSwarmTests.cpp
     vm_tests/BittyBuzzVmUndefinedFunctionTests.cpp
-    vm_tests/BittyBuzzVmRegisterFunctionTests.cpp
+    vm_tests/BittyBuzzVmRegisterClosureFunctionTests.cpp
+    vm_tests/BittyBuzzVmRegisterClosureLambdaTests.cpp
 
     vm_tests/BittyBuzzVmIsNilTests.cpp
     vm_tests/BittyBuzzVmIsIntTests.cpp
@@ -110,8 +111,13 @@ bittybuzz_generate_bytecode(isLambdaClosure
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(registerFunction 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/registerFunction.bzz 
+bittybuzz_generate_bytecode(registerClosure_function 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/registerClosure_function.bzz 
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
+bittybuzz_generate_bytecode(registerClosure_lambda 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/registerClosure_lambda.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
@@ -140,7 +146,8 @@ target_link_libraries(${TEST_NAME}
         isTable
         isClosure
         isLambdaClosure
-        registerFunction
+        registerClosure_function
+        registerClosure_lambda
 )
 
 add_test(NAME ${TEST_NAME}

@@ -6,10 +6,11 @@
 #include <bittybuzz/BittyBuzzStringResolver.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
-#include <registerFunction_bytecode.h>
-#include <registerFunction_string.h>
+#include <registerClosure_lambda_bytecode.h>
+#include <registerClosure_lambda_string.h>
 
-TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_integration_registerFunction_callOnMessage) {
+TEST_F(BittyBuzzVmTestFixture,
+       BittyBuzzVm_integration_registerClosure_registerLambda_callOnMessage) {
     // Given
     uint16_t boardId = 42;
     CircularQueueInterfaceMock<MessageDTO> inputQueueMock;
@@ -24,7 +25,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_integration_registerFunction_callOnMe
     BittyBuzzMessageHandler messageHandler(functionRegister, inputQueueMock, hostOutputQueueMock,
                                            remoteOutputQueueMock, boardId, *m_loggerMock);
 
-    FunctionCallRequestDTO fRequest(stringResolver.getString(BBZSTRID_registeredFunction).value(),
+    FunctionCallRequestDTO fRequest(stringResolver.getString(BBZSTRID_registeredLambda).value(),
                                     NULL, 0);
     UserCallRequestDTO uRequest(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, fRequest);
     RequestDTO request(1, uRequest);
@@ -43,6 +44,8 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_integration_registerFunction_callOnMe
           functionRegisters);
 
     // Then
+    // Garbage collecting to make sure the pointer is still valid
+    bbzvm_gc();
     m_bittybuzzVm->step();
 
     // Expect
