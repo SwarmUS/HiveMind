@@ -1,28 +1,41 @@
 #include "BittyBuzzVmFixture.h"
 #include "BittyBuzzVmTestsUtils.h"
-#include "mocks/BittyBuzzFunctionRegisterInterfaceMock.h"
-#include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
-#include "mocks/BittyBuzzStringResolverInterfaceMock.h"
+#include "mocks/CircularQueueInterfaceMock.h"
+#include <bittybuzz/BittyBuzzFunctionRegister.h>
+#include <bittybuzz/BittyBuzzMessageHandler.h>
+#include <bittybuzz/BittyBuzzStringResolver.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
 #include <registerFunction_bytecode.h>
 #include <registerFunction_string.h>
 
-TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerFunction) {
+TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_integration_registerFunction_callOnMessage) {
     // Given
     uint16_t boardId = 42;
-    BittyBuzzMessageHandlerInterfaceMock messageHandlerMock;
-    BittyBuzzStringResolverInterfaceMock stringResolverMock;
-    BittyBuzzFunctionRegisterInterfaceMock functionRegisterMock;
+    CircularQueueInterfaceMock<MessageDTO> inputQueueMock;
+    CircularQueueInterfaceMock<MessageDTO> hostOutputQueueMock;
+    CircularQueueInterfaceMock<MessageDTO> remoteOutputQueueMock;
 
-    EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
+    BittyBuzzFunctionRegister functionRegister;
+    BittyBuzzStringResolver stringResolver(g_bbzStringResolverArray.data(),
+                                           g_bbzStringResolverArray.size(), BBZSTRING_OFFSET,
+                                           *m_loggerMock);
 
-    std::array<FunctionRegister, 2> functionRegister = {
+    BittyBuzzMessageHandler messageHandler(functionRegister, inputQueueMock, hostOutputQueueMock,
+                                           remoteOutputQueueMock, boardId, *m_loggerMock);
+
+    FunctionCallRequestDTO fRequest(stringResolver.getString(BBZSTRID_registeredFunction).value(),
+                                    NULL, 0);
+    UserCallRequestDTO uRequest(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, fRequest);
+    RequestDTO request(1, uRequest);
+    MessageDTO message(boardId, boardId, request);
+
+    std::array<FunctionRegister, 2> functionRegisters = {
         {{BBZSTRID_assertTrue, buzzAssertTrue},
          {BBZSTRID_registerFunction, BittyBuzzUserFunctions::registerFuntion}}};
 
-    SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &functionRegisterMock, functionRegister);
+    SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &functionRegister,
+          functionRegisters);
 
     // Then
     m_bittybuzzVm->step();

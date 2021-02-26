@@ -1,9 +1,9 @@
-function functionType() {
+function registeredFunction() {
     assertTrue(1);
 }
 
 function init() {
-    registerFunction("functionType", functionType);
+    registerFunction("registeredFunction", registeredFunction);
 }
 
 function step() {
