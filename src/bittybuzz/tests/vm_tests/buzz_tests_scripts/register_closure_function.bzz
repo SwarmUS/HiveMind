@@ -1,0 +1,10 @@
+function registered_function(args) {
+    assert_true(args[0] == 42);
+}
+
+function init() {
+    register_function("registeredFunction", registered_function);
+}
+
+function step() {
+}

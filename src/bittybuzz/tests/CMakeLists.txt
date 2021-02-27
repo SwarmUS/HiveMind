@@ -47,26 +47,26 @@ bittybuzz_generate_bytecode(log
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-set(LOGINT_BST ${BITTYBUZZ_HIVEMIND_BST} vm_tests/buzz_tests_scripts/logInt.bst)
+set(LOGINT_BST ${BITTYBUZZ_HIVEMIND_BST} vm_tests/buzz_tests_scripts/log_int.bst)
 list(LENGTH LOGINT_BST TEST)
 bittybuzz_generate_bytecode(log-int 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/logInt.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/log_int.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${LOGINT_BST}")
 
 bittybuzz_generate_bytecode(init-add 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/initAdd.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/init_add.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
 bittybuzz_generate_bytecode(no-step 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/noStep.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/no_step.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-set(UNDEFINED_FUNCTION_BST ${BITTYBUZZ_HIVEMIND_BST} vm_tests/buzz_tests_scripts/undefinedFunction.bst)
+set(UNDEFINED_FUNCTION_BST ${BITTYBUZZ_HIVEMIND_BST} vm_tests/buzz_tests_scripts/undefined_function.bst)
 bittybuzz_generate_bytecode(undefined-function 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/undefinedFunction.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/undefined_function.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${UNDEFINED_FUNCTION_BST}")
 
@@ -77,47 +77,47 @@ bittybuzz_generate_bytecode(swarm
     "${SWARM_BST}")
 
 bittybuzz_generate_bytecode(isNil 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/isNil.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/is_nil.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
 bittybuzz_generate_bytecode(isInt 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/isInt.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/is_int.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
 bittybuzz_generate_bytecode(isFloat 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/isFloat.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/is_float.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
 bittybuzz_generate_bytecode(isString 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/isString.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/is_string.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
 bittybuzz_generate_bytecode(isTable 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/isTable.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/is_table.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
 bittybuzz_generate_bytecode(isClosure 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/isClosure.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/is_closure.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
 bittybuzz_generate_bytecode(isLambdaClosure 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/isLambdaClosure.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/is_lambda_closure.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
 bittybuzz_generate_bytecode(registerClosure_function 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/registerClosure_function.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/register_closure_function.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
 bittybuzz_generate_bytecode(registerClosure_lambda 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/registerClosure_lambda.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/register_closure_lambda.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 

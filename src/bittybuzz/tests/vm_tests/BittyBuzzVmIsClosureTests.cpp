@@ -5,7 +5,7 @@
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
-#include <isClosure_bytecode.h>
+#include <is_closure_bytecode.h>
 
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isClosure) {
     // Given
@@ -17,9 +17,9 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isClosure) {
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
     std::array<UserFunctionRegister, 3> functionRegister = {
-        {{BBZSTRID_isClosure, BittyBuzzUserFunctions::isClosure},
-         {BBZSTRID_assertTrue, buzzAssertTrue},
-         {BBZSTRID_assertFalse, buzzAssertFalse}}};
+        {{BBZSTRID_is_closure, BittyBuzzUserFunctions::isClosure},
+         {BBZSTRID_assert_true, buzzAssertTrue},
+         {BBZSTRID_assert_false, buzzAssertFalse}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, functionRegister);

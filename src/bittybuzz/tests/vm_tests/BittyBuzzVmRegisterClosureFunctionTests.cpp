@@ -7,8 +7,8 @@
 #include <bittybuzz/BittyBuzzStringResolver.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
-#include <registerClosure_function_bytecode.h>
-#include <registerClosure_function_string.h>
+#include <register_closure_function_bytecode.h>
+#include <register_closure_function_string.h>
 
 TEST_F(BittyBuzzVmTestFixture,
        BittyBuzzVm_integration_registerClosure_registerFunction_callOnMessage) {
@@ -34,8 +34,8 @@ TEST_F(BittyBuzzVmTestFixture,
     MessageDTO message(boardId, boardId, request);
 
     std::array<UserFunctionRegister, 2> functionRegisters = {
-        {{BBZSTRID_assertTrue, buzzAssertTrue},
-         {BBZSTRID_registerFunction, BittyBuzzUserFunctions::registerFuntion}}};
+        {{BBZSTRID_assert_true, buzzAssertTrue},
+         {BBZSTRID_register_function, BittyBuzzUserFunctions::registerFuntion}}};
 
     EXPECT_CALL(inputQueueMock, peek).Times(1).WillOnce(testing::Return(message));
     EXPECT_CALL(inputQueueMock, pop).Times(1);

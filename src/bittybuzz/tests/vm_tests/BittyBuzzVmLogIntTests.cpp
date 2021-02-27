@@ -3,7 +3,7 @@
 #include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include <bittybuzz/BittyBuzzUserFunctions.h>
-#include <logInt_bytecode.h>
+#include <log_int_bytecode.h>
 
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_logInt_FunctionCalled) {
     // Given
@@ -15,7 +15,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_logInt_FunctionCalled) {
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
     std::array<UserFunctionRegister, 1> functionRegister = {
-        {{BBZSTRID_logInt, BittyBuzzUserFunctions::logInt}}};
+        {{BBZSTRID_log_int, BittyBuzzUserFunctions::logInt}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, functionRegister);

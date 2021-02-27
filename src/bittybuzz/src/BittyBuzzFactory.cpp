@@ -19,13 +19,13 @@ std::array<UserFunctionRegister, 10> BittyBuzzFactory::createBittyBuzzFunctionRe
     return {{
         {BBZSTRID_log, BittyBuzzUserFunctions::logString},
         {BBZSTRID_logInt, BittyBuzzUserFunctions::logInt},
-        {BBZSTRID_isNil, BittyBuzzUserFunctions::isNil},
-        {BBZSTRID_isInt, BittyBuzzUserFunctions::isInt},
-        {BBZSTRID_isFloat, BittyBuzzUserFunctions::isFloat},
-        {BBZSTRID_isString, BittyBuzzUserFunctions::isString},
-        {BBZSTRID_isTable, BittyBuzzUserFunctions::isTable},
-        {BBZSTRID_isClosure, BittyBuzzUserFunctions::isClosure},
-        {BBZSTRID_isLambdaClosure, BittyBuzzUserFunctions::isLambdaClosure},
-        {BBZSTRID_registerFunction, BittyBuzzUserFunctions::registerFuntion},
+        {BBZSTRID_is_nil, BittyBuzzUserFunctions::isNil},
+        {BBZSTRID_is_int, BittyBuzzUserFunctions::isInt},
+        {BBZSTRID_is_float, BittyBuzzUserFunctions::isFloat},
+        {BBZSTRID_is_string, BittyBuzzUserFunctions::isString},
+        {BBZSTRID_is_table, BittyBuzzUserFunctions::isTable},
+        {BBZSTRID_is_closure, BittyBuzzUserFunctions::isClosure},
+        {BBZSTRID_is_lambda_closure, BittyBuzzUserFunctions::isLambdaClosure},
+        {BBZSTRID_register_function, BittyBuzzUserFunctions::registerFuntion},
     }};
 }

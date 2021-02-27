@@ -28,15 +28,15 @@ function step() {
 function swarm_behavior() {
     # Switch behavior depending on the swarm executing the closure
     if (swarm.id() == 0) {
-        logInt(1)
+        log_int(1)
     }
     else if (swarm.id() == 1) {
-        logInt(2)
-        logInt(2)
+        log_int(2)
+        log_int(2)
     }
     else if (swarm.id() == 2) {
-        logInt(3)
-        logInt(3)
-        logInt(3)
+        log_int(3)
+        log_int(3)
+        log_int(3)
     }
 }

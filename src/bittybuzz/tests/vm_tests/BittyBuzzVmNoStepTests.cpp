@@ -2,7 +2,7 @@
 #include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
 #include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
-#include <noStep_bytecode.h>
+#include <no_step_bytecode.h>
 
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_NoStep_NoError) {
     // Given
