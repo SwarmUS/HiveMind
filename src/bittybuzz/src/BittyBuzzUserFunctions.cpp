@@ -29,7 +29,7 @@ void BittyBuzzUserFunctions::logString() {
     bbzvm_ret0();
 }
 
-void BittyBuzzUserFunctions::registerFuntion() {
+void BittyBuzzUserFunctions::registerClosure() {
     bbzvm_assert_lnum(2); // NOLINT
     bbzobj_t* bbzFunctionName = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
     bbzheap_idx_t bbzClosureHeapIdx = bbzvm_locals_at(2); // NOLINT

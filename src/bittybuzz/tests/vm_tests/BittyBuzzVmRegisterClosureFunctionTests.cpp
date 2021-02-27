@@ -35,7 +35,7 @@ TEST_F(BittyBuzzVmTestFixture,
 
     std::array<UserFunctionRegister, 2> functionRegisters = {
         {{BBZSTRID_assert_true, buzzAssertTrue},
-         {BBZSTRID_register_function, BittyBuzzUserFunctions::registerFuntion}}};
+         {BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure}}};
 
     EXPECT_CALL(inputQueueMock, peek).Times(1).WillOnce(testing::Return(message));
     EXPECT_CALL(inputQueueMock, pop).Times(1);

@@ -3,7 +3,7 @@ function registered_function(args) {
 }
 
 function init() {
-    register_function("registeredFunction", registered_function);
+    register_closure("registeredFunction", registered_function);
 }
 
 function step() {

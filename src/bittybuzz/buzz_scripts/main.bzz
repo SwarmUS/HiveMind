@@ -3,7 +3,7 @@ function init() {
 }
 
 function step() {
-    logInt(test)
+    log_int(test)
     test = test + 1
     log("Hello world!")
 }

@@ -24,7 +24,7 @@ namespace BittyBuzzUserFunctions {
      *@brief register a new function, exposing it to the remote composant of the swarm
      *@details This closure expects two parameters, one stringId (name of the function), and one
      *closure (the function itself) */
-    void registerFuntion();
+    void registerClosure();
 
     /**
      *@brief Checks if a variable is nil

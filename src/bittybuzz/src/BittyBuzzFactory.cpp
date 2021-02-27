@@ -18,7 +18,7 @@ BittyBuzzStringResolver BittyBuzzFactory::createBittyBuzzStringResolver(ILogger&
 std::array<UserFunctionRegister, 10> BittyBuzzFactory::createBittyBuzzFunctionRegisters() {
     return {{
         {BBZSTRID_log, BittyBuzzUserFunctions::logString},
-        {BBZSTRID_logInt, BittyBuzzUserFunctions::logInt},
+        {BBZSTRID_log_int, BittyBuzzUserFunctions::logInt},
         {BBZSTRID_is_nil, BittyBuzzUserFunctions::isNil},
         {BBZSTRID_is_int, BittyBuzzUserFunctions::isInt},
         {BBZSTRID_is_float, BittyBuzzUserFunctions::isFloat},
@@ -26,6 +26,6 @@ std::array<UserFunctionRegister, 10> BittyBuzzFactory::createBittyBuzzFunctionRe
         {BBZSTRID_is_table, BittyBuzzUserFunctions::isTable},
         {BBZSTRID_is_closure, BittyBuzzUserFunctions::isClosure},
         {BBZSTRID_is_lambda_closure, BittyBuzzUserFunctions::isLambdaClosure},
-        {BBZSTRID_register_function, BittyBuzzUserFunctions::registerFuntion},
+        {BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure},
     }};
 }

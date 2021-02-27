@@ -7,4 +7,4 @@ is_string
 is_table
 is_closure
 is_lambda_closure
-register_function
+register_closure
