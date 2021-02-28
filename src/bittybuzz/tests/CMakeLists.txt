@@ -76,47 +76,47 @@ bittybuzz_generate_bytecode(swarm
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${SWARM_BST}")
 
-bittybuzz_generate_bytecode(isNil 
+bittybuzz_generate_bytecode(is-nil 
     ${BZZ_TEST_SCRIPTS_LOCATION}/is_nil.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(isInt 
+bittybuzz_generate_bytecode(is-int 
     ${BZZ_TEST_SCRIPTS_LOCATION}/is_int.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(isFloat 
+bittybuzz_generate_bytecode(is-float 
     ${BZZ_TEST_SCRIPTS_LOCATION}/is_float.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(isString 
+bittybuzz_generate_bytecode(is-string 
     ${BZZ_TEST_SCRIPTS_LOCATION}/is_string.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(isTable 
+bittybuzz_generate_bytecode(is-table 
     ${BZZ_TEST_SCRIPTS_LOCATION}/is_table.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(isClosure 
+bittybuzz_generate_bytecode(is-closure 
     ${BZZ_TEST_SCRIPTS_LOCATION}/is_closure.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(isLambdaClosure 
+bittybuzz_generate_bytecode(is-lambda-closure 
     ${BZZ_TEST_SCRIPTS_LOCATION}/is_lambda_closure.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(registerClosure_function 
+bittybuzz_generate_bytecode(register-closure_function 
     ${BZZ_TEST_SCRIPTS_LOCATION}/register_closure_function.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(registerClosure_lambda 
+bittybuzz_generate_bytecode(register-closure_lambda 
     ${BZZ_TEST_SCRIPTS_LOCATION}/register_closure_lambda.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
@@ -139,15 +139,15 @@ target_link_libraries(${TEST_NAME}
         no-step
         undefined-function 
         swarm
-        isNil
-        isInt
-        isFloat
-        isString
-        isTable
-        isClosure
-        isLambdaClosure
-        registerClosure_function
-        registerClosure_lambda
+        is-nil
+        is-int
+        is-float
+        is-string
+        is-table
+        is-closure
+        is-lambda-closure
+        register-closure_function
+        register-closure_lambda
 )
 
 add_test(NAME ${TEST_NAME}
