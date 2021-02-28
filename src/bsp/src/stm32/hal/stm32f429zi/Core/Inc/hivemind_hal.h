@@ -15,7 +15,16 @@ extern "C" {
 
 #define HUART_PRINT (&huart3)
 #define HUART_HOST (&huart2)
+
+// Change to ESP_SOC to use th spi channel for the SOC on the HiveSight.
+// In the future, there might a flag for the HiveBoard.
+#define ESP_WROOM
+
+#ifdef ESP_WROOM
+#define ESP_SPI (&hspi3)
+#elif ESP_SOC
 #define ESP_SPI (&hspi5)
+#endif
 
 void SystemClock_Config(void);
 
