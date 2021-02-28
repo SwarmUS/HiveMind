@@ -11,7 +11,7 @@ class IBittyBuzzClosureRegister {
     virtual ~IBittyBuzzClosureRegister() = default;
 
     /**
-     *@brief register un function to the list
+     *@brief register a closure to the list
      *@param functionName the name of the function
      *@param closureHeapIdx a pointer to the heap to the closure. When registering, the function
      *will be made permanent.

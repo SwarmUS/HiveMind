@@ -35,11 +35,9 @@ void BittyBuzzUserFunctions::registerClosure() {
     bbzheap_idx_t bbzClosureHeapIdx = bbzvm_locals_at(2); // NOLINT
     bbzobj_t* bbzClosure = bbzheap_obj_at(bbzClosureHeapIdx); // NOLINT
 
-    // TODO: add support for labda, use make_permanent to avoid gc
-    if (bbztype_isstring(*bbzFunctionName) != 1 && bbztype_isclosure(*bbzClosure) != 1 &&
-        bbztype_isclosurelambda(*bbzClosure) == 1) {
+    if (!bbztype_isstring(*bbzFunctionName) && !bbztype_isclosure(*bbzClosure)) {
         BittyBuzzSystem::g_logger->log(LogLevel::Info,
-                                       "BBZ: invalid type while registering function");
+                                       "BBZ: invalid type when registering function");
         return;
     }
 
@@ -49,8 +47,11 @@ void BittyBuzzUserFunctions::registerClosure() {
     if (optionString) {
         // Store the function name
         // TODO: add support for table with arg name as key and
-        BittyBuzzSystem::g_closureRegister->registerClosure(optionString.value(),
-                                                            bbzClosureHeapIdx);
+        bool ret = BittyBuzzSystem::g_closureRegister->registerClosure(optionString.value(),
+                                                                       bbzClosureHeapIdx);
+        if (!ret) {
+            BittyBuzzSystem::g_logger->log(LogLevel::Warn, "BBZ: Could not register closure");
+        }
 
     } else {
 
