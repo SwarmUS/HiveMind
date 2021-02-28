@@ -45,6 +45,7 @@ if(ENABLE_TARGET_IPERF_SERVER)
 endif()
 
 # Includes
+include(utils)
 include(ros/generators.cmake)
 include(catkin/common)
 include(propolis/common)

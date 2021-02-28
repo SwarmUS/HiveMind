@@ -4,6 +4,9 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BittyBuzz")
 include(bittybuzz/common)
 include(bittybuzz_config.cmake) # not a module, need to specify "".cmake"
 
+# Settings
+configure_file(include/bittybuzz/BittyBuzzSettings.in.h include/bittybuzz/BittyBuzzSettings.h)
+
 # Deps
 bittybuzz_fetch()
 find_package(BittyBuzz)
@@ -59,6 +62,9 @@ target_include_directories(${LIB_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
+
+        #Include the generated BittyBuzzSettings.h
+        ${CMAKE_CURRENT_BINARY_DIR}/include
     PRIVATE
         src
         include/bittybuzz

@@ -1,10 +1,3 @@
-function (set_default value default)
-    if("${${value}}" STREQUAL "")
-        message(STATUS "Using default value for ${value}: ${default}")
-        set(${value} ${default} PARENT_SCOPE)
-    endif()
-endfunction()
-
 set_default(UUID 1)
 set_default(HOST_PORT 55551)
 set_default(HOST_IP "192.168.1.101")

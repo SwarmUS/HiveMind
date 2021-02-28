@@ -2,6 +2,7 @@
 #define __BITTYBUZZCLOSUREREGISTER_H_
 
 #include "IBittyBuzzClosureRegister.h"
+#include "bittybuzz/BittyBuzzSettings.h"
 #include <bbzvm.h>
 #include <cstdint>
 #include <functional>
@@ -16,7 +17,7 @@ class BittyBuzzClosureRegister : public IBittyBuzzClosureRegister {
 
     std::optional<bbzheap_idx_t> getClosureHeapIdx(const char* functionName) const override;
 
-    constexpr static uint16_t m_maxSize = 8;
+    constexpr static uint16_t m_maxSize = BBZ_CLOSURE_REGISTER_LENGTH;
 
   private:
     std::array<std::tuple<size_t, bbzheap_idx_t>, m_maxSize> m_closureRegisters;
