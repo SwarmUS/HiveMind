@@ -73,7 +73,7 @@ FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
         bbzvm_push(closureHeapIdx.value());
         bbzvm_push(table);
         bbzvm_closure_call(1);
-        bbzvm_pop(); // Pop seldf table
+        bbzvm_pop(); // Pop self table
 
         // response
         return FunctionCallResponseDTO(GenericResponseStatusDTO::Ok, "");

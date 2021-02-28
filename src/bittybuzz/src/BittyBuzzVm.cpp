@@ -15,7 +15,7 @@ bool BittyBuzzVm::step() {
         for (uint16_t i = 0; i < messagesLength; i++) {
             if (!m_messageHandler.processMessage()) {
                 m_logger.log(LogLevel::Warn,
-                             "BBVM: Could not process message or the queue is full");
+                             "BBVM: Could not process message or the queue output is full");
             }
         }
         return true;
