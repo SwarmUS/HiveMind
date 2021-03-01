@@ -3,6 +3,7 @@
 
 #include "IBittyBuzzClosureRegister.h"
 #include "IBittyBuzzMessageHandler.h"
+#include <bsp/IBSP.h>
 #include <cpp-common/ICircularQueue.h>
 #include <hivemind-host/MessageDTO.h>
 #include <logger/ILogger.h>
@@ -13,7 +14,7 @@ class BittyBuzzMessageHandler : public IBittyBuzzMessageHandler {
                             ICircularQueue<MessageDTO>& inputQueue,
                             ICircularQueue<MessageDTO>& hostQueue,
                             ICircularQueue<MessageDTO>& remoteQueue,
-                            uint16_t bspuuid,
+                            const IBSP& bsp,
                             ILogger& logger);
 
     ~BittyBuzzMessageHandler() override = default;
@@ -27,7 +28,7 @@ class BittyBuzzMessageHandler : public IBittyBuzzMessageHandler {
     ICircularQueue<MessageDTO>& m_inputQueue;
     ICircularQueue<MessageDTO>& m_hostQueue;
     ICircularQueue<MessageDTO>& m_remoteQueue;
-    const uint16_t m_uuid;
+    const IBSP& m_bsp;
     ILogger& m_logger;
 
     // handling funciton

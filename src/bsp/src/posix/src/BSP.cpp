@@ -5,6 +5,7 @@
 #include <Task.h>
 #include <bsp/BSPContainer.h>
 #include <hive_mind/ExampleMessage.h>
+#include <random>
 
 /**
  * @brief Task that kills FreeRTOS when ROS node is stopped
@@ -41,7 +42,9 @@ void exampleTopicPublish(void* param) {
 BSP::BSP() :
     m_rosWatchTask("ros_watch", tskIDLE_PRIORITY + 1, rosWatcher, NULL),
     m_exampleTopicPublishTask(
-        "ros_watch", tskIDLE_PRIORITY + 1, exampleTopicPublish, &m_rosNodeHandle) {}
+        "ros_watch", tskIDLE_PRIORITY + 1, exampleTopicPublish, &m_rosNodeHandle),
+    m_rng(std::random_device()()),
+    m_distribution(0, UINT64_MAX) {}
 
 BSP::~BSP() = default;
 
@@ -62,3 +65,12 @@ void BSP::initChip(void* args) {
 std::shared_ptr<ros::NodeHandle> BSP::getRosNodeHandle() { return m_rosNodeHandle; }
 
 uint16_t BSP::getUUId() const { return SettingsContainer::getUUID(); }
+
+uint64_t BSP::generateRandomNumber() {
+
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_int_distribution<uint64_t> dist(1, UINT32_MAX);
+
+    return dist(mt);
+}

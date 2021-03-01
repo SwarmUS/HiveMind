@@ -83,7 +83,7 @@ class BittyBuzzMessageHandlerFixture : public testing::Test {
         // Message Handler
         m_bbzMessageHandler = new BittyBuzzMessageHandler(
             m_closureRegisterMock, m_inputQueueMock, m_hostOutputQueueMock, m_remoteOutputQueueMock,
-            m_uuid, *m_loggerMock);
+            *m_bspMock, *m_loggerMock);
     }
 
     void TearDown() override {

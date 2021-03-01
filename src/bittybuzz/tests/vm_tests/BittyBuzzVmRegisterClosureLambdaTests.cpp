@@ -1,5 +1,6 @@
 #include "BittyBuzzVmFixture.h"
 #include "BittyBuzzVmTestsUtils.h"
+#include "mocks/BSPInterfaceMock.h"
 #include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
 #include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
@@ -49,6 +50,7 @@ TEST_F(BittyBuzzVmTestFixture,
        BittyBuzzVm_integration_registerClosure_registerLambda_callOnMessage) {
     // Given
     uint16_t boardId = 42;
+    BSPInterfaceMock bspMock(boardId);
     CircularQueueInterfaceMock<MessageDTO> inputQueueMock;
     CircularQueueInterfaceMock<MessageDTO> hostOutputQueueMock;
     CircularQueueInterfaceMock<MessageDTO> remoteOutputQueueMock;
@@ -59,7 +61,7 @@ TEST_F(BittyBuzzVmTestFixture,
                                            *m_loggerMock);
 
     BittyBuzzMessageHandler messageHandler(closureRegister, inputQueueMock, hostOutputQueueMock,
-                                           remoteOutputQueueMock, boardId, *m_loggerMock);
+                                           remoteOutputQueueMock, bspMock, *m_loggerMock);
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
 
     std::array<FunctionCallArgumentDTO, 1> fArgs = {{{(int64_t)42}}};

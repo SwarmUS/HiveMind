@@ -2,6 +2,7 @@
 #define __BITTYBUZZMESSAGESERVICE_H_
 
 #include "IBittyBuzzMessageService.h"
+#include <bsp/IBSP.h>
 #include <cpp-common/ICircularQueue.h>
 #include <logger/ILogger.h>
 
@@ -9,7 +10,7 @@ class BittyBuzzMessageService : public IBittyBuzzMessageService {
   public:
     BittyBuzzMessageService(ICircularQueue<MessageDTO>& hostQueue,
                             ICircularQueue<MessageDTO>& remoteQueue,
-                            uint16_t bspuuid,
+                            IBSP& bsp,
                             ILogger& logger);
 
     ~BittyBuzzMessageService() override = default;
@@ -22,7 +23,7 @@ class BittyBuzzMessageService : public IBittyBuzzMessageService {
   private:
     ICircularQueue<MessageDTO>& m_hostQueue;
     ICircularQueue<MessageDTO>& m_remoteQueue;
-    const uint16_t m_uuid;
+    IBSP& m_bsp;
     ILogger& m_logger;
 };
 

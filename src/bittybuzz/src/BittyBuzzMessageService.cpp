@@ -2,9 +2,9 @@
 
 BittyBuzzMessageService::BittyBuzzMessageService(ICircularQueue<MessageDTO>& hostQueue,
                                                  ICircularQueue<MessageDTO>& remoteQueue,
-                                                 uint16_t bspuuid,
+                                                 IBSP& bsp,
                                                  ILogger& logger) :
-    m_hostQueue(hostQueue), m_remoteQueue(remoteQueue), m_uuid(bspuuid), m_logger(logger) {}
+    m_hostQueue(hostQueue), m_remoteQueue(remoteQueue), m_bsp(bsp), m_logger(logger) {}
 
 bool BittyBuzzMessageService::callFunction(uint16_t hostId,
                                            const char* functionName,
@@ -15,15 +15,16 @@ bool BittyBuzzMessageService::callFunction(uint16_t hostId,
     UserCallRequestDTO uReq(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, fReq);
 
     // TODO: dertermine how we number our requests
-    RequestDTO req(1, uReq);
-    MessageDTO message(m_uuid, hostId, req);
+    uint16_t uuid = m_bsp.getUUId();
+    RequestDTO req(m_bsp.generateRandomNumber(), uReq);
+    MessageDTO message(uuid, hostId, req);
     // Broadcast
     if (hostId == 0) {
         return m_hostQueue.push(message) && m_remoteQueue.push(message);
     }
 
     // Host
-    if (hostId == m_uuid) {
+    if (hostId == uuid) {
         return m_hostQueue.push(message);
     }
 

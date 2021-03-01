@@ -7,13 +7,13 @@ BittyBuzzMessageHandler::BittyBuzzMessageHandler(const IBittyBuzzClosureRegister
                                                  ICircularQueue<MessageDTO>& inputQueue,
                                                  ICircularQueue<MessageDTO>& hostQueue,
                                                  ICircularQueue<MessageDTO>& remoteQueue,
-                                                 uint16_t bspuuid,
+                                                 const IBSP& bsp,
                                                  ILogger& logger) :
     m_closureRegister(closureRegister),
     m_inputQueue(inputQueue),
     m_hostQueue(hostQueue),
     m_remoteQueue(remoteQueue),
-    m_uuid(bspuuid),
+    m_bsp(bsp),
     m_logger(logger) {}
 
 bool BittyBuzzMessageHandler::processMessage() {
@@ -22,7 +22,7 @@ bool BittyBuzzMessageHandler::processMessage() {
     if (message) {
         m_inputQueue.pop();
         const MessageDTO& messageDTO = message.value();
-        if (messageDTO.getDestinationId() == m_uuid) {
+        if (messageDTO.getDestinationId() == m_bsp.getUUId()) {
             return handleMessage(message.value());
         }
 
@@ -143,9 +143,10 @@ bool BittyBuzzMessageHandler::handleMessage(const MessageDTO& message) {
     if (const auto* request = std::get_if<RequestDTO>(&variantMsg)) {
         ResponseDTO response = handleRequest(*request);
 
-        MessageDTO responseMessage(m_uuid, message.getSourceId(), response);
+        uint16_t uuid = m_bsp.getUUId();
+        MessageDTO responseMessage(uuid, message.getSourceId(), response);
 
-        if (responseMessage.getDestinationId() == m_uuid) {
+        if (responseMessage.getDestinationId() == uuid) {
             // Sending response to host
             return m_hostQueue.push(responseMessage);
         }

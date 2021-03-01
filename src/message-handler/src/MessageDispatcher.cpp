@@ -4,13 +4,13 @@ MessageDispatcher::MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
                                      ICircularQueue<MessageDTO>& hostOutputQ,
                                      ICircularQueue<MessageDTO>& remoteOutputQ,
                                      IHiveMindHostDeserializer& deserializer,
-                                     uint16_t bspUuid,
+                                     const IBSP& bsp,
                                      ILogger& logger) :
     m_buzzOutputQueue(buzzOutputQ),
     m_hostOutputQueue(hostOutputQ),
     m_remoteOutputQueue(remoteOutputQ),
     m_deserializer(deserializer),
-    m_bspUuid(bspUuid),
+    m_bsp(bsp),
     m_logger(logger) {}
 
 bool MessageDispatcher::deserializeAndDispatch() {
@@ -18,7 +18,7 @@ bool MessageDispatcher::deserializeAndDispatch() {
     if (m_deserializer.deserializeFromStream(message)) {
 
         uint32_t destinationId = message.getDestinationId();
-        if (destinationId == m_bspUuid) {
+        if (destinationId == m_bsp.getUUId()) {
             return dispatchMessage(message);
         }
 
@@ -81,7 +81,7 @@ bool MessageDispatcher::dispatchResponse(const MessageDTO& message, const Respon
     }
     // Unknow response, just pipe it to the host since it won't be recognized by buzz since it uses
     // the same lib, note that generic response is included here. Buzz don't need a generic response
-    if (message.getDestinationId() == m_bspUuid) {
+    if (message.getDestinationId() == m_bsp.getUUId()) {
         return m_hostOutputQueue.push(message);
     }
     // Not recognized and not for here, send it to remote
