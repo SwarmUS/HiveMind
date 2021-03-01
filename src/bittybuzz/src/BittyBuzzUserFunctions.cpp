@@ -59,6 +59,20 @@ void BittyBuzzUserFunctions::registerClosure() {
                                        "BBZ: String id not found when registering function");
     }
 }
+
+void BittyBuzzUserFunctions::callHostFunction() {
+    bbzvm_assert_lnum(3); // NOLINT
+    bbzobj_t* bbzId = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    bbzobj_t* bbzFunctionName = bbzheap_obj_at(bbzvm_locals_at(2)); // NOLINT
+    // bbzobj_t* bbzArgsTable = bbzheap_obj_at(bbzvm_locals_at(3)); // NOLINT
+
+    std::optional<const char*> functionName =
+        BittyBuzzSystem::g_stringResolver->getString(bbzFunctionName->s.value);
+
+    BittyBuzzSystem::g_messageService->callFunction((uint16_t)bbzId->i.value, functionName.value(),
+                                                    NULL, 0);
+}
+
 void BittyBuzzUserFunctions::isNil() {
     bbzvm_assert_lnum(1); // NOLINT
     bbzobj_t* bbzObj = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT

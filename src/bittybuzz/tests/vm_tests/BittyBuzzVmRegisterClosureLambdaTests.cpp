@@ -2,6 +2,7 @@
 #include "BittyBuzzVmTestsUtils.h"
 #include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
 #include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
+#include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include "mocks/CircularQueueInterfaceMock.h"
 #include <array>
@@ -21,6 +22,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_registerLambda) {
     BittyBuzzClosureRegisterInterfaceMock closureRegister;
     BittyBuzzStringResolverInterfaceMock stringResolver;
     BittyBuzzMessageHandlerInterfaceMock messageHandler;
+    BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
 
     EXPECT_CALL(messageHandler, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     EXPECT_CALL(stringResolver, getString).Times(1).WillOnce(testing::Return(functionName.c_str()));
@@ -33,7 +35,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_registerLambda) {
          {BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &closureRegister,
-          functionRegisters);
+          &messageServiceMock, functionRegisters);
 
     // Then
     // Garbage collecting to make sure the pointer is still valid
@@ -58,6 +60,7 @@ TEST_F(BittyBuzzVmTestFixture,
 
     BittyBuzzMessageHandler messageHandler(closureRegister, inputQueueMock, hostOutputQueueMock,
                                            remoteOutputQueueMock, boardId, *m_loggerMock);
+    BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
 
     std::array<FunctionCallArgumentDTO, 1> fArgs = {{{(int64_t)42}}};
     FunctionCallRequestDTO fRequest(stringResolver.getString(BBZSTRID_registeredLambda).value(),
@@ -76,7 +79,7 @@ TEST_F(BittyBuzzVmTestFixture,
     EXPECT_CALL(hostOutputQueueMock, push(testing::_)).Times(1);
 
     SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &closureRegister,
-          functionRegisters);
+          &messageServiceMock, functionRegisters);
 
     // Then
     // Garbage collecting to make sure the pointer is still valid

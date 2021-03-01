@@ -15,3 +15,10 @@ BittyBuzzClosureRegister& BittyBuzzContainer::getBBZClosureRegister() {
     static BittyBuzzClosureRegister s_bbzClosureRegister;
     return s_bbzClosureRegister;
 }
+
+BittyBuzzMessageService& BittyBuzzContainer::getBBZMessageService() {
+    static BittyBuzzMessageService s_bbzMessageService(
+        MessageHandlerContainer::getHostMsgQueue(), MessageHandlerContainer::getRemoteMsgQueue(),
+        SettingsContainer::getUUID(), LoggerContainer::getLogger());
+    return s_bbzMessageService;
+}

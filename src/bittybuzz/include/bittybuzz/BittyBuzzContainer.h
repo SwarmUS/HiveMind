@@ -4,6 +4,7 @@
 #include "BittyBuzzBytecode.h"
 #include "BittyBuzzClosureRegister.h"
 #include "BittyBuzzMessageHandler.h"
+#include "BittyBuzzMessageService.h"
 #include "BittyBuzzStringResolver.h"
 #include "BittyBuzzVm.h"
 #include "IBittyBuzzVm.h"
@@ -18,6 +19,10 @@ namespace BittyBuzzContainer {
     /**
      *@brief return an instance of a bittybuzz function register */
     BittyBuzzClosureRegister& getBBZClosureRegister();
+
+    /**
+     *@brief return an instance of a bittybuzz message service*/
+    BittyBuzzMessageService& getBBZMessageService();
 
 } // namespace BittyBuzzContainer
 

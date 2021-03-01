@@ -3,6 +3,7 @@
 ILogger* BittyBuzzSystem::g_logger = NULL;
 const IBittyBuzzStringResolver* BittyBuzzSystem::g_stringResolver = NULL;
 IBittyBuzzClosureRegister* BittyBuzzSystem::g_closureRegister = NULL;
+IBittyBuzzMessageService* BittyBuzzSystem::g_messageService = NULL;
 
 void BittyBuzzSystem::functionCall(uint16_t stringId) {
     bbzvm_pushs(stringId);

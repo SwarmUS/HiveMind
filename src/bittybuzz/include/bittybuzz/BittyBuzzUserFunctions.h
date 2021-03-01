@@ -42,7 +42,7 @@ namespace BittyBuzzUserFunctions {
     void registerClosure();
 
     /**
-     *@brief calls a function to a hsot
+     *@brief calls a function to a host
      *@details This closure expects tree parameters. The is of the host to call (0 for prodcast, id
      *for local host), the name of the function, a table with the list of arguments
      *@code

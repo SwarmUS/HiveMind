@@ -27,6 +27,7 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
                       m_stringResolver,
                       BittyBuzzContainer::getBBZMessageHandler(),
                       BittyBuzzContainer::getBBZClosureRegister(),
+                      BittyBuzzContainer::getBBZMessageService(),
                       BSPContainer::getBSP(),
                       m_logger,
                       BittyBuzzFactory::createBittyBuzzFunctionRegisters()) {}
