@@ -3,7 +3,6 @@
 #define __BITTYBUZZBYTECODE_H_
 
 #include "bittybuzz/IBittyBuzzBytecode.h"
-#include <bbzvm.h>
 #include <cstdint>
 #include <logger/ILogger.h>
 

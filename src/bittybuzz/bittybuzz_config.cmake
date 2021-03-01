@@ -1,11 +1,3 @@
-
-function (set_default value default)
-    if("${${value}}" STREQUAL "")
-        message(STATUS "Using default value for ${value}: ${default}")
-        set(${value} ${default} PARENT_SCOPE)
-    endif()
-endfunction()
-
 set_default(BBZHEAP_SIZE 2048)
 set_default(BBZHEAP_ELEMS_PER_TSEG 5)
 set_default(BBZSTACK_SIZE 128)
@@ -19,6 +11,7 @@ set_default(BBZHEAP_GCMARK_DEPTH 8)
 set_default(BBZMSG_IN_PROC_MAX 10)
 set_default(BBZNEIGHBORS_CLR_PERIOD 10)
 set_default(BBZNEIGHBORS_MARK_TIME 4)
+
 
 option(BBZ_XTREME_MEMORY "Enables high memory-optimization." OFF)
 option(BBZ_USE_PRIORITY_SORT "Enables the use of priority sort on out-messages queue." OFF)
@@ -34,3 +27,7 @@ option(BBZ_DISABLE_SWARMLIST_BROADCASTS "Whether we disable the broadcasting of 
 
 # TODO: Check if we need it, I don't think we will compile the code in this project so the flag may not be necessary
 option(BBZ_DISABLE_PY_BEHAV "Disables Python behaviors of closures (make closure behave like in JavaScript)." OFF)
+
+
+# Swarmus BBZ Options
+set_default(BBZ_CLOSURE_REGISTER_LENGTH 32)

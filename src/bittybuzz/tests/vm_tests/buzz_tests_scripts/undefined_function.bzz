@@ -2,5 +2,5 @@ function init() {
 }
 
 function step() {
-    undefinedFunction()
+    undefined_function()
 }

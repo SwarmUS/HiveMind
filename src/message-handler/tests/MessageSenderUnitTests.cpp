@@ -7,7 +7,7 @@ class MessageSenderFixture : public testing::Test {
   protected:
     MessageSender* m_messageSender;
 
-    CircularQueueInterfaceMack<MessageDTO> m_inputQueueMock;
+    CircularQueueInterfaceMock<MessageDTO> m_inputQueueMock;
     HiveMindHostSerializerInterfaceMock m_serializerMock;
     LoggerInterfaceMock m_loggerMock;
     MessageDTO m_message;

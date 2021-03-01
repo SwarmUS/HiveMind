@@ -1,4 +1,7 @@
 #include "BittyBuzzVmFixture.h"
+#include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
+#include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
+#include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
 #include <log_bytecode.h>
@@ -6,24 +9,28 @@
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_log_FunctionCalled) {
     // Given
     uint16_t boardId = 42;
+    BittyBuzzMessageHandlerInterfaceMock messageHandlerMock;
+    BittyBuzzStringResolverInterfaceMock stringResolverMock;
+    BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
 
-    std::array<FunctionRegister, 1> functionRegister = {
+    EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
+
+    std::array<UserFunctionRegister, 1> functionRegister = {
         {{BBZSTRID_log, BittyBuzzUserFunctions::logString}}};
 
-    SetUp(bcode, bcode_size, boardId, functionRegister);
+    SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
+          &closureRegisterMock, functionRegister);
 
     std::optional<const char*> mockRet = "Hello World";
 
-    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString) // #3
-        .Times(1)
-        .WillOnce(testing::Return(mockRet.value()));
+    EXPECT_CALL(stringResolverMock, getString).Times(1).WillOnce(testing::Return(mockRet.value()));
 
     // Then
     m_bittybuzzVm->step();
 
     // Expect
     // Apprend logger prefix string
-    std::string expected = std::string("BittyBuzz: ") + std::string(mockRet.value());
+    std::string expected = std::string("BBZ: ") + std::string(mockRet.value());
 
     EXPECT_STREQ(m_loggerMock->m_logLastFormat.c_str(), expected.c_str());
     EXPECT_EQ(logCounter, 1);

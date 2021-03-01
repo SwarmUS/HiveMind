@@ -4,6 +4,9 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BittyBuzz")
 include(bittybuzz/common)
 include(bittybuzz_config.cmake) # not a module, need to specify "".cmake"
 
+# Settings
+configure_file(include/bittybuzz/BittyBuzzSettings.in.h include/bittybuzz/BittyBuzzSettings.h)
+
 # Deps
 bittybuzz_fetch()
 find_package(BittyBuzz)
@@ -14,7 +17,6 @@ bittybuzz_generate_bytecode(bittybuzz-target
         ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts/main.bzz
         ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts
         ${BITTYBUZZ_HIVEMIND_BST})
-
 
 set(LIB_HEADERS
     include/bittybuzz/BittyBuzzVm.h
@@ -27,19 +29,29 @@ set(LIB_HEADERS
     include/bittybuzz/BittyBuzzStringResolver.h
     include/bittybuzz/IBittyBuzzStringResolver.h
 
+    include/bittybuzz/BittyBuzzClosureRegister.h
+    include/bittybuzz/IBittyBuzzClosureRegister.h
+
+
+    include/bittybuzz/BittyBuzzMessageHandler.h
+    include/bittybuzz/IBittyBuzzMessageHandler.h
+
     include/bittybuzz/BittyBuzzSystem.h
     include/bittybuzz/BittyBuzzFactory.h
+    include/bittybuzz/BittyBuzzContainer.h
     include/bittybuzz/BittyBuzzUserFunctions.h
-
 )
 
 set(LIB_SOURCES
     src/BittyBuzzVm.cpp
     src/BittyBuzzBytecode.cpp
     src/BittyBuzzStringResolver.cpp
+    src/BittyBuzzClosureRegister.cpp
+    src/BittyBuzzMessageHandler.cpp
 
     src/BittyBuzzSystem.cpp
     src/BittyBuzzFactory.cpp
+    src/BittyBuzzContainer.cpp
     src/BittyBuzzUserFunctions.cpp
 )
 
@@ -50,14 +62,21 @@ target_include_directories(${LIB_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
+
+        #Include the generated BittyBuzzSettings.h
+        ${CMAKE_CURRENT_BINARY_DIR}/include
     PRIVATE
         src
+        include/bittybuzz
 )
 
 target_link_libraries(${LIB_NAME}
     PUBLIC
         BittyBuzz
         SwarmUS::HiveMind::Logger
+        SwarmUS::HiveMind::MessageHandler
+        SwarmUS::Propolis::Cpp::Common
+        SwarmUS::Propolis::Pheromones::HiveMind::Host
 
     PRIVATE
         SwarmUS::HiveMind::BSP

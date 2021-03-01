@@ -2,6 +2,8 @@
 #define __BITTYBUZZVM_H_
 
 #include "IBittyBuzzBytecode.h"
+#include "IBittyBuzzClosureRegister.h"
+#include "IBittyBuzzMessageHandler.h"
 #include "IBittyBuzzStringResolver.h"
 #include "IBittyBuzzVm.h"
 #include <array>
@@ -10,14 +12,14 @@
 
 #define BBZ_MSG_BUFF_SIZE 16
 
-class FunctionRegister {
+class UserFunctionRegister {
   public:
-    FunctionRegister(uint8_t strId, bbzvm_funp functionPtr);
+    UserFunctionRegister(uint8_t strId, bbzvm_funp functionPtr);
     uint8_t m_strId;
     bbzvm_funp m_functionPtr;
 
   private:
-    FunctionRegister();
+    UserFunctionRegister();
 };
 
 class BittyBuzzVm : public IBittyBuzzVm {
@@ -26,6 +28,8 @@ class BittyBuzzVm : public IBittyBuzzVm {
      *@brief The constructor of the bbvm
      *@param bytecode the bytecode that the vm will run
      *@param stringResolver the string resolver used in the VM
+     *@param messageHandler a reference to a buzz message handler, called on step
+     *@param closureRegister a reference to the closureRegister
      *@param bsp a reference to the bsp
      *@param logger a reference to a logger
      *@param container the provided iterator
@@ -33,6 +37,8 @@ class BittyBuzzVm : public IBittyBuzzVm {
     template <typename Container>
     BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                 const IBittyBuzzStringResolver& stringResolver,
+                IBittyBuzzMessageHandler& messageHandler,
+                IBittyBuzzClosureRegister& closureRegister,
                 const IBSP& bsp,
                 ILogger& logger,
                 const Container& container);
@@ -48,6 +54,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
   private:
     const IBittyBuzzBytecode& m_bytecode;
     const IBSP& m_bsp;
+    IBittyBuzzMessageHandler& m_messageHandler;
     ILogger& m_logger;
 
     bbzvm_t m_bbzVm;

@@ -2,7 +2,7 @@
 #include "bittybuzz/BittyBuzzSystem.h"
 #include <bbzvm.h>
 
-FunctionRegister::FunctionRegister(uint8_t strId, bbzvm_funp functionPtr) :
+UserFunctionRegister::UserFunctionRegister(uint8_t strId, bbzvm_funp functionPtr) :
     m_strId(strId), m_functionPtr(functionPtr) {}
 
 bool BittyBuzzVm::step() {
@@ -11,6 +11,13 @@ bool BittyBuzzVm::step() {
         bbzvm_process_inmsgs();
         BittyBuzzSystem::functionCall(__BBZSTRID_step);
         bbzvm_process_outmsgs();
+        uint16_t messagesLength = m_messageHandler.messageQueueLength();
+        for (uint16_t i = 0; i < messagesLength; i++) {
+            if (!m_messageHandler.processMessage()) {
+                m_logger.log(LogLevel::Warn,
+                             "BBVM: Could not process message or the queue output is full");
+            }
+        }
         return true;
     }
 

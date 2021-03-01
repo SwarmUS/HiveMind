@@ -46,7 +46,7 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
         file(READ ${BST} CONTENTS)
         file(APPEND ${BST_FILE} "${CONTENTS}")
     endforeach()
-
+    
     # Parsing buzz file
     add_custom_target(${_TARGET}_bzz_parse
             COMMAND ${BZZPAR} ${bzz_source} ${BASM_FILE} ${BST_FILE})

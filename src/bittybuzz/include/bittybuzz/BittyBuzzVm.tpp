@@ -9,14 +9,17 @@
 template <typename Container>
 BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                          const IBittyBuzzStringResolver& stringResolver,
+                         IBittyBuzzMessageHandler& messageHandler,
+                         IBittyBuzzClosureRegister& closureRegister,
                          const IBSP& bsp,
                          ILogger& logger,
                          const Container& container) :
-    m_bytecode(bytecode), m_bsp(bsp), m_logger(logger) {
+    m_bytecode(bytecode), m_bsp(bsp), m_messageHandler(messageHandler), m_logger(logger) {
     // Init global variable
     vm = &m_bbzVm;
     BittyBuzzSystem::g_logger = &logger;
     BittyBuzzSystem::g_stringResolver = &stringResolver;
+    BittyBuzzSystem::g_closureRegister = &closureRegister;
 
     // Init vm
     bbzvm_construct(m_bsp.getUUId());
@@ -25,7 +28,7 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     bbzringbuf_construct(&m_bbzPayloadBuff, m_bbzMsgBuff.data(), 1, m_bbzMsgBuff.size());
 
     // Function registration
-    for (FunctionRegister functionRegister : container) {
+    for (UserFunctionRegister functionRegister : container) {
         bbzvm_function_register(functionRegister.m_strId, functionRegister.m_functionPtr);
     }
 

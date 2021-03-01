@@ -4,6 +4,8 @@ set(TEST_SOURCES
     
     BittyBuzzBytecodeUnitTests.cpp
     BittyBuzzStringResolverUnitTests.cpp
+    BittyBuzzClosureRegisterUnitTests.cpp
+    BittyBuzzMessageHandlerUnitTests.cpp
 
     vm_tests/BittyBuzzVmTestsUtils.cpp
 
@@ -13,6 +15,8 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmNoStepTests.cpp
     vm_tests/BittyBuzzVmSwarmTests.cpp
     vm_tests/BittyBuzzVmUndefinedFunctionTests.cpp
+    vm_tests/BittyBuzzVmRegisterClosureFunctionTests.cpp
+    vm_tests/BittyBuzzVmRegisterClosureLambdaTests.cpp
 
     vm_tests/BittyBuzzVmIsNilTests.cpp
     vm_tests/BittyBuzzVmIsIntTests.cpp
@@ -26,6 +30,9 @@ set(TEST_SOURCES
 set(TEST_HEADERS
     mocks/BSPInterfaceMock.h
     mocks/LoggerInterfaceMock.h
+    mocks/CircularQueueInterfaceMock.h
+    mocks/BittyBuzzClosureRegisterInterfaceMock.h
+    mocks/BittyBuzzMessageHandlerInterfaceMock.h
     
     vm_tests/BittyBuzzVmFixture.h
     vm_tests/BittyBuzzVmTestsUtils.h
@@ -40,26 +47,26 @@ bittybuzz_generate_bytecode(log
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-set(LOGINT_BST ${BITTYBUZZ_HIVEMIND_BST} vm_tests/buzz_tests_scripts/logInt.bst)
+set(LOGINT_BST ${BITTYBUZZ_HIVEMIND_BST} vm_tests/buzz_tests_scripts/log_int.bst)
 list(LENGTH LOGINT_BST TEST)
 bittybuzz_generate_bytecode(log-int 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/logInt.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/log_int.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${LOGINT_BST}")
 
 bittybuzz_generate_bytecode(init-add 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/initAdd.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/init_add.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
 bittybuzz_generate_bytecode(no-step 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/noStep.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/no_step.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-set(UNDEFINED_FUNCTION_BST ${BITTYBUZZ_HIVEMIND_BST} vm_tests/buzz_tests_scripts/undefinedFunction.bst)
+set(UNDEFINED_FUNCTION_BST ${BITTYBUZZ_HIVEMIND_BST} vm_tests/buzz_tests_scripts/undefined_function.bst)
 bittybuzz_generate_bytecode(undefined-function 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/undefinedFunction.bzz 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/undefined_function.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${UNDEFINED_FUNCTION_BST}")
 
@@ -69,38 +76,48 @@ bittybuzz_generate_bytecode(swarm
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${SWARM_BST}")
 
-bittybuzz_generate_bytecode(isNil 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/isNil.bzz 
+bittybuzz_generate_bytecode(is-nil 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/is_nil.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(isInt 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/isInt.bzz 
+bittybuzz_generate_bytecode(is-int 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/is_int.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(isFloat 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/isFloat.bzz 
+bittybuzz_generate_bytecode(is-float 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/is_float.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(isString 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/isString.bzz 
+bittybuzz_generate_bytecode(is-string 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/is_string.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(isTable 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/isTable.bzz 
+bittybuzz_generate_bytecode(is-table 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/is_table.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(isClosure 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/isClosure.bzz 
+bittybuzz_generate_bytecode(is-closure 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/is_closure.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(isLambdaClosure 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/isLambdaClosure.bzz 
+bittybuzz_generate_bytecode(is-lambda-closure 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/is_lambda_closure.bzz 
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
+bittybuzz_generate_bytecode(register-closure_function 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/register_closure_function.bzz 
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
+bittybuzz_generate_bytecode(register-closure_lambda 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/register_closure_lambda.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
@@ -122,13 +139,15 @@ target_link_libraries(${TEST_NAME}
         no-step
         undefined-function 
         swarm
-        isNil
-        isInt
-        isFloat
-        isString
-        isTable
-        isClosure
-        isLambdaClosure
+        is-nil
+        is-int
+        is-float
+        is-string
+        is-table
+        is-closure
+        is-lambda-closure
+        register-closure_function
+        register-closure_lambda
 )
 
 add_test(NAME ${TEST_NAME}

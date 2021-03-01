@@ -14,22 +14,51 @@ void BittyBuzzUserFunctions::logString() {
     bbzobj_t* bbzString = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
 
     if (bbztype_isstring(*bbzString) != 1) {
-        BittyBuzzSystem::g_logger->log(LogLevel::Warn,
-                                       "BittyBuzz: Wrong argument type to logString");
+        BittyBuzzSystem::g_logger->log(LogLevel::Warn, "BBZ: Wrong argument type to logString");
     }
 
     std::optional<const char*> optionString =
         BittyBuzzSystem::g_stringResolver->getString(bbzString->s.value);
 
     if (optionString) {
-        BittyBuzzSystem::g_logger->log(LogLevel::Info, "BittyBuzz: %s", optionString.value());
+        BittyBuzzSystem::g_logger->log(LogLevel::Info, "BBZ: %s", optionString.value());
     } else {
-        BittyBuzzSystem::g_logger->log(LogLevel::Warn, "BittyBuzz: String id not found");
+        BittyBuzzSystem::g_logger->log(LogLevel::Warn, "BBZ: String id not found");
     }
 
     bbzvm_ret0();
 }
 
+void BittyBuzzUserFunctions::registerClosure() {
+    bbzvm_assert_lnum(2); // NOLINT
+    bbzobj_t* bbzFunctionName = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    bbzheap_idx_t bbzClosureHeapIdx = bbzvm_locals_at(2); // NOLINT
+    bbzobj_t* bbzClosure = bbzheap_obj_at(bbzClosureHeapIdx); // NOLINT
+
+    if (!bbztype_isstring(*bbzFunctionName) && !bbztype_isclosure(*bbzClosure)) {
+        BittyBuzzSystem::g_logger->log(LogLevel::Info,
+                                       "BBZ: invalid type when registering function");
+        return;
+    }
+
+    std::optional<const char*> optionString =
+        BittyBuzzSystem::g_stringResolver->getString(bbzFunctionName->s.value);
+
+    if (optionString) {
+        // Store the function name
+        // TODO: add support for table with arg name as key and
+        bool ret = BittyBuzzSystem::g_closureRegister->registerClosure(optionString.value(),
+                                                                       bbzClosureHeapIdx);
+        if (!ret) {
+            BittyBuzzSystem::g_logger->log(LogLevel::Warn, "BBZ: Could not register closure");
+        }
+
+    } else {
+
+        BittyBuzzSystem::g_logger->log(LogLevel::Warn,
+                                       "BBZ: String id not found when registering function");
+    }
+}
 void BittyBuzzUserFunctions::isNil() {
     bbzvm_assert_lnum(1); // NOLINT
     bbzobj_t* bbzObj = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT

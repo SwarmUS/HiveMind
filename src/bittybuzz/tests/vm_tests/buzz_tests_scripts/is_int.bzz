@@ -1,0 +1,23 @@
+function function_type() {
+}
+
+function init() {
+}
+
+function step() {
+    var nil_val = nil;
+    var int_val = 42;
+    var float_val = 42.24;
+    var string_val = "Hello";
+    var table_val = {.0=42, .1=43};
+    var native_closure_val = function_type;
+    var lambda_closure_val = function(){};
+
+    assert_false(is_int(nil_val));
+    assert_true(is_int(int_val));
+    assert_false(is_int(float_val));
+    assert_false(is_int(string_val));
+    assert_false(is_int(table_val));
+    assert_false(is_int(native_closure_val));
+    assert_false(is_int(lambda_closure_val));
+}

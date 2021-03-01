@@ -1,0 +1,6 @@
+function (set_default value default)
+    if("${${value}}" STREQUAL "")
+        message(STATUS "Using default value for ${value}: ${default}")
+        set(${value} ${default} PARENT_SCOPE)
+    endif()
+endfunction()

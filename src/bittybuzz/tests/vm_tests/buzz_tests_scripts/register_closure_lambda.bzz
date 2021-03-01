@@ -1,0 +1,6 @@
+function init() {
+    register_closure("registeredLambda", function(args){assert_true(args[0] == 42);});
+}
+
+function step() {
+}

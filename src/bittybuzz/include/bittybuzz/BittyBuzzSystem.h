@@ -1,6 +1,7 @@
 #ifndef __BITTYBUZZSYSTEM_H_
 #define __BITTYBUZZSYSTEM_H_
 
+#include "IBittyBuzzClosureRegister.h"
 #include "IBittyBuzzStringResolver.h"
 #include <bbzvm.h>
 #include <logger/ILogger.h>
@@ -22,11 +23,17 @@ namespace BittyBuzzSystem {
      *@brief String resolver used for user functions
      **/
     extern const IBittyBuzzStringResolver* g_stringResolver;
+
     /**
-     *@brief Call a bittybuzz function, check the function documentation and verify if you need to
-     *pass parameter via the vm stack
+     *@brief Function register used by the BBVM to register new functions
+     **/
+    extern IBittyBuzzClosureRegister* g_closureRegister;
+
+    /**
+     *@brief Call a bittybuzz function that takes not arguments (init, step, etc),
      *
-     *@param [in] stringId the string ID of the function*/
+     *@param [in] stringId the string ID of the function
+     */
     void functionCall(uint16_t stringId);
 
     /**

@@ -1,14 +1,24 @@
 #include "BittyBuzzVmFixture.h"
+#include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
+#include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
+#include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include <bittybuzz/BittyBuzzUserFunctions.h>
-#include <logInt_bytecode.h>
+#include <log_int_bytecode.h>
 
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_logInt_FunctionCalled) {
     // Given
     uint16_t boardId = 42;
+    BittyBuzzMessageHandlerInterfaceMock messageHandlerMock;
+    BittyBuzzStringResolverInterfaceMock stringResolverMock;
+    BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
 
-    std::array<FunctionRegister, 1> functionRegister = {
-        {{BBZSTRID_logInt, BittyBuzzUserFunctions::logInt}}};
-    SetUp(bcode, bcode_size, boardId, functionRegister);
+    EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
+
+    std::array<UserFunctionRegister, 1> functionRegister = {
+        {{BBZSTRID_log_int, BittyBuzzUserFunctions::logInt}}};
+
+    SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
+          &closureRegisterMock, functionRegister);
 
     // Then
     m_bittybuzzVm->step();
