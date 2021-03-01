@@ -16,6 +16,11 @@ class IBSP {
      * @brief Returns the unique id associated with the board
      * */
     virtual uint16_t getUUId() const = 0;
+
+    /**
+     * @brief Returns a random number, use a RNG if available
+     * */
+    virtual uint16_t generateRandomNumber() const = 0;
 };
 
 /**
