@@ -10,7 +10,7 @@ class BittyBuyzzMessageServiceInterfaceMock : public IBittyBuzzMessageService {
 
     MOCK_METHOD(bool,
                 callFunction,
-                (uint16_t id,
+                (uint16_t hostId,
                  const char* functionName,
                  const FunctionCallArgumentDTO* args,
                  uint16_t argsLength),

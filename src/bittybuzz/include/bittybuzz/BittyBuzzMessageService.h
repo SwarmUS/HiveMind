@@ -14,7 +14,7 @@ class BittyBuzzMessageService : public IBittyBuzzMessageService {
 
     ~BittyBuzzMessageService() override = default;
 
-    bool callFunction(uint16_t id,
+    bool callFunction(uint16_t hostId,
                       const char* functionName,
                       const FunctionCallArgumentDTO* args,
                       uint16_t argsLength) override;

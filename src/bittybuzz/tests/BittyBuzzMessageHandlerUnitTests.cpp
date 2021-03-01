@@ -11,6 +11,7 @@
 #include <bittybuzz/BittyBuzzVm.h>
 #include <gtest/gtest.h>
 
+// Mock the bytecode, we just need the VM to push in it so the tests works
 const uint8_t* mockbcodeFetcher(bbzpc_t offset, uint8_t size) {
     (void)offset;
     (void)size;

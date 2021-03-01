@@ -1,6 +1,5 @@
 #include "bittybuzz/BittyBuzzStringResolver.h"
 #include "mocks/LoggerInterfaceMock.h"
-
 #include <array>
 #include <gtest/gtest.h>
 

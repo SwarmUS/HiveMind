@@ -7,7 +7,7 @@ class IBittyBuzzMessageService {
   public:
     virtual ~IBittyBuzzMessageService() = default;
 
-    virtual bool callFunction(uint16_t id,
+    virtual bool callFunction(uint16_t hostId,
                               const char* functionName,
                               const FunctionCallArgumentDTO* args,
                               uint16_t argsLength) = 0;

@@ -6,22 +6,24 @@ BittyBuzzMessageService::BittyBuzzMessageService(ICircularQueue<MessageDTO>& hos
                                                  ILogger& logger) :
     m_hostQueue(hostQueue), m_remoteQueue(remoteQueue), m_uuid(bspuuid), m_logger(logger) {}
 
-bool BittyBuzzMessageService::callFunction(uint16_t id,
+bool BittyBuzzMessageService::callFunction(uint16_t hostId,
                                            const char* functionName,
                                            const FunctionCallArgumentDTO* args,
                                            uint16_t argsLength) {
     FunctionCallRequestDTO fReq(functionName, args, argsLength);
     // Target of a usercall from buzz is always to a host
     UserCallRequestDTO uReq(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, fReq);
+
+    // TODO: dertermine how we number our requests
     RequestDTO req(1, uReq);
-    MessageDTO message(m_uuid, id, req);
+    MessageDTO message(m_uuid, hostId, req);
     // Broadcast
-    if (id == 0) {
+    if (hostId == 0) {
         return m_hostQueue.push(message) && m_remoteQueue.push(message);
     }
 
     // Host
-    if (id == m_uuid) {
+    if (hostId == m_uuid) {
         return m_hostQueue.push(message);
     }
 
