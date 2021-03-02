@@ -62,7 +62,7 @@ FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
             }
 
             else if (const float* floatVal = std::get_if<float>(&arg)) {
-                bbzheap_idx_t bbzFloatVal = bbzfloat_new(*floatVal);
+                bbzheap_idx_t bbzFloatVal = bbzfloat_new(bbzfloat_fromfloat(*floatVal));
                 bbztable_set(table, tableIdx, bbzFloatVal);
             }
         }

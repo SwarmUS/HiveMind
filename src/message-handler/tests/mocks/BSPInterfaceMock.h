@@ -14,7 +14,7 @@ class BSPInterfaceMock final : public IBSP {
 
     uint16_t getUUId() const override { return m_boardId; }
 
-    uint64_t generateRandomNumber() override { return 42; }
+    uint32_t generateRandomNumber() override { return 42; }
 };
 
 #endif // __BSPINTERFACEMOCK_H_

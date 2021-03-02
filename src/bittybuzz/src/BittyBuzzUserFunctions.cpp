@@ -1,6 +1,13 @@
 #include "bittybuzz/BittyBuzzUserFunctions.h"
 #include "bittybuzz/BittyBuzzSystem.h"
 
+struct ForeachContext {
+    bool m_err = false;
+    std::array<FunctionCallArgumentDTO, FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>
+        m_arguments = {};
+    uint16_t m_length = 0;
+};
+
 void BittyBuzzUserFunctions::logInt() {
     bbzvm_assert_lnum(1); // NOLINT
     bbzobj_t* intVal = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
@@ -64,13 +71,42 @@ void BittyBuzzUserFunctions::callHostFunction() {
     bbzvm_assert_lnum(3); // NOLINT
     bbzobj_t* bbzId = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
     bbzobj_t* bbzFunctionName = bbzheap_obj_at(bbzvm_locals_at(2)); // NOLINT
-    // bbzobj_t* bbzArgsTable = bbzheap_obj_at(bbzvm_locals_at(3)); // NOLINT
+    bbzheap_idx_t bbzArgsTableHeapIdx = bbzvm_locals_at(3); // NOLINT
 
     std::optional<const char*> functionName =
         BittyBuzzSystem::g_stringResolver->getString(bbzFunctionName->s.value);
 
+    ForeachContext context;
+    auto callback = [](bbzheap_idx_t key, bbzheap_idx_t value, void* params) {
+        ForeachContext* context = (ForeachContext*)params;
+        bbzobj_t* keyObj = bbzheap_obj_at(key); // NOLINT
+        bbzobj_t* valueObj = bbzheap_obj_at(value); // NOLINT
+
+        if (!bbztype_isint(*keyObj) || context->m_err) {
+            context->m_err = true;
+            return;
+        }
+
+        if (bbztype_isint(*valueObj)) {
+            context->m_arguments[context->m_length++] =
+                FunctionCallArgumentDTO((int64_t)valueObj->i.value);
+        }
+        if (bbztype_isfloat(*valueObj)) {
+            context->m_arguments[context->m_length++] =
+                FunctionCallArgumentDTO(bbzfloat_tofloat(valueObj->f.value));
+        }
+    };
+
+    bbztable_foreach(bbzArgsTableHeapIdx, callback, &context);
+
+    if (!context.m_err) {
+        BittyBuzzSystem::g_logger->log(LogLevel::Warn,
+                                       "BBZ: Error parsing argument list, host FCall");
+        return;
+    }
+
     BittyBuzzSystem::g_messageService->callFunction((uint16_t)bbzId->i.value, functionName.value(),
-                                                    NULL, 0);
+                                                    context.m_arguments.data(), context.m_length);
 }
 
 void BittyBuzzUserFunctions::isNil() {

@@ -64,7 +64,7 @@ TEST_F(BittyBuzzVmTestFixture,
                                            remoteOutputQueueMock, bspMock, *m_loggerMock);
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
 
-    std::array<FunctionCallArgumentDTO, 1> fArgs = {{{(int64_t)42}}};
+    std::array<FunctionCallArgumentDTO, 1> fArgs = {{{(float)42.24}}};
     FunctionCallRequestDTO fRequest(stringResolver.getString(BBZSTRID_registeredLambda).value(),
                                     fArgs.data(), fArgs.size());
     UserCallRequestDTO uRequest(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, fRequest);

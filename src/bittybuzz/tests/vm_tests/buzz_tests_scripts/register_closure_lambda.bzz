@@ -1,5 +1,5 @@
 function init() {
-    register_closure("registeredLambda", function(args){assert_true(args[0] == 42);});
+    register_closure("registeredLambda", function(args){assert_true(args[0] == 42.24);});
 }
 
 function step() {

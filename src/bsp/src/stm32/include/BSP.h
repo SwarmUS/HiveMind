@@ -12,7 +12,7 @@ class BSP : public IBSP {
 
     uint16_t getUUId() const override;
 
-    uint64_t generateRandomNumber() override;
+    uint32_t generateRandomNumber() override;
 };
 
 #endif // __BSP_H_

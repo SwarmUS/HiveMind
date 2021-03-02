@@ -24,6 +24,7 @@
 #include "dma.h"
 #include "gpio.h"
 #include "lwip.h"
+#include "rng.h"
 #include "spi.h"
 #include "usart.h"
 

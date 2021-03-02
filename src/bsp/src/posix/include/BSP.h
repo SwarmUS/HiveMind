@@ -15,7 +15,7 @@ class BSP : public IBSP {
 
     uint16_t getUUId() const override;
 
-    uint64_t generateRandomNumber() override;
+    uint32_t generateRandomNumber() override;
 
     std::shared_ptr<ros::NodeHandle> getRosNodeHandle();
 
@@ -25,7 +25,7 @@ class BSP : public IBSP {
     BaseTask<configMINIMAL_STACK_SIZE> m_exampleTopicPublishTask;
 
     std::mt19937 m_rng;
-    std::uniform_int_distribution<uint64_t> m_distribution;
+    std::uniform_int_distribution<uint32_t> m_distribution;
 };
 
 #endif // __BSP_H_

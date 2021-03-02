@@ -18,9 +18,9 @@ class IBSP {
     virtual uint16_t getUUId() const = 0;
 
     /**
-     * @brief Returns a positive random number, use a hardware RNG if available
+     * @brief Returns a positive random number, uses an hardware RNG if available
      * */
-    virtual uint64_t generateRandomNumber() = 0;
+    virtual uint32_t generateRandomNumber() = 0;
 };
 
 /**

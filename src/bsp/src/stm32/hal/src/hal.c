@@ -11,6 +11,7 @@ void Hal_init() {
 
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
+    HAL_RNG_Init(HRNG);
 
     /* Configure the system clock */
     SystemClock_Config();
@@ -30,7 +31,6 @@ void Hal_init() {
     UartPrint_init();
 
     MX_LWIP_Init();
-
 #ifdef IPERF_SERVER
     lwiperf_start_tcp_server_default(NULL, NULL);
 #endif
@@ -40,4 +40,11 @@ uint32_t Hal_calculateCRC32(const uint8_t* buffer, uint32_t length) {
     // TODO: Determine what we do if we have a buffer that is not a multiple of 32 bytes
     // The HAL_CRC function takes the number of 32 bit words and not the number of bytes
     return HAL_CRC_Calculate(&hcrc, (uint32_t*)buffer, length >> 2);
+}
+
+uint32_t Hal_generateRandomNumber() {
+    uint32_t random = 0;
+    // TODO: Error handling if the generation fails
+    HAL_RNG_GenerateRandomNumber(HRNG, &random);
+    return random;
 }
