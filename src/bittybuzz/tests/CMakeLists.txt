@@ -18,6 +18,7 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmUndefinedFunctionTests.cpp
     vm_tests/BittyBuzzVmRegisterClosureFunctionTests.cpp
     vm_tests/BittyBuzzVmRegisterClosureLambdaTests.cpp
+    vm_tests/BittyBuzzVmCallHostFunctionTests.cpp
 
     vm_tests/BittyBuzzVmIsNilTests.cpp
     vm_tests/BittyBuzzVmIsIntTests.cpp
@@ -123,6 +124,10 @@ bittybuzz_generate_bytecode(register-closure_lambda
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
+bittybuzz_generate_bytecode(call-host-function
+    ${BZZ_TEST_SCRIPTS_LOCATION}/call_host_function.bzz
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
 
 add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})
 
@@ -150,6 +155,7 @@ target_link_libraries(${TEST_NAME}
         is-lambda-closure
         register-closure_function
         register-closure_lambda
+        call-host-function
 )
 
 add_test(NAME ${TEST_NAME}

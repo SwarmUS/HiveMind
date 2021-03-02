@@ -1,0 +1,6 @@
+function init() {
+}
+
+function step() {
+  call_host_function(id, "hostFunction", {.0 = 42, .1 = 42.24});
+}
