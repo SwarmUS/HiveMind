@@ -21,7 +21,7 @@ class BittyBuzzMessageServiceTestFixture : public testing::Test {
     std::string m_logLastFormat;
 
     // DTO
-    std::array<FunctionCallArgumentDTO, 1> m_arguments = {{{m_argVal}}};
+    std::array<FunctionCallArgumentDTO, 1> m_arguments = {{m_argVal}};
 
     void SetUp() override {
         m_loggerMock = new LoggerInterfaceMock(m_logCounter, m_logLastFormat);
