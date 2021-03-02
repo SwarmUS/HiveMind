@@ -219,7 +219,7 @@ int main(int argc, char** argv) {
     s_tcpDispatchTask.start();
     s_uartMessageSender.start();
     s_tcpMessageSender.start();
-    s_spiMessageSender.start();
+    // s_spiMessageSender.start();
 
     Task::startScheduler();
 
