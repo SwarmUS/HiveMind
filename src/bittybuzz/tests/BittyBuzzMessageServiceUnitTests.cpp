@@ -37,7 +37,7 @@ class BittyBuzzMessageServiceTestFixture : public testing::Test {
     }
 };
 
-TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callFunction_remote_valid) {
+TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callHostFunction_remote_valid) {
     // Given
     MessageDTO messageSent;
     EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
@@ -46,8 +46,8 @@ TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callFunction_
         .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
 
     // Then
-    bool ret = m_messageService->callFunction(m_remoteUUID, m_functionName.c_str(),
-                                              m_arguments.data(), m_arguments.size());
+    bool ret = m_messageService->callHostFunction(m_remoteUUID, m_functionName.c_str(),
+                                                  m_arguments.data(), m_arguments.size());
 
     // Expect
     auto req = std::get<RequestDTO>(messageSent.getMessage());
@@ -60,7 +60,8 @@ TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callFunction_
     EXPECT_STREQ(freq.getFunctionName(), m_functionName.c_str());
 }
 
-TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callFunction_remote_failToPush) {
+TEST_F(BittyBuzzMessageServiceTestFixture,
+       BittyBuzzMessageService_callHostFunction_remote_failToPush) {
     // Given
     MessageDTO messageSent;
     EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
@@ -69,8 +70,8 @@ TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callFunction_
         .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(false)));
 
     // Then
-    bool ret = m_messageService->callFunction(m_remoteUUID, m_functionName.c_str(),
-                                              m_arguments.data(), m_arguments.size());
+    bool ret = m_messageService->callHostFunction(m_remoteUUID, m_functionName.c_str(),
+                                                  m_arguments.data(), m_arguments.size());
 
     // Expect
     auto req = std::get<RequestDTO>(messageSent.getMessage());
@@ -83,7 +84,7 @@ TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callFunction_
     EXPECT_STREQ(freq.getFunctionName(), m_functionName.c_str());
 }
 
-TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callFunction_host_valid) {
+TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callHostFunction_host_valid) {
     // Given
     MessageDTO messageSent;
     EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).Times(0);
@@ -92,8 +93,8 @@ TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callFunction_
         .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
 
     // Then
-    bool ret = m_messageService->callFunction(m_bspUUID, m_functionName.c_str(), m_arguments.data(),
-                                              m_arguments.size());
+    bool ret = m_messageService->callHostFunction(m_bspUUID, m_functionName.c_str(),
+                                                  m_arguments.data(), m_arguments.size());
 
     // Expect
     auto req = std::get<RequestDTO>(messageSent.getMessage());
@@ -106,7 +107,8 @@ TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callFunction_
     EXPECT_STREQ(freq.getFunctionName(), m_functionName.c_str());
 }
 
-TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callFunction_host_failToPush) {
+TEST_F(BittyBuzzMessageServiceTestFixture,
+       BittyBuzzMessageService_callHostFunction_host_failToPush) {
     // Given
     MessageDTO messageSent;
     EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).Times(0);
@@ -115,8 +117,8 @@ TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callFunction_
         .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(false)));
 
     // Then
-    bool ret = m_messageService->callFunction(m_bspUUID, m_functionName.c_str(), m_arguments.data(),
-                                              m_arguments.size());
+    bool ret = m_messageService->callHostFunction(m_bspUUID, m_functionName.c_str(),
+                                                  m_arguments.data(), m_arguments.size());
 
     // Expect
     auto req = std::get<RequestDTO>(messageSent.getMessage());
@@ -129,7 +131,8 @@ TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callFunction_
     EXPECT_STREQ(freq.getFunctionName(), m_functionName.c_str());
 }
 
-TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callFunction_broadcast_valid) {
+TEST_F(BittyBuzzMessageServiceTestFixture,
+       BittyBuzzMessageService_callHostFunction_broadcast_valid) {
     // Given
     MessageDTO messageSentHost;
     MessageDTO messageSentRemote;
@@ -141,8 +144,8 @@ TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callFunction_
         .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSentHost), testing::Return(true)));
 
     // Then
-    bool ret = m_messageService->callFunction(0, m_functionName.c_str(), m_arguments.data(),
-                                              m_arguments.size());
+    bool ret = m_messageService->callHostFunction(0, m_functionName.c_str(), m_arguments.data(),
+                                                  m_arguments.size());
 
     // Expect
 
@@ -170,7 +173,7 @@ TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callFunction_
 }
 
 TEST_F(BittyBuzzMessageServiceTestFixture,
-       BittyBuzzMessageService_callFunction_broadcast_hostPushFail) {
+       BittyBuzzMessageService_callHostFunction_broadcast_hostPushFail) {
     // Given
     MessageDTO messageSentHost;
     EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_))
@@ -179,15 +182,15 @@ TEST_F(BittyBuzzMessageServiceTestFixture,
     EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(1).WillOnce(testing::Return(false));
 
     // Then
-    bool ret = m_messageService->callFunction(0, m_functionName.c_str(), m_arguments.data(),
-                                              m_arguments.size());
+    bool ret = m_messageService->callHostFunction(0, m_functionName.c_str(), m_arguments.data(),
+                                                  m_arguments.size());
 
     // Expect
     EXPECT_FALSE(ret);
 }
 
 TEST_F(BittyBuzzMessageServiceTestFixture,
-       BittyBuzzMessageService_callFunction_broadcast_remotePushFail) {
+       BittyBuzzMessageService_callHostFunction_broadcast_remotePushFail) {
     // Given
     MessageDTO messageSentHost;
     EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_))
@@ -198,23 +201,23 @@ TEST_F(BittyBuzzMessageServiceTestFixture,
         .WillOnce(testing::Return(true));
 
     // Then
-    bool ret = m_messageService->callFunction(0, m_functionName.c_str(), m_arguments.data(),
-                                              m_arguments.size());
+    bool ret = m_messageService->callHostFunction(0, m_functionName.c_str(), m_arguments.data(),
+                                                  m_arguments.size());
 
     // Expect
     EXPECT_FALSE(ret);
 }
 
 TEST_F(BittyBuzzMessageServiceTestFixture,
-       BittyBuzzMessageService_callFunction_broadcast_bothPushFail) {
+       BittyBuzzMessageService_callHostFunction_broadcast_bothPushFail) {
     // Given
     MessageDTO messageSentHost;
     EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).WillOnce(testing::Return(false));
     EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).WillOnce(testing::Return(true));
 
     // Then
-    bool ret = m_messageService->callFunction(0, m_functionName.c_str(), m_arguments.data(),
-                                              m_arguments.size());
+    bool ret = m_messageService->callHostFunction(0, m_functionName.c_str(), m_arguments.data(),
+                                                  m_arguments.size());
 
     // Expect
     EXPECT_FALSE(ret);

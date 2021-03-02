@@ -15,10 +15,10 @@ class BittyBuzzMessageService : public IBittyBuzzMessageService {
 
     ~BittyBuzzMessageService() override = default;
 
-    bool callFunction(uint16_t hostId,
-                      const char* functionName,
-                      const FunctionCallArgumentDTO* args,
-                      uint16_t argsLength) override;
+    bool callHostFunction(uint16_t hostId,
+                          const char* functionName,
+                          const FunctionCallArgumentDTO* args,
+                          uint16_t argsLength) override;
 
   private:
     ICircularQueue<MessageDTO>& m_hostQueue;

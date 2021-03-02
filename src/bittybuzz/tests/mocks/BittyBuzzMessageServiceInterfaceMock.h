@@ -9,7 +9,7 @@ class BittyBuyzzMessageServiceInterfaceMock : public IBittyBuzzMessageService {
     ~BittyBuyzzMessageServiceInterfaceMock() override = default;
 
     MOCK_METHOD(bool,
-                callFunction,
+                callHostFunction,
                 (uint16_t hostId,
                  const char* functionName,
                  const FunctionCallArgumentDTO* args,

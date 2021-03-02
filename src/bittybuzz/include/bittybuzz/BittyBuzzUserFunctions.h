@@ -46,7 +46,7 @@ namespace BittyBuzzUserFunctions {
      *@details This closure expects tree parameters. The is of the host to call (0 for prodcast, id
      *for local host), the name of the function, a table with the list of arguments
      *@code
-     * callFunction(id, "print", {.0 = 42, .1 = 43});
+     * call_host_function(id, "print", {.0 = 42, .1 = 43});
      *@endcode */
     void callHostFunction();
 

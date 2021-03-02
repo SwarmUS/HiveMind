@@ -1,0 +1,7 @@
+function init() {
+}
+
+function step() {
+  # only ints are valid keys
+  call_host_function(id, "hostFunction", {.key = 42, .secondkey = 42.24});
+}

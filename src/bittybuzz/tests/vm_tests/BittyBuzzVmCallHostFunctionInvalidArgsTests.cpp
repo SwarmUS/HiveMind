@@ -1,0 +1,40 @@
+#include "BittyBuzzVmFixture.h"
+#include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
+#include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
+#include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
+#include "mocks/BittyBuzzStringResolverInterfaceMock.h"
+#include <bittybuzz/BittyBuzzUserFunctions.h>
+#include <call_host_function_invalidArgs_bytecode.h>
+#include <call_host_function_invalidArgs_string.h>
+#include <gmock/gmock.h>
+
+TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_callHostFunction_sendToHost_invalidArgs) {
+    // Given
+    uint16_t boardId = 42;
+    std::string strFunctionName = "hostFunction";
+
+    BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
+    BittyBuzzStringResolverInterfaceMock stringResolverMock;
+    BittyBuzzMessageHandlerInterfaceMock messageHandlerMock;
+    BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
+
+    EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
+    EXPECT_CALL(stringResolverMock, getString(BBZSTRID_hostFunction))
+        .Times(1)
+        .WillOnce(testing::Return(strFunctionName.c_str()));
+
+    EXPECT_CALL(messageServiceMock, callHostFunction(testing::_, testing::_, testing::_, 2))
+        .Times(0);
+
+    std::array<UserFunctionRegister, 1> functionRegisters = {
+        {{BBZSTRID_call_host_function, BittyBuzzUserFunctions::callHostFunction}}};
+
+    SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
+          &closureRegisterMock, &messageServiceMock, functionRegisters);
+
+    // Then
+    m_bittybuzzVm->step();
+
+    // Expect
+    EXPECT_EQ(m_loggerMock->m_logCallCounter, 1);
+}

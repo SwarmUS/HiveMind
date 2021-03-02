@@ -21,10 +21,11 @@ void foreachHostFCallback(bbzheap_idx_t key, bbzheap_idx_t value, void* params) 
     if (bbztype_isint(*valueObj)) {
         context->m_arguments[context->m_length++] =
             FunctionCallArgumentDTO((int64_t)valueObj->i.value);
-    }
-    if (bbztype_isfloat(*valueObj)) {
+    } else if (bbztype_isfloat(*valueObj)) {
         context->m_arguments[context->m_length++] =
             FunctionCallArgumentDTO(bbzfloat_tofloat(valueObj->f.value));
+    } else {
+        context->m_err = true;
     }
 }
 
@@ -105,7 +106,7 @@ void BittyBuzzUserFunctions::callHostFunction() {
         return;
     }
 
-    bool ret = BittyBuzzSystem::g_messageService->callFunction(
+    bool ret = BittyBuzzSystem::g_messageService->callHostFunction(
         (uint16_t)bbzId->i.value, functionName.value(), context.m_arguments.data(),
         context.m_length);
     if (!ret) {
