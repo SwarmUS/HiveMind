@@ -90,7 +90,7 @@ TEST_F(BittyBuzzVmTestFixture,
 
     // Expect
 
-    EXPECT_EQ(g_assertTrueCallCount, 1);
+    EXPECT_EQ(g_assertTrueCallCount, 2);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
 }
