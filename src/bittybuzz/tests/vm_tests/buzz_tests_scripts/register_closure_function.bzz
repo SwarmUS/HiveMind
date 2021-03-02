@@ -1,5 +1,6 @@
 function registered_function(args) {
     assert_true(args[0] == 42);
+    assert_true(args[1] == 42.24);
 }
 
 function init() {
