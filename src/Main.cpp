@@ -138,8 +138,10 @@ class UartMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
 
                 // TODO: For now the uart is considered remote
                 MessageSender messageSender(MessageHandlerContainer::getRemoteMsgQueue(),
-                                            serializer, m_logger);
-
+                                            serializer, BSPContainer::getBSP(), m_logger);
+                // TODO: The uart needs to receive byte to know it's connected, so both sides would
+                // wait for message. Find a fix for that
+                messageSender.greet();
                 while (true) {
                     if (!messageSender.processAndSerialize()) {
                         m_logger.log(LogLevel::Warn, "Fail to process/serialize to uart");
@@ -167,8 +169,9 @@ class TCPMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
             if (socket) {
                 HiveMindHostSerializer serializer(socket.value());
                 MessageSender messageSender(MessageHandlerContainer::getHostMsgQueue(), serializer,
-                                            m_logger);
+                                            BSPContainer::getBSP(), m_logger);
 
+                messageSender.greet();
                 while (true) {
                     if (!messageSender.processAndSerialize()) {
                         m_logger.log(LogLevel::Warn, "Fail to process/serialize to tcp");

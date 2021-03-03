@@ -1,3 +1,4 @@
+#include "mocks/BSPInterfaceMock.h"
 #include "mocks/CircularQueueInterfaceMock.h"
 #include "mocks/HiveMindHostSerializerInterfaceMock.h"
 #include "mocks/LoggerInterfaceMock.h"
@@ -7,13 +8,17 @@ class MessageSenderFixture : public testing::Test {
   protected:
     MessageSender* m_messageSender;
 
+    BSPInterfaceMock* m_bspMock;
     CircularQueueInterfaceMock<MessageDTO> m_inputQueueMock;
     HiveMindHostSerializerInterfaceMock m_serializerMock;
     LoggerInterfaceMock m_loggerMock;
     MessageDTO m_message;
 
+    uint16_t m_uuid = 42;
     void SetUp() override {
-        m_messageSender = new MessageSender(m_inputQueueMock, m_serializerMock, m_loggerMock);
+        m_bspMock = new BSPInterfaceMock(m_uuid);
+        m_messageSender =
+            new MessageSender(m_inputQueueMock, m_serializerMock, *m_bspMock, m_loggerMock);
     }
     void TearDown() override { delete m_messageSender; }
 };
@@ -57,6 +62,36 @@ TEST_F(MessageSenderFixture, MessageSender_processAndSerialize_invalidDeserializ
 
     // Then
     bool ret = m_messageSender->processAndSerialize();
+
+    // Expect
+    EXPECT_FALSE(ret);
+}
+
+TEST_F(MessageSenderFixture, MessageSender_greet_validSerialization) {
+    // Given
+    EXPECT_CALL(m_inputQueueMock, peek).Times(0);
+    EXPECT_CALL(m_inputQueueMock, pop).Times(0);
+    EXPECT_CALL(m_serializerMock, serializeToStream(testing::_))
+        .Times(1)
+        .WillOnce(testing::Return(true));
+
+    // Then
+    bool ret = m_messageSender->greet();
+
+    // Expect
+    EXPECT_TRUE(ret);
+}
+
+TEST_F(MessageSenderFixture, MessageSender_greet_invalidSerialization) {
+    // Given
+    EXPECT_CALL(m_inputQueueMock, peek).Times(0);
+    EXPECT_CALL(m_inputQueueMock, pop).Times(0);
+    EXPECT_CALL(m_serializerMock, serializeToStream(testing::_))
+        .Times(1)
+        .WillOnce(testing::Return(false));
+
+    // Then
+    bool ret = m_messageSender->greet();
 
     // Expect
     EXPECT_FALSE(ret);
