@@ -3,7 +3,6 @@ set(LIB_ALIAS "SwarmUS::HiveMind::HAL::STM32F4")
 
 
 set(LIB_SOURCES
-    Core/Src/stm32f4xx_hal_msp.c
     # Core/Src/system_stm32f4xx.c Already provided by CMSIS, no need for it
     Core/Src/usart.c
     Core/Src/main.c
@@ -35,6 +34,7 @@ set(LIB_HEADERS
 set(GLOBAL_SOURCES
     Core/Src/stm32f4xx_it.c
     Core/Src/stm32f4xx_hal_timebase_tim.c
+    Core/Src/stm32f4xx_hal_msp.c
 )
 
 stm32_fetch_cmsis(F4)

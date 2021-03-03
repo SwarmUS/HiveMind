@@ -75,6 +75,11 @@ void HAL_MspInit(void) {
 
     /* USER CODE BEGIN MspInit 1 */
 
+    // OpenOCD Changes the clock source. Reset it here so the clock can be set
+    // properly by generated code
+    RCC->CFGR = 0;
+    HAL_Delay(1);
+
     /* USER CODE END MspInit 1 */
 }
 
