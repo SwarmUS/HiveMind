@@ -49,10 +49,6 @@ find_package(HAL COMPONENTS
             STM32F429ZI
             REQUIRED)
 
-#find_package(USB COMPONENTS
-#        STM32F429ZI
-#        REQUIRED)
-
 # Creating the interface library
 add_library(stm32f429zi-linker INTERFACE)
 add_library(${LIB_HAL_LINKER_ALIAS} ALIAS stm32f429zi-linker) # Provide alias for linker options
