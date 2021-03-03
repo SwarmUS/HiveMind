@@ -9,7 +9,10 @@ class BSP : public IBSP {
     ~BSP() override;
 
     void initChip(void* args) override;
+
     uint16_t getUUId() const override;
+
+    uint32_t generateRandomNumber() override;
 };
 
 #endif // __BSP_H_

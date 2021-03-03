@@ -27,6 +27,7 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
                       m_stringResolver,
                       BittyBuzzContainer::getBBZMessageHandler(),
                       BittyBuzzContainer::getBBZClosureRegister(),
+                      BittyBuzzContainer::getBBZMessageService(),
                       BSPContainer::getBSP(),
                       m_logger,
                       BittyBuzzFactory::createBittyBuzzFunctionRegisters()) {}
@@ -68,8 +69,7 @@ class UartMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZE>
                 MessageDispatcher messageDispatcher(MessageHandlerContainer::getBuzzMsgQueue(),
                                                     MessageHandlerContainer::getHostMsgQueue(),
                                                     MessageHandlerContainer::getRemoteMsgQueue(),
-                                                    deserializer, BSPContainer::getBSP().getUUId(),
-                                                    m_logger);
+                                                    deserializer, BSPContainer::getBSP(), m_logger);
 
                 while (true) {
                     if (!messageDispatcher.deserializeAndDispatch()) {
@@ -104,8 +104,7 @@ class TCPMessageDispatcher : public AbstractTask<10 * configMINIMAL_STACK_SIZE> 
                 MessageDispatcher messageDispatcher(MessageHandlerContainer::getBuzzMsgQueue(),
                                                     MessageHandlerContainer::getHostMsgQueue(),
                                                     MessageHandlerContainer::getRemoteMsgQueue(),
-                                                    deserializer, BSPContainer::getBSP().getUUId(),
-                                                    m_logger);
+                                                    deserializer, BSPContainer::getBSP(), m_logger);
 
                 while (true) {
                     if (!messageDispatcher.deserializeAndDispatch()) {

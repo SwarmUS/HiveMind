@@ -11,6 +11,7 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                          const IBittyBuzzStringResolver& stringResolver,
                          IBittyBuzzMessageHandler& messageHandler,
                          IBittyBuzzClosureRegister& closureRegister,
+                         IBittyBuzzMessageService& messageService,
                          const IBSP& bsp,
                          ILogger& logger,
                          const Container& container) :
@@ -20,6 +21,7 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     BittyBuzzSystem::g_logger = &logger;
     BittyBuzzSystem::g_stringResolver = &stringResolver;
     BittyBuzzSystem::g_closureRegister = &closureRegister;
+    BittyBuzzSystem::g_messageService = &messageService;
 
     // Init vm
     bbzvm_construct(m_bsp.getUUId());

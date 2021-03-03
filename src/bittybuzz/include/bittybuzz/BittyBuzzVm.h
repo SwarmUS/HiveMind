@@ -4,6 +4,7 @@
 #include "IBittyBuzzBytecode.h"
 #include "IBittyBuzzClosureRegister.h"
 #include "IBittyBuzzMessageHandler.h"
+#include "IBittyBuzzMessageService.h"
 #include "IBittyBuzzStringResolver.h"
 #include "IBittyBuzzVm.h"
 #include <array>
@@ -29,7 +30,8 @@ class BittyBuzzVm : public IBittyBuzzVm {
      *@param bytecode the bytecode that the vm will run
      *@param stringResolver the string resolver used in the VM
      *@param messageHandler a reference to a buzz message handler, called on step
-     *@param closureRegister a reference to the closureRegister
+     *@param closureRegister a reference to the closure register
+     *@param messageService a reference to the message service
      *@param bsp a reference to the bsp
      *@param logger a reference to a logger
      *@param container the provided iterator
@@ -39,6 +41,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
                 const IBittyBuzzStringResolver& stringResolver,
                 IBittyBuzzMessageHandler& messageHandler,
                 IBittyBuzzClosureRegister& closureRegister,
+                IBittyBuzzMessageService& messageService,
                 const IBSP& bsp,
                 ILogger& logger,
                 const Container& container);

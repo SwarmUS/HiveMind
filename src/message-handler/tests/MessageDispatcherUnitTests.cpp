@@ -1,3 +1,4 @@
+#include "mocks/BSPInterfaceMock.h"
 #include "mocks/CircularQueueInterfaceMock.h"
 #include "mocks/HiveMindHostDeserializerInterfaceMock.h"
 #include "mocks/LoggerInterfaceMock.h"
@@ -11,6 +12,7 @@ class MessageDispatcherFixture : public testing::Test {
     CircularQueueInterfaceMock<MessageDTO> m_hostQueue;
     CircularQueueInterfaceMock<MessageDTO> m_remoteQueue;
     HiveMindHostDeserializerInterfaceMock m_deserializerMock;
+    BSPInterfaceMock* m_bspMock;
     LoggerInterfaceMock m_loggerMock;
     MessageDTO m_message;
 
@@ -26,6 +28,7 @@ class MessageDispatcherFixture : public testing::Test {
     const uint16_t m_srcUuid = 42;
 
     void SetUp() override {
+        m_bspMock = new BSPInterfaceMock(m_uuid);
         m_fRequest = new FunctionCallRequestDTO(NULL, NULL, 0);
         m_uRequest =
             new UserCallRequestDTO(UserCallTargetDTO::HOST, UserCallTargetDTO::BUZZ, *m_fRequest);
@@ -37,9 +40,10 @@ class MessageDispatcherFixture : public testing::Test {
         m_response = new ResponseDTO(1, *m_uResponse);
 
         m_messageDispatcher = new MessageDispatcher(m_buzzQueue, m_hostQueue, m_remoteQueue,
-                                                    m_deserializerMock, m_uuid, m_loggerMock);
+                                                    m_deserializerMock, *m_bspMock, m_loggerMock);
     }
     void TearDown() override {
+        delete m_bspMock;
         delete m_messageDispatcher;
         delete m_request;
         delete m_uRequest;

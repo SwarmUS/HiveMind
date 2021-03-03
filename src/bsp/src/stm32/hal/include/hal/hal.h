@@ -20,6 +20,12 @@ void Hal_init();
  */
 uint32_t Hal_calculateCRC32(const uint8_t* buffer, uint32_t length);
 
+/**
+ * @brief Generates a random number
+ * @return a random number on 32 bits
+ */
+uint32_t Hal_generateRandomNumber();
+
 #ifdef __cplusplus
 }
 #endif

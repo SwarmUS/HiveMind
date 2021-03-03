@@ -3,6 +3,7 @@
 #include "mocks/BittyBuzzBytecodeInterfaceMock.h"
 #include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
 #include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
+#include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include "mocks/CircularQueueInterfaceMock.h"
 #include "mocks/LoggerInterfaceMock.h"
@@ -10,6 +11,7 @@
 #include <bittybuzz/BittyBuzzVm.h>
 #include <gtest/gtest.h>
 
+// Mock the bytecode, we just need the VM to push in it so the tests works
 const uint8_t* mockbcodeFetcher(bbzpc_t offset, uint8_t size) {
     (void)offset;
     (void)size;
@@ -27,6 +29,8 @@ class BittyBuzzMessageHandlerFixture : public testing::Test {
     LoggerInterfaceMock* m_loggerMock;
     BittyBuzzClosureRegisterInterfaceMock m_closureRegisterMock;
     BittyBuzzMessageHandlerInterfaceMock m_messageHandlerMock;
+    BittyBuyzzMessageServiceInterfaceMock m_messageServiceMock;
+
     CircularQueueInterfaceMock<MessageDTO> m_inputQueueMock;
     CircularQueueInterfaceMock<MessageDTO> m_hostOutputQueueMock;
     CircularQueueInterfaceMock<MessageDTO> m_remoteOutputQueueMock;
@@ -72,13 +76,14 @@ class BittyBuzzMessageHandlerFixture : public testing::Test {
         EXPECT_CALL(m_bittybuzzBytecode, getBytecodeFetchFunction)
             .WillRepeatedly(testing::Return(mockbcodeFetcher));
         m_bspMock = new BSPInterfaceMock(m_uuid);
-        m_bittybuzzVmMock = new BittyBuzzVm(m_bittybuzzBytecode, m_bittyBuzzStringResolverMock,
-                                            m_messageHandlerMock, m_closureRegisterMock, *m_bspMock,
-                                            *m_loggerMock, std::array<UserFunctionRegister, 0>{});
+        m_bittybuzzVmMock =
+            new BittyBuzzVm(m_bittybuzzBytecode, m_bittyBuzzStringResolverMock,
+                            m_messageHandlerMock, m_closureRegisterMock, m_messageServiceMock,
+                            *m_bspMock, *m_loggerMock, std::array<UserFunctionRegister, 0>{});
         // Message Handler
         m_bbzMessageHandler = new BittyBuzzMessageHandler(
             m_closureRegisterMock, m_inputQueueMock, m_hostOutputQueueMock, m_remoteOutputQueueMock,
-            m_uuid, *m_loggerMock);
+            *m_bspMock, *m_loggerMock);
     }
 
     void TearDown() override {

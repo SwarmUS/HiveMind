@@ -10,6 +10,7 @@ set(LIB_SOURCES
     Core/Src/gpio.c
     Core/Src/dma.c
     Core/Src/crc.c
+    Core/Src/rng.c
     Core/Src/spi.c
     LWIP/App/lwip.c
     LWIP/Target/ethernetif.c
@@ -24,6 +25,7 @@ set(LIB_HEADERS
     Core/Inc/gpio.h
     Core/Inc/dma.h
     Core/Inc/crc.h
+    Core/Inc/rng.h
     Core/Inc/spi.h
     LWIP/App/lwip.h
 )
@@ -69,6 +71,7 @@ target_link_libraries(stm32f429zi-linker
         HAL::STM32::F4
         HAL::STM32::F4::TIM
         HAL::STM32::F4::TIMEx
+        HAL::STM32::F4::RNG
         STM32::NoSys
         SwarmUS::HiveMind::LWIP
         CMSIS::STM32::F4::RTOS_V2

@@ -9,12 +9,14 @@ extern "C" {
 #include "dma.h"
 #include "gpio.h"
 #include "main.h"
+#include "rng.h"
 #include "spi.h"
 #include "stm32f4xx_hal_conf.h"
 #include "usart.h"
 
 #define HUART_PRINT (&huart3)
 #define HUART_HOST (&huart2)
+#define HRNG (&hrng)
 
 // Change to ESP_SOC to use th spi channel for the SOC on the HiveSight.
 // In the future, there might a flag for the HiveBoard.

@@ -1,6 +1,34 @@
 #include "bittybuzz/BittyBuzzUserFunctions.h"
 #include "bittybuzz/BittyBuzzSystem.h"
 
+struct ForeachHostFContext {
+    bool m_err = false;
+    std::array<FunctionCallArgumentDTO, FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>
+        m_arguments = {};
+    uint16_t m_length = 0;
+};
+
+void foreachHostFCallback(bbzheap_idx_t key, bbzheap_idx_t value, void* params) {
+    ForeachHostFContext* context = (ForeachHostFContext*)params;
+    bbzobj_t* keyObj = bbzheap_obj_at(key); // NOLINT
+    bbzobj_t* valueObj = bbzheap_obj_at(value); // NOLINT
+
+    if (!bbztype_isint(*keyObj) || context->m_err) {
+        context->m_err = true;
+        return;
+    }
+
+    if (bbztype_isint(*valueObj)) {
+        context->m_arguments[context->m_length++] =
+            FunctionCallArgumentDTO((int64_t)valueObj->i.value);
+    } else if (bbztype_isfloat(*valueObj)) {
+        context->m_arguments[context->m_length++] =
+            FunctionCallArgumentDTO(bbzfloat_tofloat(valueObj->f.value));
+    } else {
+        context->m_err = true;
+    }
+}
+
 void BittyBuzzUserFunctions::logInt() {
     bbzvm_assert_lnum(1); // NOLINT
     bbzobj_t* intVal = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
@@ -59,6 +87,33 @@ void BittyBuzzUserFunctions::registerClosure() {
                                        "BBZ: String id not found when registering function");
     }
 }
+
+void BittyBuzzUserFunctions::callHostFunction() {
+    bbzvm_assert_lnum(3); // NOLINT
+    bbzobj_t* bbzId = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    bbzobj_t* bbzFunctionName = bbzheap_obj_at(bbzvm_locals_at(2)); // NOLINT
+    bbzheap_idx_t bbzArgsTableHeapIdx = bbzvm_locals_at(3); // NOLINT
+
+    ForeachHostFContext context;
+    std::optional<const char*> functionName =
+        BittyBuzzSystem::g_stringResolver->getString(bbzFunctionName->s.value);
+
+    bbztable_foreach(bbzArgsTableHeapIdx, foreachHostFCallback, &context);
+
+    if (context.m_err) {
+        BittyBuzzSystem::g_logger->log(LogLevel::Warn,
+                                       "BBZ: Error parsing argument list, host FCall");
+        return;
+    }
+
+    bool ret = BittyBuzzSystem::g_messageService->callHostFunction(
+        (uint16_t)bbzId->i.value, functionName.value(), context.m_arguments.data(),
+        context.m_length);
+    if (!ret) {
+        BittyBuzzSystem::g_logger->log(LogLevel::Warn, "BBZ: could not call host FCall");
+    }
+}
+
 void BittyBuzzUserFunctions::isNil() {
     bbzvm_assert_lnum(1); // NOLINT
     bbzobj_t* bbzObj = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT

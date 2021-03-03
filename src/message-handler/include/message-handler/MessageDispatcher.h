@@ -2,6 +2,7 @@
 #define __MESSAGEHANDLER_H_
 
 #include "IMessageDispatcher.h"
+#include <bsp/IBSP.h>
 #include <cpp-common/ICircularQueue.h>
 #include <hivemind-host/IHiveMindHostDeserializer.h>
 #include <hivemind-host/MessageDTO.h>
@@ -13,7 +14,7 @@ class MessageDispatcher : IMessageDispatcher {
                       ICircularQueue<MessageDTO>& hostOutputQ,
                       ICircularQueue<MessageDTO>& remoteOutputQ,
                       IHiveMindHostDeserializer& deserializer,
-                      const uint16_t bspUuid,
+                      const IBSP& bsp,
                       ILogger& m_logger);
 
     ~MessageDispatcher() override = default;
@@ -25,7 +26,7 @@ class MessageDispatcher : IMessageDispatcher {
     ICircularQueue<MessageDTO>& m_hostOutputQueue;
     ICircularQueue<MessageDTO>& m_remoteOutputQueue;
     IHiveMindHostDeserializer& m_deserializer;
-    const uint16_t m_bspUuid;
+    const IBSP& m_bsp;
     ILogger& m_logger;
 
     // handling funciton

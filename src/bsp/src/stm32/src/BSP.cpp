@@ -13,3 +13,5 @@ void BSP::initChip(void* args) {
 }
 
 uint16_t BSP::getUUId() const { return SettingsContainer::getUUID(); }
+
+uint32_t BSP::generateRandomNumber() { return Hal_generateRandomNumber(); }
