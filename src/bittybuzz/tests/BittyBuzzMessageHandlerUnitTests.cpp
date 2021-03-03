@@ -55,7 +55,6 @@ class BittyBuzzMessageHandlerFixture : public testing::Test {
     BittyBuzzBytecodeInterfaceMock m_bittybuzzBytecode;
 
     void SetUp() override {
-        m_logCounter = 0;
         // Message
         m_fRequest = new FunctionCallRequestDTO(m_functionName.c_str(), NULL, 0);
         m_uRequest =
@@ -85,6 +84,8 @@ class BittyBuzzMessageHandlerFixture : public testing::Test {
         m_bbzMessageHandler = new BittyBuzzMessageHandler(
             m_closureRegisterMock, m_inputQueueMock, m_hostOutputQueueMock, m_remoteOutputQueueMock,
             *m_bspMock, *m_loggerMock);
+
+        m_logCounter = 0;
     }
 
     void TearDown() override {

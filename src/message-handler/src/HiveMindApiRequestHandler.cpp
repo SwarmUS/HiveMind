@@ -1,13 +1,7 @@
 #include "HiveMindApiRequestHandler.h"
 
-HiveMindApiRequestHandler::HiveMindApiRequestHandler(ICircularQueue<MessageDTO>& hostOutputQ,
-                                                     ICircularQueue<MessageDTO>& remoteOutputQ,
-                                                     const IBSP& bsp,
-                                                     ILogger& logger) :
-    m_hostOutputQueue(hostOutputQ),
-    m_remoteOutputQueue(remoteOutputQ),
-    m_bsp(bsp),
-    m_logger(logger) {}
+HiveMindApiRequestHandler::HiveMindApiRequestHandler(const IBSP& bsp, ILogger& logger) :
+    m_bsp(bsp), m_logger(logger) {}
 
 HiveMindApiResponseDTO HiveMindApiRequestHandler::handleRequest(
     const HiveMindApiRequestDTO& request) {

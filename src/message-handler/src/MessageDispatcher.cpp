@@ -72,7 +72,7 @@ bool MessageDispatcher::dispatchRequest(const MessageDTO& message, const Request
     if (const auto* uReq = std::get_if<UserCallRequestDTO>(&variantReq)) {
         return dispatchUserCallRequest(message, *uReq);
     }
-    // Handle the response locally
+    // Handle the response locally since it a hivemind api request
     if (const auto* hReq = std::get_if<HiveMindApiRequestDTO>(&variantReq)) {
         uint16_t uuid = m_bsp.getUUId();
         HiveMindApiResponseDTO hRes = m_hivemindApiReqHandler.handleRequest(*hReq);
@@ -80,14 +80,12 @@ bool MessageDispatcher::dispatchRequest(const MessageDTO& message, const Request
         MessageDTO msg(message.getSourceId(), uuid, resp);
 
         if (message.getSourceId() == uuid) {
-            m_hostOutputQueue.push(msg);
-        } else if (message.getSourceId() == 0) {
-            m_hostOutputQueue.push(msg);
-            m_remoteOutputQueue.push(msg);
-        } else {
-            m_remoteOutputQueue.push(msg);
+            return m_hostOutputQueue.push(msg);
         }
-        return true;
+        if (message.getSourceId() != 0) {
+            return m_remoteOutputQueue.push(msg);
+        }
+        return false;
     }
     if (std::holds_alternative<SwarmApiRequestDTO>(variantReq)) {
         m_logger.log(LogLevel::Warn, "Received swarm req on the hivemind");

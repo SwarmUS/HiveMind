@@ -547,7 +547,7 @@ TEST_F(MessageDispatcherFixture,
 
 TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_Greeting_host_noHandle) {
     // Given
-    m_message = MessageDTO(m_srcUuid, m_uuid, GreetingDTO(42));
+    m_message = MessageDTO(m_uuid, m_uuid, GreetingDTO(42));
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
@@ -566,17 +566,18 @@ TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_Greeti
 TEST_F(MessageDispatcherFixture,
        MessageDispatcher_deserializeAndDispatch_HiveMindApiRequest_host_handlerCalled_valid) {
     // Given
+    HiveMindApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
     m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
-    m_message = MessageDTO(m_srcUuid, m_uuid, *m_request);
+    m_message = MessageDTO(m_uuid, m_uuid, *m_request);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage)
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest)
         .Times(1)
-        .WillOnce(testing::Return(true));
+        .WillOnce(testing::Return(resp)); // Return any message, not in the scope of the tests
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -586,19 +587,20 @@ TEST_F(MessageDispatcherFixture,
 }
 
 TEST_F(MessageDispatcherFixture,
-       MessageDispatcher_deserializeAndDispatch_HiveMindApiRequest_host_handlerCalled_invalid) {
+       MessageDispatcher_deserializeAndDispatch_HiveMindApiRequest_host_handlerCalled_QueueFull) {
     // Given
+    HiveMindApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
     m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
-    m_message = MessageDTO(m_srcUuid, m_uuid, *m_request);
+    m_message = MessageDTO(m_uuid, m_uuid, *m_request);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(1).WillOnce(testing::Return(false));
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage)
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest)
         .Times(1)
-        .WillOnce(testing::Return(false));
+        .WillOnce(testing::Return(resp)); // Return any message, not in the scope of the tests
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -608,17 +610,20 @@ TEST_F(MessageDispatcherFixture,
 }
 
 TEST_F(MessageDispatcherFixture,
-       MessageDispatcher_deserializeAndDispatch_HiveMindApiRequest_remote_valid) {
+       MessageDispatcher_deserializeAndDispatch_HiveMindApiRequest_remote_handlerCalled_valid) {
     // Given
+    HiveMindApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
     m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
-    m_message = MessageDTO(m_uuid, m_srcUuid, *m_request);
+    m_message = MessageDTO(m_srcUuid, m_uuid, *m_request);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest)
+        .Times(1)
+        .WillOnce(testing::Return(resp)); // Return any message, not in the scope of the tests
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -628,17 +633,20 @@ TEST_F(MessageDispatcherFixture,
 }
 
 TEST_F(MessageDispatcherFixture,
-       MessageDispatcher_deserializeAndDispatch_HiveMindApiRequest_remote_noSpaceQueue) {
+       MessageDispatcher_deserializeAndDispatch_HiveMindApiRequest_remote_handlerCalled_QueueFull) {
     // Given
+    HiveMindApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
     m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
-    m_message = MessageDTO(m_uuid, m_srcUuid, *m_request);
+    m_message = MessageDTO(m_srcUuid, m_uuid, *m_request);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(1).WillOnce(testing::Return(false));
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest)
+        .Times(1)
+        .WillOnce(testing::Return(resp)); // Return any message, not in the scope of the tests
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();

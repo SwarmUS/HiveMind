@@ -8,18 +8,13 @@
 
 class HiveMindApiRequestHandler : public IHiveMindApiRequestHandler {
   public:
-    HiveMindApiRequestHandler(ICircularQueue<MessageDTO>& hostOutputQ,
-                              ICircularQueue<MessageDTO>& remoteOutputQ,
-                              const IBSP& bsp,
-                              ILogger& logger);
+    HiveMindApiRequestHandler(const IBSP& bsp, ILogger& logger);
 
     ~HiveMindApiRequestHandler() override = default;
 
     HiveMindApiResponseDTO handleRequest(const HiveMindApiRequestDTO& request) override;
 
   private:
-    ICircularQueue<MessageDTO>& m_hostOutputQueue;
-    ICircularQueue<MessageDTO>& m_remoteOutputQueue;
     const IBSP& m_bsp;
     ILogger& m_logger;
 };
