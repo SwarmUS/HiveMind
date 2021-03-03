@@ -94,6 +94,9 @@ target_include_directories(${LIB_NAME}
 
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         LWIP/App
+
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        USB_DEVICE/App
 )
 
 target_link_libraries(${LIB_NAME}
@@ -102,6 +105,7 @@ target_link_libraries(${LIB_NAME}
         HAL::STM32::F4::CORTEX
         STM32::NoSys
         SwarmUS::Propolis::C::Common
+        SwarmUS::HiveMind::HAL::STM32F4::USB
 
     PRIVATE
         stm32f429zi-linker
@@ -118,6 +122,7 @@ target_link_libraries(${LIB_NAME}
 )
 
 add_subdirectory(LWIP)
+add_subdirectory(USB_DEVICE)
 
 # Removing warnings and compile options
 if (DISABLE_EXTERNAL_WARNINGS) 
