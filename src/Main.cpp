@@ -66,11 +66,11 @@ class UartMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZE>
         while (true) {
             if (uart.isConnected()) {
                 HiveMindHostDeserializer deserializer(uart);
-                MessageDispatcher messageDispatcher(MessageHandlerContainer::getBuzzMsgQueue(),
-                                                    MessageHandlerContainer::getHostMsgQueue(),
-                                                    MessageHandlerContainer::getRemoteMsgQueue(),
-                                                    deserializer, BSPContainer::getBSP(), m_logger);
-
+                HiveMindApiRequestHandler hivemindApiReqHandler =
+                    MessageHandlerContainer::createHiveMindApiRequestHandler();
+                MessageDispatcher messageDispatcher =
+                    MessageHandlerContainer::createMessageDispatcher(deserializer,
+                                                                     hivemindApiReqHandler);
                 while (true) {
                     if (!messageDispatcher.deserializeAndDispatch()) {
                         m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch uart");
@@ -101,10 +101,11 @@ class TCPMessageDispatcher : public AbstractTask<10 * configMINIMAL_STACK_SIZE> 
             auto socket = SocketContainer::getHostClientSocket();
             if (socket) {
                 HiveMindHostDeserializer deserializer(socket.value());
-                MessageDispatcher messageDispatcher(MessageHandlerContainer::getBuzzMsgQueue(),
-                                                    MessageHandlerContainer::getHostMsgQueue(),
-                                                    MessageHandlerContainer::getRemoteMsgQueue(),
-                                                    deserializer, BSPContainer::getBSP(), m_logger);
+                HiveMindApiRequestHandler hivemindApiReqHandler =
+                    MessageHandlerContainer::createHiveMindApiRequestHandler();
+                MessageDispatcher messageDispatcher =
+                    MessageHandlerContainer::createMessageDispatcher(deserializer,
+                                                                     hivemindApiReqHandler);
 
                 while (true) {
                     if (!messageDispatcher.deserializeAndDispatch()) {

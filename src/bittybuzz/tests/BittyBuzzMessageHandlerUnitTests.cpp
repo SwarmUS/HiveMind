@@ -55,6 +55,7 @@ class BittyBuzzMessageHandlerFixture : public testing::Test {
     BittyBuzzBytecodeInterfaceMock m_bittybuzzBytecode;
 
     void SetUp() override {
+        m_logCounter = 0;
         // Message
         m_fRequest = new FunctionCallRequestDTO(m_functionName.c_str(), NULL, 0);
         m_uRequest =
@@ -320,6 +321,230 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     auto resp = std::get<ResponseDTO>(messageSent.getMessage());
     auto uresp = std::get<UserCallResponseDTO>(resp.getResponse());
     auto gresp = std::get<GenericResponseDTO>(uresp.getResponse());
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(gresp.getStatus(), GenericResponseStatusDTO::BadRequest);
+}
+
+TEST_F(BittyBuzzMessageHandlerFixture,
+       BittyBuzzMessageHandler_processMessage_HiveMindAPIRequest_host_pushSuccessful) {
+    // Given
+    m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
+    MessageDTO message = MessageDTO(m_uuid, m_uuid, *m_request);
+    MessageDTO messageSent;
+    std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
+
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
+    EXPECT_CALL(m_closureRegisterMock, getClosureHeapIdx(testing::_)).Times(0);
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
+
+    // Then
+    bool ret = m_bbzMessageHandler->processMessage();
+
+    // Expect
+    auto resp = std::get<ResponseDTO>(messageSent.getMessage());
+    auto gresp = std::get<GenericResponseDTO>(resp.getResponse());
+    EXPECT_TRUE(ret);
+    EXPECT_EQ(gresp.getStatus(), GenericResponseStatusDTO::BadRequest);
+}
+
+TEST_F(BittyBuzzMessageHandlerFixture,
+       BittyBuzzMessageHandler_processMessage_HiveMindAPIRequest_host_pushUnsuccessful) {
+    // Given
+    m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
+    MessageDTO message = MessageDTO(m_uuid, m_uuid, *m_request);
+    MessageDTO messageSent;
+    std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
+
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
+    EXPECT_CALL(m_closureRegisterMock, getClosureHeapIdx(testing::_)).Times(0);
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(false)));
+
+    // Then
+    bool ret = m_bbzMessageHandler->processMessage();
+
+    // Expect
+    auto resp = std::get<ResponseDTO>(messageSent.getMessage());
+    auto gresp = std::get<GenericResponseDTO>(resp.getResponse());
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(gresp.getStatus(), GenericResponseStatusDTO::BadRequest);
+}
+
+TEST_F(BittyBuzzMessageHandlerFixture,
+       BittyBuzzMessageHandler_processMessage_HiveMindAPIRequest_remote_pushSuccessful) {
+    // Given
+    m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
+    MessageDTO message = MessageDTO(m_srcUuid, m_uuid, *m_request);
+    MessageDTO messageSent;
+    std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
+
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
+    EXPECT_CALL(m_closureRegisterMock, getClosureHeapIdx(testing::_)).Times(0);
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
+
+    // Then
+    bool ret = m_bbzMessageHandler->processMessage();
+
+    // Expect
+    auto resp = std::get<ResponseDTO>(messageSent.getMessage());
+    auto gresp = std::get<GenericResponseDTO>(resp.getResponse());
+    EXPECT_TRUE(ret);
+    EXPECT_EQ(gresp.getStatus(), GenericResponseStatusDTO::BadRequest);
+}
+
+TEST_F(BittyBuzzMessageHandlerFixture,
+       BittyBuzzMessageHandler_processMessage_HiveMindAPIRequest_remote_pushUnsuccessful) {
+    // Given
+    m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
+    MessageDTO message = MessageDTO(m_srcUuid, m_uuid, *m_request);
+    MessageDTO messageSent;
+    std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
+
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
+    EXPECT_CALL(m_closureRegisterMock, getClosureHeapIdx(testing::_)).Times(0);
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(false)));
+
+    // Then
+    bool ret = m_bbzMessageHandler->processMessage();
+
+    // Expect
+    auto resp = std::get<ResponseDTO>(messageSent.getMessage());
+    auto gresp = std::get<GenericResponseDTO>(resp.getResponse());
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(gresp.getStatus(), GenericResponseStatusDTO::BadRequest);
+}
+
+TEST_F(BittyBuzzMessageHandlerFixture,
+       BittyBuzzMessageHandler_processMessage_SwarmAPIRequest_host_pushSuccessful) {
+    // Given
+    m_request->setRequest(SwarmApiRequestDTO(IdRequestDTO()));
+    MessageDTO message = MessageDTO(m_uuid, m_uuid, *m_request);
+    MessageDTO messageSent;
+    std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
+
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
+    EXPECT_CALL(m_closureRegisterMock, getClosureHeapIdx(testing::_)).Times(0);
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
+
+    // Then
+    bool ret = m_bbzMessageHandler->processMessage();
+
+    // Expect
+    auto resp = std::get<ResponseDTO>(messageSent.getMessage());
+    auto gresp = std::get<GenericResponseDTO>(resp.getResponse());
+    EXPECT_TRUE(ret);
+    EXPECT_EQ(gresp.getStatus(), GenericResponseStatusDTO::BadRequest);
+}
+
+TEST_F(BittyBuzzMessageHandlerFixture,
+       BittyBuzzMessageHandler_processMessage_SwarmAPIRequest_host_pushUnsuccessful) {
+    // Given
+    m_request->setRequest(SwarmApiRequestDTO(IdRequestDTO()));
+    MessageDTO message = MessageDTO(m_uuid, m_uuid, *m_request);
+    MessageDTO messageSent;
+    std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
+
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
+    EXPECT_CALL(m_closureRegisterMock, getClosureHeapIdx(testing::_)).Times(0);
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(false)));
+
+    // Then
+    bool ret = m_bbzMessageHandler->processMessage();
+
+    // Expect
+    auto resp = std::get<ResponseDTO>(messageSent.getMessage());
+    auto gresp = std::get<GenericResponseDTO>(resp.getResponse());
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(gresp.getStatus(), GenericResponseStatusDTO::BadRequest);
+}
+
+TEST_F(BittyBuzzMessageHandlerFixture,
+       BittyBuzzMessageHandler_processMessage_SwarmAPIRequest_remote_pushSuccessful) {
+    // Given
+    m_request->setRequest(SwarmApiRequestDTO(IdRequestDTO()));
+    MessageDTO message = MessageDTO(m_srcUuid, m_uuid, *m_request);
+    MessageDTO messageSent;
+    std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
+
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
+    EXPECT_CALL(m_closureRegisterMock, getClosureHeapIdx(testing::_)).Times(0);
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
+
+    // Then
+    bool ret = m_bbzMessageHandler->processMessage();
+
+    // Expect
+    auto resp = std::get<ResponseDTO>(messageSent.getMessage());
+    auto gresp = std::get<GenericResponseDTO>(resp.getResponse());
+    EXPECT_TRUE(ret);
+    EXPECT_EQ(gresp.getStatus(), GenericResponseStatusDTO::BadRequest);
+}
+
+TEST_F(BittyBuzzMessageHandlerFixture,
+       BittyBuzzMessageHandler_processMessage_SwarmAPIRequest_remote_pushUnsuccessful) {
+    // Given
+    m_request->setRequest(SwarmApiRequestDTO(IdRequestDTO()));
+    MessageDTO message = MessageDTO(m_srcUuid, m_uuid, *m_request);
+    MessageDTO messageSent;
+    std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
+
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
+    EXPECT_CALL(m_closureRegisterMock, getClosureHeapIdx(testing::_)).Times(0);
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(false)));
+
+    // Then
+    bool ret = m_bbzMessageHandler->processMessage();
+
+    // Expect
+    auto resp = std::get<ResponseDTO>(messageSent.getMessage());
+    auto gresp = std::get<GenericResponseDTO>(resp.getResponse());
     EXPECT_FALSE(ret);
     EXPECT_EQ(gresp.getStatus(), GenericResponseStatusDTO::BadRequest);
 }
@@ -652,6 +877,29 @@ TEST_F(BittyBuzzMessageHandlerFixture,
 }
 
 TEST_F(BittyBuzzMessageHandlerFixture,
+       BittyBuzzMessageHandler_processMessage_validHiveMindApiResponse) {
+    // Given
+    m_response->setResponse(HiveMindApiResponseDTO(IdResponseDTO(42)));
+    MessageDTO message = MessageDTO(m_srcUuid, m_uuid, *m_response);
+    MessageDTO messageSent;
+    std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
+
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
+    EXPECT_CALL(m_closureRegisterMock, getClosureHeapIdx(testing::_)).Times(0);
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).Times(0);
+
+    // Then
+    bool ret = m_bbzMessageHandler->processMessage();
+
+    // Expect
+    EXPECT_FALSE(ret);
+}
+
+TEST_F(BittyBuzzMessageHandlerFixture,
        BittyBuzzMessageHandler_processMessage_validGenericResponse) {
     // Given
     m_response->setResponse(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
@@ -672,6 +920,51 @@ TEST_F(BittyBuzzMessageHandlerFixture,
 
     // Expect
     EXPECT_TRUE(ret);
+}
+
+TEST_F(BittyBuzzMessageHandlerFixture,
+       BittyBuzzMessageHandler_processMessage_validSwarmApiResponse) {
+    // Given
+    m_response->setResponse(SwarmApiResponseDTO(IdResponseDTO(42)));
+    MessageDTO message = MessageDTO(m_srcUuid, m_uuid, *m_response);
+    MessageDTO messageSent;
+    std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
+
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
+    EXPECT_CALL(m_closureRegisterMock, getClosureHeapIdx(testing::_)).Times(0);
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).Times(0);
+
+    // Then
+    bool ret = m_bbzMessageHandler->processMessage();
+
+    // Expect
+    EXPECT_FALSE(ret);
+}
+
+TEST_F(BittyBuzzMessageHandlerFixture, BittyBuzzMessageHandler_processMessage_Greeting_log) {
+    // Given
+    MessageDTO message = MessageDTO(m_srcUuid, m_uuid, GreetingDTO(42));
+    MessageDTO messageSent;
+    std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
+
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
+    EXPECT_CALL(m_closureRegisterMock, getClosureHeapIdx(testing::_)).Times(0);
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).Times(0);
+
+    // Then
+    bool ret = m_bbzMessageHandler->processMessage();
+
+    // Expect
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(m_logCounter, 1);
 }
 
 TEST_F(BittyBuzzMessageHandlerFixture,

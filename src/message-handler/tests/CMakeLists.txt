@@ -9,6 +9,7 @@ set(TEST_HEADERS
   mocks/CircularQueueInterfaceMock.h
   mocks/HiveMindHostDeserializerInterfaceMock.h
   mocks/HiveMindHostSerializerInterfaceMock.h
+  mocks/HiveMindApiRequestHandlerInterfaceMock.h
   mocks/LoggerInterfaceMock.h
 
 )
