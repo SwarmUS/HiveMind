@@ -4,14 +4,14 @@ MessageDispatcher::MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
                                      ICircularQueue<MessageDTO>& hostOutputQ,
                                      ICircularQueue<MessageDTO>& remoteOutputQ,
                                      IHiveMindHostDeserializer& deserializer,
-                                     IHiveMindApiRequestHandler& messageHandler,
+                                     IHiveMindApiRequestHandler& hivemindApiReqHandler,
                                      const IBSP& bsp,
                                      ILogger& logger) :
     m_buzzOutputQueue(buzzOutputQ),
     m_hostOutputQueue(hostOutputQ),
     m_remoteOutputQueue(remoteOutputQ),
     m_deserializer(deserializer),
-    m_messageHandler(messageHandler),
+    m_hivemindApiReqHandler(hivemindApiReqHandler),
     m_bsp(bsp),
     m_logger(logger) {}
 
@@ -72,8 +72,22 @@ bool MessageDispatcher::dispatchRequest(const MessageDTO& message, const Request
     if (const auto* uReq = std::get_if<UserCallRequestDTO>(&variantReq)) {
         return dispatchUserCallRequest(message, *uReq);
     }
-    if (std::holds_alternative<HiveMindApiRequestDTO>(variantReq)) {
-        return m_messageHandler.handleMessage(message);
+    // Handle the response locally
+    if (const auto* hReq = std::get_if<HiveMindApiRequestDTO>(&variantReq)) {
+        uint16_t uuid = m_bsp.getUUId();
+        HiveMindApiResponseDTO hRes = m_hivemindApiReqHandler.handleRequest(*hReq);
+        ResponseDTO resp(request.getId(), hRes);
+        MessageDTO msg(message.getSourceId(), uuid, resp);
+
+        if (message.getSourceId() == uuid) {
+            m_hostOutputQueue.push(msg);
+        } else if (message.getSourceId() == 0) {
+            m_hostOutputQueue.push(msg);
+            m_remoteOutputQueue.push(msg);
+        } else {
+            m_remoteOutputQueue.push(msg);
+        }
+        return true;
     }
     if (std::holds_alternative<SwarmApiRequestDTO>(variantReq)) {
         m_logger.log(LogLevel::Warn, "Received swarm req on the hivemind");

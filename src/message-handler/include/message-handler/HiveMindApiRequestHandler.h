@@ -15,9 +15,7 @@ class HiveMindApiRequestHandler : public IHiveMindApiRequestHandler {
 
     ~HiveMindApiRequestHandler() override = default;
 
-    bool handleRequest(uint32_t source,
-                       uint32_t destination,
-                       const HiveMindApiRequestDTO& request) override = 0;
+    HiveMindApiResponseDTO handleRequest(const HiveMindApiRequestDTO& request) override;
 
   private:
     ICircularQueue<MessageDTO>& m_hostOutputQueue;

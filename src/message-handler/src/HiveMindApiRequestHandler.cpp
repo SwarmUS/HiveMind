@@ -9,18 +9,13 @@ HiveMindApiRequestHandler::HiveMindApiRequestHandler(ICircularQueue<MessageDTO>&
     m_bsp(bsp),
     m_logger(logger) {}
 
-bool HiveMindApiRequestHandler::handleRequest(uint32_t requestId,
-                                              uint32_t destination,
-                                              const HiveMindApiRequestDTO& request) {
-
-    if (destination != m_bsp.getUUId()) {
-        return false;
-    }
+HiveMindApiResponseDTO HiveMindApiRequestHandler::handleRequest(
+    const HiveMindApiRequestDTO& request) {
 
     const std::variant<std::monostate, IdRequestDTO>& vReq = request.getRequest();
-    if (const auto* idReq = std::get_if<IdRequestDTO>(&vReq)) {
-        ResponseDTO resp(requestId, IdResponseDTO(m_bsp.getUUId()));
+    if (std::holds_alternative<IdRequestDTO>(vReq)) {
+        return HiveMindApiResponseDTO(IdResponseDTO(m_bsp.getUUId()));
     }
 
-    return false;
+    return HiveMindApiResponseDTO(GenericResponseDTO(GenericResponseStatusDTO::BadRequest, ""));
 }

@@ -68,7 +68,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -87,7 +87,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -109,7 +109,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -131,7 +131,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -153,7 +153,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -175,7 +175,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -194,7 +194,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -213,7 +213,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -232,7 +232,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -251,7 +251,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(1).WillOnce(testing::Return(false));
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -270,7 +270,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -292,7 +292,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -314,7 +314,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(1).WillOnce(testing::Return(false));
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -336,7 +336,7 @@ TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_unknow
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -358,7 +358,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -382,7 +382,7 @@ TEST_F(
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -401,7 +401,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -420,7 +420,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(1).WillOnce(testing::Return(false));
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -439,7 +439,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -459,7 +459,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -479,7 +479,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -499,7 +499,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(1).WillOnce(testing::Return(false));
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -517,7 +517,7 @@ TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_Greeti
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -536,7 +536,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(1).WillOnce(testing::Return(false));
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -554,7 +554,7 @@ TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_Greeti
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -618,7 +618,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -638,7 +638,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(1).WillOnce(testing::Return(false));
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -658,7 +658,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -678,7 +678,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(1).WillOnce(testing::Return(false));
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -698,7 +698,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -718,7 +718,7 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(1).WillOnce(testing::Return(false));
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
@@ -737,7 +737,7 @@ TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_SwarmA
     EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleMessage).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
