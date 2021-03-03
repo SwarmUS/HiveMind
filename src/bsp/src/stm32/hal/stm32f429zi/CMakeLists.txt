@@ -78,7 +78,6 @@ target_link_libraries(stm32f429zi-linker
         HAL::STM32::F4::RNG
         STM32::NoSys
         SwarmUS::HiveMind::LWIP
-        SwarmUS::HiveMind::HAL::STM32F4::USB
         CMSIS::STM32::F4::RTOS_V2
         HAL::STM32::F4::SPI
         )
