@@ -29,7 +29,8 @@ if (DOXYGEN_FOUND)
         "*/tests/*"
         "*/hal/*/Core/*"
         "*/hal/*/LWIP/*"
-        "*/hal/*/USB_DEVICE/*")
+        "*/hal/*/USB_DEVICE/*"
+        "*/decawave/driver/*")
 
     if (${COMPILE_STM32_F429ZI})
         LIST(APPEND DOXYGEN_EXCLUDE_PATTERNS "*/posix/*")

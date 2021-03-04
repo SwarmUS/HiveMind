@@ -183,7 +183,7 @@ class TCPMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class SPIMessageSender : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+class SPIMessageSender : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
   public:
     SPIMessageSender(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
