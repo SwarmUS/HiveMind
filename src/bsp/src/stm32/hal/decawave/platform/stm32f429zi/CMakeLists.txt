@@ -5,12 +5,11 @@ set(LIB_SOURCES
         src/deca_mutex.c
         src/deca_sleep.c
         src/deca_spi.c
-        src/port.c
+        src/deca_port.c
     )
 
 set(LIB_HEADERS
-        include/port.h
-        include/sleep.h
+        include/deca_port.h
     )
 
 
@@ -24,4 +23,4 @@ target_include_directories(${LIB_NAME}
         include
     )
 
-target_link_libraries(${LIB_NAME} INTERFACE SwarmUS::HiveMind::OS)
+target_link_libraries(${LIB_NAME} INTERFACE SwarmUS::HiveMind::OS::FreeRTOS)

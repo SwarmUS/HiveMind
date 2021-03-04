@@ -1,11 +1,8 @@
-#include <sys/types.h>
-
-#include "deca_device_api.h"
+#include "deca_port.h"
 #include "main.h"
-#include "port.h"
 #include "stm32f4xx_hal_conf.h"
 
-void decawave_reset() {
+void deca_hardwareReset() {
     GPIO_InitTypeDef GPIO_InitStruct;
 
     // Enable GPIO used for DW1000 reset as open collector output
@@ -17,7 +14,9 @@ void decawave_reset() {
     // drive the RSTn pin low
     HAL_GPIO_WritePin(DW_RESET_A_GPIO_Port, DW_RESET_A_Pin, GPIO_PIN_RESET);
 
-    deca_sleep(1);
+    // Use HAL functions instead of FreeRTOS delays as this is called before the scheduler is
+    // started
+    HAL_Delay(1);
 
     // put the pin back to tri-state ... as
     // output open-drain (not active)
@@ -28,22 +27,27 @@ void decawave_reset() {
     HAL_GPIO_Init(DW_RESET_A_GPIO_Port, &GPIO_InitStruct);
     HAL_GPIO_WritePin(DW_RESET_A_GPIO_Port, DW_RESET_A_Pin, GPIO_PIN_SET);
 
-    deca_sleep(100);
+    HAL_Delay(100);
 }
 
-void decawave_wakeup() {
+void deca_hardwareWakeup() {
     HAL_GPIO_WritePin(DW_RESET_A_GPIO_Port, DW_RESET_A_Pin, GPIO_PIN_RESET);
-    deca_sleep(1);
+    HAL_Delay(1);
     HAL_GPIO_WritePin(DW_RESET_A_GPIO_Port, DW_RESET_A_Pin, GPIO_PIN_SET);
-    deca_sleep(7); // wait 7ms for DW1000 XTAL to stabilise
+    HAL_Delay(7); // wait 7ms for DW1000 XTAL to stabilise
 }
 
-void decawave_setSlowRate() {
+void deca_setSlowRate() {
     DW_SPI->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
     HAL_SPI_Init(DW_SPI);
 }
 
-void decawave_setFastRate() {
+void deca_setFastRate() {
     DW_SPI->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
     HAL_SPI_Init(DW_SPI);
+}
+
+void deca_init() {
+    deca_hardwareReset();
+    deca_setSlowRate();
 }
