@@ -1,12 +1,24 @@
 #include "BSP.h"
 #include "bsp/SettingsContainer.h"
 #include "deca_device_api.h"
+#include "deca_port.h"
 #include <FreeRTOS.h>
 #include <Task.h>
 #include <hal/hal.h>
 
 void decaBlink(void* params) {
     (void)params;
+
+    deca_selectDevice(DW_A);
+    while (DWT_DEVICE_ID != dwt_readdevid()) {
+        Task::delay(1);
+    }
+    if (dwt_initialise(DWT_LOADNONE) == DWT_ERROR) {
+        while (true)
+            ;
+    }
+
+    deca_selectDevice(DW_B);
     while (DWT_DEVICE_ID != dwt_readdevid()) {
         Task::delay(1);
     }

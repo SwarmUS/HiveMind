@@ -10,6 +10,11 @@ extern "C" {
 #include "stm32f4xx_hal.h"
 
 /**
+ * @brief Enum to specify which decawave we are addressing
+ */
+typedef enum { DW_A = 0, DW_B } decaDevice_t;
+
+/**
  * @brief Performs a hardware reset on decawave
  */
 void deca_hardwareReset();
@@ -33,6 +38,24 @@ void deca_setFastRate();
  * @brief Initialises the decawave hardware
  */
 void deca_init();
+
+/**
+ * @brief Choose which decawave is selected for the next SPI communication
+ * @param selectedDevice The device to select
+ */
+void deca_selectDevice(decaDevice_t selectedDevice);
+
+/**
+ * @brief Gets the NSS pin for the currently selected decawave
+ * @return The NSS pin
+ */
+uint16_t deca_getSelectedNSSPin();
+
+/**
+ * @brief Gets the NSS port for the currently selected decawave
+ * @return The NSS port
+ */
+GPIO_TypeDef* deca_getSelectedNSSPort();
 
 #ifdef __cplusplus
 }

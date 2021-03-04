@@ -1,4 +1,5 @@
 #include "deca_device_api.h"
+#include "deca_port.h"
 #include "hivemind_hal.h"
 #include "main.h"
 #include "stm32f4xx_hal_def.h"
@@ -21,13 +22,12 @@ int writetospi(uint16_t headerLength,
     while (HAL_SPI_GetState(DW_SPI) != HAL_SPI_STATE_READY) {
     }
 
-    HAL_GPIO_WritePin(DW_NSS_A_GPIO_Port, DW_NSS_A_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(deca_getSelectedNSSPort(), deca_getSelectedNSSPin(), GPIO_PIN_RESET);
 
     HAL_SPI_Transmit(DW_SPI, (uint8_t*)&headerBuffer[0], headerLength, HAL_MAX_DELAY);
     HAL_SPI_Transmit(DW_SPI, (uint8_t*)&bodyBuffer[0], bodyLength, HAL_MAX_DELAY);
 
-    HAL_GPIO_WritePin(DW_NSS_A_GPIO_Port, DW_NSS_A_Pin,
-                      GPIO_PIN_SET); /**< Put chip select line high */
+    HAL_GPIO_WritePin(deca_getSelectedNSSPort(), deca_getSelectedNSSPin(), GPIO_PIN_SET);
 
     decamutexoff(stat);
 
@@ -53,13 +53,13 @@ int readfromspi(uint16_t headerLength,
     while (HAL_SPI_GetState(DW_SPI) != HAL_SPI_STATE_READY) {
     }
 
-    HAL_GPIO_WritePin(DW_NSS_A_GPIO_Port, DW_NSS_A_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(deca_getSelectedNSSPort(), deca_getSelectedNSSPin(), GPIO_PIN_RESET);
 
     HAL_SPI_Transmit(DW_SPI, (uint8_t*)&headerBuffer[0], headerLength, HAL_MAX_DELAY);
 
     HAL_SPI_Receive(DW_SPI, readBuffer, readlength, HAL_MAX_DELAY);
 
-    HAL_GPIO_WritePin(DW_NSS_A_GPIO_Port, DW_NSS_A_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(deca_getSelectedNSSPort(), deca_getSelectedNSSPin(), GPIO_PIN_SET);
 
     decamutexoff(stat);
 

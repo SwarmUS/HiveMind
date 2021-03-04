@@ -2,6 +2,9 @@
 #include "main.h"
 #include "stm32f4xx_hal_conf.h"
 
+static GPIO_TypeDef* s_selectedDW_NSS_port = DW_NSS_A_GPIO_Port;
+static uint16_t s_selectedDW_NSS_pin = DW_NSS_A_Pin;
+
 void deca_hardwareReset() {
     GPIO_InitTypeDef GPIO_InitStruct;
 
@@ -28,6 +31,32 @@ void deca_hardwareReset() {
     HAL_GPIO_WritePin(DW_RESET_A_GPIO_Port, DW_RESET_A_Pin, GPIO_PIN_SET);
 
     HAL_Delay(100);
+
+    //**************************** DECA B ************************
+
+    // Enable GPIO used for DW1000 reset as open collector output
+    GPIO_InitStruct.Pin = DW_RESET_B_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(DW_RESET_B_GPIO_Port, &GPIO_InitStruct);
+
+    // drive the RSTn pin low
+    HAL_GPIO_WritePin(DW_RESET_B_GPIO_Port, DW_RESET_B_Pin, GPIO_PIN_RESET);
+
+    // Use HAL functions instead of FreeRTOS delays as this is called before the scheduler is
+    // started
+    HAL_Delay(1);
+
+    // put the pin back to tri-state ... as
+    // output open-drain (not active)
+    GPIO_InitStruct.Pin = DW_RESET_B_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(DW_RESET_B_GPIO_Port, &GPIO_InitStruct);
+    HAL_GPIO_WritePin(DW_RESET_B_GPIO_Port, DW_RESET_B_Pin, GPIO_PIN_SET);
+
+    HAL_Delay(100);
 }
 
 void deca_hardwareWakeup() {
@@ -51,3 +80,24 @@ void deca_init() {
     deca_hardwareReset();
     deca_setSlowRate();
 }
+
+void deca_selectDevice(decaDevice_t selectedDevice) {
+    switch (selectedDevice) {
+    case DW_A:
+        s_selectedDW_NSS_pin = DW_NSS_A_Pin;
+        s_selectedDW_NSS_port = DW_NSS_B_GPIO_Port;
+        break;
+
+    case DW_B:
+        s_selectedDW_NSS_pin = DW_NSS_B_Pin;
+        s_selectedDW_NSS_port = DW_NSS_B_GPIO_Port;
+        break;
+
+    default:
+        break;
+    }
+}
+
+uint16_t deca_getSelectedNSSPin() { return s_selectedDW_NSS_pin; }
+
+GPIO_TypeDef* deca_getSelectedNSSPort() { return s_selectedDW_NSS_port; }
