@@ -183,7 +183,7 @@ class TCPMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class SPIMessageSender : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+class SPIMessageSender : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
   public:
     SPIMessageSender(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
@@ -212,17 +212,17 @@ int main(int argc, char** argv) {
     bsp.initChip((void*)&cmdLineArgs);
 
     static BittyBuzzTask s_bittybuzzTask("bittybuzz", tskIDLE_PRIORITY + 1);
-    // static UartMessageDispatcher s_uartDispatchTask("uart_dispatch", tskIDLE_PRIORITY + 1);
-    // static TCPMessageDispatcher s_tcpDispatchTask("tcp_dispatch", tskIDLE_PRIORITY + 1);
-    // static UartMessageSender s_uartMessageSender("uart_send", tskIDLE_PRIORITY + 1);
-    // static TCPMessageSender s_tcpMessageSender("uart_send", tskIDLE_PRIORITY + 1);
-    // static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
+    static UartMessageDispatcher s_uartDispatchTask("uart_dispatch", tskIDLE_PRIORITY + 1);
+    static TCPMessageDispatcher s_tcpDispatchTask("tcp_dispatch", tskIDLE_PRIORITY + 1);
+    static UartMessageSender s_uartMessageSender("uart_send", tskIDLE_PRIORITY + 1);
+    static TCPMessageSender s_tcpMessageSender("uart_send", tskIDLE_PRIORITY + 1);
+    static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
 
     s_bittybuzzTask.start();
-    // s_uartDispatchTask.start();
-    // s_tcpDispatchTask.start();
-    // s_uartMessageSender.start();
-    // s_tcpMessageSender.start();
+    s_uartDispatchTask.start();
+    s_tcpDispatchTask.start();
+    s_uartMessageSender.start();
+    s_tcpMessageSender.start();
     // s_spiMessageSender.start();
 
     Task::startScheduler();
