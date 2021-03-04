@@ -14,7 +14,7 @@ extern "C" {
  */
 void deca_hardwareReset();
 
-/**.
+/**
  * @brief Performs a wakeup on decawave using the SS line
  */
 void deca_hardwareWakeup();
