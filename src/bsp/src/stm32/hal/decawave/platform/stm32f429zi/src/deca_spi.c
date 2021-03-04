@@ -46,7 +46,6 @@ int readfromspi(uint16_t headerLength,
                 const uint8_t* headerBuffer,
                 uint32_t readlength,
                 uint8_t* readBuffer) {
-    int i;
     decaIrqStatus_t stat;
     stat = decamutexon();
 
@@ -56,7 +55,7 @@ int readfromspi(uint16_t headerLength,
 
     HAL_GPIO_WritePin(DW_NSS_A_GPIO_Port, DW_NSS_A_Pin, GPIO_PIN_RESET);
 
-    HAL_SPI_Transmit(DW_SPI, headerBuffer, headerLength, HAL_MAX_DELAY);
+    HAL_SPI_Transmit(DW_SPI, (uint8_t*)&headerBuffer[0], headerLength, HAL_MAX_DELAY);
 
     HAL_SPI_Receive(DW_SPI, readBuffer, readlength, HAL_MAX_DELAY);
 
