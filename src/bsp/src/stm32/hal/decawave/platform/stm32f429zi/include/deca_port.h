@@ -15,9 +15,10 @@ extern "C" {
 typedef enum { DW_A = 0, DW_B } decaDevice_t;
 
 /**
- * @brief Performs a hardware reset on decawave
+ * @brief Performs a hardware reset on a specific decawave
+ * @param selectedDevice The device to reset
  */
-void deca_hardwareReset();
+void deca_hardwareReset(decaDevice_t selectedDevice);
 
 /**
  * @brief Performs a wakeup on decawave using the SS line
