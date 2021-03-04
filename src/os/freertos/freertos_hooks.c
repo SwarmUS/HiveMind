@@ -1,5 +1,4 @@
 #include <FreeRTOS.h>
-#include <FreeRTOSConfig.h>
 
 #include <stdbool.h>
 #include <task.h>

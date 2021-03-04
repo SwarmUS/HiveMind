@@ -37,7 +37,7 @@ void Hal_init() {
 
     deca_init();
 #ifdef IPERF_SERVER
-    lwiperf_start_tcp_server_default(NULL, NULL);
+//    lwiperf_start_tcp_server_default(NULL, NULL);
 #endif
 }
 
