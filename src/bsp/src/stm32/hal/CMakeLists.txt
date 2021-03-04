@@ -14,7 +14,8 @@ set(LIB_HEADERS
     include/hal/uart.h
     include/hal/hal_spi.h
     include/hal/esp_spi.h
-    include/hal/hal_gpio.h)
+    include/hal/hal_gpio.h
+    include/hal/usb.h)
 
 # Sources that needs to be global on the project
 # Ex: interrupts, syscalls, callbacks
@@ -26,6 +27,7 @@ set(GLOBAL_SOURCES
     src/esp_spi.c
     src/hal_gpio.c
     src/hal_spi.c
+    src/usb.c
 )
 
 # Creating the interface library

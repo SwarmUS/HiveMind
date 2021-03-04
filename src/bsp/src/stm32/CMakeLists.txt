@@ -24,7 +24,8 @@ set(LIB_PRIVATE_HEADERS
     include/DefaultSettings.h
     include/SpiEsp.h
     include/SpiHeader.h
-    )
+    include/USB.h
+    src/USB.h)
 
 include(DefaultSettings.cmake)
 configure_file(include/DefaultSettings.in.h include/DefaultSettings.h)
