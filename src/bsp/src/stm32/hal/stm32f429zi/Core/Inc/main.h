@@ -58,8 +58,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define DW_A_GPIO6_Pin GPIO_PIN_2
-#define DW_A_GPIO6_GPIO_Port GPIOE
+#define DW_GPIO6_A_Pin GPIO_PIN_2
+#define DW_GPIO6_A_GPIO_Port GPIOE
 #define USER_Btn_Pin GPIO_PIN_13
 #define USER_Btn_GPIO_Port GPIOC
 #define USER_Btn_EXTI_IRQn EXTI15_10_IRQn
@@ -69,8 +69,8 @@ void Error_Handler(void);
 #define ESP_CS_GPIO_Port GPIOC
 #define RMII_MDC_Pin GPIO_PIN_1
 #define RMII_MDC_GPIO_Port GPIOC
-#define DW_A_GPIO5_Pin GPIO_PIN_0
-#define DW_A_GPIO5_GPIO_Port GPIOA
+#define DW_GPIO5_A_Pin GPIO_PIN_0
+#define DW_GPIO5_A_GPIO_Port GPIOA
 #define RMII_REF_CLK_Pin GPIO_PIN_1
 #define RMII_REF_CLK_GPIO_Port GPIOA
 #define RMII_MDIO_Pin GPIO_PIN_2
@@ -86,13 +86,12 @@ void Error_Handler(void);
 #define ESP_USER0_Pin GPIO_PIN_1
 #define ESP_USER0_GPIO_Port GPIOG
 #define ESP_USER0_EXTI_IRQn EXTI1_IRQn
-#define DW_A_IRQ_Pin GPIO_PIN_7
-#define DW_A_IRQ_GPIO_Port GPIOE
-#define DW_A_IRQ_EXTI_IRQn EXTI9_5_IRQn
-#define DW_A_NSS_Pin GPIO_PIN_11
-#define DW_A_NSS_GPIO_Port GPIOE
-#define DW_A_NRST_Pin GPIO_PIN_10
-#define DW_A_NRST_GPIO_Port GPIOB
+#define DW_IRQn_A_Pin GPIO_PIN_7
+#define DW_IRQn_A_GPIO_Port GPIOE
+#define DW_WU_A_Pin GPIO_PIN_8
+#define DW_WU_A_GPIO_Port GPIOE
+#define DW_RESET_A_Pin GPIO_PIN_10
+#define DW_RESET_A_GPIO_Port GPIOB
 #define RMII_TXD1_Pin GPIO_PIN_13
 #define RMII_TXD1_GPIO_Port GPIOB
 #define LD3_Pin GPIO_PIN_14
@@ -119,8 +118,8 @@ void Error_Handler(void);
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
-#define DW_A_EXTON_Pin GPIO_PIN_9
-#define DW_A_EXTON_GPIO_Port GPIOG
+#define DW_EXTON_A_Pin GPIO_PIN_9
+#define DW_EXTON_A_GPIO_Port GPIOG
 #define RMII_TX_EN_Pin GPIO_PIN_11
 #define RMII_TX_EN_GPIO_Port GPIOG
 #define RMII_TXD0_Pin GPIO_PIN_13

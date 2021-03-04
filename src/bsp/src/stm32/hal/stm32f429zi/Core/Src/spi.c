@@ -25,13 +25,13 @@
 /* USER CODE END 0 */
 
 SPI_HandleTypeDef hspi3;
+SPI_HandleTypeDef hspi4;
 SPI_HandleTypeDef hspi5;
 DMA_HandleTypeDef hdma_spi3_rx;
 DMA_HandleTypeDef hdma_spi3_tx;
 DMA_HandleTypeDef hdma_spi5_rx;
 DMA_HandleTypeDef hdma_spi5_tx;
 
-<<<<<<< master
 /* SPI3 init function */
 void MX_SPI3_Init(void) {
 
@@ -48,7 +48,9 @@ void MX_SPI3_Init(void) {
     hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
     hspi3.Init.CRCPolynomial = 10;
     if (HAL_SPI_Init(&hspi3) != HAL_OK) {
-=======
+        Error_Handler();
+    }
+}
 /* SPI4 init function */
 void MX_SPI4_Init(void) {
 
@@ -59,13 +61,12 @@ void MX_SPI4_Init(void) {
     hspi4.Init.CLKPolarity = SPI_POLARITY_HIGH;
     hspi4.Init.CLKPhase = SPI_PHASE_2EDGE;
     hspi4.Init.NSS = SPI_NSS_SOFT;
-    hspi4.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
+    hspi4.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
     hspi4.Init.FirstBit = SPI_FIRSTBIT_MSB;
     hspi4.Init.TIMode = SPI_TIMODE_DISABLE;
     hspi4.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
     hspi4.Init.CRCPolynomial = 10;
     if (HAL_SPI_Init(&hspi4) != HAL_OK) {
->>>>>>> wip
         Error_Handler();
     }
 }
@@ -147,16 +148,38 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle) {
 
         __HAL_LINKDMA(spiHandle, hdmatx, hdma_spi3_tx);
 
-<<<<<<< master
         /* USER CODE BEGIN SPI3_MspInit 1 */
-=======
-        /* SPI4 interrupt Init */
-        HAL_NVIC_SetPriority(SPI4_IRQn, 5, 0);
+        == == == =
+                     /* SPI4 interrupt Init */
+            HAL_NVIC_SetPriority(SPI4_IRQn, 5, 0);
         HAL_NVIC_EnableIRQ(SPI4_IRQn);
         /* USER CODE BEGIN SPI4_MspInit 1 */
 >>>>>>> wip
 
         /* USER CODE END SPI3_MspInit 1 */
+    } else if (spiHandle->Instance == SPI4) {
+        /* USER CODE BEGIN SPI4_MspInit 0 */
+
+        /* USER CODE END SPI4_MspInit 0 */
+        /* SPI4 clock enable */
+        __HAL_RCC_SPI4_CLK_ENABLE();
+
+        __HAL_RCC_GPIOE_CLK_ENABLE();
+        /**SPI4 GPIO Configuration
+        PE12     ------> SPI4_SCK
+        PE13     ------> SPI4_MISO
+        PE14     ------> SPI4_MOSI
+        */
+        GPIO_InitStruct.Pin = GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        GPIO_InitStruct.Alternate = GPIO_AF5_SPI4;
+        HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+        /* USER CODE BEGIN SPI4_MspInit 1 */
+
+        /* USER CODE END SPI4_MspInit 1 */
     } else if (spiHandle->Instance == SPI5) {
         /* USER CODE BEGIN SPI5_MspInit 0 */
 
@@ -237,18 +260,34 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle) {
         */
         HAL_GPIO_DeInit(GPIOC, GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12);
 
-<<<<<<< master
         /* SPI3 DMA DeInit */
         HAL_DMA_DeInit(spiHandle->hdmarx);
         HAL_DMA_DeInit(spiHandle->hdmatx);
         /* USER CODE BEGIN SPI3_MspDeInit 1 */
-=======
-        /* SPI4 interrupt Deinit */
-        HAL_NVIC_DisableIRQ(SPI4_IRQn);
+        == == == =
+                     /* SPI4 interrupt Deinit */
+            HAL_NVIC_DisableIRQ(SPI4_IRQn);
         /* USER CODE BEGIN SPI4_MspDeInit 1 */
 >>>>>>> wip
 
         /* USER CODE END SPI3_MspDeInit 1 */
+    } else if (spiHandle->Instance == SPI4) {
+        /* USER CODE BEGIN SPI4_MspDeInit 0 */
+
+        /* USER CODE END SPI4_MspDeInit 0 */
+        /* Peripheral clock disable */
+        __HAL_RCC_SPI4_CLK_DISABLE();
+
+        /**SPI4 GPIO Configuration
+        PE12     ------> SPI4_SCK
+        PE13     ------> SPI4_MISO
+        PE14     ------> SPI4_MOSI
+        */
+        HAL_GPIO_DeInit(GPIOE, GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14);
+
+        /* USER CODE BEGIN SPI4_MspDeInit 1 */
+
+        /* USER CODE END SPI4_MspDeInit 1 */
     } else if (spiHandle->Instance == SPI5) {
         /* USER CODE BEGIN SPI5_MspDeInit 0 */
 
