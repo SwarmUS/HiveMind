@@ -76,7 +76,6 @@ target_link_libraries(stm32f429zi-linker
         HAL::STM32::F4::TIM
         HAL::STM32::F4::TIMEx
         HAL::STM32::F4::RNG
-        HAL::STM32::F4::CDC
         STM32::NoSys
         SwarmUS::HiveMind::LWIP
         CMSIS::STM32::F4::RTOS_V2

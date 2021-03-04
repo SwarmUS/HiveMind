@@ -5,6 +5,7 @@ set(LIB_HAL_LINKER_ALIAS "SwarmUS::HiveMind::HAL::Linker::STM32F4")
 
 set(LIB_SOURCES
     src/hal.c
+    src/usb.c
 )
 
 set(LIB_HEADERS
@@ -27,7 +28,6 @@ set(GLOBAL_SOURCES
     src/esp_spi.c
     src/hal_gpio.c
     src/hal_spi.c
-    src/usb.c
 )
 
 # Creating the interface library
