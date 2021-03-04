@@ -36,12 +36,12 @@ int writetospi(uint16_t headerLength,
     while (HAL_SPI_GetState(DW_SPI) != HAL_SPI_STATE_READY) {
     }
 
-    HAL_GPIO_WritePin(DW_A_NSS_GPIO_Port, DW_A_NSS_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(DW_NSS_A_GPIO_Port, DW_NSS_A_Pin, GPIO_PIN_RESET);
 
     HAL_SPI_Transmit(DW_SPI, (uint8_t*)&headerBuffer[0], headerLength, HAL_MAX_DELAY);
     HAL_SPI_Transmit(DW_SPI, (uint8_t*)&bodyBuffer[0], bodyLength, HAL_MAX_DELAY);
 
-    HAL_GPIO_WritePin(DW_A_NSS_GPIO_Port, DW_A_NSS_Pin,
+    HAL_GPIO_WritePin(DW_NSS_A_GPIO_Port, DW_NSS_A_Pin,
                       GPIO_PIN_SET); /**< Put chip select line high */
 
     decamutexoff(stat);
@@ -71,7 +71,7 @@ int readfromspi(uint16_t headerLength,
     while (HAL_SPI_GetState(DW_SPI) != HAL_SPI_STATE_READY)
         ;
 
-    HAL_GPIO_WritePin(DW_A_NSS_GPIO_Port, DW_A_NSS_Pin,
+    HAL_GPIO_WritePin(DW_NSS_A_GPIO_Port, DW_NSS_A_Pin,
                       GPIO_PIN_RESET); /**< Put chip select line low */
 
     /* Send header */
@@ -97,7 +97,7 @@ int readfromspi(uint16_t headerLength,
         (*readBuffer++) = DW_SPI->Instance->DR; // copy data read form (MISO)
     }
 
-    HAL_GPIO_WritePin(DW_A_NSS_GPIO_Port, DW_A_NSS_Pin,
+    HAL_GPIO_WritePin(DW_NSS_A_GPIO_Port, DW_NSS_A_Pin,
                       GPIO_PIN_SET); /**< Put chip select line high */
 
     decamutexoff(stat);

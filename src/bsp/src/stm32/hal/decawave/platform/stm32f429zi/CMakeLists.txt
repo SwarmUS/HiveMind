@@ -3,7 +3,6 @@ set(LIB_ALIAS "SwarmUS::HiveMind::HAL::Decawave::Platform")
 
 set(LIB_SOURCES
         src/deca_mutex.c
-        src/deca_range_tables.c
         src/deca_sleep.c
         src/deca_spi.c
         src/port.c

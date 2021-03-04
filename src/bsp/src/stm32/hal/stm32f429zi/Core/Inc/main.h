@@ -90,6 +90,8 @@ void Error_Handler(void);
 #define DW_IRQn_A_GPIO_Port GPIOE
 #define DW_WU_A_Pin GPIO_PIN_8
 #define DW_WU_A_GPIO_Port GPIOE
+#define DW_NSS_A_Pin GPIO_PIN_11
+#define DW_NSS_A_GPIO_Port GPIOE
 #define DW_RESET_A_Pin GPIO_PIN_10
 #define DW_RESET_A_GPIO_Port GPIOB
 #define RMII_TXD1_Pin GPIO_PIN_13
