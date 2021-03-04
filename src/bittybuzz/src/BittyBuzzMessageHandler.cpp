@@ -142,9 +142,9 @@ bool BittyBuzzMessageHandler::handleResponse(const ResponseDTO& response) {
         return handleGenericResponse(*gResp);
     }
     if (std::holds_alternative<HiveMindApiResponseDTO>(variantResp)) {
-        m_logger.log(LogLevel::Warn, "Receivec Hivemind Resp in buzz queue");
+        m_logger.log(LogLevel::Warn, "Received Hivemind Resp in buzz queue");
     } else if (std::holds_alternative<SwarmApiResponseDTO>(variantResp)) {
-        m_logger.log(LogLevel::Warn, "Receivec Swarm Resp in buzz queue");
+        m_logger.log(LogLevel::Warn, "Received Swarm Resp in buzz queue");
     }
     return false;
 }
