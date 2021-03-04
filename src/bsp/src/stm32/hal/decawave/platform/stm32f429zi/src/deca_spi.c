@@ -38,8 +38,8 @@ int writetospi(uint16_t headerLength,
  * @brief Low-level SPI function used by Decawave driver to read bytes from the device
  * @param headerLength Length of header in bytes
  * @param headerBuffer Buffer of the header to send
- * @param bodyLength Length of body in bytes
- * @param bodyBuffer Buffer of the body to receive
+ * @param readlength Length of body in bytes
+ * @param readBuffer Buffer of the body to receive
  * @return unused (only here for compatibility with deca driver)
  */
 int readfromspi(uint16_t headerLength,
