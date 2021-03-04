@@ -22,5 +22,6 @@ class USB : public IUSB {
 
     bool send(const uint8_t* buffer, uint16_t length) override;
     bool receive(uint8_t* buffer, uint16_t length) override;
+};
 
 #endif // HIVE_MIND_USB_H
