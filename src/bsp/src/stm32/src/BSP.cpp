@@ -11,8 +11,9 @@ void decaBlink(void* params) {
         Task::delay(1);
     }
     if (dwt_initialise(DWT_LOADNONE) == DWT_ERROR) {
-        while (true)
-            ;
+        while (true){
+        }
+            
     }
 
     dwt_enablegpioclocks();
