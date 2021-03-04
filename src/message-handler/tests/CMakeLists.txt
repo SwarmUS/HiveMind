@@ -3,12 +3,14 @@ set(TEST_NAME test-message-handler)
 set(TEST_SOURCES
     MessageSenderUnitTests.cpp
     MessageDispatcherUnitTests.cpp
+    HiveMindApiRequestHandlerUnitTests.cpp
 )
 
 set(TEST_HEADERS
   mocks/CircularQueueInterfaceMock.h
   mocks/HiveMindHostDeserializerInterfaceMock.h
   mocks/HiveMindHostSerializerInterfaceMock.h
+  mocks/HiveMindApiRequestHandlerInterfaceMock.h
   mocks/LoggerInterfaceMock.h
 
 )

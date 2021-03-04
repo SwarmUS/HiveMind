@@ -8,8 +8,12 @@ class IMessageSender {
     virtual ~IMessageSender() = default;
 
     /**
+     *@brief serialize a greeting message and sends it
+     *@return true if the operation was successful, false if not*/
+    virtual bool greet() = 0;
+
+    /**
      *@brief process an item in the queue, serializes it and sends it to the deserializer
-     *
      *@return true if the operation was successful, false if not*/
     virtual bool processAndSerialize() = 0;
 };

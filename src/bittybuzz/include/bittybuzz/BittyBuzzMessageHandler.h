@@ -39,7 +39,7 @@ class BittyBuzzMessageHandler : public IBittyBuzzMessageHandler {
 
     static bool handleUserCallResponse(const UserCallResponseDTO& response);
     static bool handleGenericResponse(const GenericResponseDTO& response);
-    static bool handleResponse(const ResponseDTO& response);
+    bool handleResponse(const ResponseDTO& response);
 
     bool handleMessage(const MessageDTO& message);
 };

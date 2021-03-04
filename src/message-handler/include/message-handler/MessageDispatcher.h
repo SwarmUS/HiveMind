@@ -1,6 +1,7 @@
-#ifndef __MESSAGEHANDLER_H_
-#define __MESSAGEHANDLER_H_
+#ifndef __MESSAGEDISPATCHER_H_
+#define __MESSAGEDISPATCHER_H_
 
+#include "IHiveMindApiRequestHandler.h"
 #include "IMessageDispatcher.h"
 #include <bsp/IBSP.h>
 #include <cpp-common/ICircularQueue.h>
@@ -14,8 +15,9 @@ class MessageDispatcher : IMessageDispatcher {
                       ICircularQueue<MessageDTO>& hostOutputQ,
                       ICircularQueue<MessageDTO>& remoteOutputQ,
                       IHiveMindHostDeserializer& deserializer,
+                      IHiveMindApiRequestHandler& hivemindApiReqHandler,
                       const IBSP& bsp,
-                      ILogger& m_logger);
+                      ILogger& logger);
 
     ~MessageDispatcher() override = default;
 
@@ -26,6 +28,7 @@ class MessageDispatcher : IMessageDispatcher {
     ICircularQueue<MessageDTO>& m_hostOutputQueue;
     ICircularQueue<MessageDTO>& m_remoteOutputQueue;
     IHiveMindHostDeserializer& m_deserializer;
+    IHiveMindApiRequestHandler& m_hivemindApiReqHandler;
     const IBSP& m_bsp;
     ILogger& m_logger;
 
@@ -38,4 +41,4 @@ class MessageDispatcher : IMessageDispatcher {
     bool dispatchMessage(const MessageDTO& message);
 };
 
-#endif // __MESSAGEHANDLER_H_
+#endif // __MESSAGEDISPATCHER_H_

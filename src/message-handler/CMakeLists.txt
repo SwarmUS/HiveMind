@@ -4,6 +4,7 @@ set(LIB_ALIAS "SwarmUS::HiveMind::MessageHandler")
 set(LIB_SOURCES
     src/MessageDispatcher.cpp
     src/MessageSender.cpp
+    src/HiveMindApiRequestHandler.cpp
     src/MessageHandlerContainer.cpp
 )
 
@@ -13,6 +14,9 @@ set(LIB_HEADERS
 
     include/message-handler/IMessageSender.h
     include/message-handler/MessageSender.h
+
+    include/message-handler/IHiveMindApiRequestHandler.h
+    include/message-handler/HiveMindApiRequestHandler.h
 
     include/message-handler/MessageHandlerContainer.h
 

@@ -1,7 +1,20 @@
 #include "MessageHandlerContainer.h"
+#include <bsp/BSPContainer.h>
 #include <cpp-common/CircularQueueStack.h>
+#include <logger/LoggerContainer.h>
 
 constexpr uint16_t gc_queueMaxSize = 8;
+
+HiveMindApiRequestHandler MessageHandlerContainer::createHiveMindApiRequestHandler() {
+    return HiveMindApiRequestHandler(BSPContainer::getBSP(), LoggerContainer::getLogger());
+}
+
+MessageDispatcher MessageHandlerContainer::createMessageDispatcher(
+    IHiveMindHostDeserializer& deserializer, IHiveMindApiRequestHandler& hivemindApiReqHandler) {
+    return MessageDispatcher(getBuzzMsgQueue(), getHostMsgQueue(), getRemoteMsgQueue(),
+                             deserializer, hivemindApiReqHandler, BSPContainer::getBSP(),
+                             LoggerContainer::getLogger());
+}
 
 ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getBuzzMsgQueue() {
     static CircularQueueStack<MessageDTO, gc_queueMaxSize> s_buzzMsgQueue;
