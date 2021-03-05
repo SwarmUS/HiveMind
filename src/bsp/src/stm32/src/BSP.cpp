@@ -1,12 +1,16 @@
 #include "BSP.h"
 #include "bsp/SettingsContainer.h"
 #include "deca_device_api.h"
+#include "deca_port.h"
 #include <FreeRTOS.h>
 #include <Task.h>
 #include <hal/hal.h>
 
+// TODO: Only here as example. Move everything out to a Decawave class
 void decaBlink(void* params) {
     (void)params;
+
+    deca_selectDevice(DW_A);
     while (DWT_DEVICE_ID != dwt_readdevid()) {
         Task::delay(1);
     }
@@ -15,12 +19,28 @@ void decaBlink(void* params) {
         }
     }
 
+    deca_selectDevice(DW_B);
+    while (DWT_DEVICE_ID != dwt_readdevid()) {
+        Task::delay(1);
+    }
+    if (dwt_initialise(DWT_LOADNONE) == DWT_ERROR) {
+        while (true) {
+        }
+    }
+
+    deca_selectDevice(DW_A);
+    dwt_enablegpioclocks();
+    dwt_setgpiodirection(DWT_GxM3 | DWT_GxM0 | DWT_GxM1 | DWT_GxM2 | DWT_GxM6 | DWT_GxM5,
+                         DWT_GxP6 | DWT_GxP5);
+
+    deca_selectDevice(DW_B);
     dwt_enablegpioclocks();
     dwt_setgpiodirection(DWT_GxM3 | DWT_GxM0 | DWT_GxM1 | DWT_GxM2 | DWT_GxM6 | DWT_GxM5,
                          DWT_GxP6 | DWT_GxP5);
     Task::delay(100);
 
     while (true) {
+        deca_selectDevice(DW_B);
         dwt_setgpiovalue(DWT_GxM0, DWT_GxP0);
         Task::delay(100);
         dwt_setgpiovalue(DWT_GxM1, DWT_GxP1);
@@ -31,10 +51,36 @@ void decaBlink(void* params) {
 
         Task::delay(100);
         dwt_setgpiovalue(DWT_GxM0, 0);
+        deca_selectDevice(DW_A);
+        dwt_setgpiovalue(DWT_GxM0, DWT_GxP0);
+
+        Task::delay(100);
+        deca_selectDevice(DW_B);
+        dwt_setgpiovalue(DWT_GxM1, 0);
+        deca_selectDevice(DW_A);
+        dwt_setgpiovalue(DWT_GxM1, DWT_GxP1);
+
+        Task::delay(100);
+        deca_selectDevice(DW_B);
+        dwt_setgpiovalue(DWT_GxM2, 0);
+        deca_selectDevice(DW_A);
+        dwt_setgpiovalue(DWT_GxM2, DWT_GxP2);
+
+        Task::delay(100);
+        deca_selectDevice(DW_B);
+        dwt_setgpiovalue(DWT_GxM3, 0);
+        deca_selectDevice(DW_A);
+        dwt_setgpiovalue(DWT_GxM3, DWT_GxP3);
+
+        Task::delay(100);
+        dwt_setgpiovalue(DWT_GxM0, 0);
+
         Task::delay(100);
         dwt_setgpiovalue(DWT_GxM1, 0);
+
         Task::delay(100);
         dwt_setgpiovalue(DWT_GxM2, 0);
+
         Task::delay(100);
         dwt_setgpiovalue(DWT_GxM3, 0);
     }
