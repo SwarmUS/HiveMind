@@ -20,7 +20,8 @@ add_link_options(
     -u _printf_float
     -Wl,--print-memory-usage
 )
-
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 
 include(stm32/common)
 # Adding module

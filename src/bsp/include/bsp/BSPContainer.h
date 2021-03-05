@@ -6,6 +6,7 @@
 #include "bsp/IHostUart.h"
 #include "bsp/ISpiEsp.h"
 #include "bsp/IUserInterface.h"
+#include "bsp/IUSB.h"
 
 namespace BSPContainer {
     /**
@@ -33,6 +34,10 @@ namespace BSPContainer {
      */
     ISpiEsp& getSpiEsp();
 
+    /**
+     * @brief Returns an instance of the Esp32 Spi driver.
+     */
+    IUSB& getUSB();
 } // namespace BSPContainer
 
 #endif // _BSPFACTORY_H

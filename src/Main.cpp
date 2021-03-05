@@ -206,6 +206,23 @@ class SPIMessageSender : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
     }
 };
 
+class USBMessageSender : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+  public:
+    USBMessageSender(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority) {}
+
+    ~USBMessageSender() override = default;
+
+  private:
+    void task() override {
+        auto& usb = BSPContainer::getUSB();
+        while (true) {
+            usb.send(reinterpret_cast<const uint8_t*>("allo"), 5);
+            Task::delay(100);
+        }
+    }
+};
+
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
@@ -218,6 +235,7 @@ int main(int argc, char** argv) {
     static UartMessageSender s_uartMessageSender("uart_send", tskIDLE_PRIORITY + 1);
     //    static TCPMessageSender s_tcpMessageSender("uart_send", tskIDLE_PRIORITY + 1);
     static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
+    static USBMessageSender s_usbMessageSender("usb_send", tskIDLE_PRIORITY + 1);
 
     s_bittybuzzTask.start();
     s_uartDispatchTask.start();
@@ -225,6 +243,7 @@ int main(int argc, char** argv) {
     s_uartMessageSender.start();
     //    s_tcpMessageSender.start();
     // s_spiMessageSender.start();
+    s_usbMessageSender.start();
 
     Task::startScheduler();
 

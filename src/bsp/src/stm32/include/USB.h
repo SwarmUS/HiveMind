@@ -17,7 +17,7 @@
 
 class USB : public IUSB {
   public:
-    explicit USB(ICRC& crc, ILogger& logger);
+    USB() = default;
     ~USB() override = default;
 
     bool send(const uint8_t* buffer, uint16_t length) override;
