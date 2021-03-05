@@ -15,6 +15,14 @@ extern "C" {
 typedef enum { DW_A = 0, DW_B } decaDevice_t;
 
 /**
+ * @brief Structure to hold a port and pin associated with a decawave NSS pin
+ */
+typedef struct {
+    GPIO_TypeDef* port;
+    uint16_t pin;
+} decaNSSConfig_t;
+
+/**
  * @brief Performs a hardware reset on a specific decawave
  * @param selectedDevice The device to reset
  */
@@ -47,16 +55,10 @@ void deca_init();
 void deca_selectDevice(decaDevice_t selectedDevice);
 
 /**
- * @brief Gets the NSS pin for the currently selected decawave
+ * @brief Gets the NSS configuration for the currently selected decawave
  * @return The NSS pin
  */
-uint16_t deca_getSelectedNSSPin();
-
-/**
- * @brief Gets the NSS port for the currently selected decawave
- * @return The NSS port
- */
-GPIO_TypeDef* deca_getSelectedNSSPort();
+decaNSSConfig_t* deca_getSelectedNSSConfig();
 
 #ifdef __cplusplus
 }

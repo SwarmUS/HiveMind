@@ -2,8 +2,10 @@
 #include "main.h"
 #include "stm32f4xx_hal_conf.h"
 
-static GPIO_TypeDef* g_selectedDecaNssPort = DW_NSS_A_GPIO_Port;
-static uint16_t g_selectedDecaNssPin = DW_NSS_A_Pin;
+static decaNSSConfig_t g_decaNssConfigA = {DW_NSS_A_GPIO_Port, DW_NSS_A_Pin};
+static decaNSSConfig_t g_decaNssConfigB = {DW_NSS_B_GPIO_Port, DW_NSS_B_Pin};
+
+static decaDevice_t g_selectedDecaDevice = DW_A;
 
 void deca_hardwareReset(decaDevice_t selectedDevice) {
     GPIO_TypeDef* selectedDecaResetPort;
@@ -22,7 +24,6 @@ void deca_hardwareReset(decaDevice_t selectedDevice) {
 
     default:
         return;
-        break;
     }
 
     GPIO_InitTypeDef gpioInitStruct;
@@ -75,23 +76,17 @@ void deca_init() {
     deca_setSlowRate();
 }
 
-void deca_selectDevice(decaDevice_t selectedDevice) {
-    switch (selectedDevice) {
+void deca_selectDevice(decaDevice_t selectedDevice) { g_selectedDecaDevice = selectedDevice; }
+
+decaNSSConfig_t* deca_getSelectedNSSConfig() {
+    switch (g_selectedDecaDevice) {
     case DW_A:
-        g_selectedDecaNssPin = DW_NSS_A_Pin;
-        g_selectedDecaNssPort = DW_NSS_B_GPIO_Port;
-        break;
+        return &g_decaNssConfigA;
 
     case DW_B:
-        g_selectedDecaNssPin = DW_NSS_B_Pin;
-        g_selectedDecaNssPort = DW_NSS_B_GPIO_Port;
-        break;
+        return &g_decaNssConfigB;
 
     default:
-        break;
+        return NULL;
     }
 }
-
-uint16_t deca_getSelectedNSSPin() { return g_selectedDecaNssPin; }
-
-GPIO_TypeDef* deca_getSelectedNSSPort() { return g_selectedDecaNssPort; }
