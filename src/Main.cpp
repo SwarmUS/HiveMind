@@ -256,6 +256,7 @@ int main(int argc, char** argv) {
     static UartMessageSender s_uartMessageSender("uart_send", tskIDLE_PRIORITY + 1);
     //    static TCPMessageSender s_tcpMessageSender("uart_send", tskIDLE_PRIORITY + 1);
     static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
+    static USBMessageSender s_usbMessageSender("usb_send", tskIDLE_PRIORITY + 1);
 
     s_bittybuzzTask.start();
     s_uartDispatchTask.start();

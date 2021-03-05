@@ -5,6 +5,7 @@
 #include "SpiEsp.h"
 #include "UserInterface.h"
 #include "logger/LoggerContainer.h"
+#include "USB.h"
 
 IBSP& BSPContainer::getBSP() {
     static BSP s_bsp;
@@ -32,4 +33,8 @@ ICRC& BSPContainer::getCRC() {
 ISpiEsp& BSPContainer::getSpiEsp() {
     static SpiEsp s_spiEsp(getCRC(), LoggerContainer::getLogger());
     return s_spiEsp;
+}
+IUSB& BSPContainer::getUSB() {
+    static USB s_usb;
+    return s_usb;
 }
