@@ -29,15 +29,20 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief register a new function, exposing it to the remote composant of the swarm
-     *@details This closure expects two parameters, one stringId (name of the function), and one
-     * closure (the function itself)
+     *@details This closure expects four parameters, one stringId (name of the function), one
+     * closure (the function itself), one table with the description of the arguments, and one with
+     *the self context
      *@code
      *
-     *function registered_function(args) {
-     *    assert_true(args[0] == 42);
-     *}
-     * register_closure("lambda", function(args){assert_true(args[0] == 42);});
-     * register_closure("function", registered_function);
+     * function registered_function(arg_int, arg_float) {
+     *   assert_true(arg_int == 42);
+     *    assert_true(arg_float == 42.24);
+     * }
+     * var args_description = {
+     *    .0 = {.arg_int=0},
+     *    .1 = {.arg_float=0.0}
+     * };
+     * register_closure("registeredFunction", registered_function, args_description, nil)
      *@endcode */
     void registerClosure();
 
