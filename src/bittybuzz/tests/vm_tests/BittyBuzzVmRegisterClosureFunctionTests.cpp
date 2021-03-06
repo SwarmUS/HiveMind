@@ -19,6 +19,8 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_registerFunction) {
     // Given
     uint16_t boardId = 42;
     std::string functionName = "registeredFunction";
+    std::string argIntName = "arg_int";
+    std::string argFloatName = "arg_float";
 
     BittyBuzzClosureRegisterInterfaceMock closureRegister;
     BittyBuzzStringResolverInterfaceMock stringResolver;
@@ -26,10 +28,20 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_registerFunction) {
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
 
     EXPECT_CALL(messageHandler, messageQueueLength).Times(1).WillOnce(testing::Return(0));
-    EXPECT_CALL(stringResolver, getString).Times(1).WillOnce(testing::Return(functionName.c_str()));
-    EXPECT_CALL(closureRegister, registerClosure(functionName.c_str(), testing::_, testing::_))
+    EXPECT_CALL(closureRegister,
+                registerClosure(functionName.c_str(), testing::_, testing::_, testing::_))
         .Times(1)
         .WillOnce(testing::Return(true));
+
+    EXPECT_CALL(stringResolver, getString(BBZSTRID_registeredFunction))
+        .Times(1)
+        .WillOnce(testing::Return(functionName.c_str()));
+    EXPECT_CALL(stringResolver, getString(BBZSTRID_arg_int))
+        .Times(1)
+        .WillOnce(testing::Return(argIntName.c_str()));
+    EXPECT_CALL(stringResolver, getString(BBZSTRID_arg_float))
+        .Times(1)
+        .WillOnce(testing::Return(argFloatName.c_str()));
 
     std::array<UserFunctionRegister, 2> functionRegisters = {
         {{BBZSTRID_assert_true, buzzAssertTrue},

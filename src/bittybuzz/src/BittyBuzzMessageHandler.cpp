@@ -56,42 +56,33 @@ FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
             return invalidRequestResponse;
         }
 
-        // Pushing bbz table for arguments
-        bbzheap_idx_t table = bbztable_new();
+        bbzvm_push(registeredClosure.m_selfHeapIdx); // Push self table
+        bbzvm_push(registeredClosure.m_closureHeapIdx); // Push closure
 
+        // Pushing bbz args
         for (uint16_t i = 0; i < functionRequest.getArgumentsLength(); i++) {
             // Buzz table index
-            bbzheap_idx_t tableIdx = bbzint_new((int16_t)i);
             const std::variant<std::monostate, int64_t, float>& arg = args[i].getArgument();
 
             if (const int64_t* intVal = std::get_if<int64_t>(&arg)) {
                 // Check if it matches the stored type
-                if (std::get<1>(storedArgs[i]) == FunctionDescriptionArgumentTypeDTO::Int) {
+                if (std::get<1>(storedArgs[i]) != FunctionDescriptionArgumentTypeDTO::Int) {
                     invalidRequestResponse.setDetails("arg type don't match");
                     return invalidRequestResponse;
                 }
+                bbzvm_pushi((int16_t)*intVal);
 
-                bbzheap_idx_t bbzIntVal = bbzint_new(*intVal);
-                bbztable_set(table, tableIdx, bbzIntVal);
-            }
-
-            else if (const float* floatVal = std::get_if<float>(&arg)) {
-                if (std::get<1>(storedArgs[i]) == FunctionDescriptionArgumentTypeDTO::Int) {
+            } else if (const float* floatVal = std::get_if<float>(&arg)) {
+                if (std::get<1>(storedArgs[i]) != FunctionDescriptionArgumentTypeDTO::Float) {
                     invalidRequestResponse.setDetails("arg type don't match");
                     return invalidRequestResponse;
                 }
-
-                bbzheap_idx_t bbzFloatVal = bbzfloat_new(bbzfloat_fromfloat(*floatVal));
-                bbztable_set(table, tableIdx, bbzFloatVal);
+                bbzvm_pushf(bbzfloat_fromfloat(*floatVal));
             }
         }
 
-        // TODO: Migrate to variable number of arguments once we know the number beforehand (at
-        // registration), will avoid the user messing with tables (if possible)
-        bbzvm_push(registeredClosure.m_selfHeapIdx); // Push self
-        bbzvm_push(registeredClosure.m_closureHeapIdx); // Push closure
-        bbzvm_push(table); // Push args
-        bbzvm_closure_call(1);
+        // Call the closure
+        bbzvm_closure_call(functionRequest.getArgumentsLength());
         bbzvm_pop(); // Pop self table
 
         // response

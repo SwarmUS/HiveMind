@@ -1,10 +1,14 @@
-function registered_function(args) {
-    assert_true(args[0] == 42);
-    assert_true(args[1] == 42.24);
+function registered_function(arg_int, arg_float) {
+    assert_true(arg_int == 42);
+    assert_true(arg_float == 42.24);
 }
 
 function init() {
-    register_closure("registeredFunction", registered_function);
+  var args_description = {
+    .0 = {.arg_int=0},
+    .1 = {.arg_float=0.0}
+  };
+  register_closure("registeredFunction", registered_function, args_description, nil)
 }
 
 function step() {

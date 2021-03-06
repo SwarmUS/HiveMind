@@ -30,8 +30,12 @@ bool BittyBuzzClosureRegister::registerClosure(const char* functionName,
     bbzheap_obj_make_permanent(*closure);
     bbzheap_obj_make_permanent(*self);
 
-    m_closureRegisters[m_closureRegistersLength] = {functionNameHash,
-                                                    {closureHeapIdx, selfHeapIdx, description}};
+    BittyBuzzRegisteredClosure registeredClosure;
+    registeredClosure.m_closureHeapIdx = closureHeapIdx;
+    registeredClosure.m_selfHeapIdx = selfHeapIdx;
+    registeredClosure.m_description = description;
+
+    m_closureRegisters[m_closureRegistersLength] = std::make_tuple(functionNameHash, registeredClosure);
     m_closureRegistersLength++;
     return true;
 }
@@ -43,9 +47,9 @@ std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> BittyBuz
     size_t functionNameHash = std::hash<std::string_view>{}(functionNameView);
 
     for (uint16_t i = 0; i < m_closureRegistersLength; i++) {
-        auto [hash, registeredClosure] = m_closureRegisters[i];
+        size_t hash = std::get<0>(m_closureRegisters[i]);
         if (functionNameHash == hash) {
-            return registeredClosure;
+            return std::get<1>(m_closureRegisters[i]); 
         }
     }
 
