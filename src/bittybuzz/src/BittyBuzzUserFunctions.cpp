@@ -109,7 +109,6 @@ void BittyBuzzUserFunctions::registerClosure() {
 
     if (functionNameOpt) {
         // Store the function name
-        // TODO: add support for table with arg name as key and
         BittyBuzzFunctionDescription argsDescription;
         uint8_t argsSize = bbztable_size(bbzArgsDescHeapIdx);
         for (uint8_t i = 0; i < argsSize; i++) {

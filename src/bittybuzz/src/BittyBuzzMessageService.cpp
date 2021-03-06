@@ -14,7 +14,6 @@ bool BittyBuzzMessageService::callHostFunction(uint16_t hostId,
     // Target of a usercall from buzz is always to a host
     UserCallRequestDTO uReq(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, fReq);
 
-    // TODO: dertermine how we number our requests
     uint16_t uuid = m_bsp.getUUId();
     RequestDTO req(m_bsp.generateRandomNumber(), uReq);
     MessageDTO message(uuid, hostId, req);
