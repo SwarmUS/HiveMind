@@ -5,6 +5,7 @@ class BittyBuzzClosureRegisterTestFixture : public testing::Test {
   protected:
     BittyBuzzClosureRegister* m_closureRegister;
     bbzvm_t m_bbzvm;
+    BittyBuzzFunctionDescription m_description;
 
     void SetUp() override {
 
@@ -21,7 +22,7 @@ TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_registerClo
     bbzheap_idx_t heapIdx = bbzclosure_new(42);
 
     // Then
-    bool ret = m_closureRegister->registerClosure("Hello World", heapIdx);
+    bool ret = m_closureRegister->registerClosure("Hello World", heapIdx, m_description);
 
     // Expect
     EXPECT_TRUE(ret);
@@ -33,7 +34,7 @@ TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_registerClo
     bbzheap_idx_t heapIdx = bbzclosure_new(42);
 
     // Then
-    bool ret = m_closureRegister->registerClosure("Hello World", heapIdx);
+    bool ret = m_closureRegister->registerClosure("Hello World", heapIdx, m_description);
 
     // Expect
     bbzobj_t* obj = bbzheap_obj_at(heapIdx);
@@ -47,7 +48,7 @@ TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_registerClo
     bbzheap_idx_t heapIdx = bbzint_new(42);
 
     // Then
-    bool ret = m_closureRegister->registerClosure("Hello World", heapIdx);
+    bool ret = m_closureRegister->registerClosure("Hello World", heapIdx, m_description);
 
     // Expect
     EXPECT_FALSE(ret);
@@ -61,11 +62,12 @@ TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_registerClo
     // Then
 
     for (uint16_t i = 0; i < BittyBuzzClosureRegister::m_maxSize; i++) {
-        bool ret = m_closureRegister->registerClosure("Hello World", bbzclosure_new(i));
+        bool ret =
+            m_closureRegister->registerClosure("Hello World", bbzclosure_new(i), m_description);
         EXPECT_TRUE(ret);
     }
 
-    bool ret = m_closureRegister->registerClosure("Hello World", heapIdx);
+    bool ret = m_closureRegister->registerClosure("Hello World", heapIdx, m_description);
 
     // Expect
     EXPECT_FALSE(ret);
@@ -85,7 +87,7 @@ TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_getClosureH
 TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_getClosureHeapIdx_exist) {
     // Given
     bbzheap_idx_t heap = bbzclosure_new(42);
-    m_closureRegister->registerClosure("Hello World", heap);
+    m_closureRegister->registerClosure("Hello World", heap, m_description);
 
     // Then
 
@@ -99,7 +101,7 @@ TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_getClosureH
 TEST_F(BittyBuzzClosureRegisterTestFixture,
        BittyBuzzClosureRegister_getClosureHeapIdx_doesNotExist) {
     // Given
-    m_closureRegister->registerClosure("Hello World", bbzclosure_new(42));
+    m_closureRegister->registerClosure("Hello World", bbzclosure_new(42), m_description);
 
     // Then
 

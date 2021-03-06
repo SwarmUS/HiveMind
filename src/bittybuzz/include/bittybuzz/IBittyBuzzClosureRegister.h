@@ -1,6 +1,7 @@
 #ifndef __IBITTYBUZZCLOSUREREGISTER_H_
 #define __IBITTYBUZZCLOSUREREGISTER_H_
 
+#include "bittybuzz/BittyBuzzFunctionDescription.h"
 #include <bbzvm.h>
 #include <optional>
 
@@ -15,9 +16,12 @@ class IBittyBuzzClosureRegister {
      *@param functionName the name of the function
      *@param closureHeapIdx a pointer to the heap to the closure. When registering, the function
      *will be made permanent.
+     *@param description the description of the function, it's argument names and types
      *@return true on success, false if not (i.e. no more space in the list, or the heapidx is not a
      *closure)*/
-    virtual bool registerClosure(const char* functionName, bbzheap_idx_t closureHeapIdx) = 0;
+    virtual bool registerClosure(const char* functionName,
+                                 bbzheap_idx_t closureHeapIdx,
+                                 const BittyBuzzFunctionDescription& description) = 0;
 
     /**
      *@brief get the id of a stored function by it's associated name

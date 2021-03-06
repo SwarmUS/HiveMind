@@ -84,8 +84,9 @@ FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
 UserCallResponseDTO BittyBuzzMessageHandler::handleUserCallRequest(
     const UserCallRequestDTO& userRequest) {
 
-    const std::variant<std::monostate, FunctionCallRequestDTO>& variantReq =
-        userRequest.getRequest();
+    // TODO: handle
+    const std::variant<std::monostate, FunctionCallRequestDTO, FunctionListLengthRequestDTO,
+                       FunctionDescriptionRequestDTO>& variantReq = userRequest.getRequest();
     if (const auto* fReq = std::get_if<FunctionCallRequestDTO>(&variantReq)) {
         // Response
         FunctionCallResponseDTO fResponse = handleFunctionCallRequest(*fReq);

@@ -7,6 +7,7 @@ set(TEST_SOURCES
     BittyBuzzClosureRegisterUnitTests.cpp
     BittyBuzzMessageHandlerUnitTests.cpp
     BittyBuzzMessageServiceUnitTests.cpp
+    BittyBuzzFunctionDescriptionUnitTests.cpp
 
     vm_tests/BittyBuzzVmTestsUtils.cpp
 

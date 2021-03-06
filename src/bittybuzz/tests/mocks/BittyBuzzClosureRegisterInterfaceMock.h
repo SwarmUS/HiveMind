@@ -10,7 +10,9 @@ class BittyBuzzClosureRegisterInterfaceMock : public IBittyBuzzClosureRegister {
 
     MOCK_METHOD(bool,
                 registerClosure,
-                (const char* functionName, bbzheap_idx_t closureHeapIdx),
+                (const char* functionName,
+                 bbzheap_idx_t closureHeapIdx,
+                 const BittyBuzzFunctionDescription& description),
                 (override));
 
     MOCK_METHOD(std::optional<bbzheap_idx_t>,

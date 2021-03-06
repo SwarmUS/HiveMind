@@ -75,8 +75,9 @@ void BittyBuzzUserFunctions::registerClosure() {
     if (optionString) {
         // Store the function name
         // TODO: add support for table with arg name as key and
-        bool ret = BittyBuzzSystem::g_closureRegister->registerClosure(optionString.value(),
-                                                                       bbzClosureHeapIdx);
+        bool ret = BittyBuzzSystem::g_closureRegister->registerClosure(
+            optionString.value(), bbzClosureHeapIdx, BittyBuzzFunctionDescription());
+
         if (!ret) {
             BittyBuzzSystem::g_logger->log(LogLevel::Warn, "BBZ: Could not register closure");
         }

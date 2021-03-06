@@ -42,6 +42,7 @@ set(LIB_HEADERS
     include/bittybuzz/BittyBuzzFactory.h
     include/bittybuzz/BittyBuzzContainer.h
     include/bittybuzz/BittyBuzzUserFunctions.h
+    include/bittybuzz/BittyBuzzFunctionDescription.h
 )
 
 set(LIB_SOURCES
@@ -56,6 +57,7 @@ set(LIB_SOURCES
     src/BittyBuzzFactory.cpp
     src/BittyBuzzContainer.cpp
     src/BittyBuzzUserFunctions.cpp
+    src/BittyBuzzFunctionDescription.cpp
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_HEADERS})
