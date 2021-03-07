@@ -21,6 +21,9 @@ class BittyBuzzClosureRegister : public IBittyBuzzClosureRegister {
     std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> getRegisteredClosure(
         const char* functionName) const override;
 
+    std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> getRegisteredClosure(
+        uint16_t idx) const override;
+
     constexpr static uint16_t m_maxSize = BBZ_CLOSURE_REGISTER_LENGTH;
 
   private:

@@ -20,6 +20,11 @@ class BittyBuzzClosureRegisterInterfaceMock : public IBittyBuzzClosureRegister {
                 getRegisteredClosure,
                 (const char* functionName),
                 (const override));
+
+    MOCK_METHOD(std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>>,
+                getRegisteredClosure,
+                (uint16_t idx),
+                (const override));
 };
 
 #endif // __BITTYBUZZCLOSUREREGISTERINTERFACEMOCK_H_

@@ -7,6 +7,7 @@
 
 /**@brief a struct containing info of a registered closure*/
 struct BittyBuzzRegisteredClosure {
+    const char* m_functionName;
     bbzheap_idx_t m_closureHeapIdx;
     bbzheap_idx_t m_selfHeapIdx;
     BittyBuzzFunctionDescription m_description;
@@ -20,7 +21,8 @@ class IBittyBuzzClosureRegister {
 
     /**
      *@brief register a closure to the list
-     *@param functionName the name of the function
+     *@param functionName the name of the function, @b Warning, the register just keeps a
+     *pointer to the name, so make sure the data it's points to is valid during usage
      *@param closureHeapIdx a pointer to the heap to the closure. When registering, the function
      *will be made permanent.
      *@param selfHeapIdx a pointer to the heap to the self variable, can be nil. When registering,
@@ -39,6 +41,13 @@ class IBittyBuzzClosureRegister {
      *@return an optional that has a reference to the info of the registered closure */
     virtual std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>>
     getRegisteredClosure(const char* functionName) const = 0;
+
+    /**
+     *@brief get the id of a stored function by it's associated name
+     *@param idx the index of the function to fetch
+     *@return an optional that has a reference to the info of the registered closure */
+    virtual std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>>
+    getRegisteredClosure(uint16_t idx) const = 0;
 };
 
 #endif // __IBITTYBUZZCLOSUREREGISTER_H_

@@ -77,7 +77,8 @@ TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_registerClo
     EXPECT_FALSE(ret);
 }
 
-TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_getRegisteredClosure_empty) {
+TEST_F(BittyBuzzClosureRegisterTestFixture,
+       BittyBuzzClosureRegister_getRegisteredClosure_name_empty) {
     // Given
 
     // Then
@@ -88,7 +89,8 @@ TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_getRegister
     EXPECT_FALSE(ret.operator bool());
 }
 
-TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_getRegisteredClosure_exist) {
+TEST_F(BittyBuzzClosureRegisterTestFixture,
+       BittyBuzzClosureRegister_getRegisteredClosure_name_exist) {
     // Given
     bbzheap_idx_t heap = bbzclosure_new(42);
     m_closureRegister->registerClosure("Hello World", heap, m_bbzvm.nil, m_description);
@@ -104,7 +106,7 @@ TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_getRegister
 }
 
 TEST_F(BittyBuzzClosureRegisterTestFixture,
-       BittyBuzzClosureRegister_getRegisteredClosure_doesNotExist) {
+       BittyBuzzClosureRegister_getRegisteredClosure_name_doesNotExist) {
     // Given
     m_closureRegister->registerClosure("Hello World", bbzclosure_new(42), m_bbzvm.nil,
                                        m_description);
@@ -118,14 +120,42 @@ TEST_F(BittyBuzzClosureRegisterTestFixture,
 }
 
 TEST_F(BittyBuzzClosureRegisterTestFixture,
-       BittyBuzzClosureRegister_getRegisteredClosure_invalidSelf) {
+       BittyBuzzClosureRegister_getRegisteredClosure_id_empty) {
     // Given
-    m_closureRegister->registerClosure("Hello World", bbzclosure_new(42), bbzint_new(42),
+
+    // Then
+    uint16_t idx = 0;
+    auto ret = m_closureRegister->getRegisteredClosure(idx);
+
+    // Expect
+    EXPECT_FALSE(ret.operator bool());
+}
+
+TEST_F(BittyBuzzClosureRegisterTestFixture,
+       BittyBuzzClosureRegister_getRegisteredClosure_id_exist) {
+    // Given
+    bbzheap_idx_t heap = bbzclosure_new(42);
+    m_closureRegister->registerClosure("Hello World", heap, m_bbzvm.nil, m_description);
+
+    // Then
+    uint16_t idx = 0;
+    auto ret = m_closureRegister->getRegisteredClosure(idx);
+
+    // Expect
+    EXPECT_TRUE(ret.operator bool());
+    EXPECT_EQ(heap, ret.value().get().m_closureHeapIdx);
+    EXPECT_EQ(m_bbzvm.nil, ret.value().get().m_selfHeapIdx);
+}
+
+TEST_F(BittyBuzzClosureRegisterTestFixture,
+       BittyBuzzClosureRegister_getRegisteredClosure_id_doesNotExist) {
+    // Given
+    m_closureRegister->registerClosure("Hello World", bbzclosure_new(42), m_bbzvm.nil,
                                        m_description);
 
     // Then
-
-    auto ret = m_closureRegister->getRegisteredClosure("Hello World");
+    uint16_t idx = 1;
+    auto ret = m_closureRegister->getRegisteredClosure(idx);
 
     // Expect
     EXPECT_FALSE(ret.operator bool());
