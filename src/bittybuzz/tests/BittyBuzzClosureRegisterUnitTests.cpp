@@ -14,7 +14,10 @@ class BittyBuzzClosureRegisterTestFixture : public testing::Test {
         m_closureRegister = new BittyBuzzClosureRegister();
     }
 
-    void TearDown() override { delete m_closureRegister; }
+    void TearDown() override {
+        delete m_description;
+        delete m_closureRegister;
+    }
 };
 
 TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_registerClosure_empty) {
