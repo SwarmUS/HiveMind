@@ -10,7 +10,6 @@
 
 class BittyBuzzClosureRegister : public IBittyBuzzClosureRegister {
   public:
-    BittyBuzzClosureRegister();
     ~BittyBuzzClosureRegister() = default;
 
     bool registerClosure(const char* functionName,

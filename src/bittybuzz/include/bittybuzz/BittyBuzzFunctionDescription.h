@@ -11,6 +11,11 @@
 class BittyBuzzFunctionDescription {
   public:
     /**
+     * @b Warning only the pointer is stored so make sure the functionName data lifetime is greater
+     * than the funciton description*/
+    BittyBuzzFunctionDescription(const char* functionName);
+
+    /**
      *@brief get the array of arguments description
      *@return an reference to an std::array with the information stored*/
     const std::array<std::tuple<const char*, FunctionDescriptionArgumentTypeDTO>,
@@ -31,6 +36,7 @@ class BittyBuzzFunctionDescription {
     bool addArgument(const char* argumentName, FunctionDescriptionArgumentTypeDTO argumentType);
 
   private:
+    const char* m_functionName;
     std::array<std::tuple<const char*, FunctionDescriptionArgumentTypeDTO>,
                FunctionDescriptionDTO::ARGUMENTS_MAX_SIZE>
         m_argumentDescriptions;

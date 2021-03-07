@@ -1,5 +1,8 @@
 #include "BittyBuzzFunctionDescription.h"
 
+BittyBuzzFunctionDescription::BittyBuzzFunctionDescription(const char* functionName) :
+    m_functionName(functionName) {}
+
 const std::array<std::tuple<const char*, FunctionDescriptionArgumentTypeDTO>,
                  FunctionDescriptionDTO::ARGUMENTS_MAX_SIZE>&
 BittyBuzzFunctionDescription::getArguments() const {

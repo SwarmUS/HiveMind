@@ -109,7 +109,7 @@ void BittyBuzzUserFunctions::registerClosure() {
 
     if (functionNameOpt) {
         // Store the function name
-        BittyBuzzFunctionDescription argsDescription;
+        BittyBuzzFunctionDescription argsDescription(functionNameOpt.value());
         uint8_t argsSize = bbztable_size(bbzArgsDescHeapIdx);
         for (uint8_t i = 0; i < argsSize; i++) {
 

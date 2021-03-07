@@ -147,7 +147,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
-    BittyBuzzRegisteredClosure registeredClosure = {"", 1, 1, {}};
+    BittyBuzzRegisteredClosure registeredClosure("");
     std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> bbzRetValue =
         registeredClosure;
 
@@ -181,7 +181,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
-    BittyBuzzRegisteredClosure registeredClosure = {"", 1, 1, {}};
+    BittyBuzzRegisteredClosure registeredClosure("");
     std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> bbzRetValue =
         registeredClosure;
 

@@ -2,7 +2,10 @@
 #include <bbzvm.h>
 #include <cstring>
 
-BittyBuzzClosureRegister::BittyBuzzClosureRegister() = default;
+BittyBuzzRegisteredClosure::BittyBuzzRegisteredClosure(const char* functionName) :
+    m_description(functionName) {}
+
+BittyBuzzRegisteredClosure::BittyBuzzRegisteredClosure() : m_description("") {}
 
 bool BittyBuzzClosureRegister::registerClosure(const char* functionName,
                                                bbzheap_idx_t closureHeapIdx,
@@ -31,7 +34,6 @@ bool BittyBuzzClosureRegister::registerClosure(const char* functionName,
     bbzheap_obj_make_permanent(*self);
 
     BittyBuzzRegisteredClosure registeredClosure;
-    registeredClosure.m_functionName = functionName;
     registeredClosure.m_closureHeapIdx = closureHeapIdx;
     registeredClosure.m_selfHeapIdx = selfHeapIdx;
     registeredClosure.m_description = description;

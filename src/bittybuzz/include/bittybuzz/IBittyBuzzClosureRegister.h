@@ -5,10 +5,12 @@
 #include <bbzvm.h>
 #include <optional>
 
-/**@brief a struct containing info of a registered closure*/
-struct BittyBuzzRegisteredClosure {
-    // TODO: move name to description
-    const char* m_functionName;
+/**@brief a class containing info of a registered closure*/
+class BittyBuzzRegisteredClosure {
+  public:
+    BittyBuzzRegisteredClosure();
+    BittyBuzzRegisteredClosure(const char* functionName);
+
     bbzheap_idx_t m_closureHeapIdx;
     bbzheap_idx_t m_selfHeapIdx;
     BittyBuzzFunctionDescription m_description;
