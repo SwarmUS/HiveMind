@@ -35,6 +35,6 @@ ISpiEsp& BSPContainer::getSpiEsp() {
     return s_spiEsp;
 }
 IUSB& BSPContainer::getUSB() {
-    static USB s_usb;
+    static USB s_usb(LoggerContainer::getLogger());
     return s_usb;
 }

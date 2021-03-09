@@ -109,7 +109,8 @@ uint8_t app_data[APP_TX_DATA_SIZE] = {0};
  * @{
  */
 
-extern USBD_HandleTypeDef hUsbDeviceFS;
+
+
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
 

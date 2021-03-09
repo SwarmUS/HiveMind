@@ -19,16 +19,15 @@
 
 class USB : public IUSB {
   public:
-//    USB(ILogger& logger);
-    USB() = default;
+    USB(ILogger& logger);
     ~USB() override = default;
 
     bool send(const uint8_t* buffer, uint16_t length) override;
     bool receive(uint8_t* buffer, uint16_t length) override;
+    bool isConnected() override;
 
-//  private:
-//    ILogger& m_logger;
-//    std::array<uint8_t, USB_STREAM_SIZE> m_streamMemory;
+  private:
+    ILogger& m_logger;
 };
 
 #endif // HIVE_MIND_USB_H

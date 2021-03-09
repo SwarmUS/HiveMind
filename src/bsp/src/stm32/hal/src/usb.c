@@ -10,3 +10,7 @@ uint8_t USB_Send_Data(uint8_t* buf, uint16_t Len) {
 void USB_rm_data(uint8_t* buf) {
     buf[0] = '\0';
 }
+
+bool USB_isConnected(){
+    return hUsbDeviceFS.dev_connection_status;
+}
