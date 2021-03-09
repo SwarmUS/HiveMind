@@ -23,7 +23,8 @@
 #include "usbd_cdc_if.h"
 
 /* USER CODE BEGIN INCLUDE */
-
+//static uint8_t inBuffer[256];
+//static uint16_t inLen = 0;
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -94,8 +95,9 @@ uint8_t UserRxBufferFS[APP_RX_DATA_SIZE];
 /** Data to send over USB CDC are stored in this buffer   */
 uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
 
-/* USER CODE BEGIN PRIVATE_VARIABLES */
 
+/* USER CODE BEGIN PRIVATE_VARIABLES */
+uint8_t app_data[APP_TX_DATA_SIZE] = {0};
 /* USER CODE END PRIVATE_VARIABLES */
 
 /**
@@ -251,13 +253,21 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length) {
  */
 static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t* Len) {
     /* USER CODE BEGIN 6 */
-    Buf++;
     USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
     USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+    add_data_app_buf(UserRxBufferFS, *Len);
     return (USBD_OK);
     /* USER CODE END 6 */
 }
 
+
+int8_t add_data_app_buf(uint8_t* Buf, uint16_t* Len){
+    static uint16_t data_len = 0;
+    data_len += Len;
+    strncat(app_data,Buf,Len);
+//    CDC_Transmit_FS(app_data, data_len);
+    return (USBD_OK);
+}
 /**
  * @brief  CDC_Transmit_FS
  *         Data to send over USB IN endpoint are sent over CDC interface

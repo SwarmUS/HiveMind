@@ -243,6 +243,7 @@ class SpiMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZE> 
     ILogger& m_logger;
 };
 
+
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
@@ -255,11 +256,12 @@ int main(int argc, char** argv) {
     static SpiMessageDispatcher s_spiDispatchTask("spi_dispatch", tskIDLE_PRIORITY + 1);
     static UartMessageSender s_uartMessageSender("uart_send", tskIDLE_PRIORITY + 1);
     //    static TCPMessageSender s_tcpMessageSender("uart_send", tskIDLE_PRIORITY + 1);
-    static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
-    static USBMessageSender s_usbMessageSender("usb_send", tskIDLE_PRIORITY + 1);
+//    static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
+//    static USBMessageSender s_usbMessageSender("usb_send", tskIDLE_PRIORITY + 5);
+    static USBMessageReceive s_usbMessageReceive("usb_receive", tskIDLE_PRIORITY + 5);
 
     s_bittybuzzTask.start();
-    s_uartDispatchTask.start();
+//    s_uartDispatchTask.start();
     //    s_tcpDispatchTask.start();
     s_uartMessageSender.start();
     s_tcpMessageSender.start();
