@@ -68,3 +68,7 @@ std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> BittyBuz
 
     return std::get<1>(m_closureRegisters[idx]);
 }
+
+uint16_t BittyBuzzClosureRegister::getRegisteredClosureLength() const {
+    return m_closureRegistersLength;
+}

@@ -51,6 +51,11 @@ class IBittyBuzzClosureRegister {
      *@return an optional that has a reference to the info of the registered closure */
     virtual std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>>
     getRegisteredClosure(uint16_t idx) const = 0;
+
+    /**
+     *@brief get the length/number of the registered closures
+     *@return the number of registered closures */
+    virtual uint16_t getRegisteredClosureLength() const = 0;
 };
 
 #endif // __IBITTYBUZZCLOSUREREGISTER_H_

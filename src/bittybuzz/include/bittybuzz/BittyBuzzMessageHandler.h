@@ -32,6 +32,10 @@ class BittyBuzzMessageHandler : public IBittyBuzzMessageHandler {
     ILogger& m_logger;
 
     // handling funciton
+    FunctionListLengthResponseDTO handleFunctionListLengthRequest(
+        const FunctionListLengthRequestDTO& functionLengthRequest);
+    FunctionDescriptionResponseDTO handleFunctionDescriptionRequest(
+        const FunctionDescriptionRequestDTO& functionDescRequest);
     FunctionCallResponseDTO handleFunctionCallRequest(
         const FunctionCallRequestDTO& functionRequest);
     UserCallResponseDTO handleUserCallRequest(const UserCallRequestDTO& userRequest);

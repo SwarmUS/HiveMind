@@ -35,6 +35,37 @@ bool BittyBuzzMessageHandler::processMessage() {
 
 uint16_t BittyBuzzMessageHandler::messageQueueLength() const { return m_inputQueue.getLength(); }
 
+FunctionListLengthResponseDTO BittyBuzzMessageHandler::handleFunctionListLengthRequest(
+    const FunctionListLengthRequestDTO& functionLengthRequest) {
+    (void)functionLengthRequest;
+    return FunctionListLengthResponseDTO(m_closureRegister.getRegisteredClosureLength());
+}
+
+FunctionDescriptionResponseDTO BittyBuzzMessageHandler::handleFunctionDescriptionRequest(
+
+    const FunctionDescriptionRequestDTO& functionDescRequest) {
+    uint16_t idx = functionDescRequest.getIndex();
+    auto optClosure = m_closureRegister.getRegisteredClosure(idx);
+
+    if (optClosure) {
+        const BittyBuzzFunctionDescription& closureDesc = optClosure.value().get().m_description;
+        std::array<FunctionDescriptionArgumentDTO, FunctionDescriptionDTO::ARGUMENTS_MAX_SIZE>
+            argsDto;
+
+        // Bulding arguments
+        auto args = closureDesc.getArguments();
+        for (uint16_t i = 0; i < closureDesc.getArgumentsLength(); i++) {
+            argsDto[i] = FunctionDescriptionArgumentDTO(std::get<0>(args[i]), std::get<1>(args[i]));
+        }
+
+        FunctionDescriptionDTO descDto(closureDesc.getFunctionName(), argsDto.data(),
+                                       closureDesc.getArgumentsLength());
+        return FunctionDescriptionResponseDTO(descDto);
+    }
+    return FunctionDescriptionResponseDTO(
+        GenericResponseDTO(GenericResponseStatusDTO::BadRequest, "invalid idx"));
+}
+
 FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
     const FunctionCallRequestDTO& functionRequest) {
 
@@ -100,7 +131,16 @@ UserCallResponseDTO BittyBuzzMessageHandler::handleUserCallRequest(
     if (const auto* fReq = std::get_if<FunctionCallRequestDTO>(&variantReq)) {
         // Response
         FunctionCallResponseDTO fResponse = handleFunctionCallRequest(*fReq);
-
+        return UserCallResponseDTO(UserCallTargetDTO::BUZZ, userRequest.getSource(), fResponse);
+    }
+    if (const auto* fReq = std::get_if<FunctionDescriptionRequestDTO>(&variantReq)) {
+        // Response
+        FunctionDescriptionResponseDTO fResponse = handleFunctionDescriptionRequest(*fReq);
+        return UserCallResponseDTO(UserCallTargetDTO::BUZZ, userRequest.getSource(), fResponse);
+    }
+    if (const auto* fReq = std::get_if<FunctionListLengthRequestDTO>(&variantReq)) {
+        // Response
+        FunctionListLengthResponseDTO fResponse = handleFunctionListLengthRequest(*fReq);
         return UserCallResponseDTO(UserCallTargetDTO::BUZZ, userRequest.getSource(), fResponse);
     }
 

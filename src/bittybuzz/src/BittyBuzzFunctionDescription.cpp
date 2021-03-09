@@ -12,6 +12,7 @@ BittyBuzzFunctionDescription::getArguments() const {
 uint16_t BittyBuzzFunctionDescription::getArgumentsLength() const {
     return m_argumentDescriptionsLength;
 }
+const char* BittyBuzzFunctionDescription::getFunctionName() const { return m_functionName; }
 
 bool BittyBuzzFunctionDescription::addArgument(const char* argumentName,
                                                FunctionDescriptionArgumentTypeDTO argumentType) {

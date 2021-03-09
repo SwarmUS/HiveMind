@@ -24,8 +24,13 @@ class BittyBuzzFunctionDescription {
 
     /**
      *@brief get the length of the array
-     *@return the length of teh array*/
+     *@return the length of the array*/
     uint16_t getArgumentsLength() const;
+
+    /**
+     *@brief get the name of the function
+     *@return the name of the function */
+    const char* getFunctionName() const;
 
     /**
      *@brief add an argument to the list of the description
