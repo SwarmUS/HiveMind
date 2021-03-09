@@ -218,10 +218,29 @@ class USBMessageSender : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
         auto& usb = BSPContainer::getUSB();
         while (true) {
             usb.send(reinterpret_cast<const uint8_t*>("allo"), 5);
+//            Task::delay(100);
+        }
+    }
+};
+
+
+class USBMessageReceive : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+  public:
+    USBMessageReceive(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority) {}
+
+    ~USBMessageReceive() override = default;
+
+  private:
+    void task() override {
+        auto& usb = BSPContainer::getUSB();
+        while (true) {
+            usb.receive(    NULL, 0);
             Task::delay(100);
         }
     }
 };
+
 
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
@@ -230,20 +249,22 @@ int main(int argc, char** argv) {
     bsp.initChip((void*)&cmdLineArgs);
 
     static BittyBuzzTask s_bittybuzzTask("bittybuzz", tskIDLE_PRIORITY + 1);
-    static UartMessageDispatcher s_uartDispatchTask("uart_dispatch", tskIDLE_PRIORITY + 1);
+//    static UartMessageDispatcher s_uartDispatchTask("uart_dispatch", tskIDLE_PRIORITY + 1);
     //    static TCPMessageDispatcher s_tcpDispatchTask("tcp_dispatch", tskIDLE_PRIORITY + 1);
-    static UartMessageSender s_uartMessageSender("uart_send", tskIDLE_PRIORITY + 1);
+//    static UartMessageSender s_uartMessageSender("uart_send", tskIDLE_PRIORITY + 1);
     //    static TCPMessageSender s_tcpMessageSender("uart_send", tskIDLE_PRIORITY + 1);
-    static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
-    static USBMessageSender s_usbMessageSender("usb_send", tskIDLE_PRIORITY + 1);
+//    static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
+//    static USBMessageSender s_usbMessageSender("usb_send", tskIDLE_PRIORITY + 5);
+    static USBMessageReceive s_usbMessageReceive("usb_receive", tskIDLE_PRIORITY + 5);
 
     s_bittybuzzTask.start();
-    s_uartDispatchTask.start();
+//    s_uartDispatchTask.start();
     //    s_tcpDispatchTask.start();
-    s_uartMessageSender.start();
+//    s_uartMessageSender.start();
     //    s_tcpMessageSender.start();
     // s_spiMessageSender.start();
-    s_usbMessageSender.start();
+//    s_usbMessageSender.start();
+    s_usbMessageReceive.start();
 
     Task::startScheduler();
 

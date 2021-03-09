@@ -9,6 +9,7 @@ extern "C" {
 #include "hivemind_hal.h"
 
 uint8_t USB_Send_Data(uint8_t* buf, uint16_t Len);
+void USB_rm_data(uint8_t* buf);
 
 #ifdef __cplusplus
 }

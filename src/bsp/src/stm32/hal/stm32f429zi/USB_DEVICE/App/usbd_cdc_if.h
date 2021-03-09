@@ -95,7 +95,7 @@ extern "C" {
 extern USBD_CDC_ItfTypeDef USBD_Interface_fops_FS;
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
-
+extern uint8_t app_data[APP_TX_DATA_SIZE];
 /* USER CODE END EXPORTED_VARIABLES */
 
 /**
@@ -110,6 +110,8 @@ extern USBD_CDC_ItfTypeDef USBD_Interface_fops_FS;
 uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
 
 /* USER CODE BEGIN EXPORTED_FUNCTIONS */
+
+int8_t add_data_app_buf(uint8_t* Buf, uint16_t* Len);
 
 /* USER CODE END EXPORTED_FUNCTIONS */
 
