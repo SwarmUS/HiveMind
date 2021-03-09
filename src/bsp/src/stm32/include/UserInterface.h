@@ -8,8 +8,11 @@ class UserInterface : public IUserInterface {
     UserInterface() = default;
     ~UserInterface() override = default;
 
-    int print(const char* format, ...) const override;
-    int print(const char* format, va_list args) const override;
+    void flush() override;
+    int print(const char* format, ...) override;
+    int print(const char* format, va_list args) override;
+    int printLine(const char* format, ...) override;
+    int printLine(const char* format, va_list args) override;
 };
 
 #endif // __USERINTERFACE_H_

@@ -28,6 +28,15 @@ namespace BittyBuzzUserFunctions {
     void logString();
 
     /**
+     *@brief Logs to the default output
+     *@details This closure can take a variadic number of arguments
+     *@code
+     * log_int("Hello world, magic number: ", 42);
+     * log_int("Goodbye",  "world", "magic number: ", 42);
+     *@endcode */
+    void log();
+
+    /**
      *@brief register a new function, exposing it to the remote composant of the swarm
      *@details This closure expects four parameters, one stringId (name of the function), one
      * closure (the function itself), one table with the description of the arguments, and one with

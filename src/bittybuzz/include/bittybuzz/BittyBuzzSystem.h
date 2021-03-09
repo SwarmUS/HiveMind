@@ -5,6 +5,7 @@
 #include "IBittyBuzzMessageService.h"
 #include "IBittyBuzzStringResolver.h"
 #include <bbzvm.h>
+#include <bsp/IUserInterface.h>
 #include <logger/ILogger.h>
 
 // TODO: Change to a class once bittybuzz support passing context to function and make it a
@@ -14,6 +15,11 @@
  *@brief Namespace to help manage the bittybuzz system.
  **/
 namespace BittyBuzzSystem {
+
+    /**
+     *@brief UserInterface used by the bbvm for printing user logs
+     **/
+    extern IUserInterface* g_ui;
 
     /**
      *@brief Logger used for error reception or user functions

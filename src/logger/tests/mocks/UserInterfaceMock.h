@@ -12,8 +12,26 @@ class UserInterfaceMock final : public IUserInterface {
     UserInterfaceMock(int& printCounter) : m_printCallCounter(printCounter) {}
     ~UserInterfaceMock() override = default;
 
+    void flush() override{};
+
+    int printLine(const char* format, ...) override {
+        va_list args;
+        va_start(args, format);
+        m_printCallCounter++;
+        va_end(args);
+        m_printCallCounter++;
+        return 0;
+    }
+
+    int printLine(const char* format, va_list args) override {
+        (void)format;
+        (void)args;
+        m_printCallCounter++;
+        return 0;
+    }
+
     // GMock des not support variable arguments, so lets mock it ourselves
-    int print(const char* format, ...) const override {
+    int print(const char* format, ...) override {
         va_list args;
         va_start(args, format);
         m_printCallCounter++;
@@ -21,7 +39,7 @@ class UserInterfaceMock final : public IUserInterface {
         return 0;
     }
 
-    int print(const char* format, va_list args) const override {
+    int print(const char* format, va_list args) override {
         (void)format;
         (void)args;
         m_printCallCounter++;
