@@ -2,8 +2,10 @@
 #include <bbzvm.h>
 #include <cstring>
 
-BittyBuzzRegisteredClosure::BittyBuzzRegisteredClosure(const char* functionName) :
-    m_description(functionName) {}
+BittyBuzzRegisteredClosure::BittyBuzzRegisteredClosure(const char* functionName,
+                                                       bbzheap_idx_t closureHeapIdx,
+                                                       bbzheap_idx_t selfHeapIdx) :
+    m_closureHeapIdx(closureHeapIdx), m_selfHeapIdx(selfHeapIdx), m_description(functionName) {}
 
 BittyBuzzRegisteredClosure::BittyBuzzRegisteredClosure() : m_description("") {}
 
