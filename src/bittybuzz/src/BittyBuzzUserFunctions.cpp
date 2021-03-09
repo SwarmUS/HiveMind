@@ -119,14 +119,14 @@ void BittyBuzzUserFunctions::registerClosure() {
             // Fetching the object in the table by index
             if (bbztable_get(bbzArgsDescHeapIdx, key, &subTable) == 0) {
                 BittyBuzzSystem::g_logger->log(
-                    LogLevel::Warn, "BBZ: Invalid args description on clojure registration");
+                    LogLevel::Warn, "BBZ: Invalid args description on closure registration");
                 return;
             }
 
             // Getting the subtable
             if (bbztable_size(subTable) != 1) {
                 BittyBuzzSystem::g_logger->log(
-                    LogLevel::Warn, "BBZ: Invalid args description on clojure registration");
+                    LogLevel::Warn, "BBZ: Invalid args description on closure registration");
                 return;
             }
 

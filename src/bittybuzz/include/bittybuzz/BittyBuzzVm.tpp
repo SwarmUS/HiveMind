@@ -35,6 +35,7 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     }
 
     vm->state = BBZVM_STATE_READY;
+    // TODO: Fix variable declaration not called when not in init
     BittyBuzzSystem::functionCall(__BBZSTRID_init);
 }
 
