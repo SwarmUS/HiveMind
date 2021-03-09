@@ -10,6 +10,7 @@ extern "C" {
 
 uint8_t USB_Send_Data(uint8_t* buf, uint16_t Len);
 void USB_rm_data(uint8_t* buf);
+bool USB_isConnected();
 
 #ifdef __cplusplus
 }

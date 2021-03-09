@@ -31,7 +31,7 @@ extern "C" {
 #include "usbd_cdc.h"
 
 /* USER CODE BEGIN INCLUDE */
-
+extern USBD_HandleTypeDef hUsbDeviceFS;
 /* USER CODE END INCLUDE */
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
