@@ -32,6 +32,9 @@ namespace BittyBuzzUserFunctions {
      *@details This closure expects four parameters, one stringId (name of the function), one
      * closure (the function itself), one table with the description of the arguments, and one with
      *the self context
+     * The table description of the arguments is an array of tuple, the tuple has the arg name as
+     *key and the type, you can use any value, only the type is checked. You could define a variable
+     *as int=0 float=0.0 And use those variables for types description
      *@code
      *
      * function registered_function(arg_int, arg_float) {
