@@ -18,7 +18,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_log_FunctionCalled) {
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
     std::array<UserFunctionRegister, 1> functionRegister = {
-        {{BBZSTRID_log, BittyBuzzUserFunctions::logString}}};
+        {{BBZSTRID_log, BittyBuzzUserFunctions::log}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, &messageServiceMock, functionRegister);
@@ -32,10 +32,8 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_log_FunctionCalled) {
 
     // Expect
     // Apprend logger prefix string
-    std::string expected = std::string("BBZ: ") + std::string(mockRet.value());
-
-    EXPECT_STREQ(m_loggerMock->m_logLastFormat.c_str(), expected.c_str());
-    EXPECT_EQ(logCounter, 1);
+    EXPECT_EQ(m_uiMock.m_printCallCounter, 4); // Because we had 4 arguments, 4 call
+    EXPECT_EQ(m_uiMock.m_flushCallCounter, 1);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
 }

@@ -16,7 +16,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledOnce) {
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     std::array<UserFunctionRegister, 1> functionRegister = {
-        {{BBZSTRID_log_int, BittyBuzzUserFunctions::logInt}}};
+        {{BBZSTRID_log, BittyBuzzUserFunctions::log}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, &messageServiceMock, functionRegister);
@@ -24,7 +24,8 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledOnce) {
     m_bittybuzzVm->step();
 
     // Expect
-    EXPECT_EQ(logCounter, 1);
+    EXPECT_EQ(m_uiMock.m_flushCallCounter, 1);
+    EXPECT_EQ(m_uiMock.m_printCallCounter, 1);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
 }
@@ -39,7 +40,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledTwice) {
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     std::array<UserFunctionRegister, 1> functionRegister = {
-        {{BBZSTRID_log_int, BittyBuzzUserFunctions::logInt}}};
+        {{BBZSTRID_log, BittyBuzzUserFunctions::log}}};
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, &messageServiceMock, functionRegister);
 
@@ -47,7 +48,8 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledTwice) {
     m_bittybuzzVm->step();
 
     // Expect
-    EXPECT_EQ(logCounter, 2);
+    EXPECT_EQ(m_uiMock.m_flushCallCounter, 2);
+    EXPECT_EQ(m_uiMock.m_printCallCounter, 2);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
 }
@@ -62,7 +64,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_InTwoSwarm_FunctionCalledQuad) 
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     std::array<UserFunctionRegister, 1> functionRegister = {
-        {{BBZSTRID_log_int, BittyBuzzUserFunctions::logInt}}};
+        {{BBZSTRID_log, BittyBuzzUserFunctions::log}}};
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, &messageServiceMock, functionRegister);
 
@@ -70,7 +72,8 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_InTwoSwarm_FunctionCalledQuad) 
     m_bittybuzzVm->step();
 
     // Expect
-    EXPECT_EQ(logCounter, 4);
+    EXPECT_EQ(m_uiMock.m_flushCallCounter, 4);
+    EXPECT_EQ(m_uiMock.m_printCallCounter, 4);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
 }

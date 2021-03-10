@@ -11,23 +11,6 @@
 namespace BittyBuzzUserFunctions {
 
     /**
-     *@brief Logs a number value. Use it for sanity checks, it has no real production values
-     *@details This closure expects one integer parameter, the number to log. Returns nothing
-     *@code
-     * log_int(42);
-     *@endcode */
-    void logInt();
-
-    /**
-     *@brief Logs a string value
-     *@details This closure expects one stringId parameter, the string to log. Returns nothing
-     *Make sure the string the string corresponding exists (i.e. not in the .bst file)
-     *@code
-     * log("Hello world!")
-     *@endcode */
-    void logString();
-
-    /**
      *@brief Logs to the default output
      *@details This closure can take a variadic number of arguments
      *@code

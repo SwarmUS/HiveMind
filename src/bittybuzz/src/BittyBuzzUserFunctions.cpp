@@ -88,12 +88,14 @@ void BittyBuzzUserFunctions::logString() {
 
 void BittyBuzzUserFunctions::log() {
     // Get the number of args
-    bbzobj_t* bbzNArgs = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    int16_t nArgs = bbzNArgs->i.value;
+    uint16_t nArgs = bbzvm_locals_count();
+    (void)nArgs;
 
-    // Iterate through those args
+    // Iterate through args
     for (uint16_t i = 0; i < nArgs; i++) {
-        bbzobj_t* obj = bbzheap_obj_at(bbzvm_stack_at(i + 1)); // NOLINT
+        // Arg 0 is nbArg so lets add +1
+        bbzobj_t* obj = bbzheap_obj_at(bbzvm_locals_at((int16_t)i+1)); // NOLINT
+
         switch (bbztype(*obj)) {
         case BBZTYPE_NIL: {
             BittyBuzzSystem::g_ui->print("[nil]");

@@ -14,11 +14,13 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                          IBittyBuzzMessageService& messageService,
                          const IBSP& bsp,
                          ILogger& logger,
+                         IUserInterface& ui,
                          const Container& container) :
-    m_bytecode(bytecode), m_bsp(bsp), m_messageHandler(messageHandler), m_logger(logger) {
+    m_bytecode(bytecode), m_bsp(bsp), m_messageHandler(messageHandler), m_logger(logger), m_ui(ui) {
     // Init global variable
     vm = &m_bbzVm;
     BittyBuzzSystem::g_logger = &logger;
+    BittyBuzzSystem::g_ui = &ui;
     BittyBuzzSystem::g_stringResolver = &stringResolver;
     BittyBuzzSystem::g_closureRegister = &closureRegister;
     BittyBuzzSystem::g_messageService = &messageService;

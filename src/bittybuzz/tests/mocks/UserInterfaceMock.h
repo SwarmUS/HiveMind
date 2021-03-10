@@ -1,5 +1,5 @@
-#ifndef __MOCK_UI_H_
-#define __MOCK_UI_H_
+#ifndef __USERINTERFACEMOCK_H_
+#define __USERINTERFACEMOCK_H_
 
 #include <bsp/IUserInterface.h>
 #include <cstdarg>
@@ -7,12 +7,12 @@
 
 class UserInterfaceMock final : public IUserInterface {
   public:
-    int& m_printCallCounter;
+    int m_printCallCounter = 0;
+    int m_flushCallCounter = 0;
 
-    UserInterfaceMock(int& printCounter) : m_printCallCounter(printCounter) {}
     ~UserInterfaceMock() override = default;
 
-    void flush() override{};
+    void flush() override{m_flushCallCounter++;};
 
     int printLine(const char* format, ...) override {
         va_list args;
@@ -46,4 +46,4 @@ class UserInterfaceMock final : public IUserInterface {
     }
 };
 
-#endif // __MOCK_UI_H_
+#endif // __USERINTERFACEMOCK_H_
