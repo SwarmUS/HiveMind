@@ -12,7 +12,7 @@ class UserInterfaceMock final : public IUserInterface {
 
     ~UserInterfaceMock() override = default;
 
-    void flush() override{m_flushCallCounter++;};
+    void flush() override { m_flushCallCounter++; };
 
     int printLine(const char* format, ...) override {
         va_list args;

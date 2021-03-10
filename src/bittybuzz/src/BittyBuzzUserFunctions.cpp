@@ -94,7 +94,7 @@ void BittyBuzzUserFunctions::log() {
     // Iterate through args2
     for (uint16_t i = 0; i < nArgs; i++) {
         // Arg 0 is nbArg so lets add +1
-        bbzobj_t* obj = bbzheap_obj_at(bbzvm_locals_at((int16_t)i+1)); // NOLINT
+        bbzobj_t* obj = bbzheap_obj_at(bbzvm_locals_at((int16_t)i + 1)); // NOLINT
 
         switch (bbztype(*obj)) {
         case BBZTYPE_NIL: {
