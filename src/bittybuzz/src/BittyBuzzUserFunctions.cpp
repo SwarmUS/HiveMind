@@ -142,6 +142,7 @@ void BittyBuzzUserFunctions::log() {
         }
     }
     BittyBuzzSystem::g_ui->flush();
+    bbzvm_ret0();
 }
 
 void BittyBuzzUserFunctions::registerClosure() {
@@ -226,7 +227,6 @@ void BittyBuzzUserFunctions::registerClosure() {
         BittyBuzzSystem::g_logger->log(LogLevel::Warn,
                                        "BBZ: String id not found when registering function");
     }
-
     bbzvm_ret0();
 }
 
@@ -245,6 +245,7 @@ void BittyBuzzUserFunctions::callHostFunction() {
     if (context.m_err) {
         BittyBuzzSystem::g_logger->log(LogLevel::Warn,
                                        "BBZ: Error parsing argument list, host FCall");
+        bbzvm_ret0();
         return;
     }
 
@@ -254,6 +255,7 @@ void BittyBuzzUserFunctions::callHostFunction() {
     if (!ret) {
         BittyBuzzSystem::g_logger->log(LogLevel::Warn, "BBZ: could not call host FCall");
     }
+    bbzvm_ret0();
 }
 
 void BittyBuzzUserFunctions::isNil() {
