@@ -4,6 +4,7 @@
 #include "hivemind_hal.h"
 #include "lwip.h"
 #include "usb_device.h"
+#include "hal/usb.h"
 
 #ifdef IPERF_SERVER
 #include <lwip/apps/lwiperf.h>
@@ -32,6 +33,7 @@ void Hal_init() {
     MX_USB_DEVICE_Init();
 
     UartPrint_init();
+    Usb_init();
 
     MX_LWIP_Init();
 
