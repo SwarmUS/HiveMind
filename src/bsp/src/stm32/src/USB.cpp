@@ -36,7 +36,7 @@ bool USB::receive(uint8_t* buffer, uint16_t length) {
         USB_rm_data(const_cast<uint8_t*>(app_data));
         m_logger.log(LogLevel::Info, "received data");
     }else{
-//        m_logger.log(LogLevel::Warn, "no data\r\n");
+        m_logger.log(LogLevel::Warn, "no data\r\n");
         return false;
     }
 
