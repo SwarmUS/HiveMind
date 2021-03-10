@@ -36,6 +36,12 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
         bbzvm_function_register(functionRegister.m_strId, functionRegister.m_functionPtr);
     }
 
+    // Execute the global part of the script
+    while (vm->state == BBZVM_STATE_READY) {
+        bbzvm_step();
+    }
+
+    // Start init
     vm->state = BBZVM_STATE_READY;
     // TODO: Fix variable declaration not called when not in init
     BittyBuzzSystem::functionCall(__BBZSTRID_init);

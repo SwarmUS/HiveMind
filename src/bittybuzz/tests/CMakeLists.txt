@@ -15,6 +15,7 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmInitAddTests.cpp
     vm_tests/BittyBuzzVmNoStepTests.cpp
     vm_tests/BittyBuzzVmSwarmTests.cpp
+    vm_tests/BittyBuzzVmGlobalInitTests.cpp
     vm_tests/BittyBuzzVmUndefinedFunctionTests.cpp
     vm_tests/BittyBuzzVmRegisterClosureFunctionTests.cpp
     vm_tests/BittyBuzzVmRegisterClosureFunctionSelfTests.cpp
@@ -72,6 +73,11 @@ bittybuzz_generate_bytecode(undefined-function
 set(SWARM_BST ${BITTYBUZZ_HIVEMIND_BST} vm_tests/buzz_tests_scripts/swarm.bst)
 bittybuzz_generate_bytecode(swarm 
     ${BZZ_TEST_SCRIPTS_LOCATION}/swarm.bzz 
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${SWARM_BST}")
+
+bittybuzz_generate_bytecode(global-init 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/global_init.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${SWARM_BST}")
 
@@ -156,6 +162,7 @@ target_link_libraries(${TEST_NAME}
         no-step
         undefined-function 
         swarm
+        global-init
         is-nil
         is-int
         is-float

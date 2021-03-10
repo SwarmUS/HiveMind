@@ -1,0 +1,13 @@
+global_data = {
+  .data1 = 42,
+  .data2 = 240
+};
+
+function init() {
+
+}
+
+function step() {
+    assert_true(global_data.data1 == 42);
+    assert_true(global_data.data2 == 240);
+}
