@@ -91,7 +91,7 @@ void BittyBuzzUserFunctions::log() {
     uint16_t nArgs = bbzvm_locals_count();
     (void)nArgs;
 
-    // Iterate through args
+    // Iterate through args2
     for (uint16_t i = 0; i < nArgs; i++) {
         // Arg 0 is nbArg so lets add +1
         bbzobj_t* obj = bbzheap_obj_at(bbzvm_locals_at((int16_t)i+1)); // NOLINT
@@ -141,6 +141,7 @@ void BittyBuzzUserFunctions::log() {
         }
         }
     }
+    BittyBuzzSystem::g_ui->flush();
 }
 
 void BittyBuzzUserFunctions::registerClosure() {
