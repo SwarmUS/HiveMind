@@ -28,6 +28,7 @@ class USB : public IUSB {
 
   private:
     ILogger& m_logger;
+    TaskHandle_t m_receivingTaskHandle;
 };
 
 #endif // HIVE_MIND_USB_H

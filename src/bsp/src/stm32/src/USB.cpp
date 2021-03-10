@@ -14,7 +14,8 @@ bool USB::send(const uint8_t* buffer, uint16_t length) {
 
     bool ret = false;
     int out = USB_Send_Data(const_cast<uint8_t*>(buffer), length);
-    if(out == 0) {
+
+    if(out == USBD_OK) {
         ret = true;
     }else{
         m_logger.log(LogLevel::Warn, "USB_Send_Data was not able to send the data");
@@ -29,16 +30,15 @@ bool USB::receive(uint8_t* buffer, uint16_t length) {
         return false;
     }
 
-    length = strlen(reinterpret_cast<const char*>(app_data));
-    if(length>0) {
-        memcpy(buffer,app_data,(uint16_t)(length+(uint16_t)1));
-//        USB_Send_Data(const_cast<uint8_t*>(app_data), length);
-        USB_rm_data(const_cast<uint8_t*>(app_data));
-        m_logger.log(LogLevel::Info, "received data");
-    }else{
-        m_logger.log(LogLevel::Warn, "no data\r\n");
-        return false;
+    m_receivingTaskHandle = xTaskGetCurrentTaskHandle();
+    while (CircularBuff_getLength(&cbuffUsb) < length) {
+        // Gets notified everytime a new packet is appended to cbuffUsb
+        ulTaskNotifyTake(pdTRUE, 500);
     }
+    m_receivingTaskHandle = NULL;
+
+    CircularBuff_get(&cbuffUsb, buffer, length);
+    m_logger.log(LogLevel::Info, "received data");
 
     return true;
 }
