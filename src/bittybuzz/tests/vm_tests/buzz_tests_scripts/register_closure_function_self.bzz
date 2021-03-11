@@ -1,0 +1,20 @@
+function init() {
+  complex_object = {
+    .context = 1,
+
+    .some_function = function(arg_int, arg_float) {
+      assert_true(arg_int == 42);
+      assert_true(arg_float == 42.24);
+      assert_true(self.context == 1);
+    }
+  }
+
+  var args_description = {
+    .0 = {.arg_int=0},
+    .1 = {.arg_float=0.0}
+  };
+  register_closure("registeredFunction", complex_object.some_function, args_description, complex_object)
+}
+
+function step() {
+}

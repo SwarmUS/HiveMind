@@ -13,19 +13,48 @@ void foreachHostFCallback(bbzheap_idx_t key, bbzheap_idx_t value, void* params) 
     bbzobj_t* keyObj = bbzheap_obj_at(key); // NOLINT
     bbzobj_t* valueObj = bbzheap_obj_at(value); // NOLINT
 
-    if (!bbztype_isint(*keyObj) || context->m_err) {
+    if (!bbztype_isint(*keyObj) || keyObj->i.value > (int16_t)context->m_arguments.size() ||
+        keyObj->i.value < 0 || context->m_err) {
         context->m_err = true;
         return;
     }
 
-    if (bbztype_isint(*valueObj)) {
-        context->m_arguments[context->m_length++] =
+    switch (bbztype(*valueObj)) {
+    case BBZTYPE_INT:
+        context->m_arguments[(uint8_t)keyObj->i.value] =
             FunctionCallArgumentDTO((int64_t)valueObj->i.value);
-    } else if (bbztype_isfloat(*valueObj)) {
-        context->m_arguments[context->m_length++] =
+        context->m_length++;
+        break;
+    case BBZTYPE_FLOAT:
+        context->m_arguments[(uint8_t)keyObj->i.value] =
             FunctionCallArgumentDTO(bbzfloat_tofloat(valueObj->f.value));
-    } else {
+        context->m_length++;
+        break;
+    default:
         context->m_err = true;
+    }
+}
+
+struct ArgNameAndType {
+    bbzheap_idx_t m_key;
+    bbzheap_idx_t m_value;
+};
+
+// We know that the size is 1, so the value will be written once
+void foreachNameAndType(bbzheap_idx_t key, bbzheap_idx_t value, void* params) {
+    ArgNameAndType* context = (ArgNameAndType*)params;
+    context->m_key = key;
+    context->m_value = value;
+}
+
+FunctionDescriptionArgumentTypeDTO getbbzObjType(bbzobj_t* bbzObj) {
+    switch (bbztype(*bbzObj)) {
+    case BBZTYPE_INT:
+        return FunctionDescriptionArgumentTypeDTO::Int;
+    case BBZTYPE_FLOAT:
+        return FunctionDescriptionArgumentTypeDTO::Float;
+    default:
+        return FunctionDescriptionArgumentTypeDTO::Unknown;
     }
 }
 
@@ -58,25 +87,78 @@ void BittyBuzzUserFunctions::logString() {
 }
 
 void BittyBuzzUserFunctions::registerClosure() {
-    bbzvm_assert_lnum(2); // NOLINT
+    bbzvm_assert_lnum(4); // NOLINT
     bbzobj_t* bbzFunctionName = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
     bbzheap_idx_t bbzClosureHeapIdx = bbzvm_locals_at(2); // NOLINT
-    bbzobj_t* bbzClosure = bbzheap_obj_at(bbzClosureHeapIdx); // NOLINT
+    bbzheap_idx_t bbzArgsDescHeapIdx = bbzvm_locals_at(3); // NOLINT
+    bbzheap_idx_t bbzSelfHeapIdx = bbzvm_locals_at(4); // NOLINT
 
-    if (!bbztype_isstring(*bbzFunctionName) && !bbztype_isclosure(*bbzClosure)) {
+    bbzobj_t* bbzClosure = bbzheap_obj_at(bbzClosureHeapIdx); // NOLINT
+    bbzobj_t* bbzArgsDesc = bbzheap_obj_at(bbzSelfHeapIdx); // NOLINT
+
+    if (!bbztype_isstring(*bbzFunctionName) && !bbztype_isclosure(*bbzClosure) &&
+        !bbztype_istable(*bbzArgsDesc)) {
         BittyBuzzSystem::g_logger->log(LogLevel::Info,
                                        "BBZ: invalid type when registering function");
+        bbzvm_ret0();
         return;
     }
 
-    std::optional<const char*> optionString =
+    std::optional<const char*> functionNameOpt =
         BittyBuzzSystem::g_stringResolver->getString(bbzFunctionName->s.value);
 
-    if (optionString) {
+    if (functionNameOpt) {
         // Store the function name
-        // TODO: add support for table with arg name as key and
-        bool ret = BittyBuzzSystem::g_closureRegister->registerClosure(optionString.value(),
-                                                                       bbzClosureHeapIdx);
+        BittyBuzzFunctionDescription argsDescription(functionNameOpt.value());
+        uint8_t argsSize = bbztable_size(bbzArgsDescHeapIdx);
+        for (uint8_t i = 0; i < argsSize; i++) {
+
+            bbzheap_idx_t key = bbzint_new(i);
+            bbzheap_idx_t subTable;
+
+            // Fetching the object in the table by index
+            if (bbztable_get(bbzArgsDescHeapIdx, key, &subTable) == 0) {
+                BittyBuzzSystem::g_logger->log(
+                    LogLevel::Warn, "BBZ: Invalid args description on closure registration");
+                bbzvm_ret0();
+                return;
+            }
+
+            // Getting the subtable
+            if (bbztable_size(subTable) != 1) {
+                BittyBuzzSystem::g_logger->log(
+                    LogLevel::Warn, "BBZ: Invalid args description on closure registration");
+                bbzvm_ret0();
+                return;
+            }
+
+            ArgNameAndType keyValue;
+
+            // We know that the subtable has a size of 1, so no overwrite on the foreach
+            bbztable_foreach(subTable, foreachNameAndType, &keyValue);
+            bbzobj_t* bbzArgName = bbzheap_obj_at(keyValue.m_key);
+            bbzobj_t* bbzArgType = bbzheap_obj_at(keyValue.m_value);
+
+            // Getting the string name
+            std::optional<const char*> argNameOpt =
+                BittyBuzzSystem::g_stringResolver->getString(bbzArgName->s.value);
+
+            if (!argNameOpt) {
+                BittyBuzzSystem::g_logger->log(LogLevel::Warn,
+                                               "BBZ: Arg name could not be found on registration");
+                bbzvm_ret0();
+                return;
+            }
+
+            // Adding to the arg description
+            const char* argName = argNameOpt.value();
+            FunctionDescriptionArgumentTypeDTO argType = getbbzObjType(bbzArgType);
+            argsDescription.addArgument(argName, argType);
+        }
+
+        bool ret = BittyBuzzSystem::g_closureRegister->registerClosure(
+            functionNameOpt.value(), bbzClosureHeapIdx, bbzSelfHeapIdx, argsDescription);
+
         if (!ret) {
             BittyBuzzSystem::g_logger->log(LogLevel::Warn, "BBZ: Could not register closure");
         }
@@ -86,6 +168,8 @@ void BittyBuzzUserFunctions::registerClosure() {
         BittyBuzzSystem::g_logger->log(LogLevel::Warn,
                                        "BBZ: String id not found when registering function");
     }
+
+    bbzvm_ret0();
 }
 
 void BittyBuzzUserFunctions::callHostFunction() {

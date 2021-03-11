@@ -35,61 +35,111 @@ bool BittyBuzzMessageHandler::processMessage() {
 
 uint16_t BittyBuzzMessageHandler::messageQueueLength() const { return m_inputQueue.getLength(); }
 
+FunctionListLengthResponseDTO BittyBuzzMessageHandler::handleFunctionListLengthRequest(
+    const FunctionListLengthRequestDTO& functionLengthRequest) {
+    (void)functionLengthRequest;
+    return FunctionListLengthResponseDTO(m_closureRegister.getRegisteredClosureLength());
+}
+
+FunctionDescriptionResponseDTO BittyBuzzMessageHandler::handleFunctionDescriptionRequest(
+    const FunctionDescriptionRequestDTO& functionDescRequest) {
+    uint16_t idx = functionDescRequest.getIndex();
+    auto optClosure = m_closureRegister.getRegisteredClosure(idx);
+
+    if (optClosure) {
+        const BittyBuzzFunctionDescription& closureDesc = optClosure.value().get().m_description;
+        std::array<FunctionDescriptionArgumentDTO, FunctionDescriptionDTO::ARGUMENTS_MAX_SIZE>
+            argsDto;
+
+        // Bulding arguments
+        auto args = closureDesc.getArguments();
+        for (uint16_t i = 0; i < closureDesc.getArgumentsLength(); i++) {
+            argsDto[i] = FunctionDescriptionArgumentDTO(std::get<0>(args[i]), std::get<1>(args[i]));
+        }
+
+        FunctionDescriptionDTO descDto(closureDesc.getFunctionName(), argsDto.data(),
+                                       closureDesc.getArgumentsLength());
+        return FunctionDescriptionResponseDTO(descDto);
+    }
+    return FunctionDescriptionResponseDTO(
+        GenericResponseDTO(GenericResponseStatusDTO::BadRequest, "invalid idx"));
+}
+
 FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
     const FunctionCallRequestDTO& functionRequest) {
 
-    std::optional<bbzheap_idx_t> closureHeapIdx =
-        m_closureRegister.getClosureHeapIdx(functionRequest.getFunctionName());
+    std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> registeredClosureOpt =
+        m_closureRegister.getRegisteredClosure(functionRequest.getFunctionName());
 
-    if (closureHeapIdx) {
+    if (registeredClosureOpt) {
+        const BittyBuzzRegisteredClosure& registeredClosure = registeredClosureOpt.value().get();
 
-        const std::array<FunctionCallArgumentDTO,
-                         FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>& args =
-            functionRequest.getArguments();
+        const auto& args = functionRequest.getArguments();
+        const auto& storedArgs = registeredClosure.m_description.getArguments();
+        GenericResponseDTO invalidRequestResponse(GenericResponseStatusDTO::BadRequest, "");
 
-        // Pushing bbz table for arguments
-        bbzheap_idx_t table = bbztable_new();
+        if (registeredClosure.m_description.getArgumentsLength() !=
+            functionRequest.getArgumentsLength()) {
+            m_logger.log(LogLevel::Warn, "BBZ: function call request args length don't match");
 
+            invalidRequestResponse.setDetails("arg length don't match");
+            return invalidRequestResponse;
+        }
+
+        bbzvm_push(registeredClosure.m_selfHeapIdx); // Push self table
+        bbzvm_push(registeredClosure.m_closureHeapIdx); // Push closure
+
+        // Pushing bbz args
         for (uint16_t i = 0; i < functionRequest.getArgumentsLength(); i++) {
             // Buzz table index
-            bbzheap_idx_t tableIdx = bbzint_new((int16_t)i);
-
             const std::variant<std::monostate, int64_t, float>& arg = args[i].getArgument();
 
             if (const int64_t* intVal = std::get_if<int64_t>(&arg)) {
-                bbzheap_idx_t bbzIntVal = bbzint_new(*intVal);
-                bbztable_set(table, tableIdx, bbzIntVal);
-            }
+                // Check if it matches the stored type
+                if (std::get<1>(storedArgs[i]) != FunctionDescriptionArgumentTypeDTO::Int) {
+                    invalidRequestResponse.setDetails("arg type don't match");
+                    return invalidRequestResponse;
+                }
+                bbzvm_pushi((int16_t)*intVal);
 
-            else if (const float* floatVal = std::get_if<float>(&arg)) {
-                bbzheap_idx_t bbzFloatVal = bbzfloat_new(bbzfloat_fromfloat(*floatVal));
-                bbztable_set(table, tableIdx, bbzFloatVal);
+            } else if (const float* floatVal = std::get_if<float>(&arg)) {
+                if (std::get<1>(storedArgs[i]) != FunctionDescriptionArgumentTypeDTO::Float) {
+                    invalidRequestResponse.setDetails("arg type don't match");
+                    return invalidRequestResponse;
+                }
+                bbzvm_pushf(bbzfloat_fromfloat(*floatVal));
             }
         }
 
-        // TODO: Migrate to variable number of arguments once we know the number beforehand (at
-        // registration), will avoid the user messing with tables (if possible)
-        bbzvm_pushnil(); // Push self table
-        bbzvm_push(closureHeapIdx.value());
-        bbzvm_push(table);
-        bbzvm_closure_call(1);
+        // Call the closure
+        bbzvm_closure_call(functionRequest.getArgumentsLength());
         bbzvm_pop(); // Pop self table
 
         // response
         return FunctionCallResponseDTO(GenericResponseStatusDTO::Ok, "");
     }
-    return FunctionCallResponseDTO(GenericResponseStatusDTO::BadRequest, "");
+    return FunctionCallResponseDTO(GenericResponseStatusDTO::BadRequest, "Not registred");
 }
 
 UserCallResponseDTO BittyBuzzMessageHandler::handleUserCallRequest(
     const UserCallRequestDTO& userRequest) {
 
-    const std::variant<std::monostate, FunctionCallRequestDTO>& variantReq =
-        userRequest.getRequest();
+    // TODO: handle
+    const std::variant<std::monostate, FunctionCallRequestDTO, FunctionListLengthRequestDTO,
+                       FunctionDescriptionRequestDTO>& variantReq = userRequest.getRequest();
     if (const auto* fReq = std::get_if<FunctionCallRequestDTO>(&variantReq)) {
         // Response
         FunctionCallResponseDTO fResponse = handleFunctionCallRequest(*fReq);
-
+        return UserCallResponseDTO(UserCallTargetDTO::BUZZ, userRequest.getSource(), fResponse);
+    }
+    if (const auto* fReq = std::get_if<FunctionDescriptionRequestDTO>(&variantReq)) {
+        // Response
+        FunctionDescriptionResponseDTO fResponse = handleFunctionDescriptionRequest(*fReq);
+        return UserCallResponseDTO(UserCallTargetDTO::BUZZ, userRequest.getSource(), fResponse);
+    }
+    if (const auto* fReq = std::get_if<FunctionListLengthRequestDTO>(&variantReq)) {
+        // Response
+        FunctionListLengthResponseDTO fResponse = handleFunctionListLengthRequest(*fReq);
         return UserCallResponseDTO(UserCallTargetDTO::BUZZ, userRequest.getSource(), fResponse);
     }
 

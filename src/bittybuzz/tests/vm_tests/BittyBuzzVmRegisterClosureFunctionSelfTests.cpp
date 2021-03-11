@@ -12,10 +12,10 @@
 #include <bittybuzz/BittyBuzzStringResolver.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
-#include <register_closure_lambda_bytecode.h>
-#include <register_closure_lambda_string.h>
+#include <register_closure_function_self_bytecode.h>
+#include <register_closure_function_self_string.h>
 
-TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_registerLambda) {
+TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_registerFunction_self) {
     // Given
     uint16_t boardId = 42;
     std::string functionName = "registeredFunction";
@@ -33,7 +33,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_registerLambda) {
         .Times(1)
         .WillOnce(testing::Return(true));
 
-    EXPECT_CALL(stringResolver, getString(BBZSTRID_registeredLambda))
+    EXPECT_CALL(stringResolver, getString(BBZSTRID_registeredFunction))
         .Times(1)
         .WillOnce(testing::Return(functionName.c_str()));
     EXPECT_CALL(stringResolver, getString(BBZSTRID_arg_int))
@@ -59,7 +59,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_registerLambda) {
 }
 
 TEST_F(BittyBuzzVmTestFixture,
-       BittyBuzzVm_integration_registerClosure_registerLambda_callOnMessage) {
+       BittyBuzzVm_integration_registerClosure_registerFunction_self_callOnMessage) {
     // Given
     uint16_t boardId = 42;
     BSPInterfaceMock bspMock(boardId);
@@ -77,7 +77,7 @@ TEST_F(BittyBuzzVmTestFixture,
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
 
     std::array<FunctionCallArgumentDTO, 2> fArgs = {{{(int64_t)42}, {(float)42.24}}};
-    FunctionCallRequestDTO fRequest(stringResolver.getString(BBZSTRID_registeredLambda).value(),
+    FunctionCallRequestDTO fRequest(stringResolver.getString(BBZSTRID_registeredFunction).value(),
                                     fArgs.data(), fArgs.size());
     UserCallRequestDTO uRequest(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, fRequest);
     RequestDTO request(1, uRequest);
@@ -102,7 +102,7 @@ TEST_F(BittyBuzzVmTestFixture,
 
     // Expect
 
-    EXPECT_EQ(g_assertTrueCallCount, 2);
+    EXPECT_EQ(g_assertTrueCallCount, 3);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
 }

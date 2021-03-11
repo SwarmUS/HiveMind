@@ -7,6 +7,7 @@ set(TEST_SOURCES
     BittyBuzzClosureRegisterUnitTests.cpp
     BittyBuzzMessageHandlerUnitTests.cpp
     BittyBuzzMessageServiceUnitTests.cpp
+    BittyBuzzFunctionDescriptionUnitTests.cpp
 
     vm_tests/BittyBuzzVmTestsUtils.cpp
 
@@ -17,6 +18,7 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmSwarmTests.cpp
     vm_tests/BittyBuzzVmUndefinedFunctionTests.cpp
     vm_tests/BittyBuzzVmRegisterClosureFunctionTests.cpp
+    vm_tests/BittyBuzzVmRegisterClosureFunctionSelfTests.cpp
     vm_tests/BittyBuzzVmRegisterClosureLambdaTests.cpp
     vm_tests/BittyBuzzVmCallHostFunctionValidTests.cpp
     vm_tests/BittyBuzzVmCallHostFunctionInvalidArgsTests.cpp
@@ -121,6 +123,11 @@ bittybuzz_generate_bytecode(register-closure_function
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
+bittybuzz_generate_bytecode(register-closure_function_self
+    ${BZZ_TEST_SCRIPTS_LOCATION}/register_closure_function_self.bzz 
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
 bittybuzz_generate_bytecode(register-closure_lambda 
     ${BZZ_TEST_SCRIPTS_LOCATION}/register_closure_lambda.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
@@ -166,6 +173,7 @@ target_link_libraries(${TEST_NAME}
         is-closure
         is-lambda-closure
         register-closure_function
+        register-closure_function_self
         register-closure_lambda
         call-host-function-valid
         call-host-function-invalid-args

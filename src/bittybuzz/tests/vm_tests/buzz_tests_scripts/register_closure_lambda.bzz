@@ -1,8 +1,15 @@
 function init() {
-  register_closure("registeredLambda", function(args){
-      assert_true(args[0] == 42);
-      assert_true(args[1] == 42.24);
-    });
+  test = {};
+  var args_description = {
+    .0 ={.arg_int=0},
+    .1 ={.arg_float=0.0}
+  };
+  register_closure("registeredLambda", function(arg_int_arg, arg_float_arg){
+      assert_true(arg_int_arg == 42);
+      assert_true(arg_float_arg == 42.24);
+    },
+    args_description,
+    nil);
 }
 
 function step() {
