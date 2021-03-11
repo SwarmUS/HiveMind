@@ -5,11 +5,19 @@
 
 class UserInterface : public IUserInterface {
   public:
-    UserInterface() = default;
+    UserInterface();
     ~UserInterface() override = default;
 
-    int print(const char* format, ...) const override;
-    int print(const char* format, va_list args) const override;
+    Mutex& getPrintMutex() override;
+
+    void flush() override;
+    int print(const char* format, ...) override;
+    int print(const char* format, va_list args) override;
+    int printLine(const char* format, ...) override;
+    int printLine(const char* format, va_list args) override;
+
+  private:
+    Mutex m_mutex;
 };
 
 #endif // __USERINTERFACE_H_

@@ -8,14 +8,13 @@
 
 class Logger : public ILogger {
   public:
-    Logger(LogLevel level, const IUserInterface& ui);
+    Logger(LogLevel level, IUserInterface& ui);
     ~Logger() override = default;
 
     LogRet log(LogLevel level, const char* format, ...) override;
 
   private:
-    const IUserInterface& m_ui;
-    Mutex m_mutex;
+    IUserInterface& m_ui;
     LogLevel m_logLevel;
 };
 

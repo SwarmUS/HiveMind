@@ -3,7 +3,6 @@ function init() {
 }
 
 function step() {
-    log_int(test)
-    test = test + 1
-    log("Hello world!")
+    test = test + 1;
+    log("BBZ user: Hello world! test value : ", test);
 }

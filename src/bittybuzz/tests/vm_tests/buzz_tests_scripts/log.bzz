@@ -2,5 +2,5 @@ function init() {
 }
 
 function step() {
-    log("Hello World!")
+    log("Hello World!", 42, 42.24, {})
 }

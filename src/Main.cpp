@@ -30,6 +30,7 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
                       BittyBuzzContainer::getBBZMessageService(),
                       BSPContainer::getBSP(),
                       m_logger,
+                      BSPContainer::getUserInterface(),
                       BittyBuzzFactory::createBittyBuzzFunctionRegisters()) {}
 
     ~BittyBuzzTask() override = default;

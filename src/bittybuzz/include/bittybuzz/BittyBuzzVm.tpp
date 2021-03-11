@@ -14,11 +14,13 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                          IBittyBuzzMessageService& messageService,
                          const IBSP& bsp,
                          ILogger& logger,
+                         IUserInterface& ui,
                          const Container& container) :
-    m_bytecode(bytecode), m_bsp(bsp), m_messageHandler(messageHandler), m_logger(logger) {
+    m_bytecode(bytecode), m_bsp(bsp), m_messageHandler(messageHandler), m_logger(logger), m_ui(ui) {
     // Init global variable
     vm = &m_bbzVm;
     BittyBuzzSystem::g_logger = &logger;
+    BittyBuzzSystem::g_ui = &ui;
     BittyBuzzSystem::g_stringResolver = &stringResolver;
     BittyBuzzSystem::g_closureRegister = &closureRegister;
     BittyBuzzSystem::g_messageService = &messageService;
@@ -34,8 +36,13 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
         bbzvm_function_register(functionRegister.m_strId, functionRegister.m_functionPtr);
     }
 
+    // Execute the global part of the script
+    while (vm->state == BBZVM_STATE_READY) {
+        bbzvm_step();
+    }
+
+    // Start init
     vm->state = BBZVM_STATE_READY;
-    // TODO: Fix variable declaration not called when not in init
     BittyBuzzSystem::functionCall(__BBZSTRID_init);
 }
 

@@ -1,5 +1,6 @@
 #include "bittybuzz/BittyBuzzUserFunctions.h"
 #include "bittybuzz/BittyBuzzSystem.h"
+#include <LockGuard.h>
 
 struct ForeachHostFContext {
     bool m_err = false;
@@ -58,31 +59,63 @@ FunctionDescriptionArgumentTypeDTO getbbzObjType(bbzobj_t* bbzObj) {
     }
 }
 
-void BittyBuzzUserFunctions::logInt() {
-    bbzvm_assert_lnum(1); // NOLINT
-    bbzobj_t* intVal = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+void BittyBuzzUserFunctions::log() {
+    // Get the number of args
+    uint16_t nArgs = bbzvm_locals_count();
 
-    BittyBuzzSystem::g_logger->log(LogLevel::Info, "Int value: %d", intVal->i.value);
-    bbzvm_ret0();
-}
+    LockGuard lock(BittyBuzzSystem::g_ui->getPrintMutex());
 
-void BittyBuzzUserFunctions::logString() {
-    bbzvm_assert_lnum(1); // NOLINT
-    bbzobj_t* bbzString = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    // Iterate through args, we start a arg 1 up to the nb of args
+    for (uint16_t i = 1; i <= nArgs; i++) {
 
-    if (bbztype_isstring(*bbzString) != 1) {
-        BittyBuzzSystem::g_logger->log(LogLevel::Warn, "BBZ: Wrong argument type to logString");
+        bbzobj_t* obj = bbzheap_obj_at(bbzvm_locals_at(i)); // NOLINT
+
+        switch (bbztype(*obj)) {
+        case BBZTYPE_NIL: {
+            BittyBuzzSystem::g_ui->print("[nil]");
+            break;
+        }
+        case BBZTYPE_INT: {
+            BittyBuzzSystem::g_ui->print("%d", obj->i.value);
+            break;
+        }
+        case BBZTYPE_FLOAT: {
+            BittyBuzzSystem::g_ui->print("%f", bbzfloat_tofloat(obj->f.value));
+            break;
+        }
+        case BBZTYPE_TABLE: {
+            BittyBuzzSystem::g_ui->print("[t:%d]", obj->t.value);
+            break;
+        }
+        case BBZTYPE_STRING: {
+            std::optional<const char*> optionString =
+                BittyBuzzSystem::g_stringResolver->getString(obj->s.value);
+            if (optionString) {
+                BittyBuzzSystem::g_ui->print("%s", optionString.value());
+            } else {
+                BittyBuzzSystem::g_ui->print("{UNKNOWN STR}");
+            }
+            break;
+        }
+        case BBZTYPE_CLOSURE: {
+            if (bbztype_isclosurelambda(*obj)) {
+                BittyBuzzSystem::g_ui->print("[cl: %d}", obj->l.value.ref);
+            } else {
+                BittyBuzzSystem::g_ui->print("[c: %d]", (int)(intptr_t)obj->c.value);
+            }
+            break;
+        }
+        case BBZTYPE_USERDATA: {
+            BittyBuzzSystem::g_ui->print("[u: %d]", (int)obj->u.value);
+            break;
+        }
+        default: {
+            printf("{UNKNOWN TYPE}");
+            break;
+        }
+        }
     }
-
-    std::optional<const char*> optionString =
-        BittyBuzzSystem::g_stringResolver->getString(bbzString->s.value);
-
-    if (optionString) {
-        BittyBuzzSystem::g_logger->log(LogLevel::Info, "BBZ: %s", optionString.value());
-    } else {
-        BittyBuzzSystem::g_logger->log(LogLevel::Warn, "BBZ: String id not found");
-    }
-
+    BittyBuzzSystem::g_ui->flush();
     bbzvm_ret0();
 }
 
@@ -168,7 +201,6 @@ void BittyBuzzUserFunctions::registerClosure() {
         BittyBuzzSystem::g_logger->log(LogLevel::Warn,
                                        "BBZ: String id not found when registering function");
     }
-
     bbzvm_ret0();
 }
 
@@ -187,6 +219,7 @@ void BittyBuzzUserFunctions::callHostFunction() {
     if (context.m_err) {
         BittyBuzzSystem::g_logger->log(LogLevel::Warn,
                                        "BBZ: Error parsing argument list, host FCall");
+        bbzvm_ret0();
         return;
     }
 
@@ -196,6 +229,7 @@ void BittyBuzzUserFunctions::callHostFunction() {
     if (!ret) {
         BittyBuzzSystem::g_logger->log(LogLevel::Warn, "BBZ: could not call host FCall");
     }
+    bbzvm_ret0();
 }
 
 void BittyBuzzUserFunctions::isNil() {

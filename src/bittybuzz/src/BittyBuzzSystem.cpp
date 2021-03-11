@@ -1,6 +1,7 @@
 #include "bittybuzz/BittyBuzzSystem.h"
 
 ILogger* BittyBuzzSystem::g_logger = NULL;
+IUserInterface* BittyBuzzSystem::g_ui = NULL;
 const IBittyBuzzStringResolver* BittyBuzzSystem::g_stringResolver = NULL;
 IBittyBuzzClosureRegister* BittyBuzzSystem::g_closureRegister = NULL;
 IBittyBuzzMessageService* BittyBuzzSystem::g_messageService = NULL;

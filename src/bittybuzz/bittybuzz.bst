@@ -1,5 +1,4 @@
 log
-log_int
 is_nil
 is_int
 is_float
