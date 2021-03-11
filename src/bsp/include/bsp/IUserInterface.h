@@ -1,6 +1,7 @@
 #ifndef __IUSERINTERFACE_H_
 #define __IUSERINTERFACE_H_
 
+#include <Mutex.h>
 #include <cstdarg>
 
 /**
@@ -13,6 +14,11 @@
 class IUserInterface {
   public:
     virtual ~IUserInterface() = default;
+
+    /**
+     *@brief get the mutex for printing. Note that the mutex is not used in any functions, the user
+     *needs to lock and unlock this mutex*/
+    virtual Mutex& getPrintMutex() = 0;
 
     /**
      *@brief Adds a newline and flushes the input to the serial port */

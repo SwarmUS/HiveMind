@@ -3,6 +3,10 @@
 #include <cstdio>
 #include <hivemind_hal.h>
 
+UserInterface::UserInterface() : m_mutex(10) {}
+
+Mutex& UserInterface::getPrintMutex() { return m_mutex; }
+
 void UserInterface::flush() {
     // Escape character to flush buffer
     printf("\r\n");

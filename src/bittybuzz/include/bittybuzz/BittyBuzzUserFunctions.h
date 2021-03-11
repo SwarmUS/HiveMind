@@ -14,8 +14,8 @@ namespace BittyBuzzUserFunctions {
      *@brief Logs to the default output
      *@details This closure can take a variadic number of arguments
      *@code
-     * log_int("Hello world, magic number: ", 42);
-     * log_int("Goodbye",  "world", "magic number: ", 42);
+     * log("Hello world, magic number: ", 42);
+     * log("Goodbye",  "world", "magic number: ", 42);
      *@endcode */
     void log();
 

@@ -8,9 +8,12 @@
 class UserInterfaceMock final : public IUserInterface {
   public:
     int& m_printCallCounter;
+    Mutex m_mutex;
 
-    UserInterfaceMock(int& printCounter) : m_printCallCounter(printCounter) {}
+    UserInterfaceMock(int& printCounter) : m_printCallCounter(printCounter), m_mutex(10) {}
     ~UserInterfaceMock() override = default;
+
+    Mutex& getPrintMutex() override { return m_mutex; }
 
     void flush() override{};
 

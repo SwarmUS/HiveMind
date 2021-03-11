@@ -9,8 +9,13 @@ class UserInterfaceMock final : public IUserInterface {
   public:
     int m_printCallCounter = 0;
     int m_flushCallCounter = 0;
+    Mutex m_mutex;
+
+    UserInterfaceMock() : m_mutex(10) {}
 
     ~UserInterfaceMock() override = default;
+
+    Mutex& getPrintMutex() override { return m_mutex; }
 
     void flush() override { m_flushCallCounter++; };
 

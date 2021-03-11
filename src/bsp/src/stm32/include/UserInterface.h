@@ -5,8 +5,10 @@
 
 class UserInterface : public IUserInterface {
   public:
-    UserInterface() = default;
+    UserInterface();
     ~UserInterface() override = default;
+
+    Mutex& getPrintMutex() override;
 
     void flush() override;
     int print(const char* format, ...) override;

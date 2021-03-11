@@ -15,7 +15,6 @@ class Logger : public ILogger {
 
   private:
     IUserInterface& m_ui;
-    Mutex m_mutex;
     LogLevel m_logLevel;
 };
 
