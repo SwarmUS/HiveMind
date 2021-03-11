@@ -42,7 +42,6 @@ FunctionListLengthResponseDTO BittyBuzzMessageHandler::handleFunctionListLengthR
 }
 
 FunctionDescriptionResponseDTO BittyBuzzMessageHandler::handleFunctionDescriptionRequest(
-
     const FunctionDescriptionRequestDTO& functionDescRequest) {
     uint16_t idx = functionDescRequest.getIndex();
     auto optClosure = m_closureRegister.getRegisteredClosure(idx);

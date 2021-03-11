@@ -50,10 +50,8 @@ FunctionDescriptionArgumentTypeDTO getbbzObjType(bbzobj_t* bbzObj) {
     switch (bbztype(*bbzObj)) {
     case BBZTYPE_INT:
         return FunctionDescriptionArgumentTypeDTO::Int;
-        break;
     case BBZTYPE_FLOAT:
         return FunctionDescriptionArgumentTypeDTO::Float;
-        break;
     default:
         return FunctionDescriptionArgumentTypeDTO::Unknown;
     }
