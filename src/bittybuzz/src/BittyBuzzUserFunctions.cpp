@@ -62,15 +62,13 @@ FunctionDescriptionArgumentTypeDTO getbbzObjType(bbzobj_t* bbzObj) {
 void BittyBuzzUserFunctions::log() {
     // Get the number of args
     uint16_t nArgs = bbzvm_locals_count();
-    (void)nArgs;
 
     LockGuard lock(BittyBuzzSystem::g_ui->getPrintMutex());
 
-    // Iterate through args2
-    for (uint16_t i = 0; i < nArgs; i++) {
-        // Arg 0 is nbArg so lets add +1
+    // Iterate through args, we start a arg 1 up to the nb of args
+    for (uint16_t i = 1; i <= nArgs; i++) {
 
-        bbzobj_t* obj = bbzheap_obj_at(bbzvm_locals_at((int16_t)i + 1)); // NOLINT
+        bbzobj_t* obj = bbzheap_obj_at(bbzvm_locals_at(i)); // NOLINT
 
         switch (bbztype(*obj)) {
         case BBZTYPE_NIL: {
