@@ -13,10 +13,25 @@ extern "C" {
 CircularBuff cbuffUsb;
 extern uint8_t cbuffUsbData[CBUFF_USB_DATA_SIZE];
 
+/**
+ * @brief Initiates a data transmission on the USB device.
+ *      Will return after the transmission is completed or aborted
+ * @param buf Pointer to a buffer to the data to be sent
+ * @param len Number of bytes to send
+ * @return True if success. Otherwise, false.
+ */
+uint8_t Usb_Send_Data(const uint8_t* buf, uint16_t len);
 
-uint8_t USB_Send_Data(const uint8_t* buf, uint16_t Len);
-void USB_rm_data(uint8_t* buf);
-bool USB_isConnected();
+/**
+ * @brief Returns the state of the USB device connection
+ * 1 : connected
+ * 0 : not connected
+ */
+bool Usb_isConnected();
+
+/**
+ * @brief Initialize the circular buffer for the USB transmissions
+ */
 void Usb_init();
 
 #ifdef __cplusplus

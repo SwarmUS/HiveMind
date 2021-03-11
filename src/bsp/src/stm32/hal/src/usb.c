@@ -1,23 +1,29 @@
-// Created by Hubert Dube - 04/03/2021
-
 #include "hal/usb.h"
 #include "usbd_cdc_if.h"
 
 uint8_t cbuffUsbData[CBUFF_USB_DATA_SIZE];
 
-uint8_t USB_Send_Data(const uint8_t* buf, uint16_t Len) {
+uint8_t Usb_HasTxFinished(USBD_CDC_HandleTypeDef* hcdc){
+    bool ret = false;
+    while(hcdc->TxState != 0){}
+    if (hcdc->TxState == 0) {
+        ret = USBD_OK;
+    }else{
+        ret = USBD_FAIL;
+    }
+
+    return ret;
+}
+
+uint8_t Usb_Send_Data(const uint8_t* buf, uint16_t Len) {
     CDC_Transmit_FS((uint8_t*)buf, Len);
     USBD_CDC_HandleTypeDef* hcdc = (USBD_CDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
-    while(hcdc->TxState != 0){
-    }
-    return USBD_OK; // to change
+    while(hcdc->TxState != 0){}
+
+    return Usb_HasTxFinished(hcdc);
 }
 
-void USB_rm_data(uint8_t* buf) {
-    buf[0] = '\0';
-}
-
-bool USB_isConnected(){
+bool Usb_isConnected(){
     return hUsbDeviceFS.dev_connection_status;
 }
 
@@ -25,6 +31,11 @@ void Usb_init() {
     CircularBuff_init(&cbuffUsb, cbuffUsbData, CBUFF_USB_DATA_SIZE);
 }
 
-void USB_CDC_RxCallBack(uint8_t* Buf, uint32_t Len) {
-    CircularBuff_put(&cbuffUsb, Buf,Len);
+void Usb_CDC_RxCallBack(uint8_t* Buf, uint32_t len) {
+    if(CircularBuff_getLength(&cbuffUsb) + len  > CBUFF_USB_DATA_SIZE){
+        // TODO should notify the user of an error
+        CircularBuff_clear(&cbuffUsb);
+        return;
+    }
+    CircularBuff_put(&cbuffUsb, Buf,len);
 }
