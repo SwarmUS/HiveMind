@@ -35,13 +35,14 @@ void foreachHostFCallback(bbzheap_idx_t key, bbzheap_idx_t value, void* params) 
     }
 }
 
-struct ForeachNameAndType {
+struct ArgNameAndType {
     bbzheap_idx_t m_key;
     bbzheap_idx_t m_value;
 };
-// We know that the size is 1
+
+// We know that the size is 1, so the value will be written once
 void foreachNameAndType(bbzheap_idx_t key, bbzheap_idx_t value, void* params) {
-    ForeachNameAndType* context = (ForeachNameAndType*)params;
+    ArgNameAndType* context = (ArgNameAndType*)params;
     context->m_key = key;
     context->m_value = value;
 }
@@ -99,6 +100,7 @@ void BittyBuzzUserFunctions::registerClosure() {
         !bbztype_istable(*bbzArgsDesc)) {
         BittyBuzzSystem::g_logger->log(LogLevel::Info,
                                        "BBZ: invalid type when registering function");
+        bbzvm_ret0();
         return;
     }
 
@@ -118,6 +120,7 @@ void BittyBuzzUserFunctions::registerClosure() {
             if (bbztable_get(bbzArgsDescHeapIdx, key, &subTable) == 0) {
                 BittyBuzzSystem::g_logger->log(
                     LogLevel::Warn, "BBZ: Invalid args description on closure registration");
+                bbzvm_ret0();
                 return;
             }
 
@@ -125,10 +128,12 @@ void BittyBuzzUserFunctions::registerClosure() {
             if (bbztable_size(subTable) != 1) {
                 BittyBuzzSystem::g_logger->log(
                     LogLevel::Warn, "BBZ: Invalid args description on closure registration");
+                bbzvm_ret0();
                 return;
             }
 
-            ForeachNameAndType keyValue;
+            ArgNameAndType keyValue;
+
             // We know that the subtable has a size of 1, so no overwrite on the foreach
             bbztable_foreach(subTable, foreachNameAndType, &keyValue);
             bbzobj_t* bbzArgName = bbzheap_obj_at(keyValue.m_key);
@@ -141,6 +146,7 @@ void BittyBuzzUserFunctions::registerClosure() {
             if (!argNameOpt) {
                 BittyBuzzSystem::g_logger->log(LogLevel::Warn,
                                                "BBZ: Arg name could not be found on registration");
+                bbzvm_ret0();
                 return;
             }
 
@@ -162,6 +168,8 @@ void BittyBuzzUserFunctions::registerClosure() {
         BittyBuzzSystem::g_logger->log(LogLevel::Warn,
                                        "BBZ: String id not found when registering function");
     }
+
+    bbzvm_ret0();
 }
 
 void BittyBuzzUserFunctions::callHostFunction() {
