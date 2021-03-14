@@ -206,7 +206,7 @@ class SPIMessageSender : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class USBMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class USBMessageSender : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
   public:
     USBMessageSender(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
@@ -239,7 +239,7 @@ class USBMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
 };
 
 
-class USBMessageDispatcher : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class USBMessageDispatcher : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
 
   public:
     USBMessageDispatcher(const char* taskName, UBaseType_t priority) :
@@ -288,13 +288,13 @@ int main(int argc, char** argv) {
     static TCPMessageSender s_tcpMessageSender("uart_send", tskIDLE_PRIORITY + 1);
     static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
     static USBMessageSender s_usbMessageSender("usb_send", tskIDLE_PRIORITY + 1);
-    static USBMessageDispatcher s_usbMessageDispatcher("usb_dispatch", tskIDLE_PRIORITY + 5);
+    static USBMessageDispatcher s_usbMessageDispatcher("usb_dispatch", tskIDLE_PRIORITY + 1);
 
     s_bittybuzzTask.start();
 //    s_uartDispatchTask.start();
-//    s_tcpDispatchTask.start();
+    s_tcpDispatchTask.start();
 //    s_uartMessageSender.start();
-//    s_tcpMessageSender.start();
+    s_tcpMessageSender.start();
 //    s_spiMessageSender.start();
     s_usbMessageSender.start();
     s_usbMessageDispatcher.start();
