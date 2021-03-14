@@ -30,7 +30,7 @@ uint8_t Usb_Send_Data(const uint8_t* buf, uint16_t len);
 bool Usb_isConnected();
 
 /**
- * @brief Initialize the circular buffer for the USB transmissions
+ * @brief Initialize the circular buffer for the USB transactions
  */
 void Usb_init();
 
