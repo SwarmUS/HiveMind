@@ -23,8 +23,7 @@
 #include "usbd_cdc_if.h"
 
 /* USER CODE BEGIN INCLUDE */
-//static uint8_t inBuffer[256];
-//static uint16_t inLen = 0;
+
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,8 +94,8 @@ uint8_t UserRxBufferFS[APP_RX_DATA_SIZE];
 /** Data to send over USB CDC are stored in this buffer   */
 uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
 
-
 /* USER CODE BEGIN PRIVATE_VARIABLES */
+
 /* USER CODE END PRIVATE_VARIABLES */
 
 /**
@@ -108,8 +107,7 @@ uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
  * @{
  */
 
-
-
+extern USBD_HandleTypeDef hUsbDeviceFS;
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
 
