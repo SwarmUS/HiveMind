@@ -1,7 +1,3 @@
-//
-// Created by hubert on 3/4/21.
-//
-
 #ifndef HIVE_MIND_IUSB_H
 #define HIVE_MIND_IUSB_H
 
