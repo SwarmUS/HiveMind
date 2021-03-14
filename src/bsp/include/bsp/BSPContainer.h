@@ -35,7 +35,7 @@ namespace BSPContainer {
     ISpiEsp& getSpiEsp();
 
     /**
-     * @brief Returns an instance of the Esp32 Spi driver.
+     * @brief Returns an instance of the USB CDC driver
      */
     IUSB& getUSB();
 } // namespace BSPContainer
