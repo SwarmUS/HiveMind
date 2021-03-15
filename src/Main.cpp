@@ -204,6 +204,22 @@ class SPIMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
                 MessageSender messageSender(MessageHandlerContainer::getRemoteMsgQueue(),
                                             serializer, BSPContainer::getBSP(), m_logger);
 
+    ~USBMessageSender() override = default;
+
+  private:
+    ILogger& m_logger;
+
+    void task() override {
+        auto& usb = BSPContainer::getUSB();
+
+        while (true) {
+            if (usb.isConnected()) {
+
+                HiveMindHostSerializer serializer(usb);
+
+                MessageSender messageSender(MessageHandlerContainer::getHostMsgQueue(),
+                                            serializer, BSPContainer::getBSP(), m_logger);
+
                 while (true) {
                     if (!messageSender.processAndSerialize()) {
                         m_logger.log(LogLevel::Warn, "Fail to process/serialize to spi");
@@ -236,6 +252,41 @@ class SpiMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZE> 
             if (!messageDispatcher.deserializeAndDispatch()) {
                 m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch spi");
             }
+        }
+    }
+
+  private:
+    ILogger& m_logger;
+};
+
+class USBMessageDispatcher : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
+
+  public:
+    USBMessageDispatcher(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
+
+    ~USBMessageDispatcher() override = default;
+
+    void task() override {
+        auto& usb = BSPContainer::getUSB();
+
+        while (true) {
+            if (usb.isConnected()) {
+                HiveMindHostDeserializer deserializer(usb);
+                HiveMindApiRequestHandler hivemindApiReqHandler =
+                    MessageHandlerContainer::createHiveMindApiRequestHandler();
+                MessageDispatcher messageDispatcher =
+                    MessageHandlerContainer::createMessageDispatcher(deserializer,
+                                                                     hivemindApiReqHandler);
+                while (true) {
+                    if (!messageDispatcher.deserializeAndDispatch()) {
+                        m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch  usb");
+                    }
+
+                    Task::delay(200);
+                }
+            }
+            Task::delay(500);
         }
     }
 
