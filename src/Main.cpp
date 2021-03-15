@@ -225,7 +225,7 @@ class USBMessageSender : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
                 HiveMindHostSerializer serializer(usb);
 
                 MessageSender messageSender(MessageHandlerContainer::getHostMsgQueue(),
-                                            serializer, m_logger);
+                                            serializer, BSPContainer::getBSP(), m_logger);
 
                 while (true) {
                     if (!messageSender.processAndSerialize()) {
@@ -253,11 +253,11 @@ class USBMessageDispatcher : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
         while (true) {
             if (usb.isConnected()) {
                 HiveMindHostDeserializer deserializer(usb);
-                MessageDispatcher messageDispatcher(MessageHandlerContainer::getBuzzMsgQueue(),
-                                                    MessageHandlerContainer::getHostMsgQueue(),
-                                                    MessageHandlerContainer::getRemoteMsgQueue(),
-                                                    deserializer, BSPContainer::getBSP(), m_logger);
-
+                HiveMindApiRequestHandler hivemindApiReqHandler =
+                    MessageHandlerContainer::createHiveMindApiRequestHandler();
+                MessageDispatcher messageDispatcher =
+                    MessageHandlerContainer::createMessageDispatcher(deserializer,
+                                                                     hivemindApiReqHandler);
                 while (true) {
                     if (!messageDispatcher.deserializeAndDispatch()) {
                         m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch  usb");
