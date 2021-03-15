@@ -217,8 +217,8 @@ class SPIMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
 
                 HiveMindHostSerializer serializer(usb);
 
-                MessageSender messageSender(MessageHandlerContainer::getHostMsgQueue(),
-                                            serializer, BSPContainer::getBSP(), m_logger);
+                MessageSender messageSender(MessageHandlerContainer::getHostMsgQueue(), serializer,
+                                            BSPContainer::getBSP(), m_logger);
 
                 while (true) {
                     if (!messageSender.processAndSerialize()) {
@@ -230,6 +230,7 @@ class SPIMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
         }
     }
 };
+
 
 class SpiMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
 
@@ -258,6 +259,9 @@ class SpiMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZE> 
   private:
     ILogger& m_logger;
 };
+
+
+
 
 class USBMessageDispatcher : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
 
@@ -294,7 +298,6 @@ class USBMessageDispatcher : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
     ILogger& m_logger;
 };
 
-
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
@@ -313,11 +316,12 @@ int main(int argc, char** argv) {
 
     s_bittybuzzTask.start();
 //    s_uartDispatchTask.start();
-    //    s_tcpDispatchTask.start();
-    s_uartMessageSender.start();
+    s_tcpDispatchTask.start();
+//    s_uartMessageSender.start();
     s_tcpMessageSender.start();
-    s_spiDispatchTask.start();
-    s_spiMessageSender.start();
+//    s_spiMessageSender.start();
+    s_usbMessageSender.start();
+    s_usbMessageDispatcher.start();
 
     Task::startScheduler();
 

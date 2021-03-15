@@ -5,8 +5,8 @@
 #include "bsp/IBSP.h"
 #include "bsp/IHostUart.h"
 #include "bsp/ISpiEsp.h"
-#include "bsp/IUserInterface.h"
 #include "bsp/IUSB.h"
+#include "bsp/IUserInterface.h"
 
 namespace BSPContainer {
     /**
