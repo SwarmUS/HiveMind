@@ -201,7 +201,7 @@ class SPIMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
             if (spi.isConnected()) {
 
                 HiveMindHostSerializer serializer(spi);
-                MessageSender messageSender(MessageHandlerContainer::getNetworkMessageQueue(),
+                MessageSender messageSender(MessageHandlerContainer::getRemoteMsgQueue(),
                                             serializer, BSPContainer::getBSP(), m_logger);
 
                 while (true) {

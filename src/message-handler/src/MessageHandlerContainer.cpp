@@ -36,10 +36,3 @@ ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getRemoteMsgQueue() {
 
     return s_remoteMsgThreadQueue;
 }
-
-ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getNetworkMessageQueue() {
-    static CircularQueueStack<MessageDTO, gc_queueMaxSize> s_networkMsgQueue;
-    static ThreadSafeQueue<MessageDTO> s_networkMsgThreadQueue(s_networkMsgQueue);
-
-    return s_networkMsgThreadQueue;
-}

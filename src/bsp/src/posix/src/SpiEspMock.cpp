@@ -5,8 +5,8 @@
 #include <ros/ros.h>
 
 void SpiMock_listenTask(void* param) {
-    auto* test = static_cast<SpiEspMock*>(param);
-    test->waitForClient();
+    auto* context = static_cast<SpiEspMock*>(param);
+    context->waitForClient();
 }
 
 SpiEspMock::SpiEspMock(ILogger& logger) :

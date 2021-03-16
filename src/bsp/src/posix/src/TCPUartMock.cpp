@@ -5,8 +5,8 @@
 #include <ros/ros.h>
 
 void TCPUartMock_listenTask(void* param) {
-    auto* test = static_cast<TCPUartMock*>(param);
-    test->waitForClient();
+    auto* context = static_cast<TCPUartMock*>(param);
+    context->waitForClient();
 }
 
 TCPUartMock::TCPUartMock(ILogger& logger) :
