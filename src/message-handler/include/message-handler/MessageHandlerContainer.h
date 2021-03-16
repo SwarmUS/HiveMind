@@ -36,6 +36,7 @@ namespace MessageHandlerContainer {
      *@brief get the remote message queue
      *@return A reference to the remote message queue */
     ThreadSafeQueue<MessageDTO>& getRemoteMsgQueue();
+
 } // namespace MessageHandlerContainer
 
 #endif // __MESSAGEHANDLERCONTAINER_H_

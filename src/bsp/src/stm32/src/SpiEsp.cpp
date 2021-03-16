@@ -64,6 +64,9 @@ bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
 
 bool SpiEsp::isBusy() const { return m_isBusy; }
 
+// TODO: this function should return true if the last header received from esp was valid.
+bool SpiEsp::isConnected() const { return true; }
+
 void SpiEsp::execute() {
     uint32_t txLengthBytes = 0;
     uint32_t rxLengthBytes = 0;

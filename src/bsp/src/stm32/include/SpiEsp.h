@@ -16,7 +16,14 @@ class SpiEsp : public ISpiEsp {
 
     bool send(const uint8_t* buffer, uint16_t length) override;
 
+    bool receive(uint8_t* buffer, uint16_t length) override {
+        (void)buffer;
+        (void)length;
+        return false;
+    }
+
     bool isBusy() const override;
+    bool isConnected() const override;
 
     void execute();
 

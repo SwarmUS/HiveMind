@@ -22,7 +22,6 @@ class BSP : public IBSP {
   private:
     std::shared_ptr<ros::NodeHandle> m_rosNodeHandle;
     BaseTask<2 * configMINIMAL_STACK_SIZE> m_rosWatchTask;
-    BaseTask<configMINIMAL_STACK_SIZE> m_exampleTopicPublishTask;
 
     std::mt19937 m_rng;
     std::uniform_int_distribution<uint32_t> m_distribution;
