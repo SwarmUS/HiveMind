@@ -184,7 +184,7 @@ class TCPMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class SPIMessageSender : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
+class SPIMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     SPIMessageSender(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
@@ -195,15 +195,52 @@ class SPIMessageSender : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
     ILogger& m_logger;
 
     void task() override {
+
         auto& spi = BSPContainer::getSpiEsp();
         while (true) {
-            if (!spi.isBusy()) {
-                const char message[] = "Sending message to ESP from task";
-                spi.send((uint8_t*)message, sizeof(message));
+            if (spi.isConnected()) {
+
+                HiveMindHostSerializer serializer(spi);
+                MessageSender messageSender(MessageHandlerContainer::getNetworkMessageQueue(),
+                                            serializer, BSPContainer::getBSP(), m_logger);
+
+                while (true) {
+                    if (!messageSender.processAndSerialize()) {
+                        m_logger.log(LogLevel::Warn, "Fail to process/serialize to spi");
+                    }
+                }
             }
-            Task::delay(100);
+            Task::delay(500);
         }
     }
+};
+
+class SpiMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
+
+  public:
+    SpiMessageDispatcher(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
+
+    ~SpiMessageDispatcher() override = default;
+
+    void task() override {
+        auto& spi = BSPContainer::getSpiEsp();
+        while (!spi.isConnected()) {
+            Task::delay(500);
+        }
+        HiveMindHostDeserializer deserializer(spi);
+        auto hivemindApiReqHandler = MessageHandlerContainer::createHiveMindApiRequestHandler();
+        auto messageDispatcher =
+            MessageHandlerContainer::createMessageDispatcher(deserializer, hivemindApiReqHandler);
+        while (true) {
+            if (!messageDispatcher.deserializeAndDispatch()) {
+                m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch spi");
+            }
+        }
+    }
+
+  private:
+    ILogger& m_logger;
 };
 
 int main(int argc, char** argv) {
@@ -215,6 +252,7 @@ int main(int argc, char** argv) {
     static BittyBuzzTask s_bittybuzzTask("bittybuzz", tskIDLE_PRIORITY + 1);
     static UartMessageDispatcher s_uartDispatchTask("uart_dispatch", tskIDLE_PRIORITY + 1);
     static TCPMessageDispatcher s_tcpDispatchTask("tcp_dispatch", tskIDLE_PRIORITY + 1);
+    static SpiMessageDispatcher s_spiDispatchTask("spi_dispatch", tskIDLE_PRIORITY + 1);
     static UartMessageSender s_uartMessageSender("uart_send", tskIDLE_PRIORITY + 1);
     static TCPMessageSender s_tcpMessageSender("uart_send", tskIDLE_PRIORITY + 1);
     static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
@@ -224,7 +262,8 @@ int main(int argc, char** argv) {
     s_tcpDispatchTask.start();
     s_uartMessageSender.start();
     s_tcpMessageSender.start();
-    // s_spiMessageSender.start();
+    s_spiDispatchTask.start();
+    s_spiMessageSender.start();
 
     Task::startScheduler();
 

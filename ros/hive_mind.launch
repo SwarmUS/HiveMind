@@ -12,6 +12,9 @@
             <!-- Set port to 0 to disable server -->
             <param name="uart_mock_port" value="12345" />
 
+            <!-- Set port to 0 to disable server -->
+            <param name="spi_mock_port" value="12346" />
+
             <param name="log_level" value="Info" />
         </node>
 </launch>

@@ -64,6 +64,8 @@ bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
 
 bool SpiEsp::isBusy() const { return m_isBusy; }
 
+bool SpiEsp::isConnected() const { return true; }
+
 void SpiEsp::execute() {
     uint32_t txLengthBytes = 0;
     uint32_t rxLengthBytes = 0;

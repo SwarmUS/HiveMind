@@ -1,11 +1,10 @@
 #include "BSP.h"
+#include "SpiEspMock.h"
 #include "bsp/SettingsContainer.h"
 #include "ros/ros.h"
 #include <TCPUartMock.h>
-#include "SpiEspMock.h"
 #include <Task.h>
 #include <bsp/BSPContainer.h>
-#include <hive_mind/ExampleMessage.h>
 #include <random>
 
 /**
@@ -21,29 +20,8 @@ void rosWatcher(void* param) {
     }
 }
 
-void exampleTopicPublish(void* param) {
-    const int loopRate = 4000;
-    hive_mind::ExampleMessage msg = hive_mind::ExampleMessage();
-    msg.number = 0;
-    msg.text = "Hello World";
-
-    std::shared_ptr<ros::NodeHandle>* nodeHandle = (std::shared_ptr<ros::NodeHandle>*)param;
-    const uint32_t queueSize = 1000;
-    ros::Publisher publisher =
-        nodeHandle->get()->advertise<hive_mind::ExampleMessage>("exampleTopic", queueSize);
-
-    while (true) {
-        publisher.publish(msg);
-        msg.number++;
-
-        Task::delay(loopRate);
-    }
-}
-
 BSP::BSP() :
     m_rosWatchTask("ros_watch", tskIDLE_PRIORITY + 1, rosWatcher, NULL),
-    m_exampleTopicPublishTask(
-        "ros_watch", tskIDLE_PRIORITY + 1, exampleTopicPublish, &m_rosNodeHandle),
     m_rng(std::random_device()()),
     m_distribution(0, UINT32_MAX) {}
 
@@ -64,7 +42,6 @@ void BSP::initChip(void* args) {
     espMock.openSocket(port);
 
     m_rosWatchTask.start();
-    m_exampleTopicPublishTask.start();
 }
 
 std::shared_ptr<ros::NodeHandle> BSP::getRosNodeHandle() { return m_rosNodeHandle; }

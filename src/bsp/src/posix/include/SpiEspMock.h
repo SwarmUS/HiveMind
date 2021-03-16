@@ -5,10 +5,9 @@
 #include <BaseTask.h>
 #include <condition_variable>
 #include <logger/ILogger.h>
-#include <netinet/in.h>
 #include <mutex>
+#include <netinet/in.h>
 #include <optional>
-
 
 class SpiEspMock : public ISpiEsp {
   public:
@@ -23,11 +22,12 @@ class SpiEspMock : public ISpiEsp {
 
     bool isBusy() const override;
 
+    bool isConnected() const override;
 
     void close() const;
     friend void SpiMock_listenTask(void* param);
 
-private:
+  private:
     ILogger& m_logger;
 
     BaseTask<configMINIMAL_STACK_SIZE * 2> m_listenTask;

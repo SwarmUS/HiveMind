@@ -9,17 +9,16 @@ void SpiMock_listenTask(void* param) {
     test->waitForClient();
 }
 
-
 SpiEspMock::SpiEspMock(ILogger& logger) :
-        m_logger(logger),
-        m_listenTask("tcp_uart_mock_listen", tskIDLE_PRIORITY + 1, SpiMock_listenTask, this),
-        m_port(0) {}
+    m_logger(logger),
+    m_listenTask("tcp_spi_mock_listen", tskIDLE_PRIORITY + 1, SpiMock_listenTask, this),
+    m_port(0) {}
 
 SpiEspMock::~SpiEspMock() { close(); }
 
 void SpiEspMock::openSocket(int port) {
     if (port == 0) {
-        m_logger.log(LogLevel::Info, "UART TCP mock port set to 0. Not initializing server.");
+        m_logger.log(LogLevel::Info, "SPI TCP mock port set to 0. Not initializing server.");
         return;
     }
 
@@ -27,7 +26,7 @@ void SpiEspMock::openSocket(int port) {
     int serverFd;
 
     if ((serverFd = ::socket(AF_INET, SOCK_STREAM, 0)) == 0) {
-        m_logger.log(LogLevel::Error, "UART TCP mock socket creation failed");
+        m_logger.log(LogLevel::Error, "SPI TCP mock socket creation failed");
         return;
     }
     m_serverFd = serverFd;
@@ -40,15 +39,15 @@ void SpiEspMock::openSocket(int port) {
 
     if (::bind(m_serverFd, (struct sockaddr*)&m_address, static_cast<socklen_t>(m_addressLength)) <
         0) {
-        m_logger.log(LogLevel::Error, "UART TCP mock server binding failed");
+        m_logger.log(LogLevel::Error, "SPI TCP mock server binding failed");
         return;
     }
 
     if (m_listenTask.start()) {
-        m_logger.log(LogLevel::Info, "UART TCP mock server waiting for client on port %d", m_port);
+        m_logger.log(LogLevel::Info, "SPI TCP mock server waiting for client on port %d", m_port);
     } else {
 
-        m_logger.log(LogLevel::Info, "UART TCP mock already listening on port %d", m_port);
+        m_logger.log(LogLevel::Info, "SPI TCP mock already listening on port %d", m_port);
     }
 }
 
@@ -68,7 +67,7 @@ bool SpiEspMock::receive(uint8_t* buffer, uint16_t length) {
     auto ret = ::recv(m_clientFd.value(), buffer, length, MSG_WAITALL);
 
     if (ret <= 0) {
-        m_logger.log(LogLevel::Warn, "Error while reading UART socket. Client has probably "
+        m_logger.log(LogLevel::Warn, "Error while reading SPI socket. Client has probably "
                                      "disconnected. Attempting reconnection...");
         ::close(m_clientFd.value());
         m_clientFd = {};
@@ -85,6 +84,8 @@ bool SpiEspMock::receive(uint8_t* buffer, uint16_t length) {
 
 bool SpiEspMock::isBusy() const { return false; }
 
+bool SpiEspMock::isConnected() const { return m_clientFd.has_value(); }
+
 void SpiEspMock::close() const {
     if (m_clientFd) {
         ::close(m_clientFd.value());
@@ -97,15 +98,15 @@ void SpiEspMock::close() const {
 
 void SpiEspMock::waitForClient() {
     if (::listen(m_serverFd, 1) < 0) {
-        m_logger.log(LogLevel::Error, "TCP UART mock server listen failed");
+        m_logger.log(LogLevel::Error, "TCP SPI mock server listen failed");
         return;
     }
 
     m_clientFd = ::accept(m_serverFd, (struct sockaddr*)&m_address, (socklen_t*)&m_addressLength);
 
     if (m_clientFd < 0) {
-        m_logger.log(LogLevel::Error, "TCP UART mock: Client acceptation failed");
+        m_logger.log(LogLevel::Error, "TCP SPI mock: Client acceptation failed");
     } else {
-        m_logger.log(LogLevel::Info, "TCP UART mock: Client connected");
+        m_logger.log(LogLevel::Info, "TCP SPI mock: Client connected");
     }
 }

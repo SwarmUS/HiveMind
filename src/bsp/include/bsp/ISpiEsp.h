@@ -1,13 +1,13 @@
 #ifndef __ISPIESP_H__
 #define __ISPIESP_H__
 
-#include <cstdint>
 #include "common/IProtobufStream.h"
+#include <cstdint>
 
 #define CRC32_SIZE sizeof(uint32_t)
 #define ESP_SPI_MAX_MESSAGE_LENGTH (2048u - CRC32_SIZE)
 
-class ISpiEsp : public IProtobufStream{
+class ISpiEsp : public IProtobufStream {
   public:
     virtual ~ISpiEsp() = default;
 
@@ -33,6 +33,8 @@ class ISpiEsp : public IProtobufStream{
      * @return True if in use. False otherwise
      */
     virtual bool isBusy() const = 0;
+
+    virtual bool isConnected() const = 0;
 };
 
 #endif // __ISPIESP_H__
