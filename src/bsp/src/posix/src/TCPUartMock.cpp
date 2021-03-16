@@ -66,10 +66,12 @@ bool TCPUartMock::receive(uint8_t* buffer, uint16_t length) {
 
     auto ret = ::recv(m_clientFd.value(), buffer, length, MSG_WAITALL);
 
-    if (ret == 0) {
-        // TODO: If we ever want to handle client reconnection in the simulation, do it here
-        m_logger.log(LogLevel::Warn,
-                     "Error while reading UART socket. Client has probably disconnected");
+    if (ret <= 0) {
+        m_logger.log(LogLevel::Warn, "Error while reading UART socket. Client has probably "
+                                     "disconnected. Attempting reconnection...");
+        ::close(m_clientFd.value());
+        m_clientFd = {};
+        waitForClient();
     }
 
     return ret == length;
