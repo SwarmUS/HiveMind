@@ -77,6 +77,7 @@ bool TCPUartMock::receive(uint8_t* buffer, uint16_t length) {
         }
         // Returning false since error occurred.
         return false;
+    }
 
     return ret == length;
 }
