@@ -71,7 +71,12 @@ bool TCPUartMock::receive(uint8_t* buffer, uint16_t length) {
                                      "disconnected. Attempting reconnection...");
         ::close(m_clientFd.value());
         m_clientFd = {};
-        waitForClient();
+        // Only return when connection has been restored.
+        while (!m_clientFd) {
+            waitForClient();
+        }
+        // Returning false since error occurred.
+        return false;
     }
 
     return ret == length;
