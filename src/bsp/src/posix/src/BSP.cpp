@@ -34,7 +34,7 @@ void BSP::initChip(void* args) {
     m_rosNodeHandle = std::make_shared<ros::NodeHandle>("~");
 
     TCPUartMock& tcpUart = static_cast<TCPUartMock&>(BSPContainer::getHostUart());
-    int port = m_rosNodeHandle->param("uart_mock_port", 0);
+    int port = m_rosNodeHandle->param("uart_mock_port", 9000);
     tcpUart.openSocket(port);
 
     SpiEspMock& espMock = static_cast<SpiEspMock&>(BSPContainer::getSpiEsp());
