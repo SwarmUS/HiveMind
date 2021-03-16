@@ -11,7 +11,7 @@ set(LIB_SOURCES
     src/SocketFactory.cpp
     src/TCPClient.cpp
     src/SettingsContainer.cpp
-    src/SpiEsp.cpp
+    src/SpiEspMock.cpp
     )
 
 set(LIB_PRIVATE_HEADERS

@@ -2,6 +2,7 @@
 #include "bsp/SettingsContainer.h"
 #include "ros/ros.h"
 #include <TCPUartMock.h>
+#include "SpiEspMock.h"
 #include <Task.h>
 #include <bsp/BSPContainer.h>
 #include <hive_mind/ExampleMessage.h>
@@ -57,6 +58,10 @@ void BSP::initChip(void* args) {
     TCPUartMock& tcpUart = static_cast<TCPUartMock&>(BSPContainer::getHostUart());
     int port = m_rosNodeHandle->param("uart_mock_port", 0);
     tcpUart.openSocket(port);
+
+    SpiEspMock& espMock = static_cast<SpiEspMock&>(BSPContainer::getSpiEsp());
+    port = m_rosNodeHandle->param("spi_mock_port", 9001);
+    espMock.openSocket(port);
 
     m_rosWatchTask.start();
     m_exampleTopicPublishTask.start();
