@@ -20,19 +20,19 @@ extern uint8_t cbuffUsbData[CBUFF_USB_DATA_SIZE];
  * @param len Number of bytes to send
  * @return True if success. Otherwise, false.
  */
-uint8_t Usb_Send_Data(const uint8_t* buf, uint16_t len);
+uint8_t usb_sendData(const uint8_t* buf, uint16_t len);
 
 /**
  * @brief Returns the state of the USB device connection
- * 1 : connected
- * 0 : not connected
+ * True : connected
+ * False : not connected
  */
-bool Usb_isConnected();
+bool usb_isConnected();
 
 /**
  * @brief Initialize the circular buffer for the USB transactions
  */
-void Usb_init();
+void usb_init();
 
 #ifdef __cplusplus
 }

@@ -33,7 +33,7 @@ void Hal_init() {
     MX_USB_DEVICE_Init();
 
     UartPrint_init();
-    Usb_init();
+    usb_init();
 
     MX_LWIP_Init();
 
