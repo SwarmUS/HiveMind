@@ -2,13 +2,13 @@
 #include "usbd_cdc_if.h"
 
 uint8_t cbuffUsbData[CBUFF_USB_DATA_SIZE];
-
 uint8_t usb_hasTxFinished(USBD_CDC_HandleTypeDef* hcdc){
     bool ret = false;
-    while(hcdc->TxState != 0){}
+    while (hcdc->TxState != 0) {
+    }
     if (hcdc->TxState == 0) {
         ret = USBD_OK;
-    }else{
+    } else {
         ret = USBD_FAIL;
     }
 
@@ -18,7 +18,8 @@ uint8_t usb_hasTxFinished(USBD_CDC_HandleTypeDef* hcdc){
 uint8_t usb_sendData(const uint8_t* buf, uint16_t Len) {
     CDC_Transmit_FS((uint8_t*)buf, Len);
     USBD_CDC_HandleTypeDef* hcdc = (USBD_CDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
-    while(hcdc->TxState != 0){}
+    while (hcdc->TxState != 0) {
+    }
 
     return usb_hasTxFinished(hcdc);
 }
@@ -37,5 +38,5 @@ void usb_CDC_RxCallBack(uint8_t* Buf, uint32_t len) {
         CircularBuff_clear(&cbuffUsb);
         return;
     }
-    CircularBuff_put(&cbuffUsb, Buf,len);
+    CircularBuff_put(&cbuffUsb, Buf, len);
 }

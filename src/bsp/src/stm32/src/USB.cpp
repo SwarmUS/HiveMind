@@ -11,9 +11,9 @@ bool USB::send(const uint8_t* buffer, uint16_t length) {
     bool ret = false;
     int out = usb_sendData(const_cast<uint8_t*>(buffer), length);
 
-    if(out == USBD_OK) {
+    if (out == USBD_OK) {
         ret = true;
-    }else{
+    } else {
         m_logger.log(LogLevel::Warn, "USB_Send_Data was not able to send the data");
     }
 
@@ -38,9 +38,9 @@ bool USB::receive(uint8_t* buffer, uint16_t length) {
     return true;
 }
 
-USB::USB(ILogger& logger):
-    m_logger(logger){}
+USB::USB(ILogger& logger) : m_logger(logger) {}
 
 bool USB::isConnected(){
     return usb_isConnected();
 }
+
