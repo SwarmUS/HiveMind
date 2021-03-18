@@ -11,7 +11,7 @@ USB_StatusTypeDef usb_hasTxFinished(USBD_CDC_HandleTypeDef* hcdc){
 USB_StatusTypeDef usb_sendData(const uint8_t* buf, uint16_t Len) {
     CDC_Transmit_FS((uint8_t*)buf, Len);
 //    TODO : add the data in another output queue so it's non blocking
-    USBD_CDC_HandleTypeDef* hcdc = (USBD_CDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
+    USBD_CDC_HandleTypeDef* hcdc = (USBD_CDC_HandleTypeDef*)USB_DEVICE.pClassData;
     while (hcdc->TxState != 0) {
     }
 
@@ -19,7 +19,7 @@ USB_StatusTypeDef usb_sendData(const uint8_t* buf, uint16_t Len) {
 }
 
 bool usb_isConnected(){
-    return hUsbDeviceFS.dev_connection_status;
+    return USB_DEVICE.dev_connection_status;
 }
 
 void usb_init() {
