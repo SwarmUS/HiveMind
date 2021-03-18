@@ -2,18 +2,26 @@
 #include "usbd_cdc_if.h"
 #include <USB.h>
 
+#define  USB_RxBUFFER_MAX_SIZE 2048
 void USB::interruptRxCallback(void* context, uint8_t* buffer, uint32_t length){
     USB* usb = (USB*)context;
     usb->receiveItCallback(buffer, length);
 }
 
 bool USB::send(const uint8_t* buffer, uint16_t length) {
-    if (buffer == nullptr || length > CBUFF_USB_DATA_SIZE) {
+    if (buffer == nullptr) {
         m_logger.log(LogLevel::Warn, "Invalid parameters for USB::send");
         return false;
     }
 
-    USB_StatusTypeDef out = usb_sendData(const_cast<uint8_t*>(buffer), length);
+    int position = 0;
+    while(length - position > USB_RxBUFFER_MAX_SIZE){
+        usb_sendData(const_cast<uint8_t*>(buffer + position), USB_RxBUFFER_MAX_SIZE);
+//        length -=  USB_RxBUFFER_MAX_SIZE;
+        position += USB_RxBUFFER_MAX_SIZE;
+    }
+
+    USB_StatusTypeDef out = usb_sendData(const_cast<uint8_t*>(buffer+position), length);
 
     if (out != USB_OK) {
         m_logger.log(LogLevel::Warn, "USB_Send_Data was not able to send the data");
