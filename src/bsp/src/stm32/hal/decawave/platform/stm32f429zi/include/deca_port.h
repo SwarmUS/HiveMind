@@ -21,7 +21,7 @@ typedef enum { DW_A = 0, DW_B } decaDevice_t;
 typedef struct {
     GPIO_TypeDef* port;
     uint16_t pin;
-    dwt_local_data_t* dwtLocalData;
+    uint8_t deviceIndex;
 } decaNSSConfig_t;
 
 /**

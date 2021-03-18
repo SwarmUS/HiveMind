@@ -1,12 +1,10 @@
 #include "deca_port.h"
+#include "deca_device_api.h"
 #include "main.h"
 #include "stm32f4xx_hal_conf.h"
 
-extern dwt_local_data_t dw1000local[DWT_NUM_DW_DEV];
-extern dwt_local_data_t* pdw1000local;
-
-static decaNSSConfig_t g_decaNssConfigA = {DW_NSS_A_GPIO_Port, DW_NSS_A_Pin, &dw1000local[0]};
-static decaNSSConfig_t g_decaNssConfigB = {DW_NSS_B_GPIO_Port, DW_NSS_B_Pin, &dw1000local[1]};
+static decaNSSConfig_t g_decaNssConfigA = {DW_NSS_A_GPIO_Port, DW_NSS_A_Pin, 0};
+static decaNSSConfig_t g_decaNssConfigB = {DW_NSS_B_GPIO_Port, DW_NSS_B_Pin, 1};
 
 static decaDevice_t g_selectedDecaDevice = DW_A;
 
@@ -69,7 +67,7 @@ void deca_setSlowRate() {
 }
 
 void deca_setFastRate() {
-    DW_SPI->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
+    DW_SPI->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
     HAL_SPI_Init(DW_SPI);
 }
 
@@ -81,7 +79,7 @@ void deca_init() {
 
 void deca_selectDevice(decaDevice_t selectedDevice) {
     g_selectedDecaDevice = selectedDevice;
-    pdw1000local = deca_getSelectedNSSConfig()->dwtLocalData;
+    dwt_setSelectedDevice(deca_getSelectedNSSConfig()->deviceIndex);
 }
 
 decaNSSConfig_t* deca_getSelectedNSSConfig() {

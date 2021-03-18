@@ -13,7 +13,7 @@ set(LIB_SOURCES
     src/SettingsContainer.cpp
     src/SpiEsp.cpp
     src/USB.cpp
-        src/Decawave.cpp)
+        src/Decawave.cpp src/DecawaveUtils.cpp)
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
@@ -26,7 +26,7 @@ set(LIB_PRIVATE_HEADERS
     include/SpiEsp.h
     include/SpiHeader.h
     include/USB.h
-        include/Decawave.h)
+        include/Decawave.h include/DecawaveUtils.h)
 
 include(DefaultSettings.cmake)
 configure_file(include/DefaultSettings.in.h include/DefaultSettings.h)

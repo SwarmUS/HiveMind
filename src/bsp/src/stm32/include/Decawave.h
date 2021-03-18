@@ -5,7 +5,7 @@
 #include "deca_port.h"
 #include <functional>
 
-#define UWB_MAX_LENGTH 127
+#define UWB_MAX_LENGTH 125 // 127 - 2 CRC bytes
 
 enum class DW_LED { LED_0, LED_1, LED_2, LED_3 };
 enum class UWBSpeed { SPEED_110K, SPEED_850K, SPEED_6M8 };
@@ -36,12 +36,9 @@ class Decawave {
     uint8_t m_channelNo;
     UWBSpeed m_speed;
 
+    std::array<uint8_t, UWB_MAX_LENGTH + 2> m_txBuffer;
+
     void configureDW();
-    uint8_t getPreambleLength();
-    uint8_t getPACSize();
-    uint8_t getPreambleCode();
-    uint8_t getDWSpeed();
-    uint16_t getSFDTimeout(uint8_t sfdLength);
 };
 
 #endif //__DECAWAVE_H__
