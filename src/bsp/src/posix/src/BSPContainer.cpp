@@ -2,8 +2,8 @@
 #include "BSP.h"
 #include "SpiEsp.h"
 #include "TCPUartMock.h"
-#include "UserInterface.h"
 #include "USBMock.h"
+#include "UserInterface.h"
 #include "logger/LoggerContainer.h"
 
 IBSP& BSPContainer::getBSP() {

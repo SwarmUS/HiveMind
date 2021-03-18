@@ -230,12 +230,7 @@ class USBMessageSender : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
                     if (!messageSender.processAndSerialize()) {
                         m_logger.log(LogLevel::Warn, "Fail to process/serialize to USB");
                     }
-//                    usb.send(buf,25);
-//                    Task::delay(500);
-
-
                 }
-
             }
             Task::delay(500);
         }
@@ -282,19 +277,19 @@ int main(int argc, char** argv) {
     bsp.initChip((void*)&cmdLineArgs);
 
     static BittyBuzzTask s_bittybuzzTask("bittybuzz", tskIDLE_PRIORITY + 1);
-//    static UartMessageDispatcher s_uartDispatchTask("uart_dispatch", tskIDLE_PRIORITY + 1);
-//    static TCPMessageDispatcher s_tcpDispatchTask("tcp_dispatch", tskIDLE_PRIORITY + 1);
-//    static UartMessageSender s_uartMessageSender("uart_send", tskIDLE_PRIORITY + 1);
-//    static TCPMessageSender s_tcpMessageSender("uart_send", tskIDLE_PRIORITY + 1);
+    //    static UartMessageDispatcher s_uartDispatchTask("uart_dispatch", tskIDLE_PRIORITY + 1);
+    static TCPMessageDispatcher s_tcpDispatchTask("tcp_dispatch", tskIDLE_PRIORITY + 1);
+    //    static UartMessageSender s_uartMessageSender("uart_send", tskIDLE_PRIORITY + 1);
+    static TCPMessageSender s_tcpMessageSender("uart_send", tskIDLE_PRIORITY + 1);
     static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
     static USBMessageSender s_usbMessageSender("usb_send", tskIDLE_PRIORITY + 1);
     static USBMessageDispatcher s_usbMessageDispatcher("usb_dispatch", tskIDLE_PRIORITY + 1);
 
     s_bittybuzzTask.start();
     //    s_uartDispatchTask.start();
-//    s_tcpDispatchTask.start();
+    //    s_tcpDispatchTask.start();
     //    s_uartMessageSender.start();
-//    s_tcpMessageSender.start();
+    //    s_tcpMessageSender.start();
     //    s_spiMessageSender.start();
     s_usbMessageSender.start();
     s_usbMessageDispatcher.start();

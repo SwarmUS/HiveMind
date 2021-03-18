@@ -6,5 +6,4 @@
 extern USBD_HandleTypeDef hUsbDeviceFS;
 #define USB_DEVICE hUsbDeviceFS
 
-
 #endif // HIVE_MIND_HIVEMIND_USB_HAL_H

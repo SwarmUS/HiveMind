@@ -66,8 +66,8 @@
 #define USBD_VID 1155
 #define USBD_LANGID_STRING 1033
 #define USBD_MANUFACTURER_STRING "SwarmUS"
-#define USBD_PID_FS 0xB00B
-#define USBD_PRODUCT_STRING_FS "STM32 HiveMind Port"
+#define USBD_PID_FS 45067
+#define USBD_PRODUCT_STRING_FS "HiveBoard : HiveMind"
 #define USBD_CONFIGURATION_STRING_FS "CDC Config"
 #define USBD_INTERFACE_STRING_FS "CDC Interface"
 
@@ -157,9 +157,9 @@ __ALIGN_BEGIN uint8_t USBD_FS_DeviceDesc[USB_LEN_DEV_DESC] __ALIGN_END = {
     USB_DESC_TYPE_DEVICE, /*bDescriptorType*/
 #if (USBD_LPM_ENABLED == 1)
     0x01,
-/*bcdUSB */ /* changed to USB version 2.01
-               in order to support LPM L1 suspend
-               resume test of USBCV3.0*/
+    /*bcdUSB */ /* changed to USB version 2.01
+                   in order to support LPM L1 suspend
+                   resume test of USBCV3.0*/
 #else
     0x00, /*bcdUSB */
 #endif /* (USBD_LPM_ENABLED == 1) */

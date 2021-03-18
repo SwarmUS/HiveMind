@@ -1,13 +1,13 @@
 #ifndef HIVE_MIND_USB_H
 #define HIVE_MIND_USB_H
 
+#include "LockGuard.h"
 #include "bsp/IUSB.h"
+#include "semphr.h"
 #include <BaseTask.h>
 #include <c-common/circular_buff.h>
 #include <cstdint>
 #include <logger/ILogger.h>
-#include "LockGuard.h"
-#include "semphr.h"
 class USB : public IUSB {
   public:
     USB(ILogger& logger);

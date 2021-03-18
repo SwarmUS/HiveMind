@@ -14,14 +14,12 @@ extern "C" {
 CircularBuff cbuffUsb;
 extern uint8_t cbuffUsbData[CBUFF_USB_DATA_SIZE];
 
-typedef enum
-{
+typedef enum {
     USB_OK = 0U,
     USB_BUSY,
     USB_EMEM,
     USB_FAIL,
 } USB_StatusTypeDef;
-
 
 /**
  * @brief Initiates a data transmission on the USB device.
@@ -44,7 +42,6 @@ bool usb_isConnected();
  */
 void usb_init();
 void usb_setRxCallback(void (*fct)(void*, uint8_t* buf, uint32_t len), void* context);
-
 
 #ifdef __cplusplus
 }
