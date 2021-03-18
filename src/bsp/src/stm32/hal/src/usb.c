@@ -2,6 +2,9 @@
 #include "usbd_cdc_if.h"
 
 uint8_t cbuffUsbData[CBUFF_USB_DATA_SIZE];
+void (*usb_rxCallback)(); //(uint8_t* buf, uint32_t len)=NULL;
+void* usb_rxCallbackContext;
+
 USB_StatusTypeDef usb_hasTxFinished(USBD_CDC_HandleTypeDef* hcdc){
     while (hcdc->TxState != 0) {
     }
@@ -26,11 +29,10 @@ void usb_init() {
     CircularBuff_init(&cbuffUsb, cbuffUsbData, CBUFF_USB_DATA_SIZE);
 }
 
-void usb_CDC_rxCallBack(uint8_t* buf, uint32_t len) {
-    if(CircularBuff_getLength(&cbuffUsb) + len  > CBUFF_USB_DATA_SIZE){
-        // TODO should notify the user of an error
-        CircularBuff_clear(&cbuffUsb);
-        return;
-    }
-    CircularBuff_put(&cbuffUsb, buf, len);
+void usb_CDC_rxCallBack(uint8_t* buf, uint32_t len) { usb_rxCallback(usb_rxCallbackContext, buf,len);
+}
+
+void usb_setRxCallback(void (*fct)(void* context, uint8_t* buf, uint32_t len), void* context){
+    usb_rxCallback = fct;
+    usb_rxCallbackContext = context;
 }

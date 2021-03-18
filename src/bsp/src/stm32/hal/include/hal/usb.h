@@ -43,6 +43,8 @@ bool usb_isConnected();
  * @brief Initialize the circular buffer for the USB transactions
  */
 void usb_init();
+void usb_setRxCallback(void (*fct)(void*, uint8_t* buf, uint32_t len), void* context);
+
 
 #ifdef __cplusplus
 }

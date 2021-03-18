@@ -6,7 +6,8 @@
 #include <c-common/circular_buff.h>
 #include <cstdint>
 #include <logger/ILogger.h>
-
+#include "LockGuard.h"
+#include "semphr.h"
 class USB : public IUSB {
   public:
     USB(ILogger& logger);
@@ -17,8 +18,11 @@ class USB : public IUSB {
     bool isConnected() override;
 
   private:
+    static void interruptRxCallback(void* context, uint8_t* buffer, uint32_t length);
+    void receiveItCallback(uint8_t* buf, uint32_t len);
+
     ILogger& m_logger;
-    TaskHandle_t m_receivingTaskHandle;
+    TaskHandle_t m_receivingTaskHandle = NULL;
 };
 
 #endif // HIVE_MIND_USB_H
