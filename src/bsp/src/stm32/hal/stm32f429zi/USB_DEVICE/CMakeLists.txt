@@ -10,6 +10,7 @@ set(LIB_SOURCES
     App/usbd_cdc_if.c
     App/usbd_desc.c
     Target/usbd_conf.c
+    App/hivemind_usb_hal.h
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES})
