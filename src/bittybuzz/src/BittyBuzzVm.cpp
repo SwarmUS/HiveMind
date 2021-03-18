@@ -1,5 +1,6 @@
 #include "bittybuzz/BittyBuzzVm.h"
 #include "bittybuzz/BittyBuzzSystem.h"
+#include <bbzoutmsg.h>
 #include <bbzvm.h>
 
 UserFunctionRegister::UserFunctionRegister(uint8_t strId, bbzvm_funp functionPtr) :
@@ -8,9 +9,7 @@ UserFunctionRegister::UserFunctionRegister(uint8_t strId, bbzvm_funp functionPtr
 bool BittyBuzzVm::step() {
 
     if (vm->state != BBZVM_STATE_ERROR) {
-        bbzvm_process_inmsgs();
-        BittyBuzzSystem::functionCall(__BBZSTRID_step);
-        bbzvm_process_outmsgs();
+        // Handle incomming messages from remote
         uint16_t messagesLength = m_messageHandler.messageQueueLength();
         for (uint16_t i = 0; i < messagesLength; i++) {
             if (!m_messageHandler.processMessage()) {
@@ -18,6 +17,12 @@ bool BittyBuzzVm::step() {
                              "BBVM: Could not process message or the queue output is full");
             }
         }
+
+        // Buzz
+        bbzvm_process_inmsgs();
+        BittyBuzzSystem::functionCall(__BBZSTRID_step);
+        bbzvm_process_outmsgs();
+
         return true;
     }
 

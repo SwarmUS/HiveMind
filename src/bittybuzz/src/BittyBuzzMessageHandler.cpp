@@ -1,6 +1,7 @@
 #include "BittyBuzzMessageHandler.h"
 #include "BittyBuzzSystem.h"
 #include "bbzvm.h"
+#include <bbzinmsg.h>
 #include <bsp/SettingsContainer.h>
 
 BittyBuzzMessageHandler::BittyBuzzMessageHandler(const IBittyBuzzClosureRegister& closureRegister,
@@ -180,6 +181,19 @@ bool BittyBuzzMessageHandler::handleGenericResponse(const GenericResponseDTO& re
     return true;
 }
 
+bool BittyBuzzMessageHandler::handleBuzzMessage(const BuzzMessageDTO& msg) {
+    (void)msg;
+    bbzmsg_payload_t payload;
+    payload.buffer = const_cast<uint8_t*>(msg.getPayload().data());
+    payload.datastart = 0;
+    payload.elsize = 1;
+    payload.dataend = msg.getPayloadLength();
+    payload.capacity = msg.getPayloadLength();
+
+    bbzinmsg_queue_append(&payload);
+    return true;
+}
+
 bool BittyBuzzMessageHandler::handleResponse(const ResponseDTO& response) {
     const std::variant<std::monostate, GenericResponseDTO, UserCallResponseDTO,
                        HiveMindApiResponseDTO, SwarmApiResponseDTO>& variantResp =
@@ -200,8 +214,8 @@ bool BittyBuzzMessageHandler::handleResponse(const ResponseDTO& response) {
 }
 
 bool BittyBuzzMessageHandler::handleMessage(const MessageDTO& message) {
-    const std::variant<std::monostate, RequestDTO, ResponseDTO, GreetingDTO>& variantMsg =
-        message.getMessage();
+    const std::variant<std::monostate, RequestDTO, ResponseDTO, GreetingDTO, BuzzMessageDTO>&
+        variantMsg = message.getMessage();
 
     // Handling request
     if (const auto* request = std::get_if<RequestDTO>(&variantMsg)) {
@@ -223,6 +237,12 @@ bool BittyBuzzMessageHandler::handleMessage(const MessageDTO& message) {
     if (const auto* response = std::get_if<ResponseDTO>(&variantMsg)) {
         return handleResponse(*response);
     }
+
+    // Handle response
+    if (const auto* buzzMsg = std::get_if<BuzzMessageDTO>(&variantMsg)) {
+        return handleBuzzMessage(*buzzMsg);
+    }
+
     // should not get greetings here
     if (std::holds_alternative<GreetingDTO>(variantMsg)) {
         m_logger.log(LogLevel::Warn, "Recieved Greeting in buzz queue");

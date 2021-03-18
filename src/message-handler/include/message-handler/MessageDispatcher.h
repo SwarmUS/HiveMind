@@ -38,6 +38,7 @@ class MessageDispatcher : IMessageDispatcher {
     bool dispatchUserCallResponse(const MessageDTO& message, const UserCallResponseDTO& response);
     bool dispatchRequest(const MessageDTO& message, const RequestDTO& request);
     bool dispatchResponse(const MessageDTO& message, const ResponseDTO& response);
+    bool dispatchBuzzMessage(const MessageDTO& message);
     bool dispatchMessage(const MessageDTO& message);
 };
 
