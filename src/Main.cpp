@@ -211,7 +211,6 @@ class SPIMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
 
     void task() override {
         auto& usb = BSPContainer::getUSB();
-
         while (true) {
             if (usb.isConnected()) {
 
@@ -224,7 +223,12 @@ class SPIMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
                     if (!messageSender.processAndSerialize()) {
                         m_logger.log(LogLevel::Warn, "Fail to process/serialize to spi");
                     }
+//                    usb.send(buf,25);
+//                    Task::delay(500);
+
+
                 }
+
             }
             Task::delay(500);
         }
