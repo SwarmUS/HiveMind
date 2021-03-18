@@ -12,16 +12,19 @@ add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
 # Wraps the interface library in a static library
 get_target_property(PROPOLIS_OS_INCLUDES SwarmUS::Propolis::OS::POSIX INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(PROPOLIS_OS_COMMON_INCLUDES SwarmUS::Propolis::OS::Common INTERFACE_INCLUDE_DIRECTORIES)
 
 target_include_directories(${LIB_NAME}
     PUBLIC
        ${PROPOLIS_OS_INCLUDES}
+       ${PROPOLIS_OS_COMMON_INCLUDES}
 )
 
 target_link_libraries(${LIB_NAME}
     PUBLIC
         SwarmUS::Propolis::OS::Common
     PRIVATE
+        SwarmUS::Propolis::OS::Common
         SwarmUS::Propolis::OS::POSIX
 )
 

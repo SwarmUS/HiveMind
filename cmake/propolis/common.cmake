@@ -12,9 +12,9 @@ function(propolis_fetch_populate)
     FetchContent_Declare(
         ${PROJECT_NAME}_propolis
 
-        GIT_REPOSITORY https://github.com/SwarmUS/Propolis
-        GIT_TAG        3445b39
-        GIT_PROGRESS   TRUE
+        GIT_REPOSITORY  https://github.com/SwarmUS/Propolis
+        GIT_TAG         5082930
+        GIT_PROGRESS    TRUE
     )
 
     set(PROPOLIS ${PROJECT_NAME}_propolis)
