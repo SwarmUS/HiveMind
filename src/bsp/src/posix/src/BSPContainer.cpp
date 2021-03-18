@@ -28,6 +28,6 @@ ISpiEsp& BSPContainer::getSpiEsp() {
 }
 
 IUSB& BSPContainer::getUSB() {
-    static USBMock s_usb();
+    static USBMock s_usb;
     return s_usb;
 }
