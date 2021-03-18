@@ -2,21 +2,15 @@
 #include "usbd_cdc_if.h"
 
 uint8_t cbuffUsbData[CBUFF_USB_DATA_SIZE];
-uint8_t usb_hasTxFinished(USBD_CDC_HandleTypeDef* hcdc){
-    bool ret = false;
+USB_StatusTypeDef usb_hasTxFinished(USBD_CDC_HandleTypeDef* hcdc){
     while (hcdc->TxState != 0) {
     }
-    if (hcdc->TxState == 0) {
-        ret = USBD_OK;
-    } else {
-        ret = USBD_FAIL;
-    }
-
-    return ret;
+    return USB_OK;
 }
 
-uint8_t usb_sendData(const uint8_t* buf, uint16_t Len) {
+USB_StatusTypeDef usb_sendData(const uint8_t* buf, uint16_t Len) {
     CDC_Transmit_FS((uint8_t*)buf, Len);
+//    TODO : add the data in another output queue so it's non blocking
     USBD_CDC_HandleTypeDef* hcdc = (USBD_CDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
     while (hcdc->TxState != 0) {
     }
@@ -32,11 +26,11 @@ void usb_init() {
     CircularBuff_init(&cbuffUsb, cbuffUsbData, CBUFF_USB_DATA_SIZE);
 }
 
-void usb_CDC_RxCallBack(uint8_t* Buf, uint32_t len) {
+void usb_CDC_rxCallBack(uint8_t* buf, uint32_t len) {
     if(CircularBuff_getLength(&cbuffUsb) + len  > CBUFF_USB_DATA_SIZE){
         // TODO should notify the user of an error
         CircularBuff_clear(&cbuffUsb);
         return;
     }
-    CircularBuff_put(&cbuffUsb, Buf, len);
+    CircularBuff_put(&cbuffUsb, buf, len);
 }

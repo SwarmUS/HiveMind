@@ -8,16 +8,14 @@ bool USB::send(const uint8_t* buffer, uint16_t length) {
         return false;
     }
 
-    bool ret = false;
-    int out = usb_sendData(const_cast<uint8_t*>(buffer), length);
+    USB_StatusTypeDef out = usb_sendData(const_cast<uint8_t*>(buffer), length);
 
-    if (out == USBD_OK) {
-        ret = true;
-    } else {
+    if (out != USB_OK) {
         m_logger.log(LogLevel::Warn, "USB_Send_Data was not able to send the data");
+        return false;
     }
 
-    return ret;
+    return true;
 }
 
 bool USB::receive(uint8_t* buffer, uint16_t length) {

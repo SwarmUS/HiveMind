@@ -261,8 +261,6 @@ class USBMessageDispatcher : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
                     if (!messageDispatcher.deserializeAndDispatch()) {
                         m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch  usb");
                     }
-
-                    Task::delay(200);
                 }
             }
             Task::delay(500);

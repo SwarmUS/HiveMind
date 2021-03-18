@@ -13,14 +13,23 @@ extern "C" {
 CircularBuff cbuffUsb;
 extern uint8_t cbuffUsbData[CBUFF_USB_DATA_SIZE];
 
+typedef enum
+{
+    USB_OK = 0U,
+    USB_BUSY,
+    USB_EMEM,
+    USB_FAIL,
+} USB_StatusTypeDef;
+
+
 /**
  * @brief Initiates a data transmission on the USB device.
  *      Will return after the transmission is completed or aborted
  * @param buf Pointer to a buffer to the data to be sent
  * @param len Number of bytes to send
- * @return True if success. Otherwise, false.
+ * @return USB_OK if the data is sent or USB_FAIL in case of errors.
  */
-uint8_t usb_sendData(const uint8_t* buf, uint16_t len);
+USB_StatusTypeDef usb_sendData(const uint8_t* buf, uint16_t len);
 
 /**
  * @brief Returns the state of the USB device connection
