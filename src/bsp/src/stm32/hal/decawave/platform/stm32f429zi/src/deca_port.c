@@ -2,8 +2,11 @@
 #include "main.h"
 #include "stm32f4xx_hal_conf.h"
 
-static decaNSSConfig_t g_decaNssConfigA = {DW_NSS_A_GPIO_Port, DW_NSS_A_Pin};
-static decaNSSConfig_t g_decaNssConfigB = {DW_NSS_B_GPIO_Port, DW_NSS_B_Pin};
+extern dwt_local_data_t dw1000local[DWT_NUM_DW_DEV];
+extern dwt_local_data_t* pdw1000local;
+
+static decaNSSConfig_t g_decaNssConfigA = {DW_NSS_A_GPIO_Port, DW_NSS_A_Pin, &dw1000local[0]};
+static decaNSSConfig_t g_decaNssConfigB = {DW_NSS_B_GPIO_Port, DW_NSS_B_Pin, &dw1000local[1]};
 
 static decaDevice_t g_selectedDecaDevice = DW_A;
 
@@ -76,7 +79,10 @@ void deca_init() {
     deca_setSlowRate();
 }
 
-void deca_selectDevice(decaDevice_t selectedDevice) { g_selectedDecaDevice = selectedDevice; }
+void deca_selectDevice(decaDevice_t selectedDevice) {
+    g_selectedDecaDevice = selectedDevice;
+    pdw1000local = deca_getSelectedNSSConfig()->dwtLocalData;
+}
 
 decaNSSConfig_t* deca_getSelectedNSSConfig() {
     switch (g_selectedDecaDevice) {

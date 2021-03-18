@@ -2,6 +2,7 @@
 #include "bsp/SettingsContainer.h"
 #include "deca_device_api.h"
 #include "deca_port.h"
+#include <Decawave.h>
 #include <FreeRTOS.h>
 #include <Task.h>
 #include <hal/hal.h>
@@ -94,7 +95,16 @@ void BSP::initChip(void* args) {
 
     Hal_init();
 
-    m_decaBlinkTask.start();
+    // m_decaBlinkTask.start();
+    Decawave deca = Decawave(DW_A, 2, UWBSpeed::SPEED_110K);
+    deca.start();
+
+    uint8_t data[] = {0x01, 0x02, 0x03, 0x04};
+
+    while (true) {
+        deca.transmit(data, sizeof data);
+        Task::delay(1000);
+    }
 }
 
 uint16_t BSP::getUUId() const { return SettingsContainer::getUUID(); }

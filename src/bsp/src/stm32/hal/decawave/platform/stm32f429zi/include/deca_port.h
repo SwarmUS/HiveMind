@@ -8,6 +8,7 @@ extern "C" {
 #include "hivemind_hal.h"
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
+#include <deca_device_api.h>
 
 /**
  * @brief Enum to specify which decawave we are addressing
@@ -20,6 +21,7 @@ typedef enum { DW_A = 0, DW_B } decaDevice_t;
 typedef struct {
     GPIO_TypeDef* port;
     uint16_t pin;
+    dwt_local_data_t* dwtLocalData;
 } decaNSSConfig_t;
 
 /**
