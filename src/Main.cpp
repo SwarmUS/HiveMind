@@ -204,21 +204,6 @@ class SPIMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
                 MessageSender messageSender(MessageHandlerContainer::getRemoteMsgQueue(),
                                             serializer, BSPContainer::getBSP(), m_logger);
 
-    ~USBMessageSender() override = default;
-
-  private:
-    ILogger& m_logger;
-
-    void task() override {
-        auto& usb = BSPContainer::getUSB();
-        while (true) {
-            if (usb.isConnected()) {
-
-                HiveMindHostSerializer serializer(usb);
-
-                MessageSender messageSender(MessageHandlerContainer::getHostMsgQueue(), serializer,
-                                            BSPContainer::getBSP(), m_logger);
-
                 while (true) {
                     if (!messageSender.processAndSerialize()) {
                         m_logger.log(LogLevel::Warn, "Fail to process/serialize to spi");
@@ -259,8 +244,36 @@ class SpiMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZE> 
     ILogger& m_logger;
 };
 
+class USBMessageSender : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
+  public:
+    USBMessageSender(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
 
+    ~USBMessageSender() override = default;
 
+  private:
+    ILogger& m_logger;
+
+    void task() override {
+        auto& usb = BSPContainer::getUSB();
+        while (true) {
+            if (usb.isConnected()) {
+
+                HiveMindHostSerializer serializer(usb);
+
+                MessageSender messageSender(MessageHandlerContainer::getHostMsgQueue(), serializer,
+                                            BSPContainer::getBSP(), m_logger);
+
+                while (true) {
+                    if (!messageSender.processAndSerialize()) {
+                        m_logger.log(LogLevel::Warn, "Fail to process/serialize to USB");
+                    }
+                }
+            }
+            Task::delay(500);
+        }
+    }
+};
 
 class USBMessageDispatcher : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
 
@@ -306,9 +319,9 @@ int main(int argc, char** argv) {
     static TCPMessageDispatcher s_tcpDispatchTask("tcp_dispatch", tskIDLE_PRIORITY + 1);
     static SpiMessageDispatcher s_spiDispatchTask("spi_dispatch", tskIDLE_PRIORITY + 1);
     static UartMessageSender s_uartMessageSender("uart_send", tskIDLE_PRIORITY + 1);
-    //    static TCPMessageSender s_tcpMessageSender("uart_send", tskIDLE_PRIORITY + 1);
-//    static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
-//    static USBMessageSender s_usbMessageSender("usb_send", tskIDLE_PRIORITY + 5);
+    static TCPMessageSender s_tcpMessageSender("uart_send", tskIDLE_PRIORITY + 1);
+    static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
+    static USBMessageSender s_usbMessageSender("usb_send", tskIDLE_PRIORITY + 5);
     static USBMessageDispatcher s_usbMessageDispatcher("usb_receive", tskIDLE_PRIORITY + 5);
 
     s_bittybuzzTask.start();
@@ -316,7 +329,7 @@ int main(int argc, char** argv) {
     s_tcpDispatchTask.start();
 //    s_uartMessageSender.start();
     s_tcpMessageSender.start();
-//    s_spiMessageSender.start();
+    s_spiMessageSender.start();
     s_usbMessageSender.start();
     s_usbMessageDispatcher.start();
 
