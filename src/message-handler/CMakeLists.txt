@@ -20,8 +20,7 @@ set(LIB_HEADERS
 
     include/message-handler/MessageHandlerContainer.h
 
-    include/message-handler/ThreadSafeQueue.h
-)
+        )
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS} ${LIB_SOURCES})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})

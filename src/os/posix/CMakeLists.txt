@@ -19,6 +19,8 @@ target_include_directories(${LIB_NAME}
 )
 
 target_link_libraries(${LIB_NAME}
+    PUBLIC
+        SwarmUS::Propolis::OS::Common
     PRIVATE
         SwarmUS::Propolis::OS::POSIX
 )
