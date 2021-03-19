@@ -42,7 +42,6 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
     BittyBuzzVm m_bittybuzzVm;
 
     void task() override {
-        BSPContainer::getBSP().deca();
         while (true) {
 
             if (!m_bittybuzzVm.step()) {
@@ -308,6 +307,16 @@ class USBMessageDispatcher : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
     ILogger& m_logger;
 };
 
+class InterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+  public:
+    InterlocTask(const char* taskName, UBaseType_t priority) : AbstractTask(taskName, priority) {}
+
+    ~InterlocTask() override = default;
+
+  private:
+    void task() override { BSPContainer::getInterlocManager().startInterloc(); }
+};
+
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
@@ -323,6 +332,7 @@ int main(int argc, char** argv) {
     static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
     static USBMessageSender s_usbMessageSender("usb_send", tskIDLE_PRIORITY + 5);
     static USBMessageDispatcher s_usbMessageDispatcher("usb_receive", tskIDLE_PRIORITY + 5);
+    static InterlocTask s_interlocTask("usb_receive", tskIDLE_PRIORITY + 5);
 
     s_bittybuzzTask.start();
     //    s_uartDispatchTask.start();
@@ -332,6 +342,7 @@ int main(int argc, char** argv) {
     s_spiMessageSender.start();
     s_usbMessageSender.start();
     s_usbMessageDispatcher.start();
+    s_interlocTask.start();
 
     Task::startScheduler();
 

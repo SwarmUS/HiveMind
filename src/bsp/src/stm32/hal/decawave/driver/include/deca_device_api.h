@@ -143,9 +143,9 @@ typedef signed long int32;
 // DW1000 interrupt events
 #define DWT_INT_TFRS 0x00000080 // frame sent
 #define DWT_INT_LDED 0x00000400 // micro-code has finished execution
-#define DWT_INT_RFCG 0x00004000 // frame received with good CRC
+#define DWT_INT_RFCG 0x00004000 // frame received with good UserCRC
 #define DWT_INT_RPHE 0x00001000 // receiver PHY header error
-#define DWT_INT_RFCE 0x00008000 // receiver CRC error
+#define DWT_INT_RFCE 0x00008000 // receiver UserCRC error
 #define DWT_INT_RFSL 0x00010000 // receiver sync loss error
 #define DWT_INT_RFTO 0x00020000 // frame wait timeout
 #define DWT_INT_RXOVRR 0x00100000 // receiver overrun
@@ -273,8 +273,8 @@ typedef struct {
     // all of the below are mapped to a 12-bit register in DW1000
     uint16 PHE; // number of received header errors
     uint16 RSL; // number of received frame sync loss events
-    uint16 CRCG; // number of good CRC received frames
-    uint16 CRCB; // number of bad CRC (CRC error) received frames
+    uint16 CRCG; // number of good UserCRC received frames
+    uint16 CRCB; // number of bad UserCRC (UserCRC error) received frames
     uint16 ARFE; // number of address filter errors
     uint16 OVER; // number of receiver overflows (used in double buffer mode)
     uint16 SFDTO; // SFD timeouts
@@ -704,10 +704,10 @@ void dwt_setsmarttxpower(int enable);
  * to those data bytes.
  *
  * input parameters
- * @param txFrameLength  - This is the total frame length, including the two byte CRC.
- *                         Note: this is the length of TX message (including the 2 byte CRC) - max
- * is 1023 standard PHR mode allows up to 127 bytes if > 127 is programmed, DWT_PHRMODE_EXT needs to
- * be set in the phrMode configuration see dwt_configure function
+ * @param txFrameLength  - This is the total frame length, including the two byte UserCRC.
+ *                         Note: this is the length of TX message (including the 2 byte UserCRC) -
+ * max is 1023 standard PHR mode allows up to 127 bytes if > 127 is programmed, DWT_PHRMODE_EXT
+ * needs to be set in the phrMode configuration see dwt_configure function
  * @param txFrameBytes   - Pointer to the user�s buffer containing the data to send.
  * @param txBufferOffset - This specifies an offset in the DW1000�s TX Buffer at which to start
  * writing data.
@@ -726,10 +726,9 @@ int dwt_writetxdata(uint16 txFrameLength, uint8* txFrameBytes, uint16 txBufferOf
  * frame
  *
  * input parameters:
- * @param txFrameLength - this is the length of TX message (including the 2 byte CRC) - max is 1023
- *                              NOTE: standard PHR mode allows up to 127 bytes
- *                              if > 127 is programmed, DWT_PHRMODE_EXT needs to be set in the
- * phrMode configuration see dwt_configure function
+ * @param txFrameLength - this is the length of TX message (including the 2 byte UserCRC) - max is
+ * 1023 NOTE: standard PHR mode allows up to 127 bytes if > 127 is programmed, DWT_PHRMODE_EXT needs
+ * to be set in the phrMode configuration see dwt_configure function
  * @param txBufferOffset - the offset in the tx buffer to start writing the data
  * @param ranging - 1 if this is a ranging frame, else 0
  *
@@ -933,8 +932,8 @@ void dwt_syncrxbufptrs(void);
  * @brief This call turns on the receiver, can be immediate or delayed (depending on the mode
  * parameter). In the case of a "late" error the receiver will only be turned on if the
  * DWT_IDLE_ON_DLY_ERR is not set. The receiver will stay turned on, listening to any messages until
- * it either receives a good frame, an error (CRC, PHY header, Reed Solomon) or  it times out (SFD,
- * Preamble or Frame).
+ * it either receives a good frame, an error (UserCRC, PHY header, Reed Solomon) or  it times out
+ * (SFD, Preamble or Frame).
  *
  * input parameters
  * @param mode - this can be one of the following allowed values:
@@ -1316,9 +1315,9 @@ void dwt_lowpowerlistenisr(void);
  * @brief This function enables the specified events to trigger an interrupt.
  * The following events can be enabled:
  * DWT_INT_TFRS         0x00000080          // frame sent
- * DWT_INT_RFCG         0x00004000          // frame received with good CRC
+ * DWT_INT_RFCG         0x00004000          // frame received with good UserCRC
  * DWT_INT_RPHE         0x00001000          // receiver PHY header error
- * DWT_INT_RFCE         0x00008000          // receiver CRC error
+ * DWT_INT_RFCE         0x00008000          // receiver UserCRC# error
  * DWT_INT_RFSL         0x00010000          // receiver sync loss error
  * DWT_INT_RFTO         0x00020000          // frame wait timeout
  * DWT_INT_RXPTO        0x00200000          // preamble detect timeout

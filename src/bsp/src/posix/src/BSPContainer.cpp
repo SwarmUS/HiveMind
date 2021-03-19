@@ -5,6 +5,7 @@
 #include "USBMock.h"
 #include "UserInterface.h"
 #include "logger/LoggerContainer.h"
+#include <bsp/src/stm32/include/InterlocManager.h>
 
 IBSP& BSPContainer::getBSP() {
     static BSP s_bsp;
@@ -30,4 +31,9 @@ ISpiEsp& BSPContainer::getSpiEsp() {
 IUSB& BSPContainer::getUSB() {
     static USBMock s_usb;
     return s_usb;
+}
+
+IInterlocManager& BSPContainer::getInterlocManager() {
+    static InterlocManager s_interlocManager;
+    return s_interlocManager;
 }

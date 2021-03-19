@@ -21,8 +21,6 @@ class IBSP {
      * @brief Returns a positive random number, uses an hardware RNG if available
      * */
     virtual uint32_t generateRandomNumber() = 0;
-
-    virtual void deca() const = 0;
 };
 
 /**

@@ -7,26 +7,33 @@ set(LIB_SOURCES
     src/UserInterface.cpp
     src/SocketContainer.cpp
     src/HostUart.cpp
-    src/CRC.cpp
+    src/UserCRC.cpp
     src/SocketFactory.cpp
     src/TCPClient.cpp
     src/SettingsContainer.cpp
     src/SpiEsp.cpp
+
     src/USB.cpp
-        src/Decawave.cpp src/DecawaveUtils.cpp)
+    src/Decawave.cpp
+    src/DecawaveUtils.cpp
+    src/InterlocManager.cpp)
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
     include/UserInterface.h
     include/HostUart.h
-    include/CRC.h
+    include/UserCRC.h
     include/SocketFactory.h
     include/TCPClient.h
     include/DefaultSettings.h
     include/SpiEsp.h
     include/SpiHeader.h
     include/USB.h
-        include/Decawave.h include/DecawaveUtils.h include/UWBRxFrame.h)
+
+    include/Decawave.h
+    include/DecawaveUtils.h
+    include/UWBRxFrame.h
+    include/InterlocManager.h)
 
 include(DefaultSettings.cmake)
 configure_file(include/DefaultSettings.in.h include/DefaultSettings.h)
