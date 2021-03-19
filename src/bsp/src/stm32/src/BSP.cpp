@@ -94,7 +94,9 @@ void BSP::initChip(void* args) {
     (void)args;
 
     Hal_init();
+}
 
+void BSP::deca() const {
     // m_decaBlinkTask.start();
     Decawave decaA = Decawave(DW_A, 2, UWBSpeed::SPEED_110K);
     decaA.start();
@@ -105,7 +107,8 @@ void BSP::initChip(void* args) {
     uint8_t data[] = {0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
 
     while (true) {
-        decaA.transmit(data, sizeof data);
+        decaB.receive(data, 15, 0);
+        decaB.transmit(data, sizeof data);
         Task::delay(1000);
     }
 }

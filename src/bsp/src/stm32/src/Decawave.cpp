@@ -1,7 +1,25 @@
 #include "Decawave.h"
 #include <DecawaveUtils.h>
+#include <FreeRTOS.h>
 #include <cstring>
 #include <deca_device_api.h>
+#include <deca_regs.h>
+#include <task.h>
+
+void rxCallback(const dwt_cb_data_t* callbackData, void* context) {
+    memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
+
+    BaseType_t taskWoken;
+    vTaskNotifyGiveFromISR(static_cast<Decawave*>(context)->m_rxTaskHandle, &taskWoken);
+    if (taskWoken == pdTRUE) {
+        portYIELD_FROM_ISR(pdTRUE);
+    }
+}
+
+void isrCallback(void* context) {
+    deca_selectDevice(static_cast<Decawave*>(context)->m_spiDevice);
+    dwt_isr();
+}
 
 Decawave::Decawave(decaDevice_t spiDevice) :
     m_spiDevice(spiDevice), m_channelNo(2), m_speed(UWBSpeed::SPEED_110K) {}
@@ -11,7 +29,6 @@ Decawave::Decawave(decaDevice_t spiDevice, uint8_t channel, UWBSpeed speed) :
 
     if (channel > 0 && channel < 8) {
         m_channelNo = channel;
-        dwt_isr();
     }
 }
 
@@ -31,12 +48,21 @@ bool Decawave::start() {
         return false;
     }
 
+    deca_selectDevice(m_spiDevice);
+    deca_setISRCallback(m_spiDevice, isrCallback, this);
+    dwt_setcallbacks(rxCallback, rxCallback, rxCallback, rxCallback, this);
+
     deca_setFastRate();
 
     dwt_enablegpioclocks();
     dwt_setgpiodirection(DWT_GxM0 | DWT_GxM1 | DWT_GxM2 | DWT_GxM3, 0);
 
+    dwt_softreset();
     configureDW();
+
+    dwt_setinterrupt(DWT_INT_TFRS | DWT_INT_RFCG | DWT_INT_RFTO | DWT_INT_RXPTO | DWT_INT_RPHE |
+                         DWT_INT_RFCE | DWT_INT_RFSL | DWT_INT_SFDT,
+                     1);
 
     setLed(DW_LED::LED_0, true);
 
@@ -94,6 +120,35 @@ void Decawave::setLed(DW_LED led, bool enabled) {
 
     deca_selectDevice(m_spiDevice);
     dwt_setgpiovalue(dwGPIO, dwGPIOValue);
+}
+
+bool Decawave::receive(uint8_t* buf, uint16_t length, uint16_t timeoutUs) {
+    // Wait for notification from ISR
+    m_rxTaskHandle = xTaskGetCurrentTaskHandle();
+
+    dwt_setrxtimeout(timeoutUs);
+    dwt_rxenable(DWT_START_RX_IMMEDIATE);
+
+    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+    if (m_callbackData.datalength > length) {
+        return false;
+    }
+    if (m_callbackData.datalength == 0) {
+        return true;
+    }
+
+    dwt_readrxdata(buf, m_callbackData.datalength - 2, 0);
+    return true;
+}
+
+void Decawave::receiveAsync(const uint8_t* buf,
+                            uint16_t length,
+                            const std::function<void(bool)>& callback) {
+    (void)buf;
+    (void)length;
+    (void)callback;
+    // TODO: implement
 }
 
 bool Decawave::transmit(uint8_t* buf, uint16_t length, uint8_t flags) {

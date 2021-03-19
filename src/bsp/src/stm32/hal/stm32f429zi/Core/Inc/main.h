@@ -88,6 +88,7 @@ void Error_Handler(void);
 #define LD1_GPIO_Port GPIOB
 #define DW_IRQn_B_Pin GPIO_PIN_15
 #define DW_IRQn_B_GPIO_Port GPIOF
+#define DW_IRQn_B_EXTI_IRQn EXTI15_10_IRQn
 #define ESP_USER0_Pin GPIO_PIN_1
 #define ESP_USER0_GPIO_Port GPIOG
 #define ESP_USER0_EXTI_IRQn EXTI1_IRQn

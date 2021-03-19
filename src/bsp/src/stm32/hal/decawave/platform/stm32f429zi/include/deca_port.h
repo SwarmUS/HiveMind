@@ -10,6 +10,8 @@ extern "C" {
 #include "stm32f4xx_hal.h"
 #include <deca_device_api.h>
 
+typedef void (*decaISRCallback_t)(void* context);
+
 /**
  * @brief Enum to specify which decawave we are addressing
  */
@@ -19,10 +21,14 @@ typedef enum { DW_A = 0, DW_B } decaDevice_t;
  * @brief Structure to hold a port and pin associated with a decawave NSS pin
  */
 typedef struct {
-    GPIO_TypeDef* port;
-    uint16_t pin;
+    GPIO_TypeDef* nssPort;
+    uint16_t nssPin;
+    GPIO_TypeDef* irqPort;
+    uint16_t irqPin;
     uint8_t deviceIndex;
-} decaNSSConfig_t;
+    void* isrContext;
+    decaISRCallback_t isrCallback;
+} decawaveDeviceConfig_t;
 
 /**
  * @brief Performs a hardware reset on a specific decawave
@@ -57,10 +63,20 @@ void deca_init();
 void deca_selectDevice(decaDevice_t selectedDevice);
 
 /**
- * @brief Gets the NSS configuration for the currently selected decawave
+ * @brief Gets the device configuration for the currently selected decawave
+ * @return The device configuration
+ */
+decawaveDeviceConfig_t* deca_getSelectedDevice();
+
+/**
+ * @brief Gets the NSS configuration for a given decawave
  * @return The NSS pin
  */
-decaNSSConfig_t* deca_getSelectedNSSConfig();
+decawaveDeviceConfig_t* deca_getDevice(decaDevice_t device);
+
+void deca_setISRCallback(decaDevice_t device, decaISRCallback_t callback, void* context);
+
+void deca_isr(decaDevice_t selectedDevice);
 
 #ifdef __cplusplus
 }

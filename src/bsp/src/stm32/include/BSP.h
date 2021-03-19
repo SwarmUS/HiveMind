@@ -14,6 +14,8 @@ class BSP : public IBSP {
 
     uint16_t getUUId() const override;
 
+    void deca() const override;
+
     uint32_t generateRandomNumber() override;
 
   private:

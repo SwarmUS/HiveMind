@@ -3,8 +3,10 @@
 #include "main.h"
 #include "stm32f4xx_hal_conf.h"
 
-static decaNSSConfig_t g_decaNssConfigA = {DW_NSS_A_GPIO_Port, DW_NSS_A_Pin, 0};
-static decaNSSConfig_t g_decaNssConfigB = {DW_NSS_B_GPIO_Port, DW_NSS_B_Pin, 1};
+static decawaveDeviceConfig_t g_decaNssConfigA = {
+    DW_NSS_A_GPIO_Port, DW_NSS_A_Pin, DW_IRQn_A_GPIO_Port, DW_IRQn_A_Pin, 0, NULL, NULL};
+static decawaveDeviceConfig_t g_decaNssConfigB = {
+    DW_NSS_B_GPIO_Port, DW_NSS_B_Pin, DW_IRQn_B_GPIO_Port, DW_IRQn_B_Pin, 1, NULL, NULL};
 
 static decaDevice_t g_selectedDecaDevice = DW_A;
 
@@ -67,7 +69,7 @@ void deca_setSlowRate() {
 }
 
 void deca_setFastRate() {
-    DW_SPI->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+    DW_SPI->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
     HAL_SPI_Init(DW_SPI);
 }
 
@@ -79,11 +81,13 @@ void deca_init() {
 
 void deca_selectDevice(decaDevice_t selectedDevice) {
     g_selectedDecaDevice = selectedDevice;
-    dwt_setSelectedDevice(deca_getSelectedNSSConfig()->deviceIndex);
+    dwt_setSelectedDevice(deca_getSelectedDevice()->deviceIndex);
 }
 
-decaNSSConfig_t* deca_getSelectedNSSConfig() {
-    switch (g_selectedDecaDevice) {
+decawaveDeviceConfig_t* deca_getSelectedDevice() { return deca_getDevice(g_selectedDecaDevice); }
+
+decawaveDeviceConfig_t* deca_getDevice(decaDevice_t device) {
+    switch (device) {
     case DW_A:
         return &g_decaNssConfigA;
 
@@ -93,4 +97,26 @@ decaNSSConfig_t* deca_getSelectedNSSConfig() {
     default:
         return NULL;
     }
+}
+
+void deca_setISRCallback(decaDevice_t device, decaISRCallback_t callback, void* context) {
+    decawaveDeviceConfig_t* deviceConfig = deca_getDevice(device);
+
+    if (deviceConfig != NULL) {
+        deviceConfig->isrCallback = callback;
+        deviceConfig->isrContext = context;
+    }
+}
+
+void deca_isr(decaDevice_t selectedDevice) {
+    decawaveDeviceConfig_t* deviceConfig = deca_getDevice(selectedDevice);
+    if (deviceConfig == NULL) {
+        return;
+    }
+
+    // while (HAL_GPIO_ReadPin(deviceConfig->nssPort, deviceConfig->nssPin) != GPIO_PIN_RESET) {
+    if (deviceConfig->isrCallback) {
+        deviceConfig->isrCallback(deviceConfig->isrContext);
+    }
+    //}
 }

@@ -42,6 +42,7 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
     BittyBuzzVm m_bittybuzzVm;
 
     void task() override {
+        BSPContainer::getBSP().deca();
         while (true) {
 
             if (!m_bittybuzzVm.step()) {
