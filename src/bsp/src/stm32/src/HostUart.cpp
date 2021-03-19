@@ -151,7 +151,7 @@ void HostUart::process() {
             }
 
         } else {
-            // TODO: Send NACK (invalid UserCRC)
+            // TODO: Send NACK (invalid CRC)
             m_logger.log(LogLevel::Warn, "Received UART message with incorrect CRC. Discarding.");
         }
 

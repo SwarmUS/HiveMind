@@ -261,9 +261,9 @@ extern "C" {
 
 /* ################## SPI peripheral configuration ########################## */
 
-/* UserCRC FEATURE: Use to activate UserCRC feature inside HAL SPI Driver
- * Activated: UserCRC code is present inside driver
- * Deactivated: UserCRC code cleaned from driver
+/* CRC FEATURE: Use to activate CRC feature inside HAL SPI Driver
+ * Activated: CRC code is present inside driver
+ * Deactivated: CRC code cleaned from driver
  */
 
 #define USE_SPI_CRC 0U

@@ -1547,13 +1547,13 @@ extern "C" {
 
 /* offset from DIG_DIAG_ID in bytes */
 #define EVC_FCG_OFFSET                                                                             \
-    0x08 /* The EVC_FCG field is a 12-bit counter of the frames received with good UserCRC/FCS         \
+    0x08 /* The EVC_FCG field is a 12-bit counter of the frames received with good CRC/FCS         \
             sequence. */
 #define EVC_FCG_LEN (2)
 #define EVC_FCG_MASK 0x0FFF
 /* offset from DIG_DIAG_ID in bytes */
 #define EVC_FCE_OFFSET                                                                             \
-    0x0A /* The EVC_FCE field is a 12-bit counter of the frames received with bad UserCRC/FCS          \
+    0x0A /* The EVC_FCE field is a 12-bit counter of the frames received with bad CRC/FCS          \
             sequence. */
 #define EVC_FCE_LEN (2)
 #define EVC_FCE_MASK 0x0FFF

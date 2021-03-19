@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    crc.c
  * @brief   This file provides code for the configuration
- *          of the UserCRC instances.
+ *          of the CRC instances.
  ******************************************************************************
  * @attention
  *
@@ -26,7 +26,7 @@
 
 CRC_HandleTypeDef hcrc;
 
-/* UserCRC init function */
+/* CRC init function */
 void MX_CRC_Init(void) {
 
     hcrc.Instance = CRC;
@@ -41,7 +41,7 @@ void HAL_CRC_MspInit(CRC_HandleTypeDef* crcHandle) {
         /* USER CODE BEGIN CRC_MspInit 0 */
 
         /* USER CODE END CRC_MspInit 0 */
-        /* UserCRC clock enable */
+        /* CRC clock enable */
         __HAL_RCC_CRC_CLK_ENABLE();
         /* USER CODE BEGIN CRC_MspInit 1 */
 

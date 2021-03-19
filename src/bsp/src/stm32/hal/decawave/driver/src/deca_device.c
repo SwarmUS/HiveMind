@@ -834,8 +834,8 @@ void dwt_settxantennadelay(uint16 txDelay) {
  * to those data bytes.
  *
  * input parameters
- * @param txFrameLength  - This is the total frame length, including the two byte UserCRC.
- *                         Note: this is the length of TX message (including the 2 byte UserCRC) - max
+ * @param txFrameLength  - This is the total frame length, including the two byte CRC.
+ *                         Note: this is the length of TX message (including the 2 byte CRC) - max
  * is 1023 standard PHR mode allows up to 127 bytes if > 127 is programmed, DWT_PHRMODE_EXT needs to
  * be set in the phrMode configuration see dwt_configure function
  * @param txFrameBytes   - Pointer to the user�s buffer containing the data to send.
@@ -854,7 +854,7 @@ int dwt_writetxdata(uint16 txFrameLength, uint8* txFrameBytes, uint16 txBufferOf
 #endif
 
     if ((txBufferOffset + txFrameLength) <= 1024) {
-        // Write the data to the IC TX buffer, (-2 bytes for auto generated UserCRC)
+        // Write the data to the IC TX buffer, (-2 bytes for auto generated CRC)
         dwt_writetodevice(TX_BUFFER_ID, txBufferOffset, txFrameLength - 2, txFrameBytes);
         return DWT_SUCCESS;
     } else {
@@ -870,7 +870,7 @@ int dwt_writetxdata(uint16 txFrameLength, uint8* txFrameBytes, uint16 txBufferOf
  * frame
  *
  * input parameters:
- * @param txFrameLength - this is the length of TX message (including the 2 byte UserCRC) - max is 1023
+ * @param txFrameLength - this is the length of TX message (including the 2 byte CRC) - max is 1023
  *                              NOTE: standard PHR mode allows up to 127 bytes
  *                              if > 127 is programmed, DWT_PHRMODE_EXT needs to be set in the
  * phrMode configuration see dwt_configure function
@@ -2983,7 +2983,7 @@ void dwt_setsnoozetime(uint8 snooze_time) {
  * @brief This call turns on the receiver, can be immediate or delayed (depending on the mode
  * parameter). In the case of a "late" error the receiver will only be turned on if the
  * DWT_IDLE_ON_DLY_ERR is not set. The receiver will stay turned on, listening to any messages until
- * it either receives a good frame, an error (UserCRC, PHY header, Reed Solomon) or  it times out (SFD,
+ * it either receives a good frame, an error (CRC, PHY header, Reed Solomon) or  it times out (SFD,
  * Preamble or Frame).
  *
  * input parameters
@@ -3104,9 +3104,9 @@ void dwt_setpreambledetecttimeout(uint16 timeout) {
  * @brief This function enables the specified events to trigger an interrupt.
  * The following events can be enabled:
  * DWT_INT_TFRS         0x00000080          // frame sent
- * DWT_INT_RFCG         0x00004000          // frame received with good UserCRC
+ * DWT_INT_RFCG         0x00004000          // frame received with good CRC
  * DWT_INT_RPHE         0x00001000          // receiver PHY header error
- * DWT_INT_RFCE         0x00008000          // receiver UserCRC error
+ * DWT_INT_RFCE         0x00008000          // receiver CRC error
  * DWT_INT_RFSL         0x00010000          // receiver sync loss error
  * DWT_INT_RFTO         0x00020000          // frame wait timeout
  * DWT_INT_RXPTO        0x00200000          // preamble detect timeout
@@ -3190,7 +3190,7 @@ void dwt_readeventcounters(dwt_deviceentcnts_t* counters) {
     counters->RSL = (temp >> 16) & 0xFFF;
 
     temp = dwt_read32bitoffsetreg(DIG_DIAG_ID,
-                                  EVC_FCG_OFFSET); // Read UserCRC bad (31-16), UserCRC good (15-0)
+                                  EVC_FCG_OFFSET); // Read CRC bad (31-16), CRC good (15-0)
     counters->CRCG = temp & 0xFFF;
     counters->CRCB = (temp >> 16) & 0xFFF;
 

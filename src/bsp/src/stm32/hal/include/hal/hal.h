@@ -13,7 +13,7 @@ extern "C" {
 void Hal_init();
 
 /**
- * @brief Calculates the 32bit UserCRC of the data
+ * @brief Calculates the 32bit CRC of the data
  * @param buffer Pointer to data
  * @param length Length of data in bytes
  * @return CRC32

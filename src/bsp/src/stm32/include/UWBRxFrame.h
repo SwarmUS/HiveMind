@@ -3,7 +3,7 @@
 
 #include <array>
 
-#define UWB_MAX_LENGTH 125 // 127 - 2 UserCRC bytes
+#define UWB_MAX_LENGTH 125 // 127 - 2 CRC bytes
 
 enum class UWBRxStatus { ONGOING, FINISHED, TIMEOUT, ERROR };
 
