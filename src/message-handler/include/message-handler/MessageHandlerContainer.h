@@ -4,7 +4,7 @@
 #include "HiveMindApiRequestHandler.h"
 #include "MessageDispatcher.h"
 #include "MessageSender.h"
-#include "ThreadSafeQueue.h"
+#include <ThreadSafeQueue.h>
 #include <hivemind-host/IHiveMindHostDeserializer.h>
 #include <hivemind-host/IHiveMindHostSerializer.h>
 #include <hivemind-host/MessageDTO.h>
