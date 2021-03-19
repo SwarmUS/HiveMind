@@ -22,10 +22,14 @@ void BSP::deca() const {
 
     uint8_t data[] = {0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
     UWBRxFrame rxFrame;
+    (void)data;
 
     while (true) {
-        decaB.receive(rxFrame, 0);
-        decaB.transmit(data, sizeof data);
+        decaB.transmitAndReceive(data, sizeof(data), 1, rxFrame, 0);
+        // decaA.transmit(data, sizeof(data));
+
+        while (rxFrame.m_status == UWBRxStatus::ONGOING) {
+        }
         Task::delay(1000);
     }
 }

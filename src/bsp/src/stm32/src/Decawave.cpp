@@ -82,6 +82,8 @@ bool Decawave::start() {
 
     setLed(DW_LED::LED_0, true);
 
+    m_rxAsyncTask.start();
+
     return true;
 }
 
@@ -138,30 +140,65 @@ void Decawave::setLed(DW_LED led, bool enabled) {
     dwt_setgpiovalue(dwGPIO, dwGPIOValue);
 }
 
-void Decawave::receive(UWBRxFrame& frame, uint16_t timeoutUs) {
+void Decawave::receiveInternal(UWBRxFrame& frame,
+                               uint16_t timeoutUs,
+                               uint8_t flags,
+                               bool rxStarted) {
     m_rxTaskHandle = xTaskGetCurrentTaskHandle();
+    deca_selectDevice(m_spiDevice);
 
     frame.m_status = UWBRxStatus::ONGOING;
 
-    dwt_setrxtimeout(timeoutUs);
-    dwt_rxenable(DWT_START_RX_IMMEDIATE);
+    if (!rxStarted) {
+        dwt_setrxtimeout(timeoutUs);
+        dwt_rxenable(flags);
+    }
 
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
     retrieveRxFrame(&frame);
 }
 
-void Decawave::receiveAsync(UWBRxFrame& frame, uint16_t timeoutUs) {
+void Decawave::receiveAsyncInternal(UWBRxFrame& frame,
+                                    uint16_t timeoutUs,
+                                    uint8_t flags,
+                                    bool rxStarted) {
     m_rxFrame = &frame;
     m_rxTaskHandle = m_rxAsyncTask.getTaskHandle();
 
+    deca_selectDevice(m_spiDevice);
+
     frame.m_status = UWBRxStatus::ONGOING;
 
-    dwt_setrxtimeout(timeoutUs);
-    dwt_rxenable(DWT_START_RX_IMMEDIATE);
+    if (!rxStarted) {
+        dwt_setrxtimeout(timeoutUs);
+        dwt_rxenable(flags);
+    }
 }
 
-bool Decawave::transmit(uint8_t* buf, uint16_t length, uint8_t flags) {
+void Decawave::receive(UWBRxFrame& frame, uint16_t timeoutUs) {
+    receiveInternal(frame, timeoutUs, DWT_START_TX_IMMEDIATE);
+}
+
+void Decawave::receiveDelayed(UWBRxFrame& frame, uint16_t timeoutUs, uint64_t rxStartTime) {
+    deca_selectDevice(m_spiDevice);
+    dwt_setdelayedtrxtime(rxStartTime >> 8);
+
+    receiveInternal(frame, timeoutUs, rxStartTime);
+}
+
+void Decawave::receiveAsync(UWBRxFrame& frame, uint16_t timeoutUs) {
+    receiveAsyncInternal(frame, timeoutUs, DWT_START_TX_IMMEDIATE);
+}
+
+void Decawave::receiveAsyncDelayed(UWBRxFrame& frame, uint16_t timeoutUs, uint64_t rxStartTime) {
+    deca_selectDevice(m_spiDevice);
+    dwt_setdelayedtrxtime(rxStartTime >> 8);
+
+    receiveAsyncInternal(frame, timeoutUs, rxStartTime);
+}
+
+bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
     if (length > UWB_MAX_LENGTH) {
         return false;
     }
@@ -179,14 +216,50 @@ bool Decawave::transmit(uint8_t* buf, uint16_t length, uint8_t flags) {
 }
 
 bool Decawave::transmit(uint8_t* buf, uint16_t length) {
-    return transmit(buf, length, DWT_START_TX_IMMEDIATE);
+    return transmitInternal(buf, length, DWT_START_TX_IMMEDIATE);
 }
 
 bool Decawave::transmitDelayed(uint8_t* buf, uint16_t length, uint64_t txTimestamp) {
     deca_selectDevice(m_spiDevice);
     dwt_setdelayedtrxtime(txTimestamp >> 8);
 
-    return transmit(buf, length, DWT_START_TX_DELAYED);
+    return transmitInternal(buf, length, DWT_START_TX_DELAYED);
+}
+
+bool Decawave::transmitAndReceive(uint8_t* buf,
+                                  uint16_t length,
+                                  uint32_t rxAfterTxTimeUs,
+                                  UWBRxFrame& frame,
+                                  uint16_t rxTimeoutUs) {
+    deca_selectDevice(m_spiDevice);
+    dwt_setrxaftertxdelay(rxAfterTxTimeUs);
+    dwt_setrxtimeout(rxTimeoutUs);
+
+    if (!transmitInternal(buf, length, DWT_START_TX_IMMEDIATE | DWT_RESPONSE_EXPECTED)) {
+        return false;
+    }
+
+    receiveInternal(frame, 0, 0, true);
+    return true;
+}
+
+bool Decawave::transmitAndReceiveDelayed(uint8_t* buf,
+                                         uint16_t length,
+                                         uint64_t txTimestamp,
+                                         uint32_t rxAfterTxTimeUs,
+                                         UWBRxFrame& frame,
+                                         uint16_t rxTimeoutUs) {
+    deca_selectDevice(m_spiDevice);
+    dwt_setrxaftertxdelay(rxAfterTxTimeUs);
+    dwt_setdelayedtrxtime(txTimestamp >> 8);
+    dwt_setrxtimeout(rxTimeoutUs);
+
+    if (!transmitInternal(buf, length, DWT_START_TX_DELAYED | DWT_RESPONSE_EXPECTED)) {
+        return false;
+    }
+
+    receiveInternal(frame, 0, 0, true);
+    return true;
 }
 
 void Decawave::configureDW() {
