@@ -215,7 +215,6 @@ class SPIMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-
 class SpiMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
 
   public:
@@ -325,9 +324,9 @@ int main(int argc, char** argv) {
     static USBMessageDispatcher s_usbMessageDispatcher("usb_receive", tskIDLE_PRIORITY + 5);
 
     s_bittybuzzTask.start();
-//    s_uartDispatchTask.start();
+    //    s_uartDispatchTask.start();
     s_tcpDispatchTask.start();
-//    s_uartMessageSender.start();
+    //    s_uartMessageSender.start();
     s_tcpMessageSender.start();
     s_spiMessageSender.start();
     s_usbMessageSender.start();

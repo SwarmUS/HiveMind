@@ -7,16 +7,17 @@ class USBMock : public IUSB {
     ~USBMock() override = default;
 
     bool send(const uint8_t* buffer, uint16_t length) override {
-        (void) buffer;
-        (void) length;
+        (void)buffer;
+        (void)length;
 
         return true;
     }
     bool receive(uint8_t* buffer, uint16_t length) override {
-        (void) buffer;
-        (void) length;
+        (void)buffer;
+        (void)length;
 
-        return true; }
+        return true;
+    }
     bool isConnected() override { return true; }
 };
 
