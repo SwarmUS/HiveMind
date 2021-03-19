@@ -21,7 +21,7 @@ class BittyBuzzMessageService : public IBittyBuzzMessageService {
                           const FunctionCallArgumentDTO* args,
                           uint16_t argsLength) override;
 
-    bool sendBuzzMessage(const uint8_t* payload, uint16_t payloadLength) override;
+    bool sendBuzzMessage(const BuzzMessageDTO& msg) override;
 
   private:
     ICircularQueue<MessageDTO>& m_hostQueue;

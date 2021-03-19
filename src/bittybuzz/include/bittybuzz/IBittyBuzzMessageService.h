@@ -23,11 +23,10 @@ class IBittyBuzzMessageService {
                                   uint16_t argsLength) = 0;
     /**
      *@brief send a buzz message, broadcasted to other buzz vm, sends it to the remote queue
-     *@param [in] payload the payload to send
-     *@param [in] payloadLength the length of the payload to send
+     *@param [in] msg the buzz message to send
      *@return true if the operation was successfull, false if not (length too big or queue is
      *full)*/
-    virtual bool sendBuzzMessage(const uint8_t* payload, uint16_t payloadLength) = 0;
+    virtual bool sendBuzzMessage(const BuzzMessageDTO& msg) = 0;
 };
 
 #endif // __IBITTYBUZZMESSAGESERVICE_H_

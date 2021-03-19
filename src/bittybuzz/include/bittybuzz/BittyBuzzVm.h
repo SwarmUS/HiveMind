@@ -61,6 +61,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
     const IBittyBuzzBytecode& m_bytecode;
     const IBSP& m_bsp;
     IBittyBuzzMessageHandler& m_messageHandler;
+    IBittyBuzzMessageService& m_messageService;
     ILogger& m_logger;
     IUserInterface& m_ui;
 

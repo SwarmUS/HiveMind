@@ -1,6 +1,9 @@
 #include "bittybuzz/BittyBuzzVm.h"
 #include "bittybuzz/BittyBuzzSystem.h"
+#include "logger/ILogger.h"
+#include <bbzmsg.h>
 #include <bbzoutmsg.h>
+#include <bbzringbuf.h>
 #include <bbzvm.h>
 
 UserFunctionRegister::UserFunctionRegister(uint8_t strId, bbzvm_funp functionPtr) :
@@ -22,6 +25,27 @@ bool BittyBuzzVm::step() {
         bbzvm_process_inmsgs();
         BittyBuzzSystem::functionCall(__BBZSTRID_step);
         bbzvm_process_outmsgs();
+
+        uint16_t queueSize = bbzoutmsg_queue_size();
+        for (uint8_t i = 0; i < queueSize; i++) {
+
+            BuzzMessageDTO msg(NULL, 0);
+            bbzmsg_payload_t outPayload;
+
+            bbzringbuf_clear(&outPayload);
+            bbzringbuf_construct(&outPayload, msg.getRawPayload().data(), 1,
+                                 BuzzMessageDTO::PAYLOAD_MAX_SIZE);
+            bbzoutmsg_queue_first(&outPayload);
+
+            msg.setRawPayloadLength(bbzringbuf_size(&outPayload));
+
+            if (!m_messageService.sendBuzzMessage(msg)) {
+                m_logger.log(LogLevel::Warn, "BBVM: Could not push buzz message");
+                return false;
+            }
+
+            bbzoutmsg_queue_next();
+        }
 
         return true;
     }

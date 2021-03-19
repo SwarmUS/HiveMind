@@ -777,8 +777,8 @@ TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_BuzzMe
     m_message = MessageDTO(m_srcUuid, m_uuid, BuzzMessageDTO(NULL, 0));
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
-        .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(false)));
-    EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
+        .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
+    EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(1).WillOnce(testing::Return(false));
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
