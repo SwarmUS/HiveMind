@@ -1,8 +1,8 @@
 #include "hal/usb.h"
+#include "Task.h"
 #include "usbd_cdc_if.h"
 #include <FreeRTOS.h>
 #include <USB.h>
-#include <task.h>
 
 #define USB_RxBUFFER_MAX_SIZE 2048
 void USB::interruptRxCallback(void* context, uint8_t* buffer, uint32_t length) {
@@ -14,6 +14,9 @@ bool USB::send(const uint8_t* buffer, uint16_t length) {
     if (buffer == nullptr) {
         m_logger.log(LogLevel::Warn, "Invalid parameters for USB::send");
         return false;
+    }
+    while (!usb_isConnected()) {
+        Task::delay(100);
     }
 
     int position = 0;
