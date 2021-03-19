@@ -74,8 +74,18 @@ decawaveDeviceConfig_t* deca_getSelectedDevice();
  */
 decawaveDeviceConfig_t* deca_getDevice(decaDevice_t device);
 
+/**
+ * @brief Sets the ISR for a given decawave chip
+ * @param device The decawave chip
+ * @param callback The ISR callback
+ * @param context A context to pass to the callback
+ */
 void deca_setISRCallback(decaDevice_t device, decaISRCallback_t callback, void* context);
 
+/**
+ * @brief The entry point for all decawave interrupts
+ * @param selectedDevice The device that triggered the interrupt
+ */
 void deca_isr(decaDevice_t selectedDevice);
 
 #ifdef __cplusplus
