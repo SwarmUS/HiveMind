@@ -1,6 +1,7 @@
 #include "hal/hal.h"
 #include "deca_port.h"
 #include "hal/uart_print.h"
+#include "hal/usb.h"
 #include "hivemind_hal.h"
 #include "lwip.h"
 #include "usb_device.h"
@@ -32,6 +33,7 @@ void Hal_init() {
     MX_USB_DEVICE_Init();
 
     UartPrint_init();
+    usb_init();
 
     MX_LWIP_Init();
 

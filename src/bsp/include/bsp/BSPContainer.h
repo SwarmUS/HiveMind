@@ -5,6 +5,7 @@
 #include "bsp/IBSP.h"
 #include "bsp/IHostUart.h"
 #include "bsp/ISpiEsp.h"
+#include "bsp/IUSB.h"
 #include "bsp/IUserInterface.h"
 
 namespace BSPContainer {
@@ -33,6 +34,10 @@ namespace BSPContainer {
      */
     ISpiEsp& getSpiEsp();
 
+    /**
+     * @brief Returns an instance of the USB CDC driver
+     */
+    IUSB& getUSB();
 } // namespace BSPContainer
 
 #endif // _BSPFACTORY_H

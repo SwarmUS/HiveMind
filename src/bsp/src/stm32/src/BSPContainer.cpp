@@ -3,6 +3,7 @@
 #include "CRC.h"
 #include "HostUart.h"
 #include "SpiEsp.h"
+#include "USB.h"
 #include "UserInterface.h"
 #include "logger/LoggerContainer.h"
 
@@ -32,4 +33,8 @@ ICRC& BSPContainer::getCRC() {
 ISpiEsp& BSPContainer::getSpiEsp() {
     static SpiEsp s_spiEsp(getCRC(), LoggerContainer::getLogger());
     return s_spiEsp;
+}
+IUSB& BSPContainer::getUSB() {
+    static USB s_usb(LoggerContainer::getLogger());
+    return s_usb;
 }

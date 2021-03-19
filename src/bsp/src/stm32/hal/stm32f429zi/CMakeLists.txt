@@ -13,6 +13,7 @@ set(LIB_SOURCES
     Core/Src/spi.c
     LWIP/App/lwip.c
     LWIP/Target/ethernetif.c
+    USB_DEVICE/App/usbd_cdc_if.c
 )
 
 set(LIB_HEADERS
@@ -27,6 +28,7 @@ set(LIB_HEADERS
     Core/Inc/rng.h
     Core/Inc/spi.h
     LWIP/App/lwip.h
+    USB_DEVICE/App/usbd_cdc_if.h
 )
 
 # Sources that needs to be global on the project
@@ -63,6 +65,8 @@ target_include_directories(stm32f429zi-linker
         Core/Inc
         LWIP/App
         LWIP/Target
+        USB_DEVICE/App
+        USB_DEVICE/Target
 )
 
 target_link_libraries(stm32f429zi-linker

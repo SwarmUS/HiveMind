@@ -12,6 +12,7 @@ set(LIB_SOURCES
     src/TCPClient.cpp
     src/SettingsContainer.cpp
     src/SpiEsp.cpp
+    src/USB.cpp
     )
 
 set(LIB_PRIVATE_HEADERS
@@ -24,7 +25,7 @@ set(LIB_PRIVATE_HEADERS
     include/DefaultSettings.h
     include/SpiEsp.h
     include/SpiHeader.h
-    )
+    include/USB.h)
 
 include(DefaultSettings.cmake)
 configure_file(include/DefaultSettings.in.h include/DefaultSettings.h)

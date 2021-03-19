@@ -21,7 +21,6 @@ add_link_options(
     -Wl,--print-memory-usage
 )
 
-
 include(stm32/common)
 # Adding module
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/stm32)

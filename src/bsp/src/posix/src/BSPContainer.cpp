@@ -2,6 +2,7 @@
 #include "BSP.h"
 #include "SpiEspMock.h"
 #include "TCPUartMock.h"
+#include "USBMock.h"
 #include "UserInterface.h"
 #include "logger/LoggerContainer.h"
 
@@ -24,4 +25,9 @@ IHostUart& BSPContainer::getHostUart() {
 ISpiEsp& BSPContainer::getSpiEsp() {
     static SpiEspMock s_spiEsp(LoggerContainer::getLogger());
     return s_spiEsp;
+}
+
+IUSB& BSPContainer::getUSB() {
+    static USBMock s_usb;
+    return s_usb;
 }
