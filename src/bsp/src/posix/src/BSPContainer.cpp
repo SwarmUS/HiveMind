@@ -1,11 +1,11 @@
 #include "bsp/BSPContainer.h"
 #include "BSP.h"
+#include "InterlocManager.h"
 #include "SpiEspMock.h"
 #include "TCPUartMock.h"
 #include "USBMock.h"
 #include "UserInterface.h"
 #include "logger/LoggerContainer.h"
-#include <bsp/src/stm32/include/InterlocManager.h>
 
 IBSP& BSPContainer::getBSP() {
     static BSP s_bsp;
