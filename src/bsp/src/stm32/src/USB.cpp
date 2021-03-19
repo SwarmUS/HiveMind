@@ -1,8 +1,8 @@
 #include "hal/usb.h"
-#include "task.h"
+#include "FreeRTOS.h"
 #include "Task.h"
+#include "task.h"
 #include "usbd_cdc_if.h"
-#include <FreeRTOS.h>
 #include <USB.h>
 
 #define USB_RxBUFFER_MAX_SIZE 2048
