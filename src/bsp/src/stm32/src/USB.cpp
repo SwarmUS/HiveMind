@@ -1,4 +1,5 @@
 #include "hal/usb.h"
+#include "task.h"
 #include "Task.h"
 #include "usbd_cdc_if.h"
 #include <FreeRTOS.h>
@@ -58,6 +59,7 @@ void USB::receiveItCallback(uint8_t* buf, uint32_t len) {
     if (CircularBuff_getLength(&cbuffUsb) + len > CBUFF_USB_DATA_SIZE) {
         // TODO should notify the user of an error
         CircularBuff_clear(&cbuffUsb);
+        m_logger.log(LogLevel::Error, "USB buffer full, erasing circular buffer");
         return;
     }
 
