@@ -15,6 +15,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_get) {
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
+    EXPECT_CALL(messageServiceMock, sendBuzzMessage).Times(2).WillOnce(testing::Return(true));
 
     std::array<UserFunctionRegister, 1> functionRegister = {{
 
@@ -35,7 +36,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_get) {
     m_bittybuzzVm->step();
 
     // Expect
-    EXPECT_EQ(logCounter, 1);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
+    EXPECT_EQ(g_assertTrueCallCount, 1);
 }
