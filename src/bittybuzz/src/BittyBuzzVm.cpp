@@ -27,7 +27,7 @@ bool BittyBuzzVm::step() {
         bbzvm_process_outmsgs();
 
         uint16_t queueSize = bbzoutmsg_queue_size();
-        for (uint8_t i = 0; i < queueSize; i++) {
+        for (uint16_t i = 0; i < queueSize; i++) {
 
             BuzzMessageDTO msg(NULL, 0);
             bbzmsg_payload_t outPayload;
