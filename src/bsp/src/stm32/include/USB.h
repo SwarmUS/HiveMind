@@ -1,6 +1,7 @@
 #ifndef HIVE_MIND_USB_H
 #define HIVE_MIND_USB_H
 
+#include "FreeRTOS.h"
 #include "LockGuard.h"
 #include "bsp/IUSB.h"
 #include "semphr.h"
