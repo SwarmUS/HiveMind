@@ -1,13 +1,14 @@
 #ifndef __DECAWAVE_H__
 #define __DECAWAVE_H__
 
+#include "UWBRxFrame.h"
 #include "deca_device_api.h"
 #include "deca_port.h"
+#include <BaseTask.h>
 #include <FreeRTOS.h>
 #include <functional>
+#include <memory>
 #include <task.h>
-
-#define UWB_MAX_LENGTH 125 // 127 - 2 CRC bytes
 
 enum class DW_LED { LED_0, LED_1, LED_2, LED_3 };
 enum class UWBSpeed { SPEED_110K, SPEED_850K, SPEED_6M8 };
@@ -24,10 +25,8 @@ class Decawave {
     bool setChannel(uint8_t channelNo);
     void setSpeed(UWBSpeed speed);
 
-    static void receiveAsync(const uint8_t* buf,
-                             uint16_t length,
-                             const std::function<void(bool)>& callback);
-    bool receive(uint8_t* buf, uint16_t length, uint16_t timeoutUs);
+    void receiveAsync(UWBRxFrame& frame, uint16_t timeoutUs);
+    void receive(UWBRxFrame& frame, uint16_t timeoutUs);
 
     bool transmit(uint8_t* buf, uint16_t length);
     bool transmit(uint8_t* buf, uint16_t length, uint8_t flags);
@@ -35,6 +34,7 @@ class Decawave {
 
     friend void rxCallback(const dwt_cb_data_t* callbackData, void* context);
     friend void isrCallback(void* context);
+    friend void rxAsyncTask(void* context);
 
   private:
     decaDevice_t m_spiDevice;
@@ -46,9 +46,13 @@ class Decawave {
     TaskHandle_t m_rxTaskHandle;
     dwt_cb_data_t m_callbackData;
 
+    BaseTask<configMINIMAL_STACK_SIZE> m_rxAsyncTask;
+    UWBRxFrame* m_rxFrame;
+
     std::array<uint8_t, UWB_MAX_LENGTH + 2> m_txBuffer;
 
     void configureDW();
+    void retrieveRxFrame(UWBRxFrame* frame);
 };
 
 #endif //__DECAWAVE_H__

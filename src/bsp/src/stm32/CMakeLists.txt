@@ -26,7 +26,7 @@ set(LIB_PRIVATE_HEADERS
     include/SpiEsp.h
     include/SpiHeader.h
     include/USB.h
-        include/Decawave.h include/DecawaveUtils.h)
+        include/Decawave.h include/DecawaveUtils.h include/UWBRxFrame.h)
 
 include(DefaultSettings.cmake)
 configure_file(include/DefaultSettings.in.h include/DefaultSettings.h)

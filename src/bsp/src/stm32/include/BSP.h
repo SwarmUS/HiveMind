@@ -17,9 +17,6 @@ class BSP : public IBSP {
     void deca() const override;
 
     uint32_t generateRandomNumber() override;
-
-  private:
-    BaseTask<2 * configMINIMAL_STACK_SIZE> m_decaBlinkTask;
 };
 
 #endif // __BSP_H_

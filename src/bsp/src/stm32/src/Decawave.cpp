@@ -1,6 +1,7 @@
 #include "Decawave.h"
 #include <DecawaveUtils.h>
 #include <FreeRTOS.h>
+#include <Task.h>
 #include <cstring>
 #include <deca_device_api.h>
 #include <deca_regs.h>
@@ -9,11 +10,14 @@
 void rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
 
-    BaseType_t taskWoken;
-    vTaskNotifyGiveFromISR(static_cast<Decawave*>(context)->m_rxTaskHandle, &taskWoken);
-    if (taskWoken == pdTRUE) {
-        portYIELD_FROM_ISR(pdTRUE);
+    BaseType_t taskWoken = pdFALSE;
+
+    if (static_cast<Decawave*>(context)->m_rxTaskHandle != NULL) {
+        vTaskNotifyGiveFromISR(static_cast<Decawave*>(context)->m_rxTaskHandle, &taskWoken);
     }
+
+    static_cast<Decawave*>(context)->m_rxTaskHandle = NULL;
+    portYIELD_FROM_ISR(taskWoken);
 }
 
 void isrCallback(void* context) {
@@ -21,11 +25,24 @@ void isrCallback(void* context) {
     dwt_isr();
 }
 
+void rxAsyncTask(void* context) {
+    while (true) {
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        static_cast<Decawave*>(context)->retrieveRxFrame(
+            static_cast<Decawave*>(context)->m_rxFrame);
+    }
+}
+
 Decawave::Decawave(decaDevice_t spiDevice) :
-    m_spiDevice(spiDevice), m_channelNo(2), m_speed(UWBSpeed::SPEED_110K) {}
+    m_spiDevice(spiDevice),
+    m_channelNo(2),
+    m_speed(UWBSpeed::SPEED_110K),
+    m_rxAsyncTask("dw_rx_task", tskIDLE_PRIORITY + 10, rxAsyncTask, this) {}
 
 Decawave::Decawave(decaDevice_t spiDevice, uint8_t channel, UWBSpeed speed) :
-    m_spiDevice(spiDevice), m_speed(speed) {
+    m_spiDevice(spiDevice),
+    m_speed(speed),
+    m_rxAsyncTask("dw_rx_task", tskIDLE_PRIORITY + 10, rxAsyncTask, this) {
 
     if (channel > 0 && channel < 8) {
         m_channelNo = channel;
@@ -35,13 +52,12 @@ Decawave::Decawave(decaDevice_t spiDevice, uint8_t channel, UWBSpeed speed) :
 bool Decawave::start() {
     deca_selectDevice(m_spiDevice);
     deca_setSlowRate();
-
     uint32_t deviceID = 0;
     uint8_t i = 0;
     // Retry to read the deviceID 10 times before abandoning
     while (deviceID != DWT_DEVICE_ID && i++ < 10) {
         deviceID = dwt_readdevid();
-        // Task::delay(1);
+        Task::delay(1);
     }
 
     if (dwt_initialise(DWT_LOADUCODE) == DWT_ERROR) {
@@ -54,14 +70,14 @@ bool Decawave::start() {
 
     deca_setFastRate();
 
-    dwt_enablegpioclocks();
-    dwt_setgpiodirection(DWT_GxM0 | DWT_GxM1 | DWT_GxM2 | DWT_GxM3, 0);
-
     dwt_softreset();
     configureDW();
 
-    dwt_setinterrupt(DWT_INT_TFRS | DWT_INT_RFCG | DWT_INT_RFTO | DWT_INT_RXPTO | DWT_INT_RPHE |
-                         DWT_INT_RFCE | DWT_INT_RFSL | DWT_INT_SFDT,
+    dwt_enablegpioclocks();
+    dwt_setgpiodirection(DWT_GxM0 | DWT_GxM1 | DWT_GxM2 | DWT_GxM3, 0);
+
+    dwt_setinterrupt(DWT_INT_RFCG | DWT_INT_RFTO | DWT_INT_RXPTO | DWT_INT_RPHE | DWT_INT_RFCE |
+                         DWT_INT_RFSL | DWT_INT_SFDT,
                      1);
 
     setLed(DW_LED::LED_0, true);
@@ -122,33 +138,27 @@ void Decawave::setLed(DW_LED led, bool enabled) {
     dwt_setgpiovalue(dwGPIO, dwGPIOValue);
 }
 
-bool Decawave::receive(uint8_t* buf, uint16_t length, uint16_t timeoutUs) {
-    // Wait for notification from ISR
+void Decawave::receive(UWBRxFrame& frame, uint16_t timeoutUs) {
     m_rxTaskHandle = xTaskGetCurrentTaskHandle();
+
+    frame.m_status = UWBRxStatus::ONGOING;
 
     dwt_setrxtimeout(timeoutUs);
     dwt_rxenable(DWT_START_RX_IMMEDIATE);
 
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-    if (m_callbackData.datalength > length) {
-        return false;
-    }
-    if (m_callbackData.datalength == 0) {
-        return true;
-    }
-
-    dwt_readrxdata(buf, m_callbackData.datalength - 2, 0);
-    return true;
+    retrieveRxFrame(&frame);
 }
 
-void Decawave::receiveAsync(const uint8_t* buf,
-                            uint16_t length,
-                            const std::function<void(bool)>& callback) {
-    (void)buf;
-    (void)length;
-    (void)callback;
-    // TODO: implement
+void Decawave::receiveAsync(UWBRxFrame& frame, uint16_t timeoutUs) {
+    m_rxFrame = &frame;
+    m_rxTaskHandle = m_rxAsyncTask.getTaskHandle();
+
+    frame.m_status = UWBRxStatus::ONGOING;
+
+    dwt_setrxtimeout(timeoutUs);
+    dwt_rxenable(DWT_START_RX_IMMEDIATE);
 }
 
 bool Decawave::transmit(uint8_t* buf, uint16_t length, uint8_t flags) {
@@ -193,4 +203,32 @@ void Decawave::configureDW() {
 
     deca_selectDevice(m_spiDevice);
     dwt_configure(&m_dwConfig);
+}
+
+void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
+    if (frame == nullptr) {
+        return;
+    }
+
+    deca_selectDevice(m_spiDevice);
+
+    frame->m_statusReg = m_callbackData.status;
+    frame->m_length = m_callbackData.datalength;
+
+    // Frame was properly received. Read all relevant data from DW
+    if (m_callbackData.datalength > 0) {
+        frame->m_status = UWBRxStatus::FINISHED;
+
+        // Read the frame into memory without the CRC16 located at the end of the frame
+        dwt_readrxdata(frame->m_rxBuffer.data(), m_callbackData.datalength - 2, 0);
+        dwt_readrxtimestamp((uint8_t*)(&frame->m_rxTimestamp));
+        return;
+    }
+
+    // Frame was not received, parse status reg to find the error type
+    if ((m_callbackData.status & SYS_STATUS_ALL_RX_TO) != 0U) {
+        frame->m_status = UWBRxStatus::TIMEOUT;
+    } else if ((m_callbackData.status & SYS_STATUS_ALL_RX_ERR) != 0U) {
+        frame->m_status = UWBRxStatus::ERROR;
+    }
 }
