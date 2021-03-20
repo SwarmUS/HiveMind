@@ -3,7 +3,6 @@
 
 class InterlocManager : public IInterlocManager {
   public:
-    InterlocManager() = default;
     ~InterlocManager() override = default;
 
     void startInterloc() override{};

@@ -19,7 +19,7 @@ int writetospi(uint16_t headerLength,
     decaIrqStatus_t stat;
     stat = decamutexon();
 
-    decawaveDeviceConfig_t* nssConfig = deca_getSelectedDevice();
+    decawaveDeviceConfig_t* nssConfig = deca_getSelectedDeviceConfig();
 
     if (nssConfig == NULL) {
         return -1;
@@ -55,7 +55,7 @@ int readfromspi(uint16_t headerLength,
     decaIrqStatus_t stat;
     stat = decamutexon();
 
-    decawaveDeviceConfig_t* nssConfig = deca_getSelectedDevice();
+    decawaveDeviceConfig_t* nssConfig = deca_getSelectedDeviceConfig();
 
     if (nssConfig == NULL) {
         return -1;

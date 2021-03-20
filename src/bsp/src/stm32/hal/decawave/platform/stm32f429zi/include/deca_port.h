@@ -15,7 +15,7 @@ typedef void (*decaISRCallback_t)(void* context);
 /**
  * @brief Enum to specify which decawave we are addressing
  */
-typedef enum { DW_A = 0, DW_B } decaDevice_t;
+typedef enum { DW_A = 0, DW_B = 1 } decaDevice_t;
 
 /**
  * @brief Structure to hold a port and pin associated with a decawave NSS pin
@@ -25,7 +25,6 @@ typedef struct {
     uint16_t nssPin;
     GPIO_TypeDef* irqPort;
     uint16_t irqPin;
-    uint8_t deviceIndex;
     void* isrContext;
     decaISRCallback_t isrCallback;
 } decawaveDeviceConfig_t;
@@ -66,13 +65,13 @@ void deca_selectDevice(decaDevice_t selectedDevice);
  * @brief Gets the device configuration for the currently selected decawave
  * @return The device configuration
  */
-decawaveDeviceConfig_t* deca_getSelectedDevice();
+decawaveDeviceConfig_t* deca_getSelectedDeviceConfig();
 
 /**
  * @brief Gets the NSS configuration for a given decawave
  * @return The NSS pin
  */
-decawaveDeviceConfig_t* deca_getDevice(decaDevice_t device);
+decawaveDeviceConfig_t* deca_getDeviceConfig(decaDevice_t device);
 
 /**
  * @brief Sets the ISR for a given decawave chip

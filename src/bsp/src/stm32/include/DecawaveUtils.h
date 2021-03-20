@@ -24,14 +24,7 @@ namespace DecawaveUtils {
      * @param channel UWB channel
      * @return Preamble code index
      */
-    uint8_t getPreambleCode(uint8_t channel);
-
-    /**
-     * @brief Converts an UWBSpeed enum into a DW1000 macro for speed
-     * @param speed Speed
-     * @return Speed macro
-     */
-    uint8_t getDWSpeed(UWBSpeed speed);
+    uint8_t getPreambleCode(UWBChannel channel);
 
     /**
      * @brief Calculates a SFD timeout based on other configurations

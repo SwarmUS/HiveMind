@@ -1,4 +1,4 @@
-#ifndef __CRC_H__
+#ifndef __USERCRC_H__
 #define __USERCRC_H__
 
 #include "bsp/ICRC.h"

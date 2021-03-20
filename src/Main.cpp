@@ -332,7 +332,7 @@ int main(int argc, char** argv) {
     static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
     static USBMessageSender s_usbMessageSender("usb_send", tskIDLE_PRIORITY + 5);
     static USBMessageDispatcher s_usbMessageDispatcher("usb_receive", tskIDLE_PRIORITY + 5);
-    static InterlocTask s_interlocTask("usb_receive", tskIDLE_PRIORITY + 5);
+    static InterlocTask s_interlocTask("interloc", tskIDLE_PRIORITY + 5);
 
     s_bittybuzzTask.start();
     //    s_uartDispatchTask.start();

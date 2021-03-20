@@ -39,32 +39,17 @@ uint8_t DecawaveUtils::getPACSize(uint8_t preambleLength) {
     }
 }
 
-uint8_t DecawaveUtils::getPreambleCode(uint8_t channel) {
+uint8_t DecawaveUtils::getPreambleCode(UWBChannel channel) {
     // Choose lowest code for a given channel
     // DW user manual section 10.5 p.218
     switch (channel) {
-    case 4:
-    case 7:
+    case UWBChannel::CHANNEL_4:
+    case UWBChannel::CHANNEL_7:
         return 17;
 
     default:
         return 9;
     }
-}
-
-uint8_t DecawaveUtils::getDWSpeed(UWBSpeed speed) {
-    switch (speed) {
-    case UWBSpeed::SPEED_110K:
-        return DWT_BR_110K;
-
-    case UWBSpeed::SPEED_850K:
-        return DWT_BR_850K;
-
-    case UWBSpeed::SPEED_6M8:
-        return DWT_BR_6M8;
-    }
-
-    return 0;
 }
 
 uint16_t DecawaveUtils::getSFDTimeout(uint8_t preambleLengthRegister,

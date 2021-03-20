@@ -2,12 +2,13 @@
 #include <DecawaveUtils.h>
 #include <FreeRTOS.h>
 #include <Task.h>
+#include <cpp-common/CppUtils.h>
 #include <cstring>
 #include <deca_device_api.h>
 #include <deca_regs.h>
 #include <task.h>
 
-void rxCallback(const dwt_cb_data_t* callbackData, void* context) {
+void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
 
     BaseType_t taskWoken = pdFALSE;
@@ -20,12 +21,12 @@ void rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     portYIELD_FROM_ISR(taskWoken);
 }
 
-void isrCallback(void* context) {
+void Decawave::isrCallback(void* context) {
     deca_selectDevice(static_cast<Decawave*>(context)->m_spiDevice);
     dwt_isr();
 }
 
-void rxAsyncTask(void* context) {
+void Decawave::rxAsyncTask(void* context) {
     while (true) {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         static_cast<Decawave*>(context)->retrieveRxFrame(
@@ -35,30 +36,27 @@ void rxAsyncTask(void* context) {
 
 Decawave::Decawave(decaDevice_t spiDevice) :
     m_spiDevice(spiDevice),
-    m_channelNo(2),
+    m_channel(UWBChannel::CHANNEL_2),
     m_speed(UWBSpeed::SPEED_110K),
     m_rxAsyncTask("dw_rx_task", tskIDLE_PRIORITY + 10, rxAsyncTask, this) {}
 
-Decawave::Decawave(decaDevice_t spiDevice, uint8_t channel, UWBSpeed speed) :
+Decawave::Decawave(decaDevice_t spiDevice, UWBChannel channel, UWBSpeed speed) :
     m_spiDevice(spiDevice),
+    m_channel(channel),
     m_speed(speed),
-    m_rxAsyncTask("dw_rx_task", tskIDLE_PRIORITY + 10, rxAsyncTask, this) {
+    m_rxAsyncTask("dw_rx_task", tskIDLE_PRIORITY + 10, rxAsyncTask, this) {}
 
-    if (channel > 0 && channel < 8) {
-        m_channelNo = channel;
-    }
-}
-
-bool Decawave::start() {
+bool Decawave::init() {
     deca_selectDevice(m_spiDevice);
     deca_setSlowRate();
     uint32_t deviceID = 0;
     uint8_t i = 0;
+
     // Retry to read the deviceID 10 times before abandoning
-    while (deviceID != DWT_DEVICE_ID && i++ < 10) {
+    do {
         deviceID = dwt_readdevid();
         Task::delay(1);
-    }
+    } while (deviceID != DWT_DEVICE_ID && 10 > i++);
 
     if (dwt_initialise(DWT_LOADUCODE) == DWT_ERROR) {
         return false;
@@ -87,12 +85,8 @@ bool Decawave::start() {
     return true;
 }
 
-bool Decawave::setChannel(uint8_t channelNo) {
-    if (channelNo < 1 || channelNo > 7) {
-        return false;
-    }
-
-    m_channelNo = channelNo;
+bool Decawave::setChannel(UWBChannel channel) {
+    m_channel = channel;
     configureDW();
     return true;
 }
@@ -103,41 +97,14 @@ void Decawave::setSpeed(UWBSpeed speed) {
 }
 
 void Decawave::setLed(DW_LED led, bool enabled) {
-    uint8_t dwGPIO = 0;
-    uint8_t dwGPIOValue = 0;
-
-    switch (led) {
-    case DW_LED::LED_0:
-        dwGPIO = DWT_GxM0;
-        if (enabled) {
-            dwGPIOValue = DWT_GxP0;
-        }
-        break;
-
-    case DW_LED::LED_1:
-        dwGPIO = DWT_GxM1;
-        if (enabled) {
-            dwGPIOValue = DWT_GxP1;
-        }
-        break;
-
-    case DW_LED::LED_2:
-        dwGPIO = DWT_GxM2;
-        if (enabled) {
-            dwGPIOValue = DWT_GxP2;
-        }
-        break;
-
-    case DW_LED::LED_3:
-        dwGPIO = DWT_GxM3;
-        if (enabled) {
-            dwGPIOValue = DWT_GxP3;
-        }
-        break;
-    }
-
     deca_selectDevice(m_spiDevice);
-    dwt_setgpiovalue(dwGPIO, dwGPIOValue);
+
+    if (enabled) {
+        dwt_setgpiovalue(static_cast<uint32>(as_integer(led)),
+                         static_cast<uint32>(as_integer(led) >> 4));
+    } else {
+        dwt_setgpiovalue(static_cast<uint32>(as_integer(led)), 0);
+    }
 }
 
 void Decawave::receiveInternal(UWBRxFrame& frame,
@@ -199,7 +166,7 @@ void Decawave::receiveAsyncDelayed(UWBRxFrame& frame, uint16_t timeoutUs, uint64
 }
 
 bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
-    if (length > UWB_MAX_LENGTH) {
+    if (length > (UWB_MAX_LENGTH - UWB_CRC_LENGTH)) {
         return false;
     }
     deca_selectDevice(m_spiDevice);
@@ -207,8 +174,8 @@ bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
     memcpy(m_txBuffer.data(), buf, length);
 
     // Send two bytes more than requested because of the DW auto-generated CRC16
-    dwt_writetxdata(length + 2, m_txBuffer.data(), 0);
-    dwt_writetxfctrl(length + 2, 0, 0);
+    dwt_writetxdata(length + UWB_CRC_LENGTH, m_txBuffer.data(), 0);
+    dwt_writetxfctrl(length + UWB_CRC_LENGTH, 0, 0);
 
     dwt_starttx(flags);
 
@@ -243,7 +210,7 @@ bool Decawave::transmitAndReceive(uint8_t* buf,
     return true;
 }
 
-bool Decawave::transmitAndReceiveDelayed(uint8_t* buf,
+bool Decawave::transmitDelayedAndReceive(uint8_t* buf,
                                          uint16_t length,
                                          uint64_t txTimestamp,
                                          uint32_t rxAfterTxTimeUs,
@@ -265,14 +232,18 @@ bool Decawave::transmitAndReceiveDelayed(uint8_t* buf,
 void Decawave::configureDW() {
     uint8_t preambleLength = DecawaveUtils::getPreambleLength(m_speed);
     uint8_t pacSize = DecawaveUtils::getPACSize(preambleLength);
-    uint8_t preambleCode = DecawaveUtils::getPreambleCode(m_channelNo);
-    uint8_t speed = DecawaveUtils::getDWSpeed(m_speed);
+    uint8_t preambleCode = DecawaveUtils::getPreambleCode(m_channel);
 
-    m_dwConfig = {
-        m_channelNo, DWT_PRF_64M,     preambleLength,
-        pacSize,     preambleCode,    preambleCode,
-        1, // Use decawaves SFD sequence
-        speed,       DWT_PHRMODE_STD, DecawaveUtils::getSFDTimeout(preambleLength, 64, pacSize)};
+    m_dwConfig = {static_cast<uint8>(as_integer(m_channel)),
+                  DWT_PRF_64M,
+                  preambleLength,
+                  pacSize,
+                  preambleCode,
+                  preambleCode,
+                  1, // Use decawaves SFD sequence
+                  static_cast<uint8>(as_integer(m_speed)),
+                  DWT_PHRMODE_STD,
+                  DecawaveUtils::getSFDTimeout(preambleLength, 64, pacSize)};
 
     deca_selectDevice(m_spiDevice);
     dwt_configure(&m_dwConfig);
@@ -293,7 +264,7 @@ void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
         frame->m_status = UWBRxStatus::FINISHED;
 
         // Read the frame into memory without the CRC16 located at the end of the frame
-        dwt_readrxdata(frame->m_rxBuffer.data(), m_callbackData.datalength - 2, 0);
+        dwt_readrxdata(frame->m_rxBuffer.data(), m_callbackData.datalength - UWB_CRC_LENGTH, 0);
         dwt_readrxtimestamp((uint8_t*)(&frame->m_rxTimestamp));
         return;
     }

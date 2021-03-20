@@ -5,10 +5,10 @@ InterlocManager::InterlocManager(ILogger& logger) :
     m_logger(logger), m_decaA(DW_A), m_decaB(DW_B) {}
 
 void InterlocManager::startInterloc() {
-    if (!m_decaA.start()) {
+    if (!m_decaA.init()) {
         m_logger.log(LogLevel::Warn, "Could not start Decawave A");
     }
-    if (!m_decaB.start()) {
+    if (!m_decaB.init()) {
         m_logger.log(LogLevel::Warn, "Could not start Decawave B");
     }
 

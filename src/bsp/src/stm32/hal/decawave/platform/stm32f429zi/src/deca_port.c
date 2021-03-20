@@ -3,10 +3,9 @@
 #include "main.h"
 #include "stm32f4xx_hal_conf.h"
 
-static decawaveDeviceConfig_t g_decaNssConfigA = {
-    DW_NSS_A_GPIO_Port, DW_NSS_A_Pin, DW_IRQn_A_GPIO_Port, DW_IRQn_A_Pin, 0, NULL, NULL};
-static decawaveDeviceConfig_t g_decaNssConfigB = {
-    DW_NSS_B_GPIO_Port, DW_NSS_B_Pin, DW_IRQn_B_GPIO_Port, DW_IRQn_B_Pin, 1, NULL, NULL};
+static decawaveDeviceConfig_t g_decawaveConfigs[DWT_NUM_DW_DEV] = {
+    {DW_NSS_A_GPIO_Port, DW_NSS_A_Pin, DW_IRQn_A_GPIO_Port, DW_IRQn_A_Pin, NULL, NULL},
+    {DW_NSS_B_GPIO_Port, DW_NSS_B_Pin, DW_IRQn_B_GPIO_Port, DW_IRQn_B_Pin, NULL, NULL}};
 
 static decaDevice_t g_selectedDecaDevice = DW_A;
 
@@ -80,27 +79,26 @@ void deca_init() {
 }
 
 void deca_selectDevice(decaDevice_t selectedDevice) {
-    g_selectedDecaDevice = selectedDevice;
-    dwt_setSelectedDevice(deca_getSelectedDevice()->deviceIndex);
-}
-
-decawaveDeviceConfig_t* deca_getSelectedDevice() { return deca_getDevice(g_selectedDecaDevice); }
-
-decawaveDeviceConfig_t* deca_getDevice(decaDevice_t device) {
-    switch (device) {
-    case DW_A:
-        return &g_decaNssConfigA;
-
-    case DW_B:
-        return &g_decaNssConfigB;
-
-    default:
-        return NULL;
+    if (selectedDevice < DWT_NUM_DW_DEV) {
+        g_selectedDecaDevice = selectedDevice;
+        dwt_setSelectedDevice(selectedDevice);
     }
 }
 
+decawaveDeviceConfig_t* deca_getSelectedDeviceConfig() {
+    return deca_getDeviceConfig(g_selectedDecaDevice);
+}
+
+decawaveDeviceConfig_t* deca_getDeviceConfig(decaDevice_t device) {
+    if (device < DWT_NUM_DW_DEV) {
+        return &g_decawaveConfigs[device];
+    }
+
+    return NULL;
+}
+
 void deca_setISRCallback(decaDevice_t device, decaISRCallback_t callback, void* context) {
-    decawaveDeviceConfig_t* deviceConfig = deca_getDevice(device);
+    decawaveDeviceConfig_t* deviceConfig = deca_getDeviceConfig(device);
 
     if (deviceConfig != NULL) {
         deviceConfig->isrCallback = callback;
@@ -109,7 +107,7 @@ void deca_setISRCallback(decaDevice_t device, decaISRCallback_t callback, void* 
 }
 
 void deca_isr(decaDevice_t selectedDevice) {
-    decawaveDeviceConfig_t* deviceConfig = deca_getDevice(selectedDevice);
+    decawaveDeviceConfig_t* deviceConfig = deca_getDeviceConfig(selectedDevice);
     if (deviceConfig == NULL) {
         return;
     }

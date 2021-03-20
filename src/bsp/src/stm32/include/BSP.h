@@ -7,7 +7,6 @@
 
 class BSP : public IBSP {
   public:
-    BSP();
     ~BSP() override;
 
     void initChip(void* args) override;
