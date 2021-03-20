@@ -1,4 +1,6 @@
 #include "BittyBuzzMessageService.h"
+#include "hivemind-host/MessageDTO.h"
+#include <bbzringbuf.h>
 
 BittyBuzzMessageService::BittyBuzzMessageService(ICircularQueue<MessageDTO>& hostQueue,
                                                  ICircularQueue<MessageDTO>& remoteQueue,
@@ -28,5 +30,10 @@ bool BittyBuzzMessageService::callHostFunction(uint16_t hostId,
     }
 
     // Remote
+    return m_remoteQueue.push(message);
+}
+
+bool BittyBuzzMessageService::sendBuzzMessage(const BuzzMessageDTO& msg) {
+    MessageDTO message(m_bsp.getUUId(), 0, msg);
     return m_remoteQueue.push(message);
 }

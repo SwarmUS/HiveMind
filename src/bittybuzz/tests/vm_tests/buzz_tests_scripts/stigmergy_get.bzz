@@ -1,0 +1,7 @@
+function init() {
+    stig = stigmergy.create(0);
+}
+
+function step() {
+  assert_true(stig.get("1"));
+}

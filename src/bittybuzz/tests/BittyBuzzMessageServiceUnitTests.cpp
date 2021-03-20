@@ -222,3 +222,29 @@ TEST_F(BittyBuzzMessageServiceTestFixture,
     // Expect
     EXPECT_FALSE(ret);
 }
+
+TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_sendBuzzMessage_pushValid) {
+    // Given
+    BuzzMessageDTO buzzMsg(NULL, 0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).WillOnce(testing::Return(true));
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
+
+    // Then
+    bool ret = m_messageService->sendBuzzMessage(buzzMsg);
+
+    // Expect
+    EXPECT_TRUE(ret);
+}
+
+TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_sendBuzzMessage_pushInvalid) {
+    // Given
+    BuzzMessageDTO buzzMsg(NULL, 0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).WillOnce(testing::Return(false));
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
+
+    // Then
+    bool ret = m_messageService->sendBuzzMessage(buzzMsg);
+
+    // Expect
+    EXPECT_FALSE(ret);
+}

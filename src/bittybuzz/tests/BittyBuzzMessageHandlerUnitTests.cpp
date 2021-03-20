@@ -8,6 +8,7 @@
 #include "mocks/CircularQueueInterfaceMock.h"
 #include "mocks/LoggerInterfaceMock.h"
 #include "mocks/UserInterfaceMock.h"
+#include <bbzinmsg.h>
 #include <bittybuzz/BittyBuzzMessageHandler.h>
 #include <bittybuzz/BittyBuzzVm.h>
 #include <gtest/gtest.h>
@@ -1160,4 +1161,28 @@ TEST_F(BittyBuzzMessageHandlerFixture,
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(fresp.getLength(), length);
+}
+
+TEST_F(BittyBuzzMessageHandlerFixture, BittyBuzzMessageHandler_processMessage_buzzmessage) {
+    // Given
+    // A valid buzz message, a stigmergy put, with id 57 as key and 42 as value
+    uint8_t payload[9] = {1, 1, 0, 1, 0, 57, 42, 0, 1};
+    BuzzMessageDTO buzzMessage(payload, 9);
+    MessageDTO message = MessageDTO(m_uuid, m_uuid, buzzMessage);
+    std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
+
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
+
+    // Then
+    bool ret = m_bbzMessageHandler->processMessage();
+
+    // Expect
+    uint8_t queueSize = bbzinmsg_queue_size();
+    EXPECT_TRUE(ret);
+    EXPECT_EQ(queueSize, 1);
 }

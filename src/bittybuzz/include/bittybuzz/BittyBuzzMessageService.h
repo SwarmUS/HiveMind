@@ -2,6 +2,7 @@
 #define __BITTYBUZZMESSAGESERVICE_H_
 
 #include "IBittyBuzzMessageService.h"
+#include <bbzmsg.h>
 #include <bsp/IBSP.h>
 #include <cpp-common/ICircularQueue.h>
 #include <logger/ILogger.h>
@@ -19,6 +20,8 @@ class BittyBuzzMessageService : public IBittyBuzzMessageService {
                           const char* functionName,
                           const FunctionCallArgumentDTO* args,
                           uint16_t argsLength) override;
+
+    bool sendBuzzMessage(const BuzzMessageDTO& msg) override;
 
   private:
     ICircularQueue<MessageDTO>& m_hostQueue;

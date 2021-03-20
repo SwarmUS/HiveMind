@@ -19,8 +19,7 @@ set(LIB_HEADERS
     include/message-handler/HiveMindApiRequestHandler.h
 
     include/message-handler/MessageHandlerContainer.h
-
-        )
+)
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS} ${LIB_SOURCES})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
@@ -37,6 +36,7 @@ target_include_directories(${LIB_NAME}
 target_link_libraries(${LIB_NAME}
     PUBLIC
         SwarmUS::HiveMind::BSP
+        SwarmUS::HiveMind::OS
         SwarmUS::HiveMind::Logger
         SwarmUS::Propolis::Cpp::Common
         SwarmUS::Propolis::Pheromones::HiveMind::Host

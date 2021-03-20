@@ -1,4 +1,6 @@
 #include "MessageDispatcher.h"
+#include "message.pb.h"
+#include <variant>
 
 MessageDispatcher::MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
                                      ICircularQueue<MessageDTO>& hostOutputQ,
@@ -114,13 +116,16 @@ bool MessageDispatcher::dispatchResponse(const MessageDTO& message, const Respon
 }
 
 bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
-    const std::variant<std::monostate, RequestDTO, ResponseDTO, GreetingDTO>& variantMsg =
-        message.getMessage();
+    const std::variant<std::monostate, RequestDTO, ResponseDTO, GreetingDTO, BuzzMessageDTO>&
+        variantMsg = message.getMessage();
     if (const auto* request = std::get_if<RequestDTO>(&variantMsg)) {
         return dispatchRequest(message, *request);
     }
     if (const auto* response = std::get_if<ResponseDTO>(&variantMsg)) {
         return dispatchResponse(message, *response);
+    }
+    if (std::holds_alternative<BuzzMessageDTO>(variantMsg)) {
+        return m_buzzOutputQueue.push(message);
     }
     if (std::holds_alternative<GreetingDTO>(variantMsg)) {
         m_logger.log(LogLevel::Warn, "Received greetings on the hivemind");

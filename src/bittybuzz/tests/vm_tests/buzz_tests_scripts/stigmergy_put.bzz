@@ -1,0 +1,7 @@
+function init() {
+    stig = stigmergy.create(0);
+}
+
+function step() {
+  stig.put("42", 42);
+}
