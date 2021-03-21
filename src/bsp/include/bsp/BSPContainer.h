@@ -26,7 +26,7 @@ namespace BSPContainer {
     IHostUart& getHostUart();
 
     /**
-     * @brief Returns an instance of the UserCRC driver.
+     * @brief Returns an instance of the HardwareCRC driver.
      */
     ICRC& getCRC();
 

@@ -1,9 +1,9 @@
 #include "bsp/BSPContainer.h"
 #include "BSP.h"
+#include "HardwareCRC.h"
 #include "HostUart.h"
 #include "SpiEsp.h"
 #include "USB.h"
-#include "UserCRC.h"
 #include "UserInterface.h"
 #include "logger/LoggerContainer.h"
 #include <InterlocManager.h>
@@ -26,7 +26,7 @@ IHostUart& BSPContainer::getHostUart() {
 }
 
 ICRC& BSPContainer::getCRC() {
-    static UserCRC s_crc;
+    static HardwareCRC s_crc;
 
     return s_crc;
 }
