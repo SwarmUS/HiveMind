@@ -8,19 +8,26 @@ extern "C" {
 #include "hivemind_hal.h"
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
+#include <deca_device_api.h>
+
+typedef void (*decaISRCallback_t)(void* context);
 
 /**
  * @brief Enum to specify which decawave we are addressing
  */
-typedef enum { DW_A = 0, DW_B } decaDevice_t;
+typedef enum { DW_A = 0, DW_B = 1 } decaDevice_t;
 
 /**
  * @brief Structure to hold a port and pin associated with a decawave NSS pin
  */
 typedef struct {
-    GPIO_TypeDef* port;
-    uint16_t pin;
-} decaNSSConfig_t;
+    GPIO_TypeDef* nssPort;
+    uint16_t nssPin;
+    GPIO_TypeDef* irqPort;
+    uint16_t irqPin;
+    void* isrContext;
+    decaISRCallback_t isrCallback;
+} decawaveDeviceConfig_t;
 
 /**
  * @brief Performs a hardware reset on a specific decawave
@@ -55,10 +62,30 @@ void deca_init();
 void deca_selectDevice(decaDevice_t selectedDevice);
 
 /**
- * @brief Gets the NSS configuration for the currently selected decawave
+ * @brief Gets the device configuration for the currently selected decawave
+ * @return The device configuration
+ */
+decawaveDeviceConfig_t* deca_getSelectedDeviceConfig();
+
+/**
+ * @brief Gets the NSS configuration for a given decawave
  * @return The NSS pin
  */
-decaNSSConfig_t* deca_getSelectedNSSConfig();
+decawaveDeviceConfig_t* deca_getDeviceConfig(decaDevice_t device);
+
+/**
+ * @brief Sets the ISR for a given decawave chip
+ * @param device The decawave chip
+ * @param callback The ISR callback
+ * @param context A context to pass to the callback
+ */
+void deca_setISRCallback(decaDevice_t device, decaISRCallback_t callback, void* context);
+
+/**
+ * @brief The entry point for all decawave interrupts
+ * @param selectedDevice The device that triggered the interrupt
+ */
+void deca_isr(decaDevice_t selectedDevice);
 
 #ifdef __cplusplus
 }

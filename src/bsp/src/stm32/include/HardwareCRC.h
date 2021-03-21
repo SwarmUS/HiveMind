@@ -1,15 +1,15 @@
-#ifndef __CRC_H__
-#define __CRC_H__
+#ifndef __HARDWARECRC_H__
+#define __HARDWARECRC_H__
 
 #include "bsp/ICRC.h"
 #include <FreeRTOS.h>
 #include <Mutex.h>
 #include <semphr.h>
 
-class CRC : public ICRC {
+class HardwareCRC : public ICRC {
   public:
-    CRC();
-    ~CRC() override = default;
+    HardwareCRC();
+    ~HardwareCRC() override = default;
 
     uint32_t calculateCRC32(const void* data, uint32_t length) override;
     uint8_t calculateCRC8(const void* data, uint32_t length) override;

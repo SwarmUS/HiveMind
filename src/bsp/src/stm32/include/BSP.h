@@ -7,7 +7,6 @@
 
 class BSP : public IBSP {
   public:
-    BSP();
     ~BSP() override;
 
     void initChip(void* args) override;
@@ -15,9 +14,6 @@ class BSP : public IBSP {
     uint16_t getUUId() const override;
 
     uint32_t generateRandomNumber() override;
-
-  private:
-    BaseTask<2 * configMINIMAL_STACK_SIZE> m_decaBlinkTask;
 };
 
 #endif // __BSP_H_

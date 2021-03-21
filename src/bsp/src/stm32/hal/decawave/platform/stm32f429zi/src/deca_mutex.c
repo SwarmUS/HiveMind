@@ -5,11 +5,16 @@
 // saving mechanism is already handled by the OS. We can only enter/exit a critical code section.
 
 decaIrqStatus_t decamutexon(void) {
-    vPortEnterCritical();
+    if (!xPortIsInsideInterrupt()) {
+        vPortEnterCritical();
+    }
     return 0;
 }
 
 void decamutexoff(decaIrqStatus_t s) {
     (void)s;
-    vPortExitCritical();
+
+    if (!xPortIsInsideInterrupt()) {
+        vPortExitCritical();
+    }
 }

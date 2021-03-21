@@ -82,12 +82,23 @@ typedef struct {
     dwt_cb_t cbRxOk; // Callback for RX good frame event
     dwt_cb_t cbRxTo; // Callback for RX timeout events
     dwt_cb_t cbRxErr; // Callback for RX error events
+    void* cbContext; // Context for callbacks
+    uint8 id;
 } dwt_local_data_t;
 
 static dwt_local_data_t
     dw1000local[DWT_NUM_DW_DEV]; // Static local device data, can be an array to support multiple
                                  // DW1000 testing applications/platforms
-static dwt_local_data_t* pdw1000local = dw1000local; // Static local data structure pointer
+static dwt_local_data_t* pdw1000local = &dw1000local[0]; // Static local data structure pointer
+
+void dwt_setSelectedDevice(uint8 deviceIdx) {
+    if (deviceIdx >= DWT_NUM_DW_DEV) {
+        deviceIdx = 0;
+    }
+
+    pdw1000local = &dw1000local[deviceIdx];
+    pdw1000local->id = deviceIdx;
+}
 
 /*!
  * ------------------------------------------------------------------------------------------------------------------
@@ -2324,16 +2335,19 @@ void dwt_setrxaftertxdelay(uint32 rxDelayTime) {
  * @param cbRxOk - the pointer to the RX good frame event callback function
  * @param cbRxTo - the pointer to the RX timeout events callback function
  * @param cbRxErr - the pointer to the RX error events callback function
+ * @param context - context to pass to the callback
  *
  * output parameters
  *
  * no return value
  */
-void dwt_setcallbacks(dwt_cb_t cbTxDone, dwt_cb_t cbRxOk, dwt_cb_t cbRxTo, dwt_cb_t cbRxErr) {
+void dwt_setcallbacks(
+    dwt_cb_t cbTxDone, dwt_cb_t cbRxOk, dwt_cb_t cbRxTo, dwt_cb_t cbRxErr, void* context) {
     pdw1000local->cbTxDone = cbTxDone;
     pdw1000local->cbRxOk = cbRxOk;
     pdw1000local->cbRxTo = cbRxTo;
     pdw1000local->cbRxErr = cbRxErr;
+    pdw1000local->cbContext = context;
 }
 
 /*!
@@ -2433,7 +2447,7 @@ void dwt_isr(void) {
 
         // Call the corresponding callback if present
         if (pdw1000local->cbRxOk != NULL) {
-            pdw1000local->cbRxOk(&pdw1000local->cbData);
+            pdw1000local->cbRxOk(&pdw1000local->cbData, pdw1000local->cbContext);
         }
 
         if (pdw1000local->dblbuffon) {
@@ -2459,7 +2473,7 @@ void dwt_isr(void) {
 
         // Call the corresponding callback if present
         if (pdw1000local->cbTxDone != NULL) {
-            pdw1000local->cbTxDone(&pdw1000local->cbData);
+            pdw1000local->cbTxDone(&pdw1000local->cbData, pdw1000local->cbContext);
         }
     }
 
@@ -2477,7 +2491,7 @@ void dwt_isr(void) {
 
         // Call the corresponding callback if present
         if (pdw1000local->cbRxTo != NULL) {
-            pdw1000local->cbRxTo(&pdw1000local->cbData);
+            pdw1000local->cbRxTo(&pdw1000local->cbData, pdw1000local->cbContext);
         }
     }
 
@@ -2495,7 +2509,7 @@ void dwt_isr(void) {
 
         // Call the corresponding callback if present
         if (pdw1000local->cbRxErr != NULL) {
-            pdw1000local->cbRxErr(&pdw1000local->cbData);
+            pdw1000local->cbRxErr(&pdw1000local->cbData, pdw1000local->cbContext);
         }
     }
 }
@@ -2567,7 +2581,7 @@ void dwt_lowpowerlistenisr(void) {
 
     // Call the corresponding callback if present
     if (pdw1000local->cbRxOk != NULL) {
-        pdw1000local->cbRxOk(&pdw1000local->cbData);
+        pdw1000local->cbRxOk(&pdw1000local->cbData, pdw1000local->cbContext);
     }
 }
 

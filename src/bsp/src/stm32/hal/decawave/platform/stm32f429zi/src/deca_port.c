@@ -1,9 +1,11 @@
 #include "deca_port.h"
+#include "deca_device_api.h"
 #include "main.h"
 #include "stm32f4xx_hal_conf.h"
 
-static decaNSSConfig_t g_decaNssConfigA = {DW_NSS_A_GPIO_Port, DW_NSS_A_Pin};
-static decaNSSConfig_t g_decaNssConfigB = {DW_NSS_B_GPIO_Port, DW_NSS_B_Pin};
+static decawaveDeviceConfig_t g_decawaveConfigs[DWT_NUM_DW_DEV] = {
+    {DW_NSS_A_GPIO_Port, DW_NSS_A_Pin, DW_IRQn_A_GPIO_Port, DW_IRQn_A_Pin, NULL, NULL},
+    {DW_NSS_B_GPIO_Port, DW_NSS_B_Pin, DW_IRQn_B_GPIO_Port, DW_IRQn_B_Pin, NULL, NULL}};
 
 static decaDevice_t g_selectedDecaDevice = DW_A;
 
@@ -66,7 +68,7 @@ void deca_setSlowRate() {
 }
 
 void deca_setFastRate() {
-    DW_SPI->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
+    DW_SPI->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
     HAL_SPI_Init(DW_SPI);
 }
 
@@ -76,17 +78,43 @@ void deca_init() {
     deca_setSlowRate();
 }
 
-void deca_selectDevice(decaDevice_t selectedDevice) { g_selectedDecaDevice = selectedDevice; }
+void deca_selectDevice(decaDevice_t selectedDevice) {
+    if (selectedDevice < DWT_NUM_DW_DEV) {
+        g_selectedDecaDevice = selectedDevice;
+        dwt_setSelectedDevice(selectedDevice);
+    }
+}
 
-decaNSSConfig_t* deca_getSelectedNSSConfig() {
-    switch (g_selectedDecaDevice) {
-    case DW_A:
-        return &g_decaNssConfigA;
+decawaveDeviceConfig_t* deca_getSelectedDeviceConfig() {
+    return deca_getDeviceConfig(g_selectedDecaDevice);
+}
 
-    case DW_B:
-        return &g_decaNssConfigB;
+decawaveDeviceConfig_t* deca_getDeviceConfig(decaDevice_t device) {
+    if (device < DWT_NUM_DW_DEV) {
+        return &g_decawaveConfigs[device];
+    }
 
-    default:
-        return NULL;
+    return NULL;
+}
+
+void deca_setISRCallback(decaDevice_t device, decaISRCallback_t callback, void* context) {
+    decawaveDeviceConfig_t* deviceConfig = deca_getDeviceConfig(device);
+
+    if (deviceConfig != NULL) {
+        deviceConfig->isrCallback = callback;
+        deviceConfig->isrContext = context;
+    }
+}
+
+void deca_isr(decaDevice_t selectedDevice) {
+    decawaveDeviceConfig_t* deviceConfig = deca_getDeviceConfig(selectedDevice);
+    if (deviceConfig == NULL) {
+        return;
+    }
+
+    while (HAL_GPIO_ReadPin(deviceConfig->irqPort, deviceConfig->irqPin) != GPIO_PIN_RESET) {
+        if (deviceConfig->isrCallback) {
+            deviceConfig->isrCallback(deviceConfig->isrContext);
+        }
     }
 }

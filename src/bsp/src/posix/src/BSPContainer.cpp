@@ -1,5 +1,6 @@
 #include "bsp/BSPContainer.h"
 #include "BSP.h"
+#include "InterlocManager.h"
 #include "SpiEspMock.h"
 #include "TCPUartMock.h"
 #include "USBMock.h"
@@ -30,4 +31,9 @@ ISpiEsp& BSPContainer::getSpiEsp() {
 IUSB& BSPContainer::getUSB() {
     static USBMock s_usb;
     return s_usb;
+}
+
+IInterlocManager& BSPContainer::getInterlocManager() {
+    static InterlocManager s_interlocManager;
+    return s_interlocManager;
 }

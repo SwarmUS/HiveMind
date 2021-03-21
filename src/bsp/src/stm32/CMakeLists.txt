@@ -7,25 +7,33 @@ set(LIB_SOURCES
     src/UserInterface.cpp
     src/SocketContainer.cpp
     src/HostUart.cpp
-    src/CRC.cpp
+        src/HardwareCRC.cpp
     src/SocketFactory.cpp
     src/TCPClient.cpp
     src/SettingsContainer.cpp
     src/SpiEsp.cpp
+
     src/USB.cpp
-    )
+    src/Decawave.cpp
+    src/DecawaveUtils.cpp
+    src/InterlocManager.cpp)
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
     include/UserInterface.h
     include/HostUart.h
-    include/CRC.h
+        include/HardwareCRC.h
     include/SocketFactory.h
     include/TCPClient.h
     include/DefaultSettings.h
     include/SpiEsp.h
     include/SpiHeader.h
-    include/USB.h)
+    include/USB.h
+
+    include/Decawave.h
+    include/DecawaveUtils.h
+    include/UWBRxFrame.h
+    include/InterlocManager.h)
 
 include(DefaultSettings.cmake)
 configure_file(include/DefaultSettings.in.h include/DefaultSettings.h)
@@ -57,6 +65,7 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::HAL
         SwarmUS::HiveMind::LWIP
         SwarmUS::Propolis::Pheromones::Common
+        SwarmUS::Propolis::Cpp::Common
 )
 
 add_custom_target(

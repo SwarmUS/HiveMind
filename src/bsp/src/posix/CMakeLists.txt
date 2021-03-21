@@ -20,7 +20,8 @@ set(LIB_PRIVATE_HEADERS
     include/SocketFactory.h
     include/TCPClient.h
     include/TCPUartMock.h
-    include/USBMock.h)
+    include/USBMock.h
+    include/InterlocManager.h)
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_PRIVATE_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})

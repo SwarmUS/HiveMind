@@ -60,7 +60,7 @@ typedef signed long int32;
 #endif
 
 #ifndef DWT_NUM_DW_DEV
-#define DWT_NUM_DW_DEV (1)
+#define DWT_NUM_DW_DEV (2)
 #endif
 
 #define DWT_SUCCESS (0)
@@ -224,7 +224,7 @@ typedef struct {
 } dwt_cb_data_t;
 
 // Call-back type for all events
-typedef void (*dwt_cb_t)(const dwt_cb_data_t*);
+typedef void (*dwt_cb_t)(const dwt_cb_data_t*, void* context);
 
 /*!
  * ------------------------------------------------------------------------------------------------------------------
@@ -1233,12 +1233,14 @@ int dwt_spicswakeup(uint8* buff, uint16 length);
  * @param cbRxOk - the pointer to the RX good frame event callback function
  * @param cbRxTo - the pointer to the RX timeout events callback function
  * @param cbRxErr - the pointer to the RX error events callback function
+ * @param context - context to pass to the callback
  *
  * output parameters
  *
  * no return value
  */
-void dwt_setcallbacks(dwt_cb_t cbTxDone, dwt_cb_t cbRxOk, dwt_cb_t cbRxTo, dwt_cb_t cbRxErr);
+void dwt_setcallbacks(
+    dwt_cb_t cbTxDone, dwt_cb_t cbRxOk, dwt_cb_t cbRxTo, dwt_cb_t cbRxErr, void* context);
 
 /*!
  * ------------------------------------------------------------------------------------------------------------------
@@ -2209,6 +2211,12 @@ void decamutexoff(decaIrqStatus_t s);
  * no return value
  */
 void deca_sleep(unsigned int time_ms);
+
+/**
+ * @brief Sets the internal deca state to the given index
+ * @param deviceIdx Index of the selected device
+ */
+void dwt_setSelectedDevice(uint8 deviceIdx);
 
 #ifdef __cplusplus
 }

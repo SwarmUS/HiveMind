@@ -18,7 +18,8 @@ set(LIB_HEADERS
     include/bsp/ITCPClient.h
     include/bsp/SocketContainer.h
     include/bsp/SettingsContainer.h
-    include/bsp/IUSB.h)
+    include/bsp/IUSB.h
+    include/bsp/IInterlocManager.h)
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})

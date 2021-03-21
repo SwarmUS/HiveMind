@@ -2,6 +2,7 @@
 #define _BSPFACTORY_H
 
 #include "ICRC.h"
+#include "IInterlocManager.h"
 #include "bsp/IBSP.h"
 #include "bsp/IHostUart.h"
 #include "bsp/ISpiEsp.h"
@@ -25,7 +26,7 @@ namespace BSPContainer {
     IHostUart& getHostUart();
 
     /**
-     * @brief Returns an instance of the CRC driver.
+     * @brief Returns an instance of the HardwareCRC driver.
      */
     ICRC& getCRC();
 
@@ -38,6 +39,11 @@ namespace BSPContainer {
      * @brief Returns an instance of the USB CDC driver
      */
     IUSB& getUSB();
+
+    /**
+     * @brief Returns an instance of the interloc manager
+     */
+    IInterlocManager& getInterlocManager();
 } // namespace BSPContainer
 
 #endif // _BSPFACTORY_H
