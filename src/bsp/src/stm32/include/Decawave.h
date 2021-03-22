@@ -10,6 +10,15 @@
 #include <functional>
 #include <memory>
 #include <task.h>
+//calibration constants
+#define TX_ANT_DLY 16505
+#define RX_ANT_DLY 16505
+
+#define POLL_TX_TO_RESP_RX_DLY_UUS  300
+#define RESP_RX_TO_FINAL_TX_DLY_UUS 3100
+#define RESP_RX_TIMEOUT_UUS 2700
+
+
 
 enum class DW_LED { LED_0 = DWT_GxM0, LED_1 = DWT_GxM1, LED_2 = DWT_GxM2, LED_3 = DWT_GxM3 };
 
@@ -125,6 +134,16 @@ class Decawave {
                                    uint32_t rxAfterTxTimeUs,
                                    UWBRxFrame& frame,
                                    uint16_t rxTimeoutUs);
+
+    bool transmitAndReceiveDelayed(uint8_t* buf,
+                                             uint16_t length,
+                                             uint32_t rxStartDelayUS,
+                                             UWBRxFrame& frame,
+                                             uint16_t rxTimeoutUs);
+
+    //TEMP
+    void setTxAntennaDLY(uint16 delay);
+    void setRxAntennaDLY(uint16 delay);
 
   private:
     decaDevice_t m_spiDevice;
