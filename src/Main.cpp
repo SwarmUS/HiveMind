@@ -53,6 +53,19 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
     }
 };
 
+class HostUsbConnexionGreet : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+  private:
+    void task() override {
+        auto& usb = BSPContainer::getUSB();
+        while (true) {
+            if (usb.isConnected()) {
+                m_hostStream = &usb;
+                m_logger.log(LogLevel::Info, "Host connected via USB");
+            }
+        }
+    }
+};
+
 class HostMessageDispatcher : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     HostMessageDispatcher(const char* taskName, UBaseType_t priority) :

@@ -7,7 +7,7 @@
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <logger/ILogger.h>
 
-class MessageSender : IMessageSender {
+class MessageSender : public IMessageSender {
   public:
     MessageSender(ICircularQueue<MessageDTO>& inputQueue,
                   IHiveMindHostSerializer& serializer,
@@ -15,8 +15,6 @@ class MessageSender : IMessageSender {
                   ILogger& logger);
 
     ~MessageSender() override = default;
-
-    bool greet() override;
 
     bool processAndSerialize() override;
 
