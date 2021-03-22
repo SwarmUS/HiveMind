@@ -72,7 +72,8 @@ void MX_GPIO_Init(void) {
     HAL_GPIO_WritePin(DW_WU_A_GPIO_Port, DW_WU_A_Pin, GPIO_PIN_RESET);
 
     /*Configure GPIO pin Output Level */
-    HAL_GPIO_WritePin(DW_GPIO4_B_GPIO_Port, DW_GPIO4_B_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOD, DW_GPIO4_B_Pin | DW_SYNC_Pin | DW_SYNC_CLEAR_Pin | DW_SYNC_EN_Pin,
+                      GPIO_PIN_RESET);
 
     /*Configure GPIO pin Output Level */
     HAL_GPIO_WritePin(GPIOD, DW_GPIO5_B_Pin | DW_GPIO6_B_Pin, GPIO_PIN_SET);
@@ -159,12 +160,12 @@ void MX_GPIO_Init(void) {
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-    /*Configure GPIO pin : PtPin */
-    GPIO_InitStruct.Pin = DW_GPIO4_B_Pin;
+    /*Configure GPIO pins : PDPin PDPin PDPin PDPin */
+    GPIO_InitStruct.Pin = DW_GPIO4_B_Pin | DW_SYNC_Pin | DW_SYNC_CLEAR_Pin | DW_SYNC_EN_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(DW_GPIO4_B_GPIO_Port, &GPIO_InitStruct);
+    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
     /*Configure GPIO pins : PDPin PDPin */
     GPIO_InitStruct.Pin = DW_GPIO5_B_Pin | DW_GPIO6_B_Pin;

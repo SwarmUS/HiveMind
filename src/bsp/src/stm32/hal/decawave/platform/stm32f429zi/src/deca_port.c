@@ -118,3 +118,15 @@ void deca_isr(decaDevice_t selectedDevice) {
         }
     }
 }
+
+void deca_setSync(bool state) {
+    HAL_GPIO_WritePin(DW_SYNC_GPIO_Port, DW_SYNC_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
+}
+
+void deca_setSyncEnable(bool state) {
+    HAL_GPIO_WritePin(DW_SYNC_GPIO_Port, DW_SYNC_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
+}
+
+void deca_setSyncClear(bool state) {
+    HAL_GPIO_WritePin(DW_SYNC_GPIO_Port, DW_SYNC_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
+}

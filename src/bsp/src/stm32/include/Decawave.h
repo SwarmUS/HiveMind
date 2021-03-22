@@ -26,6 +26,7 @@
 #define DEFAULT_CHANNEL CHANNEL_2
 
 enum class DW_LED { LED_0 = DWT_GxM0, LED_1 = DWT_GxM1, LED_2 = DWT_GxM2, LED_3 = DWT_GxM3 };
+enum class DW_SYNC_MODE { OSTR, OFF };
 enum class DW_STATE { CONFIGURED, SEND_CALIB, RESPOND_CALIB, CALIBRATED };
 
 class Decawave {
@@ -154,6 +155,12 @@ class Decawave {
                                    uint32_t rxStartDelayUS,
                                    UWBRxFrame& frame,
                                    uint16_t rxTimeoutUs);
+
+    /**
+     * Sets the SYNC register for a given mode
+     * @param syncMode Mode to set
+     */
+    void setSyncMode(DW_SYNC_MODE syncMode);
 
     /**
      * @brief Sets transmission antenna delay in DecawaveTimeUnits

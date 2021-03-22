@@ -24,6 +24,11 @@ class InterlocManager : public IInterlocManager {
     void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
                                    void* context) override;
 
+    /**
+     * Syncs the clocks of both DW1000s
+     */
+    void syncClocks();
+
   private:
     ILogger& m_logger;
     Decawave m_decaA;

@@ -5,6 +5,8 @@
 #include <deca_device_api.h>
 #include <deca_regs.h>
 
+#define OSTR_WAIT_TIME ((((uint16)33) & 0xff) << 3)
+
 void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
 
@@ -289,6 +291,31 @@ void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
         frame->m_status = UWBRxStatus::ERROR;
     }
 }
+void Decawave::setSyncMode(DW_SYNC_MODE syncMode) {
+    decaIrqStatus_t irqStatus = decamutexon();
+    dwt_setSelectedDevice(m_spiDevice);
+    uint16_t regValue;
+
+    switch (syncMode) {
+
+    case DW_SYNC_MODE::OSTR:
+        regValue = dwt_read16bitoffsetreg(EXT_SYNC_ID, EC_CTRL_OFFSET);
+        regValue &= EC_CTRL_WAIT_MASK; // Clear previous wait value
+        regValue |= EC_CTRL_OSTRM;
+        regValue |= OSTR_WAIT_TIME;
+        dwt_write16bitoffsetreg(EXT_SYNC_ID, EC_CTRL_OFFSET, regValue);
+        break;
+
+    case DW_SYNC_MODE::OFF:
+        regValue = dwt_read16bitoffsetreg(EXT_SYNC_ID, EC_CTRL_OFFSET);
+        regValue &= EC_CTRL_WAIT_MASK; // Clear previous wait value
+        dwt_write16bitoffsetreg(EXT_SYNC_ID, EC_CTRL_OFFSET, regValue);
+        break;
+    }
+
+    decamutexoff(irqStatus);
+}
+
 
 void Decawave::setTxAntennaDLY(uint16 delay) {
     deca_selectDevice(m_spiDevice);
