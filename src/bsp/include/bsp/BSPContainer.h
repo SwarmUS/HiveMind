@@ -4,7 +4,6 @@
 #include "ICRC.h"
 #include "IInterlocManager.h"
 #include "bsp/IBSP.h"
-#include "bsp/IHostUart.h"
 #include "bsp/ISpiEsp.h"
 #include "bsp/IUSB.h"
 #include "bsp/IUserInterface.h"
@@ -19,11 +18,6 @@ namespace BSPContainer {
      * @brief Returns an instance of the platform dependent UserInterface.
      */
     IUserInterface& getUserInterface();
-
-    /**
-     * @brief Returns an instance of the Host UART driver.
-     */
-    IHostUart& getHostUart();
 
     /**
      * @brief Returns an instance of the HardwareCRC driver.
