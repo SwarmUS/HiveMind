@@ -1,7 +1,6 @@
 #include "bsp/BSPContainer.h"
 #include "BSP.h"
 #include "HardwareCRC.h"
-#include "HostUart.h"
 #include "SpiEsp.h"
 #include "USB.h"
 #include "UserInterface.h"
