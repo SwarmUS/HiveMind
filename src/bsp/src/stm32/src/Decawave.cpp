@@ -228,6 +228,23 @@ bool Decawave::transmitDelayedAndReceive(uint8_t* buf,
     receiveInternal(frame, 0, 0, true);
     return true;
 }
+bool Decawave::transmitAndReceiveDelayed(uint8_t* buf,
+                                         uint16_t length,
+                                         uint32_t rxStartDelayUS,
+                                         UWBRxFrame& frame,
+                                         uint16_t rxTimeoutUs){
+    deca_selectDevice(m_spiDevice);
+    dwt_setrxaftertxdelay(rxStartDelayUS);
+    dwt_setrxtimeout(rxTimeoutUs);
+
+    if(!transmitInternal(buf, length, DWT_START_TX_IMMEDIATE | DWT_RESPONSE_EXPECTED)) {
+        return false;
+    }
+    receiveInternal(frame, 0, 0, true);
+    return true;
+
+
+}
 
 void Decawave::configureDW() {
     uint8_t preambleLength = DecawaveUtils::getPreambleLength(m_speed);
@@ -275,4 +292,14 @@ void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
     } else if ((m_callbackData.status & SYS_STATUS_ALL_RX_ERR) != 0U) {
         frame->m_status = UWBRxStatus::ERROR;
     }
+}
+
+void Decawave::setTxAntennaDLY(uint16 delay){
+    deca_selectDevice(m_spiDevice);
+    dwt_settxantennadelay(delay);
+}
+
+void Decawave::setRxAntennaDLY(uint16 delay){
+    deca_selectDevice(m_spiDevice);
+    dwt_setrxantennadelay(delay);
 }

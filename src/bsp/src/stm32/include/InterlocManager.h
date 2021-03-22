@@ -11,6 +11,7 @@ class InterlocManager : public IInterlocManager {
     ~InterlocManager() override = default;
 
     void startInterloc() override;
+    void startCalibAntenna(Decawave device, uint16_t distance);
 
   private:
     ILogger& m_logger;
