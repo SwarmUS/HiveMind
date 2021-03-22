@@ -2,7 +2,7 @@
 #include "usbd_cdc_if.h"
 
 uint8_t cbuffUsbData[CBUFF_USB_DATA_SIZE];
-void (*usb_rxCallback)(); //(uint8_t* buf, uint32_t len)=NULL;
+void (*usb_rxCallback)();
 void* usb_rxCallbackContext;
 
 USB_StatusTypeDef usb_hasTxFinished(USBD_CDC_HandleTypeDef* hcdc) {
@@ -19,7 +19,7 @@ USB_StatusTypeDef usb_sendData(const uint8_t* buf, uint16_t Len) {
     return usb_hasTxFinished(hcdc);
 }
 
-bool usb_isConnected() { return USB_DEVICE.dev_connection_status; }
+bool usb_isConnected() { return USB_DEVICE.dev_state == USBD_STATE_CONFIGURED; }
 
 void usb_init() { CircularBuff_init(&cbuffUsb, cbuffUsbData, CBUFF_USB_DATA_SIZE); }
 

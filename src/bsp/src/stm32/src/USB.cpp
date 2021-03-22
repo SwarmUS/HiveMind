@@ -1,8 +1,7 @@
 #include "hal/usb.h"
+#include "Task.h"
 #include "usbd_cdc_if.h"
-#include <FreeRTOS.h>
 #include <USB.h>
-#include <task.h>
 
 #define USB_RxBUFFER_MAX_SIZE 2048
 void USB::interruptRxCallback(void* context, uint8_t* buffer, uint32_t length) {
@@ -14,6 +13,9 @@ bool USB::send(const uint8_t* buffer, uint16_t length) {
     if (buffer == nullptr) {
         m_logger.log(LogLevel::Warn, "Invalid parameters for USB::send");
         return false;
+    }
+    while (!usb_isConnected()) {
+        Task::delay(100);
     }
 
     int position = 0;
@@ -55,6 +57,7 @@ void USB::receiveItCallback(uint8_t* buf, uint32_t len) {
     if (CircularBuff_getLength(&cbuffUsb) + len > CBUFF_USB_DATA_SIZE) {
         // TODO should notify the user of an error
         CircularBuff_clear(&cbuffUsb);
+        m_logger.log(LogLevel::Error, "USB buffer full, erasing circular buffer");
         return;
     }
 
