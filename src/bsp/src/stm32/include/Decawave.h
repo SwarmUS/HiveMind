@@ -1,6 +1,7 @@
 #ifndef __DECAWAVE_H__
 #define __DECAWAVE_H__
 
+#include "DecawaveUtils.h"
 #include "UWBRxFrame.h"
 #include "deca_device_api.h"
 #include "deca_port.h"
@@ -11,15 +12,6 @@
 #include <task.h>
 
 enum class DW_LED { LED_0 = DWT_GxM0, LED_1 = DWT_GxM1, LED_2 = DWT_GxM2, LED_3 = DWT_GxM3 };
-enum class UWBSpeed { SPEED_110K = DWT_BR_110K, SPEED_850K = DWT_BR_850K, SPEED_6M8 = DWT_BR_6M8 };
-enum class UWBChannel {
-    CHANNEL_1 = 1,
-    CHANNEL_2 = 2,
-    CHANNEL_3 = 3,
-    CHANNEL_4 = 4,
-    CHANNEL_5 = 5,
-    CHANNEL_7 = 7
-};
 
 class Decawave {
   public:

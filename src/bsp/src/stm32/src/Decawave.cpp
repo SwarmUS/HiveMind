@@ -1,12 +1,9 @@
 #include "Decawave.h"
-#include <DecawaveUtils.h>
-#include <FreeRTOS.h>
 #include <Task.h>
 #include <cpp-common/CppUtils.h>
 #include <cstring>
 #include <deca_device_api.h>
 #include <deca_regs.h>
-#include <task.h>
 
 void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));

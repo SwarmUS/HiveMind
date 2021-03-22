@@ -1,6 +1,8 @@
 #ifndef HIVE_MIND_UWBMESSAGES_H
 #define HIVE_MIND_UWBMESSAGES_H
 
+#include <cstdint>
+
 namespace UWBMessages {
     enum FrameType { BEACON = 0x0, DATA = 0x2, ACK = 0x3, MAC_COMMAND = 0x4 };
     enum AddressMode { SHORT_ADDRESS = 0x2 };
