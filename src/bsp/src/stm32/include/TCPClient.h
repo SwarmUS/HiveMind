@@ -15,10 +15,13 @@ class TCPClient : public ITCPClient {
 
     bool send(const uint8_t* data, uint16_t length) override;
 
+    bool isConnected() const override;
+
     bool close() override;
 
   private:
     ILogger& m_logger;
+    bool m_connected;
     const int m_socketFd;
     const sockaddr_in m_address;
 };
