@@ -212,7 +212,7 @@ int main(int argc, char** argv) {
 
     static BittyBuzzTask s_bittybuzzTask("bittybuzz", tskIDLE_PRIORITY + 1);
     static HostMessageDispatcher s_hostDispatchTask("tcp_dispatch", tskIDLE_PRIORITY + 1);
-    static HostMessageSender s_hostMessageSender("uart_send", tskIDLE_PRIORITY + 1,
+    static HostMessageSender s_hostMessageSender("host_send", tskIDLE_PRIORITY + 1,
                                                  s_hostDispatchTask);
     static RemoteMessageDispatcher s_spiDispatchTask("spi_dispatch", tskIDLE_PRIORITY + 1);
     static RemoteMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);

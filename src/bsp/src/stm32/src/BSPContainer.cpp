@@ -19,12 +19,6 @@ IUserInterface& BSPContainer::getUserInterface() {
     return s_ui;
 }
 
-IHostUart& BSPContainer::getHostUart() {
-    static HostUart s_hostUart(getCRC(), LoggerContainer::getLogger());
-
-    return s_hostUart;
-}
-
 ICRC& BSPContainer::getCRC() {
     static HardwareCRC s_crc;
 

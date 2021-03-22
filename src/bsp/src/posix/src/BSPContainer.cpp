@@ -2,7 +2,6 @@
 #include "BSP.h"
 #include "InterlocManager.h"
 #include "SpiEspMock.h"
-#include "TCPUartMock.h"
 #include "USBMock.h"
 #include "UserInterface.h"
 #include "logger/LoggerContainer.h"
@@ -16,11 +15,6 @@ IBSP& BSPContainer::getBSP() {
 IUserInterface& BSPContainer::getUserInterface() {
     static UserInterface s_ui;
     return s_ui;
-}
-
-IHostUart& BSPContainer::getHostUart() {
-    static TCPUartMock s_hostUart(LoggerContainer::getLogger());
-    return s_hostUart;
 }
 
 ISpiEsp& BSPContainer::getSpiEsp() {
