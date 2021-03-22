@@ -10,7 +10,6 @@ set(LIB_SOURCES
     src/TCPClient.cpp
     src/SocketContainer.cpp
     src/SocketFactory.cpp
-    src/TCPUartMock.cpp
     src/SettingsContainer.cpp
     src/SpiEspMock.cpp)
 
@@ -19,7 +18,6 @@ set(LIB_PRIVATE_HEADERS
     include/UserInterface.h
     include/SocketFactory.h
     include/TCPClient.h
-    include/TCPUartMock.h
     include/USBMock.h
     include/InterlocManager.h)
 

@@ -6,8 +6,7 @@ set(LIB_SOURCES
     src/BSPContainer.cpp
     src/UserInterface.cpp
     src/SocketContainer.cpp
-    src/HostUart.cpp
-        src/HardwareCRC.cpp
+    src/HardwareCRC.cpp
     src/SocketFactory.cpp
     src/TCPClient.cpp
     src/SettingsContainer.cpp
@@ -21,7 +20,6 @@ set(LIB_SOURCES
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
     include/UserInterface.h
-    include/HostUart.h
     include/HardwareCRC.h
     include/SocketFactory.h
     include/TCPClient.h
