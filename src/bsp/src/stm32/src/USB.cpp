@@ -1,7 +1,5 @@
 #include "hal/usb.h"
-#include "FreeRTOS.h"
 #include "Task.h"
-#include "task.h"
 #include "usbd_cdc_if.h"
 #include <USB.h>
 
