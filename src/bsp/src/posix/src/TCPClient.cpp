@@ -13,9 +13,9 @@ bool TCPClient::receive(uint8_t* data, uint16_t length) {
 }
 
 bool TCPClient::send(const uint8_t* data, uint16_t length) {
-    ssize_t ret = ::send(m_socketFd, data, length, 0) == length;
+    ssize_t ret = ::send(m_socketFd, data, length, 0);
     m_connected = ret != -1;
-    return ret;
+    return ret == length;
 }
 
 bool TCPClient::isConnected() const { return m_connected; }

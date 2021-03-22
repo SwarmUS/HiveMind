@@ -24,11 +24,12 @@ class SpiEspMock : public ISpiEsp {
 
     bool isConnected() const override;
 
-    void close() const;
+    void close();
     friend void SpiMock_listenTask(void* param);
 
   private:
     ILogger& m_logger;
+    bool m_connected;
 
     BaseTask<configMINIMAL_STACK_SIZE * 2> m_listenTask;
 
