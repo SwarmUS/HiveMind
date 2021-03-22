@@ -43,8 +43,8 @@ bool InterlocManager::constructUWBHeader(uint16_t destinationId,
     }
 
     UWBMessages::DWFrame* header = (UWBMessages::DWFrame*)buffer;
-    header->m_header = {{frameType, // Frame Type
-                         0, // Security disabled
+    header->m_header = {{frameType, // Frame Type                                                       3
+                         0, // Security disabled                             1
                          0, // Frame pending
                          0, // ACK request TODO: Maybe make this configurable later on
                          1, // Compress PAN ID
@@ -62,7 +62,7 @@ bool InterlocManager::constructUWBHeader(uint16_t destinationId,
 }
 
 // must start with button
-void InterlocManager::startCalibAntenna(Decawave device, uint16_t distance) {
+void InterlocManager::startCalibAntennaInit(Decawave device, uint16_t distance) {
     device.setChannel(UWBChannel::CHANNEL_5);
     device.setTxAntennaDLY(TX_ANT_DLY);
     device.setRxAntennaDLY(RX_ANT_DLY);
@@ -72,9 +72,12 @@ void InterlocManager::startCalibAntenna(Decawave device, uint16_t distance) {
     UWBRxFrame frame;
     //start TWR
     while(erDLY > error_margin ){
-        device.transmitAndReceiveDelayed(twrMSg, 0,POLL_TX_TO_RESP_RX_DLY_UUS,frame,RESP_RX_TIMEOUT_UUS);
+        uint8_t pollMsg[sizeof(UWBMessages::DWFrame)];
+        constructUWBHeader(0x69,UWBMessages::BEACON,UWBMessages::TWR_POLL,pollMsg,sizeof(UWBMessages::DWFrame));
+        device.transmitAndReceiveDelayed(pollMsg, 0,POLL_TX_TO_RESP_RX_DLY_UUS,frame,RESP_RX_TIMEOUT_UUS);
     }
-    //for 1000 times
 }
+
+void InterlocManager::startCalibAntennaRespond(Decawave device, uint16_t distance){}
 
 //void sentTo(Id, mes);
