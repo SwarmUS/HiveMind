@@ -15,7 +15,7 @@ class USB : public IUSB {
 
     bool send(const uint8_t* buffer, uint16_t length) override;
     bool receive(uint8_t* buffer, uint16_t length) override;
-    bool isConnected() override;
+    bool isConnected() const override;
 
   private:
     static void interruptRxCallback(void* context, uint8_t* buffer, uint32_t length);

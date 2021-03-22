@@ -2,6 +2,8 @@
 #ifndef HIVE_MIND_USBMOCK_H
 #define HIVE_MIND_USBMOCK_H
 
+#include "bsp/IUSB.h"
+
 class USBMock : public IUSB {
   public:
     ~USBMock() override = default;
@@ -18,7 +20,7 @@ class USBMock : public IUSB {
 
         return true;
     }
-    bool isConnected() override { return true; }
+    bool isConnected() const override { return true; }
 };
 
 #endif // HIVE_MIND_USBMOCK_H
