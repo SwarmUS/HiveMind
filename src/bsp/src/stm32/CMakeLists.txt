@@ -22,7 +22,7 @@ set(LIB_PRIVATE_HEADERS
     include/BSP.h
     include/UserInterface.h
     include/HostUart.h
-        include/HardwareCRC.h
+    include/HardwareCRC.h
     include/SocketFactory.h
     include/TCPClient.h
     include/DefaultSettings.h
@@ -33,7 +33,8 @@ set(LIB_PRIVATE_HEADERS
     include/Decawave.h
     include/DecawaveUtils.h
     include/UWBRxFrame.h
-    include/InterlocManager.h)
+    include/InterlocManager.h
+    include/UWBMessages.h)
 
 include(DefaultSettings.cmake)
 configure_file(include/DefaultSettings.in.h include/DefaultSettings.h)

@@ -1,7 +1,18 @@
 #ifndef __DECAWAVEUTILS_H__
 #define __DECAWAVEUTILS_H__
 
-#include "Decawave.h"
+#include <cstdint>
+#include <deca_device_api.h>
+
+enum class UWBSpeed { SPEED_110K = DWT_BR_110K, SPEED_850K = DWT_BR_850K, SPEED_6M8 = DWT_BR_6M8 };
+enum class UWBChannel {
+    CHANNEL_1 = 1,
+    CHANNEL_2 = 2,
+    CHANNEL_3 = 3,
+    CHANNEL_4 = 4,
+    CHANNEL_5 = 5,
+    CHANNEL_7 = 7
+};
 
 namespace DecawaveUtils {
 

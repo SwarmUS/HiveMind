@@ -1,6 +1,7 @@
 #ifndef __UWBRXFRAME_H__
 #define __UWBRXFRAME_H__
 
+#include "UWBMessages.h"
 #include <array>
 
 #define UWB_MAX_LENGTH 127
@@ -15,6 +16,8 @@ struct UWBRxFrame {
     uint32_t m_statusReg = 0;
 
     std::array<uint8_t, UWB_MAX_LENGTH - UWB_CRC_LENGTH> m_rxBuffer;
+    UWBMessages::DWFrame* m_frame = reinterpret_cast<UWBMessages::DWFrame*>(m_rxBuffer.data());
+    uint8_t* m_payload = m_rxBuffer.data() + sizeof(UWBMessages::DWFrame);
 };
 
 #endif //__UWBRXFRAME_H__
