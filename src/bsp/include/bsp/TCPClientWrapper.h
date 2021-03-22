@@ -17,6 +17,8 @@ class TCPClientWrapper : public ITCPClient {
 
     bool send(const uint8_t* data, uint16_t length) override { return m_client.send(data, length); }
 
+    bool isConnected() const override { return m_client.isConnected(); }
+
     bool close() override { return m_client.close(); }
 
   private:

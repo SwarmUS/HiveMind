@@ -19,6 +19,8 @@ class TCPClient : public ITCPClient {
 
     bool send(const uint8_t* data, uint16_t length) override;
 
+    bool isConnected() const override;
+
     bool close() override;
 
     friend void rxThread(TCPClient* context);
@@ -27,6 +29,7 @@ class TCPClient : public ITCPClient {
     ILogger& m_logger;
     const int m_socketFd{};
     const sockaddr_in m_address{};
+    bool m_connected;
 };
 
 #endif // __TCPCLIENT_H_

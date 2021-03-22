@@ -51,7 +51,7 @@ bool USB::receive(uint8_t* buffer, uint16_t length) {
     return true;
 }
 
-bool USB::isConnected() { return usb_isConnected(); }
+bool USB::isConnected() const { return usb_isConnected(); }
 
 void USB::receiveItCallback(uint8_t* buf, uint32_t len) {
     if (CircularBuff_getLength(&cbuffUsb) + len > CBUFF_USB_DATA_SIZE) {

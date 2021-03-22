@@ -1,13 +1,13 @@
 #ifndef __ISPIESP_H__
 #define __ISPIESP_H__
 
-#include "common/IProtobufStream.h"
+#include "ICommInterface.h"
 #include <cstdint>
 
 #define CRC32_SIZE sizeof(uint32_t)
 #define ESP_SPI_MAX_MESSAGE_LENGTH (2048u - CRC32_SIZE)
 
-class ISpiEsp : public IProtobufStream {
+class ISpiEsp : public ICommInterface {
   public:
     virtual ~ISpiEsp() = default;
 
@@ -18,7 +18,7 @@ class ISpiEsp : public IProtobufStream {
      * @param length Number of bytes to send
      * @return True if transfer started. False otherwise.
      */
-    bool send(const uint8_t* buffer, uint16_t length) override = 0;
+    virtual bool send(const uint8_t* buffer, uint16_t length) = 0;
 
     /**
      * @brief Receives up to an amount of data from the SPI channel
@@ -26,14 +26,16 @@ class ISpiEsp : public IProtobufStream {
      * @param length Maximum length of data to receive
      * @return True if success, false otherwise.
      */
-    bool receive(uint8_t* buffer, uint16_t length) override = 0;
+    virtual bool receive(uint8_t* buffer, uint16_t length) = 0;
 
     /**
      * @brief Checks if driver is already busy transmitting data.
-     * @return True if in use. False otherwise
-     */
+     * @return True if in use. False otherwise */
     virtual bool isBusy() const = 0;
 
+    /**
+     * @brief Tells if interface is connected and functionning
+     * @return true if connected, false otherwise */
     virtual bool isConnected() const = 0;
 };
 
