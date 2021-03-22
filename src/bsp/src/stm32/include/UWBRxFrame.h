@@ -1,7 +1,6 @@
 #ifndef __UWBRXFRAME_H__
 #define __UWBRXFRAME_H__
 
-#include "InterlocManager.h"
 #include "UWBMessages.h"
 #include <array>
 
