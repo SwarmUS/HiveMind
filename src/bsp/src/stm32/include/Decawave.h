@@ -18,7 +18,6 @@ enum class UWBChannel {
     CHANNEL_3 = 3,
     CHANNEL_4 = 4,
     CHANNEL_5 = 5,
-    CHANNEL_6 = 6,
     CHANNEL_7 = 7
 };
 
