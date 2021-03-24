@@ -281,6 +281,13 @@ void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
         // Read the frame into memory without the CRC16 located at the end of the frame
         dwt_readrxdata(frame->m_rxBuffer.data(), m_callbackData.datalength - UWB_CRC_LENGTH, 0);
         getRxTimestamp(&frame->m_rxTimestamp);
+
+        dwt_readfromdevice(RX_TTCKO_ID, 4, 1, &(frame->m_sfdAngleRegister));
+        // Read information needed for phase calculation
+        uint16_t firstPathIdx = dwt_read16bitoffsetreg(RX_TIME_ID, RX_TIME_FP_INDEX_OFFSET);
+        // Read one extra byte as readaccdata() returns a dummy byte
+        dwt_readaccdata(frame->m_firstPathAccumulator, 5, firstPathIdx);
+
         return;
     }
 

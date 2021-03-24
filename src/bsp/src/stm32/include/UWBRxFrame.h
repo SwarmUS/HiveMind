@@ -14,10 +14,15 @@ struct UWBRxFrame {
     uint64_t m_rxTimestamp = 0;
     UWBRxStatus m_status = UWBRxStatus::ONGOING;
     uint32_t m_statusReg = 0;
+    uint8_t m_sfdAngleRegister = 0;
+    uint8_t m_firstPathAccumulator[5]{};
 
-    std::array<uint8_t, UWB_MAX_LENGTH - UWB_CRC_LENGTH> m_rxBuffer;
+    std::array<uint8_t, UWB_MAX_LENGTH - UWB_CRC_LENGTH> m_rxBuffer{};
     UWBMessages::DWFrame* m_frame = reinterpret_cast<UWBMessages::DWFrame*>(m_rxBuffer.data());
     uint8_t* m_payload = m_rxBuffer.data() + sizeof(UWBMessages::DWFrame);
+
+    float getSFDAngle() const;
+    float getAccumulatorAngle();
 };
 
 #endif //__UWBRXFRAME_H__

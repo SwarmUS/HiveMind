@@ -14,7 +14,7 @@ set(LIB_SOURCES
     src/USB.cpp
     src/Decawave.cpp
     src/DecawaveUtils.cpp
-    src/InterlocManager.cpp)
+    src/InterlocManager.cpp src/UWBRxFrame.cpp)
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
