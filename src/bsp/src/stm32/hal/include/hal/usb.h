@@ -11,8 +11,7 @@ extern "C" {
 
 #define CBUFF_USB_DATA_SIZE 2048
 
-CircularBuff cbuffUsb;
-extern uint8_t cbuffUsbData[CBUFF_USB_DATA_SIZE];
+extern CircularBuff cbuffUsb;
 
 typedef enum {
     USB_OK = 0U,

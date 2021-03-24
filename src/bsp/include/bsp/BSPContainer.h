@@ -1,5 +1,5 @@
-#ifndef _BSPFACTORY_H
-#define _BSPFACTORY_H
+#ifndef _BSPCONTAINER_H
+#define _BSPCONTAINER_H
 
 #include "ICRC.h"
 #include "IInterlocManager.h"
@@ -46,4 +46,4 @@ namespace BSPContainer {
     IInterlocManager& getInterlocManager();
 } // namespace BSPContainer
 
-#endif // _BSPFACTORY_H
+#endif // _BSPCONTAINER_H
