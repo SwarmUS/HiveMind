@@ -7,6 +7,8 @@
 #include "bsp/ISpiEsp.h"
 #include "bsp/IUSB.h"
 #include "bsp/IUserInterface.h"
+#include <functional>
+#include <optional>
 
 namespace BSPContainer {
     /**
@@ -28,6 +30,14 @@ namespace BSPContainer {
      * @brief Returns an instance of the Esp32 Spi driver.
      */
     ISpiEsp& getSpiEsp();
+
+    /**
+     * @brief Return an instance of the connected host comm interface. */
+    std::optional<std::reference_wrapper<ICommInterface>> getHostCommInterface();
+
+    /**
+     * @brief Return an instance of the connected remote comm interface. */
+    std::optional<std::reference_wrapper<ICommInterface>> getRemoteCommInterface();
 
     /**
      * @brief Returns an instance of the USB CDC driver

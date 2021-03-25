@@ -1,9 +1,11 @@
 #include "bsp/BSPContainer.h"
 #include "BSP.h"
 #include "InterlocManager.h"
+#include "SocketFactory.h"
 #include "SpiEspMock.h"
 #include "USBMock.h"
 #include "UserInterface.h"
+#include "bsp/SettingsContainer.h"
 #include "logger/LoggerContainer.h"
 
 IBSP& BSPContainer::getBSP() {
@@ -30,4 +32,28 @@ IUSB& BSPContainer::getUSB() {
 IInterlocManager& BSPContainer::getInterlocManager() {
     static InterlocManager s_interlocManager;
     return s_interlocManager;
+}
+
+std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommInterface() {
+
+    static std::optional<TCPClient> s_clientSocket = {};
+
+    if (!s_clientSocket || !s_clientSocket.value().isConnected()) {
+
+        ILogger& logger = LoggerContainer::getLogger();
+        const uint32_t port = SettingsContainer::getHostPort();
+        char address[MAX_IP_LENGTH];
+        if (SettingsContainer::getHostIP(address, (uint8_t)MAX_IP_LENGTH) == 0) {
+            logger.log(LogLevel::Error, "IP string too big for buffer");
+            return {};
+        }
+
+        s_clientSocket = SocketFactory::createTCPClient(address, port, logger);
+    }
+
+    if (s_clientSocket) {
+        return s_clientSocket.value();
+    }
+
+    return {};
 }

@@ -31,7 +31,7 @@ bool TCPClient::send(const uint8_t* data, uint16_t length) {
 bool TCPClient::isConnected() const { return m_connected; }
 
 bool TCPClient::close() {
-    m_logger.log(LogLevel::Info, "CLOSING SOCKET");
+    m_logger.log(LogLevel::Info, "Closing Socket");
     m_connected = false;
     int ret = lwip_close(m_socketFd);
     return ret == 0;
