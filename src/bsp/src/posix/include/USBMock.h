@@ -1,9 +1,11 @@
-
 #ifndef HIVE_MIND_USBMOCK_H
 #define HIVE_MIND_USBMOCK_H
 
 #include "bsp/IUSB.h"
 
+/**
+ * @brief mocking the USB, not working for now, only for compilation
+ * */
 class USBMock : public IUSB {
   public:
     ~USBMock() override = default;

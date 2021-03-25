@@ -11,7 +11,6 @@ void SpiMock_listenTask(void* param) {
 
 SpiEspMock::SpiEspMock(ILogger& logger) :
     m_logger(logger),
-    m_connected(false),
     m_listenTask("tcp_spi_mock_listen", tskIDLE_PRIORITY + 1, SpiMock_listenTask, this),
     m_port(0) {}
 
@@ -56,10 +55,8 @@ bool SpiEspMock::send(const uint8_t* buffer, uint16_t length) {
     if (!m_clientFd) {
         return false;
     }
-    ssize_t ret = ::send(m_clientFd.value(), buffer, length, 0);
-    m_connected = ret != -1;
 
-    return ret == length;
+    return ::send(m_clientFd.value(), buffer, length, 0) == length;
 }
 
 bool SpiEspMock::receive(uint8_t* buffer, uint16_t length) {
@@ -69,19 +66,31 @@ bool SpiEspMock::receive(uint8_t* buffer, uint16_t length) {
 
     auto ret = ::recv(m_clientFd.value(), buffer, length, MSG_WAITALL);
 
-    m_connected = ret > 0;
+    if (ret <= 0) {
+        m_logger.log(LogLevel::Warn, "Error while reading SPI socket. Client has probably "
+                                     "disconnected. Attempting reconnection...");
+        ::close(m_clientFd.value());
+        m_clientFd = {};
+        // Only return when connection has been restored.
+        while (!m_clientFd) {
+            waitForClient();
+        }
+        // Returning false since error occurred.
+        return false;
+    }
+
     return ret == length;
 }
 
 bool SpiEspMock::isBusy() const { return false; }
 
-bool SpiEspMock::isConnected() const { return m_connected; }
+bool SpiEspMock::isConnected() const { return m_clientFd.has_value(); }
 
-void SpiEspMock::close() {
-    m_connected = false;
+void SpiEspMock::close() const {
     if (m_clientFd) {
         ::close(m_clientFd.value());
     }
+
     if (m_serverFd != 0) {
         ::close(m_serverFd);
     }
@@ -98,7 +107,6 @@ void SpiEspMock::waitForClient() {
     if (m_clientFd < 0) {
         m_logger.log(LogLevel::Error, "TCP SPI mock: Client acceptation failed");
     } else {
-        m_connected = true;
         m_logger.log(LogLevel::Info, "TCP SPI mock: Client connected");
     }
 }
