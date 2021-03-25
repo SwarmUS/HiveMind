@@ -28,6 +28,7 @@ class SpiEspMock : public ISpiEsp {
     bool isConnected() const override;
 
     void close();
+    
     friend void SpiMock_listenTask(void* param);
 
   private:

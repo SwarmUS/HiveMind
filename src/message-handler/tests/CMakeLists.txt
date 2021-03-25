@@ -3,6 +3,7 @@ set(TEST_NAME test-message-handler)
 set(TEST_SOURCES
     MessageSenderUnitTests.cpp
     MessageDispatcherUnitTests.cpp
+    GreetHandlerUnitTests.cpp
     HiveMindApiRequestHandlerUnitTests.cpp
 )
 

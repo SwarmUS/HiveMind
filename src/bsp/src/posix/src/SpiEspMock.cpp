@@ -86,7 +86,7 @@ bool SpiEspMock::isBusy() const { return false; }
 
 bool SpiEspMock::isConnected() const { return m_clientFd.has_value(); }
 
-void SpiEspMock::close() const {
+void SpiEspMock::close() {
     if (m_clientFd) {
         ::close(m_clientFd.value());
     }

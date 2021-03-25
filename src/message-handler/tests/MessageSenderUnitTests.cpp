@@ -66,33 +66,3 @@ TEST_F(MessageSenderFixture, MessageSender_processAndSerialize_invalidDeserializ
     // Expect
     EXPECT_FALSE(ret);
 }
-
-TEST_F(MessageSenderFixture, MessageSender_greet_validSerialization) {
-    // Given
-    EXPECT_CALL(m_inputQueueMock, peek).Times(0);
-    EXPECT_CALL(m_inputQueueMock, pop).Times(0);
-    EXPECT_CALL(m_serializerMock, serializeToStream(testing::_))
-        .Times(1)
-        .WillOnce(testing::Return(true));
-
-    // Then
-    bool ret = m_messageSender->greet();
-
-    // Expect
-    EXPECT_TRUE(ret);
-}
-
-TEST_F(MessageSenderFixture, MessageSender_greet_invalidSerialization) {
-    // Given
-    EXPECT_CALL(m_inputQueueMock, peek).Times(0);
-    EXPECT_CALL(m_inputQueueMock, pop).Times(0);
-    EXPECT_CALL(m_serializerMock, serializeToStream(testing::_))
-        .Times(1)
-        .WillOnce(testing::Return(false));
-
-    // Then
-    bool ret = m_messageSender->greet();
-
-    // Expect
-    EXPECT_FALSE(ret);
-}
