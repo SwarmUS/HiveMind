@@ -15,8 +15,8 @@ class InterlocManager : public IInterlocManager {
     ~InterlocManager() override = default;
 
     void startInterloc() override;
-    void startCalibAntennaRespond(uint16_t destinationId, Decawave device);
-    void startCalibAntennaInit(uint16_t destinationId, Decawave device);
+    void startCalibAntennaRespond(uint16_t destinationId, Decawave& device);
+    void startCalibAntennaInit(uint16_t destinationId, Decawave& device);
 
 
   private:
@@ -25,8 +25,8 @@ class InterlocManager : public IInterlocManager {
     Decawave m_decaB;
 
     uint8_t m_sequenceID = 0;
-    bool sendTWRSequence(uint16_t destinationId, Decawave device);
-    double receiveTWRSequence(uint16_t destinationId, Decawave device);
+    bool sendTWRSequence(uint16_t destinationId, Decawave& device);
+    double receiveTWRSequence(uint16_t destinationId, Decawave& device);
 
     bool constructUWBHeader(uint16_t destinationId,
                             UWBMessages::FrameType frameType,

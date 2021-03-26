@@ -7,11 +7,16 @@
 
 void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
+    //TEMP
+    uint8_t myBuff[15];
+    dwt_readrxdata(&myBuff[0],callbackData->datalength,0);
 
     BaseType_t taskWoken = pdFALSE;
+    volatile auto* test = static_cast<Decawave*>(context);
+    (void) test;
 
     if (static_cast<Decawave*>(context)->m_rxTaskHandle != NULL) {
-        vTaskNotifyGiveFromISR(static_cast<Decawave*>(context)->m_rxTaskHandle, &taskWoken);
+        vTaskNotifyGiveIndexedFromISR(static_cast<Decawave*>(context)->m_rxTaskHandle,0, &taskWoken);
     }
 
     static_cast<Decawave*>(context)->m_rxTaskHandle = NULL;
@@ -76,7 +81,6 @@ bool Decawave::init() {
                      1);
 
     setLed(DW_LED::LED_0, true);
-
     m_rxAsyncTask.start();
 
     return true;
@@ -108,8 +112,9 @@ void Decawave::receiveInternal(UWBRxFrame& frame,
                                uint16_t timeoutUs,
                                uint8_t flags,
                                bool rxStarted) {
-    m_rxTaskHandle = xTaskGetCurrentTaskHandle();
     deca_selectDevice(m_spiDevice);
+    m_rxTaskHandle = xTaskGetCurrentTaskHandle();
+
 
     frame.m_status = UWBRxStatus::ONGOING;
 
