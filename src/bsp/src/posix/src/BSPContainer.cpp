@@ -2,7 +2,7 @@
 #include "BSP.h"
 #include "InterlocManager.h"
 #include "SocketFactory.h"
-#include "SpiEspMock.h"
+#include "TCPServer.h"
 #include "TCPClient.h"
 #include "USBMock.h"
 #include "UserInterface.h"
@@ -64,30 +64,10 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommI
 }
 
 
-std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommInterface() {
-
-    // TODO: handle closing socket on destruction
-    static std::optional<TCPClient> s_clientSocket{};
-
-    if (!s_clientSocket || !s_clientSocket.value().isConnected()) {
-
-        ILogger& logger = LoggerContainer::getLogger();
-        const uint32_t port = SettingsContainer::getHostPort();
-        char address[MAX_IP_LENGTH];
-        if (SettingsContainer::getHostIP(address, (uint8_t)MAX_IP_LENGTH) == 0) {
-            logger.log(LogLevel::Error, "IP string too big for buffer");
-            return {};
-        }
-
-        std::optional<TCPClient> socket = SocketFactory::createTCPClient(address, port, logger);
-        if (socket) {
-            s_clientSocket.emplace(socket.value());
-        }
-    }
-
-    if (s_clientSocket) {
-        return s_clientSocket.value();
-    }
-
-    return {};
+std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getRemoteCommInterface() {
+    static TCPServer s_remoteCommTCPServer(LoggerContainer::getLogger());
+    
+    std::shared_ptr<ros::NodeHandle>  rosNodeHandle = BSPContainer::getBSP().getRosNodeHandle();
+    int port = rosNodeHandle->param("remote_mock_port", 9001);
+    s_remoteCommTCPServer.openSocket(port);
 }

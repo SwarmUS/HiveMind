@@ -1,23 +1,23 @@
-#include "SpiEspMock.h"
+#include "TCPServer.h"
 #include <BaseTask.h>
 #include <Task.h>
 #include <logger/Logger.h>
 #include <ros/ros.h>
 
-void SpiMock_listenTask(void* param) {
-    auto* context = static_cast<SpiEspMock*>(param);
+void TCPServer::listenTask(void* param) {
+    auto* context = static_cast<TCPServer*>(param);
     context->waitForClient();
 }
 
-SpiEspMock::SpiEspMock(ILogger& logger) :
+TCPServer::TCPServer(ILogger& logger) :
     m_logger(logger),
     m_connected(false),
-    m_listenTask("tcp_spi_mock_listen", tskIDLE_PRIORITY + 1, SpiMock_listenTask, this),
+    m_listenTask("tcp_spi_mock_listen", tskIDLE_PRIORITY + 1, TCPServer::listenTask, this),
     m_port(0) {}
 
-SpiEspMock::~SpiEspMock() { close(); }
+TCPServer::~TCPServer() { close(); }
 
-void SpiEspMock::openSocket(int port) {
+void TCPServer::openSocket(int port) {
     if (port == 0) {
         m_logger.log(LogLevel::Info, "SPI TCP mock port set to 0. Not initializing server.");
         return;
@@ -52,7 +52,7 @@ void SpiEspMock::openSocket(int port) {
     }
 }
 
-bool SpiEspMock::send(const uint8_t* buffer, uint16_t length) {
+bool TCPServer::send(const uint8_t* buffer, uint16_t length) {
     if (!m_clientFd) {
         return false;
     }
@@ -62,7 +62,7 @@ bool SpiEspMock::send(const uint8_t* buffer, uint16_t length) {
     return ret == length;
 }
 
-bool SpiEspMock::receive(uint8_t* buffer, uint16_t length) {
+bool TCPServer::receive(uint8_t* buffer, uint16_t length) {
     if (!m_clientFd) {
         return false;
     }
@@ -73,11 +73,11 @@ bool SpiEspMock::receive(uint8_t* buffer, uint16_t length) {
     return ret == length;
 }
 
-bool SpiEspMock::isBusy() const { return false; }
+bool TCPServer::isBusy() const { return false; }
 
-bool SpiEspMock::isConnected() const { return m_connected; }
+bool TCPServer::isConnected() const { return m_connected; }
 
-void SpiEspMock::close() {
+void TCPServer::close() {
     m_connected = false;
     if (m_clientFd) {
         ::close(m_clientFd.value());
@@ -87,7 +87,7 @@ void SpiEspMock::close() {
     }
 }
 
-void SpiEspMock::waitForClient() {
+void TCPServer::waitForClient() {
     if (::listen(m_serverFd, 1) < 0) {
         m_logger.log(LogLevel::Error, "TCP SPI mock server listen failed");
         return;

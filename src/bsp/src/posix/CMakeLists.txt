@@ -11,13 +11,14 @@ set(LIB_SOURCES
     src/SocketContainer.cpp
     src/SocketFactory.cpp
     src/SettingsContainer.cpp
-    src/SpiEspMock.cpp)
+    src/TCPServer.cpp)
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
     include/UserInterface.h
     include/SocketFactory.h
     include/TCPClient.h
+    include/TCPServer.h
     include/USBMock.h
     include/InterlocManager.h)
 

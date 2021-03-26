@@ -1,5 +1,5 @@
 #include "BSP.h"
-#include "SpiEspMock.h"
+#include "TCPServer.h"
 #include "bsp/SettingsContainer.h"
 #include "ros/ros.h"
 #include <Task.h>
@@ -29,12 +29,8 @@ BSP::~BSP() = default;
 void BSP::initChip(void* args) {
     CmdLineArgs* cmdLineArgs = (CmdLineArgs*)args;
     ros::init(cmdLineArgs->m_argc, cmdLineArgs->m_argv, "hive_mind");
-
     m_rosNodeHandle = std::make_shared<ros::NodeHandle>("~");
 
-    SpiEspMock& espMock = static_cast<SpiEspMock&>(BSPContainer::getSpiEsp());
-    int port = m_rosNodeHandle->param("spi_mock_port", 9001);
-    espMock.openSocket(port);
 
     m_rosWatchTask.start();
 }

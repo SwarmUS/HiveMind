@@ -1,7 +1,7 @@
-#ifndef HIVE_CONNECT_SPISTM_H
-#define HIVE_CONNECT_SPISTM_H
+#ifndef __TCPSERVER_H__
+#define __TCPSERVER_H__
 
-#include "bsp/ISpiEsp.h"
+#include "bsp/ICommInterface.h"
 #include <BaseTask.h>
 #include <condition_variable>
 #include <logger/ILogger.h>
@@ -9,10 +9,10 @@
 #include <netinet/in.h>
 #include <optional>
 
-class SpiEspMock : public ISpiEsp {
+class TCPServer : public ICommInterface {
   public:
-    SpiEspMock(ILogger& logger);
-    ~SpiEspMock() override;
+    TCPServer(ILogger& logger);
+    ~TCPServer() override;
 
     void openSocket(int port);
 
@@ -20,12 +20,9 @@ class SpiEspMock : public ISpiEsp {
 
     bool receive(uint8_t* buffer, uint16_t length) override;
 
-    bool isBusy() const override;
-
     bool isConnected() const override;
 
     void close();
-    friend void SpiMock_listenTask(void* param);
 
   private:
     ILogger& m_logger;
@@ -39,6 +36,7 @@ class SpiEspMock : public ISpiEsp {
     struct sockaddr_in m_address {};
 
     void waitForClient();
+    static void listenTask(void* param);
 };
 
-#endif // HIVE_CONNECT_SPISTM_H
+#endif // __TCPSERVER_H__
