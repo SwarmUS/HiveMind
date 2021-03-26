@@ -3,6 +3,7 @@
 #include "InterlocManager.h"
 #include "SocketFactory.h"
 #include "SpiEspMock.h"
+#include "TCPClient.h"
 #include "USBMock.h"
 #include "UserInterface.h"
 #include "bsp/SettingsContainer.h"
@@ -36,7 +37,8 @@ IInterlocManager& BSPContainer::getInterlocManager() {
 
 std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommInterface() {
 
-    static std::optional<TCPClient> s_clientSocket = {};
+    // TODO: handle closing socket on destruction
+    static std::optional<TCPClient> s_clientSocket{};
 
     if (!s_clientSocket || !s_clientSocket.value().isConnected()) {
 
@@ -48,7 +50,39 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommI
             return {};
         }
 
-        s_clientSocket = SocketFactory::createTCPClient(address, port, logger);
+        std::optional<TCPClient> socket = SocketFactory::createTCPClient(address, port, logger);
+        if (socket) {
+            s_clientSocket.emplace(socket.value());
+        }
+    }
+
+    if (s_clientSocket) {
+        return s_clientSocket.value();
+    }
+
+    return {};
+}
+
+
+std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommInterface() {
+
+    // TODO: handle closing socket on destruction
+    static std::optional<TCPClient> s_clientSocket{};
+
+    if (!s_clientSocket || !s_clientSocket.value().isConnected()) {
+
+        ILogger& logger = LoggerContainer::getLogger();
+        const uint32_t port = SettingsContainer::getHostPort();
+        char address[MAX_IP_LENGTH];
+        if (SettingsContainer::getHostIP(address, (uint8_t)MAX_IP_LENGTH) == 0) {
+            logger.log(LogLevel::Error, "IP string too big for buffer");
+            return {};
+        }
+
+        std::optional<TCPClient> socket = SocketFactory::createTCPClient(address, port, logger);
+        if (socket) {
+            s_clientSocket.emplace(socket.value());
+        }
     }
 
     if (s_clientSocket) {

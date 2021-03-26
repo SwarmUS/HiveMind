@@ -9,9 +9,6 @@
 #include <netinet/in.h>
 #include <optional>
 
-/**
- * @brief mocks the SPI, on deconnection, will try to reconnect
- * */
 class SpiEspMock : public ISpiEsp {
   public:
     SpiEspMock(ILogger& logger);
@@ -28,11 +25,11 @@ class SpiEspMock : public ISpiEsp {
     bool isConnected() const override;
 
     void close();
-    
     friend void SpiMock_listenTask(void* param);
 
   private:
     ILogger& m_logger;
+    bool m_connected;
 
     BaseTask<configMINIMAL_STACK_SIZE * 2> m_listenTask;
 
