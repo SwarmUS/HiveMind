@@ -21,5 +21,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
         deca_isr(DW_A);
     } else if (GPIO_Pin == DW_IRQn_B_Pin) {
         deca_isr(DW_B);
+    }else if (GPIO_Pin == USER_Btn_Pin){
+        // TODO
+        //start calibration
+        //blink a decawave LED
     }
 }

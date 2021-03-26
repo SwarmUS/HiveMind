@@ -208,7 +208,7 @@ bool Decawave::transmitAndReceive(uint8_t* buf,
 }
 
 bool Decawave::transmitDelayedAndReceive(uint8_t* buf,
-                                         uint16_t length,
+                                            uint16_t length,
                                          uint64_t txTimestamp,
                                          uint32_t rxAfterTxTimeUs,
                                          UWBRxFrame& frame,
@@ -299,4 +299,26 @@ void Decawave::setTxAntennaDLY(uint16 delay){
 void Decawave::setRxAntennaDLY(uint16 delay){
     deca_selectDevice(m_spiDevice);
     dwt_setrxantennadelay(delay);
+}
+
+void Decawave::getTxTimestamp(uint64_t *txTimestamp){
+    deca_selectDevice(m_spiDevice);
+    dwt_readtxtimestamp(reinterpret_cast<uint8*>(txTimestamp));
+}
+
+DW_STATE Decawave::getState(){
+    return m_state;
+}
+void Decawave::setState(DW_STATE state){
+    m_state = state;
+}
+
+uint16_t Decawave::getRxAntennaDLY(){
+    deca_selectDevice(m_spiDevice);
+    return dwt_read16bitoffsetreg(LDE_IF_ID, LDE_RXANTD_OFFSET);
+
+}
+uint16_t Decawave::getTxAntennaDLY(){
+    deca_selectDevice(m_spiDevice);
+    return dwt_read16bitoffsetreg(TX_ANTD_ID, TX_ANTD_OFFSET);
 }

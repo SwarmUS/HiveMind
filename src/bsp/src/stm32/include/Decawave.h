@@ -11,16 +11,20 @@
 #include <memory>
 #include <task.h>
 //calibration constants
-#define TX_ANT_DLY 16505
-#define RX_ANT_DLY 16505
+#define DEFAULT_TX_ANT_DLY 16505 //247ns
+#define DEFAULT_RX_ANT_DLY 16505
 
 #define POLL_TX_TO_RESP_RX_DLY_UUS  300
 #define RESP_RX_TO_FINAL_TX_DLY_UUS 3100
+#define POLL_RX_TO_RESP_TX_DLY_UUS 2750
 #define RESP_RX_TIMEOUT_UUS 2700
+#define UUS_TO_DWT_TIME 65536
+#define SPEED_OF_LIGHT 299702547
 
 
 
 enum class DW_LED { LED_0 = DWT_GxM0, LED_1 = DWT_GxM1, LED_2 = DWT_GxM2, LED_3 = DWT_GxM3 };
+enum class DW_STATE { CONFIGURED, SEND_CALIB, RECEIVE_CALIB, CALIBRATED};
 
 class Decawave {
   public:
@@ -144,6 +148,12 @@ class Decawave {
     //TEMP
     void setTxAntennaDLY(uint16 delay);
     void setRxAntennaDLY(uint16 delay);
+    uint16_t getRxAntennaDLY();
+    uint16_t getTxAntennaDLY();
+    void getTxTimestamp(uint64_t *txTimestamp);
+    void getRxTimestamp(uint64_t *rxTimestamp);
+    DW_STATE getState();
+    void setState(DW_STATE state);
 
   private:
     decaDevice_t m_spiDevice;
@@ -159,6 +169,10 @@ class Decawave {
     UWBRxFrame* m_rxFrame;
 
     std::array<uint8_t, UWB_MAX_LENGTH> m_txBuffer;
+
+    uint16_t m_rxTimestamp;
+    uint16_t m_txTimestamp;
+    DW_STATE m_state;
 
     void configureDW();
     bool transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags);
