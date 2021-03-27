@@ -7,6 +7,7 @@
 #include "UserInterface.h"
 #include "bsp/SettingsContainer.h"
 #include "logger/LoggerContainer.h"
+#include <mutex>
 
 IBSP& BSPContainer::getBSP() {
     static BSP s_bsp;
@@ -60,10 +61,14 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommI
 
 std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getRemoteCommInterface() {
     static TCPServer s_remoteCommTCPServer(LoggerContainer::getLogger());
+    static std::once_flag onceOpenSocket;
 
-    std::shared_ptr<ros::NodeHandle> rosNodeHandle =
-        static_cast<BSP&>(BSPContainer::getBSP()).getRosNodeHandle();
-    int port = rosNodeHandle->param("remote_mock_port", 9001);
-    s_remoteCommTCPServer.openSocket(port);
+    std::call_once(onceOpenSocket, [&]() {
+        std::shared_ptr<ros::NodeHandle> rosNodeHandle =
+            static_cast<BSP&>(BSPContainer::getBSP()).getRosNodeHandle();
+        int port = rosNodeHandle->param("remote_mock_port", 9001);
+        s_remoteCommTCPServer.openSocket(port);
+    });
+
     return s_remoteCommTCPServer;
 }

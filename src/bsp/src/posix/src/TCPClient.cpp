@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 TCPClient::TCPClient(int socket, sockaddr_in address, ILogger& logger) :
-    m_logger(logger), m_socketFd(socket), m_address(address), m_connected(true) {}
+    m_logger(logger), m_socketFd(socket), m_address(address), m_connected(socket > 0) {}
 
 bool TCPClient::receive(uint8_t* data, uint16_t length) {
     ssize_t ret = ::recv(m_socketFd, data, length, MSG_WAITALL);
