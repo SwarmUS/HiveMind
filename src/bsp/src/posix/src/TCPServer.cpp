@@ -91,7 +91,8 @@ void TCPServer::waitForClient() {
         return;
     }
 
-    while (1) {
+    // Always tries to reconnect
+    while (true) {
         if (!m_connected) {
             m_clientFd =
                 ::accept(m_serverFd, (struct sockaddr*)&m_address, (socklen_t*)&m_addressLength);

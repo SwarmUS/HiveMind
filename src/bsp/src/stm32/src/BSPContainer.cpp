@@ -1,9 +1,12 @@
 #include "bsp/BSPContainer.h"
 #include "BSP.h"
 #include "HardwareCRC.h"
+#include "SocketFactory.h"
 #include "SpiEsp.h"
+#include "TCPClient.h"
 #include "USB.h"
 #include "UserInterface.h"
+#include "bsp/SettingsContainer.h"
 #include "logger/LoggerContainer.h"
 #include <InterlocManager.h>
 
@@ -22,16 +25,6 @@ ICRC& BSPContainer::getCRC() {
     static HardwareCRC s_crc;
 
     return s_crc;
-}
-
-ISpiEsp& BSPContainer::getSpiEsp() {
-    static SpiEsp s_spiEsp(getCRC(), LoggerContainer::getLogger());
-    return s_spiEsp;
-}
-
-IUSB& BSPContainer::getUSB() {
-    static USB s_usb(LoggerContainer::getLogger());
-    return s_usb;
 }
 
 IInterlocManager& BSPContainer::getInterlocManager() {
@@ -54,9 +47,9 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommI
         }
 
         // Close previous socket
-        if(s_clientSocket){
+        if (s_clientSocket) {
             s_clientSocket.value().close();
-        }  
+        }
 
         // Create new socket
         std::optional<TCPClient> socket = SocketFactory::createTCPClient(address, port, logger);
@@ -65,12 +58,11 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommI
         }
     }
 
-    if(s_clientSocket){
+    if (s_clientSocket) {
         return s_clientSocket.value();
     }
     return {};
 }
-
 
 std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getRemoteCommInterface() {
     static SpiEsp s_spiEsp(getCRC(), LoggerContainer::getLogger());

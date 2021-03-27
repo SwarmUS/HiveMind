@@ -2,8 +2,8 @@
 #include "BSP.h"
 #include "InterlocManager.h"
 #include "SocketFactory.h"
-#include "TCPServer.h"
 #include "TCPClient.h"
+#include "TCPServer.h"
 #include "USBMock.h"
 #include "UserInterface.h"
 #include "bsp/SettingsContainer.h"
@@ -18,16 +18,6 @@ IBSP& BSPContainer::getBSP() {
 IUserInterface& BSPContainer::getUserInterface() {
     static UserInterface s_ui;
     return s_ui;
-}
-
-ISpiEsp& BSPContainer::getSpiEsp() {
-    static SpiEspMock s_spiEsp(LoggerContainer::getLogger());
-    return s_spiEsp;
-}
-
-IUSB& BSPContainer::getUSB() {
-    static USBMock s_usb;
-    return s_usb;
 }
 
 IInterlocManager& BSPContainer::getInterlocManager() {
@@ -50,9 +40,9 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommI
         }
 
         // Close previous socket
-        if(s_clientSocket){
+        if (s_clientSocket) {
             s_clientSocket.value().close();
-        }  
+        }
 
         // Create new socket
         std::optional<TCPClient> socket = SocketFactory::createTCPClient(address, port, logger);
@@ -61,18 +51,18 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommI
         }
     }
 
-    if(s_clientSocket){
+    if (s_clientSocket) {
         return s_clientSocket.value();
     }
     return {};
 }
 
-
 std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getRemoteCommInterface() {
     static TCPServer s_remoteCommTCPServer(LoggerContainer::getLogger());
-    
-    std::shared_ptr<ros::NodeHandle>  rosNodeHandle = BSPContainer::getBSP().getRosNodeHandle();
+
+    std::shared_ptr<ros::NodeHandle> rosNodeHandle =
+        static_cast<BSP&>(BSPContainer::getBSP()).getRosNodeHandle();
     int port = rosNodeHandle->param("remote_mock_port", 9001);
     s_remoteCommTCPServer.openSocket(port);
-    return TCPServer;
+    return s_remoteCommTCPServer;
 }

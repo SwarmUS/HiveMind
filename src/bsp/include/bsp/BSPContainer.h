@@ -27,22 +27,12 @@ namespace BSPContainer {
     ICRC& getCRC();
 
     /**
-     * @brief Returns an instance of the Esp32 Spi driver.
-     */
-    ISpiEsp& getSpiEsp();
-
-    /**
      * @brief Return an instance of the connected host comm interface. */
     std::optional<std::reference_wrapper<ICommInterface>> getHostCommInterface();
 
     /**
      * @brief Return an instance of the connected remote comm interface. */
     std::optional<std::reference_wrapper<ICommInterface>> getRemoteCommInterface();
-
-    /**
-     * @brief Returns an instance of the USB CDC driver
-     */
-    IUSB& getUSB();
 
     /**
      * @brief Returns an instance of the interloc manager
