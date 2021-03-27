@@ -1,6 +1,7 @@
 #include "BittyBuzzClosureRegister.h"
 #include <bbzvm.h>
 #include <cstring>
+#include <string_view>
 
 BittyBuzzRegisteredClosure::BittyBuzzRegisteredClosure(const char* functionName,
                                                        bbzheap_idx_t closureHeapIdx,

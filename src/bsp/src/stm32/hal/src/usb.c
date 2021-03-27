@@ -1,6 +1,7 @@
 #include "hal/usb.h"
 #include "usbd_cdc_if.h"
 
+CircularBuff cbuffUsb;
 uint8_t cbuffUsbData[CBUFF_USB_DATA_SIZE];
 void (*usb_rxCallback)();
 void* usb_rxCallbackContext;
