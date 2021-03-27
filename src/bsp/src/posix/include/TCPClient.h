@@ -1,7 +1,7 @@
 #ifndef __TCPCLIENT_H_
 #define __TCPCLIENT_H_
 
-#include "bsp/ITCPClient.h"
+#include "bsp/ICommInterface.h"
 #include <condition_variable>
 #include <logger/ILogger.h>
 #include <mutex>
@@ -9,7 +9,7 @@
 #include <optional>
 #include <thread>
 
-class TCPClient : public ITCPClient {
+class TCPClient : public ICommInterface {
   public:
     TCPClient(int socket, sockaddr_in address, ILogger& logger);
 
@@ -21,7 +21,7 @@ class TCPClient : public ITCPClient {
 
     bool isConnected() const override;
 
-    bool close() override;
+    bool close();
 
     friend void rxThread(TCPClient* context);
 

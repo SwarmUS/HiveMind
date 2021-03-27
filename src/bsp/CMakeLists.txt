@@ -13,8 +13,6 @@ set(LIB_HEADERS
     include/bsp/IUserInterface.h
     include/bsp/ICRC.h
 
-    include/bsp/ITCPClient.h
-    include/bsp/SocketContainer.h
     include/bsp/SettingsContainer.h
     include/bsp/IInterlocManager.h)
 

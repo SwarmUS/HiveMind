@@ -8,7 +8,6 @@ set(LIB_SOURCES
     src/UserInterface.cpp
 
     src/TCPClient.cpp
-    src/SocketContainer.cpp
     src/SocketFactory.cpp
     src/SettingsContainer.cpp
     src/TCPServer.cpp)
