@@ -11,6 +11,7 @@
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <logger/Logger.h>
 #include <logger/LoggerContainer.h>
+#include <message-handler/GreetHandler.h>
 #include <message-handler/GreetSender.h>
 #include <message-handler/MessageDispatcher.h>
 #include <message-handler/MessageHandlerContainer.h>
@@ -70,19 +71,24 @@ class HostMessageDispatcher : public AbstractTask<10 * configMINIMAL_STACK_SIZE>
             if (hostOpt) {
                 ICommInterface& hostStream = hostOpt.value();
                 HiveMindHostDeserializer deserializer(hostStream);
+                HiveMindHostSerializer serializer(hostStream);
                 HiveMindApiRequestHandler hivemindApiReqHandler =
                     MessageHandlerContainer::createHiveMindApiRequestHandler();
 
-                GreetSender greetSender(MessageHandlerContainer::getHostMsgQueue(),
-                                        BSPContainer::getBSP());
+                // Establishing greet handlshake
+                GreetHandler greetHandler(serializer, deserializer, BSPContainer::getBSP());
+                if (greetHandler.greet()) {
 
-                MessageDispatcher messageDispatcher =
-                    MessageHandlerContainer::createMessageDispatcher(
-                        deserializer, hivemindApiReqHandler, greetSender);
+                    GreetSender greetSender(MessageHandlerContainer::getHostMsgQueue(),
+                                            BSPContainer::getBSP());
+                    MessageDispatcher messageDispatcher =
+                        MessageHandlerContainer::createMessageDispatcher(
+                            deserializer, hivemindApiReqHandler, greetSender);
 
-                while (hostStream.isConnected()) {
-                    if (!messageDispatcher.deserializeAndDispatch()) {
-                        m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch to host");
+                    while (hostStream.isConnected()) {
+                        if (!messageDispatcher.deserializeAndDispatch()) {
+                            m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch to host");
+                        }
                     }
                 }
             }
@@ -171,19 +177,24 @@ class RemoteMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZ
             if (remoteOpt) {
                 ICommInterface& remoteStream = remoteOpt.value();
                 HiveMindHostDeserializer deserializer(remoteStream);
+                HiveMindHostSerializer serializer(remoteStream);
                 HiveMindApiRequestHandler hivemindApiReqHandler =
                     MessageHandlerContainer::createHiveMindApiRequestHandler();
 
-                GreetSender greetSender(MessageHandlerContainer::getRemoteMsgQueue(),
-                                        BSPContainer::getBSP());
+                // Establishing greet handlshake
+                GreetHandler greetHandler(serializer, deserializer, BSPContainer::getBSP());
+                if (greetHandler.greet()) {
 
-                MessageDispatcher messageDispatcher =
-                    MessageHandlerContainer::createMessageDispatcher(
-                        deserializer, hivemindApiReqHandler, greetSender);
+                    GreetSender greetSender(MessageHandlerContainer::getRemoteMsgQueue(),
+                                            BSPContainer::getBSP());
+                    MessageDispatcher messageDispatcher =
+                        MessageHandlerContainer::createMessageDispatcher(
+                            deserializer, hivemindApiReqHandler, greetSender);
 
-                while (remoteStream.isConnected()) {
-                    if (!messageDispatcher.deserializeAndDispatch()) {
-                        m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch to host");
+                    while (remoteStream.isConnected()) {
+                        if (!messageDispatcher.deserializeAndDispatch()) {
+                            m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch to remote");
+                        }
                     }
                 }
             }
