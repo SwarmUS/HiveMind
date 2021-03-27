@@ -31,7 +31,6 @@ void BSP::initChip(void* args) {
     ros::init(cmdLineArgs->m_argc, cmdLineArgs->m_argv, "hive_mind");
     m_rosNodeHandle = std::make_shared<ros::NodeHandle>("~");
 
-
     m_rosWatchTask.start();
 }
 

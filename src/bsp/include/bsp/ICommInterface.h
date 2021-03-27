@@ -11,7 +11,6 @@ class ICommInterface : public IProtobufStream {
      * @brief Tells if interface is connected and functionning
      * @return true if connected, false otherwise */
     virtual bool isConnected() const = 0;
-    
 };
 
 #endif // __ICOMMINTERFACE_H_
