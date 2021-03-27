@@ -7,6 +7,7 @@ MessageDispatcher::MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
                                      ICircularQueue<MessageDTO>& remoteOutputQ,
                                      IHiveMindHostDeserializer& deserializer,
                                      IHiveMindApiRequestHandler& hivemindApiReqHandler,
+                                     IGreetSender& greetSender,
                                      const IBSP& bsp,
                                      ILogger& logger) :
     m_buzzOutputQueue(buzzOutputQ),
@@ -14,6 +15,7 @@ MessageDispatcher::MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
     m_remoteOutputQueue(remoteOutputQ),
     m_deserializer(deserializer),
     m_hivemindApiReqHandler(hivemindApiReqHandler),
+    m_greetSender(greetSender),
     m_bsp(bsp),
     m_logger(logger) {}
 
@@ -128,7 +130,7 @@ bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
         return m_buzzOutputQueue.push(message);
     }
     if (std::holds_alternative<GreetingDTO>(variantMsg)) {
-        m_logger.log(LogLevel::Warn, "Received greetings on the hivemind");
+        return m_greetSender.sendGreet();
     }
     return false;
 }

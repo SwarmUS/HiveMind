@@ -16,8 +16,6 @@ class GreetHandler : public IGreetHandler {
 
     bool greet() override;
 
-    bool sendGreet() override;
-
   private:
     IHiveMindHostSerializer& m_serializer;
     IHiveMindHostDeserializer& m_deserializer;

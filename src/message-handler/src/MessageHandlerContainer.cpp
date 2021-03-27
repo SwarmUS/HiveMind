@@ -1,4 +1,5 @@
 #include "MessageHandlerContainer.h"
+#include "IGreetHandler.h"
 #include <Mutex.h>
 #include <bsp/BSPContainer.h>
 #include <cpp-common/CircularQueueStack.h>
@@ -11,10 +12,12 @@ HiveMindApiRequestHandler MessageHandlerContainer::createHiveMindApiRequestHandl
 }
 
 MessageDispatcher MessageHandlerContainer::createMessageDispatcher(
-    IHiveMindHostDeserializer& deserializer, IHiveMindApiRequestHandler& hivemindApiReqHandler) {
+    IHiveMindHostDeserializer& deserializer,
+    IHiveMindApiRequestHandler& hivemindApiReqHandler,
+    IGreetSender& greetSender) {
     return MessageDispatcher(getBuzzMsgQueue(), getHostMsgQueue(), getRemoteMsgQueue(),
-                             deserializer, hivemindApiReqHandler, BSPContainer::getBSP(),
-                             LoggerContainer::getLogger());
+                             deserializer, hivemindApiReqHandler, greetSender,
+                             BSPContainer::getBSP(), LoggerContainer::getLogger());
 }
 
 ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getBuzzMsgQueue() {

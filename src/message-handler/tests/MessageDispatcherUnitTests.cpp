@@ -1,5 +1,6 @@
 #include "mocks/BSPInterfaceMock.h"
 #include "mocks/CircularQueueInterfaceMock.h"
+#include "mocks/GreetSenderInterfaceMock.h"
 #include "mocks/HiveMindApiRequestHandlerInterfaceMock.h"
 #include "mocks/HiveMindHostDeserializerInterfaceMock.h"
 #include "mocks/LoggerInterfaceMock.h"
@@ -14,6 +15,7 @@ class MessageDispatcherFixture : public testing::Test {
     CircularQueueInterfaceMock<MessageDTO> m_remoteQueue;
     HiveMindHostDeserializerInterfaceMock m_deserializerMock;
     HiveMindApiRequestHandlerInterfaceMock m_hivemindApiReqHandlerMock;
+    GreetSenderInterfaceMock m_greetSenderMock;
     BSPInterfaceMock* m_bspMock;
     LoggerInterfaceMock m_loggerMock;
     MessageDTO m_message;
@@ -41,9 +43,9 @@ class MessageDispatcherFixture : public testing::Test {
             new UserCallResponseDTO(UserCallTargetDTO::HOST, UserCallTargetDTO::BUZZ, *m_fResponse);
         m_response = new ResponseDTO(1, *m_uResponse);
 
-        m_messageDispatcher =
-            new MessageDispatcher(m_buzzQueue, m_hostQueue, m_remoteQueue, m_deserializerMock,
-                                  m_hivemindApiReqHandlerMock, *m_bspMock, m_loggerMock);
+        m_messageDispatcher = new MessageDispatcher(m_buzzQueue, m_hostQueue, m_remoteQueue,
+                                                    m_deserializerMock, m_hivemindApiReqHandlerMock,
+                                                    m_greetSenderMock, *m_bspMock, m_loggerMock);
     }
     void TearDown() override {
         delete m_bspMock;
@@ -782,6 +784,36 @@ TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_BuzzMe
     EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
+
+    // Then
+    bool ret = m_messageDispatcher->deserializeAndDispatch();
+
+    // Expect
+    EXPECT_FALSE(ret);
+}
+
+TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_greet_valid) {
+    // Given
+    m_message = MessageDTO(m_srcUuid, m_uuid, GreetingDTO(0));
+    EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
+    EXPECT_CALL(m_greetSenderMock, sendGreet).WillOnce(testing::Return(true));
+
+    // Then
+    bool ret = m_messageDispatcher->deserializeAndDispatch();
+
+    // Expect
+    EXPECT_TRUE(ret);
+}
+
+TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_greet_invalid) {
+    // Given
+    m_message = MessageDTO(m_srcUuid, m_uuid, GreetingDTO(0));
+    EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
+    EXPECT_CALL(m_greetSenderMock, sendGreet).WillOnce(testing::Return(false));
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();

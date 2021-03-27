@@ -1,5 +1,4 @@
 #include "mocks/BSPInterfaceMock.h"
-#include "mocks/CircularQueueInterfaceMock.h"
 #include "mocks/HiveMindHostDeserializerInterfaceMock.h"
 #include "mocks/HiveMindHostSerializerInterfaceMock.h"
 #include "mocks/LoggerInterfaceMock.h"
@@ -76,29 +75,6 @@ TEST_F(GreetHandlerFixture, GreetHandler_greet_notGreet) {
 
     // Then
     bool ret = m_greetHandler->greet();
-
-    // Expect
-    EXPECT_FALSE(ret);
-}
-
-TEST_F(GreetHandlerFixture, GreetHandler_sendGreet_valid) {
-    // Given
-    EXPECT_CALL(m_serializerMock, serializeToStream(MessageGreetingDTOMatcher(m_uuid)))
-        .WillOnce(testing::Return(true));
-
-    // Then
-    bool ret = m_greetHandler->sendGreet();
-
-    // Expect
-    EXPECT_TRUE(ret);
-}
-
-TEST_F(GreetHandlerFixture, GreetHandler_sendGreet_invalidSerialization) {
-    // Given
-    EXPECT_CALL(m_serializerMock, serializeToStream(testing::_)).WillOnce(testing::Return(false));
-
-    // Then
-    bool ret = m_greetHandler->sendGreet();
 
     // Expect
     EXPECT_FALSE(ret);

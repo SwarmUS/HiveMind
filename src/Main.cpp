@@ -11,6 +11,7 @@
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <logger/Logger.h>
 #include <logger/LoggerContainer.h>
+#include <message-handler/GreetSender.h>
 #include <message-handler/MessageDispatcher.h>
 #include <message-handler/MessageHandlerContainer.h>
 #include <message-handler/MessageSender.h>
@@ -71,9 +72,14 @@ class HostMessageDispatcher : public AbstractTask<10 * configMINIMAL_STACK_SIZE>
                 HiveMindHostDeserializer deserializer(hostStream);
                 HiveMindApiRequestHandler hivemindApiReqHandler =
                     MessageHandlerContainer::createHiveMindApiRequestHandler();
+
+                GreetSender greetSender(MessageHandlerContainer::getHostMsgQueue(),
+                                        BSPContainer::getBSP());
+
                 MessageDispatcher messageDispatcher =
-                    MessageHandlerContainer::createMessageDispatcher(deserializer,
-                                                                     hivemindApiReqHandler);
+                    MessageHandlerContainer::createMessageDispatcher(
+                        deserializer, hivemindApiReqHandler, greetSender);
+
                 while (hostStream.isConnected()) {
                     if (!messageDispatcher.deserializeAndDispatch()) {
                         m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch to host");
@@ -167,9 +173,14 @@ class RemoteMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZ
                 HiveMindHostDeserializer deserializer(remoteStream);
                 HiveMindApiRequestHandler hivemindApiReqHandler =
                     MessageHandlerContainer::createHiveMindApiRequestHandler();
+
+                GreetSender greetSender(MessageHandlerContainer::getRemoteMsgQueue(),
+                                        BSPContainer::getBSP());
+
                 MessageDispatcher messageDispatcher =
-                    MessageHandlerContainer::createMessageDispatcher(deserializer,
-                                                                     hivemindApiReqHandler);
+                    MessageHandlerContainer::createMessageDispatcher(
+                        deserializer, hivemindApiReqHandler, greetSender);
+
                 while (remoteStream.isConnected()) {
                     if (!messageDispatcher.deserializeAndDispatch()) {
                         m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch to host");

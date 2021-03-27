@@ -1,20 +1,15 @@
 #ifndef __IGREETHANDLER_H_
-#define __IGREETERHANDLER_H_
+#define __IGREETHANDLER_H_
 
 class IGreetHandler {
   public:
     virtual ~IGreetHandler() = default;
 
     /**
-     *@brief wait for a greet and then send the greet response.
+     *@brief wait for a greet and then send the greet response. Serializes directly to the stream
+     *and not the the queue. Use to initialize a connection.
      *@return true if serialization/deserialization successed, false otherwise*/
     virtual bool greet() = 0;
-
-    /**
-     * @brief send a greet
-     * @return trie if the serialization successed, false otherwise
-     * */
-    virtual bool sendGreet() = 0;
 };
 
-#endif // __IGREETERHANDLER_H_
+#endif // __IGREETHANDLER_H_

@@ -9,15 +9,11 @@ bool GreetHandler::greet() {
     MessageDTO msg;
     if (m_deserializer.deserializeFromStream(msg)) {
         if (std::holds_alternative<GreetingDTO>(msg.getMessage())) {
-            return sendGreet();
+            uint16_t uuid = m_bsp.getUUId();
+            GreetingDTO greet(uuid);
+            MessageDTO msg(uuid, uuid, greet);
+            return m_serializer.serializeToStream(msg);
         }
     }
     return false;
-}
-
-bool GreetHandler::sendGreet() {
-    uint16_t uuid = m_bsp.getUUId();
-    GreetingDTO greet(uuid);
-    MessageDTO msg(uuid, uuid, greet);
-    return m_serializer.serializeToStream(msg);
 }

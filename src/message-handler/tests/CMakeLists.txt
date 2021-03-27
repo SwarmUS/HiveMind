@@ -4,11 +4,14 @@ set(TEST_SOURCES
     MessageSenderUnitTests.cpp
     MessageDispatcherUnitTests.cpp
     GreetHandlerUnitTests.cpp
+    GreetSenderUnitTests.cpp
     HiveMindApiRequestHandlerUnitTests.cpp
 )
 
 set(TEST_HEADERS
   mocks/CircularQueueInterfaceMock.h
+  mocks/GreetHandlerInterfaceMock.h
+  mocks/GreetSenderInterfaceMock.h
   mocks/HiveMindHostDeserializerInterfaceMock.h
   mocks/HiveMindHostSerializerInterfaceMock.h
   mocks/HiveMindApiRequestHandlerInterfaceMock.h
