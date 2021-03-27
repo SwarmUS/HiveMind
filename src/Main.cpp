@@ -226,14 +226,14 @@ int main(int argc, char** argv) {
     static HostMessageDispatcher s_hostDispatchTask("tcp_dispatch", tskIDLE_PRIORITY + 1);
     static HostMessageSender s_hostMessageSender("host_send", tskIDLE_PRIORITY + 1,
                                                  s_hostDispatchTask);
-    static RemoteMessageDispatcher s_spiDispatchTask("spi_dispatch", tskIDLE_PRIORITY + 1);
-    static RemoteMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
+    static RemoteMessageDispatcher s_remoteDispatchTask("remote_dispatch", tskIDLE_PRIORITY + 1);
+    static RemoteMessageSender s_remoteMessageSender("remote_send", tskIDLE_PRIORITY + 1);
     static InterlocTask s_interlocTask("interloc", tskIDLE_PRIORITY + 5);
 
     s_bittybuzzTask.start();
     s_hostDispatchTask.start();
     s_hostMessageSender.start();
-    s_spiMessageSender.start();
+    s_remoteMessageSender.start();
     s_interlocTask.start();
 
     Task::startScheduler();
