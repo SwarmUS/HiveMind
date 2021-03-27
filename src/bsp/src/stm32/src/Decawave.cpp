@@ -5,7 +5,7 @@
 #include <deca_device_api.h>
 #include <deca_regs.h>
 
-#define OSTR_WAIT_TIME ((((uint16)33) & 0xff) << 3)
+#define OSTR_WAIT_TIME ((((uint16_t)33) & 0xff) << 3)
 
 void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
@@ -71,14 +71,16 @@ bool Decawave::init() {
     configureDW();
     setState(DW_STATE::CONFIGURED);
 
-    dwt_enablegpioclocks();
-    dwt_setgpiodirection(DWT_GxM0 | DWT_GxM1 | DWT_GxM2 | DWT_GxM3, 0);
-
-    dwt_setinterrupt(DWT_INT_RFCG | DWT_INT_RFTO | DWT_INT_RXPTO | DWT_INT_RPHE | DWT_INT_RFCE |
-                         DWT_INT_RFSL | DWT_INT_SFDT,
-                     1);
-
-    setLed(DW_LED::LED_0, true);
+    //    dwt_enablegpioclocks();
+    //    dwt_setgpiodirection(DWT_GxM0 | DWT_GxM1 | DWT_GxM2 | DWT_GxM3, 0);
+    //
+    //    //    dwt_setinterrupt(DWT_INT_RFCG | DWT_INT_RFTO | DWT_INT_RXPTO | DWT_INT_RPHE |
+    //    DWT_INT_RFCE
+    //    //    |
+    //    //                         DWT_INT_RFSL | DWT_INT_SFDT,
+    //    //                     1);
+    //
+    //    setLed(DW_LED::LED_0, true);
 
     m_rxAsyncTask.start();
 
@@ -298,8 +300,8 @@ void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
         frame->m_status = UWBRxStatus::ERROR;
     }
 }
+
 void Decawave::setSyncMode(DW_SYNC_MODE syncMode) {
-    decaIrqStatus_t irqStatus = decamutexon();
     dwt_setSelectedDevice(m_spiDevice);
     uint16_t regValue;
 
@@ -309,7 +311,7 @@ void Decawave::setSyncMode(DW_SYNC_MODE syncMode) {
         regValue = dwt_read16bitoffsetreg(EXT_SYNC_ID, EC_CTRL_OFFSET);
         regValue &= EC_CTRL_WAIT_MASK; // Clear previous wait value
         regValue |= EC_CTRL_OSTRM;
-        regValue |= OSTR_WAIT_TIME;
+        regValue |= ((((uint16_t)33) & 0xff) << 3);
         dwt_write16bitoffsetreg(EXT_SYNC_ID, EC_CTRL_OFFSET, regValue);
         break;
 
@@ -319,8 +321,6 @@ void Decawave::setSyncMode(DW_SYNC_MODE syncMode) {
         dwt_write16bitoffsetreg(EXT_SYNC_ID, EC_CTRL_OFFSET, regValue);
         break;
     }
-
-    decamutexoff(irqStatus);
 }
 
 

@@ -124,9 +124,10 @@ void deca_setSync(bool state) {
 }
 
 void deca_setSyncEnable(bool state) {
-    HAL_GPIO_WritePin(DW_SYNC_GPIO_Port, DW_SYNC_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(DW_SYNC_EN_GPIO_Port, DW_SYNC_EN_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
 
 void deca_setSyncClear(bool state) {
-    HAL_GPIO_WritePin(DW_SYNC_GPIO_Port, DW_SYNC_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(DW_SYNC_CLEAR_GPIO_Port, DW_SYNC_CLEAR_Pin,
+                      state ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
