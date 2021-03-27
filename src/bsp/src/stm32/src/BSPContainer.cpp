@@ -49,6 +49,7 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommI
         // Close previous socket
         if (s_clientSocket) {
             s_clientSocket.value().close();
+            s_clientSocket.reset();
         }
 
         // Create new socket

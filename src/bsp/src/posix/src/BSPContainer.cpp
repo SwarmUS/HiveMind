@@ -27,6 +27,7 @@ IInterlocManager& BSPContainer::getInterlocManager() {
 std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommInterface() {
     static std::optional<TCPClient> s_clientSocket{};
 
+    // TODO: Add logic for usb
     // If disconnected, try to create a new socket
     if (!s_clientSocket || !s_clientSocket.value().isConnected()) {
 
@@ -41,6 +42,7 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommI
         // Close previous socket
         if (s_clientSocket) {
             s_clientSocket.value().close();
+            s_clientSocket.reset();
         }
 
         // Create new socket
