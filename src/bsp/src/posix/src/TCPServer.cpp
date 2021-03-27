@@ -92,7 +92,7 @@ void TCPServer::waitForClient() {
         return;
     }
 
-    // Always tries to reconnect
+    // Always tries to reconnect to client
     while (m_serverFd > 0) {
         if (!m_connected) {
             ::close(m_clientFd.value());
