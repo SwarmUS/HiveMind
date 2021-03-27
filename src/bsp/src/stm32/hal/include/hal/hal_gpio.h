@@ -10,7 +10,8 @@ extern "C" {
 typedef void (*gpioCallbackFct_t)(void* instance);
 
 void setEspCallback(gpioCallbackFct_t fct, void* instance);
-
+void setResetSendBtnCallback(void (*fct)(void* context), void* context);
+void setResetReceiveBtnCallback(void (*fct)(void* context), void* context);
 #ifdef __cplusplus
 }
 #endif

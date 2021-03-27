@@ -4,6 +4,7 @@
 #include <cstring>
 #include <deca_device_api.h>
 #include <deca_regs.h>
+#include "hal/hal_gpio.h"
 
 void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
@@ -16,7 +17,7 @@ void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     (void) test;
 
     if (static_cast<Decawave*>(context)->m_rxTaskHandle != NULL) {
-        vTaskNotifyGiveIndexedFromISR(static_cast<Decawave*>(context)->m_rxTaskHandle,0, &taskWoken);
+        vTaskNotifyGiveFromISR(static_cast<Decawave*>(context)->m_rxTaskHandle,&taskWoken);
     }
 
     static_cast<Decawave*>(context)->m_rxTaskHandle = NULL;
@@ -81,6 +82,10 @@ bool Decawave::init() {
                      1);
 
     setLed(DW_LED::LED_0, true);
+
+    //temp
+    setResetSendBtnCallback(Decawave::interruptBtnSendCallback, this);
+    setResetReceiveBtnCallback(Decawave::interruptBtnReceiveCallback, this);
     m_rxAsyncTask.start();
 
     return true;
@@ -146,7 +151,7 @@ void Decawave::receiveAsyncInternal(UWBRxFrame& frame,
 }
 
 void Decawave::receive(UWBRxFrame& frame, uint16_t timeoutUs) {
-    receiveInternal(frame, timeoutUs, DWT_START_TX_IMMEDIATE);
+    receiveInternal(frame, timeoutUs, DWT_START_RX_IMMEDIATE);
 }
 
 void Decawave::receiveDelayed(UWBRxFrame& frame, uint16_t timeoutUs, uint64_t rxStartTime) {
@@ -326,4 +331,26 @@ uint16_t Decawave::getRxAntennaDLY(){
 uint16_t Decawave::getTxAntennaDLY(){
     deca_selectDevice(m_spiDevice);
     return dwt_read16bitoffsetreg(TX_ANTD_ID, TX_ANTD_OFFSET);
+}
+
+void Decawave::resetBtnSendTWRCallback(){
+    deca_selectDevice(m_spiDevice);
+    setState(DW_STATE::SEND_CALIB);
+    setLed(DW_LED::LED_3, false);
+    setLed(DW_LED::LED_2, true);
+}
+void Decawave::resetBtnReceiveTWRCallback(){
+    setState(DW_STATE::RECEIVE_CALIB);
+    setLed(DW_LED::LED_3, true);
+    setLed(DW_LED::LED_2, false);
+}
+
+void Decawave::interruptBtnSendCallback(void* context) {
+    Decawave* deca = (Decawave*)context;
+    deca->resetBtnSendTWRCallback();
+}
+
+void Decawave::interruptBtnReceiveCallback(void* context) {
+    Decawave* deca = (Decawave*)context;
+    deca->resetBtnReceiveTWRCallback();
 }

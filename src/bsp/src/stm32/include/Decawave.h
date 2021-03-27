@@ -191,6 +191,11 @@ class Decawave {
     static void rxCallback(const dwt_cb_data_t* callbackData, void* context);
     static void isrCallback(void* context);
     static void rxAsyncTask(void* context);
+    static void interruptBtnSendCallback(void* context);
+    static void interruptBtnReceiveCallback(void* context);
+    void resetBtnReceiveTWRCallback();
+    void resetBtnSendTWRCallback();
+
 };
 
 #endif //__DECAWAVE_H__
