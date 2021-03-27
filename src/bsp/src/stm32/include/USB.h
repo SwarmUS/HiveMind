@@ -2,13 +2,14 @@
 #define HIVE_MIND_USB_H
 
 #include "LockGuard.h"
-#include "bsp/IUSB.h"
+#include "bsp/ICommInterface.h"
 #include "semphr.h"
 #include <BaseTask.h>
 #include <c-common/circular_buff.h>
 #include <cstdint>
 #include <logger/ILogger.h>
-class USB : public IUSB {
+
+class USB : public ICommInterface {
   public:
     USB(ILogger& logger);
     ~USB() override = default;

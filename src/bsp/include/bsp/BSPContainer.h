@@ -2,10 +2,9 @@
 #define _BSPCONTAINER_H
 
 #include "ICRC.h"
+#include "ICommInterface.h"
 #include "IInterlocManager.h"
 #include "bsp/IBSP.h"
-#include "bsp/ISpiEsp.h"
-#include "bsp/IUSB.h"
 #include "bsp/IUserInterface.h"
 #include <functional>
 #include <optional>

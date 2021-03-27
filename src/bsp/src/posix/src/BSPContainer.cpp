@@ -4,7 +4,6 @@
 #include "SocketFactory.h"
 #include "TCPClient.h"
 #include "TCPServer.h"
-#include "USBMock.h"
 #include "UserInterface.h"
 #include "bsp/SettingsContainer.h"
 #include "logger/LoggerContainer.h"

@@ -19,7 +19,6 @@ set(LIB_PRIVATE_HEADERS
     include/SocketFactory.h
     include/TCPClient.h
     include/TCPServer.h
-    include/USBMock.h
     include/InterlocManager.h)
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_PRIVATE_HEADERS})
