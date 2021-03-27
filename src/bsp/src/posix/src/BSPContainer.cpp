@@ -61,9 +61,9 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommI
 
 std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getRemoteCommInterface() {
     static TCPServer s_remoteCommTCPServer(LoggerContainer::getLogger());
-    static std::once_flag onceOpenSocket;
+    static std::once_flag s_onceOpenSocket;
 
-    std::call_once(onceOpenSocket, [&]() {
+    std::call_once(s_onceOpenSocket, [&]() {
         std::shared_ptr<ros::NodeHandle> rosNodeHandle =
             static_cast<BSP&>(BSPContainer::getBSP()).getRosNodeHandle();
         int port = rosNodeHandle->param("remote_mock_port", 9001);
