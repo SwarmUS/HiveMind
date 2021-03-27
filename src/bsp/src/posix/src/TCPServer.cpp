@@ -17,10 +17,10 @@ TCPServer::TCPServer(ILogger& logger) :
 
 TCPServer::~TCPServer() { close(); }
 
-void TCPServer::openSocket(int port) {
+bool TCPServer::openSocket(int port) {
     if (port == 0) {
         m_logger.log(LogLevel::Info, "TCP server port set to 0. Not initializing server.");
-        return;
+        return false;
     }
 
     m_port = port;
@@ -28,7 +28,7 @@ void TCPServer::openSocket(int port) {
 
     if ((serverFd = ::socket(AF_INET, SOCK_STREAM, 0)) == 0) {
         m_logger.log(LogLevel::Error, "TCP server socket creation failed");
-        return;
+        return false;
     }
     m_serverFd = serverFd;
 
@@ -41,7 +41,12 @@ void TCPServer::openSocket(int port) {
     if (::bind(m_serverFd, (struct sockaddr*)&m_address, static_cast<socklen_t>(m_addressLength)) <
         0) {
         m_logger.log(LogLevel::Error, "TCP server server binding failed");
-        return;
+        return false;
+    }
+
+    if (::listen(m_serverFd, 1) < 0) {
+        m_logger.log(LogLevel::Error, "TCP server server listen failed");
+        return false;
     }
 
     if (m_listenTask.start()) {
@@ -50,6 +55,7 @@ void TCPServer::openSocket(int port) {
 
         m_logger.log(LogLevel::Info, "TCP server already listening on port %d", m_port);
     }
+    return true;
 }
 
 bool TCPServer::send(const uint8_t* buffer, uint16_t length) {
@@ -87,11 +93,6 @@ void TCPServer::close() {
 }
 
 void TCPServer::waitForClient() {
-    if (::listen(m_serverFd, 1) < 0) {
-        m_logger.log(LogLevel::Error, "TCP server server listen failed");
-        return;
-    }
-
     // Always tries to reconnect to client
     while (m_serverFd > 0) {
         if (!m_connected) {
