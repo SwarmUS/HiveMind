@@ -36,10 +36,9 @@ IInterlocManager& BSPContainer::getInterlocManager() {
 }
 
 std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommInterface() {
-
-    // TODO: handle closing socket on destruction
     static std::optional<TCPClient> s_clientSocket{};
 
+    // If disconnected, try to create a new socket
     if (!s_clientSocket || !s_clientSocket.value().isConnected()) {
 
         ILogger& logger = LoggerContainer::getLogger();
@@ -50,16 +49,21 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommI
             return {};
         }
 
+        // Close previous socket
+        if(s_clientSocket){
+            s_clientSocket.value().close();
+        }  
+
+        // Create new socket
         std::optional<TCPClient> socket = SocketFactory::createTCPClient(address, port, logger);
         if (socket) {
             s_clientSocket.emplace(socket.value());
         }
     }
 
-    if (s_clientSocket) {
+    if(s_clientSocket){
         return s_clientSocket.value();
     }
-
     return {};
 }
 
@@ -70,4 +74,5 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getRemoteCom
     std::shared_ptr<ros::NodeHandle>  rosNodeHandle = BSPContainer::getBSP().getRosNodeHandle();
     int port = rosNodeHandle->param("remote_mock_port", 9001);
     s_remoteCommTCPServer.openSocket(port);
+    return TCPServer;
 }

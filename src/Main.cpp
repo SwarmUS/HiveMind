@@ -53,19 +53,6 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class HostUsbConnexionGreet : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
-  private:
-    void task() override {
-        auto& usb = BSPContainer::getUSB();
-        while (true) {
-            if (usb.isConnected()) {
-                m_hostStream = &usb;
-                m_logger.log(LogLevel::Info, "Host connected via USB");
-            }
-        }
-    }
-};
-
 class HostMessageDispatcher : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     HostMessageDispatcher(const char* taskName, UBaseType_t priority) :
@@ -73,36 +60,22 @@ class HostMessageDispatcher : public AbstractTask<10 * configMINIMAL_STACK_SIZE>
 
     ~HostMessageDispatcher() override = default;
 
-    IProtobufStream* m_hostStream = NULL;
-
   private:
     ILogger& m_logger;
 
     void task() override {
-
-        auto& usb = BSPContainer::getUSB();
         while (true) {
 
-            auto socket = SocketContainer::getHostClientSocket();
-
-            if (socket) {
-                m_hostStream = &socket.value();
-                m_logger.log(LogLevel::Info, "Host connected via TCP");
-            } else {
-                if (usb.isConnected()) {
-                    m_hostStream = &usb;
-                    m_logger.log(LogLevel::Info, "Host connected via USB");
-                }
-            }
-
-            if (m_hostStream != NULL) {
-                HiveMindHostDeserializer deserializer(*m_hostStream);
+            auto hostOpt = BSPContainer::getHostCommInterface();
+            if (hostOpt) {
+                ICommInterface& hostStream = hostOpt.value();
+                HiveMindHostDeserializer deserializer(hostStream);
                 HiveMindApiRequestHandler hivemindApiReqHandler =
                     MessageHandlerContainer::createHiveMindApiRequestHandler();
                 MessageDispatcher messageDispatcher =
                     MessageHandlerContainer::createMessageDispatcher(deserializer,
                                                                      hivemindApiReqHandler);
-                while (m_hostStream != NULL) {
+                while (hostStream.isConnected()) {
                     if (!messageDispatcher.deserializeAndDispatch()) {
                         m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch to host");
                     }
@@ -132,12 +105,13 @@ class HostMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     void task() override {
         while (true) {
 
-            if (m_messageDispatcher.m_hostStream != NULL) {
-                HiveMindHostSerializer serializer(*m_messageDispatcher.m_hostStream);
+            auto hostOpt = BSPContainer::getHostCommInterface();
+            if (hostOpt) {
+                ICommInterface& hostStream = hostOpt.value();
+                HiveMindHostSerializer serializer(hostStream);
                 MessageSender messageSender(MessageHandlerContainer::getHostMsgQueue(), serializer,
                                             BSPContainer::getBSP(), m_logger);
-                messageSender.greet();
-                while (m_messageDispatcher.m_hostStream != NULL) {
+                while (hostStream.isConnected()) {
                     if (!messageSender.processAndSerialize()) {
                         m_logger.log(LogLevel::Warn, "Fail to process/serialize to tcp");
                     }
@@ -159,28 +133,26 @@ class RemoteMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     ILogger& m_logger;
 
     void task() override {
-
-        auto& spi = BSPContainer::getSpiEsp();
         while (true) {
-            if (spi.isConnected()) {
 
-                HiveMindHostSerializer serializer(spi);
-                MessageSender messageSender(MessageHandlerContainer::getRemoteMsgQueue(),
-                                            serializer, BSPContainer::getBSP(), m_logger);
-
-                while (true) {
+            auto remoteOpt = BSPContainer::getRemoteCommInterface();
+            if (remoteOpt) {
+                ICommInterface& remoteStream = remoteOpt.value();
+                HiveMindHostSerializer serializer(remoteStream);
+                MessageSender messageSender(MessageHandlerContainer::getHostMsgQueue(), serializer,
+                                            BSPContainer::getBSP(), m_logger);
+                while (remoteStream.isConnected()) {
                     if (!messageSender.processAndSerialize()) {
-                        m_logger.log(LogLevel::Warn, "Fail to process/serialize to remote");
+                        m_logger.log(LogLevel::Warn, "Fail to process/serialize to tcp");
                     }
                 }
             }
             Task::delay(500);
         }
-    }
+    };
 };
 
 class RemoteMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
-
   public:
     RemoteMessageDispatcher(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
@@ -188,18 +160,24 @@ class RemoteMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZ
     ~RemoteMessageDispatcher() override = default;
 
     void task() override {
-        auto& spi = BSPContainer::getSpiEsp();
-        while (!spi.isConnected()) {
-            Task::delay(500);
-        }
-        HiveMindHostDeserializer deserializer(spi);
-        auto hivemindApiReqHandler = MessageHandlerContainer::createHiveMindApiRequestHandler();
-        auto messageDispatcher =
-            MessageHandlerContainer::createMessageDispatcher(deserializer, hivemindApiReqHandler);
         while (true) {
-            if (!messageDispatcher.deserializeAndDispatch()) {
-                m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch spi");
+
+            auto remoteOpt = BSPContainer::getRemoteCommInterface();
+            if (remoteOpt) {
+                ICommInterface& remoteStream = remoteOpt.value();
+                HiveMindHostDeserializer deserializer(remoteStream);
+                HiveMindApiRequestHandler hivemindApiReqHandler =
+                    MessageHandlerContainer::createHiveMindApiRequestHandler();
+                MessageDispatcher messageDispatcher =
+                    MessageHandlerContainer::createMessageDispatcher(deserializer,
+                                                                     hivemindApiReqHandler);
+                while (remoteStream.isConnected()) {
+                    if (!messageDispatcher.deserializeAndDispatch()) {
+                        m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch to host");
+                    }
+                }
             }
+            Task::delay(500);
         }
     }
 

@@ -73,8 +73,6 @@ bool TCPServer::receive(uint8_t* buffer, uint16_t length) {
     return ret == length;
 }
 
-bool TCPServer::isBusy() const { return false; }
-
 bool TCPServer::isConnected() const { return m_connected; }
 
 void TCPServer::close() {
@@ -93,12 +91,18 @@ void TCPServer::waitForClient() {
         return;
     }
 
-    m_clientFd = ::accept(m_serverFd, (struct sockaddr*)&m_address, (socklen_t*)&m_addressLength);
+    while (1) {
+        if (!m_connected) {
+            m_clientFd =
+                ::accept(m_serverFd, (struct sockaddr*)&m_address, (socklen_t*)&m_addressLength);
 
-    if (m_clientFd < 0) {
-        m_logger.log(LogLevel::Error, "TCP SPI mock: Client acceptation failed");
-    } else {
-        m_connected = true;
-        m_logger.log(LogLevel::Info, "TCP SPI mock: Client connected");
+            if (m_clientFd < 0) {
+                m_logger.log(LogLevel::Error, "TCP SPI mock: Client acceptation failed");
+            } else {
+                m_connected = true;
+                m_logger.log(LogLevel::Info, "TCP SPI mock: Client connected");
+            }
+        }
+        Task::delay(500);
     }
 }
