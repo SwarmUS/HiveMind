@@ -22,7 +22,7 @@ struct UWBRxFrame {
     uint8_t* m_payload = m_rxBuffer.data() + sizeof(UWBMessages::DWFrame);
 
     float getSFDAngle() const;
-    float getAccumulatorAngle();
+    float getAccumulatorAngle() const;
 };
 
 #endif //__UWBRXFRAME_H__

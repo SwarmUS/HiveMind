@@ -6,7 +6,7 @@ float UWBRxFrame::getSFDAngle() const {
     return (((float)(m_sfdAngleRegister & 0x7F)) / 64.0F) * M_PI;
 }
 
-float UWBRxFrame::getAccumulatorAngle() {
+float UWBRxFrame::getAccumulatorAngle() const {
     // Accumulator data has a dummy byte at the first index
     int16_t accumulatorQ = (m_firstPathAccumulator[2] << 8) | m_firstPathAccumulator[1];
     int16_t accumulatorI = (m_firstPathAccumulator[4] << 8) | m_firstPathAccumulator[3];
