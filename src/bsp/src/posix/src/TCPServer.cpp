@@ -96,7 +96,10 @@ void TCPServer::waitForClient() {
     // Always tries to reconnect to client
     while (m_serverFd > 0) {
         if (!m_connected) {
-            ::close(m_clientFd.value());
+            // Close socket
+            if (m_clientFd) {
+                ::close(m_clientFd.value());
+            }
             m_clientFd =
                 ::accept(m_serverFd, (struct sockaddr*)&m_address, (socklen_t*)&m_addressLength);
 
