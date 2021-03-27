@@ -19,7 +19,7 @@ TCPServer::~TCPServer() { close(); }
 
 void TCPServer::openSocket(int port) {
     if (port == 0) {
-        m_logger.log(LogLevel::Info, "SPI TCP mock port set to 0. Not initializing server.");
+        m_logger.log(LogLevel::Info, "TCP server port set to 0. Not initializing server.");
         return;
     }
 
@@ -27,7 +27,7 @@ void TCPServer::openSocket(int port) {
     int serverFd;
 
     if ((serverFd = ::socket(AF_INET, SOCK_STREAM, 0)) == 0) {
-        m_logger.log(LogLevel::Error, "SPI TCP mock socket creation failed");
+        m_logger.log(LogLevel::Error, "TCP server socket creation failed");
         return;
     }
     m_serverFd = serverFd;
@@ -40,15 +40,15 @@ void TCPServer::openSocket(int port) {
 
     if (::bind(m_serverFd, (struct sockaddr*)&m_address, static_cast<socklen_t>(m_addressLength)) <
         0) {
-        m_logger.log(LogLevel::Error, "SPI TCP mock server binding failed");
+        m_logger.log(LogLevel::Error, "TCP server server binding failed");
         return;
     }
 
     if (m_listenTask.start()) {
-        m_logger.log(LogLevel::Info, "SPI TCP mock server waiting for client on port %d", m_port);
+        m_logger.log(LogLevel::Info, "TCP server server waiting for client on port %d", m_port);
     } else {
 
-        m_logger.log(LogLevel::Info, "SPI TCP mock already listening on port %d", m_port);
+        m_logger.log(LogLevel::Info, "TCP server already listening on port %d", m_port);
     }
 }
 
@@ -87,7 +87,7 @@ void TCPServer::close() {
 
 void TCPServer::waitForClient() {
     if (::listen(m_serverFd, 1) < 0) {
-        m_logger.log(LogLevel::Error, "TCP SPI mock server listen failed");
+        m_logger.log(LogLevel::Error, "TCP server server listen failed");
         return;
     }
 
@@ -98,10 +98,10 @@ void TCPServer::waitForClient() {
                 ::accept(m_serverFd, (struct sockaddr*)&m_address, (socklen_t*)&m_addressLength);
 
             if (m_clientFd < 0) {
-                m_logger.log(LogLevel::Error, "TCP SPI mock: Client acceptation failed");
+                m_logger.log(LogLevel::Error, "TCP server: Client acceptation failed");
             } else {
                 m_connected = true;
-                m_logger.log(LogLevel::Info, "TCP SPI mock: Client connected");
+                m_logger.log(LogLevel::Info, "TCP server: Client connected");
             }
         }
         Task::delay(500);

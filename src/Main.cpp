@@ -17,6 +17,9 @@
 #include <message-handler/MessageHandlerContainer.h>
 #include <message-handler/MessageSender.h>
 
+// Need to return the proper comm interface
+typedef std::optional<std::reference_wrapper<ICommInterface>> (*CommInterfaceGetter)();
+
 class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
   public:
     BittyBuzzTask(const char* taskName, UBaseType_t priority) :
@@ -54,156 +57,134 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class HostMessageDispatcher : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class MessageDispatcherTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
-    HostMessageDispatcher(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
-
-    ~HostMessageDispatcher() override = default;
-
-  private:
-    ILogger& m_logger;
-
-    void task() override {
-        while (true) {
-
-            auto hostOpt = BSPContainer::getHostCommInterface();
-            if (hostOpt) {
-                ICommInterface& hostStream = hostOpt.value();
-                HiveMindHostDeserializer deserializer(hostStream);
-                HiveMindHostSerializer serializer(hostStream);
-                HiveMindApiRequestHandler hivemindApiReqHandler =
-                    MessageHandlerContainer::createHiveMindApiRequestHandler();
-
-                // Establishing greet handlshake
-                GreetHandler greetHandler(serializer, deserializer, BSPContainer::getBSP());
-                if (greetHandler.greet()) {
-
-                    GreetSender greetSender(MessageHandlerContainer::getHostMsgQueue(),
-                                            BSPContainer::getBSP());
-                    MessageDispatcher messageDispatcher =
-                        MessageHandlerContainer::createMessageDispatcher(
-                            deserializer, hivemindApiReqHandler, greetSender);
-
-                    while (hostStream.isConnected()) {
-                        if (!messageDispatcher.deserializeAndDispatch()) {
-                            m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch to host");
-                        }
-                    }
-                }
-            }
-            Task::delay(500);
-        }
-    }
-};
-
-class HostMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
-  public:
-    HostMessageSender(const char* taskName,
-                      UBaseType_t priority,
-                      HostMessageDispatcher& dispatcher) :
+    MessageDispatcherTask(const char* taskName,
+                          UBaseType_t priority,
+                          ICommInterface* stream,
+                          ICircularQueue<MessageDTO>& streamQueue) :
         AbstractTask(taskName, priority),
-        m_messageDispatcher(dispatcher),
+        m_taskName(taskName),
+        m_stream(stream),
+        m_streamQueue(streamQueue),
         m_logger(LoggerContainer::getLogger()) {}
 
-    ~HostMessageSender() override = default;
+    ~MessageDispatcherTask() override = default;
 
-    HostMessageDispatcher& m_messageDispatcher;
+    void setStream(ICommInterface* stream) { m_stream = stream; }
 
   private:
+    const char* m_taskName;
+    ICommInterface* m_stream;
+    ICircularQueue<MessageDTO>& m_streamQueue;
     ILogger& m_logger;
 
     void task() override {
-        while (true) {
+        if (m_stream != NULL) {
 
-            auto hostOpt = BSPContainer::getHostCommInterface();
-            if (hostOpt) {
-                ICommInterface& hostStream = hostOpt.value();
-                HiveMindHostSerializer serializer(hostStream);
-                MessageSender messageSender(MessageHandlerContainer::getHostMsgQueue(), serializer,
-                                            BSPContainer::getBSP(), m_logger);
-                while (hostStream.isConnected()) {
-                    if (!messageSender.processAndSerialize()) {
-                        m_logger.log(LogLevel::Warn, "Fail to process/serialize to tcp");
-                    }
+            HiveMindHostDeserializer deserializer(*m_stream);
+            HiveMindHostSerializer serializer(*m_stream);
+            HiveMindApiRequestHandler hivemindApiReqHandler =
+                MessageHandlerContainer::createHiveMindApiRequestHandler();
+
+            GreetSender greetSender(m_streamQueue, BSPContainer::getBSP());
+            MessageDispatcher messageDispatcher = MessageHandlerContainer::createMessageDispatcher(
+                deserializer, hivemindApiReqHandler, greetSender);
+
+            while (m_stream->isConnected()) {
+                if (!messageDispatcher.deserializeAndDispatch()) {
+                    m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch to %s", m_taskName);
                 }
             }
-            Task::delay(500);
         }
     }
 };
 
-class RemoteMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
-    RemoteMessageSender(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
+    MessageSenderTask(const char* taskName,
+                      UBaseType_t priority,
+                      ICommInterface* stream,
+                      ICircularQueue<MessageDTO>& streamQueue) :
+        AbstractTask(taskName, priority),
+        m_taskName(taskName),
+        m_stream(stream),
+        m_streamQueue(streamQueue),
+        m_logger(LoggerContainer::getLogger()) {}
 
-    ~RemoteMessageSender() override = default;
+    ~MessageSenderTask() override = default;
+
+    void setStream(ICommInterface* stream) { m_stream = stream; }
 
   private:
+    const char* m_taskName;
+    ICommInterface* m_stream;
+    ICircularQueue<MessageDTO>& m_streamQueue;
+    ILogger& m_logger;
+
+    void task() override {
+        if (m_stream != NULL) {
+            HiveMindHostSerializer serializer(*m_stream);
+            MessageSender messageSender(m_streamQueue, serializer, BSPContainer::getBSP(),
+                                        m_logger);
+            while (m_stream->isConnected()) {
+                if (!messageSender.processAndSerialize()) {
+                    m_logger.log(LogLevel::Warn, "Fail to process/serialize in %s", m_taskName);
+                }
+            }
+        }
+    }
+};
+
+class CommMonitoringTask : public AbstractTask<4 * configMINIMAL_STACK_SIZE> {
+  public:
+    CommMonitoringTask(const char* taskName,
+                       UBaseType_t priority,
+                       MessageDispatcherTask& dispatcherTask,
+                       MessageSenderTask& senderTask,
+                       CommInterfaceGetter commInterfaceGetter) :
+        AbstractTask(taskName, priority),
+        m_dispatcherTask(dispatcherTask),
+        m_senderTask(senderTask),
+        m_commInterfaceGetter(commInterfaceGetter),
+        m_logger(LoggerContainer::getLogger()) {}
+
+  private:
+    MessageDispatcherTask& m_dispatcherTask;
+    MessageSenderTask& m_senderTask;
+    CommInterfaceGetter m_commInterfaceGetter;
     ILogger& m_logger;
 
     void task() override {
         while (true) {
+            // TODO use notification instead of polling, need to add it in propolis os
+            if (!m_dispatcherTask.isRunning() && !m_senderTask.isRunning()) {
+                auto commInterfaceOpt = m_commInterfaceGetter();
+                if (commInterfaceOpt) {
+                    ICommInterface& commInterface = commInterfaceOpt.value();
 
-            auto remoteOpt = BSPContainer::getRemoteCommInterface();
-            if (remoteOpt) {
-                ICommInterface& remoteStream = remoteOpt.value();
-                HiveMindHostSerializer serializer(remoteStream);
-                MessageSender messageSender(MessageHandlerContainer::getHostMsgQueue(), serializer,
-                                            BSPContainer::getBSP(), m_logger);
-                while (remoteStream.isConnected()) {
-                    if (!messageSender.processAndSerialize()) {
-                        m_logger.log(LogLevel::Warn, "Fail to process/serialize to tcp");
-                    }
-                }
-            }
-            Task::delay(500);
-        }
-    };
-};
+                    if (commInterface.isConnected()) {
 
-class RemoteMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
-  public:
-    RemoteMessageDispatcher(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
+                        HiveMindHostSerializer serializer(commInterface);
+                        HiveMindHostDeserializer deserializer(commInterface);
+                        GreetHandler greetHandler(serializer, deserializer, BSPContainer::getBSP());
 
-    ~RemoteMessageDispatcher() override = default;
+                        // Handshake
+                        if (greetHandler.greet()) {
 
-    void task() override {
-        while (true) {
-
-            auto remoteOpt = BSPContainer::getRemoteCommInterface();
-            if (remoteOpt) {
-                ICommInterface& remoteStream = remoteOpt.value();
-                HiveMindHostDeserializer deserializer(remoteStream);
-                HiveMindHostSerializer serializer(remoteStream);
-                HiveMindApiRequestHandler hivemindApiReqHandler =
-                    MessageHandlerContainer::createHiveMindApiRequestHandler();
-
-                // Establishing greet handlshake
-                GreetHandler greetHandler(serializer, deserializer, BSPContainer::getBSP());
-                if (greetHandler.greet()) {
-
-                    GreetSender greetSender(MessageHandlerContainer::getRemoteMsgQueue(),
-                                            BSPContainer::getBSP());
-                    MessageDispatcher messageDispatcher =
-                        MessageHandlerContainer::createMessageDispatcher(
-                            deserializer, hivemindApiReqHandler, greetSender);
-
-                    while (remoteStream.isConnected()) {
-                        if (!messageDispatcher.deserializeAndDispatch()) {
-                            m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch to remote");
+                            // Restart the tasks with the new streams
+                            m_dispatcherTask.setStream(&commInterface);
+                            m_senderTask.setStream(&commInterface);
+                            m_dispatcherTask.start();
+                            m_senderTask.start();
                         }
                     }
                 }
             }
-            Task::delay(500);
+
+            Task::delay(1000);
         }
     }
-
-  private:
-    ILogger& m_logger;
 };
 
 class InterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
@@ -223,18 +204,28 @@ int main(int argc, char** argv) {
     bsp.initChip((void*)&cmdLineArgs);
 
     static BittyBuzzTask s_bittybuzzTask("bittybuzz", tskIDLE_PRIORITY + 1);
-    static HostMessageDispatcher s_hostDispatchTask("tcp_dispatch", tskIDLE_PRIORITY + 1);
-    static HostMessageSender s_hostMessageSender("host_send", tskIDLE_PRIORITY + 1,
-                                                 s_hostDispatchTask);
-    static RemoteMessageDispatcher s_remoteDispatchTask("remote_dispatch", tskIDLE_PRIORITY + 1);
-    static RemoteMessageSender s_remoteMessageSender("remote_send", tskIDLE_PRIORITY + 1);
     static InterlocTask s_interlocTask("interloc", tskIDLE_PRIORITY + 5);
 
+    static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", tskIDLE_PRIORITY + 1, NULL,
+                                                    MessageHandlerContainer::getHostMsgQueue());
+    static MessageSenderTask s_hostMessageSender("host_send", tskIDLE_PRIORITY + 1, NULL,
+                                                 MessageHandlerContainer::getHostMsgQueue());
+    static MessageDispatcherTask s_remoteDispatchTask("remote_dispatch", tskIDLE_PRIORITY + 1, NULL,
+                                                      MessageHandlerContainer::getRemoteMsgQueue());
+    static MessageSenderTask s_remoteMessageSender("remote_send", tskIDLE_PRIORITY + 1, NULL,
+                                                   MessageHandlerContainer::getRemoteMsgQueue());
+
+    static CommMonitoringTask s_hostMonitorTask("host_monitor", tskIDLE_PRIORITY + 1,
+                                                s_hostDispatchTask, s_hostMessageSender,
+                                                BSPContainer::getHostCommInterface);
+    static CommMonitoringTask s_remoteMonitorTask("remote_monitor", tskIDLE_PRIORITY + 1,
+                                                  s_remoteDispatchTask, s_remoteMessageSender,
+                                                  BSPContainer::getRemoteCommInterface);
+
     s_bittybuzzTask.start();
-    s_hostDispatchTask.start();
-    s_hostMessageSender.start();
-    s_remoteMessageSender.start();
     s_interlocTask.start();
+    s_hostMonitorTask.start();
+    s_remoteMonitorTask.start();
 
     Task::startScheduler();
 
