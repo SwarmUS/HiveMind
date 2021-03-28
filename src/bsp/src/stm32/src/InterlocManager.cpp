@@ -64,19 +64,7 @@ void InterlocManager::syncClocks() {
     m_decaA.setSyncMode(DW_SYNC_MODE::OSTR);
     m_decaB.setSyncMode(DW_SYNC_MODE::OSTR);
 
-    // Enable sync
-    deca_setSyncEnable(true);
-    deca_setSyncClear(true);
-
-    // Sync
-    // TODO: Maybe play on timings here
-    deca_setSync(true);
-    Task::delay(1);
-    deca_setSync(false);
-    deca_setSyncClear(false);
-
-    // Disable sync
-    deca_setSyncEnable(false);
+    deca_pulseSyncSignal();
 
     m_decaA.setSyncMode(DW_SYNC_MODE::OFF);
     m_decaB.setSyncMode(DW_SYNC_MODE::OFF);

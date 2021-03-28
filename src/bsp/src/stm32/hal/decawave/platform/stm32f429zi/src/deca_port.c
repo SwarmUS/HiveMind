@@ -2,6 +2,8 @@
 #include "deca_device_api.h"
 #include "main.h"
 #include "stm32f4xx_hal_conf.h"
+#include <FreeRTOS.h>
+#include <task.h>
 
 static decawaveDeviceConfig_t g_decawaveConfigs[DWT_NUM_DW_DEV] = {
     {DW_NSS_A_GPIO_Port, DW_NSS_A_Pin, DW_IRQn_A_GPIO_Port, DW_IRQn_A_Pin, NULL, NULL},
@@ -117,6 +119,22 @@ void deca_isr(decaDevice_t selectedDevice) {
             deviceConfig->isrCallback(deviceConfig->isrContext);
         }
     }
+}
+
+void deca_pulseSyncSignal() {
+    // Enable sync
+    deca_setSyncEnable(true);
+    deca_setSyncClear(true);
+
+    // Sync
+    // TODO: Maybe play on timings here
+    deca_setSync(true);
+    vTaskDelay(1);
+    deca_setSync(false);
+    deca_setSyncClear(false);
+
+    // Disable sync
+    deca_setSyncEnable(false);
 }
 
 void deca_setSync(bool state) {

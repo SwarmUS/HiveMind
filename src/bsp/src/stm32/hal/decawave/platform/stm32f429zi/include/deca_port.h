@@ -88,6 +88,11 @@ void deca_setISRCallback(decaDevice_t device, decaISRCallback_t callback, void* 
 void deca_isr(decaDevice_t selectedDevice);
 
 /**
+ * @brief Sends a pulse on the DW clock sync
+ */
+void deca_pulseSyncSignal();
+
+/**
  * Sets the DW_SYNC pin
  * @param state State to set
  */
