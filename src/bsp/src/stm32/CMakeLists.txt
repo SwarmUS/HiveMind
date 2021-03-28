@@ -7,7 +7,7 @@ set(LIB_SOURCES
     src/UserInterface.cpp
     src/HardwareCRC.cpp
     src/SocketContainer.cpp
-        src/HardwareCRC.cpp
+    src/HardwareCRC.cpp
     src/SocketFactory.cpp
     src/TCPClient.cpp
     src/SettingsContainer.cpp
@@ -16,7 +16,8 @@ set(LIB_SOURCES
     src/USB.cpp
     src/Decawave.cpp
     src/DecawaveUtils.cpp
-    src/InterlocManager.cpp src/UWBRxFrame.cpp)
+    src/InterlocManager.cpp
+    src/UWBRxFrame.cpp)
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
