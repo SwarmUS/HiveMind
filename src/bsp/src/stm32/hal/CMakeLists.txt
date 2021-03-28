@@ -11,7 +11,6 @@ set(LIB_SOURCES
 set(LIB_HEADERS
     include/hal/hal.h
     include/hal/uart_print.h
-    include/hal/uart_host.h
     include/hal/uart.h
     include/hal/hal_spi.h
     include/hal/esp_spi.h
@@ -24,7 +23,6 @@ set(GLOBAL_SOURCES
     src/uart_print.c
     src/uart.c
     src/syscalls.c
-    src/uart_host.c
     src/esp_spi.c
     src/hal_gpio.c
     src/hal_spi.c
