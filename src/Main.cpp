@@ -17,6 +17,9 @@
 #include <message-handler/MessageHandlerContainer.h>
 #include <message-handler/MessageSender.h>
 
+constexpr uint16_t gc_taskNormalPriority = tskIDLE_PRIORITY + 1;
+constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 5;
+
 // Need to return the proper comm interface
 typedef std::optional<std::reference_wrapper<ICommInterface>> (*CommInterfaceGetter)();
 
@@ -203,22 +206,23 @@ int main(int argc, char** argv) {
     IBSP& bsp = BSPContainer::getBSP();
     bsp.initChip((void*)&cmdLineArgs);
 
-    static BittyBuzzTask s_bittybuzzTask("bittybuzz", tskIDLE_PRIORITY + 1);
-    static InterlocTask s_interlocTask("interloc", tskIDLE_PRIORITY + 5);
+    static BittyBuzzTask s_bittybuzzTask("bittybuzz", gc_taskNormalPriority);
+    static InterlocTask s_interlocTask("interloc", gc_taskHighPriority);
 
-    static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", tskIDLE_PRIORITY + 1, NULL,
+    static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskNormalPriority, NULL,
                                                     MessageHandlerContainer::getHostMsgQueue());
-    static MessageSenderTask s_hostMessageSender("host_send", tskIDLE_PRIORITY + 1, NULL,
+    static MessageSenderTask s_hostMessageSender("host_send", gc_taskNormalPriority, NULL,
                                                  MessageHandlerContainer::getHostMsgQueue());
-    static MessageDispatcherTask s_remoteDispatchTask("remote_dispatch", tskIDLE_PRIORITY + 1, NULL,
+    static MessageDispatcherTask s_remoteDispatchTask("remote_dispatch", gc_taskNormalPriority,
+                                                      NULL,
                                                       MessageHandlerContainer::getRemoteMsgQueue());
-    static MessageSenderTask s_remoteMessageSender("remote_send", tskIDLE_PRIORITY + 1, NULL,
+    static MessageSenderTask s_remoteMessageSender("remote_send", gc_taskNormalPriority, NULL,
                                                    MessageHandlerContainer::getRemoteMsgQueue());
 
-    static CommMonitoringTask s_hostMonitorTask("host_monitor", tskIDLE_PRIORITY + 1,
+    static CommMonitoringTask s_hostMonitorTask("host_monitor", gc_taskNormalPriority,
                                                 s_hostDispatchTask, s_hostMessageSender,
                                                 BSPContainer::getHostCommInterface);
-    static CommMonitoringTask s_remoteMonitorTask("remote_monitor", tskIDLE_PRIORITY + 1,
+    static CommMonitoringTask s_remoteMonitorTask("remote_monitor", gc_taskNormalPriority,
                                                   s_remoteDispatchTask, s_remoteMessageSender,
                                                   BSPContainer::getRemoteCommInterface);
 

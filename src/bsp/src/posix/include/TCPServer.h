@@ -16,7 +16,7 @@ class TCPServer : public ICommInterface {
 
     /**
      *@brief opens the socket on a certain port
-     *@retun true if the socket could be opened, binded and then listen to the port, false if not*/
+     *@return true if the socket could be opened, binded and then listen to the port, false if not*/
     bool openSocket(int port);
 
     bool send(const uint8_t* buffer, uint16_t length) override;
