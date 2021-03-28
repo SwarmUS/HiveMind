@@ -15,7 +15,6 @@ extern "C" {
 #include "usart.h"
 
 #define HUART_PRINT (&huart3)
-#define HUART_HOST NULL
 #define HRNG (&hrng)
 
 // Change to ESP_SOC to use th spi channel for the SOC on the HiveSight.

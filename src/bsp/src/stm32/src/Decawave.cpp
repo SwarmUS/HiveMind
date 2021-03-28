@@ -5,8 +5,6 @@
 #include <deca_device_api.h>
 #include <deca_regs.h>
 
-#define OSTR_WAIT_TIME ((((uint16_t)33) & 0xff) << 3)
-
 void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
 
