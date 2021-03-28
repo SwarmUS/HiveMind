@@ -157,8 +157,8 @@ class Decawave {
                                    uint16_t rxTimeoutUs);
 
     /**
-     * Sets the SYNC register for a given mode
-     * @param syncMode Mode to set
+     * Prepares the DW1000 for a clock sync
+     * @param syncMode Sync mode to prepare for
      */
     void setSyncMode(DW_SYNC_MODE syncMode);
 

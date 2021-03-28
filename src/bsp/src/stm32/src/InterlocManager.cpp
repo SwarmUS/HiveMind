@@ -59,41 +59,29 @@ void InterlocManager::startInterloc() {
 }
 
 void InterlocManager::syncClocks() {
-    // vPortEnterCritical();
+    vPortEnterCritical();
 
     m_decaA.setSyncMode(DW_SYNC_MODE::OSTR);
     m_decaB.setSyncMode(DW_SYNC_MODE::OSTR);
 
     // Enable sync
-    //    deca_setSyncEnable(true);
-    //    deca_setSyncClear(true);
-    //
-    //    // Sync
-    //    // TODO: Maybe play on timings here
-    //    deca_setSync(true);
-    //    deca_setSync(false);
-    //    // deca_setSyncClear(false);
-    //
-    //    // Disable sync
-    //    deca_setSyncEnable(false);
+    deca_setSyncEnable(true);
+    deca_setSyncClear(true);
 
-    HAL_GPIO_WritePin(DW_SYNC_EN_GPIO_Port, DW_SYNC_EN_Pin, GPIO_PIN_SET);
-    HAL_GPIO_WritePin(DW_SYNC_CLEAR_GPIO_Port, DW_SYNC_CLEAR_Pin, GPIO_PIN_SET);
+    // Sync
+    // TODO: Maybe play on timings here
+    deca_setSync(true);
+    Task::delay(1);
+    deca_setSync(false);
+    deca_setSyncClear(false);
 
-    // this gives about 2.7 MHz pulse
-    HAL_GPIO_WritePin(DW_SYNC_GPIO_Port, DW_SYNC_Pin, GPIO_PIN_SET);
-    for (int i = 0; i < 100; i++) {
-    }
-    HAL_GPIO_WritePin(DW_SYNC_GPIO_Port, DW_SYNC_Pin, GPIO_PIN_RESET);
-    // HAL_GPIO_WritePin(DW_SYNC_CLEAR_GPIO_Port, DW_SYNC_CLEAR_Pin, GPIO_PIN_RESET);
-
-    // then turn off mode and sync
-    HAL_GPIO_WritePin(DW_SYNC_EN_GPIO_Port, DW_SYNC_EN_Pin, GPIO_PIN_SET);
+    // Disable sync
+    deca_setSyncEnable(false);
 
     m_decaA.setSyncMode(DW_SYNC_MODE::OFF);
     m_decaB.setSyncMode(DW_SYNC_MODE::OFF);
 
-    // vPortExitCritical();
+    vPortExitCritical();
 }
 
 bool InterlocManager::constructUWBHeader(uint16_t destinationId,

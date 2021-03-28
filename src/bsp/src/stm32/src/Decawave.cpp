@@ -71,16 +71,14 @@ bool Decawave::init() {
     configureDW();
     setState(DW_STATE::CONFIGURED);
 
-    //    dwt_enablegpioclocks();
-    //    dwt_setgpiodirection(DWT_GxM0 | DWT_GxM1 | DWT_GxM2 | DWT_GxM3, 0);
-    //
-    //    //    dwt_setinterrupt(DWT_INT_RFCG | DWT_INT_RFTO | DWT_INT_RXPTO | DWT_INT_RPHE |
-    //    DWT_INT_RFCE
-    //    //    |
-    //    //                         DWT_INT_RFSL | DWT_INT_SFDT,
-    //    //                     1);
-    //
-    //    setLed(DW_LED::LED_0, true);
+    dwt_enablegpioclocks();
+    dwt_setgpiodirection(DWT_GxM0 | DWT_GxM1 | DWT_GxM2 | DWT_GxM3, 0);
+
+    dwt_setinterrupt(DWT_INT_RFCG | DWT_INT_RFTO | DWT_INT_RXPTO | DWT_INT_RPHE | DWT_INT_RFCE |
+                         DWT_INT_RFSL | DWT_INT_SFDT,
+                     1);
+
+    setLed(DW_LED::LED_0, true);
 
     m_rxAsyncTask.start();
 
@@ -302,8 +300,9 @@ void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
 }
 
 void Decawave::setSyncMode(DW_SYNC_MODE syncMode) {
-    dwt_setSelectedDevice(m_spiDevice);
-    uint16_t regValue;
+    deca_selectDevice(m_spiDevice);
+    uint16_t regValue = 0;
+    constexpr uint16_t syncWaitTime = 33; // should have waitTime%4 = 1 (DW1000 user manual p.56)
 
     switch (syncMode) {
 
@@ -311,7 +310,7 @@ void Decawave::setSyncMode(DW_SYNC_MODE syncMode) {
         regValue = dwt_read16bitoffsetreg(EXT_SYNC_ID, EC_CTRL_OFFSET);
         regValue &= EC_CTRL_WAIT_MASK; // Clear previous wait value
         regValue |= EC_CTRL_OSTRM;
-        regValue |= ((((uint16_t)33) & 0xff) << 3);
+        regValue |= (((syncWaitTime)&0xff) << 3);
         dwt_write16bitoffsetreg(EXT_SYNC_ID, EC_CTRL_OFFSET, regValue);
         break;
 
