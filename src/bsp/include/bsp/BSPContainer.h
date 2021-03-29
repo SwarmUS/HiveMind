@@ -2,12 +2,12 @@
 #define _BSPCONTAINER_H
 
 #include "ICRC.h"
+#include "ICommInterface.h"
 #include "IInterlocManager.h"
 #include "bsp/IBSP.h"
-#include "bsp/IHostUart.h"
-#include "bsp/ISpiEsp.h"
-#include "bsp/IUSB.h"
 #include "bsp/IUserInterface.h"
+#include <functional>
+#include <optional>
 
 namespace BSPContainer {
     /**
@@ -21,24 +21,17 @@ namespace BSPContainer {
     IUserInterface& getUserInterface();
 
     /**
-     * @brief Returns an instance of the Host UART driver.
-     */
-    IHostUart& getHostUart();
-
-    /**
      * @brief Returns an instance of the HardwareCRC driver.
      */
     ICRC& getCRC();
 
     /**
-     * @brief Returns an instance of the Esp32 Spi driver.
-     */
-    ISpiEsp& getSpiEsp();
+     * @brief Return an instance of the connected host comm interface. */
+    std::optional<std::reference_wrapper<ICommInterface>> getHostCommInterface();
 
     /**
-     * @brief Returns an instance of the USB CDC driver
-     */
-    IUSB& getUSB();
+     * @brief Return an instance of the connected remote comm interface. */
+    std::optional<std::reference_wrapper<ICommInterface>> getRemoteCommInterface();
 
     /**
      * @brief Returns an instance of the interloc manager

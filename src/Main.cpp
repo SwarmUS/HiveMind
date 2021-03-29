@@ -6,15 +6,22 @@
 #include <bittybuzz/BittyBuzzVm.h>
 #include <bsp/BSPContainer.h>
 #include <bsp/IBSP.h>
-#include <bsp/SocketContainer.h>
 #include <cstdlib>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <logger/Logger.h>
 #include <logger/LoggerContainer.h>
+#include <message-handler/GreetHandler.h>
+#include <message-handler/GreetSender.h>
 #include <message-handler/MessageDispatcher.h>
 #include <message-handler/MessageHandlerContainer.h>
 #include <message-handler/MessageSender.h>
+
+constexpr uint16_t gc_taskNormalPriority = tskIDLE_PRIORITY + 1;
+constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 5;
+
+// Need to return the proper comm interface
+typedef std::optional<std::reference_wrapper<ICommInterface>> (*CommInterfaceGetter)();
 
 class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
   public:
@@ -53,258 +60,134 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class UartMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
-
+class MessageDispatcherTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
-    UartMessageDispatcher(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
+    MessageDispatcherTask(const char* taskName,
+                          UBaseType_t priority,
+                          ICommInterface* stream,
+                          ICircularQueue<MessageDTO>& streamQueue) :
+        AbstractTask(taskName, priority),
+        m_taskName(taskName),
+        m_stream(stream),
+        m_streamQueue(streamQueue),
+        m_logger(LoggerContainer::getLogger()) {}
 
-    ~UartMessageDispatcher() override = default;
+    ~MessageDispatcherTask() override = default;
 
-    void task() override {
-        auto& uart = BSPContainer::getHostUart();
-
-        while (true) {
-            if (uart.isConnected()) {
-                HiveMindHostDeserializer deserializer(uart);
-                HiveMindApiRequestHandler hivemindApiReqHandler =
-                    MessageHandlerContainer::createHiveMindApiRequestHandler();
-                MessageDispatcher messageDispatcher =
-                    MessageHandlerContainer::createMessageDispatcher(deserializer,
-                                                                     hivemindApiReqHandler);
-                while (true) {
-                    if (!messageDispatcher.deserializeAndDispatch()) {
-                        m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch uart");
-                    }
-                }
-            }
-            Task::delay(500);
-        }
-    }
+    void setStream(ICommInterface* stream) { m_stream = stream; }
 
   private:
-    ILogger& m_logger;
-};
-
-class TCPMessageDispatcher : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
-
-  public:
-    TCPMessageDispatcher(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
-
-    ~TCPMessageDispatcher() override = default;
-
-  private:
+    const char* m_taskName;
+    ICommInterface* m_stream;
+    ICircularQueue<MessageDTO>& m_streamQueue;
     ILogger& m_logger;
 
     void task() override {
-        while (true) {
-            auto socket = SocketContainer::getHostClientSocket();
-            if (socket) {
-                HiveMindHostDeserializer deserializer(socket.value());
-                HiveMindApiRequestHandler hivemindApiReqHandler =
-                    MessageHandlerContainer::createHiveMindApiRequestHandler();
-                MessageDispatcher messageDispatcher =
-                    MessageHandlerContainer::createMessageDispatcher(deserializer,
-                                                                     hivemindApiReqHandler);
+        if (m_stream != NULL) {
 
-                while (true) {
-                    if (!messageDispatcher.deserializeAndDispatch()) {
-                        m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch TCP");
-                    }
+            HiveMindHostDeserializer deserializer(*m_stream);
+            HiveMindHostSerializer serializer(*m_stream);
+            HiveMindApiRequestHandler hivemindApiReqHandler =
+                MessageHandlerContainer::createHiveMindApiRequestHandler();
+
+            GreetSender greetSender(m_streamQueue, BSPContainer::getBSP());
+            MessageDispatcher messageDispatcher = MessageHandlerContainer::createMessageDispatcher(
+                deserializer, hivemindApiReqHandler, greetSender);
+
+            while (m_stream->isConnected()) {
+                if (!messageDispatcher.deserializeAndDispatch()) {
+                    m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch to %s", m_taskName);
                 }
             }
-            Task::delay(500);
         }
     }
 };
 
-class UartMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
-    UartMessageSender(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
+    MessageSenderTask(const char* taskName,
+                      UBaseType_t priority,
+                      ICommInterface* stream,
+                      ICircularQueue<MessageDTO>& streamQueue) :
+        AbstractTask(taskName, priority),
+        m_taskName(taskName),
+        m_stream(stream),
+        m_streamQueue(streamQueue),
+        m_logger(LoggerContainer::getLogger()) {}
 
-    ~UartMessageSender() override = default;
+    ~MessageSenderTask() override = default;
+
+    void setStream(ICommInterface* stream) { m_stream = stream; }
 
   private:
+    const char* m_taskName;
+    ICommInterface* m_stream;
+    ICircularQueue<MessageDTO>& m_streamQueue;
     ILogger& m_logger;
 
     void task() override {
-        auto& uart = BSPContainer::getHostUart();
-
-        while (true) {
-            if (uart.isConnected()) {
-
-                HiveMindHostSerializer serializer(uart);
-
-                // TODO: For now the uart is considered remote
-                MessageSender messageSender(MessageHandlerContainer::getRemoteMsgQueue(),
-                                            serializer, BSPContainer::getBSP(), m_logger);
-                // TODO: The uart needs to receive byte to know it's connected, so both sides would
-                // wait for message. Find a fix for that
-                messageSender.greet();
-                while (true) {
-                    if (!messageSender.processAndSerialize()) {
-                        m_logger.log(LogLevel::Warn, "Fail to process/serialize to uart");
-                    }
+        if (m_stream != NULL) {
+            HiveMindHostSerializer serializer(*m_stream);
+            MessageSender messageSender(m_streamQueue, serializer, BSPContainer::getBSP(),
+                                        m_logger);
+            while (m_stream->isConnected()) {
+                if (!messageSender.processAndSerialize()) {
+                    m_logger.log(LogLevel::Warn, "Fail to process/serialize in %s", m_taskName);
                 }
             }
-            Task::delay(500);
         }
     }
 };
 
-class TCPMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class CommMonitoringTask : public AbstractTask<4 * configMINIMAL_STACK_SIZE> {
   public:
-    TCPMessageSender(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
-
-    ~TCPMessageSender() override = default;
+    CommMonitoringTask(const char* taskName,
+                       UBaseType_t priority,
+                       MessageDispatcherTask& dispatcherTask,
+                       MessageSenderTask& senderTask,
+                       CommInterfaceGetter commInterfaceGetter) :
+        AbstractTask(taskName, priority),
+        m_dispatcherTask(dispatcherTask),
+        m_senderTask(senderTask),
+        m_commInterfaceGetter(commInterfaceGetter),
+        m_logger(LoggerContainer::getLogger()) {}
 
   private:
+    MessageDispatcherTask& m_dispatcherTask;
+    MessageSenderTask& m_senderTask;
+    CommInterfaceGetter m_commInterfaceGetter;
     ILogger& m_logger;
 
     void task() override {
         while (true) {
-            auto socket = SocketContainer::getHostClientSocket();
-            if (socket) {
-                HiveMindHostSerializer serializer(socket.value());
-                MessageSender messageSender(MessageHandlerContainer::getHostMsgQueue(), serializer,
-                                            BSPContainer::getBSP(), m_logger);
+            // TODO use notification instead of polling, need to add it in propolis os
+            if (!m_dispatcherTask.isRunning() && !m_senderTask.isRunning()) {
+                auto commInterfaceOpt = m_commInterfaceGetter();
+                if (commInterfaceOpt) {
+                    ICommInterface& commInterface = commInterfaceOpt.value();
 
-                messageSender.greet();
-                while (true) {
-                    if (!messageSender.processAndSerialize()) {
-                        m_logger.log(LogLevel::Warn, "Fail to process/serialize to tcp");
+                    if (commInterface.isConnected()) {
+
+                        HiveMindHostSerializer serializer(commInterface);
+                        HiveMindHostDeserializer deserializer(commInterface);
+                        GreetHandler greetHandler(serializer, deserializer, BSPContainer::getBSP());
+
+                        // Handshake
+                        if (greetHandler.greet()) {
+
+                            // Restart the tasks with the new streams
+                            m_dispatcherTask.setStream(&commInterface);
+                            m_senderTask.setStream(&commInterface);
+                            m_dispatcherTask.start();
+                            m_senderTask.start();
+                        }
                     }
                 }
             }
-            Task::delay(500);
+
+            Task::delay(1000);
         }
     }
-};
-
-class SPIMessageSender : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
-  public:
-    SPIMessageSender(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
-
-    ~SPIMessageSender() override = default;
-
-  private:
-    ILogger& m_logger;
-
-    void task() override {
-
-        auto& spi = BSPContainer::getSpiEsp();
-        while (true) {
-            if (spi.isConnected()) {
-
-                HiveMindHostSerializer serializer(spi);
-                MessageSender messageSender(MessageHandlerContainer::getRemoteMsgQueue(),
-                                            serializer, BSPContainer::getBSP(), m_logger);
-
-                while (true) {
-                    if (!messageSender.processAndSerialize()) {
-                        m_logger.log(LogLevel::Warn, "Fail to process/serialize to spi");
-                    }
-                }
-            }
-            Task::delay(500);
-        }
-    }
-};
-
-class SpiMessageDispatcher : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
-
-  public:
-    SpiMessageDispatcher(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
-
-    ~SpiMessageDispatcher() override = default;
-
-    void task() override {
-        auto& spi = BSPContainer::getSpiEsp();
-        while (!spi.isConnected()) {
-            Task::delay(500);
-        }
-        HiveMindHostDeserializer deserializer(spi);
-        auto hivemindApiReqHandler = MessageHandlerContainer::createHiveMindApiRequestHandler();
-        auto messageDispatcher =
-            MessageHandlerContainer::createMessageDispatcher(deserializer, hivemindApiReqHandler);
-        while (true) {
-            if (!messageDispatcher.deserializeAndDispatch()) {
-                m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch spi");
-            }
-        }
-    }
-
-  private:
-    ILogger& m_logger;
-};
-
-class USBMessageSender : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
-  public:
-    USBMessageSender(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
-
-    ~USBMessageSender() override = default;
-
-  private:
-    ILogger& m_logger;
-
-    void task() override {
-        auto& usb = BSPContainer::getUSB();
-        while (true) {
-            if (usb.isConnected()) {
-
-                HiveMindHostSerializer serializer(usb);
-
-                MessageSender messageSender(MessageHandlerContainer::getHostMsgQueue(), serializer,
-                                            BSPContainer::getBSP(), m_logger);
-
-                while (true) {
-                    if (!messageSender.processAndSerialize()) {
-                        m_logger.log(LogLevel::Warn, "Fail to process/serialize to USB");
-                    }
-                }
-            }
-            Task::delay(500);
-        }
-    }
-};
-
-class USBMessageDispatcher : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
-
-  public:
-    USBMessageDispatcher(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
-
-    ~USBMessageDispatcher() override = default;
-
-    void task() override {
-        auto& usb = BSPContainer::getUSB();
-
-        while (true) {
-            if (usb.isConnected()) {
-                HiveMindHostDeserializer deserializer(usb);
-                HiveMindApiRequestHandler hivemindApiReqHandler =
-                    MessageHandlerContainer::createHiveMindApiRequestHandler();
-                MessageDispatcher messageDispatcher =
-                    MessageHandlerContainer::createMessageDispatcher(deserializer,
-                                                                     hivemindApiReqHandler);
-                while (true) {
-                    if (!messageDispatcher.deserializeAndDispatch()) {
-                        m_logger.log(LogLevel::Warn, "Fail to deserialize/dispatch  usb");
-                    }
-                }
-            }
-            Task::delay(500);
-        }
-    }
-
-  private:
-    ILogger& m_logger;
 };
 
 class InterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
@@ -323,26 +206,30 @@ int main(int argc, char** argv) {
     IBSP& bsp = BSPContainer::getBSP();
     bsp.initChip((void*)&cmdLineArgs);
 
-    static BittyBuzzTask s_bittybuzzTask("bittybuzz", tskIDLE_PRIORITY + 1);
-    //    static UartMessageDispatcher s_uartDispatchTask("uart_dispatch", tskIDLE_PRIORITY + 1);
-    static TCPMessageDispatcher s_tcpDispatchTask("tcp_dispatch", tskIDLE_PRIORITY + 1);
-    static SpiMessageDispatcher s_spiDispatchTask("spi_dispatch", tskIDLE_PRIORITY + 1);
-    static UartMessageSender s_uartMessageSender("uart_send", tskIDLE_PRIORITY + 1);
-    static TCPMessageSender s_tcpMessageSender("uart_send", tskIDLE_PRIORITY + 1);
-    static SPIMessageSender s_spiMessageSender("spi_send", tskIDLE_PRIORITY + 1);
-    static USBMessageSender s_usbMessageSender("usb_send", tskIDLE_PRIORITY + 5);
-    static USBMessageDispatcher s_usbMessageDispatcher("usb_receive", tskIDLE_PRIORITY + 5);
-    static InterlocTask s_interlocTask("interloc", tskIDLE_PRIORITY + 5);
+    static BittyBuzzTask s_bittybuzzTask("bittybuzz", gc_taskNormalPriority);
+    static InterlocTask s_interlocTask("interloc", gc_taskHighPriority);
+
+    static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskNormalPriority, NULL,
+                                                    MessageHandlerContainer::getHostMsgQueue());
+    static MessageSenderTask s_hostMessageSender("host_send", gc_taskNormalPriority, NULL,
+                                                 MessageHandlerContainer::getHostMsgQueue());
+    static MessageDispatcherTask s_remoteDispatchTask("remote_dispatch", gc_taskNormalPriority,
+                                                      NULL,
+                                                      MessageHandlerContainer::getRemoteMsgQueue());
+    static MessageSenderTask s_remoteMessageSender("remote_send", gc_taskNormalPriority, NULL,
+                                                   MessageHandlerContainer::getRemoteMsgQueue());
+
+    static CommMonitoringTask s_hostMonitorTask("host_monitor", gc_taskNormalPriority,
+                                                s_hostDispatchTask, s_hostMessageSender,
+                                                BSPContainer::getHostCommInterface);
+    static CommMonitoringTask s_remoteMonitorTask("remote_monitor", gc_taskNormalPriority,
+                                                  s_remoteDispatchTask, s_remoteMessageSender,
+                                                  BSPContainer::getRemoteCommInterface);
 
     s_bittybuzzTask.start();
-    //    s_uartDispatchTask.start();
-    s_tcpDispatchTask.start();
-    //    s_uartMessageSender.start();
-    s_tcpMessageSender.start();
-    s_spiMessageSender.start();
-    s_usbMessageSender.start();
-    s_usbMessageDispatcher.start();
     s_interlocTask.start();
+    s_hostMonitorTask.start();
+    s_remoteMonitorTask.start();
 
     Task::startScheduler();
 
