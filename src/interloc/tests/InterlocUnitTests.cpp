@@ -191,8 +191,18 @@ TEST_F(InterlocFixture, Interloc_getPositionsTable_elementInTable) {
     // Then
     m_interlocManagerMock->m_callback(positionUpdate);
     auto ret = m_interloc->getPositionsTable();
-    ret.m_positionsLength = 1;
 
     // Expect
     EXPECT_EQ(ret.m_positionsLength, 1);
+}
+
+TEST_F(InterlocFixture, Interloc_getPositionsTable_addMoreRobotsThanAllowed) {
+    for (int i = 0; i < MAX_ROBOTS_IN_SWARM + 1; i++) {
+        m_interlocManagerMock->m_callback({.m_robotId = static_cast<uint16_t>(i)});
+    }
+
+    auto ret = m_interloc->getPositionsTable();
+
+    // Expect
+    EXPECT_EQ(ret.m_positionsLength, MAX_ROBOTS_IN_SWARM);
 }

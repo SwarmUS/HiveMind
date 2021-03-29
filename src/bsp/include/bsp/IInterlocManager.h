@@ -17,7 +17,7 @@ class IInterlocManager {
      * @brief Registers a callback to be called when new interloc data is available
      * @param callback Callback to call
      */
-    virtual void registerDataCallback(std::function<void(InterlocUpdate)> callback) = 0;
+    virtual void registerPositionUpdateCallback(std::function<void(InterlocUpdate)> callback) = 0;
 };
 
 #endif //__IINTERLOCMANAGER_H__
