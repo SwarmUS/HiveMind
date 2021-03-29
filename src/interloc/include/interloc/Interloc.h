@@ -8,6 +8,7 @@
 class Interloc : public IInterloc {
   public:
     Interloc(ILogger& logger, IInterlocManager& interlocManager);
+    virtual ~Interloc() = default;
 
     std::optional<RelativePosition> getRobotPosition(uint16_t robotId) override;
     bool isLineOfSight(uint16_t robotId) override;
