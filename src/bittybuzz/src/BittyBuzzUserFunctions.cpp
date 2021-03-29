@@ -66,6 +66,7 @@ void BittyBuzzUserFunctions::log() {
     LockGuard lock(BittyBuzzSystem::g_ui->getPrintMutex());
 
     // Iterate through args, we start a arg 1 up to the nb of args
+    BittyBuzzSystem::g_ui->print("BBZ USER: ");
     for (uint16_t i = 1; i <= nArgs; i++) {
 
         bbzobj_t* obj = bbzheap_obj_at(bbzvm_locals_at(i)); // NOLINT
