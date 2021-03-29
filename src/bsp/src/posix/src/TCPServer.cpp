@@ -86,7 +86,7 @@ void TCPServer::close() {
     if (m_clientFd) {
         ::close(m_clientFd.value());
     }
-    if (m_serverFd != 0) {
+    if (m_serverFd > 0) {
         ::close(m_serverFd);
         m_serverFd = -1;
     }
