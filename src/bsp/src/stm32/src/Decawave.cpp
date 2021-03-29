@@ -9,8 +9,8 @@
 void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
     //TEMP
-    uint8_t myBuff[15];
-    dwt_readrxdata(&myBuff[0],callbackData->datalength,0);
+//    uint8_t myBuff[15];
+//    dwt_readrxdata(&myBuff[0],callbackData->datalength,0);
 
     BaseType_t taskWoken = pdFALSE;
     volatile auto* test = static_cast<Decawave*>(context);
