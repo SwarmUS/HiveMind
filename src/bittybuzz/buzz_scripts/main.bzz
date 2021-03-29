@@ -1,4 +1,5 @@
 function move_by_buzz(arg_float1, arg_float2){
+  log("Move by buzz called");
   call_host_function(id, "moveBy", {.0 = arg_float1, .1 = arg_float2});
 }
 
