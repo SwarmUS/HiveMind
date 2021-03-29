@@ -16,7 +16,7 @@ set(LIB_HEADERS
     include/bsp/SettingsContainer.h
     include/bsp/IInterlocManager.h
 
-    include/bsp/RobotPosition.h    )
+    include/bsp/InterlocUpdate.h)
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})

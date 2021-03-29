@@ -7,10 +7,10 @@ Interloc::Interloc(ILogger& logger, IInterlocManager& interlocManager) :
     m_robotPositions({}),
     m_robotPositionsLength(0) {
     m_interlocManager.registerDataCallback(
-        [this](RobotPosition position) { onDataCallback(RobotPosition(position)); });
+        [this](InterlocUpdate position) { onDataCallback(InterlocUpdate(position)); });
 }
 
-std::optional<RobotPosition> Interloc::getRobotPosition(uint16_t robotId) {
+std::optional<RelativePosition> Interloc::getRobotPosition(uint16_t robotId) {
     int16_t idx = getRobotArrayIndex(robotId);
 
     if (idx >= 0) {
@@ -20,17 +20,17 @@ std::optional<RobotPosition> Interloc::getRobotPosition(uint16_t robotId) {
     return {};
 }
 
-void Interloc::onDataCallback(RobotPosition position) {
-    int16_t idx = getRobotArrayIndex(position.m_robotId);
+void Interloc::onDataCallback(InterlocUpdate positionUpdate) {
+    int16_t idx = getRobotArrayIndex(positionUpdate.m_robotId);
 
     if (idx >= 0) {
-        m_robotPositions[idx] = position;
+        updateRobotPosition(m_robotPositions[idx], positionUpdate);
     } else {
         if (m_robotPositionsLength == m_robotPositions.size()) {
             m_logger.log(LogLevel::Error, "Robot positions array too small for number of robots");
             return;
         }
-        m_robotPositions[m_robotPositionsLength++] = position;
+        updateRobotPosition(m_robotPositions[m_robotPositionsLength++], positionUpdate);
     }
 }
 
@@ -42,4 +42,20 @@ int16_t Interloc::getRobotArrayIndex(uint16_t robotId) {
     }
 
     return -1;
+}
+
+void Interloc::updateRobotPosition(RelativePosition& positionToUpdate, InterlocUpdate update) {
+    positionToUpdate.m_robotId = update.m_robotId;
+
+    if (update.m_distance) {
+        positionToUpdate.m_distance = update.m_distance.value();
+    }
+
+    if (update.m_relativeOrientation) {
+        positionToUpdate.m_relativeOrientation = update.m_relativeOrientation.value();
+    }
+
+    if (update.m_isInLineOfSight) {
+        positionToUpdate.m_isInLineOfSight = update.m_isInLineOfSight.value();
+    }
 }

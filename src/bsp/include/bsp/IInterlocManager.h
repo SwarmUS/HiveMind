@@ -1,7 +1,7 @@
 #ifndef __IINTERLOCMANAGER_H__
 #define __IINTERLOCMANAGER_H__
 
-#include "bsp/RobotPosition.h"
+#include "bsp/InterlocUpdate.h"
 #include <functional>
 
 class IInterlocManager {
@@ -17,7 +17,7 @@ class IInterlocManager {
      * @brief Registers a callback to be called when new interloc data is available
      * @param callback Callback to call
      */
-    virtual void registerDataCallback(std::function<void(RobotPosition)> callback) = 0;
+    virtual void registerDataCallback(std::function<void(InterlocUpdate)> callback) = 0;
 };
 
 #endif //__IINTERLOCMANAGER_H__

@@ -28,7 +28,7 @@ TEST_F(InterlocFixture, Interloc_getPosition_robotNotInList) {
     uint16_t robotId = 42;
 
     // Then
-    std::optional<RobotPosition> ret = m_interloc->getRobotPosition(robotId);
+    auto ret = m_interloc->getRobotPosition(robotId);
 
     // Expect
     EXPECT_FALSE(ret.has_value());
@@ -37,14 +37,14 @@ TEST_F(InterlocFixture, Interloc_getPosition_robotNotInList) {
 TEST_F(InterlocFixture, Interloc_getPosition_pushData_robotInList) {
     // Given
     uint16_t robotId = 42;
-    RobotPosition position = {.m_robotId = robotId,
-                              .m_distance = 42.24,
-                              .m_relativeOrientation = 69.0,
-                              .m_isInLineOfSight = true};
+    InterlocUpdate position = {.m_robotId = robotId,
+                               .m_distance = 42.24,
+                               .m_relativeOrientation = 69.0,
+                               .m_isInLineOfSight = true};
 
     // Then
     m_interlocManagerMock->m_callback(position);
-    std::optional<RobotPosition> ret = m_interloc->getRobotPosition(robotId);
+    auto ret = m_interloc->getRobotPosition(robotId);
 
     // Expect
     EXPECT_TRUE(ret.has_value());
@@ -53,40 +53,89 @@ TEST_F(InterlocFixture, Interloc_getPosition_pushData_robotInList) {
 TEST_F(InterlocFixture, Interloc_getPosition_validData) {
     // Given
     uint16_t robotId = 42;
-    RobotPosition position = {.m_robotId = robotId,
-                              .m_distance = 42.24,
-                              .m_relativeOrientation = 69.0,
-                              .m_isInLineOfSight = true};
+    float distance = 42.24;
+    float angle = 69.0;
+    bool isInLineOfSight = true;
+    InterlocUpdate position = {.m_robotId = robotId,
+                               .m_distance = distance,
+                               .m_relativeOrientation = angle,
+                               .m_isInLineOfSight = isInLineOfSight};
 
     // Then
     m_interlocManagerMock->m_callback(position);
-    std::optional<RobotPosition> ret = m_interloc->getRobotPosition(robotId);
+    auto ret = m_interloc->getRobotPosition(robotId);
 
     // Expect
-    EXPECT_EQ(ret->m_distance, position.m_distance);
-    EXPECT_EQ(ret->m_relativeOrientation, position.m_relativeOrientation);
-    EXPECT_EQ(ret->m_isInLineOfSight, position.m_isInLineOfSight);
+    EXPECT_EQ(ret->m_distance, distance);
+    EXPECT_EQ(ret->m_relativeOrientation, angle);
+    EXPECT_EQ(ret->m_isInLineOfSight, isInLineOfSight);
 }
 
-TEST_F(InterlocFixture, Interloc_getPosition_updateData_validData) {
+TEST_F(InterlocFixture, Interloc_getPosition_updateDistance_validData) {
     // Given
     uint16_t robotId = 42;
-    RobotPosition position1 = {.m_robotId = robotId,
-                               .m_distance = 42.24,
-                               .m_relativeOrientation = 69.0,
-                               .m_isInLineOfSight = true};
-    RobotPosition position2 = {.m_robotId = robotId,
-                               .m_distance = 43.24,
-                               .m_relativeOrientation = 70.0,
-                               .m_isInLineOfSight = true};
+    float distance = 42.24;
+    float angle = 69.0;
+    bool isInLineOfSight = true;
+    InterlocUpdate position1 = {.m_robotId = robotId,
+                                .m_distance = distance,
+                                .m_relativeOrientation = angle,
+                                .m_isInLineOfSight = isInLineOfSight};
+
+    float updatedDistance = 43;
+    InterlocUpdate position2 = {.m_robotId = robotId, .m_distance = updatedDistance};
 
     // Then
     m_interlocManagerMock->m_callback(position1);
     m_interlocManagerMock->m_callback(position2);
-    std::optional<RobotPosition> ret = m_interloc->getRobotPosition(robotId);
+    auto ret = m_interloc->getRobotPosition(robotId);
 
     // Expect
-    EXPECT_EQ(ret->m_distance, position2.m_distance);
-    EXPECT_EQ(ret->m_relativeOrientation, position2.m_relativeOrientation);
-    EXPECT_EQ(ret->m_isInLineOfSight, position2.m_isInLineOfSight);
+    EXPECT_EQ(ret->m_distance, updatedDistance);
+}
+
+TEST_F(InterlocFixture, Interloc_getPosition_updateAngle_validData) {
+    // Given
+    uint16_t robotId = 42;
+    float distance = 42.24;
+    float angle = 69.0;
+    bool isInLineOfSight = true;
+    InterlocUpdate position1 = {.m_robotId = robotId,
+                                .m_distance = distance,
+                                .m_relativeOrientation = angle,
+                                .m_isInLineOfSight = isInLineOfSight};
+
+    float updatedAngle = 43;
+    InterlocUpdate position2 = {.m_robotId = robotId, .m_relativeOrientation = updatedAngle};
+
+    // Then
+    m_interlocManagerMock->m_callback(position1);
+    m_interlocManagerMock->m_callback(position2);
+    auto ret = m_interloc->getRobotPosition(robotId);
+
+    // Expect
+    EXPECT_EQ(ret->m_relativeOrientation, updatedAngle);
+}
+
+TEST_F(InterlocFixture, Interloc_getPosition_updateLineOfSight_validData) {
+    // Given
+    uint16_t robotId = 42;
+    float distance = 42.24;
+    float angle = 69.0;
+    bool isInLineOfSight = true;
+    InterlocUpdate position1 = {.m_robotId = robotId,
+                                .m_distance = distance,
+                                .m_relativeOrientation = angle,
+                                .m_isInLineOfSight = isInLineOfSight};
+
+    bool updatedLOS = false;
+    InterlocUpdate position2 = {.m_robotId = robotId, .m_isInLineOfSight = updatedLOS};
+
+    // Then
+    m_interlocManagerMock->m_callback(position1);
+    m_interlocManagerMock->m_callback(position2);
+    auto ret = m_interloc->getRobotPosition(robotId);
+
+    // Expect
+    EXPECT_EQ(ret->m_isInLineOfSight, updatedLOS);
 }

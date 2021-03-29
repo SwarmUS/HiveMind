@@ -1,13 +1,13 @@
-#ifndef __ROBOTPOSITION_H__
-#define __ROBOTPOSITION_H__
+#ifndef __RELATIVEPOSITION_H__
+#define __RELATIVEPOSITION_H__
 
 #include <cstdint>
 
-struct RobotPosition {
+struct RelativePosition {
     uint16_t m_robotId;
     float m_distance;
     float m_relativeOrientation;
     bool m_isInLineOfSight;
 };
 
-#endif //__ROBOTPOSITION_H__
+#endif //__RELATIVEPOSITION_H__

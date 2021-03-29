@@ -8,6 +8,7 @@ set(LIB_SOURCES
 set(LIB_HEADERS
     include/interloc/IInterloc.h
     include/interloc/Interloc.h
+    include/interloc/RelativePosition.h
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS} ${LIB_SOURCES})

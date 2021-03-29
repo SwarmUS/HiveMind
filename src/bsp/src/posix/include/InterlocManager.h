@@ -7,7 +7,7 @@ class InterlocManager : public IInterlocManager {
 
     void startInterloc() override{};
 
-    void registerDataCallback(std::function<void(RobotPosition)> callback) override{};
+    void registerDataCallback(std::function<void(InterlocUpdate)> callback) override{};
 
   private:
 };
