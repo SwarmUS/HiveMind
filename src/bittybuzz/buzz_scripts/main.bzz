@@ -1,8 +1,16 @@
+function move_by_buzz(arg_float1, arg_float2){
+  call_host_function(id, "moveBy", {.0 = arg_float1, .1 = arg_float2});
+}
+
 function init() {
-    test = 0
+  
+  var args_description = {
+    .0 = {.arg_float1=0.0},
+    .1 = {.arg_float2=0.0}
+  };
+
+  register_closure("moveByBuzz", move_by_buzz, args_description, nil);
 }
 
 function step() {
-    test = test + 1;
-    log("BBZ user: Hello world! test value : ", test);
 }
