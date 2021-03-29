@@ -8,7 +8,7 @@ class InterlocManagerInterfaceMock final : public IInterlocManager {
   public:
     void startInterloc() override{};
 
-    void registerPositionUpdateCallback(std::function<void(InterlocUpdate)> callback) override {
+    void registerPositionUpdateCallback(PositionUpdateCallbackFunction callback) override {
         m_callback = callback;
     }
 

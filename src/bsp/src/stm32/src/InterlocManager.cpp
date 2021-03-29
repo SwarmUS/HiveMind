@@ -5,7 +5,7 @@
 InterlocManager::InterlocManager(ILogger& logger) :
     m_logger(logger), m_decaA(DW_A), m_decaB(DW_B) {}
 
-void InterlocManager::registerPositionUpdateCallback(std::function<void(InterlocUpdate)> callback) {
+void InterlocManager::registerPositionUpdateCallback(PositionUpdateCallbackFunction callback) {
     m_positionUpdateCallback = callback;
 }
 

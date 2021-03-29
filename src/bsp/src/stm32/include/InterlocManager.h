@@ -15,7 +15,7 @@ class InterlocManager : public IInterlocManager {
     ~InterlocManager() override = default;
 
     void startInterloc() override;
-    void registerPositionUpdateCallback(std::function<void(InterlocUpdate)> callback) override;
+    void registerPositionUpdateCallback(PositionUpdateCallbackFunction callback) override;
 
   private:
     ILogger& m_logger;
