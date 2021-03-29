@@ -139,3 +139,60 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateLineOfSight_validData) {
     // Expect
     EXPECT_EQ(ret->m_isInLineOfSight, updatedLOS);
 }
+
+TEST_F(InterlocFixture, Interloc_isLineOfSight_robotNotInList) {
+    // Given
+    uint16_t robotId = 42;
+
+    bool ret = m_interloc->isLineOfSight(robotId);
+
+    // Expect
+    EXPECT_FALSE(ret);
+}
+
+TEST_F(InterlocFixture, Interloc_isLineOfSight_robotInLOS) {
+    // Given
+    uint16_t robotId = 42;
+    InterlocUpdate positionUpdate = {.m_robotId = robotId, .m_isInLineOfSight = true};
+
+    // Then
+    m_interlocManagerMock->m_callback(positionUpdate);
+    bool ret = m_interloc->isLineOfSight(robotId);
+
+    // Expect
+    EXPECT_TRUE(ret);
+}
+
+TEST_F(InterlocFixture, Interloc_isLineOfSight_robotNotInLOS) {
+    // Given
+    uint16_t robotId = 42;
+    InterlocUpdate positionUpdate = {.m_robotId = robotId, .m_isInLineOfSight = false};
+
+    // Then
+    m_interlocManagerMock->m_callback(positionUpdate);
+    bool ret = m_interloc->isLineOfSight(robotId);
+
+    // Expect
+    EXPECT_FALSE(ret);
+}
+
+TEST_F(InterlocFixture, Interloc_getPositionsTable_emptyTable) {
+    // Then
+    auto ret = m_interloc->getPositionsTable();
+
+    // Expect
+    EXPECT_EQ(ret.m_positionsLength, 0);
+}
+
+TEST_F(InterlocFixture, Interloc_getPositionsTable_elementInTable) {
+    uint16_t robotId = 42;
+    InterlocUpdate positionUpdate = {.m_robotId = robotId, .m_isInLineOfSight = true};
+
+    // Then
+    m_interlocManagerMock->m_callback(positionUpdate);
+    auto ret = m_interloc->getPositionsTable();
+    ret.m_positionsLength = 1;
+
+    // Expect
+    EXPECT_EQ(ret.m_positionsLength, 1);
+}

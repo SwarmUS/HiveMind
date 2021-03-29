@@ -2,10 +2,7 @@
 #include <optional>
 
 Interloc::Interloc(ILogger& logger, IInterlocManager& interlocManager) :
-    m_logger(logger),
-    m_interlocManager(interlocManager),
-    m_robotPositions({}),
-    m_robotPositionsLength(0) {
+    m_logger(logger), m_interlocManager(interlocManager), m_positionsTable() {
     m_interlocManager.registerDataCallback(
         [this](InterlocUpdate position) { onDataCallback(InterlocUpdate(position)); });
 }
@@ -14,29 +11,42 @@ std::optional<RelativePosition> Interloc::getRobotPosition(uint16_t robotId) {
     int16_t idx = getRobotArrayIndex(robotId);
 
     if (idx >= 0) {
-        return m_robotPositions[idx];
+        return m_positionsTable.m_positions[idx];
     }
 
     return {};
 }
 
+bool Interloc::isLineOfSight(uint16_t robotId) {
+    int16_t idx = getRobotArrayIndex(robotId);
+
+    if (idx >= 0) {
+        return m_positionsTable.m_positions[idx].m_isInLineOfSight;
+    }
+
+    return false;
+}
+
 void Interloc::onDataCallback(InterlocUpdate positionUpdate) {
+    // TODO: If we implement some long running operations here (eg filtering), should change this
+    // for a queue of updates, that is processed by another thread
     int16_t idx = getRobotArrayIndex(positionUpdate.m_robotId);
 
     if (idx >= 0) {
-        updateRobotPosition(m_robotPositions[idx], positionUpdate);
+        updateRobotPosition(m_positionsTable.m_positions[idx], positionUpdate);
     } else {
-        if (m_robotPositionsLength == m_robotPositions.size()) {
+        if (m_positionsTable.m_positionsLength == m_positionsTable.m_positions.size()) {
             m_logger.log(LogLevel::Error, "Robot positions array too small for number of robots");
             return;
         }
-        updateRobotPosition(m_robotPositions[m_robotPositionsLength++], positionUpdate);
+        updateRobotPosition(m_positionsTable.m_positions[m_positionsTable.m_positionsLength++],
+                            positionUpdate);
     }
 }
 
 int16_t Interloc::getRobotArrayIndex(uint16_t robotId) {
-    for (int i = 0; i < m_robotPositions.size(); i++) {
-        if (m_robotPositions[i].m_robotId == robotId) {
+    for (int i = 0; i < m_positionsTable.m_positions.size(); i++) {
+        if (m_positionsTable.m_positions[i].m_robotId == robotId) {
             return i;
         }
     }
@@ -59,3 +69,5 @@ void Interloc::updateRobotPosition(RelativePosition& positionToUpdate, InterlocU
         positionToUpdate.m_isInLineOfSight = update.m_isInLineOfSight.value();
     }
 }
+
+const PositionsTable& Interloc::getPositionsTable() { return m_positionsTable; }
