@@ -7,7 +7,8 @@ class InterlocManager : public IInterlocManager {
 
     void startInterloc() override{};
 
-    void registerPositionUpdateCallback(std::function<void(InterlocUpdate)> callback) override{};
+    void registerPositionUpdateCallback(std::function<void(InterlocUpdate)> callback) override{
+        (void)callback};
 
   private:
 };
