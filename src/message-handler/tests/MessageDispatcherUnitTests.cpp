@@ -510,61 +510,6 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_FALSE(ret);
 }
 
-TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_Greeting_remote_valid) {
-    // Given
-    m_message = MessageDTO(m_uuid, m_srcUuid, GreetingDTO(42));
-    EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
-        .Times(1)
-        .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
-    EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
-
-    // Then
-    bool ret = m_messageDispatcher->deserializeAndDispatch();
-
-    // Expect
-    EXPECT_TRUE(ret);
-}
-
-TEST_F(MessageDispatcherFixture,
-       MessageDispatcher_deserializeAndDispatch_Greeting_remote_noSpaceInQueue) {
-    // Given
-    m_message = MessageDTO(m_uuid, m_srcUuid, GreetingDTO(42));
-    EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
-        .Times(1)
-        .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
-    EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(1).WillOnce(testing::Return(false));
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
-
-    // Then
-    bool ret = m_messageDispatcher->deserializeAndDispatch();
-
-    // Expect
-    EXPECT_FALSE(ret);
-}
-
-TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_Greeting_host_noHandle) {
-    // Given
-    m_message = MessageDTO(m_uuid, m_uuid, GreetingDTO(42));
-    EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
-        .Times(1)
-        .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
-    EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
-
-    // Then
-    bool ret = m_messageDispatcher->deserializeAndDispatch();
-
-    // Expect
-    EXPECT_FALSE(ret);
-}
-
 TEST_F(MessageDispatcherFixture,
        MessageDispatcher_deserializeAndDispatch_HiveMindApiRequest_host_handlerCalled_valid) {
     // Given
@@ -798,6 +743,9 @@ TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_greet_
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
+    EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_greetSenderMock, sendGreet).WillOnce(testing::Return(true));
 
     // Then
@@ -813,6 +761,9 @@ TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_greet_
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
+    EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
     EXPECT_CALL(m_greetSenderMock, sendGreet).WillOnce(testing::Return(false));
 
     // Then
@@ -820,4 +771,22 @@ TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_greet_
 
     // Expect
     EXPECT_FALSE(ret);
+}
+
+TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_greet_remote_valid) {
+    // Given
+    m_message = MessageDTO(m_uuid, m_srcUuid, GreetingDTO(42));
+    EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
+    EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_greetSenderMock, sendGreet).WillOnce(testing::Return(true));
+
+    // Then
+    bool ret = m_messageDispatcher->deserializeAndDispatch();
+
+    // Expect
+    EXPECT_TRUE(ret);
 }

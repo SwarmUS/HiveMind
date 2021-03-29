@@ -36,5 +36,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_callHostFunction_sendToHost_invalidKe
     m_bittybuzzVm->step();
 
     // Expect
-    EXPECT_EQ(m_loggerMock->m_logCallCounter, 1);
+    EXPECT_EQ(m_loggerMock->m_logCallCounter, 2);
+    EXPECT_EQ(vm->state, BBZVM_STATE_ERROR);
+    EXPECT_EQ(vm->error, BBZVM_ERROR_TYPE);
 }
