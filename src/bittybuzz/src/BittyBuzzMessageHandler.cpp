@@ -150,8 +150,8 @@ UserCallResponseDTO BittyBuzzMessageHandler::handleUserCallRequest(
 }
 
 ResponseDTO BittyBuzzMessageHandler::handleRequest(const RequestDTO& request) {
-    const std::variant<std::monostate, UserCallRequestDTO, HiveMindApiRequestDTO,
-                       SwarmApiRequestDTO>& variantReq = request.getRequest();
+    const std::variant<std::monostate, UserCallRequestDTO, HiveMindApiRequestDTO>& variantReq =
+        request.getRequest();
 
     if (const auto* uReq = std::get_if<UserCallRequestDTO>(&variantReq)) {
         std::optional<UserCallResponseDTO> uResponse = handleUserCallRequest(*uReq);
@@ -160,11 +160,7 @@ ResponseDTO BittyBuzzMessageHandler::handleRequest(const RequestDTO& request) {
         }
     }
 
-    if (std::holds_alternative<HiveMindApiRequestDTO>(variantReq)) {
-        m_logger.log(LogLevel::Warn, "Received Hivemind Req in buzz queue");
-    } else if (std::holds_alternative<SwarmApiRequestDTO>(variantReq)) {
-        m_logger.log(LogLevel::Warn, "Received Swarm Req in buzz queue");
-    }
+    m_logger.log(LogLevel::Warn, "Unkown request in buzz queue, idx: %d", variantReq.index());
     return ResponseDTO(request.getId(),
                        GenericResponseDTO(GenericResponseStatusDTO::BadRequest, "Unknown REQ"));
 }
@@ -196,8 +192,7 @@ bool BittyBuzzMessageHandler::handleBuzzMessage(const BuzzMessageDTO& msg) {
 
 bool BittyBuzzMessageHandler::handleResponse(const ResponseDTO& response) {
     const std::variant<std::monostate, GenericResponseDTO, UserCallResponseDTO,
-                       HiveMindApiResponseDTO, SwarmApiResponseDTO>& variantResp =
-        response.getResponse();
+                       HiveMindApiResponseDTO>& variantResp = response.getResponse();
 
     if (const auto* uResp = std::get_if<UserCallResponseDTO>(&variantResp)) {
         return handleUserCallResponse(*uResp);
@@ -207,15 +202,15 @@ bool BittyBuzzMessageHandler::handleResponse(const ResponseDTO& response) {
     }
     if (std::holds_alternative<HiveMindApiResponseDTO>(variantResp)) {
         m_logger.log(LogLevel::Warn, "Received Hivemind Resp in buzz queue");
-    } else if (std::holds_alternative<SwarmApiResponseDTO>(variantResp)) {
-        m_logger.log(LogLevel::Warn, "Received Swarm Resp in buzz queue");
+    } else {
+        m_logger.log(LogLevel::Warn, "Unkown Resp in buzz queue, idx: %d", variantResp.index());
     }
     return false;
 }
 
 bool BittyBuzzMessageHandler::handleMessage(const MessageDTO& message) {
-    const std::variant<std::monostate, RequestDTO, ResponseDTO, GreetingDTO, BuzzMessageDTO>&
-        variantMsg = message.getMessage();
+    const std::variant<std::monostate, RequestDTO, ResponseDTO, GreetingDTO, BuzzMessageDTO,
+                       NetworkApiDTO>& variantMsg = message.getMessage();
 
     // Handling request
     if (const auto* request = std::get_if<RequestDTO>(&variantMsg)) {
@@ -243,10 +238,7 @@ bool BittyBuzzMessageHandler::handleMessage(const MessageDTO& message) {
         return handleBuzzMessage(*buzzMsg);
     }
 
-    // should not get greetings here
-    if (std::holds_alternative<GreetingDTO>(variantMsg)) {
-        m_logger.log(LogLevel::Warn, "Recieved Greeting in buzz queue");
-    }
-
+    m_logger.log(LogLevel::Warn, "Recieved unkown message in buzz queue, idx: %d",
+                 variantMsg.index());
     return false;
 }

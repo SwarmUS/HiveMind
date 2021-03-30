@@ -682,25 +682,6 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_FALSE(ret);
 }
 
-TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_SwarmAPIRequest_invalid) {
-    // Given
-    m_request->setRequest(SwarmApiRequestDTO(IdRequestDTO()));
-    m_message = MessageDTO(m_srcUuid, m_uuid, *m_request);
-    EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
-        .Times(1)
-        .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
-    EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
-    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
-
-    // Then
-    bool ret = m_messageDispatcher->deserializeAndDispatch();
-
-    // Expect
-    EXPECT_FALSE(ret);
-}
-
 TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_BuzzMessage_valid) {
     // Given
     m_message = MessageDTO(m_srcUuid, m_uuid, BuzzMessageDTO(NULL, 0));
