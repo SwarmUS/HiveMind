@@ -7,8 +7,16 @@
 struct InterlocUpdate {
     uint16_t m_robotId{};
 
+    /**
+     * @brief Distance in meters
+     */
     std::optional<float> m_distance;
+
+    /**
+     * @brief Relative orientation in degrees
+     */
     std::optional<float> m_relativeOrientation;
+
     std::optional<bool> m_isInLineOfSight;
 };
 

@@ -8,7 +8,7 @@ class InterlocManagerInterfaceMock final : public IInterlocManager {
   public:
     void startInterloc() override{};
 
-    void registerPositionUpdateCallback(PositionUpdateCallbackFunction callback) override {
+    void setPositionUpdateCallback(PositionUpdateCallbackFunction callback) override {
         m_callback = callback;
     }
 

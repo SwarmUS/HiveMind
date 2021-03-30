@@ -7,7 +7,8 @@ class InterlocManager : public IInterlocManager {
 
     void startInterloc() override{};
 
-    void registerPositionUpdateCallback(PositionUpdateCallbackFunction callback) override {
+    void setPositionUpdateCallback(PositionUpdateCallbackFunction callback) override {
+        // TODO: implement
         (void)callback;
     };
 

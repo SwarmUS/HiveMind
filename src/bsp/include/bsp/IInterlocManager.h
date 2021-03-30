@@ -16,10 +16,10 @@ class IInterlocManager {
     virtual void startInterloc() = 0;
 
     /**
-     * @brief Registers a callback to be called when new interloc data is available
+     * @brief Sets the callback to be called when new interloc data is available
      * @param callback Callback to call
      */
-    virtual void registerPositionUpdateCallback(PositionUpdateCallbackFunction callback) = 0;
+    virtual void setPositionUpdateCallback(PositionUpdateCallbackFunction callback) = 0;
 };
 
 #endif //__IINTERLOCMANAGER_H__

@@ -1,9 +1,8 @@
 #include "interloc/Interloc.h"
-#include <optional>
 
 Interloc::Interloc(ILogger& logger, IInterlocManager& interlocManager) :
     m_logger(logger), m_interlocManager(interlocManager), m_positionsTable() {
-    m_interlocManager.registerPositionUpdateCallback(
+    m_interlocManager.setPositionUpdateCallback(
         [this](InterlocUpdate position) { onPositionUpdateCallback(InterlocUpdate(position)); });
 }
 
@@ -45,6 +44,7 @@ void Interloc::onPositionUpdateCallback(InterlocUpdate positionUpdate) {
 }
 
 std::optional<uint8_t> Interloc::getRobotArrayIndex(uint16_t robotId) {
+    // TODO: migrate to a hashmap
     for (unsigned int i = 0; i < m_positionsTable.m_positions.size(); i++) {
         if (m_positionsTable.m_positions[i].m_robotId == robotId) {
             return i;
