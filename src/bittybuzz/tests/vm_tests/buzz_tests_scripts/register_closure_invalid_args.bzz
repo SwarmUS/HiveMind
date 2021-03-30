@@ -1,0 +1,11 @@
+function registered_function(arg_int, arg_float) {
+}
+
+function init() {
+  var args_description = {.0 = 42};
+
+  register_closure("registeredFunction", registered_function, args_description, nil);
+}
+
+function step() {
+}

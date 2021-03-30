@@ -23,6 +23,11 @@ bool MessageDispatcher::deserializeAndDispatch() {
     MessageDTO message;
     if (m_deserializer.deserializeFromStream(message)) {
 
+        // Handle greet before filtering by id
+        if (std::holds_alternative<GreetingDTO>(message.getMessage())) {
+            return m_greetSender.sendGreet();
+        }
+
         uint32_t destinationId = message.getDestinationId();
         if (destinationId == m_bsp.getUUId()) {
             return dispatchMessage(message);
@@ -129,8 +134,7 @@ bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
     if (std::holds_alternative<BuzzMessageDTO>(variantMsg)) {
         return m_buzzOutputQueue.push(message);
     }
-    if (std::holds_alternative<GreetingDTO>(variantMsg)) {
-        return m_greetSender.sendGreet();
-    }
+
+    m_logger.log(LogLevel::Warn, "Unknown message, could not dispatch");
     return false;
 }
