@@ -18,6 +18,7 @@ class IInterlocManager {
     /**
      * @brief Sets the callback to be called when new interloc data is available
      * @param callback Callback to call
+     * @param context The context to pass to the callback
      */
     virtual void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
                                            void* context) = 0;
