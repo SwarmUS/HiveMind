@@ -66,6 +66,6 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommI
 }
 
 std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getRemoteCommInterface() {
-    static SpiEsp s_spiEsp(getCRC(), LoggerContainer::getLogger());
-    return s_spiEsp;
+    static USB s_usb(LoggerContainer::getLogger());
+    return s_usb;
 }
