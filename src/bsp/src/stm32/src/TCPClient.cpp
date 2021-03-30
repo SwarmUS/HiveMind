@@ -1,7 +1,7 @@
 #include "TCPClient.h"
 
 TCPClient::TCPClient(int socket, sockaddr_in address, ILogger& logger) :
-    m_logger(logger), m_connected(socket > 0), m_socketFd(socket), m_address(address) {}
+    m_logger(logger), m_connected(socket >= 0), m_socketFd(socket), m_address(address) {}
 
 bool TCPClient::receive(uint8_t* data, uint16_t length) {
     ssize_t receivedBytes = 0;
