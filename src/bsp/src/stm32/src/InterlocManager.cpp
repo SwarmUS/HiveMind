@@ -131,12 +131,11 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
     device.receive(rxFrame, 0);
     pollRxTs = rxFrame.m_rxTimestamp;
 
-    device.getSysTime(&sysTs);
-    (void) sysTs;
+//    device.getSysTime(&sysTs);
+//    (void) sysTs;
     // set timestamp for Response send
-    respTxTime = (pollRxTs + (POLL_RX_TO_RESP_TX_DLY_UUS * UUS_TO_DWT_TIME)) >> 8;
+//    respTxTime = (sysTs + (POLL_RX_TO_RESP_TX_DLY_UUS * UUS_TO_DWT_TIME));
 //    respTxTime = (pollRxTs + (POLL_RX_TO_RESP_TX_DLY_UUS * UUS_TO_DWT_TIME));
-    (void) respTxTime;
 
     // construct and send Response message
     if(!isFrameGood(rxFrame, m_logger)){
@@ -152,7 +151,7 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
                        (uint8_t*)&responseMsg, sizeof(responseMsg));
     responseMsg.m_calculatedTOF = 0;
     device.transmit((uint8_t*)&responseMsg,sizeof(responseMsg));
-//    device.transmitDelayed((uint8_t*)&responseMsg,sizeof(responseMsg),respTxTime);
+//    device.transmitDelayed((uint8_t*)&responseMsg,sizeof(responseMsg),respTxTime>>8);
 
     // wait for Final message reception
     device.receive(rxFrame, 0);
@@ -220,16 +219,12 @@ bool InterlocManager::sendTWRSequence(uint16_t destinationId, Decawave& device){
 
     //  Compute final message transmission time
 //    finalTxTime = (responseTimestamp + (RESP_RX_TO_FINAL_TX_DLY_UUS * UUS_TO_DWT_TIME)) >> 8;
-//    finalTxTs = (((uint64_t)(finalTxTime & 0xFFFFFFFEUL)) << 8) + device.getTxAntennaDLY();
 
     // TEMP
     device.getSysTime(&finalTxTs);
     finalTxTs += (RESP_RX_TO_FINAL_TX_DLY_UUS/2 * UUS_TO_DWT_TIME);
 
     //  Construct final message
-//    finalMsg.m_respMinPoll = responseTimestamp - pollTimestamp;
-//    finalMsg.m_finaleMinResp = finalTxTs - responseTimestamp;
-
     device.finalMsgAddTs((uint8_t*)(&finalMsg.m_respMinPoll),responseTimestamp - pollTimestamp);
     device.finalMsgAddTs((uint8_t*)(&finalMsg.m_finaleMinResp),finalTxTs - responseTimestamp);
 
