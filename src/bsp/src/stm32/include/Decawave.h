@@ -16,10 +16,12 @@
 
 #define POLL_TX_TO_RESP_RX_DLY_UUS  300
 #define RESP_RX_TO_FINAL_TX_DLY_UUS 3100
-#define POLL_RX_TO_RESP_TX_DLY_UUS 2750
-#define RESP_RX_TIMEOUT_UUS 0
-#define UUS_TO_DWT_TIME 2700
-#define SPEED_OF_LIGHT 299702547
+//#define POLL_RX_TO_RESP_TX_DLY_UUS 2750
+#define POLL_RX_TO_RESP_TX_DLY_UUS 1000
+#define RESP_RX_TIMEOUT_UUS 4000
+#define FINAL_RX_TIMEOUT_UUS 3300
+#define UUS_TO_DWT_TIME 65536 // check value, j'obtien 63 897...
+#define SPEED_OF_LIGHT 299792458
 
 
 
@@ -152,6 +154,8 @@ class Decawave {
     uint16_t getTxAntennaDLY();
     void getTxTimestamp(uint64_t *txTimestamp);
     void getRxTimestamp(uint64_t *rxTimestamp);
+    void getSysTime(uint64_t *sysTime);
+    void finalMsgAddTs(uint8 *tsField, uint64_t ts);
     DW_STATE getState();
     void setState(DW_STATE state);
 
