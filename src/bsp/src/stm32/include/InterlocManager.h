@@ -15,7 +15,8 @@ class InterlocManager : public IInterlocManager {
     ~InterlocManager() override = default;
 
     void startInterloc() override;
-    void setPositionUpdateCallback(PositionUpdateCallbackFunction callback) override;
+    void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
+                                   void* context) override;
 
   private:
     ILogger& m_logger;
@@ -30,7 +31,8 @@ class InterlocManager : public IInterlocManager {
                             uint8_t* buffer,
                             uint16_t bufferLength);
 
-    std::function<void(InterlocUpdate)> m_positionUpdateCallback;
+    positionUpdateCallbackFunction_t m_positionUpdateCallback;
+    void* m_positionUpdateCallbackContext;
 };
 
 #endif //__INTERLOCMANAGER_H__

@@ -2,8 +2,7 @@
 
 Interloc::Interloc(ILogger& logger, IInterlocManager& interlocManager) :
     m_logger(logger), m_interlocManager(interlocManager), m_positionsTable() {
-    m_interlocManager.setPositionUpdateCallback(
-        [this](InterlocUpdate position) { onPositionUpdateCallback(InterlocUpdate(position)); });
+    m_interlocManager.setPositionUpdateCallback(onPositionUpdateStaticCallback, this);
 }
 
 std::optional<RelativePosition> Interloc::getRobotPosition(uint16_t robotId) {
@@ -71,3 +70,7 @@ void Interloc::updateRobotPosition(RelativePosition& positionToUpdate, InterlocU
 }
 
 const PositionsTable& Interloc::getPositionsTable() { return m_positionsTable; }
+
+void Interloc::onPositionUpdateStaticCallback(void* context, InterlocUpdate update) {
+    static_cast<Interloc*>(context)->onPositionUpdateCallback(update);
+}

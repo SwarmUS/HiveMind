@@ -4,7 +4,7 @@
 #include "bsp/InterlocUpdate.h"
 #include <functional>
 
-using PositionUpdateCallbackFunction = std::function<void(InterlocUpdate)>;
+typedef void (*positionUpdateCallbackFunction_t)(void* instance, InterlocUpdate update);
 
 class IInterlocManager {
   public:
@@ -19,7 +19,8 @@ class IInterlocManager {
      * @brief Sets the callback to be called when new interloc data is available
      * @param callback Callback to call
      */
-    virtual void setPositionUpdateCallback(PositionUpdateCallbackFunction callback) = 0;
+    virtual void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
+                                           void* context) = 0;
 };
 
 #endif //__IINTERLOCMANAGER_H__

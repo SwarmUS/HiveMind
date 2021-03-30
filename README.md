@@ -136,6 +136,7 @@ CMake variables can be used to override certain default firmware settings.
 | HOST_PORT | 5555            |
 | HOST_IP   | 192.168.1.101   |
 | LOG_LEVEL | Info            |
+| MAX_ROBOTS_IN_SWARM | 10            |
 
 #### ROS Target
 ROS launch parameters are used to configure variables.

@@ -2,11 +2,10 @@
 #define __IINTERLOC_H__
 
 #include "IInterloc.h"
+#include "InterlocSettings.h"
 #include "RelativePosition.h"
 #include <array>
 #include <optional>
-
-#define MAX_ROBOTS_IN_SWARM 10
 
 struct PositionsTable {
     std::array<RelativePosition, MAX_ROBOTS_IN_SWARM> m_positions;

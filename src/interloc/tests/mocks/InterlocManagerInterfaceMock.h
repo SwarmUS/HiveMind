@@ -8,11 +8,14 @@ class InterlocManagerInterfaceMock final : public IInterlocManager {
   public:
     void startInterloc() override{};
 
-    void setPositionUpdateCallback(PositionUpdateCallbackFunction callback) override {
+    void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
+                                   void* context) override {
         m_callback = callback;
+        m_context = context;
     }
 
-    std::function<void(InterlocUpdate)> m_callback;
+    positionUpdateCallbackFunction_t m_callback;
+    void* m_context;
 };
 
 #endif // __BSPINTERFACEMOCK_H_
