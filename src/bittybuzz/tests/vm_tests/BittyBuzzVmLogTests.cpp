@@ -32,7 +32,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_log_FunctionCalled) {
 
     // Expect
     // Apprend logger prefix string
-    EXPECT_EQ(m_uiMock.m_printCallCounter, 4); // Because we had 4 arguments, 4 call
+    EXPECT_EQ(m_uiMock.m_printCallCounter, 5); // Because we had 4 arguments, 4 call + the first one
     EXPECT_EQ(m_uiMock.m_flushCallCounter, 1);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);

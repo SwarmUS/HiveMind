@@ -82,10 +82,8 @@ bool TCPServer::receive(uint8_t* buffer, uint16_t length) {
 bool TCPServer::isConnected() const { return m_connected; }
 
 void TCPServer::close() {
-    m_connected = false;
-    if (m_clientFd) {
-        ::close(m_clientFd.value());
-    }
+    TCPServer::closeClient();
+
     if (m_serverFd > 0) {
         ::close(m_serverFd);
         m_serverFd = -1;
@@ -97,9 +95,8 @@ void TCPServer::waitForClient() {
     while (m_serverFd > 0) {
         if (!m_connected) {
             // Close socket
-            if (m_clientFd) {
-                ::close(m_clientFd.value());
-            }
+            closeClient();
+
             m_clientFd =
                 ::accept(m_serverFd, (struct sockaddr*)&m_address, (socklen_t*)&m_addressLength);
 
@@ -111,5 +108,13 @@ void TCPServer::waitForClient() {
             }
         }
         Task::delay(500);
+    }
+}
+
+void TCPServer::closeClient() {
+    m_connected = false;
+    if (m_clientFd) {
+        ::close(m_clientFd.value());
+        m_clientFd.reset();
     }
 }
