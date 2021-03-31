@@ -6,13 +6,16 @@ configure_file(include/interloc/InterlocSettings.in.h include/interloc/InterlocS
 
 set(LIB_SOURCES
     src/Interloc.cpp
+    src/InterlocMessageHandler.cpp
 )
 
 set(LIB_HEADERS
     include/interloc/IInterloc.h
     include/interloc/Interloc.h
     include/interloc/RelativePosition.h
-    include/interloc/InterlocSettings.h)
+    include/interloc/InterlocSettings.h
+    include/interloc/IInterlocMessageHandler.h
+    include/interloc/InterlocMessageHandler.h)
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS} ${LIB_SOURCES})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
@@ -31,6 +34,8 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::BSP
         SwarmUS::HiveMind::OS
         SwarmUS::HiveMind::Logger
+        SwarmUS::Propolis::Cpp::Common
+        SwarmUS::Propolis::Pheromones::HiveMind::Host
 )
 
 if(ENABLE_TESTS)

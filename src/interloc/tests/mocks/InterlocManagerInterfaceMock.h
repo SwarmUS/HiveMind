@@ -1,7 +1,7 @@
-#ifndef __BSPINTERFACEMOCK_H_
-#define __BSPINTERFACEMOCK_H_
+#ifndef __INTERLOCMANAGERMOCK_H_
+#define __INTERLOCMANAGERMOCK_H_
 
-#include <bsp/IBSP.h>
+#include <bsp/IInterlocManager.h>
 #include <gmock/gmock.h>
 
 class InterlocManagerInterfaceMock final : public IInterlocManager {
@@ -26,4 +26,4 @@ class InterlocManagerInterfaceMock final : public IInterlocManager {
     };
 };
 
-#endif // __BSPINTERFACEMOCK_H_
+#endif // __INTERLOCMANAGERMOCK_H_

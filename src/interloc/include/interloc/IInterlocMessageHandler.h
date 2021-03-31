@@ -1,0 +1,6 @@
+#ifndef __IINTERLOCMESSAGEHANDLER_H__
+#define __IINTERLOCMESSAGEHANDLER_H__
+
+class IInterlocMessageHandler {};
+
+#endif //__IINTERLOCMESSAGEHANDLER_H__
