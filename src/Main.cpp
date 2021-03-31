@@ -218,7 +218,11 @@ class SoftwareInterlocTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
     IInterloc& m_interloc;
     IInterlocMessageHandler& m_interlocMessageHandler;
 
-    void task() override { m_interlocMessageHandler.processMessage(); }
+    void task() override {
+        while (true) {
+            m_interlocMessageHandler.processMessage();
+        }
+    }
 };
 
 int main(int argc, char** argv) {
