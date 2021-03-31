@@ -8,19 +8,16 @@ set(LIB_SOURCES
     src/UserInterface.cpp
 
     src/TCPClient.cpp
-    src/SocketContainer.cpp
     src/SocketFactory.cpp
-    src/TCPUartMock.cpp
     src/SettingsContainer.cpp
-    src/SpiEspMock.cpp)
+    src/TCPServer.cpp)
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
     include/UserInterface.h
     include/SocketFactory.h
     include/TCPClient.h
-    include/TCPUartMock.h
-    include/USBMock.h
+    include/TCPServer.h
     include/InterlocManager.h)
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_PRIVATE_HEADERS})

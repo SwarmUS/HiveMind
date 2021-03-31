@@ -20,7 +20,8 @@ namespace MessageHandlerContainer {
      *@brief create a message dispatcher
      *@return A new message dispatcher */
     MessageDispatcher createMessageDispatcher(IHiveMindHostDeserializer& deserializer,
-                                              IHiveMindApiRequestHandler& hivemindApiReqHandler);
+                                              IHiveMindApiRequestHandler& hivemindApiReqHandler,
+                                              IGreetSender& greetSender);
 
     /**
      *@brief get the buzz message queue

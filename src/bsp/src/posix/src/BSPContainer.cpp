@@ -1,11 +1,13 @@
 #include "bsp/BSPContainer.h"
 #include "BSP.h"
 #include "InterlocManager.h"
-#include "SpiEspMock.h"
-#include "TCPUartMock.h"
-#include "USBMock.h"
+#include "SocketFactory.h"
+#include "TCPClient.h"
+#include "TCPServer.h"
 #include "UserInterface.h"
+#include "bsp/SettingsContainer.h"
 #include "logger/LoggerContainer.h"
+#include <mutex>
 
 IBSP& BSPContainer::getBSP() {
     static BSP s_bsp;
@@ -18,22 +20,55 @@ IUserInterface& BSPContainer::getUserInterface() {
     return s_ui;
 }
 
-IHostUart& BSPContainer::getHostUart() {
-    static TCPUartMock s_hostUart(LoggerContainer::getLogger());
-    return s_hostUart;
-}
-
-ISpiEsp& BSPContainer::getSpiEsp() {
-    static SpiEspMock s_spiEsp(LoggerContainer::getLogger());
-    return s_spiEsp;
-}
-
-IUSB& BSPContainer::getUSB() {
-    static USBMock s_usb;
-    return s_usb;
-}
-
 IInterlocManager& BSPContainer::getInterlocManager() {
     static InterlocManager s_interlocManager;
     return s_interlocManager;
+}
+
+std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommInterface() {
+    static std::optional<TCPClient> s_clientSocket{};
+
+    // TODO: Add logic for usb
+    // If disconnected, try to create a new socket
+    if (!s_clientSocket || !s_clientSocket.value().isConnected()) {
+
+        ILogger& logger = LoggerContainer::getLogger();
+        const uint32_t port = SettingsContainer::getHostPort();
+        char address[MAX_IP_LENGTH];
+        if (SettingsContainer::getHostIP(address, (uint8_t)MAX_IP_LENGTH) == 0) {
+            logger.log(LogLevel::Error, "IP string too big for buffer");
+            return {};
+        }
+
+        // Close previous socket
+        if (s_clientSocket) {
+            s_clientSocket.value().close();
+            s_clientSocket.reset();
+        }
+
+        // Create new socket
+        std::optional<TCPClient> socket = SocketFactory::createTCPClient(address, port, logger);
+        if (socket) {
+            s_clientSocket.emplace(socket.value());
+        }
+    }
+
+    if (s_clientSocket) {
+        return s_clientSocket.value();
+    }
+    return {};
+}
+
+std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getRemoteCommInterface() {
+    static TCPServer s_remoteCommTCPServer(LoggerContainer::getLogger());
+    static std::once_flag s_onceOpenSocket;
+
+    std::call_once(s_onceOpenSocket, [&]() {
+        std::shared_ptr<ros::NodeHandle> rosNodeHandle =
+            static_cast<BSP&>(BSPContainer::getBSP()).getRosNodeHandle();
+        int port = rosNodeHandle->param("remote_mock_port", 9001);
+        s_remoteCommTCPServer.openSocket(port);
+    });
+
+    return s_remoteCommTCPServer;
 }

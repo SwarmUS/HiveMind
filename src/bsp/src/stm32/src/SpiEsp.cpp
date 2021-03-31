@@ -10,7 +10,7 @@
 #define BYTES_TO_WORDS(byte) ((uint8_t)(byte >> 2U))
 
 void task(void* context) {
-    constexpr uint loopRate = 5;
+    constexpr uint16_t loopRate = 5;
     while (true) {
         static_cast<SpiEsp*>(context)->execute();
         Task::delay(loopRate);

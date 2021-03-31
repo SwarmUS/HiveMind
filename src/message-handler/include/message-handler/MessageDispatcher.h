@@ -1,6 +1,7 @@
 #ifndef __MESSAGEDISPATCHER_H_
 #define __MESSAGEDISPATCHER_H_
 
+#include "IGreetSender.h"
 #include "IHiveMindApiRequestHandler.h"
 #include "IMessageDispatcher.h"
 #include <bsp/IBSP.h>
@@ -16,6 +17,7 @@ class MessageDispatcher : IMessageDispatcher {
                       ICircularQueue<MessageDTO>& remoteOutputQ,
                       IHiveMindHostDeserializer& deserializer,
                       IHiveMindApiRequestHandler& hivemindApiReqHandler,
+                      IGreetSender& greetSender,
                       const IBSP& bsp,
                       ILogger& logger);
 
@@ -29,6 +31,7 @@ class MessageDispatcher : IMessageDispatcher {
     ICircularQueue<MessageDTO>& m_remoteOutputQueue;
     IHiveMindHostDeserializer& m_deserializer;
     IHiveMindApiRequestHandler& m_hivemindApiReqHandler;
+    IGreetSender& m_greetSender;
     const IBSP& m_bsp;
     ILogger& m_logger;
 

@@ -1,8 +1,7 @@
 #include "BSP.h"
-#include "SpiEspMock.h"
+#include "TCPServer.h"
 #include "bsp/SettingsContainer.h"
 #include "ros/ros.h"
-#include <TCPUartMock.h>
 #include <Task.h>
 #include <bsp/BSPContainer.h>
 #include <random>
@@ -30,16 +29,7 @@ BSP::~BSP() = default;
 void BSP::initChip(void* args) {
     CmdLineArgs* cmdLineArgs = (CmdLineArgs*)args;
     ros::init(cmdLineArgs->m_argc, cmdLineArgs->m_argv, "hive_mind");
-
     m_rosNodeHandle = std::make_shared<ros::NodeHandle>("~");
-
-    TCPUartMock& tcpUart = static_cast<TCPUartMock&>(BSPContainer::getHostUart());
-    int port = m_rosNodeHandle->param("uart_mock_port", 9000);
-    tcpUart.openSocket(port);
-
-    SpiEspMock& espMock = static_cast<SpiEspMock&>(BSPContainer::getSpiEsp());
-    port = m_rosNodeHandle->param("spi_mock_port", 9001);
-    espMock.openSocket(port);
 
     m_rosWatchTask.start();
 }

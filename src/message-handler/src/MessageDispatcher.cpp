@@ -7,6 +7,7 @@ MessageDispatcher::MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
                                      ICircularQueue<MessageDTO>& remoteOutputQ,
                                      IHiveMindHostDeserializer& deserializer,
                                      IHiveMindApiRequestHandler& hivemindApiReqHandler,
+                                     IGreetSender& greetSender,
                                      const IBSP& bsp,
                                      ILogger& logger) :
     m_buzzOutputQueue(buzzOutputQ),
@@ -14,12 +15,18 @@ MessageDispatcher::MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
     m_remoteOutputQueue(remoteOutputQ),
     m_deserializer(deserializer),
     m_hivemindApiReqHandler(hivemindApiReqHandler),
+    m_greetSender(greetSender),
     m_bsp(bsp),
     m_logger(logger) {}
 
 bool MessageDispatcher::deserializeAndDispatch() {
     MessageDTO message;
     if (m_deserializer.deserializeFromStream(message)) {
+
+        // Handle greet before filtering by id
+        if (std::holds_alternative<GreetingDTO>(message.getMessage())) {
+            return m_greetSender.sendGreet();
+        }
 
         uint32_t destinationId = message.getDestinationId();
         if (destinationId == m_bsp.getUUId()) {
@@ -68,8 +75,8 @@ bool MessageDispatcher::dispatchUserCallResponse(const MessageDTO& message,
 
 bool MessageDispatcher::dispatchRequest(const MessageDTO& message, const RequestDTO& request) {
 
-    const std::variant<std::monostate, UserCallRequestDTO, HiveMindApiRequestDTO,
-                       SwarmApiRequestDTO>& variantReq = request.getRequest();
+    const std::variant<std::monostate, UserCallRequestDTO, HiveMindApiRequestDTO>& variantReq =
+        request.getRequest();
 
     if (const auto* uReq = std::get_if<UserCallRequestDTO>(&variantReq)) {
         return dispatchUserCallRequest(message, *uReq);
@@ -89,23 +96,17 @@ bool MessageDispatcher::dispatchRequest(const MessageDTO& message, const Request
         }
         return false;
     }
-    if (std::holds_alternative<SwarmApiRequestDTO>(variantReq)) {
-        m_logger.log(LogLevel::Warn, "Received swarm req on the hivemind");
-    }
+
+    m_logger.log(LogLevel::Warn, "Unknown request to dispatch, idx: %d", variantReq.index());
     return false;
 }
 
 bool MessageDispatcher::dispatchResponse(const MessageDTO& message, const ResponseDTO& response) {
     const std::variant<std::monostate, GenericResponseDTO, UserCallResponseDTO,
-                       HiveMindApiResponseDTO, SwarmApiResponseDTO>& variantResp =
-        response.getResponse();
+                       HiveMindApiResponseDTO>& variantResp = response.getResponse();
 
     if (const auto* uResp = std::get_if<UserCallResponseDTO>(&variantResp)) {
         return dispatchUserCallResponse(message, *uResp);
-    }
-    if (std::holds_alternative<SwarmApiResponseDTO>(variantResp)) {
-        m_logger.log(LogLevel::Warn, "Received swarm resp on the hivemind");
-        return false;
     }
 
     // Either a HiveMindAPI or a unknown response, pipe it either way
@@ -116,8 +117,8 @@ bool MessageDispatcher::dispatchResponse(const MessageDTO& message, const Respon
 }
 
 bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
-    const std::variant<std::monostate, RequestDTO, ResponseDTO, GreetingDTO, BuzzMessageDTO>&
-        variantMsg = message.getMessage();
+    const std::variant<std::monostate, RequestDTO, ResponseDTO, GreetingDTO, BuzzMessageDTO,
+                       NetworkApiDTO>& variantMsg = message.getMessage();
     if (const auto* request = std::get_if<RequestDTO>(&variantMsg)) {
         return dispatchRequest(message, *request);
     }
@@ -127,8 +128,7 @@ bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
     if (std::holds_alternative<BuzzMessageDTO>(variantMsg)) {
         return m_buzzOutputQueue.push(message);
     }
-    if (std::holds_alternative<GreetingDTO>(variantMsg)) {
-        m_logger.log(LogLevel::Warn, "Received greetings on the hivemind");
-    }
+
+    m_logger.log(LogLevel::Warn, "Unknown message, could not dispatch, idx %d", variantMsg.index());
     return false;
 }

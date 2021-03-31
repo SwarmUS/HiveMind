@@ -3,13 +3,16 @@
 
 #include "SpiHeader.h"
 #include "bsp/ICRC.h"
-#include "bsp/ISpiEsp.h"
+#include "bsp/ICommInterface.h"
 #include "logger/ILogger.h"
 #include <BaseTask.h>
 #include <Task.h>
 #include <array>
 
-class SpiEsp : public ISpiEsp {
+#define CRC32_SIZE sizeof(uint32_t)
+#define ESP_SPI_MAX_MESSAGE_LENGTH (2048u - CRC32_SIZE)
+
+class SpiEsp : public ICommInterface {
   public:
     SpiEsp(ICRC& crc, ILogger& logger);
     ~SpiEsp() override = default;
@@ -22,7 +25,7 @@ class SpiEsp : public ISpiEsp {
         return false;
     }
 
-    bool isBusy() const override;
+    bool isBusy() const;
     bool isConnected() const override;
 
     void execute();

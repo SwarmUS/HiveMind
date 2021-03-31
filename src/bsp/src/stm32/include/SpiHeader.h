@@ -2,6 +2,7 @@
 #define SPI_HEADER_H
 
 #include <cstdint>
+
 namespace EspHeader {
 
     struct EspSystemState {

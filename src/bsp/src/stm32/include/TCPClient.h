@@ -1,11 +1,11 @@
 #ifndef __TCPCLIENT_H_
 #define __TCPCLIENT_H_
 
-#include "bsp/ITCPClient.h"
+#include "bsp/ICommInterface.h"
 #include <logger/ILogger.h>
 #include <lwip/sockets.h>
 
-class TCPClient : public ITCPClient {
+class TCPClient : public ICommInterface {
   public:
     TCPClient(int socket, sockaddr_in address, ILogger& logger);
 
@@ -15,10 +15,13 @@ class TCPClient : public ITCPClient {
 
     bool send(const uint8_t* data, uint16_t length) override;
 
-    bool close() override;
+    bool isConnected() const override;
+
+    bool close();
 
   private:
     ILogger& m_logger;
+    bool m_connected;
     const int m_socketFd;
     const sockaddr_in m_address;
 };

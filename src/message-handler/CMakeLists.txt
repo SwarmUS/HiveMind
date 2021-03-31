@@ -6,6 +6,9 @@ set(LIB_SOURCES
     src/MessageSender.cpp
     src/HiveMindApiRequestHandler.cpp
     src/MessageHandlerContainer.cpp
+
+    src/GreetHandler.cpp
+    src/GreetSender.cpp
 )
 
 set(LIB_HEADERS
@@ -14,6 +17,12 @@ set(LIB_HEADERS
 
     include/message-handler/IMessageSender.h
     include/message-handler/MessageSender.h
+
+    include/message-handler/IGreetHandler.h
+    include/message-handler/GreetHandler.h
+
+    include/message-handler/IGreetSender.h
+    include/message-handler/GreetSender.h
 
     include/message-handler/IHiveMindApiRequestHandler.h
     include/message-handler/HiveMindApiRequestHandler.h

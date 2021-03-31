@@ -2,20 +2,21 @@
 #define HIVE_MIND_USB_H
 
 #include "LockGuard.h"
-#include "bsp/IUSB.h"
+#include "bsp/ICommInterface.h"
 #include "semphr.h"
 #include <BaseTask.h>
 #include <c-common/circular_buff.h>
 #include <cstdint>
 #include <logger/ILogger.h>
-class USB : public IUSB {
+
+class USB : public ICommInterface {
   public:
     USB(ILogger& logger);
     ~USB() override = default;
 
     bool send(const uint8_t* buffer, uint16_t length) override;
     bool receive(uint8_t* buffer, uint16_t length) override;
-    bool isConnected() override;
+    bool isConnected() const override;
 
   private:
     static void interruptRxCallback(void* context, uint8_t* buffer, uint32_t length);
