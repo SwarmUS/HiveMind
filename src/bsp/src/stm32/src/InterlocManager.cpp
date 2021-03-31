@@ -30,6 +30,12 @@ void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t
     m_positionUpdateCallbackContext = context;
 }
 
+void InterlocManager::setCalibrationEndedCallback(calibrationEndedCallbackFunction_t callback,
+                                                  void* context) {
+    m_calibrationEndedCallback = callback;
+    m_calibrationEndedCallbackContext = context;
+}
+
 void InterlocManager::startInterloc() {
     if (!m_decaA.init()) {
         m_logger.log(LogLevel::Warn, "InterlocManager: Could not start Decawave A");

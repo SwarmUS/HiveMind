@@ -21,6 +21,8 @@ class InterlocManager : public IInterlocManager {
     void setCalibFinishedCallback(void (*fct)(void* context), void* context) override;
     void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
                                    void* context) override;
+    void setCalibrationEndedCallback(calibrationEndedCallbackFunction_t callback,
+                                     void* context) override;
 
   private:
     ILogger& m_logger;
@@ -42,8 +44,10 @@ class InterlocManager : public IInterlocManager {
                             uint16_t bufferLength);
 
     positionUpdateCallbackFunction_t m_positionUpdateCallback;
+    calibrationEndedCallbackFunction_t m_calibrationEndedCallback;
     void* m_positionUpdateCallbackContext;
     bool isFrameOk(UWBRxFrame frame);
+    void* m_calibrationEndedCallbackContext;
 };
 
 #endif //__INTERLOCMANAGER_H__
