@@ -22,6 +22,13 @@ class InterlocManager : public IInterlocManager {
         (void)context;
     };
 
+    void setCalibrationEndedCallback(calibrationEndedCallbackFunction_t callback,
+                                     void* context) override {
+        // TODO: implement
+        (void)callback;
+        (void)context;
+    };
+
   private:
 };
 

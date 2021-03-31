@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <interloc/Interloc.h>
 #include <mocks/InterlocManagerInterfaceMock.h>
+#include <mocks/InterlocMessageHandlerMock.h>
 #include <mocks/LoggerInterfaceMock.h>
 
 class InterlocFixture : public testing::Test {
@@ -9,11 +10,13 @@ class InterlocFixture : public testing::Test {
 
     InterlocManagerInterfaceMock* m_interlocManagerMock;
     LoggerInterfaceMock* m_loggerMock;
+    InterlocMessageHandlerMock m_interlocMessageHandlerMock;
 
     void SetUp() override {
         m_loggerMock = new LoggerInterfaceMock();
         m_interlocManagerMock = new InterlocManagerInterfaceMock();
-        m_interloc = new Interloc(*m_loggerMock, *m_interlocManagerMock);
+        m_interloc =
+            new Interloc(*m_loggerMock, *m_interlocManagerMock, m_interlocMessageHandlerMock);
     }
 
     void TearDown() override {
@@ -45,7 +48,8 @@ TEST_F(InterlocFixture, Interloc_getPosition_pushData_robotInList) {
     position.m_relativeOrientation = 0;
 
     // Then
-    m_interlocManagerMock->m_callback(m_interlocManagerMock->m_context, position);
+    m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
+                                                    position);
     auto ret = m_interloc->getRobotPosition(robotId);
 
     // Expect
@@ -66,7 +70,8 @@ TEST_F(InterlocFixture, Interloc_getPosition_validData) {
     position.m_relativeOrientation = angle;
 
     // Then
-    m_interlocManagerMock->m_callback(m_interlocManagerMock->m_context, position);
+    m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
+                                                    position);
     auto ret = m_interloc->getRobotPosition(robotId);
 
     // Expect
@@ -94,8 +99,10 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateDistance_validData) {
     position2.m_distance = updatedDistance;
 
     // Then
-    m_interlocManagerMock->m_callback(m_interlocManagerMock->m_context, position1);
-    m_interlocManagerMock->m_callback(m_interlocManagerMock->m_context, position2);
+    m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
+                                                    position1);
+    m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
+                                                    position2);
     auto ret = m_interloc->getRobotPosition(robotId);
 
     // Expect
@@ -121,8 +128,10 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateAngle_validData) {
     position2.m_relativeOrientation = updatedAngle;
 
     // Then
-    m_interlocManagerMock->m_callback(m_interlocManagerMock->m_context, position1);
-    m_interlocManagerMock->m_callback(m_interlocManagerMock->m_context, position2);
+    m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
+                                                    position1);
+    m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
+                                                    position2);
     auto ret = m_interloc->getRobotPosition(robotId);
 
     // Expect
@@ -148,8 +157,10 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateLineOfSight_validData) {
     position2.m_isInLineOfSight = updatedLOS;
 
     // Then
-    m_interlocManagerMock->m_callback(m_interlocManagerMock->m_context, position1);
-    m_interlocManagerMock->m_callback(m_interlocManagerMock->m_context, position2);
+    m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
+                                                    position1);
+    m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
+                                                    position2);
     auto ret = m_interloc->getRobotPosition(robotId);
 
     // Expect
@@ -174,7 +185,8 @@ TEST_F(InterlocFixture, Interloc_isLineOfSight_robotInLOS) {
     positionUpdate.m_isInLineOfSight = true;
 
     // Then
-    m_interlocManagerMock->m_callback(m_interlocManagerMock->m_context, positionUpdate);
+    m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
+                                                    positionUpdate);
     bool ret = m_interloc->isLineOfSight(robotId);
 
     // Expect
@@ -189,7 +201,8 @@ TEST_F(InterlocFixture, Interloc_isLineOfSight_robotNotInLOS) {
     positionUpdate.m_isInLineOfSight = false;
 
     // Then
-    m_interlocManagerMock->m_callback(m_interlocManagerMock->m_context, positionUpdate);
+    m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
+                                                    positionUpdate);
     bool ret = m_interloc->isLineOfSight(robotId);
 
     // Expect
@@ -211,7 +224,8 @@ TEST_F(InterlocFixture, Interloc_getPositionsTable_elementInTable) {
     positionUpdate.m_isInLineOfSight = true;
 
     // Then
-    m_interlocManagerMock->m_callback(m_interlocManagerMock->m_context, positionUpdate);
+    m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
+                                                    positionUpdate);
     auto ret = m_interloc->getPositionsTable();
 
     // Expect
@@ -224,11 +238,25 @@ TEST_F(InterlocFixture, Interloc_getPositionsTable_addMoreRobotsThanAllowed) {
         positionUpdate.m_robotId = i;
         positionUpdate.m_isInLineOfSight = true;
 
-        m_interlocManagerMock->m_callback(m_interlocManagerMock->m_context, positionUpdate);
+        m_interlocManagerMock->m_positionUpdateCallback(
+            m_interlocManagerMock->m_positionUpdateContext, positionUpdate);
     }
 
     auto ret = m_interloc->getPositionsTable();
 
     // Expect
     EXPECT_EQ(ret.m_positionsLength, MAX_ROBOTS_IN_SWARM);
+}
+
+TEST_F(InterlocFixture, Interloc_calibrationEnded_sendsMessage) {
+    uint16_t initiator = UINT16_MAX;
+    uint16_t callArg;
+    EXPECT_CALL(m_interlocMessageHandlerMock, notifyCalibrationEnded(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&callArg), testing::Return(true)));
+
+    m_interlocManagerMock->m_calibrationEndedCallback(
+        m_interlocManagerMock->m_calibrationEndedContext, initiator);
+
+    EXPECT_EQ(callArg, initiator);
 }

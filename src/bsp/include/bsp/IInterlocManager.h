@@ -5,6 +5,7 @@
 #include <functional>
 
 typedef void (*positionUpdateCallbackFunction_t)(void* instance, InterlocUpdate update);
+typedef void (*calibrationEndedCallbackFunction_t)(void* instance, uint16_t initiatorId);
 
 class IInterlocManager {
   public:
@@ -44,6 +45,14 @@ class IInterlocManager {
      */
     virtual void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
                                            void* context) = 0;
+
+    /**
+     * @brief Sets the callback to be called when a calibration ends
+     * @param callback Callback to call
+     * @param context The context to pass to the callback
+     */
+    virtual void setCalibrationEndedCallback(calibrationEndedCallbackFunction_t callback,
+                                             void* context) = 0;
 };
 
 #endif //__IINTERLOCMANAGER_H__
