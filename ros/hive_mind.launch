@@ -10,7 +10,7 @@
             <param name="host_tcp_port" value="5555" />
 
             <!-- Set port to 0 to disable server -->
-            <param name="remote_mock_port" value="12346" />
+            <param name="remote_mock_port" value="9001" />
 
             <param name="log_level" value="Info" />
         </node>

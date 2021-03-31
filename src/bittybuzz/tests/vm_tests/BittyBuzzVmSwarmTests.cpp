@@ -25,7 +25,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledOnce) {
 
     // Expect
     EXPECT_EQ(m_uiMock.m_flushCallCounter, 1);
-    EXPECT_EQ(m_uiMock.m_printCallCounter, 1);
+    EXPECT_EQ(m_uiMock.m_printCallCounter, 2); // 2 times since we have the first print
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
 }
@@ -49,7 +49,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledTwice) {
 
     // Expect
     EXPECT_EQ(m_uiMock.m_flushCallCounter, 2);
-    EXPECT_EQ(m_uiMock.m_printCallCounter, 2);
+    EXPECT_EQ(m_uiMock.m_printCallCounter, 4); // 2 times since we have the first print
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
 }
@@ -73,7 +73,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_InTwoSwarm_FunctionCalledQuad) 
 
     // Expect
     EXPECT_EQ(m_uiMock.m_flushCallCounter, 4);
-    EXPECT_EQ(m_uiMock.m_printCallCounter, 4);
+    EXPECT_EQ(m_uiMock.m_printCallCounter, 8); // 2 times since we have the first print
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
 }
