@@ -5,6 +5,12 @@
 InterlocManager::InterlocManager(ILogger& logger) :
     m_logger(logger), m_decaA(DW_A), m_decaB(DW_B) {}
 
+void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
+                                                void* context) {
+    m_positionUpdateCallback = callback;
+    m_positionUpdateCallbackContext = context;
+}
+
 void InterlocManager::startInterloc() {
     if (!m_decaA.init()) {
         m_logger.log(LogLevel::Warn, "Could not start Decawave A");

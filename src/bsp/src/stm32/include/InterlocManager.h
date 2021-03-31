@@ -15,6 +15,8 @@ class InterlocManager : public IInterlocManager {
     ~InterlocManager() override = default;
 
     void startInterloc() override;
+    void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
+                                   void* context) override;
 
   private:
     ILogger& m_logger;
@@ -28,6 +30,9 @@ class InterlocManager : public IInterlocManager {
                             UWBMessages::FunctionCode functionCode,
                             uint8_t* buffer,
                             uint16_t bufferLength);
+
+    positionUpdateCallbackFunction_t m_positionUpdateCallback;
+    void* m_positionUpdateCallbackContext;
 };
 
 #endif //__INTERLOCMANAGER_H__

@@ -17,7 +17,8 @@ target_link_libraries(${EXECUTABLE_NAME}
       SwarmUS::HiveMind::OS
       SwarmUS::HiveMind::Logger
       SwarmUS::HiveMind::BittyBuzz
-      SwarmUS::HiveMind::MessageHandler 
+      SwarmUS::HiveMind::MessageHandler
+      SwarmUS::HiveMind::Interloc
 )
 
 add_subdirectory(bittybuzz)
@@ -25,6 +26,7 @@ add_subdirectory(bsp)
 add_subdirectory(os)
 add_subdirectory(logger)
 add_subdirectory(message-handler)
+add_subdirectory(interloc)
 
 # Removing warnings from interface libraries
 if (DISABLE_EXTERNAL_WARNINGS) 
