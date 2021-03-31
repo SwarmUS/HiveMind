@@ -17,6 +17,10 @@ bool isFrameGood(UWBRxFrame frame,ILogger&  logger){
     return true;
 }
 
+void InterlocManager::setCalibFinishedCallback(void (*fct)(void* context), void* context){
+    m_calibFinishedCallback = fct;
+    m_calibFinishedCallbackContext = context;
+}
 InterlocManager::InterlocManager(ILogger& logger) :
     m_logger(logger), m_decaA(DW_A), m_decaB(DW_B) {}
 
@@ -27,8 +31,7 @@ void InterlocManager::startInterloc() {
     if (!m_decaB.init()) {
         m_logger.log(LogLevel::Warn, "Could not start Decawave B");
     }
-//    m_decaB.setState(DW_STATE::RESPOND_CALIB);
-    m_decaB.setState(DW_STATE::SEND_CALIB);
+
     while(m_decaA.getState() != DW_STATE::CALIBRATED && m_decaB.getState() != DW_STATE::CALIBRATED) {
         if (m_decaA.getState() == DW_STATE::RESPOND_CALIB) {
             startCalibSingleRespond(0x69, m_decaA);
@@ -42,6 +45,7 @@ void InterlocManager::startInterloc() {
             startCalibSingleInit(0x69, m_decaB);
         }
     }
+
 }
 
 bool InterlocManager::constructUWBHeader(uint16_t destinationId,
@@ -74,6 +78,20 @@ bool InterlocManager::constructUWBHeader(uint16_t destinationId,
 
 void InterlocManager::setCalibDistance(uint16_t distanceForCalibCm){
     m_distanceForCalibCm = distanceForCalibCm;
+}
+
+void InterlocManager::startCalibSingleInit() {
+    // TODO add destination ID
+        m_decaA.setState(DW_STATE::SEND_CALIB);
+}
+
+void InterlocManager::startCalibSingleRespond() {
+    // TODO add destination ID
+    if (m_decaA.getState() != DW_STATE::CALIBRATED) {
+        m_decaA.setState(DW_STATE::RESPOND_CALIB);
+    }else if (m_decaB.getState() != DW_STATE::CALIBRATED) {
+        m_decaA.setState(DW_STATE::RESPOND_CALIB);
+    }
 }
 
 void InterlocManager::startCalibSingleInit(uint16_t destinationId, Decawave& device) {
@@ -117,7 +135,7 @@ void InterlocManager::startCalibSingleRespond(uint16_t destinationId, Decawave& 
             device.setRxAntennaDLY((dwCountOffset>>1)+device.getRxAntennaDLY());
             if(dwCountOffset>>1 <=1){
                 device.setState(DW_STATE::CALIBRATED);
-                //TODO notify the manager that the calibration process is finished for this DW
+                m_calibFinishedCallback(m_calibFinishedCallbackContext);
             }
         }
         Task::delay(50);
@@ -126,18 +144,15 @@ void InterlocManager::startCalibSingleRespond(uint16_t destinationId, Decawave& 
 
 double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& device) {
     UWBRxFrame rxFrame;
-    volatile uint64_t pollRxTs;
-    uint64_t sysTs;
-    uint64_t respTxTime;
+    uint64_t pollRxTs;
     uint64_t respTxTs;
-    uint64_t respTxTs2;
     uint64_t finalRxTs;
     UWBMessages::TWRResponse responseMsg{};
-    volatile double varA;
-    volatile double varB;
-    volatile double varC;
-    volatile double varD;
-    volatile double distanceEval;
+    double varA;
+    double varB;
+    double varC;
+    double varD;
+    double distanceEval;
     double tof;
     uint64_t tofDtu;
 
@@ -202,7 +217,7 @@ bool InterlocManager::sendTWRSequence(uint16_t destinationId, Decawave& device){
 
     // Construct poll message
     constructUWBHeader(destinationId,UWBMessages:: BEACON,UWBMessages::TWR_POLL,(uint8_t*)&pollMsg,sizeof(pollMsg));
-    device.transmitAndReceiveDelayed((uint8_t*)(&pollMsg), sizeof(UWBMessages::DWFrame),POLL_TX_TO_RESP_RX_DLY_UUS,responseFrame,RESP_RX_TIMEOUT_UUS * UUS_TO_DWT_TIME);
+    device.transmitAndReceiveDelayed((uint8_t*)(&pollMsg), sizeof(UWBMessages::DWFrame),POLL_TX_TO_RESP_RX_DLY_UUS,responseFrame,RESP_RX_TIMEOUT_UUS);
 
     if(!isFrameGood(responseFrame, m_logger)){
         return false;

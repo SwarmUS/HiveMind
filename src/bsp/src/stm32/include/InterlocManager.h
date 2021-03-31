@@ -15,9 +15,10 @@ class InterlocManager : public IInterlocManager {
     ~InterlocManager() override = default;
 
     void startInterloc() override;
-    void startCalibSingleInit(uint16_t destinationId, Decawave& device);
-    void startCalibSingleRespond(uint16_t destinationId, Decawave& device);
-    void setCalibDistance(uint16_t distanceForCalibCm);
+    void startCalibSingleInit() override;
+    void startCalibSingleRespond()override;
+    void setCalibDistance(uint16_t distanceForCalibCm) override;
+    void setCalibFinishedCallback(void (*fct)(void* context), void* context) override;
 
   private:
     ILogger& m_logger;
@@ -26,9 +27,12 @@ class InterlocManager : public IInterlocManager {
 
     uint8_t m_sequenceID = 0;
     uint16_t m_distanceForCalibCm = 75;
+    void (*m_calibFinishedCallback)(void* context);
+    void* m_calibFinishedCallbackContext;
+    void startCalibSingleInit(uint16_t destinationId, Decawave& device);
+    void startCalibSingleRespond(uint16_t destinationId, Decawave& device);
     bool sendTWRSequence(uint16_t destinationId, Decawave& device);
     double receiveTWRSequence(uint16_t destinationId, Decawave& device);
-
     bool constructUWBHeader(uint16_t destinationId,
                             UWBMessages::FrameType frameType,
                             UWBMessages::FunctionCode functionCode,
