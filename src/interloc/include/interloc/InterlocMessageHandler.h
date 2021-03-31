@@ -14,18 +14,24 @@ class InterlocMessageHandler : public IInterlocMessageHandler {
     InterlocMessageHandler(ILogger& logger,
                            IInterlocManager& interlocManager,
                            IBSP& bsp,
-                           ICircularQueue<MessageDTO>& inputQueue);
+                           ICircularQueue<MessageDTO>& inputQueue,
+                           ICircularQueue<MessageDTO>& hostQueue,
+                           ICircularQueue<MessageDTO>& remoteQueue);
 
     bool processMessage();
+    bool notifyCalibrationEnded(uint16_t initiatorId);
 
   private:
     ILogger& m_logger;
     IInterlocManager& m_interlocManager;
     IBSP& m_bsp;
     ICircularQueue<MessageDTO>& m_inputQueue;
+    ICircularQueue<MessageDTO>& m_hostQueue;
+    ICircularQueue<MessageDTO>& m_remoteQueue;
 
     bool handleMessage(const MessageDTO& dto) const;
     static bool handleCalibrationMessage(const CalibrationMessageDTO& dto);
+    ICircularQueue<MessageDTO>& getQueueForDestination(uint16_t destinationId) const;
 };
 
 #endif //__INTERLOCMESSAGEHANDLER_H__

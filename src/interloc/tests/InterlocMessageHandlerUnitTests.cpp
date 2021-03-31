@@ -13,11 +13,14 @@ class InterlocMessageHandlerFixture : public testing::Test {
     InterlocManagerInterfaceMock m_interlocManagerMock;
     LoggerInterfaceMock m_loggerMock;
     CircularQueueInterfaceMock<MessageDTO> m_inputQueueMock;
+    CircularQueueInterfaceMock<MessageDTO> m_hostQueueMock;
+    CircularQueueInterfaceMock<MessageDTO> m_remoteQueueMock;
     BSPInterfaceMock m_bspMock = BSPInterfaceMock(gc_boardId);
 
     void SetUp() override {
-        m_messageHandler = new InterlocMessageHandler(m_loggerMock, m_interlocManagerMock,
-                                                      m_bspMock, m_inputQueueMock);
+        m_messageHandler =
+            new InterlocMessageHandler(m_loggerMock, m_interlocManagerMock, m_bspMock,
+                                       m_inputQueueMock, m_hostQueueMock, m_remoteQueueMock);
     }
 
     void TearDown() override { delete m_messageHandler; }
@@ -119,4 +122,44 @@ TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_unknownCali
     bool ret = m_messageHandler->processMessage();
 
     EXPECT_FALSE(ret);
+}
+
+TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_notifyCalibEnded_calledFromHost) {
+    MessageDTO messageSent;
+    uint16_t initiator = gc_boardId;
+
+    EXPECT_CALL(m_hostQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
+    EXPECT_CALL(m_remoteQueueMock, push(testing::_)).Times(0);
+    bool ret = m_messageHandler->notifyCalibrationEnded(initiator);
+
+    EXPECT_TRUE(ret);
+    EXPECT_EQ(messageSent.getDestinationId(), initiator);
+    EXPECT_EQ(messageSent.getSourceId(), gc_boardId);
+
+    const auto* interlocMessage = std::get_if<InterlocAPIDTO>(&(messageSent.getMessage()));
+    const auto* calibMessage = std::get_if<CalibrationMessageDTO>(&(interlocMessage->getAPICall()));
+
+    EXPECT_TRUE(std::holds_alternative<CalibrationEndedDTO>(calibMessage->getCall()));
+}
+
+TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_notifyCalibEnded_calledFromRemote) {
+    MessageDTO messageSent;
+    uint16_t initiator = UINT16_MAX;
+
+    EXPECT_CALL(m_remoteQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
+    EXPECT_CALL(m_hostQueueMock, push(testing::_)).Times(0);
+    bool ret = m_messageHandler->notifyCalibrationEnded(initiator);
+
+    EXPECT_TRUE(ret);
+    EXPECT_EQ(messageSent.getDestinationId(), initiator);
+    EXPECT_EQ(messageSent.getSourceId(), gc_boardId);
+
+    const auto* interlocMessage = std::get_if<InterlocAPIDTO>(&(messageSent.getMessage()));
+    const auto* calibMessage = std::get_if<CalibrationMessageDTO>(&(interlocMessage->getAPICall()));
+
+    EXPECT_TRUE(std::holds_alternative<CalibrationEndedDTO>(calibMessage->getCall()));
 }

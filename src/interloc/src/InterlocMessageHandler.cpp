@@ -5,8 +5,15 @@
 InterlocMessageHandler::InterlocMessageHandler(ILogger& logger,
                                                IInterlocManager& interlocManager,
                                                IBSP& bsp,
-                                               ICircularQueue<MessageDTO>& inputQueue) :
-    m_logger(logger), m_interlocManager(interlocManager), m_bsp(bsp), m_inputQueue(inputQueue) {}
+                                               ICircularQueue<MessageDTO>& inputQueue,
+                                               ICircularQueue<MessageDTO>& hostQueue,
+                                               ICircularQueue<MessageDTO>& remoteQueue) :
+    m_logger(logger),
+    m_interlocManager(interlocManager),
+    m_bsp(bsp),
+    m_inputQueue(inputQueue),
+    m_hostQueue(hostQueue),
+    m_remoteQueue(remoteQueue) {}
 
 bool InterlocMessageHandler::processMessage() {
     auto message = m_inputQueue.peek();
@@ -61,4 +68,20 @@ bool InterlocMessageHandler::handleCalibrationMessage(const CalibrationMessageDT
     }
 
     return false;
+}
+
+bool InterlocMessageHandler::notifyCalibrationEnded(uint16_t initiatorId) {
+    MessageDTO message = MessageDTO(m_bsp.getUUId(), initiatorId,
+                                    InterlocAPIDTO(CalibrationMessageDTO(CalibrationEndedDTO())));
+
+    return getQueueForDestination(initiatorId).push(message);
+}
+
+ICircularQueue<MessageDTO>& InterlocMessageHandler::getQueueForDestination(
+    uint16_t destinationId) const {
+    if (destinationId == m_bsp.getUUId()) {
+        return m_hostQueue;
+    }
+
+    return m_remoteQueue;
 }
