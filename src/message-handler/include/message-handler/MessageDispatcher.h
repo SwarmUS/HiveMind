@@ -15,6 +15,7 @@ class MessageDispatcher : IMessageDispatcher {
     MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
                       ICircularQueue<MessageDTO>& hostOutputQ,
                       ICircularQueue<MessageDTO>& remoteOutputQ,
+                      ICircularQueue<MessageDTO>& interlocQ,
                       IHiveMindHostDeserializer& deserializer,
                       IHiveMindApiRequestHandler& hivemindApiReqHandler,
                       IGreetSender& greetSender,
@@ -29,6 +30,7 @@ class MessageDispatcher : IMessageDispatcher {
     ICircularQueue<MessageDTO>& m_buzzOutputQueue;
     ICircularQueue<MessageDTO>& m_hostOutputQueue;
     ICircularQueue<MessageDTO>& m_remoteOutputQueue;
+    ICircularQueue<MessageDTO>& m_interlocQueue;
     IHiveMindHostDeserializer& m_deserializer;
     IHiveMindApiRequestHandler& m_hivemindApiReqHandler;
     IGreetSender& m_greetSender;

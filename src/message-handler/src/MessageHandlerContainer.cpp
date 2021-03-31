@@ -16,8 +16,8 @@ MessageDispatcher MessageHandlerContainer::createMessageDispatcher(
     IHiveMindApiRequestHandler& hivemindApiReqHandler,
     IGreetSender& greetSender) {
     return MessageDispatcher(getBuzzMsgQueue(), getHostMsgQueue(), getRemoteMsgQueue(),
-                             deserializer, hivemindApiReqHandler, greetSender,
-                             BSPContainer::getBSP(), LoggerContainer::getLogger());
+                             getInterlocMsgQueue(), deserializer, hivemindApiReqHandler,
+                             greetSender, BSPContainer::getBSP(), LoggerContainer::getLogger());
 }
 
 ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getBuzzMsgQueue() {
