@@ -38,6 +38,11 @@ namespace MessageHandlerContainer {
      *@return A reference to the remote message queue */
     ThreadSafeQueue<MessageDTO>& getRemoteMsgQueue();
 
+    /**
+     *@brief get the interloc message queue
+     *@return A reference to the interloc message queue */
+    ThreadSafeQueue<MessageDTO>& getInterlocMsgQueue();
+
 } // namespace MessageHandlerContainer
 
 #endif // __MESSAGEHANDLERCONTAINER_H_

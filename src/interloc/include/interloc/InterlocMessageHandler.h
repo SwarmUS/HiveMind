@@ -18,6 +18,8 @@ class InterlocMessageHandler : public IInterlocMessageHandler {
                            ICircularQueue<MessageDTO>& hostQueue,
                            ICircularQueue<MessageDTO>& remoteQueue);
 
+    virtual ~InterlocMessageHandler() = default;
+
     bool processMessage() override;
     bool notifyCalibrationEnded(uint16_t initiatorId) override;
 

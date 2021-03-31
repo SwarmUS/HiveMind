@@ -43,3 +43,11 @@ ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getRemoteMsgQueue() {
 
     return s_remoteMsgThreadQueue;
 }
+
+ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getInterlocMsgQueue() {
+    static Mutex s_mutex(10);
+    static CircularQueueStack<MessageDTO, gc_queueMaxSize> s_interlocMsgQueue;
+    static ThreadSafeQueue<MessageDTO> s_interlocMsgThreadQueue(s_interlocMsgQueue, s_mutex);
+
+    return s_interlocMsgThreadQueue;
+}
