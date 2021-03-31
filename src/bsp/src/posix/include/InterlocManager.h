@@ -16,14 +16,11 @@ class InterlocManager : public IInterlocManager {
 
     void startCalibSingleInit() override{};
     void startCalibSingleRespond() override{};
-    void setCalibDistance(uint16_t distanceForCalibCm) override{
-        (void)distanceForCalibCm
-    };
-    void setCalibFinishedCallback(void (*fct)(void* context), void* context) override{
+    void setCalibDistance(uint16_t distanceForCalibCm) override{(void)distanceForCalibCm};
+    void setCalibFinishedCallback(void (*fct)(void* context), void* context) override {
         (void)fct;
         (void)context;
     };
-
 
   private:
 };
