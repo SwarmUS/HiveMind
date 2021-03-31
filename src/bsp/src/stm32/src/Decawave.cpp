@@ -1,10 +1,10 @@
 #include "Decawave.h"
+#include "hal/hal_gpio.h"
 #include <Task.h>
 #include <cpp-common/CppUtils.h>
 #include <cstring>
 #include <deca_device_api.h>
 #include <deca_regs.h>
-#include "hal/hal_gpio.h"
 
 void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
@@ -12,7 +12,7 @@ void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     BaseType_t taskWoken = pdFALSE;
 
     if (static_cast<Decawave*>(context)->m_rxTaskHandle != NULL) {
-        vTaskNotifyGiveFromISR(static_cast<Decawave*>(context)->m_rxTaskHandle,&taskWoken);
+        vTaskNotifyGiveFromISR(static_cast<Decawave*>(context)->m_rxTaskHandle, &taskWoken);
     }
 
     static_cast<Decawave*>(context)->m_rxTaskHandle = NULL;
@@ -113,7 +113,6 @@ void Decawave::receiveInternal(UWBRxFrame& frame,
     deca_selectDevice(m_spiDevice);
     m_rxTaskHandle = xTaskGetCurrentTaskHandle();
 
-
     frame.m_status = UWBRxStatus::ONGOING;
 
     if (!rxStarted) {
@@ -211,7 +210,7 @@ bool Decawave::transmitAndReceive(uint8_t* buf,
 }
 
 bool Decawave::transmitDelayedAndReceive(uint8_t* buf,
-                                            uint16_t length,
+                                         uint16_t length,
                                          uint64_t txTimestamp,
                                          uint32_t rxAfterTxTimeUs,
                                          UWBRxFrame& frame,
@@ -232,18 +231,16 @@ bool Decawave::transmitAndReceiveDelayed(uint8_t* buf,
                                          uint16_t length,
                                          uint32_t rxStartDelayUS,
                                          UWBRxFrame& frame,
-                                         uint16_t rxTimeoutUs){
+                                         uint16_t rxTimeoutUs) {
     deca_selectDevice(m_spiDevice);
     dwt_setrxaftertxdelay(rxStartDelayUS);
     dwt_setrxtimeout(rxTimeoutUs);
 
-    if(!transmitInternal(buf, length, DWT_START_TX_IMMEDIATE | DWT_RESPONSE_EXPECTED)) {
+    if (!transmitInternal(buf, length, DWT_START_TX_IMMEDIATE | DWT_RESPONSE_EXPECTED)) {
         return false;
     }
     receiveInternal(frame, 0, 0, true);
     return true;
-
-
 }
 
 void Decawave::configureDW() {
@@ -294,52 +291,47 @@ void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
     }
 }
 
-void Decawave::setTxAntennaDLY(uint16 delay){
+void Decawave::setTxAntennaDLY(uint16 delay) {
     deca_selectDevice(m_spiDevice);
     dwt_settxantennadelay(delay);
 }
 
-void Decawave::setRxAntennaDLY(uint16 delay){
+void Decawave::setRxAntennaDLY(uint16 delay) {
     deca_selectDevice(m_spiDevice);
     dwt_setrxantennadelay(delay);
 }
 
-void Decawave::getTxTimestamp(uint64_t *txTimestamp){
+void Decawave::getTxTimestamp(uint64_t* txTimestamp) {
     deca_selectDevice(m_spiDevice);
     dwt_readtxtimestamp((uint8_t*)txTimestamp);
 }
 
-void Decawave::getRxTimestamp(uint64_t *rxTimestamp){
+void Decawave::getRxTimestamp(uint64_t* rxTimestamp) {
     deca_selectDevice(m_spiDevice);
     dwt_readrxtimestamp((uint8_t*)rxTimestamp);
 }
-void Decawave::getSysTime(uint64_t *sysTime){
+void Decawave::getSysTime(uint64_t* sysTime) {
     deca_selectDevice(m_spiDevice);
     dwt_readrxtimestamp((uint8_t*)sysTime);
 }
 
-void Decawave::finalMsgAddTs(uint8 *tsField, uint64_t ts){
+void Decawave::finalMsgAddTs(uint8* tsField, uint64_t ts) {
     deca_selectDevice(m_spiDevice);
     int i;
-    for (i = 0; i < 4; i++){
-        tsField[i] = (uint8) ts;
+    for (i = 0; i < 4; i++) {
+        tsField[i] = (uint8)ts;
         ts >>= 8;
     }
 }
 
-DW_STATE Decawave::getState(){
-    return m_state;
-}
-void Decawave::setState(DW_STATE state){
-    m_state = state;
-}
+DW_STATE Decawave::getState() { return m_state; }
+void Decawave::setState(DW_STATE state) { m_state = state; }
 
-uint16_t Decawave::getRxAntennaDLY(){
+uint16_t Decawave::getRxAntennaDLY() {
     deca_selectDevice(m_spiDevice);
     return dwt_read16bitoffsetreg(LDE_IF_ID, LDE_RXANTD_OFFSET);
-
 }
-uint16_t Decawave::getTxAntennaDLY(){
+uint16_t Decawave::getTxAntennaDLY() {
     deca_selectDevice(m_spiDevice);
     return dwt_read16bitoffsetreg(TX_ANTD_ID, TX_ANTD_OFFSET);
 }

@@ -16,7 +16,7 @@ class InterlocManager : public IInterlocManager {
 
     void startInterloc() override;
     void startCalibSingleInit() override;
-    void startCalibSingleRespond()override;
+    void startCalibSingleRespond() override;
     void setCalibDistance(uint16_t distanceForCalibCm) override;
     void setCalibFinishedCallback(void (*fct)(void* context), void* context) override;
     void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,

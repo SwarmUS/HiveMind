@@ -21,7 +21,8 @@ class IInterlocManager {
     virtual void startCalibSingleInit() = 0;
 
     /**
-     * @brief Start calibration in responder mode, it sends the response msg and compute the distance
+     * @brief Start calibration in responder mode, it sends the response msg and compute the
+     * distance
      */
     virtual void startCalibSingleRespond() = 0;
 
@@ -34,7 +35,6 @@ class IInterlocManager {
      * @brief Sets the function to call when the calibration ends
      */
     virtual void setCalibFinishedCallback(void (*fct)(void* context), void* context) = 0;
-
 
     /**
      * @brief Sets the callback to be called when new interloc data is available
