@@ -8,13 +8,8 @@
 
 void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
-    //TEMP
-//    uint8_t myBuff[15];
-//    dwt_readrxdata(&myBuff[0],callbackData->datalength,0);
 
     BaseType_t taskWoken = pdFALSE;
-    volatile auto* test = static_cast<Decawave*>(context);
-    (void) test;
 
     if (static_cast<Decawave*>(context)->m_rxTaskHandle != NULL) {
         vTaskNotifyGiveFromISR(static_cast<Decawave*>(context)->m_rxTaskHandle,&taskWoken);
@@ -73,6 +68,7 @@ bool Decawave::init() {
 
     dwt_softreset();
     configureDW();
+    setState(DW_STATE::CONFIGURED);
 
     dwt_enablegpioclocks();
     dwt_setgpiodirection(DWT_GxM0 | DWT_GxM1 | DWT_GxM2 | DWT_GxM3, 0);
@@ -83,9 +79,6 @@ bool Decawave::init() {
 
     setLed(DW_LED::LED_0, true);
 
-    //temp
-    setResetSendBtnCallback(Decawave::interruptBtnSendCallback, this);
-    setResetReceiveBtnCallback(Decawave::interruptBtnReceiveCallback, this);
     m_rxAsyncTask.start();
 
     return true;
@@ -195,8 +188,7 @@ bool Decawave::transmit(uint8_t* buf, uint16_t length) {
 
 bool Decawave::transmitDelayed(uint8_t* buf, uint16_t length, uint64_t txTimestamp) {
     deca_selectDevice(m_spiDevice);
-    // TEMP
-    dwt_setdelayedtrxtime(txTimestamp );//>> 8);
+    dwt_setdelayedtrxtime(txTimestamp >> 8);
 
     return transmitInternal(buf, length, DWT_START_TX_DELAYED);
 }
@@ -291,8 +283,6 @@ void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
         // Read the frame into memory without the CRC16 located at the end of the frame
         dwt_readrxdata(frame->m_rxBuffer.data(), m_callbackData.datalength - UWB_CRC_LENGTH, 0);
         getRxTimestamp(&frame->m_rxTimestamp);
-        // TEMP
-//        dwt_readrxtimestamp((uint8_t*)(&frame->m_rxTimestamp));
         return;
     }
 
@@ -316,48 +306,26 @@ void Decawave::setRxAntennaDLY(uint16 delay){
 
 void Decawave::getTxTimestamp(uint64_t *txTimestamp){
     deca_selectDevice(m_spiDevice);
-    uint8_t tsTab[5];
-    *txTimestamp = 0;
-    dwt_readtxtimestamp(tsTab);
-    for (int i = 4; i >= 0; i--)
-    {
-        *txTimestamp <<= 8;
-        *txTimestamp |= tsTab[i];
-    }
+    dwt_readtxtimestamp((uint8_t*)txTimestamp);
 }
 
 void Decawave::getRxTimestamp(uint64_t *rxTimestamp){
     deca_selectDevice(m_spiDevice);
-    uint8_t tsTab[5];
-    *rxTimestamp = 0;
-    dwt_readrxtimestamp(tsTab);
-    for (int i = 4; i >= 0; i--){
-        *rxTimestamp <<= 8;
-        *rxTimestamp |= tsTab[i];
-    }
+    dwt_readrxtimestamp((uint8_t*)rxTimestamp);
 }
 void Decawave::getSysTime(uint64_t *sysTime){
     deca_selectDevice(m_spiDevice);
-    uint8_t tsTab[5];
-    *sysTime = 0;
-    dwt_readsystime(tsTab);
-    for (int i = 4; i >= 0; i--){
-        *sysTime <<= 8;
-        *sysTime |= tsTab[i];
-    }
+    dwt_readrxtimestamp((uint8_t*)sysTime);
 }
 
 void Decawave::finalMsgAddTs(uint8 *tsField, uint64_t ts){
     deca_selectDevice(m_spiDevice);
     int i;
-    //build as uint32_t
-    for (i = 0; i < 4; i++)
-    {
+    for (i = 0; i < 4; i++){
         tsField[i] = (uint8) ts;
         ts >>= 8;
     }
 }
-
 
 DW_STATE Decawave::getState(){
     return m_state;
@@ -374,26 +342,4 @@ uint16_t Decawave::getRxAntennaDLY(){
 uint16_t Decawave::getTxAntennaDLY(){
     deca_selectDevice(m_spiDevice);
     return dwt_read16bitoffsetreg(TX_ANTD_ID, TX_ANTD_OFFSET);
-}
-
-void Decawave::resetBtnSendTWRCallback(){
-    deca_selectDevice(m_spiDevice);
-    setState(DW_STATE::SEND_CALIB);
-    setLed(DW_LED::LED_3, false);
-    setLed(DW_LED::LED_2, true);
-}
-void Decawave::resetBtnReceiveTWRCallback(){
-    setState(DW_STATE::RECEIVE_CALIB);
-    setLed(DW_LED::LED_3, true);
-    setLed(DW_LED::LED_2, false);
-}
-
-void Decawave::interruptBtnSendCallback(void* context) {
-    Decawave* deca = (Decawave*)context;
-    deca->resetBtnSendTWRCallback();
-}
-
-void Decawave::interruptBtnReceiveCallback(void* context) {
-    Decawave* deca = (Decawave*)context;
-    deca->resetBtnReceiveTWRCallback();
 }

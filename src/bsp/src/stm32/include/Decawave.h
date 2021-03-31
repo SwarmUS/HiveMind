@@ -15,7 +15,7 @@
 #define DEFAULT_RX_ANT_DLY 16505
 
 #define POLL_TX_TO_RESP_RX_DLY_UUS  300
-#define RESP_RX_TO_FINAL_TX_DLY_UUS 3100
+#define RESP_RX_TO_FINAL_TX_DLY_UUS 4000
 //#define POLL_RX_TO_RESP_TX_DLY_UUS 2750
 #define POLL_RX_TO_RESP_TX_DLY_UUS 1000
 #define RESP_RX_TIMEOUT_UUS 4000
@@ -27,7 +27,7 @@
 
 
 enum class DW_LED { LED_0 = DWT_GxM0, LED_1 = DWT_GxM1, LED_2 = DWT_GxM2, LED_3 = DWT_GxM3 };
-enum class DW_STATE { CONFIGURED, SEND_CALIB, RECEIVE_CALIB, CALIBRATED};
+enum class DW_STATE { CONFIGURED, SEND_CALIB, RESPOND_CALIB, CALIBRATED};
 
 class Decawave {
   public:
@@ -141,24 +141,81 @@ class Decawave {
                                    uint32_t rxAfterTxTimeUs,
                                    UWBRxFrame& frame,
                                    uint16_t rxTimeoutUs);
-
+    /**
+     * @brief Transmits data over UWB and blocks until response is received
+     * @param buf Buffer to transmit
+     * @param length Length of the data
+     * @param rxStartDelayUS Number of microseconds between the TX and the start of the RX
+     * @param frame [out] Variable in which all frame data will be put once packet is received
+     * @param rxTimeoutUs Timeout in microseconds. 0 to block indefinitely
+     * @return True if successful, false otherwise.
+     */
     bool transmitAndReceiveDelayed(uint8_t* buf,
                                              uint16_t length,
                                              uint32_t rxStartDelayUS,
                                              UWBRxFrame& frame,
                                              uint16_t rxTimeoutUs);
 
-    //TEMP
+    /**
+    * @brief Sets transmission antenna delay in DecawaveTimeUnits
+    * @param delay Delay in DecawaveTimeUnits
+    */
     void setTxAntennaDLY(uint16 delay);
+
+    /**
+    * @brief Sets reception antenna delay in DecawaveTimeUnits
+    * @param delay Delay in DecawaveTimeUnits
+    */
     void setRxAntennaDLY(uint16 delay);
-    uint16_t getRxAntennaDLY();
+
+    /**
+    * @brief Get transmission antenna delay in DecawaveTimeUnits
+    * @return Delay in DecawaveTimeUnits
+    */
     uint16_t getTxAntennaDLY();
+
+    /**
+    * @brief Get reception antenna delay in DecawaveTimeUnits
+    * @return Delay in DecawaveTimeUnits
+    */
+    uint16_t getRxAntennaDLY();
+
+    /**
+    * @brief Retrieves transmission timestamp in DecawaveTimeUnits
+    * @param txTimestamp Transmission timestamp in DecawaveTimeUnits
+    */
     void getTxTimestamp(uint64_t *txTimestamp);
+
+    /**
+    * @brief Retrieves reception timestamp in DecawaveTimeUnits
+    * @param rxTimestamp Reception timestamp in DecawaveTimeUnits
+    */
     void getRxTimestamp(uint64_t *rxTimestamp);
+
+    /**
+    * @brief Retrieves present time DecawaveTimeUnits
+    * @param sysTime Present timestamp in DecawaveTimeUnits
+    */
     void getSysTime(uint64_t *sysTime);
-    void finalMsgAddTs(uint8 *tsField, uint64_t ts);
+
+    /**
+    * @brief Retrieves the present state of calibration
+    * @return The present state of calibration
+    */
     DW_STATE getState();
+
+    /**
+    * @brief Sets the next state of calibration
+    * @param state The next state of calibration
+    */
     void setState(DW_STATE state);
+
+    /**
+    * @brief Sets a 5 byte timestamp into the specied message field
+    * @param ts Timestamp to insert in message
+    * @param tsField Field to put timestamp in
+    */
+    void finalMsgAddTs(uint8 *tsField, uint64_t ts);
 
   private:
     decaDevice_t m_spiDevice;
@@ -175,8 +232,6 @@ class Decawave {
 
     std::array<uint8_t, UWB_MAX_LENGTH> m_txBuffer;
 
-    uint16_t m_rxTimestamp;
-    uint16_t m_txTimestamp;
     DW_STATE m_state;
 
     void configureDW();
@@ -196,10 +251,6 @@ class Decawave {
     static void rxCallback(const dwt_cb_data_t* callbackData, void* context);
     static void isrCallback(void* context);
     static void rxAsyncTask(void* context);
-    static void interruptBtnSendCallback(void* context);
-    static void interruptBtnReceiveCallback(void* context);
-    void resetBtnReceiveTWRCallback();
-    void resetBtnSendTWRCallback();
 
 };
 

@@ -114,7 +114,7 @@ void deca_isr(decaDevice_t selectedDevice) {
 
     while (HAL_GPIO_ReadPin(deviceConfig->irqPort, deviceConfig->irqPin) != GPIO_PIN_RESET) {
         if (deviceConfig->isrCallback) {
-            deviceConfig->isrCallback(deviceConfig->isrContext);
+                    deviceConfig->isrCallback(deviceConfig->isrContext);
         }
     }
 }

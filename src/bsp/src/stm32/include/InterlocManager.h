@@ -17,7 +17,7 @@ class InterlocManager : public IInterlocManager {
     void startInterloc() override;
     void startCalibSingleInit(uint16_t destinationId, Decawave& device);
     void startCalibSingleRespond(uint16_t destinationId, Decawave& device);
-
+    void setCalibDistance(uint16_t distanceForCalibCm);
 
   private:
     ILogger& m_logger;
@@ -25,6 +25,7 @@ class InterlocManager : public IInterlocManager {
     Decawave m_decaB;
 
     uint8_t m_sequenceID = 0;
+    uint16_t m_distanceForCalibCm = 75;
     bool sendTWRSequence(uint16_t destinationId, Decawave& device);
     double receiveTWRSequence(uint16_t destinationId, Decawave& device);
 
