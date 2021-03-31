@@ -15,8 +15,8 @@ class InterlocManager : public IInterlocManager {
     ~InterlocManager() override = default;
 
     void startInterloc() override;
-    void startCalibAntennaRespond(uint16_t destinationId, Decawave& device);
-    void startCalibAntennaInit(uint16_t destinationId, Decawave& device);
+    void startCalibSingleInit(uint16_t destinationId, Decawave& device);
+    void startCalibSingleRespond(uint16_t destinationId, Decawave& device);
 
 
   private:

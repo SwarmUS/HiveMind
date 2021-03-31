@@ -1,6 +1,7 @@
 #include "InterlocManager.h"
 #include "bsp/BSPContainer.h"
 #include <Task.h>
+#define NB_CALIB_TRIES 10
 
 bool isFrameGood(UWBRxFrame frame,ILogger&  logger){
 
@@ -27,21 +28,11 @@ void InterlocManager::startInterloc() {
         m_logger.log(LogLevel::Warn, "Could not start Decawave B");
     }
 
-    uint8_t data[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
-    UWBRxFrame rxFrame;
-//    while(true) {
-//        if (m_decaB.getState() == DW_STATE::RECEIVE_CALIB) {
-//            receiveTWRSequence(0x69, m_decaB);
-//        }
-//        if (m_decaB.getState() == DW_STATE::SEND_CALIB){
-//            sendTWRSequence(0x69, m_decaB);
-//        }
-//        Task::delay(1000);
-//    }
-    startCalibAntennaRespond(0x69, m_decaB); //1
-//    startCalibAntennaInit(0x69, m_decaB); //2
+    startCalibSingleRespond(0x69, m_decaB); //1
+//    startCalibSingleInit(0x69, m_decaB); //2
 
 }
+
 bool InterlocManager::constructUWBHeader(uint16_t destinationId,
                                          UWBMessages::FrameType frameType,
                                          UWBMessages::FunctionCode functionCode,
@@ -70,8 +61,7 @@ bool InterlocManager::constructUWBHeader(uint16_t destinationId,
     return true;
 }
 
-// must start with button
-void InterlocManager::startCalibAntennaInit(uint16_t destinationId, Decawave& device) {
+void InterlocManager::startCalibSingleInit(uint16_t destinationId, Decawave& device) {
     device.setChannel(UWBChannel::CHANNEL_2);
     device.setTxAntennaDLY(DEFAULT_TX_ANT_DLY);
     device.setRxAntennaDLY(DEFAULT_RX_ANT_DLY);
@@ -87,9 +77,10 @@ void InterlocManager::startCalibAntennaInit(uint16_t destinationId, Decawave& de
 
 }
 
-void InterlocManager::startCalibAntennaRespond(uint16_t destinationId, Decawave& device){
-    double distanceEval;
-    uint16_t distanceCm = 501; //distance between devices in calibration mode in centimeters
+void InterlocManager::startCalibSingleRespond(uint16_t destinationId, Decawave& device){
+    int32_t error;
+    int32_t dwCountOffset;
+    uint16_t distanceCm = 75; //distance between devices in calibration mode in centimeters
 
     device.setChannel(UWBChannel::CHANNEL_2);
     device.setTxAntennaDLY(DEFAULT_TX_ANT_DLY);
@@ -97,17 +88,29 @@ void InterlocManager::startCalibAntennaRespond(uint16_t destinationId, Decawave&
     //set_preamble_detect?
     // reset?
     device.setState(DW_STATE::RECEIVE_CALIB);
+
+    int i = 0;
+    double val = 0;
     while(device.getState() == DW_STATE::RECEIVE_CALIB) { //find exit condition
-        receiveTWRSequence(destinationId, device);
+        val += receiveTWRSequence(destinationId, device);
+        i++;
+        if(i > NB_CALIB_TRIES-1){
+
+            i = 0;
+            // Compute the distance error between acquired and actual
+            error = (int32_t)((val*100/NB_CALIB_TRIES) - distanceCm);
+            val = 0;
+            // convert distance error to tick count in DW device
+            // P type control, P  = 0.9
+            // TODO could had a PID type control #futureImpro   vement
+            dwCountOffset = 0.9 * error * DW_INTERNAL_CLOCK_RFEQ / SPEED_OF_LIGHT /100;
+            // antenna delay is considered equal on Rx and Tx
+            int16_t presentAntDly = device.getTxAntennaDLY();
+            device.setTxAntennaDLY((dwCountOffset>>1)+presentAntDly);
+            device.setRxAntennaDLY((dwCountOffset>>1)+device.getRxAntennaDLY());
+        }
+
         Task::delay(100);
-
-//        if(abs(distanceEval - distanceCm) < 10){
-//            device.setState(DW_STATE::CALIBRATED);
-            //send dtop calib message
-//        }else {
-            // set new antenna delay values
-//        }
-
     }
 }
 
@@ -131,8 +134,6 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
     device.receive(rxFrame, 0);
     pollRxTs = rxFrame.m_rxTimestamp;
 
-//    device.getSysTime(&sysTs);
-//    (void) sysTs;
     // set timestamp for Response send
 //    respTxTime = (sysTs + (POLL_RX_TO_RESP_TX_DLY_UUS * UUS_TO_DWT_TIME));
 //    respTxTime = (pollRxTs + (POLL_RX_TO_RESP_TX_DLY_UUS * UUS_TO_DWT_TIME));
@@ -141,15 +142,13 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
     if(!isFrameGood(rxFrame, m_logger)){
         return 0;
     }
-    if(rxFrame.m_frame->m_functionCode == UWBMessages::FunctionCode::TWR_POLL){
-      //  m_logger.log(LogLevel::Error,"received POLL TWR");
-    }else{
+    if(rxFrame.m_frame->m_functionCode != UWBMessages::FunctionCode::TWR_POLL){
         return 0;
     }
 
     constructUWBHeader(destinationId, UWBMessages::DATA, UWBMessages::TWR_RESPONSE,
                        (uint8_t*)&responseMsg, sizeof(responseMsg));
-    responseMsg.m_calculatedTOF = 0;
+    responseMsg.m_calculatedTOF = 0; // ca sert à quoi ca?
     device.transmit((uint8_t*)&responseMsg,sizeof(responseMsg));
 //    device.transmitDelayed((uint8_t*)&responseMsg,sizeof(responseMsg),respTxTime>>8);
 
@@ -158,10 +157,7 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
     if(!isFrameGood(rxFrame, m_logger)){
         return 0;
     }
-    if(rxFrame.m_frame->m_functionCode == UWBMessages::FunctionCode::TWR_FINAL){
-      //  m_logger.log(LogLevel::Error,"received final TWR");
-    }else{
-        m_logger.log(LogLevel::Error,"received Not final TWR");
+    if(rxFrame.m_frame->m_functionCode != UWBMessages::FunctionCode::TWR_FINAL){
         return 0;
     }
 
@@ -180,11 +176,12 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
 
     tof = tofDtu * DWT_TIME_UNITS;
     distanceEval = tof * SPEED_OF_LIGHT;
-    (void) distanceEval;
-//    return distanceEval;
+//    (void) distanceEval;
     m_logger.log(LogLevel::Error,"distance : %f", distanceEval);
-    return 1;
+
+    return distanceEval;
 }
+
 bool InterlocManager::sendTWRSequence(uint16_t destinationId, Decawave& device){
 
     UWBRxFrame responseFrame;
@@ -206,10 +203,7 @@ bool InterlocManager::sendTWRSequence(uint16_t destinationId, Decawave& device){
         return false;
     }
 
-    if(responseFrame.m_frame->m_functionCode == UWBMessages::FunctionCode::TWR_RESPONSE){
-       // m_logger.log(LogLevel::Error,"Received response");
-    }else{
-        m_logger.log(LogLevel::Error,"Received NOT response");
+    if(responseFrame.m_frame->m_functionCode != UWBMessages::FunctionCode::TWR_RESPONSE){
         return false;
     }
 

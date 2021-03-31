@@ -11,8 +11,8 @@
 #include <memory>
 #include <task.h>
 //calibration constants
-#define DEFAULT_TX_ANT_DLY 36900/2 //247ns
-#define DEFAULT_RX_ANT_DLY 36900/2
+#define DEFAULT_TX_ANT_DLY 16505 //247ns
+#define DEFAULT_RX_ANT_DLY 16505
 
 #define POLL_TX_TO_RESP_RX_DLY_UUS  300
 #define RESP_RX_TO_FINAL_TX_DLY_UUS 3100
@@ -22,6 +22,7 @@
 #define FINAL_RX_TIMEOUT_UUS 3300
 #define UUS_TO_DWT_TIME 65536 // check value, j'obtien 63 897...
 #define SPEED_OF_LIGHT 299792458
+#define  DW_INTERNAL_CLOCK_RFEQ 63897600000
 
 
 
