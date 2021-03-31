@@ -28,6 +28,8 @@ class TCPServer : public ICommInterface {
     void close();
 
   private:
+    void closeClient();
+
     ILogger& m_logger;
     bool m_connected;
 

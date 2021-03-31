@@ -23,7 +23,7 @@ constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 5;
 // Need to return the proper comm interface
 typedef std::optional<std::reference_wrapper<ICommInterface>> (*CommInterfaceGetter)();
 
-class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
+class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     BittyBuzzTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority),
@@ -55,7 +55,7 @@ class BittyBuzzTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
                 m_logger.log(LogLevel::Error, "BBZVM failed to step! state: %d err: %d",
                              m_bittybuzzVm.getSate(), m_bittybuzzVm.getError());
             }
-            Task::delay(1000);
+            Task::delay(100);
         }
     }
 };
@@ -174,7 +174,7 @@ class CommMonitoringTask : public AbstractTask<4 * configMINIMAL_STACK_SIZE> {
 
                         // Handshake
                         if (greetHandler.greet()) {
-
+                            m_logger.log(LogLevel::Info, "Greet succeeded");
                             // Restart the tasks with the new streams
                             m_dispatcherTask.setStream(&commInterface);
                             m_senderTask.setStream(&commInterface);

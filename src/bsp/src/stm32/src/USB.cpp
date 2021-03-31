@@ -40,6 +40,7 @@ bool USB::receive(uint8_t* buffer, uint16_t length) {
         return false;
     }
 
+    m_receivingTaskHandle = xTaskGetCurrentTaskHandle();
     while (CircularBuff_getLength(&cbuffUsb) < length) {
         // Gets notified everytime a new packet is appended to cbuffUsb
         ulTaskNotifyTake(pdTRUE, 500);
