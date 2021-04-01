@@ -162,7 +162,8 @@ void InterlocManager::startDeviceCalibSingleResponder(uint16_t destinationId, De
             device.setRxAntennaDLY((dwCountOffset >> 1) + device.getRxAntennaDLY());
             if (dwCountOffset >> 1 <= 1) {
                 device.setState(DW_STATE::CALIBRATED);
-                m_calibrationEndedCallback(m_calibrationEndedCallbackContext, 0);
+                m_calibrationEndedCallback(m_calibrationEndedCallbackContext,
+                                           m_calibrationInitiatorId);
             }
         }
         Task::delay(100);
