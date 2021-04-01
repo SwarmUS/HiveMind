@@ -37,8 +37,7 @@ void InterlocManager::startInterloc() {
     if (!m_decaB.init()) {
         m_logger.log(LogLevel::Warn, "InterlocManager: Could not start Decawave B");
     }
-    //    m_decaB.setState(DW_STATE::RESPOND_CALIB);
-    m_decaB.setState(DW_STATE::SEND_CALIB);
+
     while (m_decaA.getState() != DW_STATE::CALIBRATED &&
            m_decaB.getState() != DW_STATE::CALIBRATED) {
         if (m_decaA.getState() == DW_STATE::RESPOND_CALIB) {
@@ -139,10 +138,10 @@ void InterlocManager::startDeviceCalibSingleResponder(uint16_t destinationId, De
             // antenna delay is considered equal on Rx and Tx
             device.setTxAntennaDLY((dwCountOffset >> 1) + device.getTxAntennaDLY());
             device.setRxAntennaDLY((dwCountOffset >> 1) + device.getRxAntennaDLY());
-            //            if (dwCountOffset >> 1 <= 1) {
-            //                device.setState(DW_STATE::CALIBRATED);
-            //                m_calibFinishedCallback(m_calibFinishedCallbackContext);
-            //            }
+            if (dwCountOffset >> 1 <= 1) {
+                device.setState(DW_STATE::CALIBRATED);
+                m_calibFinishedCallback(m_calibFinishedCallbackContext);
+            }
         }
         Task::delay(100);
     }
@@ -188,17 +187,17 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
     uint32_t finalRxTs = (uint32_t)rxFrame.m_rxTimestamp;
 
     // evaluate distance
-    double tRound1 = (double)finalTWRFrame->m_respMinPoll;
-    double tRound2 = (double)(finalRxTs - (uint32_t)respTxTs);
-    double tReply1 = (double)(finalTWRFrame->m_finaleMinResp);
-    double tReply2 = (double)((uint32_t)respTxTs - (uint32_t)pollRxTs);
+    uint64_t tRound1 = finalTWRFrame->m_respMinPoll;
+    uint32_t tRound2 = (finalRxTs - (uint32_t)respTxTs);
+    uint64_t tReply1 = (finalTWRFrame->m_finaleMinResp);
+    uint32_t tReply2 = ((uint32_t)respTxTs - (uint32_t)pollRxTs);
 
     uint64_t tofDtu =
         ((tRound1 * tRound2 - tReply1 * tReply2) / (tRound1 + tRound2 + tReply1 + tReply2));
 
     double tof = tofDtu * DWT_TIME_UNITS;
     double distanceEval = tof * SPEED_OF_LIGHT;
-    m_logger.log(LogLevel::Error, "distance : %f", distanceEval);
+
     return distanceEval;
 }
 

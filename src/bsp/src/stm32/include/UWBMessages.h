@@ -43,7 +43,7 @@ namespace UWBMessages {
         uint64_t m_calculatedTOF;
     };
 
-    struct TWRFinal : DWFrame {
+    struct TWRFinal {
         DWFrame m_headerFrame;
         uint64_t m_respMinPoll;
         uint64_t m_finaleMinResp;
