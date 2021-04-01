@@ -203,7 +203,7 @@ class HardwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> 
     void task() override { BSPContainer::getInterlocManager().startInterloc(); }
 };
 
-class SoftwareInterlocTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
+class SoftwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     SoftwareInterlocTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority),

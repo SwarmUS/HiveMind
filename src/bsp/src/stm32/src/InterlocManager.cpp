@@ -44,6 +44,9 @@ void InterlocManager::startInterloc() {
         m_logger.log(LogLevel::Warn, "InterlocManager: Could not start Decawave B");
     }
 
+    m_decaA.setState(DW_STATE::RESPOND_CALIB);
+    //    m_decaA.setState(DW_STATE::SEND_CALIB);
+
     while (m_decaA.getState() != DW_STATE::CALIBRATED &&
            m_decaB.getState() != DW_STATE::CALIBRATED) {
         if (m_decaA.getState() == DW_STATE::RESPOND_CALIB) {
@@ -57,6 +60,8 @@ void InterlocManager::startInterloc() {
         } else if (m_decaB.getState() == DW_STATE::SEND_CALIB) {
             startDeviceCalibSingleInitiator(0x69, m_decaB);
         }
+
+        Task::delay(100);
     }
 }
 
