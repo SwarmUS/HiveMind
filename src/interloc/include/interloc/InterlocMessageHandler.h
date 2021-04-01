@@ -21,7 +21,6 @@ class InterlocMessageHandler : public IInterlocMessageHandler {
     virtual ~InterlocMessageHandler() = default;
 
     bool processMessage() override;
-    bool notifyCalibrationEnded(uint16_t initiatorId) override;
 
   private:
     ILogger& m_logger;
@@ -32,8 +31,11 @@ class InterlocMessageHandler : public IInterlocMessageHandler {
     ICircularQueue<MessageDTO>& m_remoteQueue;
 
     bool handleMessage(const MessageDTO& dto) const;
-    static bool handleCalibrationMessage(const CalibrationMessageDTO& dto);
+    bool handleCalibrationMessage(const CalibrationMessageDTO& dto, uint16_t sourceId) const;
     ICircularQueue<MessageDTO>& getQueueForDestination(uint16_t destinationId) const;
+
+    void notifyCalibrationEnded(uint16_t initiatorId);
+    static void notifyCalibrationEndedStatic(void* context, uint16_t initiatorId);
 };
 
 #endif //__INTERLOCMESSAGEHANDLER_H__

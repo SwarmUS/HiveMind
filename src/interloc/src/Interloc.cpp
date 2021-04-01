@@ -1,14 +1,8 @@
 #include "interloc/Interloc.h"
 
-Interloc::Interloc(ILogger& logger,
-                   IInterlocManager& interlocManager,
-                   IInterlocMessageHandler& interlocMessageHandler) :
-    m_logger(logger),
-    m_interlocManager(interlocManager),
-    m_interlocMessageHandler(interlocMessageHandler),
-    m_positionsTable() {
+Interloc::Interloc(ILogger& logger, IInterlocManager& interlocManager) :
+    m_logger(logger), m_interlocManager(interlocManager), m_positionsTable() {
     m_interlocManager.setPositionUpdateCallback(onPositionUpdateStaticCallback, this);
-    m_interlocManager.setCalibrationEndedCallback(onCalibrationEndedStaticCallback, this);
 }
 
 std::optional<RelativePosition> Interloc::getRobotPosition(uint16_t robotId) {
@@ -79,16 +73,4 @@ const PositionsTable& Interloc::getPositionsTable() { return m_positionsTable; }
 
 void Interloc::onPositionUpdateStaticCallback(void* context, InterlocUpdate update) {
     static_cast<Interloc*>(context)->onPositionUpdateCallback(update);
-}
-
-void Interloc::onCalibrationEndedCallback(uint16_t initiatorId) {
-    bool ret = m_interlocMessageHandler.notifyCalibrationEnded(initiatorId);
-
-    if (!ret) {
-        m_logger.log(LogLevel::Warn, "Could not send CalibrationEnded notification");
-    }
-}
-
-void Interloc::onCalibrationEndedStaticCallback(void* context, uint16_t initiatorId) {
-    static_cast<Interloc*>(context)->onCalibrationEndedCallback(initiatorId);
 }

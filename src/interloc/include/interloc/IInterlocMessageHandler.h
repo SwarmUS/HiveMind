@@ -3,8 +3,11 @@
 
 class IInterlocMessageHandler {
   public:
+    /**
+     * @brief Processes the next message in the queue
+     * @return True if successfully processed, false otherwise
+     */
     virtual bool processMessage() = 0;
-    virtual bool notifyCalibrationEnded(uint16_t initiatorId) = 0;
 };
 
 #endif //__IINTERLOCMESSAGEHANDLER_H__

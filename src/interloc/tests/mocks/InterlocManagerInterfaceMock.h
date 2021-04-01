@@ -14,26 +14,16 @@ class InterlocManagerInterfaceMock final : public IInterlocManager {
         m_positionUpdateContext = context;
     }
 
-    positionUpdateCallbackFunction_t m_callback;
-    void* m_context;
-
-    void startCalibSingleInitiator() override{};
-    void startCalibSingleResponder() override{};
-    void setCalibDistance(uint16_t distanceCalibCm) override { (void)distanceCalibCm; };
-    void setCalibFinishedCallback(void (*fct)(void* context), void* context) override {
-        (void)fct;
-        (void)context;
-    };
-    void setCalibrationEndedCallback(calibrationEndedCallbackFunction_t callback,
-                                     void* context) override {
-        m_calibrationEndedCallback = callback;
-        m_calibrationEndedContext = context;
-    }
+    MOCK_METHOD(void, startCalibSingleInitiator, (), (override));
+    MOCK_METHOD(void, stopCalibration, (), (override));
+    MOCK_METHOD(void,
+                startCalibSingleResponder,
+                (uint16_t initiatorId, calibrationEndedCallbackFunction_t callback, void* context),
+                (override));
+    MOCK_METHOD(void, setCalibDistance, (uint16_t distanceCalibCm), (override));
 
     positionUpdateCallbackFunction_t m_positionUpdateCallback;
-    calibrationEndedCallbackFunction_t m_calibrationEndedCallback;
     void* m_positionUpdateContext;
-    void* m_calibrationEndedContext;
 };
 
 #endif // __INTERLOCMANAGERMOCK_H_

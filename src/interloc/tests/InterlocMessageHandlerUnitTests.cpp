@@ -67,17 +67,45 @@ TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_wrongType) 
     EXPECT_FALSE(ret);
 }
 
-TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_startCalib) {
+TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_startCalibRespond) {
+    uint16_t sourceId = 1;
     auto message = MessageDTO(
-        1, gc_boardId,
+        sourceId, gc_boardId,
         InterlocAPIDTO(CalibrationMessageDTO(StartCalibrationDTO(CalibrationModeDTO::RESPONDER))));
+
+    uint16_t sourceIdArg;
+    calibrationEndedCallbackFunction_t callbackArg;
+    void* contextArg;
+
     std::optional<std::reference_wrapper<MessageDTO>> queueValue = message;
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(queueValue));
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_interlocManagerMock,
+                startCalibSingleResponder(testing::_, testing::_, testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&sourceIdArg),
+                                 testing::SaveArg<1>(&callbackArg),
+                                 testing::SaveArg<2>(&contextArg)));
     bool ret = m_messageHandler->processMessage();
 
-    // TODO: expect stopCalib call
+    EXPECT_TRUE(ret);
+    EXPECT_EQ(sourceIdArg, sourceId);
+    EXPECT_TRUE(contextArg != NULL);
+}
+
+TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_startCalibInitiator) {
+    uint16_t sourceId = 1;
+    auto message = MessageDTO(
+        sourceId, gc_boardId,
+        InterlocAPIDTO(CalibrationMessageDTO(StartCalibrationDTO(CalibrationModeDTO::INITIATOR))));
+
+    std::optional<std::reference_wrapper<MessageDTO>> queueValue = message;
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(queueValue));
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_interlocManagerMock, startCalibSingleInitiator()).Times(1);
+    bool ret = m_messageHandler->processMessage();
 
     EXPECT_TRUE(ret);
 }
@@ -89,26 +117,28 @@ TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_stopCalib) 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(queueValue));
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_interlocManagerMock, stopCalibration).Times(1);
     bool ret = m_messageHandler->processMessage();
-
-    // TODO: expect stopCalib call
 
     EXPECT_TRUE(ret);
 }
 
 TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_setCalibDistance) {
     float distance = 42.42;
+    uint16_t callArg;
     auto message = MessageDTO(
         1, gc_boardId, InterlocAPIDTO(CalibrationMessageDTO(SetCalibrationDistanceDTO(distance))));
     std::optional<std::reference_wrapper<MessageDTO>> queueValue = message;
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(queueValue));
 
     EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_interlocManagerMock, setCalibDistance(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&callArg)));
     bool ret = m_messageHandler->processMessage();
 
-    // TODO: expect stopCalib call
-
     EXPECT_TRUE(ret);
+    EXPECT_EQ(callArg, (uint16_t)(distance * 100));
 }
 
 TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_unknownCalibMessage) {
@@ -124,18 +154,40 @@ TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_unknownCali
     EXPECT_FALSE(ret);
 }
 
-TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_notifyCalibEnded_calledFromHost) {
-    MessageDTO messageSent;
-    uint16_t initiator = gc_boardId;
+TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_startCalibRespond_callbackToHost) {
+    uint16_t sourceId = gc_boardId;
+    auto message = MessageDTO(
+        sourceId, gc_boardId,
+        InterlocAPIDTO(CalibrationMessageDTO(StartCalibrationDTO(CalibrationModeDTO::RESPONDER))));
 
+    uint16_t sourceIdArg;
+    calibrationEndedCallbackFunction_t callbackArg;
+    void* contextArg;
+
+    std::optional<std::reference_wrapper<MessageDTO>> queueValue = message;
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(queueValue));
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_interlocManagerMock,
+                startCalibSingleResponder(testing::_, testing::_, testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&sourceIdArg),
+                                 testing::SaveArg<1>(&callbackArg),
+                                 testing::SaveArg<2>(&contextArg)));
+
+    // Process message to get callback
+    m_messageHandler->processMessage();
+
+    MessageDTO messageSent;
     EXPECT_CALL(m_hostQueueMock, push(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
     EXPECT_CALL(m_remoteQueueMock, push(testing::_)).Times(0);
-    bool ret = m_messageHandler->notifyCalibrationEnded(initiator);
 
-    EXPECT_TRUE(ret);
-    EXPECT_EQ(messageSent.getDestinationId(), initiator);
+    // Call the callback to send a response
+    callbackArg(contextArg, sourceIdArg);
+
+    EXPECT_EQ(messageSent.getDestinationId(), sourceId);
     EXPECT_EQ(messageSent.getSourceId(), gc_boardId);
 
     const auto* interlocMessage = std::get_if<InterlocAPIDTO>(&(messageSent.getMessage()));
@@ -144,18 +196,40 @@ TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_notifyCalibEnded_ca
     EXPECT_TRUE(std::holds_alternative<CalibrationEndedDTO>(calibMessage->getCall()));
 }
 
-TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_notifyCalibEnded_calledFromRemote) {
-    MessageDTO messageSent;
-    uint16_t initiator = UINT16_MAX;
+TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_startCalibRespond_callbackToRemote) {
+    uint16_t sourceId = UINT16_MAX;
+    auto message = MessageDTO(
+        sourceId, gc_boardId,
+        InterlocAPIDTO(CalibrationMessageDTO(StartCalibrationDTO(CalibrationModeDTO::RESPONDER))));
 
+    uint16_t sourceIdArg;
+    calibrationEndedCallbackFunction_t callbackArg;
+    void* contextArg;
+
+    std::optional<std::reference_wrapper<MessageDTO>> queueValue = message;
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(queueValue));
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_interlocManagerMock,
+                startCalibSingleResponder(testing::_, testing::_, testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&sourceIdArg),
+                                 testing::SaveArg<1>(&callbackArg),
+                                 testing::SaveArg<2>(&contextArg)));
+
+    // Process message to get callback
+    m_messageHandler->processMessage();
+
+    MessageDTO messageSent;
     EXPECT_CALL(m_remoteQueueMock, push(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
     EXPECT_CALL(m_hostQueueMock, push(testing::_)).Times(0);
-    bool ret = m_messageHandler->notifyCalibrationEnded(initiator);
 
-    EXPECT_TRUE(ret);
-    EXPECT_EQ(messageSent.getDestinationId(), initiator);
+    // Call the callback to send a response
+    callbackArg(contextArg, sourceIdArg);
+
+    EXPECT_EQ(messageSent.getDestinationId(), sourceId);
     EXPECT_EQ(messageSent.getSourceId(), gc_boardId);
 
     const auto* interlocMessage = std::get_if<InterlocAPIDTO>(&(messageSent.getMessage()));

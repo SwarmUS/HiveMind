@@ -38,7 +38,7 @@ bool InterlocMessageHandler::handleMessage(const MessageDTO& dto) const {
 
     if (const auto* apiCall = std::get_if<InterlocAPIDTO>(&message)) {
         if (const auto* calibCall = std::get_if<CalibrationMessageDTO>(&(apiCall->getAPICall()))) {
-            return handleCalibrationMessage(*calibCall);
+            return handleCalibrationMessage(*calibCall, dto.getSourceId());
         }
     }
 
@@ -46,35 +46,45 @@ bool InterlocMessageHandler::handleMessage(const MessageDTO& dto) const {
     return false;
 }
 
-bool InterlocMessageHandler::handleCalibrationMessage(const CalibrationMessageDTO& dto) {
+bool InterlocMessageHandler::handleCalibrationMessage(const CalibrationMessageDTO& dto,
+                                                      uint16_t sourceId) const {
     auto messageVariant = dto.getCall();
 
     if (const auto* startCalibMsg = std::get_if<StartCalibrationDTO>(&messageVariant)) {
-        (void)startCalibMsg;
-        // TODO: Start calib
-        return true;
+        if (startCalibMsg->getCalibrationMode() == CalibrationModeDTO::RESPONDER) {
+            m_interlocManager.startCalibSingleResponder(sourceId, notifyCalibrationEndedStatic,
+                                                        (void*)this);
+            return true;
+        }
+
+        if (startCalibMsg->getCalibrationMode() == CalibrationModeDTO::INITIATOR) {
+            m_interlocManager.startCalibSingleInitiator();
+            return true;
+        }
+
+        return false;
     }
 
-    if (const auto* stopCalibMessage = std::get_if<StopCalibrationDTO>(&messageVariant)) {
-        (void)stopCalibMessage;
-        // TODO: Stop calib
+    if (std::holds_alternative<StopCalibrationDTO>(messageVariant)) {
+        m_interlocManager.stopCalibration();
         return true;
     }
 
     if (const auto* setDistanceMsg = std::get_if<SetCalibrationDistanceDTO>(&messageVariant)) {
-        (void)setDistanceMsg;
-        // TODO: Set distance
+        m_interlocManager.setCalibDistance(setDistanceMsg->getDistance() * 100);
         return true;
     }
 
     return false;
 }
 
-bool InterlocMessageHandler::notifyCalibrationEnded(uint16_t initiatorId) {
+void InterlocMessageHandler::notifyCalibrationEnded(uint16_t initiatorId) {
     MessageDTO message = MessageDTO(m_bsp.getUUId(), initiatorId,
                                     InterlocAPIDTO(CalibrationMessageDTO(CalibrationEndedDTO())));
 
-    return getQueueForDestination(initiatorId).push(message);
+    if (!getQueueForDestination(initiatorId).push(message)) {
+        m_logger.log(LogLevel::Warn, "Could not push calibration ended message on queue");
+    }
 }
 
 ICircularQueue<MessageDTO>& InterlocMessageHandler::getQueueForDestination(
@@ -84,4 +94,8 @@ ICircularQueue<MessageDTO>& InterlocMessageHandler::getQueueForDestination(
     }
 
     return m_remoteQueue;
+}
+
+void InterlocMessageHandler::notifyCalibrationEndedStatic(void* context, uint16_t initiatorId) {
+    static_cast<InterlocMessageHandler*>(context)->notifyCalibrationEnded(initiatorId);
 }

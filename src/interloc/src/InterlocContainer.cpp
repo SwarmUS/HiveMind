@@ -7,8 +7,7 @@
 
 IInterloc& InterlocContainer::getInterloc() {
     static Interloc s_interloc =
-        Interloc(LoggerContainer::getLogger(), BSPContainer::getInterlocManager(),
-                 getInterlocMessageHandler());
+        Interloc(LoggerContainer::getLogger(), BSPContainer::getInterlocManager());
     return s_interloc;
 }
 
