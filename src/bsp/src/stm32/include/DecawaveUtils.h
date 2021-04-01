@@ -48,6 +48,13 @@ namespace DecawaveUtils {
                            uint8_t sfdLength,
                            uint8_t pacSizeRegister);
 
+    /**
+     * @brief Converts a timestamp to it's equivalent in bytes
+     * @param tsField Destination of the converted timestamp
+     * @param ts Timestamp to convert
+     */
+    void tsToBytes(uint8_t* tsField, uint64_t ts);
+
 } // namespace DecawaveUtils
 
 #endif //__DECAWAVEUTILS_H__

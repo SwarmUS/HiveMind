@@ -12,7 +12,6 @@ void setEspCallback(gpioCallbackFct_t fct, void* instance) {
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-
     if (GPIO_Pin == ESP_USER0_Pin) {
         if (espCallBackFct != NULL && espCallBackContext != NULL) {
             espCallBackFct(espCallBackContext);

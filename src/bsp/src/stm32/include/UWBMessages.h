@@ -34,11 +34,17 @@ namespace UWBMessages {
         FunctionCode m_functionCode;
     };
 
+    struct TWRPoll {
+        DWFrame m_headerFrame;
+    };
+
     struct TWRResponse {
+        DWFrame m_headerFrame;
         uint64_t m_calculatedTOF;
     };
 
     struct TWRFinal {
+        DWFrame m_headerFrame;
         uint64_t m_respMinPoll;
         uint64_t m_finaleMinResp;
     };
