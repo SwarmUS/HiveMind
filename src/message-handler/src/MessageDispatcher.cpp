@@ -7,7 +7,7 @@ MessageDispatcher::MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
                                      ICircularQueue<MessageDTO>& remoteOutputQ,
                                      ICircularQueue<MessageDTO>& interlocQ,
                                      IHiveMindHostDeserializer& deserializer,
-                                     IHiveMindApiRequestHandler& hivemindApiReqHandler,
+                                     IHiveMindHostApiRequestHandler& hivemindApiReqHandler,
                                      IGreetSender& greetSender,
                                      const IBSP& bsp,
                                      ILogger& logger) :
@@ -77,16 +77,16 @@ bool MessageDispatcher::dispatchUserCallResponse(const MessageDTO& message,
 
 bool MessageDispatcher::dispatchRequest(const MessageDTO& message, const RequestDTO& request) {
 
-    const std::variant<std::monostate, UserCallRequestDTO, HiveMindApiRequestDTO>& variantReq =
+    const std::variant<std::monostate, UserCallRequestDTO, HiveMindHostApiRequestDTO>& variantReq =
         request.getRequest();
 
     if (const auto* uReq = std::get_if<UserCallRequestDTO>(&variantReq)) {
         return dispatchUserCallRequest(message, *uReq);
     }
     // Handle the response locally since it a hivemind api request
-    if (const auto* hReq = std::get_if<HiveMindApiRequestDTO>(&variantReq)) {
+    if (const auto* hReq = std::get_if<HiveMindHostApiRequestDTO>(&variantReq)) {
         uint16_t uuid = m_bsp.getUUId();
-        HiveMindApiResponseDTO hRes = m_hivemindApiReqHandler.handleRequest(*hReq);
+        HiveMindHostApiResponseDTO hRes = m_hivemindApiReqHandler.handleRequest(*hReq);
         ResponseDTO resp(request.getId(), hRes);
         MessageDTO msg(message.getSourceId(), uuid, resp);
 
@@ -105,7 +105,7 @@ bool MessageDispatcher::dispatchRequest(const MessageDTO& message, const Request
 
 bool MessageDispatcher::dispatchResponse(const MessageDTO& message, const ResponseDTO& response) {
     const std::variant<std::monostate, GenericResponseDTO, UserCallResponseDTO,
-                       HiveMindApiResponseDTO>& variantResp = response.getResponse();
+                       HiveMindHostApiResponseDTO>& variantResp = response.getResponse();
 
     if (const auto* uResp = std::get_if<UserCallResponseDTO>(&variantResp)) {
         return dispatchUserCallResponse(message, *uResp);

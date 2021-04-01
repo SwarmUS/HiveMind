@@ -81,7 +81,7 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::Logger
         SwarmUS::HiveMind::MessageHandler
         SwarmUS::Propolis::Cpp::Common
-        SwarmUS::Propolis::Pheromones::HiveMind::Host
+        SwarmUS::Propolis::Pheromones
 
     PRIVATE
         SwarmUS::HiveMind::BSP

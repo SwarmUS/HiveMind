@@ -2,7 +2,7 @@
 #define __DTOMATCHERS_H_
 
 #include <gmock/gmock.h>
-#include <hivemind-host/MessageDTO.h>
+#include <pheromones/MessageDTO.h>
 
 // Simple matcher to check that DTO matches inside function call. If required
 MATCHER_P(MessageGreetingDTOMatcher, expectedId, "Equality matcher for NetworkApiDTO)") {

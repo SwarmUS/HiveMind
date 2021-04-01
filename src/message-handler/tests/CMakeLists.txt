@@ -5,7 +5,7 @@ set(TEST_SOURCES
     MessageDispatcherUnitTests.cpp
     GreetHandlerUnitTests.cpp
     GreetSenderUnitTests.cpp
-    HiveMindApiRequestHandlerUnitTests.cpp
+    HiveMindHostApiRequestHandlerUnitTests.cpp
 )
 
 set(TEST_HEADERS
@@ -14,7 +14,7 @@ set(TEST_HEADERS
   mocks/GreetSenderInterfaceMock.h
   mocks/HiveMindHostDeserializerInterfaceMock.h
   mocks/HiveMindHostSerializerInterfaceMock.h
-  mocks/HiveMindApiRequestHandlerInterfaceMock.h
+  mocks/HiveMindHostApiRequestHandlerInterfaceMock.h
   mocks/LoggerInterfaceMock.h
 
 )

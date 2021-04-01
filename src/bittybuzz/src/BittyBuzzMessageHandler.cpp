@@ -150,7 +150,7 @@ UserCallResponseDTO BittyBuzzMessageHandler::handleUserCallRequest(
 }
 
 ResponseDTO BittyBuzzMessageHandler::handleRequest(const RequestDTO& request) {
-    const std::variant<std::monostate, UserCallRequestDTO, HiveMindApiRequestDTO>& variantReq =
+    const std::variant<std::monostate, UserCallRequestDTO, HiveMindHostApiRequestDTO>& variantReq =
         request.getRequest();
 
     if (const auto* uReq = std::get_if<UserCallRequestDTO>(&variantReq)) {
@@ -192,7 +192,7 @@ bool BittyBuzzMessageHandler::handleBuzzMessage(const BuzzMessageDTO& msg) {
 
 bool BittyBuzzMessageHandler::handleResponse(const ResponseDTO& response) {
     const std::variant<std::monostate, GenericResponseDTO, UserCallResponseDTO,
-                       HiveMindApiResponseDTO>& variantResp = response.getResponse();
+                       HiveMindHostApiResponseDTO>& variantResp = response.getResponse();
 
     if (const auto* uResp = std::get_if<UserCallResponseDTO>(&variantResp)) {
         return handleUserCallResponse(*uResp);
@@ -200,7 +200,7 @@ bool BittyBuzzMessageHandler::handleResponse(const ResponseDTO& response) {
     if (const auto* gResp = std::get_if<GenericResponseDTO>(&variantResp)) {
         return handleGenericResponse(*gResp);
     }
-    if (std::holds_alternative<HiveMindApiResponseDTO>(variantResp)) {
+    if (std::holds_alternative<HiveMindHostApiResponseDTO>(variantResp)) {
         m_logger.log(LogLevel::Warn, "Received Hivemind Resp in buzz queue");
     } else {
         m_logger.log(LogLevel::Warn, "Unkown Resp in buzz queue, idx: %d", variantResp.index());

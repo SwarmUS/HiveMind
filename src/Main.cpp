@@ -7,8 +7,8 @@
 #include <bsp/BSPContainer.h>
 #include <bsp/IBSP.h>
 #include <cstdlib>
-#include <hivemind-host/HiveMindHostDeserializer.h>
-#include <hivemind-host/HiveMindHostSerializer.h>
+#include <pheromones/HiveMindHostDeserializer.h>
+#include <pheromones/HiveMindHostSerializer.h>
 #include <interloc/IInterloc.h>
 #include <interloc/InterlocContainer.h>
 #include <logger/Logger.h>
@@ -89,8 +89,8 @@ class MessageDispatcherTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE>
 
             HiveMindHostDeserializer deserializer(*m_stream);
             HiveMindHostSerializer serializer(*m_stream);
-            HiveMindApiRequestHandler hivemindApiReqHandler =
-                MessageHandlerContainer::createHiveMindApiRequestHandler();
+            HiveMindHostApiRequestHandler hivemindApiReqHandler =
+                MessageHandlerContainer::createHiveMindHostApiRequestHandler();
 
             GreetSender greetSender(m_streamQueue, BSPContainer::getBSP());
             MessageDispatcher messageDispatcher = MessageHandlerContainer::createMessageDispatcher(

@@ -274,7 +274,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
 TEST_F(BittyBuzzMessageHandlerFixture,
        BittyBuzzMessageHandler_processMessage_HiveMindAPIRequest_host_pushSuccessful) {
     // Given
-    m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
+    m_request->setRequest(HiveMindHostApiRequestDTO(IdRequestDTO()));
     MessageDTO message = MessageDTO(m_uuid, m_uuid, *m_request);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
@@ -302,7 +302,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
 TEST_F(BittyBuzzMessageHandlerFixture,
        BittyBuzzMessageHandler_processMessage_HiveMindAPIRequest_host_pushUnsuccessful) {
     // Given
-    m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
+    m_request->setRequest(HiveMindHostApiRequestDTO(IdRequestDTO()));
     MessageDTO message = MessageDTO(m_uuid, m_uuid, *m_request);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
@@ -330,7 +330,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
 TEST_F(BittyBuzzMessageHandlerFixture,
        BittyBuzzMessageHandler_processMessage_HiveMindAPIRequest_remote_pushSuccessful) {
     // Given
-    m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
+    m_request->setRequest(HiveMindHostApiRequestDTO(IdRequestDTO()));
     MessageDTO message = MessageDTO(m_srcUuid, m_uuid, *m_request);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
@@ -358,7 +358,7 @@ TEST_F(BittyBuzzMessageHandlerFixture,
 TEST_F(BittyBuzzMessageHandlerFixture,
        BittyBuzzMessageHandler_processMessage_HiveMindAPIRequest_remote_pushUnsuccessful) {
     // Given
-    m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
+    m_request->setRequest(HiveMindHostApiRequestDTO(IdRequestDTO()));
     MessageDTO message = MessageDTO(m_srcUuid, m_uuid, *m_request);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
@@ -651,9 +651,9 @@ TEST_F(BittyBuzzMessageHandlerFixture,
 }
 
 TEST_F(BittyBuzzMessageHandlerFixture,
-       BittyBuzzMessageHandler_processMessage_validHiveMindApiResponse) {
+       BittyBuzzMessageHandler_processMessage_validHiveMindHostApiResponse) {
     // Given
-    m_response->setResponse(HiveMindApiResponseDTO(IdResponseDTO(42)));
+    m_response->setResponse(HiveMindHostApiResponseDTO(IdResponseDTO(42)));
     MessageDTO message = MessageDTO(m_srcUuid, m_uuid, *m_response);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;

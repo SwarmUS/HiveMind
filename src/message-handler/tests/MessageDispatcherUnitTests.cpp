@@ -1,7 +1,7 @@
 #include "mocks/BSPInterfaceMock.h"
 #include "mocks/CircularQueueInterfaceMock.h"
 #include "mocks/GreetSenderInterfaceMock.h"
-#include "mocks/HiveMindApiRequestHandlerInterfaceMock.h"
+#include "mocks/HiveMindHostApiRequestHandlerInterfaceMock.h"
 #include "mocks/HiveMindHostDeserializerInterfaceMock.h"
 #include "mocks/LoggerInterfaceMock.h"
 #include <message-handler/MessageDispatcher.h>
@@ -15,7 +15,7 @@ class MessageDispatcherFixture : public testing::Test {
     CircularQueueInterfaceMock<MessageDTO> m_remoteQueue;
     CircularQueueInterfaceMock<MessageDTO> m_interlocQueue;
     HiveMindHostDeserializerInterfaceMock m_deserializerMock;
-    HiveMindApiRequestHandlerInterfaceMock m_hivemindApiReqHandlerMock;
+    HiveMindHostApiRequestHandlerInterfaceMock m_hivemindApiReqHandlerMock;
     GreetSenderInterfaceMock m_greetSenderMock;
     BSPInterfaceMock* m_bspMock;
     LoggerInterfaceMock m_loggerMock;
@@ -512,10 +512,10 @@ TEST_F(MessageDispatcherFixture,
 }
 
 TEST_F(MessageDispatcherFixture,
-       MessageDispatcher_deserializeAndDispatch_HiveMindApiRequest_host_handlerCalled_valid) {
+       MessageDispatcher_deserializeAndDispatch_HiveMindHostApiRequest_host_handlerCalled_valid) {
     // Given
-    HiveMindApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
-    m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
+    HiveMindHostApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
+    m_request->setRequest(HiveMindHostApiRequestDTO(IdRequestDTO()));
     m_message = MessageDTO(m_uuid, m_uuid, *m_request);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
@@ -535,10 +535,10 @@ TEST_F(MessageDispatcherFixture,
 }
 
 TEST_F(MessageDispatcherFixture,
-       MessageDispatcher_deserializeAndDispatch_HiveMindApiRequest_host_handlerCalled_QueueFull) {
+       MessageDispatcher_deserializeAndDispatch_HiveMindHostApiRequest_host_handlerCalled_QueueFull) {
     // Given
-    HiveMindApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
-    m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
+    HiveMindHostApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
+    m_request->setRequest(HiveMindHostApiRequestDTO(IdRequestDTO()));
     m_message = MessageDTO(m_uuid, m_uuid, *m_request);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
@@ -558,10 +558,10 @@ TEST_F(MessageDispatcherFixture,
 }
 
 TEST_F(MessageDispatcherFixture,
-       MessageDispatcher_deserializeAndDispatch_HiveMindApiRequest_remote_handlerCalled_valid) {
+       MessageDispatcher_deserializeAndDispatch_HiveMindHostApiRequest_remote_handlerCalled_valid) {
     // Given
-    HiveMindApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
-    m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
+    HiveMindHostApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
+    m_request->setRequest(HiveMindHostApiRequestDTO(IdRequestDTO()));
     m_message = MessageDTO(m_srcUuid, m_uuid, *m_request);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
@@ -581,10 +581,10 @@ TEST_F(MessageDispatcherFixture,
 }
 
 TEST_F(MessageDispatcherFixture,
-       MessageDispatcher_deserializeAndDispatch_HiveMindApiRequest_remote_handlerCalled_QueueFull) {
+       MessageDispatcher_deserializeAndDispatch_HiveMindHostApiRequest_remote_handlerCalled_QueueFull) {
     // Given
-    HiveMindApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
-    m_request->setRequest(HiveMindApiRequestDTO(IdRequestDTO()));
+    HiveMindHostApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
+    m_request->setRequest(HiveMindHostApiRequestDTO(IdRequestDTO()));
     m_message = MessageDTO(m_srcUuid, m_uuid, *m_request);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
@@ -604,9 +604,9 @@ TEST_F(MessageDispatcherFixture,
 }
 
 TEST_F(MessageDispatcherFixture,
-       MessageDispatcher_deserializeAndDispatch_HiveMindApiResponse_sentRemote_valid) {
+       MessageDispatcher_deserializeAndDispatch_HiveMindHostApiResponse_sentRemote_valid) {
     // Given
-    m_response->setResponse(HiveMindApiResponseDTO(IdResponseDTO(42)));
+    m_response->setResponse(HiveMindHostApiResponseDTO(IdResponseDTO(42)));
     m_message = MessageDTO(m_uuid, m_srcUuid, *m_request);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
@@ -624,9 +624,9 @@ TEST_F(MessageDispatcherFixture,
 }
 
 TEST_F(MessageDispatcherFixture,
-       MessageDispatcher_deserializeAndDispatch_HiveMindApiResponse_sentRemote_invalid) {
+       MessageDispatcher_deserializeAndDispatch_HiveMindHostApiResponse_sentRemote_invalid) {
     // Given
-    m_response->setResponse(HiveMindApiResponseDTO(IdResponseDTO(42)));
+    m_response->setResponse(HiveMindHostApiResponseDTO(IdResponseDTO(42)));
     m_message = MessageDTO(m_uuid, m_srcUuid, *m_request);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
@@ -644,9 +644,9 @@ TEST_F(MessageDispatcherFixture,
 }
 
 TEST_F(MessageDispatcherFixture,
-       MessageDispatcher_deserializeAndDispatch_HiveMindApiResponse_sentHost_valid) {
+       MessageDispatcher_deserializeAndDispatch_HiveMindHostApiResponse_sentHost_valid) {
     // Given
-    m_response->setResponse(HiveMindApiResponseDTO(IdResponseDTO(42)));
+    m_response->setResponse(HiveMindHostApiResponseDTO(IdResponseDTO(42)));
     m_message = MessageDTO(m_srcUuid, m_uuid, *m_response);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
@@ -664,9 +664,9 @@ TEST_F(MessageDispatcherFixture,
 }
 
 TEST_F(MessageDispatcherFixture,
-       MessageDispatcher_deserializeAndDispatch_HiveMindApiResponse_sentHost_invalid) {
+       MessageDispatcher_deserializeAndDispatch_HiveMindHostApiResponse_sentHost_invalid) {
     // Given
-    m_response->setResponse(HiveMindApiResponseDTO(IdResponseDTO(42)));
+    m_response->setResponse(HiveMindHostApiResponseDTO(IdResponseDTO(42)));
     m_message = MessageDTO(m_srcUuid, m_uuid, *m_response);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)

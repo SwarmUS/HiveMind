@@ -2,12 +2,12 @@
 #define __MESSAGEDISPATCHER_H_
 
 #include "IGreetSender.h"
-#include "IHiveMindApiRequestHandler.h"
+#include "IHiveMindHostApiRequestHandler.h"
 #include "IMessageDispatcher.h"
 #include <bsp/IBSP.h>
 #include <cpp-common/ICircularQueue.h>
-#include <hivemind-host/IHiveMindHostDeserializer.h>
-#include <hivemind-host/MessageDTO.h>
+#include <pheromones/IHiveMindHostDeserializer.h>
+#include <pheromones/MessageDTO.h>
 #include <logger/ILogger.h>
 
 class MessageDispatcher : IMessageDispatcher {
@@ -17,7 +17,7 @@ class MessageDispatcher : IMessageDispatcher {
                       ICircularQueue<MessageDTO>& remoteOutputQ,
                       ICircularQueue<MessageDTO>& interlocQ,
                       IHiveMindHostDeserializer& deserializer,
-                      IHiveMindApiRequestHandler& hivemindApiReqHandler,
+                      IHiveMindHostApiRequestHandler& hivemindApiReqHandler,
                       IGreetSender& greetSender,
                       const IBSP& bsp,
                       ILogger& logger);
@@ -32,7 +32,7 @@ class MessageDispatcher : IMessageDispatcher {
     ICircularQueue<MessageDTO>& m_remoteOutputQueue;
     ICircularQueue<MessageDTO>& m_interlocQueue;
     IHiveMindHostDeserializer& m_deserializer;
-    IHiveMindApiRequestHandler& m_hivemindApiReqHandler;
+    IHiveMindHostApiRequestHandler& m_hivemindApiReqHandler;
     IGreetSender& m_greetSender;
     const IBSP& m_bsp;
     ILogger& m_logger;

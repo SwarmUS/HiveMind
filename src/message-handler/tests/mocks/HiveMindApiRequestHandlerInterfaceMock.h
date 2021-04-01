@@ -2,15 +2,15 @@
 #define __HIVEMINDAPIREQUESTHANDLERINTERFACEMOCK_H_
 
 #include <gmock/gmock.h>
-#include <message-handler/IHiveMindApiRequestHandler.h>
+#include <message-handler/IHiveMindHostApiRequestHandler.h>
 
-class HiveMindApiRequestHandlerInterfaceMock : public IHiveMindApiRequestHandler {
+class HiveMindHostApiRequestHandlerInterfaceMock : public IHiveMindHostApiRequestHandler {
   public:
-    ~HiveMindApiRequestHandlerInterfaceMock() override = default;
+    ~HiveMindHostApiRequestHandlerInterfaceMock() override = default;
 
-    MOCK_METHOD(HiveMindApiResponseDTO,
+    MOCK_METHOD(HiveMindHostApiResponseDTO,
                 handleRequest,
-                (const HiveMindApiRequestDTO& request),
+                (const HiveMindHostApiRequestDTO& request),
                 (override));
 };
 

@@ -2,8 +2,8 @@
 #define __BITTYBUZZFUNCTIONDESCRIPTION_H_
 
 #include <array>
-#include <hivemind-host/FunctionDescriptionArgumentTypeDTO.h>
-#include <hivemind-host/FunctionDescriptionDTO.h>
+#include <pheromones/FunctionDescriptionArgumentTypeDTO.h>
+#include <pheromones/FunctionDescriptionDTO.h>
 #include <tuple>
 
 /**

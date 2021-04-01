@@ -2,7 +2,7 @@
 #define __HIVEMINDHOSTDESERIALIZERINTERFACEMOCK_H_
 
 #include <gmock/gmock.h>
-#include <hivemind-host/IHiveMindHostDeserializer.h>
+#include <pheromones/IHiveMindHostDeserializer.h>
 
 class HiveMindHostDeserializerInterfaceMock final : public IHiveMindHostDeserializer {
   public:

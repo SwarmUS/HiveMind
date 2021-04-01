@@ -3,8 +3,8 @@
 
 #include "IGreetHandler.h"
 #include <bsp/IBSP.h>
-#include <hivemind-host/HiveMindHostDeserializer.h>
-#include <hivemind-host/HiveMindHostSerializer.h>
+#include <pheromones/HiveMindHostDeserializer.h>
+#include <pheromones/HiveMindHostSerializer.h>
 
 class GreetHandler : public IGreetHandler {
   public:
