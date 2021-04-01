@@ -17,10 +17,6 @@ bool InterlocManager::isFrameOk(UWBRxFrame frame) {
     return true;
 }
 
-void InterlocManager::setCalibFinishedCallback(void (*fct)(void* context), void* context) {
-    m_calibFinishedCallback = fct;
-    m_calibFinishedCallbackContext = context;
-}
 InterlocManager::InterlocManager(ILogger& logger) :
     m_logger(logger), m_decaA(DW_A), m_decaB(DW_B) {}
 
@@ -40,17 +36,24 @@ void InterlocManager::startInterloc() {
 
     while (m_decaA.getState() != DW_STATE::CALIBRATED &&
            m_decaB.getState() != DW_STATE::CALIBRATED) {
+
         if (m_decaA.getState() == DW_STATE::RESPOND_CALIB) {
+            m_logger.log(LogLevel::Info, "Starting DW calibration as responder on DW A");
             startDeviceCalibSingleResponder(0x69, m_decaA);
         } else if (m_decaA.getState() == DW_STATE::SEND_CALIB) {
+            m_logger.log(LogLevel::Info, "Starting DW calibration as initiator on DW A");
             startDeviceCalibSingleInitiator(0x69, m_decaA);
         }
 
         if (m_decaB.getState() == DW_STATE::RESPOND_CALIB) {
+            m_logger.log(LogLevel::Info, "Starting DW calibration as responder on DW B");
             startDeviceCalibSingleResponder(0x69, m_decaB);
         } else if (m_decaB.getState() == DW_STATE::SEND_CALIB) {
+            m_logger.log(LogLevel::Info, "Starting DW calibration as initiator on DW B");
             startDeviceCalibSingleInitiator(0x69, m_decaB);
         }
+
+        Task::delay(10);
     }
 }
 
@@ -91,12 +94,31 @@ void InterlocManager::startCalibSingleInitiator() {
     m_decaA.setState(DW_STATE::SEND_CALIB);
 }
 
-void InterlocManager::startCalibSingleResponder() {
+void InterlocManager::startCalibSingleResponder(uint16_t initiatorId,
+                                                calibrationEndedCallbackFunction_t callback,
+                                                void* context) {
+    m_calibrationInitiatorId = initiatorId;
+    m_calibrationEndedCallback = callback;
+    m_calibrationEndedCallbackContext = context;
+
     // TODO add destination ID
     if (m_decaA.getState() != DW_STATE::CALIBRATED) {
         m_decaA.setState(DW_STATE::RESPOND_CALIB);
     } else if (m_decaB.getState() != DW_STATE::CALIBRATED) {
         m_decaA.setState(DW_STATE::RESPOND_CALIB);
+    } else {
+        // No calibration needed, notify it is ended
+        callback(context, initiatorId);
+    }
+}
+
+void InterlocManager::stopCalibration() {
+    m_logger.log(LogLevel::Info, "Stopping DW calibration");
+
+    if (m_decaA.getState() == DW_STATE::SEND_CALIB) {
+        m_decaA.setState(DW_STATE::CONFIGURED);
+    } else if (m_decaB.getState() == DW_STATE::SEND_CALIB) {
+        m_decaB.setState(DW_STATE::CONFIGURED);
     }
 }
 
@@ -140,7 +162,8 @@ void InterlocManager::startDeviceCalibSingleResponder(uint16_t destinationId, De
             device.setRxAntennaDLY((dwCountOffset >> 1) + device.getRxAntennaDLY());
             if (dwCountOffset >> 1 <= 1) {
                 device.setState(DW_STATE::CALIBRATED);
-                m_calibFinishedCallback(m_calibFinishedCallbackContext);
+                m_calibrationEndedCallback(m_calibrationEndedCallbackContext,
+                                           m_calibrationInitiatorId);
             }
         }
         Task::delay(100);
@@ -197,6 +220,8 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
 
     double tof = tofDtu * DWT_TIME_UNITS;
     double distanceEval = tof * SPEED_OF_LIGHT;
+
+    m_logger.log(LogLevel::Info, "Measured distance : %f", distanceEval);
 
     return distanceEval;
 }

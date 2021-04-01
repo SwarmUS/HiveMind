@@ -5,6 +5,7 @@
 MessageDispatcher::MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
                                      ICircularQueue<MessageDTO>& hostOutputQ,
                                      ICircularQueue<MessageDTO>& remoteOutputQ,
+                                     ICircularQueue<MessageDTO>& interlocQ,
                                      IHiveMindHostDeserializer& deserializer,
                                      IHiveMindApiRequestHandler& hivemindApiReqHandler,
                                      IGreetSender& greetSender,
@@ -13,6 +14,7 @@ MessageDispatcher::MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
     m_buzzOutputQueue(buzzOutputQ),
     m_hostOutputQueue(hostOutputQ),
     m_remoteOutputQueue(remoteOutputQ),
+    m_interlocQueue(interlocQ),
     m_deserializer(deserializer),
     m_hivemindApiReqHandler(hivemindApiReqHandler),
     m_greetSender(greetSender),
@@ -118,7 +120,7 @@ bool MessageDispatcher::dispatchResponse(const MessageDTO& message, const Respon
 
 bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
     const std::variant<std::monostate, RequestDTO, ResponseDTO, GreetingDTO, BuzzMessageDTO,
-                       NetworkApiDTO>& variantMsg = message.getMessage();
+                       NetworkApiDTO, InterlocAPIDTO>& variantMsg = message.getMessage();
     if (const auto* request = std::get_if<RequestDTO>(&variantMsg)) {
         return dispatchRequest(message, *request);
     }
@@ -127,6 +129,9 @@ bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
     }
     if (std::holds_alternative<BuzzMessageDTO>(variantMsg)) {
         return m_buzzOutputQueue.push(message);
+    }
+    if (std::holds_alternative<InterlocAPIDTO>(variantMsg)) {
+        return m_interlocQueue.push(message);
     }
 
     m_logger.log(LogLevel::Warn, "Unknown message, could not dispatch, idx %d", variantMsg.index());

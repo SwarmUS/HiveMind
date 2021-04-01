@@ -9,6 +9,8 @@
 #include <cstdlib>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
+#include <interloc/IInterloc.h>
+#include <interloc/InterlocContainer.h>
 #include <logger/Logger.h>
 #include <logger/LoggerContainer.h>
 #include <message-handler/GreetHandler.h>
@@ -190,14 +192,37 @@ class CommMonitoringTask : public AbstractTask<4 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class InterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class HardwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
-    InterlocTask(const char* taskName, UBaseType_t priority) : AbstractTask(taskName, priority) {}
+    HardwareInterlocTask(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority) {}
 
-    ~InterlocTask() override = default;
+    ~HardwareInterlocTask() override = default;
 
   private:
     void task() override { BSPContainer::getInterlocManager().startInterloc(); }
+};
+
+class SoftwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+  public:
+    SoftwareInterlocTask(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority),
+        m_interloc(InterlocContainer::getInterloc()),
+        m_interlocMessageHandler(InterlocContainer::getInterlocMessageHandler()) {}
+
+    ~SoftwareInterlocTask() override = default;
+
+  private:
+    // Create the object so it can register it's callbacks
+    // TODO: remove once it is used somewhere else
+    IInterloc& m_interloc;
+    IInterlocMessageHandler& m_interlocMessageHandler;
+
+    void task() override {
+        while (true) {
+            m_interlocMessageHandler.processMessage();
+        }
+    }
 };
 
 int main(int argc, char** argv) {
@@ -207,7 +232,8 @@ int main(int argc, char** argv) {
     bsp.initChip((void*)&cmdLineArgs);
 
     static BittyBuzzTask s_bittybuzzTask("bittybuzz", gc_taskNormalPriority);
-    static InterlocTask s_interlocTask("interloc", gc_taskHighPriority);
+    static HardwareInterlocTask s_hardwareInterlocTask("hardware_interloc", gc_taskHighPriority);
+    static SoftwareInterlocTask s_softwareInterlocTask("software_interloc", gc_taskNormalPriority);
 
     static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskNormalPriority, NULL,
                                                     MessageHandlerContainer::getHostMsgQueue());
@@ -227,7 +253,8 @@ int main(int argc, char** argv) {
                                                   BSPContainer::getRemoteCommInterface);
 
     s_bittybuzzTask.start();
-    s_interlocTask.start();
+    s_hardwareInterlocTask.start();
+    s_softwareInterlocTask.start();
     s_hostMonitorTask.start();
     s_remoteMonitorTask.start();
 
