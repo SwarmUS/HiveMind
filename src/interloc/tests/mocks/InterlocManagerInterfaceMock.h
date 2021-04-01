@@ -17,9 +17,9 @@ class InterlocManagerInterfaceMock final : public IInterlocManager {
     positionUpdateCallbackFunction_t m_callback;
     void* m_context;
 
-    void startCalibSingleInit() override{};
-    void startCalibSingleRespond() override{};
-    void setCalibDistance(uint16_t distanceForCalibCm) override { (void)distanceForCalibCm; };
+    void startCalibSingleInitiator() override{};
+    void startCalibSingleResponder() override{};
+    void setCalibDistance(uint16_t distanceCalibCm) override { (void)distanceCalibCm; };
     void setCalibFinishedCallback(void (*fct)(void* context), void* context) override {
         (void)fct;
         (void)context;

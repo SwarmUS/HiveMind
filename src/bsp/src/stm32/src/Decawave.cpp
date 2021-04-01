@@ -1,5 +1,4 @@
 #include "Decawave.h"
-#include "hal/hal_gpio.h"
 #include <Task.h>
 #include <cpp-common/CppUtils.h>
 #include <cstring>
@@ -34,7 +33,7 @@ void Decawave::rxAsyncTask(void* context) {
 
 Decawave::Decawave(decaDevice_t spiDevice) :
     m_spiDevice(spiDevice),
-    m_channel(UWBChannel::CHANNEL_2),
+    m_channel(UWBChannel::DEFAULT_CHANNEL),
     m_speed(UWBSpeed::SPEED_110K),
     m_rxAsyncTask("dw_rx_task", tskIDLE_PRIORITY + 10, rxAsyncTask, this) {}
 
@@ -310,27 +309,21 @@ void Decawave::getRxTimestamp(uint64_t* rxTimestamp) {
     deca_selectDevice(m_spiDevice);
     dwt_readrxtimestamp((uint8_t*)rxTimestamp);
 }
+
 void Decawave::getSysTime(uint64_t* sysTime) {
     deca_selectDevice(m_spiDevice);
-    dwt_readrxtimestamp((uint8_t*)sysTime);
-}
-
-void Decawave::finalMsgAddTs(uint8* tsField, uint64_t ts) {
-    deca_selectDevice(m_spiDevice);
-    int i;
-    for (i = 0; i < 4; i++) {
-        tsField[i] = (uint8)ts;
-        ts >>= 8;
-    }
+    dwt_readsystime((uint8_t*)sysTime);
 }
 
 DW_STATE Decawave::getState() { return m_state; }
+
 void Decawave::setState(DW_STATE state) { m_state = state; }
 
 uint16_t Decawave::getRxAntennaDLY() {
     deca_selectDevice(m_spiDevice);
     return dwt_read16bitoffsetreg(LDE_IF_ID, LDE_RXANTD_OFFSET);
 }
+
 uint16_t Decawave::getTxAntennaDLY() {
     deca_selectDevice(m_spiDevice);
     return dwt_read16bitoffsetreg(TX_ANTD_ID, TX_ANTD_OFFSET);

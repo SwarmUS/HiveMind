@@ -93,3 +93,11 @@ uint16_t DecawaveUtils::getSFDTimeout(uint8_t preambleLengthRegister,
 
     return preambleLength + 1 + sfdLength - pacSize;
 }
+
+void DecawaveUtils::tsToBytes(uint8_t* tsField, uint64_t ts) {
+    int i;
+    for (i = 0; i < 4; i++) {
+        tsField[i] = (uint8)ts;
+        ts >>= 8;
+    }
+}

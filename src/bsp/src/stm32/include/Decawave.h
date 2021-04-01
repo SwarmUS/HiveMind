@@ -16,13 +16,14 @@
 
 #define POLL_TX_TO_RESP_RX_DLY_UUS 300
 #define RESP_RX_TO_FINAL_TX_DLY_UUS 4000
-//#define POLL_RX_TO_RESP_TX_DLY_UUS 2750
-#define POLL_RX_TO_RESP_TX_DLY_UUS 1000
+#define POLL_RX_TO_RESP_TX_DLY_UUS 2750
 #define RESP_RX_TIMEOUT_UUS 4000
 #define FINAL_RX_TIMEOUT_UUS 3300
-#define UUS_TO_DWT_TIME 65536 // check value, j'obtien 63 897...
+#define UUS_TO_DWT_TIME 63898
 #define SPEED_OF_LIGHT 299792458
 #define DW_INTERNAL_CLOCK_RFEQ 63897600000
+
+#define DEFAULT_CHANNEL CHANNEL_2
 
 enum class DW_LED { LED_0 = DWT_GxM0, LED_1 = DWT_GxM1, LED_2 = DWT_GxM2, LED_3 = DWT_GxM3 };
 enum class DW_STATE { CONFIGURED, SEND_CALIB, RESPOND_CALIB, CALIBRATED };
@@ -207,13 +208,6 @@ class Decawave {
      * @param state The next state of calibration
      */
     void setState(DW_STATE state);
-
-    /**
-     * @brief Sets a 5 byte timestamp into the specied message field
-     * @param ts Timestamp to insert in message
-     * @param tsField Field to put timestamp in
-     */
-    void finalMsgAddTs(uint8* tsField, uint64_t ts);
 
   private:
     decaDevice_t m_spiDevice;
