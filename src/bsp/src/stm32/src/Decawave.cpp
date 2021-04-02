@@ -321,14 +321,22 @@ void Decawave::setSyncMode(DW_SYNC_MODE syncMode) {
 }
 
 void Decawave::setTxAntennaDLY(uint16 delay) {
+    m_txAntennaDelayDTU = delay;
+
     deca_selectDevice(m_spiDevice);
     dwt_settxantennadelay(delay);
 }
 
 void Decawave::setRxAntennaDLY(uint16 delay) {
+    m_rxAntennaDelayDTU = delay;
+
     deca_selectDevice(m_spiDevice);
     dwt_setrxantennadelay(delay);
 }
+
+uint16_t Decawave::getRxAntennaDLY() const { return m_rxAntennaDelayDTU; }
+
+uint16_t Decawave::getTxAntennaDLY() const { return m_rxAntennaDelayDTU; }
 
 void Decawave::getTxTimestamp(uint64_t* txTimestamp) {
     deca_selectDevice(m_spiDevice);
@@ -348,13 +356,3 @@ void Decawave::getSysTime(uint64_t* sysTime) {
 DW_STATE Decawave::getState() { return m_state; }
 
 void Decawave::setState(DW_STATE state) { m_state = state; }
-
-uint16_t Decawave::getRxAntennaDLY() {
-    deca_selectDevice(m_spiDevice);
-    return dwt_read16bitoffsetreg(LDE_IF_ID, LDE_RXANTD_OFFSET);
-}
-
-uint16_t Decawave::getTxAntennaDLY() {
-    deca_selectDevice(m_spiDevice);
-    return dwt_read16bitoffsetreg(TX_ANTD_ID, TX_ANTD_OFFSET);
-}

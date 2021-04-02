@@ -36,6 +36,8 @@ void InterlocManager::startInterloc() {
 
     syncClocks();
 
+    m_decaA.setState(DW_STATE::RESPOND_CALIB);
+
     while (m_decaA.getState() != DW_STATE::CALIBRATED &&
            m_decaB.getState() != DW_STATE::CALIBRATED) {
 
@@ -275,9 +277,8 @@ bool InterlocManager::sendTWRSequence(uint16_t destinationId, Decawave& device) 
     uint64_t responseTimestamp = responseFrame.m_rxTimestamp;
 
     //  Compute final message transmission time
-    uint64_t finalTxTime =
-        (responseTimestamp + (RESP_RX_TO_FINAL_TX_DLY_UUS * UUS_TO_DWT_TIME)) >> 8;
-    uint64_t finalTxTs = (finalTxTime << 8); //+device.getTxAntennaDLY();
+    uint64_t finalTxTime = responseTimestamp + (RESP_RX_TO_FINAL_TX_DLY_UUS * UUS_TO_DWT_TIME);
+    uint64_t finalTxTs = finalTxTime + device.getTxAntennaDLY();
 
     //  Construct final message
     DecawaveUtils::tsToBytes((uint8_t*)(&finalMsg.m_respMinPoll),

@@ -178,13 +178,13 @@ class Decawave {
      * @brief Get transmission antenna delay in DecawaveTimeUnits
      * @return Delay in DecawaveTimeUnits
      */
-    uint16_t getTxAntennaDLY();
+    uint16_t getTxAntennaDLY() const;
 
     /**
      * @brief Get reception antenna delay in DecawaveTimeUnits
      * @return Delay in DecawaveTimeUnits
      */
-    uint16_t getRxAntennaDLY();
+    uint16_t getRxAntennaDLY() const;
 
     /**
      * @brief Retrieves transmission timestamp in DecawaveTimeUnits
@@ -222,6 +222,8 @@ class Decawave {
 
     UWBChannel m_channel;
     UWBSpeed m_speed;
+    uint16_t m_rxAntennaDelayDTU = DEFAULT_RX_ANT_DLY;
+    uint16_t m_txAntennaDelayDTU = DEFAULT_TX_ANT_DLY;
 
     TaskHandle_t m_rxTaskHandle;
     dwt_cb_data_t m_callbackData;
