@@ -29,8 +29,7 @@ class HiveMindHostApiRequestHandlerFixture : public testing::Test {
 TEST_F(HiveMindHostApiRequestHandlerFixture,
        HiveMindHostApiRequestHandler_handleRequest_invalidRequest) {
     // Given
-    IdRequestDTO idReq;
-    HiveMindHostApiRequestDTO req(idReq);
+    HiveMindHostApiRequestDTO req(BytesDTO(0,0,true, NULL,0));
     req.setRequest(std::monostate());
 
     // Then

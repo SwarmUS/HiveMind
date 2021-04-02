@@ -515,7 +515,7 @@ TEST_F(MessageDispatcherFixture,
        MessageDispatcher_deserializeAndDispatch_HiveMindHostApiRequest_host_handlerCalled_valid) {
     // Given
     HiveMindHostApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
-    m_request->setRequest(HiveMindHostApiRequestDTO(IdRequestDTO()));
+    m_request->setRequest(HiveMindHostApiRequestDTO(BytesDTO(0,0,true,NULL,0)));
     m_message = MessageDTO(m_uuid, m_uuid, *m_request);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
@@ -538,7 +538,7 @@ TEST_F(MessageDispatcherFixture,
        MessageDispatcher_deserializeAndDispatch_HiveMindHostApiRequest_host_handlerCalled_QueueFull) {
     // Given
     HiveMindHostApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
-    m_request->setRequest(HiveMindHostApiRequestDTO(IdRequestDTO()));
+    m_request->setRequest(HiveMindHostApiRequestDTO(BytesDTO(0,0,true,NULL,0)));
     m_message = MessageDTO(m_uuid, m_uuid, *m_request);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
@@ -561,7 +561,7 @@ TEST_F(MessageDispatcherFixture,
        MessageDispatcher_deserializeAndDispatch_HiveMindHostApiRequest_remote_handlerCalled_valid) {
     // Given
     HiveMindHostApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
-    m_request->setRequest(HiveMindHostApiRequestDTO(IdRequestDTO()));
+    m_request->setRequest(HiveMindHostApiRequestDTO(BytesDTO(0,0,true,NULL,0)));
     m_message = MessageDTO(m_srcUuid, m_uuid, *m_request);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
@@ -584,7 +584,7 @@ TEST_F(MessageDispatcherFixture,
        MessageDispatcher_deserializeAndDispatch_HiveMindHostApiRequest_remote_handlerCalled_QueueFull) {
     // Given
     HiveMindHostApiResponseDTO resp(GenericResponseDTO(GenericResponseStatusDTO::Ok, ""));
-    m_request->setRequest(HiveMindHostApiRequestDTO(IdRequestDTO()));
+    m_request->setRequest(HiveMindHostApiRequestDTO(BytesDTO(0,0,true,NULL,0)));
     m_message = MessageDTO(m_srcUuid, m_uuid, *m_request);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
