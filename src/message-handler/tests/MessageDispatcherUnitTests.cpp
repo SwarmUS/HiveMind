@@ -13,6 +13,7 @@ class MessageDispatcherFixture : public testing::Test {
     CircularQueueInterfaceMock<MessageDTO> m_buzzQueue;
     CircularQueueInterfaceMock<MessageDTO> m_hostQueue;
     CircularQueueInterfaceMock<MessageDTO> m_remoteQueue;
+    CircularQueueInterfaceMock<MessageDTO> m_interlocQueue;
     HiveMindHostDeserializerInterfaceMock m_deserializerMock;
     HiveMindApiRequestHandlerInterfaceMock m_hivemindApiReqHandlerMock;
     GreetSenderInterfaceMock m_greetSenderMock;
@@ -43,9 +44,9 @@ class MessageDispatcherFixture : public testing::Test {
             new UserCallResponseDTO(UserCallTargetDTO::HOST, UserCallTargetDTO::BUZZ, *m_fResponse);
         m_response = new ResponseDTO(1, *m_uResponse);
 
-        m_messageDispatcher = new MessageDispatcher(m_buzzQueue, m_hostQueue, m_remoteQueue,
-                                                    m_deserializerMock, m_hivemindApiReqHandlerMock,
-                                                    m_greetSenderMock, *m_bspMock, m_loggerMock);
+        m_messageDispatcher = new MessageDispatcher(
+            m_buzzQueue, m_hostQueue, m_remoteQueue, m_interlocQueue, m_deserializerMock,
+            m_hivemindApiReqHandlerMock, m_greetSenderMock, *m_bspMock, m_loggerMock);
     }
     void TearDown() override {
         delete m_bspMock;
@@ -770,4 +771,45 @@ TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_greet_
 
     // Expect
     EXPECT_TRUE(ret);
+}
+
+TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_validInterlocAPIMessage) {
+    // Given
+    m_message =
+        MessageDTO(m_srcUuid, m_uuid, InterlocAPIDTO(CalibrationMessageDTO(StopCalibrationDTO())));
+    EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
+    EXPECT_CALL(m_interlocQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
+    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
+
+    // Then
+    bool ret = m_messageDispatcher->deserializeAndDispatch();
+
+    // Expect
+    EXPECT_TRUE(ret);
+}
+
+TEST_F(MessageDispatcherFixture,
+       MessageDispatcher_deserializeAndDispatch_invalidInterlocAPIMessage) {
+    // Given
+    m_message =
+        MessageDTO(m_srcUuid, m_uuid, InterlocAPIDTO(CalibrationMessageDTO(StopCalibrationDTO())));
+    EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
+    EXPECT_CALL(m_interlocQueue, push(testing::_)).Times(1).WillOnce(testing::Return(false));
+    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_buzzQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteQueue, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hivemindApiReqHandlerMock, handleRequest).Times(0);
+
+    // Then
+    bool ret = m_messageDispatcher->deserializeAndDispatch();
+
+    // Expect
+    EXPECT_FALSE(ret);
 }

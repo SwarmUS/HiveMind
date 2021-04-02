@@ -16,8 +16,8 @@ MessageDispatcher MessageHandlerContainer::createMessageDispatcher(
     IHiveMindApiRequestHandler& hivemindApiReqHandler,
     IGreetSender& greetSender) {
     return MessageDispatcher(getBuzzMsgQueue(), getHostMsgQueue(), getRemoteMsgQueue(),
-                             deserializer, hivemindApiReqHandler, greetSender,
-                             BSPContainer::getBSP(), LoggerContainer::getLogger());
+                             getInterlocMsgQueue(), deserializer, hivemindApiReqHandler,
+                             greetSender, BSPContainer::getBSP(), LoggerContainer::getLogger());
 }
 
 ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getBuzzMsgQueue() {
@@ -42,4 +42,12 @@ ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getRemoteMsgQueue() {
     static ThreadSafeQueue<MessageDTO> s_remoteMsgThreadQueue(s_remoteMsgQueue, s_mutex);
 
     return s_remoteMsgThreadQueue;
+}
+
+ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getInterlocMsgQueue() {
+    static Mutex s_mutex(10);
+    static CircularQueueStack<MessageDTO, gc_queueMaxSize> s_interlocMsgQueue;
+    static ThreadSafeQueue<MessageDTO> s_interlocMsgThreadQueue(s_interlocMsgQueue, s_mutex);
+
+    return s_interlocMsgThreadQueue;
 }

@@ -18,6 +18,7 @@ class Interloc : public IInterloc {
     void onPositionUpdateCallback(InterlocUpdate positionUpdate);
     std::optional<uint8_t> getRobotArrayIndex(uint16_t robotId);
     static void updateRobotPosition(RelativePosition& positionToUpdate, InterlocUpdate update);
+
     static void onPositionUpdateStaticCallback(void* context, InterlocUpdate update);
 
     ILogger& m_logger;
