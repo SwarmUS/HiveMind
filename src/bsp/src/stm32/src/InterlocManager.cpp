@@ -18,7 +18,9 @@ bool InterlocManager::isFrameOk(UWBRxFrame frame) {
 }
 
 InterlocManager::InterlocManager(ILogger& logger) :
-    m_logger(logger), m_decaA(DW_A), m_decaB(DW_B) {}
+    m_logger(logger),
+    m_decaA(DW_A, UWBChannel::CHANNEL_2, UWBSpeed::SPEED_6M8),
+    m_decaB(DW_B, UWBChannel::CHANNEL_2, UWBSpeed::SPEED_6M8) {}
 
 void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
                                                 void* context) {
@@ -163,6 +165,11 @@ void InterlocManager::startDeviceCalibSingleResponder(uint16_t destinationId, De
     int i = 0;
     double val = 0;
     while (device.getState() == DW_STATE::RESPOND_CALIB) { // find exit condition
+        double calculatedDistance;
+        do {
+            calculatedDistance = receiveTWRSequence(destinationId, device);
+        } while (calculatedDistance < 0);
+
         val += receiveTWRSequence(destinationId, device);
         i++;
         if (i > NB_CALIB_MEASUREMENTS - 1) {
@@ -190,11 +197,10 @@ void InterlocManager::startDeviceCalibSingleResponder(uint16_t destinationId, De
 
 double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& device) {
     UWBRxFrame rxFrame;
-    uint64_t respTxTs;
     UWBMessages::TWRResponse responseMsg{};
 
     // receive poll message
-    device.receive(rxFrame, 0);
+    device.receive(rxFrame, POLL_RX_TIMEOUT_UUS);
 
     if (!isFrameOk(rxFrame)) {
         return -1;
@@ -209,13 +215,11 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
     // construct and send Response message
     constructUWBHeader(destinationId, UWBMessages::DATA, UWBMessages::TWR_RESPONSE,
                        (uint8_t*)&responseMsg, sizeof(responseMsg));
-    device.transmit((uint8_t*)&responseMsg, sizeof(responseMsg));
-    // TODO make the transmitDelayed work
-    //    respTxTs = (pollRxTs + (POLL_RX_TO_RESP_TX_DLY_UUS * UUS_TO_DWT_TIME))>>8;
-    //    device.transmitDelayed((uint8_t*)&responseMsg,sizeof(responseMsg),respTxTime);
 
-    // wait for Final message reception
-    device.receive(rxFrame, 0);
+    uint64_t respTxTs = (pollRxTs + (POLL_RX_TO_RESP_TX_DLY_UUS * UUS_TO_DWT_TIME));
+    device.transmitDelayedAndReceive((uint8_t*)&responseMsg, sizeof(responseMsg), respTxTs, 0,
+                                     rxFrame, FINAL_RX_TIMEOUT_UUS);
+
     if (!isFrameOk(rxFrame)) {
         return -1;
     }
@@ -226,18 +230,16 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
 
     UWBMessages::TWRFinal* finalTWRFrame =
         reinterpret_cast<UWBMessages::TWRFinal*>(rxFrame.m_rxBuffer.data());
-    device.getTxTimestamp(&respTxTs);
     uint32_t finalRxTs = (uint32_t)rxFrame.m_rxTimestamp;
 
     // evaluate distance
-    volatile uint64_t tRound1 = finalTWRFrame->m_respMinPoll;
-    volatile uint32_t tRound2 = (finalRxTs - (uint32_t)respTxTs);
-    volatile uint64_t tReply1 = (finalTWRFrame->m_finaleMinResp);
-    volatile uint32_t tReply2 = ((uint32_t)respTxTs - (uint32_t)pollRxTs);
+    uint64_t tRound1 = finalTWRFrame->m_respMinPoll;
+    uint32_t tRound2 = (finalRxTs - (uint32_t)respTxTs);
+    uint64_t tReply1 = (finalTWRFrame->m_finaleMinResp);
+    uint32_t tReply2 = ((uint32_t)respTxTs - (uint32_t)pollRxTs);
 
-    volatile uint64_t num = (tRound1 * tRound2 - tReply1 * tReply2);
-    volatile uint64_t denom = (tRound1 + tRound2 + tReply1 + tReply2);
-    uint64_t tofDtu = num / denom;
+    uint64_t tofDtu =
+        (tRound1 * tRound2 - tReply1 * tReply2) / (tRound1 + tRound2 + tReply1 + tReply2);
 
     double tof = tofDtu * DWT_TIME_UNITS;
     double distanceEval = tof * SPEED_OF_LIGHT;
@@ -278,7 +280,7 @@ bool InterlocManager::sendTWRSequence(uint16_t destinationId, Decawave& device) 
 
     //  Compute final message transmission time
     uint64_t finalTxTime = responseTimestamp + (RESP_RX_TO_FINAL_TX_DLY_UUS * UUS_TO_DWT_TIME);
-    uint64_t finalTxTs = finalTxTime + device.getTxAntennaDLY();
+    uint64_t finalTxTs = finalTxTime; //+ device.getTxAntennaDLY();
 
     //  Construct final message
     DecawaveUtils::tsToBytes((uint8_t*)(&finalMsg.m_respMinPoll),
@@ -288,7 +290,6 @@ bool InterlocManager::sendTWRSequence(uint16_t destinationId, Decawave& device) 
     constructUWBHeader(destinationId, UWBMessages::DATA, UWBMessages::TWR_FINAL,
                        (uint8_t*)(&finalMsg), sizeof(finalMsg));
     return device.transmitDelayed((uint8_t*)(&finalMsg), sizeof(UWBMessages::TWRFinal), finalTxTs);
-    // TODO adjust all delays. Refer to DecaRangeRTLS_ARM_Source_Code_Guide
 }
 
 uint8_t InterlocManager::powerCorrection(double twrDistance) {

@@ -7,7 +7,6 @@
 
 void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
-
     BaseType_t taskWoken = pdFALSE;
 
     if (static_cast<Decawave*>(context)->m_rxTaskHandle != NULL) {
@@ -175,7 +174,8 @@ bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
     dwt_writetxdata(length + UWB_CRC_LENGTH, m_txBuffer.data(), 0);
     dwt_writetxfctrl(length + UWB_CRC_LENGTH, 0, 0);
 
-    dwt_starttx(flags);
+    volatile int x = dwt_starttx(flags);
+    x++;
 
     return true;
 }
@@ -186,9 +186,15 @@ bool Decawave::transmit(uint8_t* buf, uint16_t length) {
 
 bool Decawave::transmitDelayed(uint8_t* buf, uint16_t length, uint64_t txTimestamp) {
     deca_selectDevice(m_spiDevice);
-    dwt_setdelayedtrxtime(txTimestamp >> 8);
+    uint32_t txTimeMSB = txTimestamp >> 8;
+    dwt_setdelayedtrxtime(txTimeMSB);
 
-    return transmitInternal(buf, length, DWT_START_TX_DELAYED);
+    transmitInternal(buf, length, DWT_START_TX_DELAYED);
+    uint64_t systime;
+    getSysTime(&systime);
+
+    systime++;
+    return true;
 }
 
 bool Decawave::transmitAndReceive(uint8_t* buf,
@@ -349,8 +355,17 @@ void Decawave::getRxTimestamp(uint64_t* rxTimestamp) {
 }
 
 void Decawave::getSysTime(uint64_t* sysTime) {
+    uint64_t ts = 0;
+    uint8_t time[5];
     deca_selectDevice(m_spiDevice);
-    dwt_readsystime((uint8_t*)sysTime);
+    dwt_readsystime(time);
+
+    for (int i = 4; i >= 0; i--) {
+        ts <<= 8;
+        ts |= time[i];
+    }
+
+    *sysTime = ts;
 }
 
 DW_STATE Decawave::getState() { return m_state; }

@@ -34,7 +34,7 @@ void Hal_init() {
     UartPrint_init();
     usb_init();
 
-    MX_LWIP_Init();
+    // MX_LWIP_Init();
 
     deca_init();
 #ifdef IPERF_SERVER
