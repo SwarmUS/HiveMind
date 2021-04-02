@@ -653,7 +653,8 @@ TEST_F(BittyBuzzMessageHandlerFixture,
 TEST_F(BittyBuzzMessageHandlerFixture,
        BittyBuzzMessageHandler_processMessage_validHiveMindHostApiResponse_doNothing) {
     // Given
-    m_response->setResponse(HiveMindHostApiResponseDTO(GenericResponseDTO(GenericResponseStatusDTO::Ok, "")));
+    m_response->setResponse(
+        HiveMindHostApiResponseDTO(GenericResponseDTO(GenericResponseStatusDTO::Ok, "")));
     MessageDTO message = MessageDTO(m_srcUuid, m_uuid, *m_response);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;

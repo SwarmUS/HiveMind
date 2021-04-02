@@ -6,9 +6,9 @@
 #include "IMessageDispatcher.h"
 #include <bsp/IBSP.h>
 #include <cpp-common/ICircularQueue.h>
+#include <logger/ILogger.h>
 #include <pheromones/IHiveMindHostDeserializer.h>
 #include <pheromones/MessageDTO.h>
-#include <logger/ILogger.h>
 
 class MessageDispatcher : IMessageDispatcher {
   public:
