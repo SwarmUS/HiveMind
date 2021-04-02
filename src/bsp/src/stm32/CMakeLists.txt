@@ -6,7 +6,6 @@ set(LIB_SOURCES
     src/BSPContainer.cpp
     src/UserInterface.cpp
     src/HardwareCRC.cpp
-    src/HardwareCRC.cpp
     src/SocketFactory.cpp
     src/TCPClient.cpp
     src/SettingsContainer.cpp
