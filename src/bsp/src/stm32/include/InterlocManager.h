@@ -31,6 +31,13 @@ class InterlocManager : public IInterlocManager {
 
     uint8_t m_sequenceID = 0;
     uint16_t m_distanceCalibCm = 75;
+
+    positionUpdateCallbackFunction_t m_positionUpdateCallback;
+    calibrationEndedCallbackFunction_t m_calibrationEndedCallback;
+    void* m_positionUpdateCallbackContext;
+    void* m_calibrationEndedCallbackContext;
+    uint16_t m_calibrationInitiatorId;
+
     void startDeviceCalibSingleInitiator(uint16_t destinationId, Decawave& device);
     void startDeviceCalibSingleResponder(uint16_t destinationId, Decawave& device);
     bool sendTWRSequence(uint16_t destinationId, Decawave& device);
@@ -41,12 +48,7 @@ class InterlocManager : public IInterlocManager {
                             uint8_t* buffer,
                             uint16_t bufferLength);
     bool isFrameOk(UWBRxFrame frame);
-
-    positionUpdateCallbackFunction_t m_positionUpdateCallback;
-    calibrationEndedCallbackFunction_t m_calibrationEndedCallback;
-    void* m_positionUpdateCallbackContext;
-    void* m_calibrationEndedCallbackContext;
-    uint16_t m_calibrationInitiatorId;
+    static uint8_t powerCorrection(double twrDistance);
 };
 
 #endif //__INTERLOCMANAGER_H__
