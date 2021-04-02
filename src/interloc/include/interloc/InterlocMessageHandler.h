@@ -5,9 +5,9 @@
 #include <bsp/IBSP.h>
 #include <bsp/IInterlocManager.h>
 #include <cpp-common/ICircularQueue.h>
+#include <logger/ILogger.h>
 #include <pheromones/InterlocAPIDTO.h>
 #include <pheromones/MessageDTO.h>
-#include <logger/ILogger.h>
 
 class InterlocMessageHandler : public IInterlocMessageHandler {
   public:
