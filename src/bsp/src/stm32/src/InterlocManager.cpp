@@ -36,7 +36,7 @@ void InterlocManager::startInterloc() {
 
     syncClocks();
 
-    m_decaA.setState(DW_STATE::RESPOND_CALIB);
+    // m_decaA.setState(DW_STATE::RESPOND_CALIB);
 
     while (m_decaA.getState() != DW_STATE::CALIBRATED &&
            m_decaB.getState() != DW_STATE::CALIBRATED) {
