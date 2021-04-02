@@ -16,7 +16,8 @@ class HiveMindHostApiRequestHandlerFixture : public testing::Test {
     void SetUp() override {
         m_bspMock = new BSPInterfaceMock(m_boardId);
         m_loggerInterfaceMock = new LoggerInterfaceMock();
-        m_hivemindApiReqHandler = new HiveMindHostApiRequestHandler(*m_bspMock, *m_loggerInterfaceMock);
+        m_hivemindApiReqHandler =
+            new HiveMindHostApiRequestHandler(*m_bspMock, *m_loggerInterfaceMock);
     }
     void TearDown() override {
         delete m_hivemindApiReqHandler;
@@ -25,20 +26,8 @@ class HiveMindHostApiRequestHandlerFixture : public testing::Test {
     }
 };
 
-TEST_F(HiveMindHostApiRequestHandlerFixture, HiveMindHostApiRequestHandler_handleRequest_validIdRequest) {
-    // Given
-    IdRequestDTO idReq;
-    HiveMindHostApiRequestDTO req(idReq);
-
-    // Then
-    HiveMindHostApiResponseDTO ret = m_hivemindApiReqHandler->handleRequest(req);
-
-    // Expect
-    auto response = std::get<IdResponseDTO>(ret.getResponse());
-    EXPECT_EQ(response.getId(), m_boardId);
-}
-
-TEST_F(HiveMindHostApiRequestHandlerFixture, HiveMindHostApiRequestHandler_handleRequest_invalidRequest) {
+TEST_F(HiveMindHostApiRequestHandlerFixture,
+       HiveMindHostApiRequestHandler_handleRequest_invalidRequest) {
     // Given
     IdRequestDTO idReq;
     HiveMindHostApiRequestDTO req(idReq);
