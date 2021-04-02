@@ -44,6 +44,7 @@ class InterlocManager : public IInterlocManager {
     positionUpdateCallbackFunction_t m_positionUpdateCallback;
     void* m_positionUpdateCallbackContext;
     bool isFrameOk(UWBRxFrame frame);
+    static uint8_t powerCorrection(double twrDistance);
 };
 
 #endif //__INTERLOCMANAGER_H__

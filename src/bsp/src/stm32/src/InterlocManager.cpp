@@ -242,6 +242,11 @@ bool InterlocManager::sendTWRSequence(uint16_t destinationId, Decawave& device) 
     constructUWBHeader(destinationId, UWBMessages::DATA, UWBMessages::TWR_FINAL,
                        (uint8_t*)(&finalMsg), sizeof(finalMsg));
     return device.transmitDelayed((uint8_t*)(&finalMsg), sizeof(UWBMessages::TWRFinal), finalTxTs);
+    // TODO adjust all delays. Refer to DecaRangeRTLS_ARM_Source_Code_Guide
 }
 
-// TODO adjust all delays. Refer to DecaRangeRTLS_ARM_Source_Code_Guide
+uint8_t InterlocManager::powerCorrection(double twrDistance) {
+    (void)twrDistance;
+    return 0;
+    // refer to https://confluence.swarmus.jajservers.duckdns.org/display/LOG/DECA+-++Calibration
+}
