@@ -168,6 +168,7 @@ void InterlocManager::startDeviceCalibSingleResponder(uint16_t destinationId, De
         double calculatedDistance;
         do {
             calculatedDistance = receiveTWRSequence(destinationId, device);
+            Task::delay(200);
         } while (calculatedDistance < 0);
 
         val += receiveTWRSequence(destinationId, device);
@@ -200,7 +201,7 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
     UWBMessages::TWRResponse responseMsg{};
 
     // receive poll message
-    device.receive(rxFrame, POLL_RX_TIMEOUT_UUS);
+    device.receive(rxFrame, 0);
 
     if (!isFrameOk(rxFrame)) {
         return -1;
@@ -216,7 +217,7 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
     constructUWBHeader(destinationId, UWBMessages::DATA, UWBMessages::TWR_RESPONSE,
                        (uint8_t*)&responseMsg, sizeof(responseMsg));
 
-    uint64_t respTxTs = (pollRxTs + (POLL_RX_TO_RESP_TX_DLY_UUS * UUS_TO_DWT_TIME));
+    uint64_t respTxTs = pollRxTs + (POLL_RX_TO_RESP_TX_DLY_UUS * UUS_TO_DWT_TIME);
     device.transmitDelayedAndReceive((uint8_t*)&responseMsg, sizeof(responseMsg), respTxTs, 0,
                                      rxFrame, FINAL_RX_TIMEOUT_UUS);
 

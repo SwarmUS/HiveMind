@@ -190,10 +190,7 @@ bool Decawave::transmitDelayed(uint8_t* buf, uint16_t length, uint64_t txTimesta
     dwt_setdelayedtrxtime(txTimeMSB);
 
     transmitInternal(buf, length, DWT_START_TX_DELAYED);
-    uint64_t systime;
-    getSysTime(&systime);
 
-    systime++;
     return true;
 }
 
@@ -222,7 +219,8 @@ bool Decawave::transmitDelayedAndReceive(uint8_t* buf,
                                          uint16_t rxTimeoutUs) {
     deca_selectDevice(m_spiDevice);
     dwt_setrxaftertxdelay(rxAfterTxTimeUs);
-    dwt_setdelayedtrxtime(txTimestamp >> 8);
+    uint32_t time = txTimestamp >> 8;
+    dwt_setdelayedtrxtime(time);
     dwt_setrxtimeout(rxTimeoutUs);
 
     if (!transmitInternal(buf, length, DWT_START_TX_DELAYED | DWT_RESPONSE_EXPECTED)) {
