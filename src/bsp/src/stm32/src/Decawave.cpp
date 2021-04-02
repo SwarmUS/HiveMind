@@ -61,7 +61,7 @@ bool Decawave::init() {
 
     deca_selectDevice(m_spiDevice);
     deca_setISRCallback(m_spiDevice, isrCallback, this);
-    dwt_setcallbacks(rxCallback, rxCallback, rxCallback, rxCallback, this);
+    dwt_setcallbacks(NULL, rxCallback, rxCallback, rxCallback, this);
 
     deca_setFastRate();
 
@@ -279,6 +279,13 @@ void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
         // Read the frame into memory without the CRC16 located at the end of the frame
         dwt_readrxdata(frame->m_rxBuffer.data(), m_callbackData.datalength - UWB_CRC_LENGTH, 0);
         getRxTimestamp(&frame->m_rxTimestamp);
+
+        dwt_readfromdevice(RX_TTCKO_ID, 4, 1, &(frame->m_sfdAngleRegister));
+        // Read information needed for phase calculation
+        uint16_t firstPathIdx = dwt_read16bitoffsetreg(RX_TIME_ID, RX_TIME_FP_INDEX_OFFSET);
+        // Read one extra byte as readaccdata() returns a dummy byte
+        dwt_readaccdata(frame->m_firstPathAccumulator, 5, firstPathIdx);
+
         return;
     }
 
@@ -287,6 +294,29 @@ void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
         frame->m_status = UWBRxStatus::TIMEOUT;
     } else if ((m_callbackData.status & SYS_STATUS_ALL_RX_ERR) != 0U) {
         frame->m_status = UWBRxStatus::ERROR;
+    }
+}
+
+void Decawave::setSyncMode(DW_SYNC_MODE syncMode) {
+    deca_selectDevice(m_spiDevice);
+    uint16_t regValue = 0;
+    constexpr uint16_t syncWaitTime = 33; // should have waitTime%4 = 1 (DW1000 user manual p.56)
+
+    switch (syncMode) {
+
+    case DW_SYNC_MODE::OSTR:
+        regValue = dwt_read16bitoffsetreg(EXT_SYNC_ID, EC_CTRL_OFFSET);
+        regValue &= EC_CTRL_WAIT_MASK; // Clear previous wait value
+        regValue |= EC_CTRL_OSTRM;
+        regValue |= (((syncWaitTime)&0xff) << 3);
+        dwt_write16bitoffsetreg(EXT_SYNC_ID, EC_CTRL_OFFSET, regValue);
+        break;
+
+    case DW_SYNC_MODE::OFF:
+        regValue = dwt_read16bitoffsetreg(EXT_SYNC_ID, EC_CTRL_OFFSET);
+        regValue &= EC_CTRL_WAIT_MASK; // Clear previous wait value
+        dwt_write16bitoffsetreg(EXT_SYNC_ID, EC_CTRL_OFFSET, regValue);
+        break;
     }
 }
 

@@ -34,6 +34,8 @@ void InterlocManager::startInterloc() {
         m_logger.log(LogLevel::Warn, "InterlocManager: Could not start Decawave B");
     }
 
+    syncClocks();
+
     while (m_decaA.getState() != DW_STATE::CALIBRATED &&
            m_decaB.getState() != DW_STATE::CALIBRATED) {
 
@@ -55,6 +57,20 @@ void InterlocManager::startInterloc() {
 
         Task::delay(10);
     }
+}
+
+void InterlocManager::syncClocks() {
+    vPortEnterCritical();
+
+    m_decaA.setSyncMode(DW_SYNC_MODE::OSTR);
+    m_decaB.setSyncMode(DW_SYNC_MODE::OSTR);
+
+    deca_pulseSyncSignal();
+
+    m_decaA.setSyncMode(DW_SYNC_MODE::OFF);
+    m_decaB.setSyncMode(DW_SYNC_MODE::OFF);
+
+    vPortExitCritical();
 }
 
 bool InterlocManager::constructUWBHeader(uint16_t destinationId,
@@ -181,7 +197,8 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
     if (!isFrameOk(rxFrame)) {
         return -1;
     }
-    if (rxFrame.m_frame->m_functionCode != UWBMessages::FunctionCode::TWR_POLL) {
+    if (reinterpret_cast<UWBMessages::DWFrame*>(rxFrame.m_rxBuffer.data())->m_functionCode !=
+        UWBMessages::FunctionCode::TWR_POLL) {
         return -1;
     }
 
@@ -200,23 +217,25 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
     if (!isFrameOk(rxFrame)) {
         return -1;
     }
-    if (rxFrame.m_frame->m_functionCode != UWBMessages::FunctionCode::TWR_FINAL) {
+    if (reinterpret_cast<UWBMessages::DWFrame*>(rxFrame.m_rxBuffer.data())->m_functionCode !=
+        UWBMessages::FunctionCode::TWR_FINAL) {
         return -1;
     }
 
     UWBMessages::TWRFinal* finalTWRFrame =
-        reinterpret_cast<UWBMessages::TWRFinal*>(rxFrame.m_frame);
+        reinterpret_cast<UWBMessages::TWRFinal*>(rxFrame.m_rxBuffer.data());
     device.getTxTimestamp(&respTxTs);
     uint32_t finalRxTs = (uint32_t)rxFrame.m_rxTimestamp;
 
     // evaluate distance
-    uint64_t tRound1 = finalTWRFrame->m_respMinPoll;
-    uint32_t tRound2 = (finalRxTs - (uint32_t)respTxTs);
-    uint64_t tReply1 = (finalTWRFrame->m_finaleMinResp);
-    uint32_t tReply2 = ((uint32_t)respTxTs - (uint32_t)pollRxTs);
+    volatile uint64_t tRound1 = finalTWRFrame->m_respMinPoll;
+    volatile uint32_t tRound2 = (finalRxTs - (uint32_t)respTxTs);
+    volatile uint64_t tReply1 = (finalTWRFrame->m_finaleMinResp);
+    volatile uint32_t tReply2 = ((uint32_t)respTxTs - (uint32_t)pollRxTs);
 
-    uint64_t tofDtu =
-        ((tRound1 * tRound2 - tReply1 * tReply2) / (tRound1 + tRound2 + tReply1 + tReply2));
+    volatile uint64_t num = (tRound1 * tRound2 - tReply1 * tReply2);
+    volatile uint64_t denom = (tRound1 + tRound2 + tReply1 + tReply2);
+    uint64_t tofDtu = num / denom;
 
     double tof = tofDtu * DWT_TIME_UNITS;
     double distanceEval = tof * SPEED_OF_LIGHT;
@@ -246,7 +265,8 @@ bool InterlocManager::sendTWRSequence(uint16_t destinationId, Decawave& device) 
         return false;
     }
 
-    if (responseFrame.m_frame->m_functionCode != UWBMessages::FunctionCode::TWR_RESPONSE) {
+    if (reinterpret_cast<UWBMessages::DWFrame*>(responseFrame.m_rxBuffer.data())->m_functionCode !=
+        UWBMessages::FunctionCode::TWR_RESPONSE) {
         return false;
     }
 
