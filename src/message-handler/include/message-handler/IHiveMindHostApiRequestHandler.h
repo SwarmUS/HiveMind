@@ -1,6 +1,7 @@
 #ifndef __IHIVEMINDHOSTAPIREQUESTHANDLER_H_
 #define __IHIVEMINDHOSTAPIREQUESTHANDLER_H_
 
+#include <optional>
 #include <pheromones/HiveMindHostApiRequestDTO.h>
 #include <pheromones/MessageDTO.h>
 
@@ -11,10 +12,10 @@ class IHiveMindHostApiRequestHandler {
     virtual ~IHiveMindHostApiRequestHandler() = default;
 
     /**
-     *@brief handles a request and sends a response to the approriate target
-     *@param request the request to handle
-     *@return the response to the request */
-    virtual HiveMindHostApiResponseDTO handleRequest(const HiveMindHostApiRequestDTO& request) = 0;
+     *@brief handles HiveMindHostAPI request and sends a response to the approriate target
+     *@param message the message dto to handle
+     *@return true if the operation was successfull, false if not*/
+    virtual bool handleRequest(const MessageDTO& message) = 0;
 };
 
 #endif // __IHIVEMINDHOSTAPIREQUESTHANDLER_H_

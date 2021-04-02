@@ -8,10 +8,7 @@ class HiveMindHostApiRequestHandlerInterfaceMock : public IHiveMindHostApiReques
   public:
     ~HiveMindHostApiRequestHandlerInterfaceMock() override = default;
 
-    MOCK_METHOD(HiveMindHostApiResponseDTO,
-                handleRequest,
-                (const HiveMindHostApiRequestDTO& request),
-                (override));
+    MOCK_METHOD(bool, handleRequest, (const MessageDTO& message), (override));
 };
 
 #endif // __HIVEMINDAPIREQUESTHANDLERINTERFACEMOCK_H_

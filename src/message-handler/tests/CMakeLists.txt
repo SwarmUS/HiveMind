@@ -9,14 +9,13 @@ set(TEST_SOURCES
 )
 
 set(TEST_HEADERS
-  mocks/CircularQueueInterfaceMock.h
-  mocks/GreetHandlerInterfaceMock.h
-  mocks/GreetSenderInterfaceMock.h
-  mocks/HiveMindHostDeserializerInterfaceMock.h
-  mocks/HiveMindHostSerializerInterfaceMock.h
-  mocks/HiveMindHostApiRequestHandlerInterfaceMock.h
-  mocks/LoggerInterfaceMock.h
-
+    mocks/CircularQueueInterfaceMock.h
+    mocks/GreetHandlerInterfaceMock.h
+    mocks/GreetSenderInterfaceMock.h
+    mocks/HiveMindHostDeserializerInterfaceMock.h
+    mocks/HiveMindHostSerializerInterfaceMock.h
+    mocks/HiveMindHostApiRequestHandlerInterfaceMock.h
+    mocks/LoggerInterfaceMock.h
 )
 
 add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})
