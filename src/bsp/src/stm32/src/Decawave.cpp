@@ -6,7 +6,11 @@
 #include <deca_regs.h>
 
 void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
-    memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
+    // memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData,
+    // sizeof(dwt_cb_data_t));
+    for (unsigned int i = 0; i < sizeof(dwt_cb_data_t); i++) {
+        *(&(static_cast<Decawave*>(context)->m_callbackData) + i) = *(callbackData + i);
+    }
 
     BaseType_t taskWoken = pdFALSE;
 
@@ -61,7 +65,7 @@ bool Decawave::init() {
 
     deca_selectDevice(m_spiDevice);
     deca_setISRCallback(m_spiDevice, isrCallback, this);
-    dwt_setcallbacks(rxCallback, rxCallback, rxCallback, rxCallback, this);
+    dwt_setcallbacks(NULL, rxCallback, rxCallback, rxCallback, this);
 
     deca_setFastRate();
 
@@ -280,11 +284,12 @@ void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
         dwt_readrxdata(frame->m_rxBuffer.data(), m_callbackData.datalength - UWB_CRC_LENGTH, 0);
         getRxTimestamp(&frame->m_rxTimestamp);
 
-        dwt_readfromdevice(RX_TTCKO_ID, 4, 1, &(frame->m_sfdAngleRegister));
-        // Read information needed for phase calculation
-        uint16_t firstPathIdx = dwt_read16bitoffsetreg(RX_TIME_ID, RX_TIME_FP_INDEX_OFFSET);
-        // Read one extra byte as readaccdata() returns a dummy byte
-        dwt_readaccdata(frame->m_firstPathAccumulator, 5, firstPathIdx);
+        //        dwt_readfromdevice(RX_TTCKO_ID, 4, 1, &(frame->m_sfdAngleRegister));
+        //        // Read information needed for phase calculation
+        //        uint16_t firstPathIdx = dwt_read16bitoffsetreg(RX_TIME_ID,
+        //        RX_TIME_FP_INDEX_OFFSET);
+        //        // Read one extra byte as readaccdata() returns a dummy byte
+        //        dwt_readaccdata(frame->m_firstPathAccumulator, 5, firstPathIdx);
 
         return;
     }
@@ -319,7 +324,6 @@ void Decawave::setSyncMode(DW_SYNC_MODE syncMode) {
         break;
     }
 }
-
 
 void Decawave::setTxAntennaDLY(uint16 delay) {
     deca_selectDevice(m_spiDevice);
