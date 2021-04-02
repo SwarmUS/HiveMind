@@ -102,10 +102,7 @@ bool MessageDispatcher::dispatchResponse(const MessageDTO& message, const Respon
     }
 
     // Either a HiveMindAPI or a unknown response, pipe it either way
-    if (message.getDestinationId() == m_bsp.getUUId()) {
-        return m_hostOutputQueue.push(message);
-    }
-    return m_remoteOutputQueue.push(message);
+    return m_hostOutputQueue.push(message);
 }
 
 bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {

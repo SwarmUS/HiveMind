@@ -9,7 +9,7 @@ class HiveMindHostApiRequestHandlerFixture : public testing::Test {
     BSPInterfaceMock* m_bspMock;
     LoggerInterfaceMock* m_loggerInterfaceMock;
     HiveMindHostApiRequestHandler* m_hivemindApiReqHandler;
-    CircularQueueInterfaceMock<MessateDTO> m_hostQueueMock;
+    CircularQueueInterfaceMock<MessageDTO> m_hostQueueMock;
 
     RequestDTO* m_request;
     MessageDTO* m_message;
@@ -39,26 +39,26 @@ class HiveMindHostApiRequestHandlerFixture : public testing::Test {
 TEST_F(HiveMindHostApiRequestHandlerFixture, HiveMindHostApiRequestHandler_handleRequest_bytes) {
     // Given
     HiveMindHostApiRequestDTO req(BytesDTO(0, 0, true, NULL, 0));
-    EXPECT_CALL(m_hostQueue, push(testing::_)).Times(1).WillOnce(testing::Return(true));
+    m_request->setRequest(req);
+    m_message->setMessage(*m_request);
+    EXPECT_CALL(m_hostQueueMock, push(testing::_)).Times(1).WillOnce(testing::Return(true));
 
     // Then
-    bool ret = m_hivemindApiReqHandler->handleRequest(req);
+    bool ret = m_hivemindApiReqHandler->handleRequest(*m_message);
 
     // Expect
-    auto response = std::get<GenericResponseDTO>(ret.getResponse());
-    EXPECT_EQ(response.getStatus(), GenericResponseStatusDTO::BadRequest);
+    EXPECT_TRUE(ret);
 }
 
 TEST_F(HiveMindHostApiRequestHandlerFixture,
        HiveMindHostApiRequestHandler_handleRequest_invalidRequest) {
     // Given
-    HiveMindHostApiRequestDTO req(BytesDTO(0, 0, true, NULL, 0));
-    req.setRequest(std::monostate());
+    EXPECT_CALL(m_hostQueueMock, push(testing::_)).Times(0);
+    m_message->setMessage(std::monostate());
 
     // Then
-    HiveMindHostApiResponseDTO ret = m_hivemindApiReqHandler->handleRequest(req);
+    bool ret = m_hivemindApiReqHandler->handleRequest(*m_message);
 
     // Expect
-    auto response = std::get<GenericResponseDTO>(ret.getResponse());
-    EXPECT_EQ(response.getStatus(), GenericResponseStatusDTO::BadRequest);
+    EXPECT_FALSE(ret);
 }
