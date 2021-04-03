@@ -203,9 +203,17 @@ class Decawave {
 
     /**
      * @brief Retrieves present time DecawaveTimeUnits
-     * @param sysTime Present timestamp in DecawaveTimeUnits
+     * @return Present timestamp in DecawaveTimeUnits
      */
-    void getSysTime(uint64_t* sysTime);
+    uint64_t getSysTime();
+
+    /**
+     * @brief Returns the system time (in DTUs) at which a message will be sent when a delayed tx is
+     * called with the argument
+     * @param txTime The time used to call the delayed TX
+     * @return The SysTime at which the packet will be sent
+     */
+    uint64_t getTxTimestampFromDelayedTime(uint64_t txTime) const;
 
     /**
      * @brief Retrieves the present state of calibration

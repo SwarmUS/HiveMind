@@ -38,8 +38,6 @@ void InterlocManager::startInterloc() {
 
     syncClocks();
 
-    m_decaA.setState(DW_STATE::RESPOND_CALIB);
-
     while (m_decaA.getState() != DW_STATE::CALIBRATED &&
            m_decaB.getState() != DW_STATE::CALIBRATED) {
 
@@ -217,12 +215,12 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
     constructUWBHeader(destinationId, UWBMessages::DATA, UWBMessages::TWR_RESPONSE,
                        (uint8_t*)&responseMsg, sizeof(responseMsg));
 
-    uint64_t respTxTs = pollRxTs + (POLL_RX_TO_RESP_TX_DLY_UUS * UUS_TO_DWT_TIME);
-    device.transmitDelayedAndReceive((uint8_t*)&responseMsg, sizeof(responseMsg), respTxTs, 0,
+    uint64_t respTxTime = pollRxTs + (POLL_RX_TO_RESP_TX_DLY_UUS * UUS_TO_DWT_TIME);
+    device.transmitDelayedAndReceive((uint8_t*)&responseMsg, sizeof(responseMsg), respTxTime, 0,
                                      rxFrame, FINAL_RX_TIMEOUT_UUS);
 
-    // Get the real time at which the response was sent
-    respTxTs = (respTxTs & 0xFFFFFE00UL) + device.getTxAntennaDLY();
+    // Get the real time at which the response will be sent
+    uint64_t respTxTs = device.getTxTimestampFromDelayedTime(respTxTime);
 
     if (!isFrameOk(rxFrame)) {
         return -1;
@@ -284,10 +282,8 @@ bool InterlocManager::sendTWRSequence(uint16_t destinationId, Decawave& device) 
 
     //  Compute final message transmission time
     uint64_t finalTxTime = responseTimestamp + (RESP_RX_TO_FINAL_TX_DLY_UUS * UUS_TO_DWT_TIME);
-
-    // The DW100 delayed transmit has a resolution of 512 DTUs (so lower 9 bits are masked off the
-    // get the time at which it will really be sent)
-    uint64_t finalTxTs = (finalTxTime & 0xFFFFFE00UL) + device.getTxAntennaDLY();
+    // Get the timestamp at which it will really be sent
+    uint64_t finalTxTs = device.getTxTimestampFromDelayedTime(finalTxTime);
 
     //  Construct final message
     DecawaveUtils::tsToBytes((uint8_t*)(&finalMsg.m_respMinPoll),

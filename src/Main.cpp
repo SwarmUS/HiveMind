@@ -20,7 +20,7 @@
 #include <message-handler/MessageSender.h>
 
 constexpr uint16_t gc_taskNormalPriority = tskIDLE_PRIORITY + 1;
-constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 30;
+constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 30; // Higher priority then LwIP
 
 // Need to return the proper comm interface
 typedef std::optional<std::reference_wrapper<ICommInterface>> (*CommInterfaceGetter)();
@@ -255,7 +255,7 @@ int main(int argc, char** argv) {
     s_bittybuzzTask.start();
     s_hardwareInterlocTask.start();
     s_softwareInterlocTask.start();
-    // s_hostMonitorTask.start();
+    s_hostMonitorTask.start();
     s_remoteMonitorTask.start();
 
     Task::startScheduler();

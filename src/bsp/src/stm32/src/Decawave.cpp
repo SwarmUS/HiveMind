@@ -357,7 +357,7 @@ void Decawave::getRxTimestamp(uint64_t* rxTimestamp) {
     dwt_readrxtimestamp((uint8_t*)rxTimestamp);
 }
 
-void Decawave::getSysTime(uint64_t* sysTime) {
+uint64_t Decawave::getSysTime() {
     uint64_t ts = 0;
     uint8_t time[5];
     deca_selectDevice(m_spiDevice);
@@ -368,7 +368,13 @@ void Decawave::getSysTime(uint64_t* sysTime) {
         ts |= time[i];
     }
 
-    *sysTime = ts;
+    return ts;
+}
+
+uint64_t Decawave::getTxTimestampFromDelayedTime(uint64_t txTime) const {
+    // The DW100 delayed transmit has a resolution of 512 DTUs (so lower 9 bits are masked off the
+    // get the time at which it will really be sent)
+    return (txTime & 0xFFFFFE00UL) + getTxAntennaDLY();
 }
 
 DW_STATE Decawave::getState() { return m_state; }
