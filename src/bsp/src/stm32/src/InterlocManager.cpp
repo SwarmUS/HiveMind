@@ -19,8 +19,8 @@ bool InterlocManager::isFrameOk(UWBRxFrame frame) {
 
 InterlocManager::InterlocManager(ILogger& logger) :
     m_logger(logger),
-    m_decaA(DW_A, UWBChannel::CHANNEL_2, UWBSpeed::SPEED_6M8),
-    m_decaB(DW_B, UWBChannel::CHANNEL_2, UWBSpeed::SPEED_6M8) {}
+    m_decaA(DW_A, UWBChannel::DEFAULT_CHANNEL, UWBSpeed::SPEED_6M8),
+    m_decaB(DW_B, UWBChannel::DEFAULT_CHANNEL, UWBSpeed::SPEED_6M8) {}
 
 void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
                                                 void* context) {
@@ -141,7 +141,6 @@ void InterlocManager::stopCalibration() {
 }
 
 void InterlocManager::startDeviceCalibSingleInitiator(uint16_t destinationId, Decawave& device) {
-    device.setChannel(UWBChannel::DEFAULT_CHANNEL);
     device.setTxAntennaDLY(DEFAULT_TX_ANT_DLY);
     device.setRxAntennaDLY(DEFAULT_RX_ANT_DLY);
 
@@ -155,8 +154,6 @@ void InterlocManager::startDeviceCalibSingleResponder(uint16_t destinationId, De
     int32_t error;
     int32_t dwCountOffset;
     // distance between devices in calibration mode in centimeters
-
-    device.setChannel(UWBChannel::DEFAULT_CHANNEL);
     device.setTxAntennaDLY(DEFAULT_TX_ANT_DLY);
     device.setRxAntennaDLY(DEFAULT_RX_ANT_DLY);
 

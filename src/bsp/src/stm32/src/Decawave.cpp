@@ -191,8 +191,7 @@ bool Decawave::transmit(uint8_t* buf, uint16_t length) {
 
 bool Decawave::transmitDelayed(uint8_t* buf, uint16_t length, uint64_t txTimestamp) {
     deca_selectDevice(m_spiDevice);
-    uint32_t txTimeMSB = txTimestamp >> 8;
-    dwt_setdelayedtrxtime(txTimeMSB);
+    dwt_setdelayedtrxtime(txTimestamp >> 8);
 
     transmitInternal(buf, length, DWT_START_TX_DELAYED);
 
@@ -224,8 +223,7 @@ bool Decawave::transmitDelayedAndReceive(uint8_t* buf,
                                          uint16_t rxTimeoutUs) {
     deca_selectDevice(m_spiDevice);
     dwt_setrxaftertxdelay(rxAfterTxTimeUs);
-    uint32_t time = txTimestamp >> 8;
-    dwt_setdelayedtrxtime(time);
+    dwt_setdelayedtrxtime(txTimestamp >> 8);
     dwt_setrxtimeout(rxTimeoutUs);
 
     if (!transmitInternal(buf, length, DWT_START_TX_DELAYED | DWT_RESPONSE_EXPECTED)) {
