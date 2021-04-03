@@ -235,10 +235,10 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
     uint32_t finalRxTs = (uint32_t)rxFrame.m_rxTimestamp;
 
     // evaluate distance
-    uint64_t tRound1 = finalTWRFrame->m_respMinPoll;
-    uint32_t tRound2 = (finalRxTs - (uint32_t)respTxTs);
-    uint64_t tReply1 = (finalTWRFrame->m_finaleMinResp);
-    uint32_t tReply2 = ((uint32_t)respTxTs - (uint32_t)pollRxTs);
+    volatile uint64_t tRound1 = finalTWRFrame->m_respMinPoll;
+    volatile uint32_t tRound2 = (finalRxTs - (uint32_t)respTxTs);
+    volatile uint64_t tReply1 = (finalTWRFrame->m_finaleMinResp);
+    volatile uint32_t tReply2 = ((uint32_t)respTxTs - (uint32_t)pollRxTs);
 
     uint64_t tofDtu =
         (tRound1 * tRound2 - tReply1 * tReply2) / (tRound1 + tRound2 + tReply1 + tReply2);
