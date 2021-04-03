@@ -20,7 +20,7 @@ USB_StatusTypeDef usb_sendData(const uint8_t* buf, uint16_t Len) {
     return usb_hasTxFinished(hcdc);
 }
 
-bool usb_isConnected() { return USB_DEVICE.dev_state == USBD_STATE_CONFIGURED; }
+bool usb_isConnected() { return USB_DEVICE.dev_state == USBD_STATE_CONFIGURED && USB_DEVICE_VPC_OPENED; }
 
 void usb_init() { CircularBuff_init(&cbuffUsb, cbuffUsbData, CBUFF_USB_DATA_SIZE); }
 

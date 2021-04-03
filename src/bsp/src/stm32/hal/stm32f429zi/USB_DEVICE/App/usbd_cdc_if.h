@@ -31,7 +31,7 @@ extern "C" {
 #include "usbd_cdc.h"
 
 /* USER CODE BEGIN INCLUDE */
-
+#include <stdbool.h>
 /* USER CODE END INCLUDE */
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
@@ -66,7 +66,7 @@ extern "C" {
  */
 
 /* USER CODE BEGIN EXPORTED_TYPES */
-
+extern bool hUsbDeviceVCPOpened;
 /* USER CODE END EXPORTED_TYPES */
 
 /**

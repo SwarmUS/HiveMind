@@ -248,7 +248,6 @@ double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& dev
 bool InterlocManager::sendTWRSequence(uint16_t destinationId, Decawave& device) {
 
     UWBRxFrame responseFrame;
-    UWBRxFrame finalFrame;
 
     UWBMessages::TWRPoll pollMsg{};
     UWBMessages::TWRFinal finalMsg{};
