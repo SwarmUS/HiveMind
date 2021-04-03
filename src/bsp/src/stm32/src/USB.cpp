@@ -14,23 +14,25 @@ bool USB::send(const uint8_t* buffer, uint16_t length) {
         m_logger.log(LogLevel::Warn, "Invalid parameters for USB::send");
         return false;
     }
-    while (!usb_isConnected()) {
-        Task::delay(100);
-    }
-
-    int position = 0;
-    while (length - position > USB_RxBUFFER_MAX_SIZE) {
-        usb_sendData(const_cast<uint8_t*>(buffer + position), USB_RxBUFFER_MAX_SIZE);
-        position += USB_RxBUFFER_MAX_SIZE;
-    }
-
-    USB_StatusTypeDef out = usb_sendData(const_cast<uint8_t*>(buffer + position), length);
-
-    if (out != USB_OK) {
-        m_logger.log(LogLevel::Warn, "USB_Send_Data was not able to send the data");
+    if (!usb_isConnected()) {
         return false;
     }
 
+    uint16_t position = 0;
+    while (position < length) {
+        uint16_t lenghtLeft = length - position;
+        uint16_t lengthSend = (lenghtLeft > USB_RxBUFFER_MAX_SIZE) ? USB_RxBUFFER_MAX_SIZE : lenghtLeft;
+
+        USB_StatusTypeDef ret = usb_sendData(const_cast<uint8_t*>(buffer + position), lengthSend);
+        position += lengthSend;
+
+        if (ret != USB_OK) {
+            m_logger.log(LogLevel::Warn, "USB_Send_Data was not able to send the data");
+            return false;
+        }
+
+    }
+    
     return true;
 }
 
@@ -44,12 +46,17 @@ bool USB::receive(uint8_t* buffer, uint16_t length) {
     while (CircularBuff_getLength(&cbuffUsb) < length) {
         // Gets notified everytime a new packet is appended to cbuffUsb
         ulTaskNotifyTake(pdTRUE, 500);
+
+        if(!isConnected()){
+            m_receivingTaskHandle = NULL;
+            return false;
+        }
     }
     m_receivingTaskHandle = NULL;
 
-    CircularBuff_get(&cbuffUsb, buffer, length);
+    uint16_t readLength = CircularBuff_get(&cbuffUsb, buffer, length);
 
-    return true;
+    return readLength == length;
 }
 
 bool USB::isConnected() const { return usb_isConnected(); }
