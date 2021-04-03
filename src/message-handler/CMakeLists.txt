@@ -4,7 +4,7 @@ set(LIB_ALIAS "SwarmUS::HiveMind::MessageHandler")
 set(LIB_SOURCES
     src/MessageDispatcher.cpp
     src/MessageSender.cpp
-    src/HiveMindApiRequestHandler.cpp
+    src/HiveMindHostApiRequestHandler.cpp
     src/MessageHandlerContainer.cpp
 
     src/GreetHandler.cpp
@@ -24,8 +24,8 @@ set(LIB_HEADERS
     include/message-handler/IGreetSender.h
     include/message-handler/GreetSender.h
 
-    include/message-handler/IHiveMindApiRequestHandler.h
-    include/message-handler/HiveMindApiRequestHandler.h
+    include/message-handler/IHiveMindHostApiRequestHandler.h
+    include/message-handler/HiveMindHostApiRequestHandler.h
 
     include/message-handler/MessageHandlerContainer.h
 )
@@ -48,7 +48,7 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::OS
         SwarmUS::HiveMind::Logger
         SwarmUS::Propolis::Cpp::Common
-        SwarmUS::Propolis::Pheromones::HiveMind::Host
+        SwarmUS::Propolis::Pheromones
 )
 
 if(ENABLE_TESTS)

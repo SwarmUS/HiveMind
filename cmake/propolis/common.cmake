@@ -13,7 +13,7 @@ function(propolis_fetch_populate)
         ${PROJECT_NAME}_propolis
 
         GIT_REPOSITORY  https://github.com/SwarmUS/Propolis
-        GIT_TAG         f5a9d35663f656a41fd8a5ec9178ee8251aeaafb
+        GIT_TAG         c34d2c2 
         GIT_PROGRESS    TRUE
     )
 
@@ -33,8 +33,8 @@ function(propolis_fetch_populate)
 
         # Removing warnings from freertos compilation on executable target
         if (DISABLE_EXTERNAL_WARNINGS) 
-            target_compile_options(swarmus-propolis-pheromones-hivemind-host PRIVATE -w)
-            set_target_properties(swarmus-propolis-pheromones-hivemind-host PROPERTIES CXX_CLANG_TIDY "" )
+            target_compile_options(swarmus-propolis-pheromones PRIVATE -w)
+            set_target_properties(swarmus-propolis-pheromones PROPERTIES CXX_CLANG_TIDY "" )
         endif()
 
     endif()

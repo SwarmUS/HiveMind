@@ -1,7 +1,7 @@
 #ifndef __ICOMMINTERFACE_H_
 #define __ICOMMINTERFACE_H_
 
-#include <common/IProtobufStream.h>
+#include <pheromones/IProtobufStream.h>
 
 class ICommInterface : public IProtobufStream {
   public:

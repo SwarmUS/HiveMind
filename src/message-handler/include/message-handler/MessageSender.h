@@ -4,8 +4,8 @@
 #include "IMessageSender.h"
 #include <bsp/IBSP.h>
 #include <cpp-common/ICircularQueue.h>
-#include <hivemind-host/HiveMindHostSerializer.h>
 #include <logger/ILogger.h>
+#include <pheromones/HiveMindHostSerializer.h>
 
 class MessageSender : public IMessageSender {
   public:

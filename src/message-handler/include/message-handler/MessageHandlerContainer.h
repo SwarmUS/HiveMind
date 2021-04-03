@@ -1,26 +1,26 @@
 #ifndef __MESSAGEHANDLERCONTAINER_H_
 #define __MESSAGEHANDLERCONTAINER_H_
 
-#include "HiveMindApiRequestHandler.h"
+#include "HiveMindHostApiRequestHandler.h"
 #include "MessageDispatcher.h"
 #include "MessageSender.h"
 #include <ThreadSafeQueue.h>
-#include <hivemind-host/IHiveMindHostDeserializer.h>
-#include <hivemind-host/IHiveMindHostSerializer.h>
-#include <hivemind-host/MessageDTO.h>
+#include <pheromones/IHiveMindHostDeserializer.h>
+#include <pheromones/IHiveMindHostSerializer.h>
+#include <pheromones/MessageDTO.h>
 
 namespace MessageHandlerContainer {
 
     /**
      *@brief create a message handler
      *@return A new message handler */
-    HiveMindApiRequestHandler createHiveMindApiRequestHandler();
+    HiveMindHostApiRequestHandler createHiveMindHostApiRequestHandler();
 
     /**
      *@brief create a message dispatcher
      *@return A new message dispatcher */
     MessageDispatcher createMessageDispatcher(IHiveMindHostDeserializer& deserializer,
-                                              IHiveMindApiRequestHandler& hivemindApiReqHandler,
+                                              IHiveMindHostApiRequestHandler& hivemindApiReqHandler,
                                               IGreetSender& greetSender);
 
     /**

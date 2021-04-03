@@ -7,7 +7,7 @@ MessageDispatcher::MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
                                      ICircularQueue<MessageDTO>& remoteOutputQ,
                                      ICircularQueue<MessageDTO>& interlocQ,
                                      IHiveMindHostDeserializer& deserializer,
-                                     IHiveMindApiRequestHandler& hivemindApiReqHandler,
+                                     IHiveMindHostApiRequestHandler& hivemindApiReqHandler,
                                      IGreetSender& greetSender,
                                      const IBSP& bsp,
                                      ILogger& logger) :
@@ -31,6 +31,7 @@ bool MessageDispatcher::deserializeAndDispatch() {
         }
 
         uint32_t destinationId = message.getDestinationId();
+
         if (destinationId == m_bsp.getUUId()) {
             return dispatchMessage(message);
         }
@@ -77,26 +78,15 @@ bool MessageDispatcher::dispatchUserCallResponse(const MessageDTO& message,
 
 bool MessageDispatcher::dispatchRequest(const MessageDTO& message, const RequestDTO& request) {
 
-    const std::variant<std::monostate, UserCallRequestDTO, HiveMindApiRequestDTO>& variantReq =
+    const std::variant<std::monostate, UserCallRequestDTO, HiveMindHostApiRequestDTO>& variantReq =
         request.getRequest();
 
     if (const auto* uReq = std::get_if<UserCallRequestDTO>(&variantReq)) {
         return dispatchUserCallRequest(message, *uReq);
     }
     // Handle the response locally since it a hivemind api request
-    if (const auto* hReq = std::get_if<HiveMindApiRequestDTO>(&variantReq)) {
-        uint16_t uuid = m_bsp.getUUId();
-        HiveMindApiResponseDTO hRes = m_hivemindApiReqHandler.handleRequest(*hReq);
-        ResponseDTO resp(request.getId(), hRes);
-        MessageDTO msg(message.getSourceId(), uuid, resp);
-
-        if (message.getSourceId() == uuid) {
-            return m_hostOutputQueue.push(msg);
-        }
-        if (message.getSourceId() != 0) {
-            return m_remoteOutputQueue.push(msg);
-        }
-        return false;
+    if (std::holds_alternative<HiveMindHostApiRequestDTO>(variantReq)) {
+        return m_hivemindApiReqHandler.handleRequest(message);
     }
 
     m_logger.log(LogLevel::Warn, "Unknown request to dispatch, idx: %d", variantReq.index());
@@ -105,17 +95,14 @@ bool MessageDispatcher::dispatchRequest(const MessageDTO& message, const Request
 
 bool MessageDispatcher::dispatchResponse(const MessageDTO& message, const ResponseDTO& response) {
     const std::variant<std::monostate, GenericResponseDTO, UserCallResponseDTO,
-                       HiveMindApiResponseDTO>& variantResp = response.getResponse();
+                       HiveMindHostApiResponseDTO>& variantResp = response.getResponse();
 
     if (const auto* uResp = std::get_if<UserCallResponseDTO>(&variantResp)) {
         return dispatchUserCallResponse(message, *uResp);
     }
 
     // Either a HiveMindAPI or a unknown response, pipe it either way
-    if (message.getDestinationId() == m_bsp.getUUId()) {
-        return m_hostOutputQueue.push(message);
-    }
-    return m_remoteOutputQueue.push(message);
+    return m_hostOutputQueue.push(message);
 }
 
 bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
