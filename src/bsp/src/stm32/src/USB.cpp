@@ -21,7 +21,8 @@ bool USB::send(const uint8_t* buffer, uint16_t length) {
     uint16_t position = 0;
     while (position < length) {
         uint16_t lenghtLeft = length - position;
-        uint16_t lengthSend = (lenghtLeft > USB_RxBUFFER_MAX_SIZE) ? USB_RxBUFFER_MAX_SIZE : lenghtLeft;
+        uint16_t lengthSend =
+            (lenghtLeft > USB_RxBUFFER_MAX_SIZE) ? USB_RxBUFFER_MAX_SIZE : lenghtLeft;
 
         USB_StatusTypeDef ret = usb_sendData(const_cast<uint8_t*>(buffer + position), lengthSend);
         position += lengthSend;
@@ -30,9 +31,8 @@ bool USB::send(const uint8_t* buffer, uint16_t length) {
             m_logger.log(LogLevel::Warn, "USB_Send_Data was not able to send the data");
             return false;
         }
-
     }
-    
+
     return true;
 }
 
@@ -47,7 +47,7 @@ bool USB::receive(uint8_t* buffer, uint16_t length) {
         // Gets notified everytime a new packet is appended to cbuffUsb
         ulTaskNotifyTake(pdTRUE, 500);
 
-        if(!isConnected()){
+        if (!isConnected()) {
             m_receivingTaskHandle = NULL;
             return false;
         }
