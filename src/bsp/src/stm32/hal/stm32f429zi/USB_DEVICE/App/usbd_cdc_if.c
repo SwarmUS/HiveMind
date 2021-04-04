@@ -110,7 +110,7 @@ uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
 extern USBD_HandleTypeDef hUsbDeviceFS;
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
-
+bool hUsbDeviceVCPOpened = false;
 /* USER CODE END EXPORTED_VARIABLES */
 
 /**
@@ -172,6 +172,7 @@ static int8_t CDC_DeInit_FS(void) {
  */
 static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length) {
     /* USER CODE BEGIN 5 */
+    USBD_SetupReqTypedef* req = (USBD_SetupReqTypedef*)pbuf;
     switch (cmd) {
     case CDC_SEND_ENCAPSULATED_COMMAND:
 
@@ -211,19 +212,16 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length) {
         /* 6      | bDataBits  |   1   | Number Data bits (5, 6, 7, 8 or 16).          */
         /*******************************************************************************/
     case CDC_SET_LINE_CODING:
-
         break;
 
     case CDC_GET_LINE_CODING:
-
         break;
 
     case CDC_SET_CONTROL_LINE_STATE:
-
+        hUsbDeviceVCPOpened = req->wValue & 0x0001 != 0;
         break;
 
     case CDC_SEND_BREAK:
-
         break;
 
     default:
