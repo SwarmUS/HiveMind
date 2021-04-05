@@ -41,7 +41,7 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::Logger
         ${catkin_LIBRARIES}
     PRIVATE
-        SwarmUS::Propolis::Pheromones::Common
+        SwarmUS::Propolis::Pheromones
 )
 
 # Mock linker library

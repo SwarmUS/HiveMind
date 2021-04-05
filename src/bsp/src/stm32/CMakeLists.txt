@@ -63,7 +63,7 @@ target_link_libraries(${LIB_NAME}
     PRIVATE
         SwarmUS::HiveMind::HAL
         SwarmUS::HiveMind::LWIP
-        SwarmUS::Propolis::Pheromones::Common
+        SwarmUS::Propolis::Pheromones
         SwarmUS::Propolis::Cpp::Common
 )
 

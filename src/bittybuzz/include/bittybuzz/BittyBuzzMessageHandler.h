@@ -5,8 +5,8 @@
 #include "IBittyBuzzMessageHandler.h"
 #include <bsp/IBSP.h>
 #include <cpp-common/ICircularQueue.h>
-#include <hivemind-host/MessageDTO.h>
 #include <logger/ILogger.h>
+#include <pheromones/MessageDTO.h>
 
 class BittyBuzzMessageHandler : public IBittyBuzzMessageHandler {
   public:

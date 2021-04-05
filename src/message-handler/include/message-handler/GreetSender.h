@@ -2,7 +2,7 @@
 #define __GREETSENDER_H_
 
 #include "IGreetSender.h"
-#include "hivemind-host/MessageDTO.h"
+#include "pheromones/MessageDTO.h"
 #include <bsp/IBSP.h>
 #include <cpp-common/ICircularQueue.h>
 

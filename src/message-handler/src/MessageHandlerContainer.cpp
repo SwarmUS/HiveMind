@@ -7,13 +7,14 @@
 
 constexpr uint16_t gc_queueMaxSize = 8;
 
-HiveMindApiRequestHandler MessageHandlerContainer::createHiveMindApiRequestHandler() {
-    return HiveMindApiRequestHandler(BSPContainer::getBSP(), LoggerContainer::getLogger());
+HiveMindHostApiRequestHandler MessageHandlerContainer::createHiveMindHostApiRequestHandler() {
+    return HiveMindHostApiRequestHandler(BSPContainer::getBSP(), getHostMsgQueue(),
+                                         LoggerContainer::getLogger());
 }
 
 MessageDispatcher MessageHandlerContainer::createMessageDispatcher(
     IHiveMindHostDeserializer& deserializer,
-    IHiveMindApiRequestHandler& hivemindApiReqHandler,
+    IHiveMindHostApiRequestHandler& hivemindApiReqHandler,
     IGreetSender& greetSender) {
     return MessageDispatcher(getBuzzMsgQueue(), getHostMsgQueue(), getRemoteMsgQueue(),
                              getInterlocMsgQueue(), deserializer, hivemindApiReqHandler,

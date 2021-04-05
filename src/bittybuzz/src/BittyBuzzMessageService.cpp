@@ -1,5 +1,5 @@
 #include "BittyBuzzMessageService.h"
-#include "hivemind-host/MessageDTO.h"
+#include "pheromones/MessageDTO.h"
 #include <bbzringbuf.h>
 
 BittyBuzzMessageService::BittyBuzzMessageService(ICircularQueue<MessageDTO>& hostQueue,

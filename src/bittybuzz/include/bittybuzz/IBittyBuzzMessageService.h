@@ -1,7 +1,7 @@
 #ifndef __IBITTYBUZZMESSAGESERVICE_H_
 #define __IBITTYBUZZMESSAGESERVICE_H_
 
-#include <hivemind-host/MessageDTO.h>
+#include <pheromones/MessageDTO.h>
 
 /**
  *@brief message service use by the BBVM. Constructs the messages and dispatches it at the
