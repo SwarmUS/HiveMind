@@ -1,6 +1,7 @@
 #include "InterlocManager.h"
 #include "bsp/BSPContainer.h"
 #include <Task.h>
+#include <math.h>
 #define NB_CALIB_MEASUREMENTS 10
 
 bool InterlocManager::isFrameOk(UWBRxFrame frame) {
@@ -18,7 +19,9 @@ bool InterlocManager::isFrameOk(UWBRxFrame frame) {
 }
 
 InterlocManager::InterlocManager(ILogger& logger) :
-    m_logger(logger), m_decaA(DW_A), m_decaB(DW_B) {}
+    m_logger(logger),
+    m_decaA(DW_A, UWBChannel::CHANNEL_5, UWBSpeed::SPEED_6M8),
+    m_decaB(DW_B, UWBChannel::CHANNEL_5, UWBSpeed::SPEED_6M8) {}
 
 void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
                                                 void* context) {
@@ -36,27 +39,76 @@ void InterlocManager::startInterloc() {
 
     syncClocks();
 
-    while (m_decaA.getState() != DW_STATE::CALIBRATED &&
-           m_decaB.getState() != DW_STATE::CALIBRATED) {
+    UWBRxFrame rxA;
+    UWBRxFrame rxB;
+    double D = 0.20;
 
-        if (m_decaA.getState() == DW_STATE::RESPOND_CALIB) {
-            m_logger.log(LogLevel::Info, "Starting DW calibration as responder on DW A");
-            startDeviceCalibSingleResponder(0x69, m_decaA);
-        } else if (m_decaA.getState() == DW_STATE::SEND_CALIB) {
-            m_logger.log(LogLevel::Info, "Starting DW calibration as initiator on DW A");
-            startDeviceCalibSingleInitiator(0x69, m_decaA);
+    int64_t tdoa1 = 0;
+
+    while (true) {
+        m_decaB.receiveAsync(rxB, 0);
+        m_decaA.receive(rxA, 0);
+
+        if (rxA.m_status == UWBRxStatus::FINISHED && rxB.m_status == UWBRxStatus::FINISHED) {
+            volatile float aSFD = rxA.getSFDAngle();
+            volatile float bSFD = rxB.getSFDAngle();
+            double pdoa = (rxA.getAccumulatorAngle() - rxA.getSFDAngle() -
+                           rxB.getAccumulatorAngle() + rxB.getSFDAngle());
+
+            pdoa += M_PI;
+
+            while (pdoa >= 2 * M_PI) {
+                pdoa -= 2 * M_PI;
+            }
+            while (pdoa < 0) {
+                pdoa += 2 * M_PI;
+            }
+
+            pdoa -= M_PI;
+
+            volatile int64_t tdDTU = rxA.m_rxTimestamp - rxB.m_rxTimestamp;
+            volatile double tdoa = tdDTU * DWT_TIME_UNITS;
+            volatile double p = tdoa * SPEED_OF_LIGHT;
+            volatile double angle = asin(p / D);
+            angle *= (180 / M_PI);
+            pdoa *= (180 / M_PI);
+
+            //            if (tdoa1 == 0) {
+            //                tdoa1 = tdDTU;
+            //            } else {
+            //                double mean = (tdoa1 + tdDTU) / 2.0;
+            //                tdoa1 = 0;
+
+            m_logger.log(LogLevel::Error, "%3.2f", pdoa);
+            //            if (tdDTU < 1000 && tdDTU > -1000) {
+            //                m_logger.log(LogLevel::Error, "%3.2f", (double)tdDTU);
+            //            }
+            //}
+            // syncClocks();
         }
-
-        if (m_decaB.getState() == DW_STATE::RESPOND_CALIB) {
-            m_logger.log(LogLevel::Info, "Starting DW calibration as responder on DW B");
-            startDeviceCalibSingleResponder(0x69, m_decaB);
-        } else if (m_decaB.getState() == DW_STATE::SEND_CALIB) {
-            m_logger.log(LogLevel::Info, "Starting DW calibration as initiator on DW B");
-            startDeviceCalibSingleInitiator(0x69, m_decaB);
-        }
-
-        Task::delay(10);
     }
+
+    //    while (m_decaA.getState() != DW_STATE::CALIBRATED &&
+    //           m_decaB.getState() != DW_STATE::CALIBRATED) {
+    //
+    //        if (m_decaA.getState() == DW_STATE::RESPOND_CALIB) {
+    //            m_logger.log(LogLevel::Info, "Starting DW calibration as responder on DW A");
+    //            startDeviceCalibSingleResponder(0x69, m_decaA);
+    //        } else if (m_decaA.getState() == DW_STATE::SEND_CALIB) {
+    //            m_logger.log(LogLevel::Info, "Starting DW calibration as initiator on DW A");
+    //            startDeviceCalibSingleInitiator(0x69, m_decaA);
+    //        }
+    //
+    //        if (m_decaB.getState() == DW_STATE::RESPOND_CALIB) {
+    //            m_logger.log(LogLevel::Info, "Starting DW calibration as responder on DW B");
+    //            startDeviceCalibSingleResponder(0x69, m_decaB);
+    //        } else if (m_decaB.getState() == DW_STATE::SEND_CALIB) {
+    //            m_logger.log(LogLevel::Info, "Starting DW calibration as initiator on DW B");
+    //            startDeviceCalibSingleInitiator(0x69, m_decaB);
+    //        }
+    //
+    //        Task::delay(10);
+    //    }
 }
 
 void InterlocManager::syncClocks() {

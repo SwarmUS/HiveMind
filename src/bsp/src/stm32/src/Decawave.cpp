@@ -283,6 +283,7 @@ void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
         dwt_readfromdevice(RX_TTCKO_ID, 4, 1, &(frame->m_sfdAngleRegister));
         // Read information needed for phase calculation
         uint16_t firstPathIdx = dwt_read16bitoffsetreg(RX_TIME_ID, RX_TIME_FP_INDEX_OFFSET);
+        firstPathIdx = ((int)(((float)firstPathIdx) * (1.0f / 64.0f) + 0.5f)) * 4.0f;
         // Read one extra byte as readaccdata() returns a dummy byte
         dwt_readaccdata(frame->m_firstPathAccumulator, 5, firstPathIdx);
 

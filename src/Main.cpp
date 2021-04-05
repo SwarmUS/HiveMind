@@ -141,7 +141,7 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class CommMonitoringTask : public AbstractTask<4 * configMINIMAL_STACK_SIZE> {
+class CommMonitoringTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
   public:
     CommMonitoringTask(const char* taskName,
                        UBaseType_t priority,
