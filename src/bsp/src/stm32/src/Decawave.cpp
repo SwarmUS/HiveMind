@@ -7,7 +7,6 @@
 
 void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
-
     BaseType_t taskWoken = pdFALSE;
 
     if (static_cast<Decawave*>(context)->m_rxTaskHandle != NULL) {
@@ -175,7 +174,13 @@ bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
     dwt_writetxdata(length + UWB_CRC_LENGTH, m_txBuffer.data(), 0);
     dwt_writetxfctrl(length + UWB_CRC_LENGTH, 0, 0);
 
-    dwt_starttx(flags);
+    int txStatus = dwt_starttx(flags);
+
+    if (txStatus < 0) {
+        // TODO: For debugging. Remove and handle correctly in real application
+        while (true) {
+        }
+    }
 
     return true;
 }
@@ -321,14 +326,22 @@ void Decawave::setSyncMode(DW_SYNC_MODE syncMode) {
 }
 
 void Decawave::setTxAntennaDLY(uint16 delay) {
+    m_txAntennaDelayDTU = delay;
+
     deca_selectDevice(m_spiDevice);
     dwt_settxantennadelay(delay);
 }
 
 void Decawave::setRxAntennaDLY(uint16 delay) {
+    m_rxAntennaDelayDTU = delay;
+
     deca_selectDevice(m_spiDevice);
     dwt_setrxantennadelay(delay);
 }
+
+uint16_t Decawave::getRxAntennaDLY() const { return m_rxAntennaDelayDTU; }
+
+uint16_t Decawave::getTxAntennaDLY() const { return m_rxAntennaDelayDTU; }
 
 void Decawave::getTxTimestamp(uint64_t* txTimestamp) {
     deca_selectDevice(m_spiDevice);
@@ -340,21 +353,26 @@ void Decawave::getRxTimestamp(uint64_t* rxTimestamp) {
     dwt_readrxtimestamp((uint8_t*)rxTimestamp);
 }
 
-void Decawave::getSysTime(uint64_t* sysTime) {
+uint64_t Decawave::getSysTime() {
+    uint64_t ts = 0;
+    uint8_t time[5];
     deca_selectDevice(m_spiDevice);
-    dwt_readsystime((uint8_t*)sysTime);
+    dwt_readsystime(time);
+
+    for (int i = 4; i >= 0; i--) {
+        ts <<= 8;
+        ts |= time[i];
+    }
+
+    return ts;
+}
+
+uint64_t Decawave::getTxTimestampFromDelayedTime(uint64_t txTime) const {
+    // The DW100 delayed transmit has a resolution of 512 DTUs (so lower 9 bits are masked off the
+    // get the time at which it will really be sent)
+    return (txTime & 0xFFFFFE00UL) + getTxAntennaDLY();
 }
 
 DW_STATE Decawave::getState() { return m_state; }
 
 void Decawave::setState(DW_STATE state) { m_state = state; }
-
-uint16_t Decawave::getRxAntennaDLY() {
-    deca_selectDevice(m_spiDevice);
-    return dwt_read16bitoffsetreg(LDE_IF_ID, LDE_RXANTD_OFFSET);
-}
-
-uint16_t Decawave::getTxAntennaDLY() {
-    deca_selectDevice(m_spiDevice);
-    return dwt_read16bitoffsetreg(TX_ANTD_ID, TX_ANTD_OFFSET);
-}

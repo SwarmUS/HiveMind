@@ -15,10 +15,13 @@
 #define DEFAULT_RX_ANT_DLY 16505
 
 #define POLL_TX_TO_RESP_RX_DLY_UUS 300
-#define RESP_RX_TO_FINAL_TX_DLY_UUS 4000
-#define POLL_RX_TO_RESP_TX_DLY_UUS 2750
-#define RESP_RX_TIMEOUT_UUS 4000
-#define FINAL_RX_TIMEOUT_UUS 3300
+#define RESP_RX_TO_FINAL_TX_DLY_UUS 900
+#define POLL_RX_TO_RESP_TX_DLY_UUS 900
+
+#define POLL_RX_TIMEOUT_UUS 1000
+#define RESP_RX_TIMEOUT_UUS 1000
+#define FINAL_RX_TIMEOUT_UUS 1000
+
 #define UUS_TO_DWT_TIME 63898
 #define SPEED_OF_LIGHT 299792458
 #define DW_INTERNAL_CLOCK_RFEQ 63897600000
@@ -178,13 +181,13 @@ class Decawave {
      * @brief Get transmission antenna delay in DecawaveTimeUnits
      * @return Delay in DecawaveTimeUnits
      */
-    uint16_t getTxAntennaDLY();
+    uint16_t getTxAntennaDLY() const;
 
     /**
      * @brief Get reception antenna delay in DecawaveTimeUnits
      * @return Delay in DecawaveTimeUnits
      */
-    uint16_t getRxAntennaDLY();
+    uint16_t getRxAntennaDLY() const;
 
     /**
      * @brief Retrieves transmission timestamp in DecawaveTimeUnits
@@ -200,9 +203,17 @@ class Decawave {
 
     /**
      * @brief Retrieves present time DecawaveTimeUnits
-     * @param sysTime Present timestamp in DecawaveTimeUnits
+     * @return Present timestamp in DecawaveTimeUnits
      */
-    void getSysTime(uint64_t* sysTime);
+    uint64_t getSysTime();
+
+    /**
+     * @brief Returns the system time (in DTUs) at which a message will be sent when a delayed tx is
+     * called with the argument
+     * @param txTime The time used to call the delayed TX
+     * @return The SysTime at which the packet will be sent
+     */
+    uint64_t getTxTimestampFromDelayedTime(uint64_t txTime) const;
 
     /**
      * @brief Retrieves the present state of calibration
@@ -222,6 +233,8 @@ class Decawave {
 
     UWBChannel m_channel;
     UWBSpeed m_speed;
+    uint16_t m_rxAntennaDelayDTU = DEFAULT_RX_ANT_DLY;
+    uint16_t m_txAntennaDelayDTU = DEFAULT_TX_ANT_DLY;
 
     TaskHandle_t m_rxTaskHandle;
     dwt_cb_data_t m_callbackData;

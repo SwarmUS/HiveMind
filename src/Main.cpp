@@ -20,7 +20,7 @@
 #include <pheromones/HiveMindHostSerializer.h>
 
 constexpr uint16_t gc_taskNormalPriority = tskIDLE_PRIORITY + 1;
-constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 5;
+constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 30; // Higher priority then LwIP
 
 // Need to return the proper comm interface
 typedef std::optional<std::reference_wrapper<ICommInterface>> (*CommInterfaceGetter)();
