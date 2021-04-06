@@ -5,7 +5,7 @@ Interloc::Interloc(ILogger& logger, IInterlocManager& interlocManager) :
     m_interlocManager.setPositionUpdateCallback(onPositionUpdateStaticCallback, this);
 }
 
-std::optional<RelativePosition> Interloc::getRobotPosition(uint16_t robotId) {
+std::optional<RelativePosition> Interloc::getRobotPosition(uint16_t robotId) const {
     std::optional<uint8_t> idx = getRobotArrayIndex(robotId);
 
     if (idx) {
@@ -15,7 +15,7 @@ std::optional<RelativePosition> Interloc::getRobotPosition(uint16_t robotId) {
     return {};
 }
 
-bool Interloc::isLineOfSight(uint16_t robotId) {
+bool Interloc::isLineOfSight(uint16_t robotId) const {
     std::optional<RelativePosition> position = getRobotPosition(robotId);
 
     if (position) {
@@ -42,7 +42,7 @@ void Interloc::onPositionUpdateCallback(InterlocUpdate positionUpdate) {
     }
 }
 
-std::optional<uint8_t> Interloc::getRobotArrayIndex(uint16_t robotId) {
+std::optional<uint8_t> Interloc::getRobotArrayIndex(uint16_t robotId) const {
     // TODO: migrate to a hashmap
     for (unsigned int i = 0; i < m_positionsTable.m_positions.size(); i++) {
         if (m_positionsTable.m_positions[i].m_robotId == robotId) {
