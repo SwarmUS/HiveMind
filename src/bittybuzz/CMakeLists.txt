@@ -79,6 +79,7 @@ target_link_libraries(${LIB_NAME}
     PUBLIC
         BittyBuzz
         SwarmUS::HiveMind::Logger
+        SwarmUS::HiveMind::Interloc
         SwarmUS::HiveMind::MessageHandler
         SwarmUS::Propolis::Cpp::Common
         SwarmUS::Propolis::Pheromones
