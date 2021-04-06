@@ -47,7 +47,6 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::BSP
         SwarmUS::HiveMind::OS
         SwarmUS::HiveMind::Logger
-        SwarmUS::HiveMind::Interloc
         SwarmUS::Propolis::Cpp::Common
         SwarmUS::Propolis::Pheromones
 )

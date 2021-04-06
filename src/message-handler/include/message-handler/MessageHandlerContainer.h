@@ -43,11 +43,6 @@ namespace MessageHandlerContainer {
      *@return A reference to the interloc message queue */
     ThreadSafeQueue<MessageDTO>& getInterlocMsgQueue();
 
-    /**
-     *@brief get interloc position update msg queu
-     *@return A reference to a queue with the id of robots with new positions */
-    ThreadSafeQueue<uint16_t>& getInterlocPosUpdateQueue();
-
 } // namespace MessageHandlerContainer
 
 #endif // __MESSAGEHANDLERCONTAINER_H_
