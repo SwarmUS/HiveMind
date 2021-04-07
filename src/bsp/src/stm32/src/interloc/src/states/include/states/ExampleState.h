@@ -4,9 +4,7 @@
 #include "IInterlocState.h"
 
 class ExampleState : public IInterlocState {
-    void enter(InterlocStateHandler& context) override;
     void process(InterlocStateHandler& context) override;
-    void exit(InterlocStateHandler& context) override;
 };
 
 #endif // HIVE_MIND_EXAMPLESTATE_H
