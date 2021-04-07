@@ -19,6 +19,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsBroadcast) {
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
     BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
+    EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     EXPECT_CALL(messageServiceMock, sendBuzzMessage).Times(1).WillOnce(testing::Return(0));
 

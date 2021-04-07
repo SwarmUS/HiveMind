@@ -19,10 +19,11 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsListen) {
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
     BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
+    EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
-    EXPECT_CALL(messageServiceMock, sendBuzzMessage).Times(1).WillOnce(testing::Return(0));
 
-    std::array<uint8_t, 8> payload = {0, 1, 0, 8, 0, 41, 42, 0};
+    uint8_t strId = BBZSTRID_key;
+    std::array<uint8_t, 8> payload = {0, 1, 0, strId, 0, 41, 42, 0};
     bbzmsg_payload_t broadcastMessage;
     broadcastMessage.buffer = payload.data();
     broadcastMessage.capacity = 8;
@@ -36,11 +37,13 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsListen) {
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
 
-    bbzinmsg_queue_append(&payload);
+    bbzinmsg_queue_append(&broadcastMessage);
+
     // Then
     m_bittybuzzVm->step();
 
     // Expect
+    EXPECT_EQ(g_assertTrueCallCount, 3);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
 }

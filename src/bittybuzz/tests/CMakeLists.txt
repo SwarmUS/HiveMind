@@ -22,7 +22,7 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmStigmergyGetTests.cpp
     vm_tests/BittyBuzzVmNeighborsDistanceTests.cpp
     vm_tests/BittyBuzzVmNeighborsBroadcastTests.cpp
-#    vm_tests/BittyBuzzVmNeighborsListenTests.cpp
+    vm_tests/BittyBuzzVmNeighborsListenTests.cpp
 
     vm_tests/BittyBuzzVmRegisterClosureFunctionTests.cpp
     vm_tests/BittyBuzzVmRegisterClosureFunctionSelfTests.cpp

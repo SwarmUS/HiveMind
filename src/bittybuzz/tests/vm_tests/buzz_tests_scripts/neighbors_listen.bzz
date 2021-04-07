@@ -1,9 +1,9 @@
 function init() {
   neighbors.listen("key",
     function(vid, value, rid) {
-      assert_true(vid == 42);
+      assert_true(vid == "key");
       assert_true(value == 42);
-      assert_true(value == 1);
+      assert_true(rid == 1);
 
     })
 }
