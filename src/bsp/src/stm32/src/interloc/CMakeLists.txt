@@ -5,14 +5,18 @@ set(LIB_SOURCES
         src/Decawave.cpp
         src/DecawaveUtils.cpp
         src/InterlocManager.cpp
-        src/UWBRxFrame.cpp)
+        src/UWBRxFrame.cpp
+        src/InterlocStateHandler.cpp
+        src/InterlocBSPContainer.cpp)
 
 set(LIB_HEADERS
         include/interloc/Decawave.h
         include/interloc/DecawaveUtils.h
         include/interloc/UWBRxFrame.h
         include/interloc/InterlocManager.h
-        include/interloc/UWBMessages.h)
+        include/interloc/UWBMessages.h
+        include/interloc/InterlocStateHandler.h
+        include/interloc/InterlocBSPContainer.h)
 
 add_library(${LIB_NAME}
         ${LIB_SOURCES}
@@ -33,8 +37,6 @@ target_link_libraries(${LIB_NAME}
         # Defined libraries
         SwarmUS::HiveMind::OS
         SwarmUS::HiveMind::Logger
-
-        PRIVATE
         SwarmUS::HiveMind::HAL
         SwarmUS::HiveMind::BSP::Platform::Interloc::States
         )

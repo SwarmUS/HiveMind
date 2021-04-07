@@ -3,6 +3,7 @@
 
 #include "Decawave.h"
 #include "UWBMessages.h"
+#include "interloc/InterlocStateHandler.h"
 #include <bsp/IInterlocManager.h>
 #include <logger/ILogger.h>
 
@@ -11,7 +12,7 @@
 
 class InterlocManager : public IInterlocManager {
   public:
-    explicit InterlocManager(ILogger& logger);
+    InterlocManager(ILogger& logger, InterlocStateHandler& stateHandler);
     ~InterlocManager() override = default;
 
     void startInterloc() override;
@@ -31,6 +32,8 @@ class InterlocManager : public IInterlocManager {
 
   private:
     ILogger& m_logger;
+    InterlocStateHandler& m_stateHandler;
+
     Decawave m_decaA;
     Decawave m_decaB;
 

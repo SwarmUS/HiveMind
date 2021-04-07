@@ -1,6 +1,7 @@
 #include "interloc/InterlocManager.h"
 #include "bsp/BSPContainer.h"
 #include <Task.h>
+
 #define NB_CALIB_MEASUREMENTS 10
 
 bool InterlocManager::isFrameOk(UWBRxFrame frame) {
@@ -17,8 +18,9 @@ bool InterlocManager::isFrameOk(UWBRxFrame frame) {
     return true;
 }
 
-InterlocManager::InterlocManager(ILogger& logger) :
+InterlocManager::InterlocManager(ILogger& logger, InterlocStateHandler& stateHandler) :
     m_logger(logger),
+    m_stateHandler(stateHandler),
     m_decaA(DW_A, UWBChannel::DEFAULT_CHANNEL, UWBSpeed::SPEED_6M8),
     m_decaB(DW_B, UWBChannel::DEFAULT_CHANNEL, UWBSpeed::SPEED_6M8) {}
 
@@ -37,6 +39,11 @@ void InterlocManager::startInterloc() {
     }
 
     syncClocks();
+
+    // TODO: Uncomment to start the state machine
+    //    while (true) {
+    //        m_stateHandler.process();
+    //    }
 
     while (m_decaA.getState() != DW_STATE::CALIBRATED &&
            m_decaB.getState() != DW_STATE::CALIBRATED) {

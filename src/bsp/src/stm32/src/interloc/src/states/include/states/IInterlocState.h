@@ -1,13 +1,13 @@
 #ifndef __IINTERLOCSTATE_H__
 #define __IINTERLOCSTATE_H__
 
-#include <interloc/InterlocManager.h>
+class InterlocStateHandler;
 
 class IInterlocState {
   public:
-    virtual void enter(InterlocManager& context) = 0;
-    virtual void process(InterlocManager& context) = 0;
-    virtual void exit(InterlocManager& context) = 0;
+    virtual void enter(InterlocStateHandler& context) = 0;
+    virtual void process(InterlocStateHandler& context) = 0;
+    virtual void exit(InterlocStateHandler& context) = 0;
 };
 
 #endif //__IINTERLOCSTATE_H__
