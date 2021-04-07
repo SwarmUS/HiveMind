@@ -66,6 +66,8 @@ void InterlocManager::startInterloc() {
 
             pdoa -= M_PI;
 
+            Task::delay(1);
+
             volatile int64_t tdDTU = rxA.m_rxTimestamp - rxB.m_rxTimestamp;
             volatile double tdoa = tdDTU * DWT_TIME_UNITS;
             volatile double p = tdoa * SPEED_OF_LIGHT;
@@ -79,10 +81,11 @@ void InterlocManager::startInterloc() {
             //                double mean = (tdoa1 + tdDTU) / 2.0;
             //                tdoa1 = 0;
 
-            m_logger.log(LogLevel::Error, "%3.2f", pdoa);
-            //            if (tdDTU < 1000 && tdDTU > -1000) {
-            //                m_logger.log(LogLevel::Error, "%3.2f", (double)tdDTU);
-            //            }
+            if (tdDTU < 1000 && tdDTU > -1000) {
+                m_logger.log(LogLevel::Error, "%3.2f;%3.2f", (double)tdDTU, pdoa);
+                // m_logger.log(LogLevel::Error, "%3.2f", pdoa);
+            }
+            Task::delay(10);
             //}
             // syncClocks();
         }
