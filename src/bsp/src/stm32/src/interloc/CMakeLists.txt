@@ -8,11 +8,11 @@ set(LIB_SOURCES
         src/UWBRxFrame.cpp)
 
 set(LIB_HEADERS
-        include/Decawave.h
-        include/DecawaveUtils.h
-        include/UWBRxFrame.h
-        include/InterlocManager.h
-        include/UWBMessages.h)
+        include/interloc/Decawave.h
+        include/interloc/DecawaveUtils.h
+        include/interloc/UWBRxFrame.h
+        include/interloc/InterlocManager.h
+        include/interloc/UWBMessages.h)
 
 add_library(${LIB_NAME}
         ${LIB_SOURCES}
@@ -23,9 +23,9 @@ add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
 target_include_directories(${LIB_NAME}
         PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
         ${BSP_CMAKE_DIR}/include
-        include
         )
 
 target_link_libraries(${LIB_NAME}
@@ -36,4 +36,7 @@ target_link_libraries(${LIB_NAME}
 
         PRIVATE
         SwarmUS::HiveMind::HAL
+        SwarmUS::HiveMind::BSP::Platform::Interloc::States
         )
+
+add_subdirectory(src/states)

@@ -8,7 +8,7 @@
 #include "UserInterface.h"
 #include "bsp/SettingsContainer.h"
 #include "logger/LoggerContainer.h"
-#include <InterlocManager.h>
+#include <interloc/InterlocManager.h>
 
 IBSP& BSPContainer::getBSP() {
     static BSP s_bsp;
