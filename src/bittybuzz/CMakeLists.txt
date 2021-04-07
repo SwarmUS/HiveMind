@@ -38,6 +38,9 @@ set(LIB_HEADERS
     include/bittybuzz/BittyBuzzMessageService.h
     include/bittybuzz/IBittyBuzzMessageService.h
 
+    include/bittybuzz/BittyBuzzNeighborsManager.h
+    include/bittybuzz/IBittyBuzzNeighborsManager.h
+
     include/bittybuzz/BittyBuzzSystem.h
     include/bittybuzz/BittyBuzzFactory.h
     include/bittybuzz/BittyBuzzContainer.h
@@ -52,6 +55,7 @@ set(LIB_SOURCES
     src/BittyBuzzClosureRegister.cpp
     src/BittyBuzzMessageHandler.cpp
     src/BittyBuzzMessageService.cpp
+    src/BittyBuzzNeighborsManager.cpp
 
     src/BittyBuzzSystem.cpp
     src/BittyBuzzFactory.cpp

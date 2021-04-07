@@ -23,3 +23,5 @@ BittyBuzzMessageService& BittyBuzzContainer::getBBZMessageService() {
         BSPContainer::getBSP(), LoggerContainer::getLogger());
     return s_bbzMessageService;
 }
+
+BittyBuzzNeighborsManager& BittyBuzzContainer::getBBZNeighborsManager() { static BittyBuzzNei }

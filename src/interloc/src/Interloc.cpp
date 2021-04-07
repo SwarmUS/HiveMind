@@ -69,7 +69,7 @@ void Interloc::updateRobotPosition(RelativePosition& positionToUpdate, InterlocU
     }
 }
 
-const PositionsTable& Interloc::getPositionsTable() { return m_positionsTable; }
+const PositionsTable& Interloc::getPositionsTable() const { return m_positionsTable; }
 
 void Interloc::onPositionUpdateStaticCallback(void* context, InterlocUpdate update) {
     static_cast<Interloc*>(context)->onPositionUpdateCallback(update);

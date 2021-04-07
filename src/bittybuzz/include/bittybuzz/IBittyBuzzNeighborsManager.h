@@ -3,7 +3,9 @@
 
 class IBittyBuzzNeighborsManager {
   public:
-    virtual ~IBittyBuzzNeighborsManager() = 0;
+    virtual ~IBittyBuzzNeighborsManager() = default;
+
+    virtual void updateNeighbors() = 0;
 };
 
 #endif // __IBITTYBUZZNEIGHBORSMANAGER_H_

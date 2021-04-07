@@ -8,6 +8,7 @@
 #include "bittybuzz/IBittyBuzzMessageService.h"
 #include "bittybuzz/IBittyBuzzStringResolver.h"
 #include "mocks/BSPInterfaceMock.h"
+#include "mocks/BittyBuzzNeighbotsManagerInterfaceMock.h"
 #include "mocks/LoggerInterfaceMock.h"
 #include "mocks/UserInterfaceMock.h"
 #include <gtest/gtest.h>
@@ -20,6 +21,7 @@ class BittyBuzzVmTestFixture : public testing::Test {
     LoggerInterfaceMock* m_loggerMock;
     BSPInterfaceMock* m_bspMock;
     UserInterfaceMock m_uiMock;
+    BittyBuzzNeighborsManagerInterfaceMock m_neightborsManagerMock;
 
     int logCounter = 0;
     std::string logLastFormat;
@@ -44,8 +46,8 @@ class BittyBuzzVmTestFixture : public testing::Test {
 
         m_bittybuzzVm = new BittyBuzzVm(*m_bittybuzzBytecode, *bittyBuzzStringResolver,
                                         *bittyBuzzMessageHandler, *bittyBuzzClosureRegister,
-                                        *bittyBuzzMessageService, *m_bspMock, *m_loggerMock,
-                                        m_uiMock, container);
+                                        *bittyBuzzMessageService, m_neightborsManagerMock,
+                                        *m_bspMock, *m_loggerMock, m_uiMock, container);
     }
 
     void TearDown() override {
