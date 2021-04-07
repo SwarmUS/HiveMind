@@ -4,6 +4,7 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform::Interloc::States")
 set(LIB_SOURCES
     src/InterlocStateContainer.cpp
     src/ExampleState.cpp
+    src/SendPollState.cpp
 )
 
 set(LIB_HEADERS
