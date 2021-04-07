@@ -1,0 +1,12 @@
+function init() {
+  neighbors.listen("key",
+    function(vid, value, rid) {
+      assert_true(vid == 42);
+      assert_true(value == 42);
+      assert_true(value == 1);
+
+    })
+}
+
+function step() {
+}
