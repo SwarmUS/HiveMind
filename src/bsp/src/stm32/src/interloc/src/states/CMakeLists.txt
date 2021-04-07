@@ -10,6 +10,11 @@ set(LIB_HEADERS
     include/states/InterlocStateContainer.h
     include/states/IInterlocState.h
     include/states/ExampleState.h
+    include/states/SendFinalState.h
+    include/states/SendPollState.h
+    include/states/WaitFinalState.h
+    include/states/WaitPollState.h
+    include/states/WaitResponseState.h
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_HEADERS})

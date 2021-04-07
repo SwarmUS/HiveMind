@@ -45,8 +45,9 @@ namespace UWBMessages {
 
     struct TWRFinal {
         DWFrame m_headerFrame;
-        uint64_t m_respMinPoll;
-        uint64_t m_finaleMinResp;
+        uint64_t m_pollTxTs;
+        uint64_t m_responseRxTs;
+        uint64_t m_finalTxTs;
     };
 
 } // namespace UWBMessages
