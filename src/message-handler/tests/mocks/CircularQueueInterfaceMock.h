@@ -23,9 +23,9 @@ class CircularQueueInterfaceMock final : public ICircularQueue<T> {
 
     MOCK_METHOD(bool, isEmpty, (), (const override));
 
-    MOCK_METHOD(uint16_t, getLength, (), (const override));
+    MOCK_METHOD(uint32_t, getLength, (), (const override));
 
-    MOCK_METHOD(uint16_t, getFreeSize, (), (const override));
+    MOCK_METHOD(uint32_t, getFreeSize, (), (const override));
 
     MOCK_METHOD(std::optional<std::reference_wrapper<T>>, getNextAllocation, (), (override));
 
