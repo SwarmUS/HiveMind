@@ -21,6 +21,7 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmStigmergyPutTests.cpp
     vm_tests/BittyBuzzVmStigmergyGetTests.cpp
     vm_tests/BittyBuzzVmNeighborsDistanceTests.cpp
+    vm_tests/BittyBuzzVmNeighborsBroadcastTests.cpp
 
     vm_tests/BittyBuzzVmRegisterClosureFunctionTests.cpp
     vm_tests/BittyBuzzVmRegisterClosureFunctionSelfTests.cpp
@@ -174,6 +175,11 @@ bittybuzz_generate_bytecode(neighbors-distance
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
+bittybuzz_generate_bytecode(neighbors-broadcast
+    ${BZZ_TEST_SCRIPTS_LOCATION}/neighbors_broadcast.bzz
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
 add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})
 
 target_link_libraries(${TEST_NAME}
@@ -208,6 +214,7 @@ target_link_libraries(${TEST_NAME}
         stigmergy-put
         stigmergy-get
         neighbors-distance
+        neighbors-broadcast
 )
 
 add_test(NAME ${TEST_NAME}

@@ -1,0 +1,7 @@
+
+function init() {
+}
+
+function step() {
+  neighbors.broadcast("key", 42);
+}
