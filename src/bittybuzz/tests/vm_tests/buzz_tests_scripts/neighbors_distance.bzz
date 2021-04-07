@@ -2,6 +2,7 @@ function init() {
 }
 
 function step() {
-  var dist = neighbors.get(2);
-  assert_true(dist,42);
+  var neighbor = neighbors.get(1);
+  assert_true(neighbor.distance == 42);
+  assert_true(neighbor.azimuth == 24);
 }
