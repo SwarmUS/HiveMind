@@ -4,6 +4,7 @@
 #include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
 #include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
+#include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include "mocks/CircularQueueInterfaceMock.h"
 #include <array>
@@ -24,7 +25,9 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_invalidArgs) {
     BittyBuzzStringResolverInterfaceMock stringResolver;
     BittyBuzzMessageHandlerInterfaceMock messageHandler;
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
+    BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
+    EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(0);
     EXPECT_CALL(messageHandler, messageQueueLength).Times(0);
     EXPECT_CALL(closureRegister, registerClosure(testing::_, testing::_, testing::_, testing::_))
         .Times(0);
@@ -37,7 +40,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_invalidArgs) {
         {{BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &closureRegister,
-          &messageServiceMock, functionRegisters);
+          &messageServiceMock, &neighborsManagerMock, functionRegisters);
 
     m_bittybuzzVm->step();
 
