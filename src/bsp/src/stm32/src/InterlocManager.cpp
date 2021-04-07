@@ -43,9 +43,22 @@ void InterlocManager::startInterloc() {
     UWBRxFrame rxB;
     double D = 0.20;
 
-    int64_t tdoa1 = 0;
+    m_decaA.setRxAntennaDLY(DEFAULT_RX_ANT_DLY);
+    m_decaB.setRxAntennaDLY(DEFAULT_RX_ANT_DLY);
 
     while (true) {
+        //        uint64_t timeA;
+        //        uint64_t timeB;
+        //        m_decaB.getSysTime(&timeB);
+        //        m_decaA.getSysTime(&timeA);
+        //
+        //        volatile int64_t timeDiff = timeA - timeB;
+        //        m_logger.log(LogLevel::Error, "%3.2f", (double)timeDiff);
+        //        // m_logger.log(LogLevel::Error, "%3.2f", pdoa);
+        //
+        //        Task::delay(10);
+        //        continue;
+
         m_decaB.receiveAsync(rxB, 0);
         m_decaA.receive(rxA, 0);
 
