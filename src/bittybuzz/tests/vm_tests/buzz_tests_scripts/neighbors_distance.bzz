@@ -1,23 +1,7 @@
 function init() {
-  iteration = 0
-  if(id == 0) {
-    # Source robot
-    mydist = 0
-  }
-  else {
-    # Other robots
-    mydist = 600
-    # Listen to other robots' distances
-    neighbors.listen("dist_to_source",
-      function(value_id, value, robot_id) {
-        var n = neighbors.get(robot_id) # FIXME Sometimes the value returned is nil
-        if (n != nil and value != nil) {
-          mydist = math.min(mydist, n.distance + value)
-        }
-      })
-  }
 }
 
 function step() {
-
+  var dist = neighbors.get(2);
+  assert_true(dist,42);
 }

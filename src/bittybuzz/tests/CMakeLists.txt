@@ -8,6 +8,7 @@ set(TEST_SOURCES
     BittyBuzzMessageHandlerUnitTests.cpp
     BittyBuzzMessageServiceUnitTests.cpp
     BittyBuzzFunctionDescriptionUnitTests.cpp
+    BittyBuzzNeighborsManagerUnitTests.cpp
 
     vm_tests/BittyBuzzVmTestsUtils.cpp
 
@@ -45,6 +46,7 @@ set(TEST_HEADERS
     mocks/BittyBuzzMessageHandlerInterfaceMock.h
     mocks/BittyBuzzMessageServiceInterfaceMock.h
     mocks/BittyBuzzNeighborsManagerInterfaceMock.h
+    mocks/InterlocInterfaceMock.h
     
     vm_tests/BittyBuzzVmFixture.h
     vm_tests/BittyBuzzVmTestsUtils.h
