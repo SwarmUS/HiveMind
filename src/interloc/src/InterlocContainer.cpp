@@ -1,9 +1,13 @@
+#include <InterlocSettings.h>
 #include <bsp/BSPContainer.h>
+#include <cpp-common/CircularQueueStack.h>
 #include <interloc/Interloc.h>
 #include <interloc/InterlocContainer.h>
 #include <interloc/InterlocMessageHandler.h>
 #include <logger/LoggerContainer.h>
 #include <message-handler/MessageHandlerContainer.h>
+
+constexpr uint16_t gc_interlocPosUpdateMaxSize = 4 * MAX_ROBOTS_IN_SWARM;
 
 IInterloc& InterlocContainer::getInterloc() {
     static Interloc s_interloc =
@@ -19,4 +23,12 @@ IInterlocMessageHandler& InterlocContainer::getInterlocMessageHandler() {
         MessageHandlerContainer::getRemoteMsgQueue());
 
     return s_messageHandler;
+}
+
+ThreadSafeQueue<uint16_t>& InterlocContainer::getInterlocPosUpdateQueue() {
+    static Mutex s_mutex(10);
+    static CircularQueueStack<uint16_t, gc_interlocPosUpdateMaxSize> s_interlocMsgQueue;
+    static ThreadSafeQueue<uint16_t> s_interlocPosUpdateThreadQueue(s_interlocMsgQueue, s_mutex);
+
+    return s_interlocPosUpdateThreadQueue;
 }
