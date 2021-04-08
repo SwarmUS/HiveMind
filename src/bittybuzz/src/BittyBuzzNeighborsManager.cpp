@@ -18,8 +18,8 @@ void BittyBuzzNeighborsManager::updateNeighbors() {
                 RelativePosition& pos = posOpt.value();
                 bbzneighbors_elem_t neighbor;
                 neighbor.robot = robotId.value();
-                neighbor.azimuth = pos.m_relativeOrientation;
-                neighbor.distance = pos.m_distance;
+                neighbor.azimuth = (uint8_t)pos.m_relativeOrientation;
+                neighbor.distance = (uint8_t)pos.m_distance;
                 neighbor.elevation = 0;
                 bbzneighbors_add(&neighbor);
             }
