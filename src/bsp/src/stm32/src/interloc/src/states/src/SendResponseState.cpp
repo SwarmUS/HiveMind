@@ -10,6 +10,7 @@ void SendResponseState::process(InterlocStateHandler& context) {
     InterlocBSPContainer::getInterlocManager().constructUWBHeader(
         0x01, UWBMessages::DATA, UWBMessages::TWR_RESPONSE, (uint8_t*)&m_respMsg,
         sizeof(m_respMsg));
+    m_respMsg.m_subFrameId = RESPONDER_SLOT;
 
     uint64_t respTxTime =
         context.getTWR().m_pollRxTs + (POLL_RX_TO_RESP_TX_DLY_UUS * UUS_TO_DWT_TIME);

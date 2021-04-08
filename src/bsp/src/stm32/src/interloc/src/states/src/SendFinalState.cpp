@@ -9,7 +9,7 @@ void SendFinalState::process(InterlocStateHandler& context) {
     Decawave& deca = InterlocBSPContainer::getDecawave(InterlocBSPContainer::DecawavePort::A);
 
     uint64_t finalTxTime =
-        context.getTWR().m_responseRxTs + (RESP_RX_TO_FINAL_TX_DLY_UUS * UUS_TO_DWT_TIME);
+        context.getTWR().m_pollTxTs + (POLL_TX_TO_FINAL_TX_DLY_UUS * UUS_TO_DWT_TIME);
 
     // Get the timestamp at which it will really be sent
     uint64_t finalTxTs = deca.getTxTimestampFromDelayedTime(finalTxTime);

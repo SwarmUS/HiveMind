@@ -20,7 +20,9 @@ void SendPollState::process(InterlocStateHandler& context) {
             UWBMessages::FunctionCode::TWR_RESPONSE) {
 
         deca.getTxTimestamp(&context.getTWR().m_pollTxTs);
-        deca.getRxTimestamp(&context.getTWR().m_responseRxTs);
+        context.getTWR()
+            .m_responseRxTs[reinterpret_cast<UWBMessages::TWRResponse*>(m_responseFrame.m_rxBuffer)
+                                ->m_subFrameId] = m_responseFrame.m_rxTimestamp;
 
         context.setState(InterlocStateContainer::getSendFinalState());
     } else {
