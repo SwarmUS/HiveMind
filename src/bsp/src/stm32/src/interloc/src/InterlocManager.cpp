@@ -20,11 +20,10 @@ bool InterlocManager::isFrameOk(UWBRxFrame frame) {
     return true;
 }
 
-InterlocManager::InterlocManager(ILogger& logger, InterlocStateHandler& stateHandler) :
-    m_logger(logger),
-    m_stateHandler(stateHandler),
-    m_decaA(InterlocBSPContainer::getDecawave(InterlocBSPContainer::DecawavePort::A)),
-    m_decaB(InterlocBSPContainer::getDecawave(InterlocBSPContainer::DecawavePort::B)) {}
+InterlocManager::InterlocManager(ILogger& logger,
+                                 InterlocStateHandler& stateHandler,
+                                 DecawaveArray& decawaves) :
+    m_logger(logger), m_stateHandler(stateHandler), m_decawaves(decawaves) {}
 
 void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
                                                 void* context) {
@@ -33,54 +32,57 @@ void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t
 }
 
 void InterlocManager::startInterloc() {
-    if (!m_decaA.init()) {
-        m_logger.log(LogLevel::Warn, "InterlocManager: Could not start Decawave A");
-    }
-    if (!m_decaB.init()) {
-        m_logger.log(LogLevel::Warn, "InterlocManager: Could not start Decawave B");
+    for (auto& deca : m_decawaves) {
+        if (!deca.init()) {
+            // TODO: Add ID to decawave
+            m_logger.log(LogLevel::Warn, "InterlocManager: Could not start Decawave");
+        }
     }
 
     syncClocks();
 
-    m_stateHandler.setState(InterlocStateContainer::getWaitPollState());
+    // Uncomment one of the following lines to go into TWR
+    m_stateHandler.setState(InterlocStates::WAIT_POLL);
+    // m_stateHandler.setState(InterlocStates::SEND_POLL);
 
     while (true) {
         m_stateHandler.process();
     }
 
-    while (m_decaA.getState() != DW_STATE::CALIBRATED &&
-           m_decaB.getState() != DW_STATE::CALIBRATED) {
-
-        if (m_decaA.getState() == DW_STATE::RESPOND_CALIB) {
-            m_logger.log(LogLevel::Info, "Starting DW calibration as responder on DW A");
-            startDeviceCalibSingleResponder(0x69, m_decaA);
-        } else if (m_decaA.getState() == DW_STATE::SEND_CALIB) {
-            m_logger.log(LogLevel::Info, "Starting DW calibration as initiator on DW A");
-            startDeviceCalibSingleInitiator(0x69, m_decaA);
-        }
-
-        if (m_decaB.getState() == DW_STATE::RESPOND_CALIB) {
-            m_logger.log(LogLevel::Info, "Starting DW calibration as responder on DW B");
-            startDeviceCalibSingleResponder(0x69, m_decaB);
-        } else if (m_decaB.getState() == DW_STATE::SEND_CALIB) {
-            m_logger.log(LogLevel::Info, "Starting DW calibration as initiator on DW B");
-            startDeviceCalibSingleInitiator(0x69, m_decaB);
-        }
-
-        Task::delay(10);
-    }
+    //    while (m_decaA.getState() != DW_STATE::CALIBRATED &&
+    //           m_decaB.getState() != DW_STATE::CALIBRATED) {
+    //
+    //        if (m_decaA.getState() == DW_STATE::RESPOND_CALIB) {
+    //            m_logger.log(LogLevel::Info, "Starting DW calibration as responder on DW A");
+    //            startDeviceCalibSingleResponder(0x69, m_decaA);
+    //        } else if (m_decaA.getState() == DW_STATE::SEND_CALIB) {
+    //            m_logger.log(LogLevel::Info, "Starting DW calibration as initiator on DW A");
+    //            startDeviceCalibSingleInitiator(0x69, m_decaA);
+    //        }
+    //
+    //        if (m_decaB.getState() == DW_STATE::RESPOND_CALIB) {
+    //            m_logger.log(LogLevel::Info, "Starting DW calibration as responder on DW B");
+    //            startDeviceCalibSingleResponder(0x69, m_decaB);
+    //        } else if (m_decaB.getState() == DW_STATE::SEND_CALIB) {
+    //            m_logger.log(LogLevel::Info, "Starting DW calibration as initiator on DW B");
+    //            startDeviceCalibSingleInitiator(0x69, m_decaB);
+    //        }
+    //
+    //        Task::delay(10);
 }
 
 void InterlocManager::syncClocks() {
     vPortEnterCritical();
 
-    m_decaA.setSyncMode(DW_SYNC_MODE::OSTR);
-    m_decaB.setSyncMode(DW_SYNC_MODE::OSTR);
+    for (auto& deca : m_decawaves) {
+        deca.setSyncMode(DW_SYNC_MODE::OSTR);
+    }
 
     deca_pulseSyncSignal();
 
-    m_decaA.setSyncMode(DW_SYNC_MODE::OFF);
-    m_decaB.setSyncMode(DW_SYNC_MODE::OFF);
+    for (auto& deca : m_decawaves) {
+        deca.setSyncMode(DW_SYNC_MODE::OFF);
+    }
 
     vPortExitCritical();
 }
@@ -119,35 +121,38 @@ void InterlocManager::setCalibDistance(uint16_t distanceCalibCm) {
 
 void InterlocManager::startCalibSingleInitiator() {
     // TODO add destination ID
-    m_decaA.setState(DW_STATE::SEND_CALIB);
+    m_logger.log(LogLevel::Warn, "Calibration disabled for now");
+    // m_decaA.setState(DW_STATE::SEND_CALIB);
 }
 
 void InterlocManager::startCalibSingleResponder(uint16_t initiatorId,
                                                 calibrationEndedCallbackFunction_t callback,
                                                 void* context) {
-    m_calibrationInitiatorId = initiatorId;
-    m_calibrationEndedCallback = callback;
-    m_calibrationEndedCallbackContext = context;
-
-    // TODO add destination ID
-    if (m_decaA.getState() != DW_STATE::CALIBRATED) {
-        m_decaA.setState(DW_STATE::RESPOND_CALIB);
-    } else if (m_decaB.getState() != DW_STATE::CALIBRATED) {
-        m_decaA.setState(DW_STATE::RESPOND_CALIB);
-    } else {
-        // No calibration needed, notify it is ended
-        callback(context, initiatorId);
-    }
+    m_logger.log(LogLevel::Warn, "Calibration disabled for now");
+    //    m_calibrationInitiatorId = initiatorId;
+    //    m_calibrationEndedCallback = callback;
+    //    m_calibrationEndedCallbackContext = context;
+    //
+    //    // TODO add destination ID
+    //    if (m_decaA.getState() != DW_STATE::CALIBRATED) {
+    //        m_decaA.setState(DW_STATE::RESPOND_CALIB);
+    //    } else if (m_decaB.getState() != DW_STATE::CALIBRATED) {
+    //        m_decaA.setState(DW_STATE::RESPOND_CALIB);
+    //    } else {
+    //        // No calibration needed, notify it is ended
+    //        callback(context, initiatorId);
+    //    }
 }
 
 void InterlocManager::stopCalibration() {
-    m_logger.log(LogLevel::Info, "Stopping DW calibration");
-
-    if (m_decaA.getState() == DW_STATE::SEND_CALIB) {
-        m_decaA.setState(DW_STATE::CONFIGURED);
-    } else if (m_decaB.getState() == DW_STATE::SEND_CALIB) {
-        m_decaB.setState(DW_STATE::CONFIGURED);
-    }
+    m_logger.log(LogLevel::Warn, "Calibration disabled for now");
+    //    m_logger.log(LogLevel::Info, "Stopping DW calibration");
+    //
+    //    if (m_decaA.getState() == DW_STATE::SEND_CALIB) {
+    //        m_decaA.setState(DW_STATE::CONFIGURED);
+    //    } else if (m_decaB.getState() == DW_STATE::SEND_CALIB) {
+    //        m_decaB.setState(DW_STATE::CONFIGURED);
+    //    }
 }
 
 // void InterlocManager::startDeviceCalibSingleInitiator(uint16_t destinationId, Decawave& device) {

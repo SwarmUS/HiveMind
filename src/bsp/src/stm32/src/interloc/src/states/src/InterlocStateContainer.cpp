@@ -1,36 +1,50 @@
-#include "states/InterlocStateContainer.h"
-#include "states/ExampleState.h"
+#include <interloc/InterlocBSPContainer.h>
+#include <logger/LoggerContainer.h>
+#include <states/DefaultState.h>
+#include <states/InterlocStateContainer.h>
 #include <states/SendFinalState.h>
 #include <states/SendPollState.h>
 #include <states/SendResponseState.h>
 #include <states/WaitPollState.h>
 
-IInterlocState& InterlocStateContainer::getExampleState() {
-    static ExampleState s_state;
+AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
+    static DefaultState s_defaultState(LoggerContainer::getLogger(),
+                                       InterlocBSPContainer::getInterlocManager(),
+                                       InterlocBSPContainer::getDecawaves());
 
-    return s_state;
-}
+    static SendPollState s_sendPollState(LoggerContainer::getLogger(),
+                                         InterlocBSPContainer::getInterlocManager(),
+                                         InterlocBSPContainer::getDecawaves());
 
-IInterlocState& InterlocStateContainer::getSendPollState() {
-    static SendPollState s_state;
+    static SendFinalState s_sendFinalState(LoggerContainer::getLogger(),
+                                           InterlocBSPContainer::getInterlocManager(),
+                                           InterlocBSPContainer::getDecawaves());
 
-    return s_state;
-}
+    static WaitPollState s_waitPollState(LoggerContainer::getLogger(),
+                                         InterlocBSPContainer::getInterlocManager(),
+                                         InterlocBSPContainer::getDecawaves());
 
-IInterlocState& InterlocStateContainer::getSendFinalState() {
-    static SendFinalState s_state;
+    static SendResponseState s_sendResponseState(LoggerContainer::getLogger(),
+                                                 InterlocBSPContainer::getInterlocManager(),
+                                                 InterlocBSPContainer::getDecawaves());
 
-    return s_state;
-}
+    switch (state) {
+    case InterlocStates::DEFAULT:
+        return s_defaultState;
 
-IInterlocState& InterlocStateContainer::getWaitPollState() {
-    static WaitPollState s_state;
+    case InterlocStates::SEND_POLL:
+        return s_sendPollState;
 
-    return s_state;
-}
+    case InterlocStates::SEND_FINAL:
+        return s_sendFinalState;
 
-IInterlocState& InterlocStateContainer::getSendResponseState() {
-    static SendResponseState s_state;
+    case InterlocStates::WAIT_POLL:
+        return s_waitPollState;
 
-    return s_state;
+    case InterlocStates::SEND_RESPONSE:
+        return s_sendResponseState;
+
+    default:
+        return s_defaultState;
+    }
 }

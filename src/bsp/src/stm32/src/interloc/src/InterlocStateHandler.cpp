@@ -1,11 +1,12 @@
 #include "interloc/InterlocStateHandler.h"
-#include "states/InterlocStateContainer.h"
 
 InterlocStateHandler::InterlocStateHandler() :
-    m_state(&InterlocStateContainer::getExampleState()) {}
+    m_currentState(&InterlocStateContainer::getState(InterlocStates::DEFAULT)) {}
 
-void InterlocStateHandler::setState(IInterlocState& state) { m_state = &state; }
+void InterlocStateHandler::setState(InterlocStates state) {
+    m_currentState = &InterlocStateContainer::getState(state);
+}
 
-void InterlocStateHandler::process() { m_state->process(*this); }
+void InterlocStateHandler::process() { m_currentState->process(*this); }
 
 TwoWayRanging& InterlocStateHandler::getTWR() { return m_twr; }

@@ -18,8 +18,7 @@ struct UWBRxFrame {
     uint8_t m_sfdAngleRegister = 0;
     uint8_t m_firstPathAccumulator[ACCUMULATOR_DATA_SIZE]{};
 
-    // std::array<uint8_t, UWB_MAX_LENGTH - UWB_CRC_LENGTH> m_rxBuffer{};
-    uint8_t m_rxBuffer[UWB_MAX_LENGTH - UWB_CRC_LENGTH];
+    std::array<uint8_t, UWB_MAX_LENGTH - UWB_CRC_LENGTH> m_rxBuffer{};
 
     float getSFDAngle() const;
     float getAccumulatorAngle() const;

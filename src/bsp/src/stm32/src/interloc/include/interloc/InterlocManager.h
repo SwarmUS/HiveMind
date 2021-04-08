@@ -2,8 +2,9 @@
 #define __INTERLOCMANAGER_H__
 
 #include "Decawave.h"
+#include "DecawaveArray.h"
+#include "InterlocStateHandler.h"
 #include "UWBMessages.h"
-#include "interloc/InterlocStateHandler.h"
 #include <bsp/IInterlocManager.h>
 #include <logger/ILogger.h>
 
@@ -12,7 +13,7 @@
 
 class InterlocManager : public IInterlocManager {
   public:
-    InterlocManager(ILogger& logger, InterlocStateHandler& stateHandler);
+    InterlocManager(ILogger& logger, InterlocStateHandler& stateHandler, DecawaveArray& decawaves);
     ~InterlocManager() override = default;
 
     void startInterloc() override;
@@ -40,8 +41,7 @@ class InterlocManager : public IInterlocManager {
     ILogger& m_logger;
     InterlocStateHandler& m_stateHandler;
 
-    Decawave& m_decaA;
-    Decawave& m_decaB;
+    DecawaveArray& m_decawaves;
 
     uint8_t m_sequenceID = 0;
     uint16_t m_distanceCalibCm = 75;

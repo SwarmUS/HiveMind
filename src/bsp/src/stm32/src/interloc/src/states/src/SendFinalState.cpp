@@ -5,23 +5,26 @@
 #include <interloc/InterlocBSPContainer.h>
 #include <states/InterlocStateContainer.h>
 
-void SendFinalState::process(InterlocStateHandler& context) {
-    Decawave& deca = InterlocBSPContainer::getDecawave(InterlocBSPContainer::DecawavePort::A);
+SendFinalState::SendFinalState(ILogger& logger,
+                               InterlocManager& interlocManager,
+                               DecawaveArray& decawaves) :
+    AbstractInterlocState(logger, interlocManager, decawaves) {}
 
+void SendFinalState::process(InterlocStateHandler& context) {
     uint64_t finalTxTime =
         context.getTWR().m_pollTxTs + (POLL_TX_TO_FINAL_TX_DLY_UUS * UUS_TO_DWT_TIME);
 
     // Get the timestamp at which it will really be sent
-    uint64_t finalTxTs = deca.getTxTimestampFromDelayedTime(finalTxTime);
+    uint64_t finalTxTs = m_decawaves[DecawavePort::A].getTxTimestampFromDelayedTime(finalTxTime);
 
     // TODO: ADD DESTINATION ID
-    InterlocBSPContainer::getInterlocManager().constructUWBHeader(
-        0x01, UWBMessages::DATA, UWBMessages::TWR_FINAL, (uint8_t*)(&m_finalMsg),
-        sizeof(m_finalMsg));
+    m_interlocManager.constructUWBHeader(0x01, UWBMessages::DATA, UWBMessages::TWR_FINAL,
+                                         (uint8_t*)(&m_finalMsg), sizeof(m_finalMsg));
 
     context.getTWR().constructFinal(&m_finalMsg, finalTxTs);
-    deca.transmitDelayed((uint8_t*)(&m_finalMsg), sizeof(UWBMessages::TWRFinal), finalTxTime);
+    m_decawaves[DecawavePort::A].transmitDelayed((uint8_t*)(&m_finalMsg),
+                                                 sizeof(UWBMessages::TWRFinal), finalTxTime);
 
     Task::delay(100);
-    context.setState(InterlocStateContainer::getSendPollState());
+    context.setState(InterlocStates::SEND_POLL);
 }

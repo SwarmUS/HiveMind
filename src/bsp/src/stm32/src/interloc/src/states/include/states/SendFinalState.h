@@ -1,12 +1,13 @@
 #ifndef HIVE_MIND_SENDFINALSTATE_H
 #define HIVE_MIND_SENDFINALSTATE_H
 
-#include "IInterlocState.h"
+#include "AbstractInterlocState.h"
 #include <interloc/UWBMessages.h>
 #include <interloc/UWBRxFrame.h>
 
-class SendFinalState : public IInterlocState {
+class SendFinalState : public AbstractInterlocState {
   public:
+    SendFinalState(ILogger& logger, InterlocManager& interlocManager, DecawaveArray& decawaves);
     void process(InterlocStateHandler& context) override;
 
   private:

@@ -4,30 +4,33 @@
 #include "states/InterlocStateContainer.h"
 #include <Task.h>
 
+SendPollState::SendPollState(ILogger& logger,
+                             InterlocManager& interlocManager,
+                             DecawaveArray& decawaves) :
+    AbstractInterlocState(logger, interlocManager, decawaves) {}
+
 void SendPollState::process(InterlocStateHandler& context) {
-    InterlocBSPContainer::getInterlocManager().constructUWBHeader(
-        UWB_BROADCAST_ADDRESS, UWBMessages::BEACON, UWBMessages::TWR_POLL, (uint8_t*)&m_pollMsg,
-        sizeof(m_pollMsg));
+    m_interlocManager.constructUWBHeader(UWB_BROADCAST_ADDRESS, UWBMessages::BEACON,
+                                         UWBMessages::TWR_POLL, (uint8_t*)&m_pollMsg,
+                                         sizeof(m_pollMsg));
 
-    Decawave& deca = InterlocBSPContainer::getDecawave(InterlocBSPContainer::DecawavePort::A);
-
-    deca.transmitAndReceiveDelayed((uint8_t*)&m_pollMsg, sizeof(UWBMessages::TWRPoll),
-                                   POLL_TX_TO_RESP_RX_DLY_UUS, m_responseFrame,
-                                   RESP_RX_TIMEOUT_UUS);
+    m_decawaves[DecawavePort::A].transmitAndReceiveDelayed(
+        (uint8_t*)&m_pollMsg, sizeof(UWBMessages::TWRPoll), POLL_TX_TO_RESP_RX_DLY_UUS,
+        m_responseFrame, RESP_RX_TIMEOUT_UUS);
 
     if (m_responseFrame.m_status == UWBRxStatus::FINISHED &&
-        reinterpret_cast<UWBMessages::DWFrame*>(m_responseFrame.m_rxBuffer)->m_functionCode ==
-            UWBMessages::FunctionCode::TWR_RESPONSE) {
+        reinterpret_cast<UWBMessages::DWFrame*>(m_responseFrame.m_rxBuffer.data())
+                ->m_functionCode == UWBMessages::FunctionCode::TWR_RESPONSE) {
 
-        deca.getTxTimestamp(&context.getTWR().m_pollTxTs);
-        context.getTWR()
-            .m_responseRxTs[reinterpret_cast<UWBMessages::TWRResponse*>(m_responseFrame.m_rxBuffer)
-                                ->m_subFrameId] = m_responseFrame.m_rxTimestamp;
+        m_decawaves[DecawavePort::A].getTxTimestamp(&context.getTWR().m_pollTxTs);
+        context.getTWR().m_responseRxTs[reinterpret_cast<UWBMessages::TWRResponse*>(
+                                            m_responseFrame.m_rxBuffer.data())
+                                            ->m_subFrameId] = m_responseFrame.m_rxTimestamp;
 
-        context.setState(InterlocStateContainer::getSendFinalState());
+        context.setState(InterlocStates::SEND_FINAL);
     } else {
         // Wait a little and send next poll
         Task::delay(100);
-        context.setState(InterlocStateContainer::getSendPollState());
+        context.setState(InterlocStates::SEND_POLL);
     }
 }

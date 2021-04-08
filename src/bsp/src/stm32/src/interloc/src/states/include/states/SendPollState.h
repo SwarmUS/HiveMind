@@ -1,12 +1,14 @@
 #ifndef HIVE_MIND_SENDPOLLSTATE_H
 #define HIVE_MIND_SENDPOLLSTATE_H
 
-#include "IInterlocState.h"
+#include "AbstractInterlocState.h"
 #include <interloc/UWBMessages.h>
 #include <interloc/UWBRxFrame.h>
 
-class SendPollState : public IInterlocState {
+class SendPollState : public AbstractInterlocState {
   public:
+    SendPollState(ILogger& logger, InterlocManager& interlocManager, DecawaveArray& decawaves);
+
     void process(InterlocStateHandler& context) override;
 
   private:

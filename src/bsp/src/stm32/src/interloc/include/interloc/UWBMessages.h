@@ -8,7 +8,7 @@
 // TODO: Make configurable and merge with define in interloc lib
 #define MAX_INTERLOC_SUBFRAMES 2
 // Slots go from 0 to MAX_INTERLOC_SUBFRAMES-1
-#define RESPONDER_SLOT 1
+#define RESPONDER_SLOT 0
 
 namespace UWBMessages {
     enum FrameType { BEACON = 0x0, DATA = 0x2, ACK = 0x3, MAC_COMMAND = 0x4 };

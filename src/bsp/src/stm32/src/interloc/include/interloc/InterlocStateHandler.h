@@ -2,20 +2,22 @@
 #define HIVE_MIND_INTERLOCSTATEHANDLER_H
 
 #include "TwoWayRanging.h"
-#include <states/IInterlocState.h>
+#include <array>
+#include <states/AbstractInterlocState.h>
+#include <states/InterlocStateContainer.h>
 
 class InterlocStateHandler {
   public:
     InterlocStateHandler();
 
-    void setState(IInterlocState& state);
+    void setState(InterlocStates state);
     void process();
 
     TwoWayRanging& getTWR();
 
   private:
-    IInterlocState* m_state;
-    TwoWayRanging m_twr;
+    AbstractInterlocState* m_currentState;
+    TwoWayRanging m_twr{};
 };
 
 #endif // HIVE_MIND_INTERLOCSTATEHANDLER_H

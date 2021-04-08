@@ -1,15 +1,19 @@
 #ifndef HIVE_MIND_INTERLOCSTATECONTAINER_H
 #define HIVE_MIND_INTERLOCSTATECONTAINER_H
 
-#include "IInterlocState.h"
+#include "AbstractInterlocState.h"
+
+enum class InterlocStates {
+    DEFAULT = 0,
+    SEND_POLL,
+    SEND_FINAL,
+    WAIT_POLL,
+    SEND_RESPONSE,
+    NUM_STATES
+};
 
 namespace InterlocStateContainer {
-    IInterlocState& getExampleState();
-    IInterlocState& getSendPollState();
-    IInterlocState& getSendFinalState();
-    IInterlocState& getWaitPollState();
-    IInterlocState& getSendResponseState();
-
+    AbstractInterlocState& getState(InterlocStates state);
 } // namespace InterlocStateContainer
 
 #endif // HIVE_MIND_INTERLOCSTATECONTAINER_H

@@ -1,12 +1,14 @@
 #ifndef HIVE_MIND_WAITPOLLSTATE_H
 #define HIVE_MIND_WAITPOLLSTATE_H
 
-#include "IInterlocState.h"
+#include "AbstractInterlocState.h"
 #include <interloc/UWBMessages.h>
 #include <interloc/UWBRxFrame.h>
 
-class WaitPollState : public IInterlocState {
+class WaitPollState : public AbstractInterlocState {
   public:
+    WaitPollState(ILogger& logger, InterlocManager& interlocManager, DecawaveArray& decawaves);
+
     void process(InterlocStateHandler& context) override;
 
   private:

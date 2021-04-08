@@ -294,7 +294,7 @@ void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
     frame->m_status = UWBRxStatus::FINISHED;
 
     // Read the frame into memory without the CRC16 located at the end of the frame
-    dwt_readrxdata(frame->m_rxBuffer, m_callbackData.datalength - UWB_CRC_LENGTH, 0);
+    dwt_readrxdata(frame->m_rxBuffer.data(), m_callbackData.datalength - UWB_CRC_LENGTH, 0);
     getRxTimestamp(&frame->m_rxTimestamp);
 
     dwt_readfromdevice(RX_TTCKO_ID, 4, 1, &(frame->m_sfdAngleRegister));
