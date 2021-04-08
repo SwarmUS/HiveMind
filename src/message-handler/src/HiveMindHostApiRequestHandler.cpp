@@ -2,8 +2,9 @@
 
 HiveMindHostApiRequestHandler::HiveMindHostApiRequestHandler(const IBSP& bsp,
                                                              ICircularQueue<MessageDTO>& hostQueue,
+                                                             const IInterloc& interloc,
                                                              ILogger& logger) :
-    m_bsp(bsp), m_hostQueue(hostQueue), m_logger(logger) {}
+    m_bsp(bsp), m_hostQueue(hostQueue), m_interloc(interloc), m_logger(logger) {}
 
 bool HiveMindHostApiRequestHandler::handleRequest(const MessageDTO& message) {
 
