@@ -11,7 +11,7 @@ class SendPollState : public IInterlocState {
 
   private:
     UWBMessages::TWRPoll m_pollMsg{};
-    UWBRxFrame m_responseMsg;
+    UWBRxFrame m_responseFrame;
 };
 
 #endif // HIVE_MIND_SENDPOLLSTATE_H

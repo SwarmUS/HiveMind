@@ -11,9 +11,9 @@ void TwoWayRanging::deserializeFinal(UWBMessages::TWRFinal* finalMessage) {
 void TwoWayRanging::constructFinal(UWBMessages::TWRFinal* finalMessage, uint64_t finalTxTs) {
     m_finalTxTs = finalTxTs;
 
-    finalMessage->m_pollTxTs = m_pollTxTs;
-    finalMessage->m_responseRxTs = m_responseRxTs;
-    finalMessage->m_finalTxTs = m_finalTxTs;
+    DecawaveUtils::tsToBytes((uint8_t*)(&finalMessage->m_pollTxTs), m_pollTxTs);
+    DecawaveUtils::tsToBytes((uint8_t*)(&finalMessage->m_responseRxTs), m_responseRxTs);
+    DecawaveUtils::tsToBytes((uint8_t*)(&finalMessage->m_finalTxTs), m_finalTxTs);
 }
 
 double TwoWayRanging::calculateDistance() const {

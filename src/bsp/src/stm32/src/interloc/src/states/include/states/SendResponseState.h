@@ -1,16 +1,17 @@
-#ifndef HIVE_MIND_WAITPOLLSTATE_H
-#define HIVE_MIND_WAITPOLLSTATE_H
+#ifndef HIVE_MIND_WAITFINALSTATE_H
+#define HIVE_MIND_WAITFINALSTATE_H
 
 #include "IInterlocState.h"
 #include <interloc/UWBMessages.h>
 #include <interloc/UWBRxFrame.h>
 
-class WaitPollState : public IInterlocState {
+class SendResponseState : public IInterlocState {
   public:
     void process(InterlocStateHandler& context) override;
 
   private:
+    UWBMessages::TWRResponse m_respMsg{};
     UWBRxFrame m_rxFrame;
 };
 
-#endif // HIVE_MIND_WAITPOLLSTATE_H
+#endif // HIVE_MIND_WAITFINALSTATE_H

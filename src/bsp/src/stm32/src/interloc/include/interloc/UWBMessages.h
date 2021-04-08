@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#define UWB_BROADCAST_ADDRESS = 0xFF
+#define UWB_BROADCAST_ADDRESS 0xFF
 
 namespace UWBMessages {
     enum FrameType { BEACON = 0x0, DATA = 0x2, ACK = 0x3, MAC_COMMAND = 0x4 };

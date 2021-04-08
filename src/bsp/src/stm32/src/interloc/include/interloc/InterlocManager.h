@@ -25,6 +25,12 @@ class InterlocManager : public IInterlocManager {
     void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
                                    void* context) override;
 
+    bool constructUWBHeader(uint16_t destinationId,
+                            UWBMessages::FrameType frameType,
+                            UWBMessages::FunctionCode functionCode,
+                            uint8_t* buffer,
+                            uint16_t bufferLength);
+
     /**
      * Syncs the clocks of both DW1000s
      */
@@ -34,8 +40,8 @@ class InterlocManager : public IInterlocManager {
     ILogger& m_logger;
     InterlocStateHandler& m_stateHandler;
 
-    Decawave m_decaA;
-    Decawave m_decaB;
+    Decawave& m_decaA;
+    Decawave& m_decaB;
 
     uint8_t m_sequenceID = 0;
     uint16_t m_distanceCalibCm = 75;
@@ -50,11 +56,7 @@ class InterlocManager : public IInterlocManager {
     void startDeviceCalibSingleResponder(uint16_t destinationId, Decawave& device);
     bool sendTWRSequence(uint16_t destinationId, Decawave& device);
     double receiveTWRSequence(uint16_t destinationId, Decawave& device);
-    bool constructUWBHeader(uint16_t destinationId,
-                            UWBMessages::FrameType frameType,
-                            UWBMessages::FunctionCode functionCode,
-                            uint8_t* buffer,
-                            uint16_t bufferLength);
+
     bool isFrameOk(UWBRxFrame frame);
     static uint8_t powerCorrection(double twrDistance);
 };

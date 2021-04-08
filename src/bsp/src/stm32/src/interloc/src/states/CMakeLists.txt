@@ -5,6 +5,9 @@ set(LIB_SOURCES
     src/InterlocStateContainer.cpp
     src/ExampleState.cpp
     src/SendPollState.cpp
+    src/SendFinalState.cpp
+    src/WaitPollState.cpp
+    src/SendResponseState.cpp
 )
 
 set(LIB_HEADERS
@@ -13,10 +16,9 @@ set(LIB_HEADERS
     include/states/ExampleState.h
     include/states/SendFinalState.h
     include/states/SendPollState.h
-    include/states/WaitFinalState.h
+    include/states/SendResponseState.h
     include/states/WaitPollState.h
-    include/states/WaitResponseState.h
-)
+    )
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_HEADERS})
 

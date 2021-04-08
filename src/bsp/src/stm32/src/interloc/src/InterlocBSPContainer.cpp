@@ -16,7 +16,7 @@ InterlocStateHandler& InterlocBSPContainer::getStateHandler() {
 Decawave& InterlocBSPContainer::getDecawave(InterlocBSPContainer::DecawavePort port) {
     static std::array<Decawave, gc_numDecawavePorts> s_decawaves = {
         Decawave(DW_A, UWBChannel::CHANNEL_5, UWBSpeed::SPEED_6M8),
-        Decawave(DW_A, UWBChannel::CHANNEL_5, UWBSpeed::SPEED_6M8)};
+        Decawave(DW_B, UWBChannel::CHANNEL_5, UWBSpeed::SPEED_6M8)};
 
     return s_decawaves.at(static_cast<unsigned int>(port));
 }

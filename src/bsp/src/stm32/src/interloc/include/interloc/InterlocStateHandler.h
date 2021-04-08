@@ -14,7 +14,7 @@ class InterlocStateHandler {
     TwoWayRanging& getTWR();
 
   private:
-    IInterlocState& m_state;
+    IInterlocState* m_state;
     TwoWayRanging m_twr;
 };
 
