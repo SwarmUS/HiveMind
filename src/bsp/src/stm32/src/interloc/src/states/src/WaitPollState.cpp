@@ -9,11 +9,12 @@ void WaitPollState::process(InterlocStateHandler& context) {
     deca.receive(m_rxFrame, 0);
 
     if (m_rxFrame.m_status == UWBRxStatus::FINISHED &&
-        reinterpret_cast<UWBMessages::DWFrame*>(m_rxFrame.m_rxBuffer.data())->m_functionCode ==
+        reinterpret_cast<UWBMessages::DWFrame*>(m_rxFrame.m_rxBuffer)->m_functionCode ==
             UWBMessages::FunctionCode::TWR_POLL) {
 
         context.getTWR().m_pollRxTs = m_rxFrame.m_rxTimestamp;
         context.setState(InterlocStateContainer::getSendResponseState());
+        return;
     }
 
     context.setState(InterlocStateContainer::getWaitPollState());

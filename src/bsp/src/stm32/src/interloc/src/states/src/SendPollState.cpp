@@ -16,8 +16,8 @@ void SendPollState::process(InterlocStateHandler& context) {
                                    RESP_RX_TIMEOUT_UUS);
 
     if (m_responseFrame.m_status == UWBRxStatus::FINISHED &&
-        reinterpret_cast<UWBMessages::DWFrame*>(m_responseFrame.m_rxBuffer.data())
-                ->m_functionCode == UWBMessages::FunctionCode::TWR_RESPONSE) {
+        reinterpret_cast<UWBMessages::DWFrame*>(m_responseFrame.m_rxBuffer)->m_functionCode ==
+            UWBMessages::FunctionCode::TWR_RESPONSE) {
 
         deca.getTxTimestamp(&context.getTWR().m_pollTxTs);
         deca.getRxTimestamp(&context.getTWR().m_responseRxTs);

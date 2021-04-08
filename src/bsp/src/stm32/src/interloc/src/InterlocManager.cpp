@@ -42,7 +42,7 @@ void InterlocManager::startInterloc() {
 
     syncClocks();
 
-    m_stateHandler.setState(InterlocStateContainer::getSendPollState());
+    m_stateHandler.setState(InterlocStateContainer::getWaitPollState());
 
     while (true) {
         m_stateHandler.process();

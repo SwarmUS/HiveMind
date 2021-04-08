@@ -66,6 +66,10 @@ bool Decawave::init() {
 
     dwt_softreset();
     configureDW();
+
+    setRxAntennaDLY(DEFAULT_RX_ANT_DLY);
+    setTxAntennaDLY(DEFAULT_TX_ANT_DLY);
+
     setState(DW_STATE::CONFIGURED);
 
     dwt_enablegpioclocks();
@@ -274,32 +278,30 @@ void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
 
     deca_selectDevice(m_spiDevice);
 
-    frame->m_statusReg = m_callbackData.status;
-    frame->m_length = m_callbackData.datalength;
-
-    // Frame was properly received. Read all relevant data from DW
-    if (m_callbackData.datalength > 0) {
-        frame->m_status = UWBRxStatus::FINISHED;
-
-        // Read the frame into memory without the CRC16 located at the end of the frame
-        dwt_readrxdata(frame->m_rxBuffer.data(), m_callbackData.datalength - UWB_CRC_LENGTH, 0);
-        getRxTimestamp(&frame->m_rxTimestamp);
-
-        dwt_readfromdevice(RX_TTCKO_ID, 4, 1, &(frame->m_sfdAngleRegister));
-        // Read information needed for phase calculation
-        uint16_t firstPathIdx = dwt_read16bitoffsetreg(RX_TIME_ID, RX_TIME_FP_INDEX_OFFSET);
-        // Read one extra byte as readaccdata() returns a dummy byte
-        dwt_readaccdata(frame->m_firstPathAccumulator, 5, firstPathIdx);
-
-        return;
-    }
-
     // Frame was not received, parse status reg to find the error type
     if ((m_callbackData.status & SYS_STATUS_ALL_RX_TO) != 0U) {
         frame->m_status = UWBRxStatus::TIMEOUT;
-    } else if ((m_callbackData.status & SYS_STATUS_ALL_RX_ERR) != 0U) {
-        frame->m_status = UWBRxStatus::ERROR;
+        return;
     }
+
+    if ((m_callbackData.status & SYS_STATUS_ALL_RX_ERR) != 0U) {
+        frame->m_status = UWBRxStatus::ERROR;
+        return;
+    }
+
+    frame->m_statusReg = m_callbackData.status;
+    frame->m_length = m_callbackData.datalength;
+    frame->m_status = UWBRxStatus::FINISHED;
+
+    // Read the frame into memory without the CRC16 located at the end of the frame
+    dwt_readrxdata(frame->m_rxBuffer, m_callbackData.datalength - UWB_CRC_LENGTH, 0);
+    getRxTimestamp(&frame->m_rxTimestamp);
+
+    dwt_readfromdevice(RX_TTCKO_ID, 4, 1, &(frame->m_sfdAngleRegister));
+    // Read information needed for phase calculation
+    uint16_t firstPathIdx = dwt_read16bitoffsetreg(RX_TIME_ID, RX_TIME_FP_INDEX_OFFSET);
+    // Read one extra byte as readaccdata() returns a dummy byte
+    dwt_readaccdata(frame->m_firstPathAccumulator, 5, firstPathIdx);
 }
 
 void Decawave::setSyncMode(DW_SYNC_MODE syncMode) {
