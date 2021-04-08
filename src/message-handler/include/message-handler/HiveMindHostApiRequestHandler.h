@@ -19,7 +19,8 @@ class HiveMindHostApiRequestHandler : public IHiveMindHostApiRequestHandler {
     bool handleRequest(const MessageDTO& message) override;
 
   private:
-    bool handleHiveMindHostApiRequest(const MessageDTO& message,
+    bool handleHiveMindHostApiRequest(uint16_t requestId,
+                                      const MessageDTO& message,
                                       const HiveMindHostApiRequestDTO& request);
 
     const IBSP& m_bsp;
