@@ -1,5 +1,7 @@
 #include "InterlocManager.h"
+#include "../../posix/include/InterlocManager.h"
 #include "bsp/BSPContainer.h"
+
 #include <Task.h>
 #define NB_CALIB_MEASUREMENTS 10
 
