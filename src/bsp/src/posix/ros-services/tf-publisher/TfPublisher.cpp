@@ -35,10 +35,12 @@ void tfCallback(const gazebo_msgs::ModelStates& msg) {
 int main(int argc, char** argv) {
     ros::init(argc, argv, "tf_publisher");
 
-    ros::NodeHandle node;
-    ros::Subscriber sub = node.subscribe(GAZEBO_MODEL_STATES_TOPIC, 1, &tfCallback);
-
+    ros::NodeHandle node("~");
     g_refreshRateS = node.param("refresh_rate_s", 0.1);
+
+    ROS_INFO("Starting interloc service with refresh rate of %3.1f Hz", 1/g_refreshRateS);
+
+    ros::Subscriber sub = node.subscribe(GAZEBO_MODEL_STATES_TOPIC, 1, &tfCallback);
 
     ros::spin();
 
