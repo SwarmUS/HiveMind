@@ -9,11 +9,6 @@
 class BittyBuzzRegisteredClosure {
   public:
     BittyBuzzRegisteredClosure(uint16_t closureId,
-                               const char* functionName,
-                               bbzheap_idx_t closureHeapIdx,
-                               bbzheap_idx_t selfHeapIdx);
-
-    BittyBuzzRegisteredClosure(uint16_t closureId,
                                BittyBuzzFunctionDescription description,
                                bbzheap_idx_t closureHeapIdx,
                                bbzheap_idx_t selfHeapIdx);

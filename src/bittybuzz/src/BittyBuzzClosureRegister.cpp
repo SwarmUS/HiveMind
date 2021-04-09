@@ -4,15 +4,6 @@
 #include <string_view>
 
 BittyBuzzRegisteredClosure::BittyBuzzRegisteredClosure(uint16_t closureId,
-                                                       const char* functionName,
-                                                       bbzheap_idx_t closureHeapIdx,
-                                                       bbzheap_idx_t selfHeapIdx) :
-    m_closureId(closureId),
-    m_closureHeapIdx(closureHeapIdx),
-    m_selfHeapIdx(selfHeapIdx),
-    m_description(functionName) {}
-
-BittyBuzzRegisteredClosure::BittyBuzzRegisteredClosure(uint16_t closureId,
                                                        BittyBuzzFunctionDescription description,
                                                        bbzheap_idx_t closureHeapIdx,
                                                        bbzheap_idx_t selfHeapIdx) :
