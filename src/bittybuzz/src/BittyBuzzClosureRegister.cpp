@@ -16,10 +16,11 @@ BittyBuzzRegisteredClosure::BittyBuzzRegisteredClosure(uint16_t closureId,
                                                        BittyBuzzFunctionDescription description,
                                                        bbzheap_idx_t closureHeapIdx,
                                                        bbzheap_idx_t selfHeapIdx) :
+
     m_closureId(closureId),
     m_closureHeapIdx(closureHeapIdx),
     m_selfHeapIdx(selfHeapIdx),
-    m_description(description) {}
+    m_description(std::move(description)) {}
 
 bool BittyBuzzClosureRegister::registerClosure(const char* functionName,
                                                bbzheap_idx_t closureHeapIdx,
@@ -47,14 +48,14 @@ bool BittyBuzzClosureRegister::registerClosure(const char* functionName,
     BittyBuzzRegisteredClosure registeredClosure(m_closureRegisterMap.getUsedSpace(), description,
                                                  closureHeapIdx, selfHeapIdx);
     // Handler overwrite
-    // auto closureOpt = m_closureRegisterMap.at(functionName);
+    auto closureOpt = m_closureRegisterMap.at(functionName);
 
-    // if (closureOpt) {
-    //     registeredClosure.m_closureId = closureOpt.value().get().m_closureId;
-    // }
+    if (closureOpt) {
+        registeredClosure.m_closureId = closureOpt.value().get().m_closureId;
+    }
 
     m_closureRegisterMap.upsert(functionName, registeredClosure);
-    // m_closureNameRegisters.upsert(registeredClosure.m_closureId, functionName);
+    m_closureNameRegisters.upsert(registeredClosure.m_closureId, functionName);
     return true;
 }
 
@@ -65,10 +66,10 @@ std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> BittyBuz
 
 std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> BittyBuzzClosureRegister::
     getRegisteredClosure(uint16_t idx) const {
-    // auto functionNameOpt = m_closureNameRegisters.at(idx);
-    // if (functionNameOpt) {
-    //     return  m_closureRegisterMap.at(functionNameOpt.value());
-    // }
+    auto functionNameOpt = m_closureNameRegisters.at(idx);
+    if (functionNameOpt) {
+        return m_closureRegisterMap.at(functionNameOpt.value().get());
+    }
     return {};
 }
 

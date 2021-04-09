@@ -7,6 +7,7 @@
 #include <cpp-common/HashMapStack.h>
 #include <cstdint>
 #include <functional>
+#include <string_view>
 #include <tuple>
 
 class BittyBuzzClosureRegister : public IBittyBuzzClosureRegister {
@@ -30,7 +31,7 @@ class BittyBuzzClosureRegister : public IBittyBuzzClosureRegister {
 
   private:
     HashMapStack<uint16_t, const char*, m_maxSize> m_closureNameRegisters;
-    HashMapStack<const char*, BittyBuzzRegisteredClosure, m_maxSize> m_closureRegisterMap;
+    HashMapStack<std::string_view, BittyBuzzRegisteredClosure, m_maxSize> m_closureRegisterMap;
 };
 
 #endif // __BITTYBUZZCLOSUREREGISTER_H_
