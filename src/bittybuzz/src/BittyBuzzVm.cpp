@@ -13,6 +13,7 @@ bool BittyBuzzVm::step() {
 
     if (vm->state != BBZVM_STATE_ERROR) {
         // Handle incomming messages from remote
+        m_neighborsManager.updateNeighbors();
         uint16_t messagesLength = m_messageHandler.messageQueueLength();
         for (uint16_t i = 0; i < messagesLength; i++) {
             if (!m_messageHandler.processMessage()) {

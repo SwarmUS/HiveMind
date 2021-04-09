@@ -4,6 +4,7 @@
 #include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
 #include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
+#include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include "mocks/CircularQueueInterfaceMock.h"
 #include <array>
@@ -26,7 +27,9 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_registerFunction) {
     BittyBuzzStringResolverInterfaceMock stringResolver;
     BittyBuzzMessageHandlerInterfaceMock messageHandler;
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
+    BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
+    EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandler, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     EXPECT_CALL(closureRegister,
                 registerClosure(functionName.c_str(), testing::_, testing::_, testing::_))
@@ -48,7 +51,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_registerFunction) {
          {BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &closureRegister,
-          &messageServiceMock, functionRegisters);
+          &messageServiceMock, &neighborsManagerMock, functionRegisters);
 
     // Then
     // Garbage collecting to make sure the pointer is still valid
@@ -75,6 +78,7 @@ TEST_F(BittyBuzzVmTestFixture,
     BittyBuzzMessageHandler messageHandler(closureRegister, inputQueueMock, hostOutputQueueMock,
                                            remoteOutputQueueMock, bspMock, *m_loggerMock);
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
+    BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
     std::array<FunctionCallArgumentDTO, 2> fArgs = {{{(int64_t)42}, {(float)42.24}}};
     FunctionCallRequestDTO fRequest(stringResolver.getString(BBZSTRID_registeredFunction).value(),
@@ -87,13 +91,14 @@ TEST_F(BittyBuzzVmTestFixture,
         {{BBZSTRID_assert_true, buzzAssertTrue},
          {BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure}}};
 
+    EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(inputQueueMock, peek).Times(1).WillOnce(testing::Return(message));
     EXPECT_CALL(inputQueueMock, pop).Times(1);
     EXPECT_CALL(inputQueueMock, getLength).Times(1).WillOnce(testing::Return(1));
     EXPECT_CALL(hostOutputQueueMock, push(testing::_)).Times(1);
 
     SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &closureRegister,
-          &messageServiceMock, functionRegisters);
+          &messageServiceMock, &neighborsManagerMock, functionRegisters);
 
     // Then
     // Garbage collecting to make sure the pointer is still valid

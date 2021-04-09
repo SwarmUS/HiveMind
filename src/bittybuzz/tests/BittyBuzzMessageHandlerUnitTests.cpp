@@ -4,6 +4,7 @@
 #include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
 #include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
+#include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include "mocks/CircularQueueInterfaceMock.h"
 #include "mocks/LoggerInterfaceMock.h"
@@ -33,6 +34,7 @@ class BittyBuzzMessageHandlerFixture : public testing::Test {
     BittyBuzzClosureRegisterInterfaceMock m_closureRegisterMock;
     BittyBuzzMessageHandlerInterfaceMock m_messageHandlerMock;
     BittyBuyzzMessageServiceInterfaceMock m_messageServiceMock;
+    BittyBuzzNeighborsManagerInterfaceMock m_neighborsManagerMock;
 
     CircularQueueInterfaceMock<MessageDTO> m_inputQueueMock;
     CircularQueueInterfaceMock<MessageDTO> m_hostOutputQueueMock;
@@ -79,10 +81,10 @@ class BittyBuzzMessageHandlerFixture : public testing::Test {
         EXPECT_CALL(m_bittybuzzBytecode, getBytecodeFetchFunction)
             .WillRepeatedly(testing::Return(mockbcodeFetcher));
         m_bspMock = new BSPInterfaceMock(m_uuid);
-        m_bittybuzzVmMock = new BittyBuzzVm(m_bittybuzzBytecode, m_bittyBuzzStringResolverMock,
-                                            m_messageHandlerMock, m_closureRegisterMock,
-                                            m_messageServiceMock, *m_bspMock, *m_loggerMock,
-                                            m_uiMock, std::array<UserFunctionRegister, 0>{});
+        m_bittybuzzVmMock = new BittyBuzzVm(
+            m_bittybuzzBytecode, m_bittyBuzzStringResolverMock, m_messageHandlerMock,
+            m_closureRegisterMock, m_messageServiceMock, m_neighborsManagerMock, *m_bspMock,
+            *m_loggerMock, m_uiMock, std::array<UserFunctionRegister, 0>{});
         // Message Handler
         m_bbzMessageHandler = new BittyBuzzMessageHandler(
             m_closureRegisterMock, m_inputQueueMock, m_hostOutputQueueMock, m_remoteOutputQueueMock,

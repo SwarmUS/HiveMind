@@ -2,6 +2,7 @@
 #include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
 #include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
+#include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
@@ -14,14 +15,16 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_log_FunctionCalled) {
     BittyBuzzStringResolverInterfaceMock stringResolverMock;
     BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
+    BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
+    EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
     std::array<UserFunctionRegister, 1> functionRegister = {
         {{BBZSTRID_log, BittyBuzzUserFunctions::log}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
 
     std::optional<const char*> mockRet = "Hello World";
 

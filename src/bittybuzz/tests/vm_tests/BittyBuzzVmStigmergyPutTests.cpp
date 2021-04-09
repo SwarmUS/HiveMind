@@ -3,6 +3,7 @@
 #include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
 #include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
+#include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include <gtest/gtest.h>
 #include <stigmergy_put_bytecode.h>
@@ -14,13 +15,15 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_put_pushSuccess) {
     BittyBuzzStringResolverInterfaceMock stringResolverMock;
     BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
+    BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
+    EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     EXPECT_CALL(messageServiceMock, sendBuzzMessage).Times(1).WillOnce(testing::Return(true));
 
     std::array<UserFunctionRegister, 0> functionRegister = {};
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
     // Then
     bool ret = m_bittybuzzVm->step();
 
@@ -38,13 +41,15 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_put_pushFail) {
     BittyBuzzStringResolverInterfaceMock stringResolverMock;
     BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
+    BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
+    EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     EXPECT_CALL(messageServiceMock, sendBuzzMessage).Times(1).WillOnce(testing::Return(false));
 
     std::array<UserFunctionRegister, 0> functionRegister = {};
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
     // Then
     bool ret = m_bittybuzzVm->step();
 

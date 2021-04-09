@@ -3,6 +3,7 @@
 #include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
 #include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
+#include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include <stigmergy_get_bytecode.h>
 
@@ -13,7 +14,9 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_get) {
     BittyBuzzStringResolverInterfaceMock stringResolverMock;
     BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
+    BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
+    EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     EXPECT_CALL(messageServiceMock, sendBuzzMessage).Times(2).WillRepeatedly(testing::Return(true));
 
@@ -21,7 +24,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_get) {
 
         {BBZSTRID_assert_true, buzzAssertTrue}}};
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
 
     // Then
     bbzmsg_payload_t bbzPayloadBuff;

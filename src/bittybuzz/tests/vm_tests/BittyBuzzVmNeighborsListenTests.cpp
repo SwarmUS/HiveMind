@@ -5,11 +5,12 @@
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
 #include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
+#include <bittybuzz/BittyBuzzNeighborsManager.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
-#include <is_int_bytecode.h>
+#include <neighbors_listen_bytecode.h>
 
-TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isInt) {
+TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsListen) {
     // Given
     uint16_t boardId = 42;
     BittyBuzzMessageHandlerInterfaceMock messageHandlerMock;
@@ -21,21 +22,28 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isInt) {
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
-    std::array<UserFunctionRegister, 3> functionRegister = {
-        {{BBZSTRID_is_int, BittyBuzzUserFunctions::isInt},
-         {BBZSTRID_assert_true, buzzAssertTrue},
-         {BBZSTRID_assert_false, buzzAssertFalse}}};
+    uint8_t strId = BBZSTRID_key;
+    std::array<uint8_t, 8> payload = {0, 1, 0, strId, 0, 41, 42, 0};
+    bbzmsg_payload_t broadcastMessage;
+    broadcastMessage.buffer = payload.data();
+    broadcastMessage.capacity = 8;
+    broadcastMessage.elsize = 1;
+    broadcastMessage.datastart = 0;
+    broadcastMessage.dataend = 8;
+
+    std::array<UserFunctionRegister, 1> functionRegister = {
+        {{BBZSTRID_assert_true, buzzAssertTrue}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
+
+    bbzinmsg_queue_append(&broadcastMessage);
 
     // Then
     m_bittybuzzVm->step();
 
     // Expect
-
-    EXPECT_EQ(g_assertTrueCallCount, 1);
-    EXPECT_EQ(g_assertFalseCallCount, 6);
+    EXPECT_EQ(g_assertTrueCallCount, 3);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
 }
