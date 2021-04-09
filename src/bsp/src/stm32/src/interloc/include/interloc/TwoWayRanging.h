@@ -5,11 +5,29 @@
 #include "UWBRxFrame.h"
 #include <cstdint>
 
+/**
+ * @brief Class containing all information needed to calculate a distance using the TWR algorithm
+ */
 class TwoWayRanging {
   public:
+    /**
+     * @brief Calculates a distance based on the values of the class members
+     * @return The distance in meters
+     */
     double calculateDistance() const;
 
+    /**
+     * @brief Extracts all timestamps from a Final message
+     * @param finalMessage A pointer to the message
+     */
     void deserializeFinal(UWBMessages::TWRFinal* finalMessage);
+
+    /**
+     * @brief Constructs a final message based on the values of the class members and the given Tx
+     * timestamp
+     * @param finalMessage A pointer to the buffer to fill
+     * @param finalTxTs The timestamp at which the final message will be sent
+     */
     void constructFinal(UWBMessages::TWRFinal* finalMessage, uint64_t finalTxTs);
 
     uint64_t m_pollTxTs;

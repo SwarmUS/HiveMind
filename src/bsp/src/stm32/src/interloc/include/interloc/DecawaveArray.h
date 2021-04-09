@@ -7,6 +7,9 @@
 
 enum class DecawavePort { A = 0, B, NUM_PORTS };
 
+/**
+ * @brief Wrapper class that allows accessing DW1000s through an enum
+ */
 class DecawaveArray {
   public:
     DecawaveArray() = default;

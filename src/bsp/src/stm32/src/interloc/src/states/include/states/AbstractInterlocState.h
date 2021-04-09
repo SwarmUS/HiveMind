@@ -11,6 +11,11 @@ class AbstractInterlocState {
   public:
     AbstractInterlocState(ILogger& logger, DecawaveArray& decawaves);
 
+    /**
+     * @brief Called periodically to perform the state action. Should set the next state through the
+     * context
+     * @param context Reference to the state handler
+     */
     virtual void process(InterlocStateHandler& context) = 0;
 
   protected:

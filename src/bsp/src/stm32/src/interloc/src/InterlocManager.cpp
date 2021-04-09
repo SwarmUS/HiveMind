@@ -34,7 +34,6 @@ void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t
 void InterlocManager::startInterloc() {
     for (auto& deca : m_decawaves) {
         if (!deca.init()) {
-            // TODO: Add ID to decawave
             m_logger.log(LogLevel::Warn, "InterlocManager: Could not start Decawave");
         }
     }
@@ -42,7 +41,7 @@ void InterlocManager::startInterloc() {
     syncClocks();
 
     // Uncomment one of the following lines to go into TWR
-    m_stateHandler.setState(InterlocStates::WAIT_POLL);
+    // m_stateHandler.setState(InterlocStates::WAIT_POLL);
     // m_stateHandler.setState(InterlocStates::SEND_POLL);
 
     while (true) {
@@ -101,6 +100,9 @@ void InterlocManager::startCalibSingleResponder(uint16_t initiatorId,
                                                 calibrationEndedCallbackFunction_t callback,
                                                 void* context) {
     m_logger.log(LogLevel::Warn, "Calibration disabled for now");
+    (void)initiatorId;
+    (void)callback;
+    (void)context;
     //    m_calibrationInitiatorId = initiatorId;
     //    m_calibrationEndedCallback = callback;
     //    m_calibrationEndedCallbackContext = context;
@@ -176,109 +178,6 @@ void InterlocManager::stopCalibration() {
 //        }
 //        Task::delay(100);
 //    }
-//}
-
-// double InterlocManager::receiveTWRSequence(uint16_t destinationId, Decawave& device) {
-//    UWBRxFrame rxFrame;
-//    UWBMessages::TWRResponse responseMsg{};
-//
-//    // receive poll message
-//    device.receive(rxFrame, 0);
-//
-//    if (!isFrameOk(rxFrame)) {
-//        return -1;
-//    }
-//    if (reinterpret_cast<UWBMessages::DWFrame*>(rxFrame.m_rxBuffer.data())->m_functionCode !=
-//        UWBMessages::FunctionCode::TWR_POLL) {
-//        return -1;
-//    }
-//
-//    uint64_t pollRxTs = rxFrame.m_rxTimestamp;
-//
-//    // construct and send Response message
-//    constructUWBHeader(destinationId, UWBMessages::DATA, UWBMessages::TWR_RESPONSE,
-//                       (uint8_t*)&responseMsg, sizeof(responseMsg));
-//
-//    uint64_t respTxTime = pollRxTs + (POLL_RX_TO_RESP_TX_DLY_UUS * UUS_TO_DWT_TIME);
-//    device.transmitDelayedAndReceive((uint8_t*)&responseMsg, sizeof(responseMsg), respTxTime, 0,
-//                                     rxFrame, FINAL_RX_TIMEOUT_UUS);
-//
-//    // Get the real time at which the response will be sent
-//    uint64_t respTxTs = device.getTxTimestampFromDelayedTime(respTxTime);
-//
-//    if (!isFrameOk(rxFrame)) {
-//        return -1;
-//    }
-//    if (reinterpret_cast<UWBMessages::DWFrame*>(rxFrame.m_rxBuffer.data())->m_functionCode !=
-//        UWBMessages::FunctionCode::TWR_FINAL) {
-//        return -1;
-//    }
-//
-//    UWBMessages::TWRFinal* finalTWRFrame =
-//        reinterpret_cast<UWBMessages::TWRFinal*>(rxFrame.m_rxBuffer.data());
-//    uint32_t finalRxTs = (uint32_t)rxFrame.m_rxTimestamp;
-//
-//    // evaluate distance
-//    volatile uint64_t tRound1 = finalTWRFrame->m_respMinPoll;
-//    volatile uint32_t tRound2 = (finalRxTs - (uint32_t)respTxTs);
-//    volatile uint64_t tReply1 = (finalTWRFrame->m_finaleMinResp);
-//    volatile uint32_t tReply2 = ((uint32_t)respTxTs - (uint32_t)pollRxTs);
-//
-//    uint64_t tofDtu =
-//        (tRound1 * tRound2 - tReply1 * tReply2) / (tRound1 + tRound2 + tReply1 + tReply2);
-//
-//    double tof = tofDtu * DWT_TIME_UNITS;
-//    double distanceEval = tof * SPEED_OF_LIGHT;
-//
-//    m_logger.log(LogLevel::Info, "Measured distance : %f", distanceEval);
-//
-//    return distanceEval;
-//}
-
-// bool InterlocManager::sendTWRSequence(uint16_t destinationId, Decawave& device) {
-//
-//    UWBRxFrame responseFrame;
-//
-//    UWBMessages::TWRPoll pollMsg{};
-//    UWBMessages::TWRFinal finalMsg{};
-//    uint64_t pollTimestamp;
-//
-//    // Construct poll message
-//    constructUWBHeader(destinationId, UWBMessages::BEACON, UWBMessages::TWR_POLL,
-//                       (uint8_t*)&pollMsg, sizeof(pollMsg));
-//    device.transmitAndReceiveDelayed((uint8_t*)(&pollMsg), sizeof(UWBMessages::DWFrame),
-//                                     POLL_TX_TO_RESP_RX_DLY_UUS, responseFrame,
-//                                     RESP_RX_TIMEOUT_UUS);
-//
-//    if (!isFrameOk(responseFrame)) {
-//        return false;
-//    }
-//
-//    if (reinterpret_cast<UWBMessages::DWFrame*>(responseFrame.m_rxBuffer.data())->m_functionCode
-//    !=
-//        UWBMessages::FunctionCode::TWR_RESPONSE) {
-//        return false;
-//    }
-//
-//    //  Retrieve poll transmission and response reception timestamp.
-//    device.getTxTimestamp(&pollTimestamp);
-//    uint64_t responseTimestamp = responseFrame.m_rxTimestamp;
-//
-//    //  Compute final message transmission time
-//    uint64_t finalTxTime = responseTimestamp + (RESP_RX_TO_FINAL_TX_DLY_UUS * UUS_TO_DWT_TIME);
-//    // Get the timestamp at which it will really be sent
-//    uint64_t finalTxTs = device.getTxTimestampFromDelayedTime(finalTxTime);
-//
-//    //  Construct final message
-//    DecawaveUtils::tsToBytes((uint8_t*)(&finalMsg.m_respMinPoll),
-//                             responseTimestamp - pollTimestamp);
-//    DecawaveUtils::tsToBytes((uint8_t*)(&finalMsg.m_finaleMinResp), finalTxTs -
-//    responseTimestamp);
-//
-//    constructUWBHeader(destinationId, UWBMessages::DATA, UWBMessages::TWR_FINAL,
-//                       (uint8_t*)(&finalMsg), sizeof(finalMsg));
-//    return device.transmitDelayed((uint8_t*)(&finalMsg), sizeof(UWBMessages::TWRFinal),
-//                                  finalTxTime);
 //}
 
 uint8_t InterlocManager::powerCorrection(double twrDistance) {

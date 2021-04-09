@@ -30,7 +30,7 @@ void SendResponseState::process(InterlocStateHandler& context) {
         context.getTWR().deserializeFinal(
             reinterpret_cast<UWBMessages::TWRFinal*>(m_rxFrame.m_rxBuffer.data()));
         double distance = context.getTWR().calculateDistance();
-        m_logger.log(LogLevel::Info, "Distance: %3.2f", distance);
+        m_logger.log(LogLevel::Info, "Distance: %2.3f", distance);
     }
 
     context.setState(InterlocStates::WAIT_POLL);
