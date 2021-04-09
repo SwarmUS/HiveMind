@@ -7,7 +7,7 @@
 
 class SendFinalState : public AbstractInterlocState {
   public:
-    SendFinalState(ILogger& logger, InterlocManager& interlocManager, DecawaveArray& decawaves);
+    SendFinalState(ILogger& logger, DecawaveArray& decawaves);
     void process(InterlocStateHandler& context) override;
 
   private:

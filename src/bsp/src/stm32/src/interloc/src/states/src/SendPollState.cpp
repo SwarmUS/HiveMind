@@ -4,15 +4,12 @@
 #include "states/InterlocStateContainer.h"
 #include <Task.h>
 
-SendPollState::SendPollState(ILogger& logger,
-                             InterlocManager& interlocManager,
-                             DecawaveArray& decawaves) :
-    AbstractInterlocState(logger, interlocManager, decawaves) {}
+SendPollState::SendPollState(ILogger& logger, DecawaveArray& decawaves) :
+    AbstractInterlocState(logger, decawaves) {}
 
 void SendPollState::process(InterlocStateHandler& context) {
-    m_interlocManager.constructUWBHeader(UWB_BROADCAST_ADDRESS, UWBMessages::BEACON,
-                                         UWBMessages::TWR_POLL, (uint8_t*)&m_pollMsg,
-                                         sizeof(m_pollMsg));
+    context.constructUWBHeader(UWB_BROADCAST_ADDRESS, UWBMessages::BEACON, UWBMessages::TWR_POLL,
+                               (uint8_t*)&m_pollMsg, sizeof(m_pollMsg));
 
     m_decawaves[DecawavePort::A].transmitAndReceiveDelayed(
         (uint8_t*)&m_pollMsg, sizeof(UWBMessages::TWRPoll), POLL_TX_TO_RESP_RX_DLY_UUS,

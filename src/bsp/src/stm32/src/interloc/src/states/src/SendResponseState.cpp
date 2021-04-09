@@ -3,15 +3,13 @@
 #include <states/InterlocStateContainer.h>
 #include <states/SendResponseState.h>
 
-SendResponseState::SendResponseState(ILogger& logger,
-                                     InterlocManager& interlocManager,
-                                     DecawaveArray& decawaves) :
-    AbstractInterlocState(logger, interlocManager, decawaves) {}
+SendResponseState::SendResponseState(ILogger& logger, DecawaveArray& decawaves) :
+    AbstractInterlocState(logger, decawaves) {}
 
 void SendResponseState::process(InterlocStateHandler& context) {
     // TODO: Set destination ID
-    m_interlocManager.constructUWBHeader(0x01, UWBMessages::DATA, UWBMessages::TWR_RESPONSE,
-                                         (uint8_t*)&m_respMsg, sizeof(m_respMsg));
+    context.constructUWBHeader(0x01, UWBMessages::DATA, UWBMessages::TWR_RESPONSE,
+                               (uint8_t*)&m_respMsg, sizeof(m_respMsg));
     m_respMsg.m_subFrameId = RESPONDER_SLOT;
 
     uint64_t respTxTime =

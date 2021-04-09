@@ -9,23 +9,18 @@
 
 AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
     static DefaultState s_defaultState(LoggerContainer::getLogger(),
-                                       InterlocBSPContainer::getInterlocManager(),
                                        InterlocBSPContainer::getDecawaves());
 
     static SendPollState s_sendPollState(LoggerContainer::getLogger(),
-                                         InterlocBSPContainer::getInterlocManager(),
                                          InterlocBSPContainer::getDecawaves());
 
     static SendFinalState s_sendFinalState(LoggerContainer::getLogger(),
-                                           InterlocBSPContainer::getInterlocManager(),
                                            InterlocBSPContainer::getDecawaves());
 
     static WaitPollState s_waitPollState(LoggerContainer::getLogger(),
-                                         InterlocBSPContainer::getInterlocManager(),
                                          InterlocBSPContainer::getDecawaves());
 
     static SendResponseState s_sendResponseState(LoggerContainer::getLogger(),
-                                                 InterlocBSPContainer::getInterlocManager(),
                                                  InterlocBSPContainer::getDecawaves());
 
     switch (state) {

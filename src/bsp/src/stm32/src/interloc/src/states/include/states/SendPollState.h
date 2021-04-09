@@ -7,7 +7,7 @@
 
 class SendPollState : public AbstractInterlocState {
   public:
-    SendPollState(ILogger& logger, InterlocManager& interlocManager, DecawaveArray& decawaves);
+    SendPollState(ILogger& logger, DecawaveArray& decawaves);
 
     void process(InterlocStateHandler& context) override;
 

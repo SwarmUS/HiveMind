@@ -3,10 +3,8 @@
 #include <states/InterlocStateContainer.h>
 #include <states/WaitPollState.h>
 
-WaitPollState::WaitPollState(ILogger& logger,
-                             InterlocManager& interlocManager,
-                             DecawaveArray& decawaves) :
-    AbstractInterlocState(logger, interlocManager, decawaves) {}
+WaitPollState::WaitPollState(ILogger& logger, DecawaveArray& decawaves) :
+    AbstractInterlocState(logger, decawaves) {}
 
 void WaitPollState::process(InterlocStateHandler& context) {
     m_decawaves[DecawavePort::A].receive(m_rxFrame, 0);

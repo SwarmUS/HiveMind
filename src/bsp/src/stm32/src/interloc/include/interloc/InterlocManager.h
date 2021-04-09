@@ -8,9 +8,6 @@
 #include <bsp/IInterlocManager.h>
 #include <logger/ILogger.h>
 
-// TODO: Add to settings
-#define PAN_ID 0x01
-
 class InterlocManager : public IInterlocManager {
   public:
     InterlocManager(ILogger& logger, InterlocStateHandler& stateHandler, DecawaveArray& decawaves);
@@ -26,12 +23,6 @@ class InterlocManager : public IInterlocManager {
     void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
                                    void* context) override;
 
-    bool constructUWBHeader(uint16_t destinationId,
-                            UWBMessages::FrameType frameType,
-                            UWBMessages::FunctionCode functionCode,
-                            uint8_t* buffer,
-                            uint16_t bufferLength);
-
     /**
      * Syncs the clocks of both DW1000s
      */
@@ -43,7 +34,6 @@ class InterlocManager : public IInterlocManager {
 
     DecawaveArray& m_decawaves;
 
-    uint8_t m_sequenceID = 0;
     uint16_t m_distanceCalibCm = 75;
 
     positionUpdateCallbackFunction_t m_positionUpdateCallback;

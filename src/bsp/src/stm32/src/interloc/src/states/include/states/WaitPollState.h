@@ -7,7 +7,7 @@
 
 class WaitPollState : public AbstractInterlocState {
   public:
-    WaitPollState(ILogger& logger, InterlocManager& interlocManager, DecawaveArray& decawaves);
+    WaitPollState(ILogger& logger, DecawaveArray& decawaves);
 
     void process(InterlocStateHandler& context) override;
 

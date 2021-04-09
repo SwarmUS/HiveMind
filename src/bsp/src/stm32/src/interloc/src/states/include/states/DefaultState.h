@@ -5,7 +5,7 @@
 
 class DefaultState : public AbstractInterlocState {
   public:
-    DefaultState(ILogger& logger, InterlocManager& interlocManager, DecawaveArray& decawaves);
+    DefaultState(ILogger& logger, DecawaveArray& decawaves);
 
     void process(InterlocStateHandler& context) override;
 };

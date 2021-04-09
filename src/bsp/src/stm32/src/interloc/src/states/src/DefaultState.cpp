@@ -2,10 +2,8 @@
 #include "interloc/InterlocStateHandler.h"
 #include <Task.h>
 
-DefaultState::DefaultState(ILogger& logger,
-                           InterlocManager& interlocManager,
-                           DecawaveArray& decawaves) :
-    AbstractInterlocState(logger, interlocManager, decawaves) {}
+DefaultState::DefaultState(ILogger& logger, DecawaveArray& decawaves) :
+    AbstractInterlocState(logger, decawaves) {}
 
 void DefaultState::process(InterlocStateHandler& context) {
     (void)context;
