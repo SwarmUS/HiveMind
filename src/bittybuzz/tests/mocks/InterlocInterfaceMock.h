@@ -14,7 +14,7 @@ class InterlocInterfaceMock : public IInterloc {
                 (const override));
     MOCK_METHOD(bool, isLineOfSight, (uint16_t robotId), (const override));
 
-    MOCK_METHOD(const PositionsTable&, getPositionsTable, (), (const override));
+    MOCK_METHOD((const PositionsTable&), getPositionsTable, (), (const override));
 };
 
 #endif // __INTERLOCKINTERFACEMOCK_H_

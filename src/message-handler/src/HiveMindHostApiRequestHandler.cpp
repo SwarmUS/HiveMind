@@ -29,11 +29,17 @@ bool HiveMindHostApiRequestHandler::handleHiveMindHostApiRequest(
 
     if (const auto* neighborReq = std::get_if<GetNeighborRequestDTO>(&request.getRequest())) {
         uint16_t id = neighborReq->getNeighborId();
-        std::optional<RelativePosition> pos = m_interloc.getRobotPosition(id);
-        NeighborPositionDTO posDTO(pos->m_distance, pos->m_relativeOrientation,
-                                   pos->m_isInLineOfSight);
+        std::optional<RelativePosition> posOpt = m_interloc.getRobotPosition(id);
 
-        GetNeighborResponseDTO neighborResp(id, posDTO);
+        std::optional<NeighborPositionDTO> posOptDTO = {};
+        if (posOpt) {
+
+            const RelativePosition& pos = posOpt.value();
+            posOptDTO = NeighborPositionDTO(pos.m_distance, pos.m_relativeOrientation,
+                                            pos.m_isInLineOfSight);
+        }
+
+        GetNeighborResponseDTO neighborResp(id, posOptDTO);
         HiveMindHostApiResponseDTO hmResp(neighborResp);
         ResponseDTO resp(requestId, hmResp);
         MessageDTO msg(m_bsp.getUUId(), message.getSourceId(), resp);
@@ -43,10 +49,10 @@ bool HiveMindHostApiRequestHandler::handleHiveMindHostApiRequest(
     if (std::holds_alternative<GetNeighborsListRequestDTO>(request.getRequest())) {
 
         GetNeighborsListResponseDTO neighborResp(NULL, 0);
-        const PositionsTable& posTable = m_interloc.getPositionTable();
+        const PositionsTable& posTable = m_interloc.getPositionsTable();
 
         neighborResp.setRawNeighborsLength(posTable.m_positionsLength);
-        auto rawNeighbors = neighborResp.getRawNeighbors(posTable.m_positionsLength);
+        auto& rawNeighbors = neighborResp.getRawNeighbors();
         for (uint16_t i = 0; i < neighborResp.getNeighborsLength(); i++) {
             rawNeighbors[i] = posTable.m_positions[i].m_robotId;
         }
