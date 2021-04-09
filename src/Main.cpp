@@ -245,6 +245,26 @@ class SoftwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> 
     }
 };
 
+class TestEspCommunicationTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+  public:
+    TestEspCommunicationTask(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority),
+        m_spi(BSPContainer::getRemoteCommInterface().value().get()) {}
+
+    ~TestEspCommunicationTask() override = default;
+
+  private:
+    ICommInterface& m_spi;
+
+    void task() override {
+        char message[] = "Message sent by stm";
+        while (true) {
+            m_spi.send((uint8_t*)message, sizeof(message));
+            Task::delay(2000);
+        }
+    }
+};
+
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
@@ -272,11 +292,13 @@ int main(int argc, char** argv) {
                                                   s_remoteDispatchTask, s_remoteMessageSender,
                                                   BSPContainer::getRemoteCommInterface);
 
-    s_bittybuzzTask.start();
-    s_hardwareInterlocTask.start();
-    s_softwareInterlocTask.start();
-    s_hostMonitorTask.start();
-    s_remoteMonitorTask.start();
+    static TestEspCommunicationTask s_test("test", tskIDLE_PRIORITY + 1);
+    s_test.start();
+    /* s_bittybuzzTask.start();
+     s_hardwareInterlocTask.start();
+     s_softwareInterlocTask.start();
+     s_hostMonitorTask.start();
+     s_remoteMonitorTask.start();*/
 
     Task::startScheduler();
 
