@@ -52,3 +52,5 @@ add_custom_target(
     run
     COMMAND $<TARGET_FILE:${EXECUTABLE_NAME}>
 )
+
+add_subdirectory(ros-services)
