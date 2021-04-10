@@ -2,6 +2,7 @@
 #include "mocks/BittyBuzzClosureRegisterInterfaceMock.h"
 #include "mocks/BittyBuzzMessageHandlerInterfaceMock.h"
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
+#include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <call_host_function_invalidKeys_bytecode.h>
@@ -17,7 +18,9 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_callHostFunction_sendToHost_invalidKe
     BittyBuzzStringResolverInterfaceMock stringResolverMock;
     BittyBuzzMessageHandlerInterfaceMock messageHandlerMock;
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
+    BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
+    EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     EXPECT_CALL(stringResolverMock, getString(BBZSTRID_hostFunction))
         .Times(1)
@@ -30,7 +33,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_callHostFunction_sendToHost_invalidKe
         {{BBZSTRID_call_host_function, BittyBuzzUserFunctions::callHostFunction}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, functionRegisters);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegisters);
 
     // Then
     m_bittybuzzVm->step();

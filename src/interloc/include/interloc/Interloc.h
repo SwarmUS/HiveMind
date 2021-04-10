@@ -10,13 +10,13 @@ class Interloc : public IInterloc {
     Interloc(ILogger& logger, IInterlocManager& interlocManager);
     virtual ~Interloc() = default;
 
-    std::optional<RelativePosition> getRobotPosition(uint16_t robotId) override;
-    bool isLineOfSight(uint16_t robotId) override;
-    const PositionsTable& getPositionsTable() override;
+    std::optional<RelativePosition> getRobotPosition(uint16_t robotId) const override;
+    bool isLineOfSight(uint16_t robotId) const override;
+    const PositionsTable& getPositionsTable() const override;
 
   private:
     void onPositionUpdateCallback(InterlocUpdate positionUpdate);
-    std::optional<uint8_t> getRobotArrayIndex(uint16_t robotId);
+    std::optional<uint8_t> getRobotArrayIndex(uint16_t robotId) const;
     static void updateRobotPosition(RelativePosition& positionToUpdate, InterlocUpdate update);
 
     static void onPositionUpdateStaticCallback(void* context, InterlocUpdate update);

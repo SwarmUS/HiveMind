@@ -5,6 +5,7 @@
 #include "IBittyBuzzClosureRegister.h"
 #include "IBittyBuzzMessageHandler.h"
 #include "IBittyBuzzMessageService.h"
+#include "IBittyBuzzNeighborsManager.h"
 #include "IBittyBuzzStringResolver.h"
 #include "IBittyBuzzVm.h"
 #include <array>
@@ -33,6 +34,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
      *@param messageHandler a reference to a buzz message handler, called on step
      *@param closureRegister a reference to the closure register
      *@param messageService a reference to the message service
+     *@param neighborsManager a reference to a neighbors manager
      *@param bsp a reference to the bsp
      *@param logger a reference to a logger
      *@param ui a reference to a user interface
@@ -44,6 +46,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
                 IBittyBuzzMessageHandler& messageHandler,
                 IBittyBuzzClosureRegister& closureRegister,
                 IBittyBuzzMessageService& messageService,
+                IBittyBuzzNeighborsManager& neighborsManager,
                 const IBSP& bsp,
                 ILogger& logger,
                 IUserInterface& ui,
@@ -62,6 +65,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
     const IBSP& m_bsp;
     IBittyBuzzMessageHandler& m_messageHandler;
     IBittyBuzzMessageService& m_messageService;
+    IBittyBuzzNeighborsManager& m_neighborsManager;
     ILogger& m_logger;
     IUserInterface& m_ui;
 

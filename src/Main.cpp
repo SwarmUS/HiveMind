@@ -37,6 +37,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
                       BittyBuzzContainer::getBBZMessageHandler(),
                       BittyBuzzContainer::getBBZClosureRegister(),
                       BittyBuzzContainer::getBBZMessageService(),
+                      BittyBuzzContainer::getBBZNeighborsManager(),
                       BSPContainer::getBSP(),
                       m_logger,
                       BSPContainer::getUserInterface(),

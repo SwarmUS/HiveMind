@@ -6,6 +6,7 @@
 #include "bittybuzz/BittyBuzzVm.h"
 #include "bittybuzz/IBittyBuzzMessageHandler.h"
 #include "bittybuzz/IBittyBuzzMessageService.h"
+#include "bittybuzz/IBittyBuzzNeighborsManager.h"
 #include "bittybuzz/IBittyBuzzStringResolver.h"
 #include "mocks/BSPInterfaceMock.h"
 #include "mocks/LoggerInterfaceMock.h"
@@ -16,7 +17,6 @@ class BittyBuzzVmTestFixture : public testing::Test {
   protected:
     BittyBuzzVm* m_bittybuzzVm;
     BittyBuzzBytecode* m_bittybuzzBytecode;
-
     LoggerInterfaceMock* m_loggerMock;
     BSPInterfaceMock* m_bspMock;
     UserInterfaceMock m_uiMock;
@@ -33,6 +33,7 @@ class BittyBuzzVmTestFixture : public testing::Test {
                IBittyBuzzMessageHandler* bittyBuzzMessageHandler,
                IBittyBuzzClosureRegister* bittyBuzzClosureRegister,
                IBittyBuzzMessageService* bittyBuzzMessageService,
+               IBittyBuzzNeighborsManager* m_neightborsManager,
                const Container& container) {
 
         g_assertTrueCallCount = 0;
@@ -44,8 +45,8 @@ class BittyBuzzVmTestFixture : public testing::Test {
 
         m_bittybuzzVm = new BittyBuzzVm(*m_bittybuzzBytecode, *bittyBuzzStringResolver,
                                         *bittyBuzzMessageHandler, *bittyBuzzClosureRegister,
-                                        *bittyBuzzMessageService, *m_bspMock, *m_loggerMock,
-                                        m_uiMock, container);
+                                        *bittyBuzzMessageService, *m_neightborsManager, *m_bspMock,
+                                        *m_loggerMock, m_uiMock, container);
     }
 
     void TearDown() override {

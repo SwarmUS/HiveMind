@@ -19,20 +19,20 @@ class IInterloc {
      * @param robotId The ID of the robot to get the position
      * @return The relative position of the robot
      */
-    virtual std::optional<RelativePosition> getRobotPosition(uint16_t robotId) = 0;
+    virtual std::optional<RelativePosition> getRobotPosition(uint16_t robotId) const = 0;
 
     /**
      * @brief Tells if a robot is in line of sight
      * @param robotId The ID of the robot to get
      * @return Is in line of sight
      */
-    virtual bool isLineOfSight(uint16_t robotId) = 0;
+    virtual bool isLineOfSight(uint16_t robotId) const = 0;
 
     /**
      * @brief Returns the position table for all robots in the swarm
      * @return The position table
      */
-    virtual const PositionsTable& getPositionsTable() = 0;
+    virtual const PositionsTable& getPositionsTable() const = 0;
 };
 
 #endif //__IINTERLOC_H__
