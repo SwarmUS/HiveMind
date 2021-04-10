@@ -47,27 +47,6 @@ void InterlocManager::startInterloc() {
     while (true) {
         m_stateHandler.process();
     }
-
-    //    while (m_decaA.getState() != DW_STATE::CALIBRATED &&
-    //           m_decaB.getState() != DW_STATE::CALIBRATED) {
-    //
-    //        if (m_decaA.getState() == DW_STATE::RESPOND_CALIB) {
-    //            m_logger.log(LogLevel::Info, "Starting DW calibration as responder on DW A");
-    //            startDeviceCalibSingleResponder(0x69, m_decaA);
-    //        } else if (m_decaA.getState() == DW_STATE::SEND_CALIB) {
-    //            m_logger.log(LogLevel::Info, "Starting DW calibration as initiator on DW A");
-    //            startDeviceCalibSingleInitiator(0x69, m_decaA);
-    //        }
-    //
-    //        if (m_decaB.getState() == DW_STATE::RESPOND_CALIB) {
-    //            m_logger.log(LogLevel::Info, "Starting DW calibration as responder on DW B");
-    //            startDeviceCalibSingleResponder(0x69, m_decaB);
-    //        } else if (m_decaB.getState() == DW_STATE::SEND_CALIB) {
-    //            m_logger.log(LogLevel::Info, "Starting DW calibration as initiator on DW B");
-    //            startDeviceCalibSingleInitiator(0x69, m_decaB);
-    //        }
-    //
-    //        Task::delay(10);
 }
 
 void InterlocManager::syncClocks() {

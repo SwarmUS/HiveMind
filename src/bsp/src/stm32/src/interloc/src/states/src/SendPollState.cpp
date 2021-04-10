@@ -22,7 +22,8 @@ void SendPollState::process(InterlocStateHandler& context) {
         m_decawaves[DecawavePort::A].getTxTimestamp(&context.getTWR().m_pollTxTs);
         context.getTWR().m_responseRxTs[reinterpret_cast<UWBMessages::TWRResponse*>(
                                             m_responseFrame.m_rxBuffer.data())
-                                            ->m_subFrameId] = m_responseFrame.m_rxTimestamp;
+                                            ->m_subFrameId -
+                                        1] = m_responseFrame.m_rxTimestamp;
 
         context.setState(InterlocStates::SEND_FINAL);
     } else {

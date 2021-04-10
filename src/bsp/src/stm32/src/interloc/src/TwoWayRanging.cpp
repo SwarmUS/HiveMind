@@ -24,17 +24,21 @@ void TwoWayRanging::constructFinal(UWBMessages::TWRFinal* finalMessage, uint64_t
     DecawaveUtils::tsToBytes((uint8_t*)(&finalMessage->m_finalTxTs), m_finalTxTs);
 }
 
-double TwoWayRanging::calculateDistance() const {
-    uint64_t tRound1 = m_responseRxTs[RESPONDER_SLOT] - m_pollTxTs;
-    uint32_t tRound2 = m_finalRxTs - (uint32_t)m_responseTxTs;
+std::optional<double> TwoWayRanging::calculateDistance() const {
+    uint64_t tRound1 = m_responseRxTs[RESPONDER_SLOT - 1] - m_pollTxTs;
+    uint32_t tRound2 = (uint32_t)m_finalRxTs - (uint32_t)m_responseTxTs;
     uint32_t tReply1 = (uint32_t)m_responseTxTs - (uint32_t)m_pollRxTs;
-    uint64_t tReply2 = m_finalTxTs - m_responseRxTs[RESPONDER_SLOT];
+    uint64_t tReply2 = m_finalTxTs - m_responseRxTs[RESPONDER_SLOT - 1];
 
     uint64_t tofDtu =
         (tRound1 * tRound2 - tReply1 * tReply2) / (tRound1 + tRound2 + tReply1 + tReply2);
 
     double tof = tofDtu * DWT_TIME_UNITS;
-    tof *= SPEED_OF_LIGHT;
+    double distance = tof * SPEED_OF_LIGHT;
 
-    return tof < MAX_POSSIBLE_DISTANCE ? tof : 0;
+    if (distance < MAX_POSSIBLE_DISTANCE) {
+        return distance;
+    }
+
+    return {};
 }

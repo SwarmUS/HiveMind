@@ -4,6 +4,7 @@
 #include "UWBMessages.h"
 #include "UWBRxFrame.h"
 #include <cstdint>
+#include <optional>
 
 /**
  * @brief Class containing all information needed to calculate a distance using the TWR algorithm
@@ -14,7 +15,7 @@ class TwoWayRanging {
      * @brief Calculates a distance based on the values of the class members
      * @return The distance in meters
      */
-    double calculateDistance() const;
+    std::optional<double> calculateDistance() const;
 
     /**
      * @brief Extracts all timestamps from a Final message
@@ -38,11 +39,6 @@ class TwoWayRanging {
 
     uint64_t m_finalTxTs;
     uint64_t m_finalRxTs;
-
-    //    UWBRxFrame m_pollMessage;
-    //    UWBMessages::TWRPoll m_pollMsg{};
-    //    UWBMessages::TWRResponse m_responseMsg{};
-    //    UWBMessages::TWRFinal m_finalMsg{};
 };
 
 #endif // HIVE_MIND_TWOWAYRANGING_H

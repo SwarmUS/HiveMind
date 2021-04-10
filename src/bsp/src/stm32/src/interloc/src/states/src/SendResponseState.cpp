@@ -18,7 +18,7 @@ void SendResponseState::process(InterlocStateHandler& context) {
     m_decawaves[DecawavePort::A].transmitDelayedAndReceive(
         (uint8_t*)&m_respMsg, sizeof(m_respMsg), respTxTime, 0, m_rxFrame, FINAL_RX_TIMEOUT_UUS);
 
-    // Get the real time at which the response was be sent
+    // Get the real time at which the response was sent
     context.getTWR().m_responseTxTs =
         m_decawaves[DecawavePort::A].getTxTimestampFromDelayedTime(respTxTime);
 
@@ -29,8 +29,10 @@ void SendResponseState::process(InterlocStateHandler& context) {
         context.getTWR().m_finalRxTs = m_rxFrame.m_rxTimestamp;
         context.getTWR().deserializeFinal(
             reinterpret_cast<UWBMessages::TWRFinal*>(m_rxFrame.m_rxBuffer.data()));
-        double distance = context.getTWR().calculateDistance();
-        m_logger.log(LogLevel::Info, "Distance: %2.3f", distance);
+        std::optional<double> distance = context.getTWR().calculateDistance();
+        if (distance) {
+            m_logger.log(LogLevel::Info, "Distance: %2.3f", distance.value());
+        }
     }
 
     context.setState(InterlocStates::WAIT_POLL);
