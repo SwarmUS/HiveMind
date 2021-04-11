@@ -11,7 +11,8 @@ constexpr uint16_t gc_interlocPosUpdateMaxSize = 4 * MAX_ROBOTS_IN_SWARM;
 
 IInterloc& InterlocContainer::getInterloc() {
     static Interloc s_interloc =
-        Interloc(LoggerContainer::getLogger(), BSPContainer::getInterlocManager());
+        Interloc(LoggerContainer::getLogger(), BSPContainer::getInterlocManager(),
+                 getInterlocPosUpdateQueue());
     return s_interloc;
 }
 

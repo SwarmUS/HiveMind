@@ -1,7 +1,12 @@
 #include "interloc/Interloc.h"
 
-Interloc::Interloc(ILogger& logger, IInterlocManager& interlocManager) :
-    m_logger(logger), m_interlocManager(interlocManager), m_positionsTable() {
+Interloc::Interloc(ILogger& logger,
+                   IInterlocManager& interlocManager,
+                   ICircularQueue<uint16_t>& positionUpdateQueue) :
+    m_logger(logger),
+    m_interlocManager(interlocManager),
+    m_positionsTable(),
+    m_positionUpdateQueue(positionUpdateQueue) {
     m_interlocManager.setPositionUpdateCallback(onPositionUpdateStaticCallback, this);
 }
 
@@ -40,6 +45,8 @@ void Interloc::onPositionUpdateCallback(InterlocUpdate positionUpdate) {
         updateRobotPosition(m_positionsTable.m_positions[m_positionsTable.m_positionsLength++],
                             positionUpdate);
     }
+
+    m_positionUpdateQueue.push(positionUpdate.m_robotId);
 }
 
 std::optional<uint8_t> Interloc::getRobotArrayIndex(uint16_t robotId) const {

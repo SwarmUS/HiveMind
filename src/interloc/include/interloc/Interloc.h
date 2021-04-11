@@ -2,12 +2,15 @@
 #define __INTERLOC_H__
 
 #include "IInterloc.h"
+#include <ThreadSafeQueue.h>
 #include <bsp/IInterlocManager.h>
 #include <logger/ILogger.h>
 
 class Interloc : public IInterloc {
   public:
-    Interloc(ILogger& logger, IInterlocManager& interlocManager);
+    Interloc(ILogger& logger,
+             IInterlocManager& interlocManager,
+             ICircularQueue<uint16_t>& positionUpdateQueue);
     virtual ~Interloc() = default;
 
     std::optional<RelativePosition> getRobotPosition(uint16_t robotId) const override;
@@ -25,6 +28,7 @@ class Interloc : public IInterloc {
     IInterlocManager& m_interlocManager;
 
     PositionsTable m_positionsTable;
+    ICircularQueue<uint16_t>& m_positionUpdateQueue;
 };
 
 #endif //__INTERLOC_H__
