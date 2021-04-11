@@ -11,8 +11,8 @@ extraction:
       packages:
         - protobuf-compiler
         - python3-protobuf
-        - ros-noetic-gazebo-ros-pkgs
-        - ros-noetic-gazebo-ros-control
+        - ros-*-gazebo-ros-pkgs
+        - ros-*-gazebo-ros-control
 
     after_prepare:
       # Buzz installation
