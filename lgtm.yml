@@ -12,6 +12,7 @@ extraction:
         # Propolis deps
         - protobuf-compiler
         - python3-protobuf
+        - ros-noetic-gazebo-ros-pkgs
 
     after_prepare:
       # Buzz installation
