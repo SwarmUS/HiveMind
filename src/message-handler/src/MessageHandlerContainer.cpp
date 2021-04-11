@@ -3,12 +3,14 @@
 #include <Mutex.h>
 #include <bsp/BSPContainer.h>
 #include <cpp-common/CircularQueueStack.h>
+#include <interloc/InterlocContainer.h>
 #include <logger/LoggerContainer.h>
 
 constexpr uint16_t gc_queueMaxSize = 8;
 
 HiveMindHostApiRequestHandler MessageHandlerContainer::createHiveMindHostApiRequestHandler() {
     return HiveMindHostApiRequestHandler(BSPContainer::getBSP(), getHostMsgQueue(),
+                                         InterlocContainer::getInterloc(),
                                          LoggerContainer::getLogger());
 }
 
