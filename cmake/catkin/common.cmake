@@ -7,8 +7,9 @@ else()
         roscpp
         std_msgs
         message_generation
-        geometry_msgs
-        tf
+        tf2
+        tf2_ros
+        tf2_geometry_msgs
         )
 
     add_message_files(
