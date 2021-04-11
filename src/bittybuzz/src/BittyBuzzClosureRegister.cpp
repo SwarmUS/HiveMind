@@ -41,9 +41,9 @@ bool BittyBuzzClosureRegister::registerClosure(const char* functionName,
         registeredClosure.m_closureId = closureOpt.value().get().m_closureId;
     }
 
-    m_closureRegisterMap.upsert(functionName, registeredClosure);
-    m_closureNameRegisters.upsert(registeredClosure.m_closureId, functionName);
-    return true;
+    bool ret = m_closureRegisterMap.upsert(functionName, registeredClosure);
+    ret = ret && m_closureNameRegisters.upsert(registeredClosure.m_closureId, functionName);
+    return ret;
 }
 
 std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> BittyBuzzClosureRegister::
