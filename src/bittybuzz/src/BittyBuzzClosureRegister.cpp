@@ -17,10 +17,6 @@ bool BittyBuzzClosureRegister::registerClosure(const char* functionName,
                                                bbzheap_idx_t closureHeapIdx,
                                                bbzheap_idx_t selfHeapIdx,
                                                const BittyBuzzFunctionDescription& description) {
-    if (m_closureNameRegisters.isFull() || m_closureRegisterMap.isFull()) {
-        return false;
-    }
-
     bbzobj_t* closure = bbzheap_obj_at(closureHeapIdx);
 
     if (!bbztype_isclosure(*closure)) {
