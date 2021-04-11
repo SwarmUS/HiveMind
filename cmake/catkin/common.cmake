@@ -10,6 +10,7 @@ else()
         tf2
         tf2_ros
         tf2_geometry_msgs
+        gazebo_msgs
         )
 
     add_message_files(

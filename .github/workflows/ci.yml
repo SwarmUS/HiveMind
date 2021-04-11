@@ -79,4 +79,7 @@ jobs:
       run: |
         cd catkin_ws
         . /opt/ros/$ROS_DISTRO/setup.sh
-        catkin_make 
+        rosdep update
+        apt update
+        rosdep install --from-paths src --ignore-src -r -y
+        catkin_make
