@@ -68,12 +68,13 @@ TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_registerClo
 
     // Then
 
-    // We need to allocate the string and keep them alive for the whole function call since in the real case we are using global const strings.
+    // We need to allocate the string and keep them alive for the whole function call since in the
+    // real case we are using global const strings.
     std::vector<std::string> functionNames;
     for (uint16_t i = 0; i < BittyBuzzClosureRegister::m_maxSize; i++) {
         functionNames.push_back("Hello World" + std::to_string(i));
-        bool ret = m_closureRegister->registerClosure(functionNames[i].c_str(), bbzclosure_new(i), m_bbzvm.nil,
-                                                      *m_description);
+        bool ret = m_closureRegister->registerClosure(functionNames[i].c_str(), bbzclosure_new(i),
+                                                      m_bbzvm.nil, *m_description);
         EXPECT_TRUE(ret);
     }
 
