@@ -7,7 +7,7 @@ function(bittybuzz_fetch)
     FetchContent_Declare(
         bittybuzz
         GIT_REPOSITORY https://github.com/MISTLab/BittyBuzz.git
-        GIT_TAG        beacf622757f1439c4adfe012005a82c9e2bde5d # Fixed commit since BittyBuzz doesn't have tags
+        GIT_TAG        6ec05e8 
         GIT_PROGRESS   TRUE
     ) 
 
