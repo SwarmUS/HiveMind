@@ -28,7 +28,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsDistance) {
     pos.m_robotId = robotId;
     pos.m_distance = 42;
     pos.m_isInLineOfSight = true;
-    pos.m_relativeOrientation = 24;
+    pos.m_relativeOrientation = 355;
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
@@ -71,13 +71,13 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsDistance_twiceData) {
     pos1.m_robotId = robotId;
     pos1.m_distance = 40;
     pos1.m_isInLineOfSight = true;
-    pos1.m_relativeOrientation = 20;
+    pos1.m_relativeOrientation = 300;
 
     RelativePosition pos2;
     pos2.m_robotId = robotId;
     pos2.m_distance = 42;
     pos2.m_isInLineOfSight = true;
-    pos2.m_relativeOrientation = 24;
+    pos2.m_relativeOrientation = 355;
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 

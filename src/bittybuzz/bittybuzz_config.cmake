@@ -21,6 +21,7 @@ option(BBZ_DISABLE_VSTIGS "Disables the virtual stigmergy data structure and mes
 option(BBZ_DISABLE_SWARMS "Disables swarms data structures and messages." OFF)
 option(BBZ_DISABLE_MESSAGES "Disables usage and transfer of any kind of Buzz message." OFF)
 option(BBZ_BYTEWISE_ASSIGNMENT "Enables byte per byte assignment." OFF)
+option(BBZ_NEIGHBORS_USE_FLOATS "Whether to use floats for the neighbor's range and bearing measurments." ON)
 
 # There is no implementation of the swarmlist broadcast on bittybuzz for now
 option(BBZ_DISABLE_SWARMLIST_BROADCASTS "Whether we disable the broadcasting of our swarmlist to neighboring robots." ON)
