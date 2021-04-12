@@ -16,23 +16,41 @@ InterlocManager::InterlocManager(ILogger& logger) :
     m_positionUpdateCallback(nullptr),
     m_positionUpdateContext(nullptr) {}
 
+geometry_msgs::TransformStamped convertPoseToTransformStamped(const geometry_msgs::Pose& pose) {
+    geometry_msgs::TransformStamped transformStamped;
+
+    transformStamped.transform.translation.x = pose.position.x;
+    transformStamped.transform.translation.y = pose.position.y;
+    transformStamped.transform.translation.z = pose.position.z;
+    transformStamped.transform.rotation = pose.orientation;
+
+    return transformStamped;
+}
+
 tf2::Transform InterlocManager::computeRelativeTransform(
-    const geometry_msgs::Pose& currentAgentPose,
-    const geometry_msgs::TransformStamped& currentAgentHBTransform,
-    const geometry_msgs::Pose& distantAgentPose,
-    const geometry_msgs::TransformStamped& distantAgentHBTransform) {
+    const geometry_msgs::Pose& currentAgentPoseWorldFrame,
+    const geometry_msgs::TransformStamped& currentAgentHbToRobotTf,
+    const geometry_msgs::Pose& distantAgentPoseWorldFrame,
+    const geometry_msgs::TransformStamped& distantAgentHbToRobotTf) {
 
-    // Convert the poses into the HB frame
-    geometry_msgs::Pose currentAgentPoseHBFrame;
-    geometry_msgs::Pose distantAgentPoseHBFrame;
+    geometry_msgs::TransformStamped currentAgentRobotToWorldTf =
+        convertPoseToTransformStamped(currentAgentPoseWorldFrame);
+    geometry_msgs::TransformStamped distantAgentRobotToWorldTf =
+        convertPoseToTransformStamped(distantAgentPoseWorldFrame);
 
-    tf2::doTransform(currentAgentPose, currentAgentPoseHBFrame, currentAgentHBTransform);
-    tf2::doTransform(distantAgentPose, distantAgentPoseHBFrame, distantAgentHBTransform);
+    geometry_msgs::TransformStamped currentAgentHbPoseWorldFrame;
+    geometry_msgs::TransformStamped distantAgentHbPoseWorldFrame;
 
-    tf2::Transform currentAgentTf;
-    tf2::Transform distantAgentTf;
-    tf2::fromMsg(currentAgentPoseHBFrame, currentAgentTf);
-    tf2::fromMsg(distantAgentPoseHBFrame, distantAgentTf);
+    tf2::doTransform(currentAgentHbToRobotTf, currentAgentHbPoseWorldFrame,
+                     currentAgentRobotToWorldTf);
+    tf2::doTransform(distantAgentHbToRobotTf, distantAgentHbPoseWorldFrame,
+                     distantAgentRobotToWorldTf);
+
+    tf2::Stamped<tf2::Transform> currentAgentTf;
+    tf2::Stamped<tf2::Transform> distantAgentTf;
+
+    tf2::fromMsg(currentAgentHbPoseWorldFrame, currentAgentTf);
+    tf2::fromMsg(distantAgentHbPoseWorldFrame, distantAgentTf);
 
     // Equivalent of currentAgentPose - distantAgentPose
     return distantAgentTf.inverseTimes(currentAgentTf);
@@ -57,12 +75,14 @@ std::optional<geometry_msgs::TransformStamped> InterlocManager::getHiveBoardTran
     geometry_msgs::TransformStamped transform;
 
     try {
-        transform = m_tfBuffer.lookupTransform(agentName + HIVEBOARD_SUFFIX,
-                                               agentName + ROBOT_CENTER_SUFFIX, ros::Time(0));
+        transform = m_tfBuffer.lookupTransform(agentName + ROBOT_CENTER_SUFFIX,
+                                               agentName + HIVEBOARD_SUFFIX, ros::Time(0));
     } catch (tf2::TransformException& ex) {
         m_logger.log(LogLevel::Warn, "Could not find transform to hiveboard for %s",
                      agentName.c_str());
         m_logger.log(LogLevel::Warn, "%s", ex.what());
+
+        return {};
     }
 
     return transform;
@@ -146,3 +166,15 @@ void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t
     m_positionUpdateCallback = callback;
     m_positionUpdateContext = context;
 }
+
+// Calib API is not needed in simulation. Can just ignore any calls to these functions
+void InterlocManager::startCalibSingleInitiator() {}
+void InterlocManager::startCalibSingleResponder(uint16_t initiatorId,
+                                                calibrationEndedCallbackFunction_t callback,
+                                                void* context) {
+    (void)initiatorId;
+    (void)callback;
+    (void)context;
+}
+void InterlocManager::stopCalibration() {}
+void InterlocManager::setCalibDistance(uint16_t distanceCalibCm) { (void)distanceCalibCm; }

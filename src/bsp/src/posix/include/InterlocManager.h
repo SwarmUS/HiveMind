@@ -19,16 +19,12 @@ class InterlocManager : public IInterlocManager {
                                    void* context) override;
 
     // Calib API is not needed in simulation. Can just ignore any calls to these functions
-    void startCalibSingleInitiator() override{};
+    void startCalibSingleInitiator() override;
     void startCalibSingleResponder(uint16_t initiatorId,
                                    calibrationEndedCallbackFunction_t callback,
-                                   void* context) override {
-        (void)initiatorId;
-        (void)callback;
-        (void)context;
-    };
-    void stopCalibration() override{};
-    void setCalibDistance(uint16_t distanceCalibCm) override { (void)distanceCalibCm; };
+                                   void* context) override;
+    void stopCalibration() override;
+    void setCalibDistance(uint16_t distanceCalibCm) override;
 
   private:
     ILogger& m_logger;
@@ -43,10 +39,10 @@ class InterlocManager : public IInterlocManager {
     void* m_positionUpdateContext;
 
     static tf2::Transform computeRelativeTransform(
-        const geometry_msgs::Pose& currentAgentPose,
-        const geometry_msgs::TransformStamped& currentAgentHBTransform,
-        const geometry_msgs::Pose& distantAgentPose,
-        const geometry_msgs::TransformStamped& distantAgentHBTransform);
+        const geometry_msgs::Pose& currentAgentPoseWorldFrame,
+        const geometry_msgs::TransformStamped& currentAgentHbToRobotTf,
+        const geometry_msgs::Pose& distantAgentPoseWorldFrame,
+        const geometry_msgs::TransformStamped& distantAgentHbToRobotTf);
 
     static double getDistance(const tf2::Transform& transform);
     static double getOrientation(const tf2::Transform& transform);
