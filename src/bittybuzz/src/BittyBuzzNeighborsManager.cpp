@@ -15,8 +15,6 @@ void BittyBuzzNeighborsManager::updateNeighbors() {
             std::optional<RelativePosition> posOpt = m_interloc.getRobotPosition(robotId.value());
 
             if (posOpt) {
-                // TODO fix position with buzz, cast from float to uint8_t overflow, 360 degrees
-                // does not fit in 8 bits
                 RelativePosition& pos = posOpt.value();
                 bbzneighbors_elem_t neighbor;
                 neighbor.robot = robotId.value();
