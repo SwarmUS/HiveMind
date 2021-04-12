@@ -2,16 +2,15 @@
 #define __INTERLOCMANAGER_H__
 
 #include "Decawave.h"
+#include "DecawaveArray.h"
+#include "InterlocStateHandler.h"
 #include "UWBMessages.h"
 #include <bsp/IInterlocManager.h>
 #include <logger/ILogger.h>
 
-// TODO: Add to settings
-#define PAN_ID 0x01
-
 class InterlocManager : public IInterlocManager {
   public:
-    explicit InterlocManager(ILogger& logger);
+    InterlocManager(ILogger& logger, InterlocStateHandler& stateHandler, DecawaveArray& decawaves);
     ~InterlocManager() override = default;
 
     void startInterloc() override;
@@ -31,10 +30,10 @@ class InterlocManager : public IInterlocManager {
 
   private:
     ILogger& m_logger;
-    Decawave m_decaA;
-    Decawave m_decaB;
+    InterlocStateHandler& m_stateHandler;
 
-    uint8_t m_sequenceID = 0;
+    DecawaveArray& m_decawaves;
+
     uint16_t m_distanceCalibCm = 75;
 
     positionUpdateCallbackFunction_t m_positionUpdateCallback;
@@ -47,11 +46,7 @@ class InterlocManager : public IInterlocManager {
     void startDeviceCalibSingleResponder(uint16_t destinationId, Decawave& device);
     bool sendTWRSequence(uint16_t destinationId, Decawave& device);
     double receiveTWRSequence(uint16_t destinationId, Decawave& device);
-    bool constructUWBHeader(uint16_t destinationId,
-                            UWBMessages::FrameType frameType,
-                            UWBMessages::FunctionCode functionCode,
-                            uint8_t* buffer,
-                            uint16_t bufferLength);
+
     bool isFrameOk(UWBRxFrame frame);
     static uint8_t powerCorrection(double twrDistance);
 };

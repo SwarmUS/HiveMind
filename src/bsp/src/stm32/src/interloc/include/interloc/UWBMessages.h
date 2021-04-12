@@ -3,6 +3,13 @@
 
 #include <cstdint>
 
+#define UWB_BROADCAST_ADDRESS 0xFF
+
+// TODO: Make configurable and merge with define in interloc lib
+#define MAX_INTERLOC_SUBFRAMES 2
+// Slots go from 1 to MAX_INTERLOC_SUBFRAMES
+#define RESPONDER_SLOT 1
+
 namespace UWBMessages {
     enum FrameType { BEACON = 0x0, DATA = 0x2, ACK = 0x3, MAC_COMMAND = 0x4 };
     enum AddressMode { SHORT_ADDRESS = 0x2 };
@@ -40,13 +47,14 @@ namespace UWBMessages {
 
     struct TWRResponse {
         DWFrame m_headerFrame;
-        uint64_t m_calculatedTOF;
+        uint8_t m_subFrameId;
     };
 
     struct TWRFinal {
         DWFrame m_headerFrame;
-        uint64_t m_respMinPoll;
-        uint64_t m_finaleMinResp;
+        uint64_t m_pollTxTs;
+        uint64_t m_responseRxTs[MAX_INTERLOC_SUBFRAMES];
+        uint64_t m_finalTxTs;
     };
 
 } // namespace UWBMessages

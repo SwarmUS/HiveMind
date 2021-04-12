@@ -12,10 +12,7 @@ set(LIB_SOURCES
     src/SpiEsp.cpp
 
     src/USB.cpp
-    src/Decawave.cpp
-    src/DecawaveUtils.cpp
-    src/InterlocManager.cpp
-    src/UWBRxFrame.cpp)
+)
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
@@ -27,12 +24,7 @@ set(LIB_PRIVATE_HEADERS
     include/SpiEsp.h
     include/SpiHeader.h
     include/USB.h
-
-    include/Decawave.h
-    include/DecawaveUtils.h
-    include/UWBRxFrame.h
-    include/InterlocManager.h
-    include/UWBMessages.h)
+)
 
 include(DefaultSettings.cmake)
 configure_file(include/DefaultSettings.in.h include/DefaultSettings.h)
@@ -65,6 +57,7 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::LWIP
         SwarmUS::Propolis::Pheromones
         SwarmUS::Propolis::Cpp::Common
+        SwarmUS::HiveMind::BSP::Platform::Interloc
 )
 
 add_custom_target(
@@ -73,3 +66,4 @@ add_custom_target(
 )
 
 add_subdirectory(hal)
+add_subdirectory(src/interloc)

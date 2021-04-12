@@ -8,7 +8,7 @@
 #include "UserInterface.h"
 #include "bsp/SettingsContainer.h"
 #include "logger/LoggerContainer.h"
-#include <InterlocManager.h>
+#include <interloc/InterlocBSPContainer.h>
 
 IBSP& BSPContainer::getBSP() {
     static BSP s_bsp;
@@ -28,8 +28,7 @@ ICRC& BSPContainer::getCRC() {
 }
 
 IInterlocManager& BSPContainer::getInterlocManager() {
-    static InterlocManager s_interlocManager(LoggerContainer::getLogger());
-    return s_interlocManager;
+    return InterlocBSPContainer::getInterlocManager();
 }
 
 std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommInterface() {
