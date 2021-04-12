@@ -1,5 +1,5 @@
-#ifndef __INTERLOCKINTERFACEMOCK_H_
-#define __INTERLOCKINTERFACEMOCK_H_
+#ifndef __INTERLOCINTERFACEMOCK_H_
+#define __INTERLOCINTERFACEMOCK_H_
 
 #include <gmock/gmock.h>
 #include <interloc/IInterloc.h>
@@ -17,4 +17,4 @@ class InterlocInterfaceMock : public IInterloc {
     MOCK_METHOD((const PositionsTable&), getPositionsTable, (), (const override));
 };
 
-#endif // __INTERLOCKINTERFACEMOCK_H_
+#endif // __INTERLOCINTERFACEMOCK_H_

@@ -3,21 +3,20 @@
 #include <cstring>
 #include <string_view>
 
-BittyBuzzRegisteredClosure::BittyBuzzRegisteredClosure(const char* functionName,
+BittyBuzzRegisteredClosure::BittyBuzzRegisteredClosure(uint16_t closureId,
+                                                       BittyBuzzFunctionDescription description,
                                                        bbzheap_idx_t closureHeapIdx,
                                                        bbzheap_idx_t selfHeapIdx) :
-    m_closureHeapIdx(closureHeapIdx), m_selfHeapIdx(selfHeapIdx), m_description(functionName) {}
 
-BittyBuzzRegisteredClosure::BittyBuzzRegisteredClosure() : m_description("") {}
+    m_closureId(closureId),
+    m_closureHeapIdx(closureHeapIdx),
+    m_selfHeapIdx(selfHeapIdx),
+    m_description(std::move(description)) {}
 
 bool BittyBuzzClosureRegister::registerClosure(const char* functionName,
                                                bbzheap_idx_t closureHeapIdx,
                                                bbzheap_idx_t selfHeapIdx,
                                                const BittyBuzzFunctionDescription& description) {
-    if (m_closureRegistersLength >= m_maxSize) {
-        return false;
-    }
-
     bbzobj_t* closure = bbzheap_obj_at(closureHeapIdx);
 
     if (!bbztype_isclosure(*closure)) {
@@ -29,49 +28,38 @@ bool BittyBuzzClosureRegister::registerClosure(const char* functionName,
         return false;
     }
 
-    std::string_view functionNameView(functionName);
-    size_t functionNameHash = std::hash<std::string_view>{}(functionNameView);
-
     // Making object permanent
     bbzheap_obj_make_permanent(*closure);
     bbzheap_obj_make_permanent(*self);
 
-    BittyBuzzRegisteredClosure registeredClosure;
-    registeredClosure.m_closureHeapIdx = closureHeapIdx;
-    registeredClosure.m_selfHeapIdx = selfHeapIdx;
-    registeredClosure.m_description = description;
+    BittyBuzzRegisteredClosure registeredClosure(m_closureRegisterMap.getUsedSpace(), description,
+                                                 closureHeapIdx, selfHeapIdx);
+    // Handler overwrite
+    auto closureOpt = m_closureRegisterMap.at(functionName);
 
-    m_closureRegisters[m_closureRegistersLength] =
-        std::make_tuple(functionNameHash, registeredClosure);
-    m_closureRegistersLength++;
-    return true;
+    if (closureOpt) {
+        registeredClosure.m_closureId = closureOpt.value().get().m_closureId;
+    }
+
+    bool ret = m_closureRegisterMap.upsert(functionName, registeredClosure);
+    ret = ret && m_closureNameRegisters.upsert(registeredClosure.m_closureId, functionName);
+    return ret;
 }
 
 std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> BittyBuzzClosureRegister::
     getRegisteredClosure(const char* functionName) const {
-
-    std::string_view functionNameView(functionName);
-    size_t functionNameHash = std::hash<std::string_view>{}(functionNameView);
-
-    for (uint16_t i = 0; i < m_closureRegistersLength; i++) {
-        size_t hash = std::get<0>(m_closureRegisters[i]);
-        if (functionNameHash == hash) {
-            return std::get<1>(m_closureRegisters[i]);
-        }
-    }
-
-    return {};
+    return m_closureRegisterMap.at(functionName);
 }
 
 std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> BittyBuzzClosureRegister::
     getRegisteredClosure(uint16_t idx) const {
-    if (idx > m_closureRegistersLength - 1) {
-        return {};
+    auto functionNameOpt = m_closureNameRegisters.at(idx);
+    if (functionNameOpt) {
+        return m_closureRegisterMap.at(functionNameOpt.value().get());
     }
-
-    return std::get<1>(m_closureRegisters[idx]);
+    return {};
 }
 
 uint16_t BittyBuzzClosureRegister::getRegisteredClosureLength() const {
-    return m_closureRegistersLength;
+    return m_closureRegisterMap.getUsedSpace();
 }

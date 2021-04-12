@@ -16,6 +16,7 @@ set(TEST_HEADERS
     mocks/HiveMindHostSerializerInterfaceMock.h
     mocks/HiveMindHostApiRequestHandlerInterfaceMock.h
     mocks/LoggerInterfaceMock.h
+    mocks/InterlocInterfaceMock.h
 )
 
 add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})

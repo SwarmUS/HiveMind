@@ -8,11 +8,12 @@
 /**@brief a class containing info of a registered closure*/
 class BittyBuzzRegisteredClosure {
   public:
-    BittyBuzzRegisteredClosure();
-    BittyBuzzRegisteredClosure(const char* functionName,
+    BittyBuzzRegisteredClosure(uint16_t closureId,
+                               BittyBuzzFunctionDescription description,
                                bbzheap_idx_t closureHeapIdx,
                                bbzheap_idx_t selfHeapIdx);
 
+    uint16_t m_closureId;
     bbzheap_idx_t m_closureHeapIdx;
     bbzheap_idx_t m_selfHeapIdx;
     BittyBuzzFunctionDescription m_description;
