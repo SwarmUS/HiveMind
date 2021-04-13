@@ -6,6 +6,9 @@
 #include <states/SendPollState.h>
 #include <states/SendResponseState.h>
 #include <states/WaitPollState.h>
+#include <states/WaitFinalState.h>
+#include <states/WaitResponseState.h>
+
 
 AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
     static DefaultState s_defaultState(LoggerContainer::getLogger(),
@@ -23,6 +26,13 @@ AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
     static SendResponseState s_sendResponseState(LoggerContainer::getLogger(),
                                                  InterlocBSPContainer::getDecawaves());
 
+    static WaitFinalState s_waitFinalState(LoggerContainer::getLogger(),
+                                                 InterlocBSPContainer::getDecawaves());
+
+    static WaitResponseState s_waitResponseState(LoggerContainer::getLogger(),
+                                           InterlocBSPContainer::getDecawaves());
+
+
     switch (state) {
     case InterlocStates::DEFAULT:
         return s_defaultState;
@@ -38,6 +48,12 @@ AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
 
     case InterlocStates::SEND_RESPONSE:
         return s_sendResponseState;
+
+    case InterlocStates::WAIT_FINAL:
+        return s_waitFinalState;
+
+    case InterlocStates::WAIT_RESPONSE:
+        return s_waitResponseState;
 
     default:
         return s_defaultState;

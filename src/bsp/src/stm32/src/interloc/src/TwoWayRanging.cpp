@@ -35,8 +35,9 @@ std::optional<double> TwoWayRanging::calculateDistance() const {
 
     double tof = tofDtu * DWT_TIME_UNITS;
     double distance = tof * SPEED_OF_LIGHT;
-
-    if (distance < MAX_POSSIBLE_DISTANCE) {
+//TEMP
+//    if (distance < MAX_POSSIBLE_DISTANCE) {
+    if (distance > 0) {
         return distance;
     }
 
