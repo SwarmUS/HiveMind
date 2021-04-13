@@ -42,7 +42,8 @@ set(LIB_HEADERS
     include/bittybuzz/IBittyBuzzNeighborsManager.h
 
     include/bittybuzz/BittyBuzzMathFunctions.h
-    include/bittybuzz/IBittyBuzzMathFunctions.h
+    include/bittybuzz/BittyBuzzStdLib.h
+    include/bittybuzz/IBittyBuzzStdLib.h
 
     include/bittybuzz/BittyBuzzSystem.h
     include/bittybuzz/BittyBuzzFactory.h

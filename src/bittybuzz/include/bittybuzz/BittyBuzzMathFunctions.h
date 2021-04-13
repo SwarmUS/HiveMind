@@ -1,7 +1,7 @@
 #ifndef __BITTYBUZZMATHFUNCTIONS_H_
 #define __BITTYBUZZMATHFUNCTIONS_H_
 
-#include "IBittyBuzzMathFunctions.h"
+/**@brief Provides math function for the standard lib provided with the vm see IBittyBuzzStdLib */
 namespace BittyBuzzMathFunctions {
 
     /**@brief Calculates the absolute value

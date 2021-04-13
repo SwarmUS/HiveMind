@@ -36,7 +36,6 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     bbzvm_construct(m_bsp.getUUId());
     bbzvm_set_error_receiver(BittyBuzzSystem::errorReceiver);
     bbzvm_set_bcode(m_bytecode.getBytecodeFetchFunction(), m_bytecode.getBytecodeLength());
-    bbzringbuf_construct(&m_bbzPayloadBuff, m_bbzMsgBuff.data(), 1, m_bbzMsgBuff.size());
 
     // Function registration
     for (UserFunctionRegister functionRegister : container) {

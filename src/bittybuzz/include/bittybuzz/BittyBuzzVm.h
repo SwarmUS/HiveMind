@@ -13,8 +13,6 @@
 #include <bsp/IUserInterface.h>
 #include <logger/ILogger.h>
 
-#define BBZ_MSG_BUFF_SIZE 16
-
 class UserFunctionRegister {
   public:
     UserFunctionRegister(uint8_t strId, bbzvm_funp functionPtr);
@@ -70,8 +68,6 @@ class BittyBuzzVm : public IBittyBuzzVm {
     IUserInterface& m_ui;
 
     bbzvm_t m_bbzVm;
-    std::array<uint8_t, BBZ_MSG_BUFF_SIZE> m_bbzMsgBuff;
-    bbzmsg_payload_t m_bbzPayloadBuff;
 };
 
 #include "BittyBuzzVm.tpp"
