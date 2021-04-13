@@ -11,7 +11,9 @@ set(LIB_SOURCES
     src/SocketFactory.cpp
     src/SettingsContainer.cpp
     src/TCPServer.cpp
-    src/InterlocManager.cpp)
+    src/InterlocManager.cpp
+
+    src/Math.cpp)
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h
