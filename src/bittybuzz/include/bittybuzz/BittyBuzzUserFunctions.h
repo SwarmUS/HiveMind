@@ -27,9 +27,9 @@ namespace BittyBuzzUserFunctions {
      * -# a table with the description of the arguments
      * -# one with the self context
      *
-     * The table description of the arguments is an array of tuple, the
-     *tuple has the arg name as key and the type, you can use any value, only the type is checked.
-     *You could define a variable as int=0 float=0.0 And use those variables for types description
+     * The table description of the arguments is an array of tuples, which hold the arg name as key
+     *and a value (float or int), only the type is check, so the value is not considered.You could
+     *define a variable as int=0 float=0.0 and use those variables for types description
      *@code
      *
      * var context = {.some_context = 42};
@@ -38,7 +38,7 @@ namespace BittyBuzzUserFunctions {
      *   log("Context: ", self.some_context, "Arg int: ", arg_int, "Arg float: ", arg_float);
      * }
      * var args_description = {
-     *    .0 = {.arg_int=0}, // We juste pass value so the type is registered
+     *    .0 = {.arg_int=0}, // We just pass value so the type is registered
      *    .1 = {.arg_float=0.0} // Same here
      * };
      * register_closure("registeredFunction", registered_function, args_description, context);
@@ -47,12 +47,12 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief calls a function to a host
-     *@details This closure expects tree parameters.
+     *@details This closure expects three parameters.
      * -# the id of the host to call (0 for broadcast, id for local host)
      * -# the name of the function
      * -# a table with the list of arguments
      *
-     * The table argument must be by index from 0 to N-1 args.
+     * The table argument's must be by index from 0 to N-1 args.
      *
      *@code
      * call_host_function(id, "print", {.0 = 42, .1 = 43});
