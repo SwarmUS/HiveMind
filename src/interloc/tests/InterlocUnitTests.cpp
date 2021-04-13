@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <interloc/Interloc.h>
+#include <mocks/CircularQueueInterfaceMock.h>
 #include <mocks/InterlocManagerInterfaceMock.h>
 #include <mocks/LoggerInterfaceMock.h>
 
@@ -9,11 +10,12 @@ class InterlocFixture : public testing::Test {
 
     InterlocManagerInterfaceMock* m_interlocManagerMock;
     LoggerInterfaceMock* m_loggerMock;
+    CircularQueueInterfaceMock<uint16_t> m_posUpdateQueue;
 
     void SetUp() override {
         m_loggerMock = new LoggerInterfaceMock();
         m_interlocManagerMock = new InterlocManagerInterfaceMock();
-        m_interloc = new Interloc(*m_loggerMock, *m_interlocManagerMock);
+        m_interloc = new Interloc(*m_loggerMock, *m_interlocManagerMock, m_posUpdateQueue);
     }
 
     void TearDown() override {
@@ -44,6 +46,11 @@ TEST_F(InterlocFixture, Interloc_getPosition_pushData_robotInList) {
     position.m_distance = 42;
     position.m_relativeOrientation = 0;
 
+    uint16_t queuePushValue;
+    EXPECT_CALL(m_posUpdateQueue, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&queuePushValue)));
+
     // Then
     m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
                                                     position);
@@ -51,6 +58,7 @@ TEST_F(InterlocFixture, Interloc_getPosition_pushData_robotInList) {
 
     // Expect
     EXPECT_TRUE(ret.has_value());
+    EXPECT_EQ(queuePushValue, robotId);
 }
 
 TEST_F(InterlocFixture, Interloc_getPosition_validData) {
@@ -66,6 +74,11 @@ TEST_F(InterlocFixture, Interloc_getPosition_validData) {
     position.m_distance = distance;
     position.m_relativeOrientation = angle;
 
+    uint16_t queuePushValue;
+    EXPECT_CALL(m_posUpdateQueue, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&queuePushValue)));
+
     // Then
     m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
                                                     position);
@@ -75,6 +88,7 @@ TEST_F(InterlocFixture, Interloc_getPosition_validData) {
     EXPECT_EQ(ret->m_distance, distance);
     EXPECT_EQ(ret->m_relativeOrientation, angle);
     EXPECT_EQ(ret->m_isInLineOfSight, isInLineOfSight);
+    EXPECT_EQ(queuePushValue, robotId);
 }
 
 TEST_F(InterlocFixture, Interloc_getPosition_updateDistance_validData) {
@@ -95,6 +109,13 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateDistance_validData) {
     position2.m_robotId = robotId;
     position2.m_distance = updatedDistance;
 
+    uint16_t queuePushValue1;
+    uint16_t queuePushValue2;
+    EXPECT_CALL(m_posUpdateQueue, push(testing::_))
+        .Times(2)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&queuePushValue1)))
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&queuePushValue2)));
+
     // Then
     m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
                                                     position1);
@@ -104,6 +125,8 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateDistance_validData) {
 
     // Expect
     EXPECT_EQ(ret->m_distance, updatedDistance);
+    EXPECT_EQ(queuePushValue1, robotId);
+    EXPECT_EQ(queuePushValue2, robotId);
 }
 
 TEST_F(InterlocFixture, Interloc_getPosition_updateAngle_validData) {
@@ -124,6 +147,13 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateAngle_validData) {
     position2.m_robotId = robotId;
     position2.m_relativeOrientation = updatedAngle;
 
+    uint16_t queuePushValue1;
+    uint16_t queuePushValue2;
+    EXPECT_CALL(m_posUpdateQueue, push(testing::_))
+        .Times(2)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&queuePushValue1)))
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&queuePushValue2)));
+
     // Then
     m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
                                                     position1);
@@ -133,6 +163,8 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateAngle_validData) {
 
     // Expect
     EXPECT_EQ(ret->m_relativeOrientation, updatedAngle);
+    EXPECT_EQ(queuePushValue1, robotId);
+    EXPECT_EQ(queuePushValue2, robotId);
 }
 
 TEST_F(InterlocFixture, Interloc_getPosition_updateLineOfSight_validData) {
@@ -153,6 +185,13 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateLineOfSight_validData) {
     position2.m_robotId = robotId;
     position2.m_isInLineOfSight = updatedLOS;
 
+    uint16_t queuePushValue1;
+    uint16_t queuePushValue2;
+    EXPECT_CALL(m_posUpdateQueue, push(testing::_))
+        .Times(2)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&queuePushValue1)))
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&queuePushValue2)));
+
     // Then
     m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
                                                     position1);
@@ -162,6 +201,8 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateLineOfSight_validData) {
 
     // Expect
     EXPECT_EQ(ret->m_isInLineOfSight, updatedLOS);
+    EXPECT_EQ(queuePushValue1, robotId);
+    EXPECT_EQ(queuePushValue2, robotId);
 }
 
 TEST_F(InterlocFixture, Interloc_isLineOfSight_robotNotInList) {
@@ -181,6 +222,11 @@ TEST_F(InterlocFixture, Interloc_isLineOfSight_robotInLOS) {
     positionUpdate.m_robotId = robotId;
     positionUpdate.m_isInLineOfSight = true;
 
+    uint16_t queuePushValue;
+    EXPECT_CALL(m_posUpdateQueue, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&queuePushValue)));
+
     // Then
     m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
                                                     positionUpdate);
@@ -188,6 +234,7 @@ TEST_F(InterlocFixture, Interloc_isLineOfSight_robotInLOS) {
 
     // Expect
     EXPECT_TRUE(ret);
+    EXPECT_EQ(queuePushValue, robotId);
 }
 
 TEST_F(InterlocFixture, Interloc_isLineOfSight_robotNotInLOS) {
@@ -197,6 +244,11 @@ TEST_F(InterlocFixture, Interloc_isLineOfSight_robotNotInLOS) {
     positionUpdate.m_robotId = robotId;
     positionUpdate.m_isInLineOfSight = false;
 
+    uint16_t queuePushValue;
+    EXPECT_CALL(m_posUpdateQueue, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&queuePushValue)));
+
     // Then
     m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
                                                     positionUpdate);
@@ -204,6 +256,7 @@ TEST_F(InterlocFixture, Interloc_isLineOfSight_robotNotInLOS) {
 
     // Expect
     EXPECT_FALSE(ret);
+    EXPECT_EQ(queuePushValue, robotId);
 }
 
 TEST_F(InterlocFixture, Interloc_getPositionsTable_emptyTable) {
@@ -220,6 +273,8 @@ TEST_F(InterlocFixture, Interloc_getPositionsTable_elementInTable) {
     positionUpdate.m_robotId = robotId;
     positionUpdate.m_isInLineOfSight = true;
 
+    EXPECT_CALL(m_posUpdateQueue, push(testing::_));
+
     // Then
     m_interlocManagerMock->m_positionUpdateCallback(m_interlocManagerMock->m_positionUpdateContext,
                                                     positionUpdate);
@@ -230,9 +285,10 @@ TEST_F(InterlocFixture, Interloc_getPositionsTable_elementInTable) {
 }
 
 TEST_F(InterlocFixture, Interloc_getPositionsTable_addMoreRobotsThanAllowed) {
+    EXPECT_CALL(m_posUpdateQueue, push(testing::_)).Times(MAX_ROBOTS_IN_SWARM);
     for (int i = 0; i < MAX_ROBOTS_IN_SWARM + 1; i++) {
         InterlocUpdate positionUpdate;
-        positionUpdate.m_robotId = i;
+        positionUpdate.m_robotId = i + 1; // ID 0 cannot exist
         positionUpdate.m_isInLineOfSight = true;
 
         m_interlocManagerMock->m_positionUpdateCallback(

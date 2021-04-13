@@ -13,5 +13,8 @@
             <param name="remote_mock_port" value="9001" />
 
             <param name="log_level" value="Info" />
+
+            <!-- Interloc refresh rate in Hz -->
+            <param name="interloc_refresh_rate" value="10.0" />
         </node>
 </launch>

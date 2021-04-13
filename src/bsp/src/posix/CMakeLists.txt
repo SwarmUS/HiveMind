@@ -10,7 +10,8 @@ set(LIB_SOURCES
     src/TCPClient.cpp
     src/SocketFactory.cpp
     src/SettingsContainer.cpp
-    src/TCPServer.cpp)
+    src/TCPServer.cpp
+    src/InterlocManager.cpp)
 
 set(LIB_PRIVATE_HEADERS
     include/BSP.h

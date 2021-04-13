@@ -21,7 +21,7 @@ IUserInterface& BSPContainer::getUserInterface() {
 }
 
 IInterlocManager& BSPContainer::getInterlocManager() {
-    static InterlocManager s_interlocManager;
+    static InterlocManager s_interlocManager(LoggerContainer::getLogger());
     return s_interlocManager;
 }
 
