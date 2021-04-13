@@ -89,7 +89,7 @@ namespace Math {
 
     /**@brief Calculates the remainder of numer/denom
      *@param numer the quotient numerator
-     *@param the quotient denominator of 0, an error occurs
+     *@param denom the quotient denominator of 0, an error occurs
      *@return the remainder of divinding the argument */
     float fmod(float numer, float denom);
 
@@ -116,18 +116,16 @@ namespace Math {
      *@return the minimum value of it's arguments*/
     float fmin(float x, float y);
 
-    /**@brief Return the minimum of it's arguments, either x or y
-     *@param x one of the value to select the minimum
-     *@param y one of the value to select the minimum
-     *@return the minimum value of it's arguments*/
+    /**@brief Return the absolute value
+     *@param x value whose absolute value is returned
+     *@return the absolute value value */
     float fabs(float x);
 
-    /**@brief Return the minimum of it's arguments, either x or y
-     *@param x one of the value to select the minimum
-     *@param y one of the value to select the minimum
-     *@return the minimum value of it's arguments*/
+    /**@brief Return the absolute value
+     *@param x value whose absolute value is returned
+     *@return the absolute value value */
     int abs(int x);
 
-}; // namespace Math
+} // namespace Math
 
 #endif // __MATH_H_

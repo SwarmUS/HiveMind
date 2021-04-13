@@ -5,6 +5,7 @@
 #include "IBittyBuzzMessageService.h"
 #include "IBittyBuzzStringResolver.h"
 #include <bbzvm.h>
+#include <bsp/IBSP.h>
 #include <bsp/IUserInterface.h>
 #include <logger/ILogger.h>
 
@@ -40,6 +41,11 @@ namespace BittyBuzzSystem {
      *@brief Message service used by the BBVM to send requests to host and remote
      **/
     extern IBittyBuzzMessageService* g_messageService;
+
+    /**
+     *@brief BSP used by the bbvm for random numbers
+     **/
+    extern IBSP* g_bsp;
 
     /**
      *@brief Call a bittybuzz function that takes not arguments (init, step, etc),

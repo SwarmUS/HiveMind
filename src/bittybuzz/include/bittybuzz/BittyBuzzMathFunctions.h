@@ -8,24 +8,24 @@ class BittyBuzzMathFunctions : public IBittyBuzzMathFunctions {
     bool registerMathTable() override;
 
   private:
-    void bbzmath_abs();
-    void bbzmath_floor();
-    void bbzmath_ceil();
-    void bbzmath_round();
-    void bbzmath_log();
-    void bbzmath_log2();
-    void bbzmath_log10();
-    void bbzmath_exp();
-    void bbzmath_sqrt();
-    void bbzmath_sin();
-    void bbzmath_cos();
-    void bbzmath_tan();
-    void bbzmath_asin();
-    void bbzmath_acos();
-    void bbzmath_atan();
-    void bbzmath_min();
-    void bbzmath_max();
-    void bbzmath_rng();
+    static void bbzmath_abs();
+    static void bbzmath_floor();
+    static void bbzmath_ceil();
+    static void bbzmath_round();
+    static void bbzmath_log();
+    static void bbzmath_log2();
+    static void bbzmath_log10();
+    static void bbzmath_exp();
+    static void bbzmath_sqrt();
+    static void bbzmath_sin();
+    static void bbzmath_cos();
+    static void bbzmath_tan();
+    static void bbzmath_asin();
+    static void bbzmath_acos();
+    static void bbzmath_atan();
+    static void bbzmath_min();
+    static void bbzmath_max();
+    static void bbzmath_rng_uniform();
 };
 
 #endif // __BITTYBUZZMATHFUNCTIONS_H_

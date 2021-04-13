@@ -47,7 +47,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
                 IBittyBuzzClosureRegister& closureRegister,
                 IBittyBuzzMessageService& messageService,
                 IBittyBuzzNeighborsManager& neighborsManager,
-                const IBSP& bsp,
+                IBSP& bsp,
                 ILogger& logger,
                 IUserInterface& ui,
                 const Container& container);

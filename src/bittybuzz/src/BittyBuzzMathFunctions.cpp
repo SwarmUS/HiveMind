@@ -1,24 +1,27 @@
 #include "BittyBuzzMathFunctions.h"
+#include "BittyBuzzSystem.h"
 #include <bbzvm.h>
 #include <bsp/Math.h>
 
 bool BittyBuzzMathFunctions::registerMathTable() {
     // TODO
     bbzvm_pusht(); // "math"
+    return true;
 }
 
 void BittyBuzzMathFunctions::bbzmath_abs() {
     bbzvm_assert_lnum(1); // NOLINT
 
     // Get args
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
         bbzvm_pushf(bbzfloat_fromfloat(Math::fabs(bbzfloat_tofloat(o->f.value))));
-    } else if (bbztype_isint(o)) {
+    } else if (bbztype_isint(*o)) {
         bbzvm_pushi(Math::abs(o->i.value));
     } else {
 
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
     bbzvm_ret1();
 }
@@ -26,14 +29,15 @@ void BittyBuzzMathFunctions::bbzmath_floor() {
     bbzvm_assert_lnum(1); // NOLINT
 
     // Get args
-    float arg;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
+    float arg = 0;
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
         arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(o)) {
+    } else if (bbztype_isint(*o)) {
         arg = o->i.value;
     } else {
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
 
     bbzvm_pushi(Math::floor(arg));
@@ -44,14 +48,15 @@ void BittyBuzzMathFunctions::bbzmath_ceil() {
     bbzvm_assert_lnum(1); // NOLINT
 
     // Get args
-    float arg;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
+    float arg = 0;
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
         arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(o)) {
+    } else if (bbztype_isint(*o)) {
         arg = o->i.value;
     } else {
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
 
     bbzvm_pushi(Math::ceil(arg));
@@ -62,14 +67,15 @@ void BittyBuzzMathFunctions::bbzmath_round() {
     bbzvm_assert_lnum(1); // NOLINT
 
     // Get args
-    float arg;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
+    float arg = 0;
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
         arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(o)) {
+    } else if (bbztype_isint(*o)) {
         arg = o->i.value;
     } else {
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
 
     bbzvm_pushi(Math::ceil(arg));
@@ -80,14 +86,15 @@ void BittyBuzzMathFunctions::bbzmath_log() {
     bbzvm_assert_lnum(1); // NOLINT
 
     // Get args
-    float arg;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
+    float arg = 0;
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
         arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(o)) {
+    } else if (bbztype_isint(*o)) {
         arg = o->i.value;
     } else {
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
 
     bbzvm_pushf(bbzfloat_tofloat(Math::ln(arg)));
@@ -97,14 +104,15 @@ void BittyBuzzMathFunctions::bbzmath_log() {
 void BittyBuzzMathFunctions::bbzmath_log2() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
+    float arg = 0;
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
         arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(o)) {
+    } else if (bbztype_isint(*o)) {
         arg = o->i.value;
     } else {
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
 
     bbzvm_pushf(bbzfloat_tofloat(Math::log2(arg)));
@@ -113,14 +121,15 @@ void BittyBuzzMathFunctions::bbzmath_log2() {
 void BittyBuzzMathFunctions::bbzmath_log10() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
+    float arg = 0;
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
         arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(o)) {
+    } else if (bbztype_isint(*o)) {
         arg = o->i.value;
     } else {
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
 
     bbzvm_pushf(bbzfloat_tofloat(Math::log10(arg)));
@@ -129,14 +138,15 @@ void BittyBuzzMathFunctions::bbzmath_log10() {
 void BittyBuzzMathFunctions::bbzmath_exp() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
+    float arg = 0;
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
         arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(o)) {
+    } else if (bbztype_isint(*o)) {
         arg = o->i.value;
     } else {
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
 
     bbzvm_pushf(bbzfloat_tofloat(Math::exp(arg)));
@@ -145,14 +155,15 @@ void BittyBuzzMathFunctions::bbzmath_exp() {
 void BittyBuzzMathFunctions::bbzmath_sqrt() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
+    float arg = 0;
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
         arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(o)) {
+    } else if (bbztype_isint(*o)) {
         arg = o->i.value;
     } else {
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
 
     bbzvm_pushf(bbzfloat_tofloat(Math::sqrt(arg)));
@@ -161,14 +172,15 @@ void BittyBuzzMathFunctions::bbzmath_sqrt() {
 void BittyBuzzMathFunctions::bbzmath_sin() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
+    float arg = 0;
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
         arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(o)) {
+    } else if (bbztype_isint(*o)) {
         arg = o->i.value;
     } else {
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
 
     bbzvm_pushf(bbzfloat_tofloat(Math::sin(arg)));
@@ -178,14 +190,15 @@ void BittyBuzzMathFunctions::bbzmath_sin() {
 void BittyBuzzMathFunctions::bbzmath_cos() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
+    float arg = 0;
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
         arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(o)) {
+    } else if (bbztype_isint(*o)) {
         arg = o->i.value;
     } else {
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
 
     bbzvm_pushf(bbzfloat_tofloat(Math::cos(arg)));
@@ -194,14 +207,15 @@ void BittyBuzzMathFunctions::bbzmath_cos() {
 void BittyBuzzMathFunctions::bbzmath_tan() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
+    float arg = 0;
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
         arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(o)) {
+    } else if (bbztype_isint(*o)) {
         arg = o->i.value;
     } else {
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
 
     bbzvm_pushf(bbzfloat_tofloat(Math::tan(arg)));
@@ -210,14 +224,15 @@ void BittyBuzzMathFunctions::bbzmath_tan() {
 void BittyBuzzMathFunctions::bbzmath_asin() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
+    float arg = 0;
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
         arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(o)) {
+    } else if (bbztype_isint(*o)) {
         arg = o->i.value;
     } else {
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
 
     bbzvm_pushf(bbzfloat_tofloat(Math::asin(arg)));
@@ -227,14 +242,15 @@ void BittyBuzzMathFunctions::bbzmath_asin() {
 void BittyBuzzMathFunctions::bbzmath_acos() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
+    float arg = 0;
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
         arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(o)) {
+    } else if (bbztype_isint(*o)) {
         arg = o->i.value;
     } else {
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
 
     bbzvm_pushf(bbzfloat_tofloat(Math::acos(arg)));
@@ -244,24 +260,26 @@ void BittyBuzzMathFunctions::bbzmath_acos() {
 void BittyBuzzMathFunctions::bbzmath_atan() {
     bbzvm_assert_lnum(2); // NOLINT
 
-    float y;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
-        y = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(o)) {
-        y = o->i.value;
+    float y = 0;
+    bbzobj_t* a = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*a)) {
+        y = bbzfloat_tofloat(a->f.value);
+    } else if (bbztype_isint(*a)) {
+        y = a->i.value;
     } else {
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
 
-    float x;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1));
-    if (bbztype_isfloat(o)) {
-        x = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(o)) {
-        x = o->i.value;
+    float x = 0;
+    bbzobj_t* b = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*b)) {
+        x = bbzfloat_tofloat(b->f.value);
+    } else if (bbztype_isint(*b)) {
+        x = b->i.value;
     } else {
         bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
     }
 
     bbzvm_pushf(bbzfloat_tofloat(Math::atan2(y, x)));
@@ -269,10 +287,10 @@ void BittyBuzzMathFunctions::bbzmath_atan() {
 }
 
 void BittyBuzzMathFunctions::bbzmath_min() {
-    bbzvm_lnum_assert(2);
+    bbzvm_assert_lnum(2); // NOLINT
     /* Get arguments */
-    bbzobj_t* a = bbzheap_obj_at(bbzvm_locals_at(1));
-    bbzobj_t* b = bbzheap_obj_at(bbzvm_locals_at(2));
+    bbzobj_t* a = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    bbzobj_t* b = bbzheap_obj_at(bbzvm_locals_at(2)); // NOLINT
 
     /* Compare them and return the smaller one */
     int cmp = bbztype_cmp(a, b);
@@ -281,10 +299,10 @@ void BittyBuzzMathFunctions::bbzmath_min() {
 }
 
 void BittyBuzzMathFunctions::bbzmath_max() {
-    bbzvm_lnum_assert(2);
+    bbzvm_assert_lnum(2); // NOLINT
     /* Get arguments */
-    bbzobj_t* a = bbzheap_obj_at(bbzvm_locals_at(1));
-    bbzobj_t* b = bbzheap_obj_at(bbzvm_locals_at(2));
+    bbzobj_t* a = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    bbzobj_t* b = bbzheap_obj_at(bbzvm_locals_at(2)); // NOLINT
 
     /* Compare them and return the bigger one */
     int cmp = bbztype_cmp(a, b);
@@ -292,14 +310,8 @@ void BittyBuzzMathFunctions::bbzmath_max() {
     bbzvm_ret1();
 }
 
-void BittyBuzzMathFunctions::bbzmath_rng() {
-    bbzvm_lnum_assert(2);
-    /* Get arguments */
-    bbzobj_t* a = bbzheap_obj_at(bbzvm_locals_at(1));
-    bbzobj_t* b = bbzheap_obj_at(bbzvm_locals_at(2));
-
-    /* Compare them and return the smaller one */
-    int cmp = bbztype_cmp(a, b);
-    bbzvm_lload(cmp >= 0 ? 1 : 2);
-    bbzvm_ret1();
+void BittyBuzzMathFunctions::bbzmath_rng_uniform() {
+    bbzvm_assert_lnum(0); // NOLINT
+    uint32_t randomNum = BittyBuzzSystem::g_bsp->generateRandomNumber();
+    bbzvm_pushi((int16_t)randomNum);
 }

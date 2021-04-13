@@ -1,4 +1,3 @@
-
 #ifndef __BITTYBUZZVM_TPP_
 #define __BITTYBUZZVM_TPP_
 
@@ -13,7 +12,7 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                          IBittyBuzzClosureRegister& closureRegister,
                          IBittyBuzzMessageService& messageService,
                          IBittyBuzzNeighborsManager& neighborsManager,
-                         const IBSP& bsp,
+                         IBSP& bsp,
                          ILogger& logger,
                          IUserInterface& ui,
                          const Container& container) :
@@ -31,6 +30,7 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     BittyBuzzSystem::g_stringResolver = &stringResolver;
     BittyBuzzSystem::g_closureRegister = &closureRegister;
     BittyBuzzSystem::g_messageService = &messageService;
+    BittyBuzzSystem::g_bsp = &bsp;
 
     // Init vm
     bbzvm_construct(m_bsp.getUUId());
