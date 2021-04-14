@@ -78,6 +78,9 @@ void Error_Handler(void);
 #define RMII_REF_CLK_GPIO_Port GPIOA
 #define RMII_MDIO_Pin GPIO_PIN_2
 #define RMII_MDIO_GPIO_Port GPIOA
+#define ESP_USER0_WROOM_Pin GPIO_PIN_4
+#define ESP_USER0_WROOM_GPIO_Port GPIOA
+#define ESP_USER0_WROOM_EXTI_IRQn EXTI4_IRQn
 #define RMII_CRS_DV_Pin GPIO_PIN_7
 #define RMII_CRS_DV_GPIO_Port GPIOA
 #define RMII_RXD0_Pin GPIO_PIN_4
@@ -89,9 +92,9 @@ void Error_Handler(void);
 #define DW_IRQn_B_Pin GPIO_PIN_15
 #define DW_IRQn_B_GPIO_Port GPIOF
 #define DW_IRQn_B_EXTI_IRQn EXTI15_10_IRQn
-#define ESP_USER0_Pin GPIO_PIN_1
-#define ESP_USER0_GPIO_Port GPIOG
-#define ESP_USER0_EXTI_IRQn EXTI1_IRQn
+#define ESP_USER0_SOC_Pin GPIO_PIN_1
+#define ESP_USER0_SOC_GPIO_Port GPIOG
+#define ESP_USER0_SOC_EXTI_IRQn EXTI1_IRQn
 #define DW_IRQn_A_Pin GPIO_PIN_7
 #define DW_IRQn_A_GPIO_Port GPIOE
 #define DW_IRQn_A_EXTI_IRQn EXTI9_5_IRQn

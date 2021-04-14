@@ -23,7 +23,11 @@ extern "C" {
 
 #ifdef ESP_WROOM
 #define ESP_SPI (&hspi3)
+#define ESP_USER0_Pin ESP_USER0_WROOM_Pin
+#define ESP_USER0_Port ESP_USER0_WROOM_GPIO_Port
 #elif ESP_SOC
+#define ESP_USER0_Pin ESP_USER0_SOC_Pin
+#define ESP_USER0_Port ESP_USER0_SOC_GPIO_Port
 #define ESP_SPI (&hspi5)
 #endif
 #define DW_SPI (&hspi4)
