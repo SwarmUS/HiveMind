@@ -32,9 +32,13 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_callHostFunction_sendToHost_invalidKe
 
     std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_call_host_function, BittyBuzzUserFunctions::callHostFunction}}};
+    BittyBuzzLib globalLib(0, functionRegisters);
+
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
+    libraries.emplace_back(globalLib);
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegisters);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, libraries);
 
     // Then
     m_bittybuzzVm->step();

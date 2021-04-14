@@ -38,11 +38,15 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsDistance) {
     EXPECT_CALL(queueMock, pop).Times(1);
     EXPECT_CALL(interlocMock, getRobotPosition).Times(1).WillOnce(testing::Return(pos));
 
-    std::array<BittyBuzzUserFunctionRegister, 1> functionRegister = {
+    std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_assert_true, buzzAssertTrue}}};
+    BittyBuzzLib globalLib(0, functionRegisters);
+
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
+    libraries.emplace_back(globalLib);
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, &neighborsManager, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManager, libraries);
 
     // Then
 
@@ -91,11 +95,15 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsDistance_twiceData) {
         .WillOnce(testing::Return(pos1))
         .WillOnce(testing::Return(pos2));
 
-    std::array<BittyBuzzUserFunctionRegister, 1> functionRegister = {
+    std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_assert_true, buzzAssertTrue}}};
+    BittyBuzzLib globalLib(0, functionRegisters);
+
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
+    libraries.emplace_back(globalLib);
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, &neighborsManager, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManager, libraries);
 
     // Then
 

@@ -23,13 +23,17 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isClosure) {
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
-    std::array<BittyBuzzUserFunctionRegister, 3> functionRegister = {
+    std::array<BittyBuzzLibMemberRegister, 3> functionRegisters = {
         {{BBZSTRID_is_closure, BittyBuzzUserFunctions::isClosure},
          {BBZSTRID_assert_true, buzzAssertTrue},
          {BBZSTRID_assert_false, buzzAssertFalse}}};
+    BittyBuzzLib globalLib(0, functionRegisters);
+
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
+    libraries.emplace_back(globalLib);
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, libraries);
 
     // Then
     m_bittybuzzVm->step();

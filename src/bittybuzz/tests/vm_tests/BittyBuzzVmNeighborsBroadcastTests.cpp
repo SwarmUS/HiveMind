@@ -24,10 +24,10 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsBroadcast) {
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     EXPECT_CALL(messageServiceMock, sendBuzzMessage).Times(1).WillOnce(testing::Return(0));
 
-    std::array<BittyBuzzUserFunctionRegister, 0> functionRegister = {};
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, libraries);
 
     // Then
 

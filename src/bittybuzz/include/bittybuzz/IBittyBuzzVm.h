@@ -14,7 +14,8 @@ class IBittyBuzzVm {
     /**@brief Init the virtual machine
      *@param bbzLibs an array of the libraries to init
      *@param bbzLibsLength the length of the libraries to init*/
-    virtual bool init(std::reference_wrapper<IBittyBuzzLib>* bbzLibs, uint32_t bbzLibsLength) = 0;
+    virtual bool init(const std::reference_wrapper<IBittyBuzzLib>* bbzLibs,
+                      uint32_t bbzLibsLength) = 0;
 
     /** @brief Does one execution step in the virtual machine.  Thus execute the buzz code in the
      * step function

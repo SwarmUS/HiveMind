@@ -37,11 +37,15 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_invalidArgs) {
         .Times(1)
         .WillOnce(testing::Return(functionName.c_str()));
 
-    std::array<BittyBuzzUserFunctionRegister, 1> functionRegisters = {
+    std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure}}};
+    BittyBuzzLib globalLib(0, functionRegisters);
+
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
+    libraries.emplace_back(globalLib);
 
     SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &closureRegister,
-          &messageServiceMock, &neighborsManagerMock, functionRegisters);
+          &messageServiceMock, &neighborsManagerMock, libraries);
 
     m_bittybuzzVm->step();
 

@@ -32,7 +32,8 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     BittyBuzzSystem::g_bsp = &bsp;
 }
 
-bool BittyBuzzVm::init(std::reference_wrapper<IBittyBuzzLib>* bbzLibs, uint32_t bbzLibsLength) {
+bool BittyBuzzVm::init(const std::reference_wrapper<IBittyBuzzLib>* bbzLibs,
+                       uint32_t bbzLibsLength) {
 
     // Init vm
     bbzvm_construct(m_bsp.getUUId());

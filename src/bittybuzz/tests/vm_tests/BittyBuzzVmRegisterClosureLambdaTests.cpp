@@ -47,12 +47,17 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_registerLambda) {
         .Times(1)
         .WillOnce(testing::Return(argFloatName.c_str()));
 
-    std::array<BittyBuzzUserFunctionRegister, 2> functionRegisters = {
+    std::array<BittyBuzzLibMemberRegister, 2> functionRegisters = {
         {{BBZSTRID_assert_true, buzzAssertTrue},
          {BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure}}};
 
+    BittyBuzzLib globalLib(0, functionRegisters);
+
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
+    libraries.emplace_back(globalLib);
+
     SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &closureRegister,
-          &messageServiceMock, &neighborsManagerMock, functionRegisters);
+          &messageServiceMock, &neighborsManagerMock, libraries);
 
     // Then
     // Garbage collecting to make sure the pointer is still valid
@@ -88,9 +93,13 @@ TEST_F(BittyBuzzVmTestFixture,
     RequestDTO request(1, uRequest);
     MessageDTO message(boardId, boardId, request);
 
-    std::array<BittyBuzzUserFunctionRegister, 2> functionRegisters = {
+    std::array<BittyBuzzLibMemberRegister, 2> functionRegisters = {
         {{BBZSTRID_assert_true, buzzAssertTrue},
          {BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure}}};
+    BittyBuzzLib globalLib(0, functionRegisters);
+
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
+    libraries.emplace_back(globalLib);
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(inputQueueMock, peek).Times(1).WillOnce(testing::Return(message));
@@ -99,7 +108,7 @@ TEST_F(BittyBuzzVmTestFixture,
     EXPECT_CALL(hostOutputQueueMock, push(testing::_)).Times(1);
 
     SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &closureRegister,
-          &messageServiceMock, &neighborsManagerMock, functionRegisters);
+          &messageServiceMock, &neighborsManagerMock, libraries);
 
     // Then
     // Garbage collecting to make sure the pointer is still valid
