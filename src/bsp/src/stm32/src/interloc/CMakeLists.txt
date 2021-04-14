@@ -8,7 +8,8 @@ set(LIB_SOURCES
         src/UWBRxFrame.cpp
         src/InterlocStateHandler.cpp
         src/InterlocBSPContainer.cpp
-        src/TwoWayRanging.cpp)
+        src/TwoWayRanging.cpp
+        src/InterlocTimeManager.cpp)
 
 set(LIB_HEADERS
         include/interloc/Decawave.h
