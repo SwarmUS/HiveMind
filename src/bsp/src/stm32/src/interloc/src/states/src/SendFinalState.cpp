@@ -24,5 +24,5 @@ void SendFinalState::process(InterlocStateHandler& context) {
                                                  sizeof(UWBMessages::TWRFinal), finalTxTime);
 
     Task::delay(100);
-    context.setState(InterlocStates::SEND_POLL);
+    context.setState(InterlocStates::SEND_POLL, InterlocEvent::NO_EVENT);
 }
