@@ -17,7 +17,7 @@ BittyBuzzLib<Container>::BittyBuzzLib(const Container& container) :
 
 template <typename Container>
 bool BittyBuzzLib<Container>::registerLib() {
-    return m_libTableId ? registerLibTable(): registerLibGlobal();
+    return m_libTableId ? registerLibTable() : registerLibGlobal();
 }
 
 template <typename Container>

@@ -5,12 +5,16 @@
 #include <cstdint>
 #include <optional>
 
+/**@brief A buzz library, can register on the global scope or on a table
+ *@tparam Container a container that implements a forward iterator of BittyBuzzLibMemberRegister */
 template <typename Container>
 class BittyBuzzLib : public IBittyBuzzLib {
   public:
     /**@brief BittyBuzzLib constructor, will register on a table/namespace
      * @param libTableId the string id of the table
-     * @param container a container of BittyBuzzLibMemberRegister*/
+     * @param container a container of BittyBuzzLibMemberRegister, need to implement a forward
+     * iterator. std::array<BittyBuzzLibMemberRegister, XX> or
+     * std::vector<BittyBuzzLibMemberRegister> are probably the most common ones */
     BittyBuzzLib(uint16_t libTableId, const Container& container);
 
     /**@brief BittyBuzzLib constructor, will register on the global scope
