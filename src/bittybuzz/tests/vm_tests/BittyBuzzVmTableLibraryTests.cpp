@@ -35,7 +35,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_tableLibrary) {
     std::array<BittyBuzzLibMemberRegister, 2> tableLibRegister = {
         {{BBZSTRID_get_10, methodGet10}, {BBZSTRID_value_5, (int16_t)5}}};
 
-    BittyBuzzLib globalLib(0, functionRegisters);
+    BittyBuzzLib globalLib(functionRegisters);
     BittyBuzzLib tableLib(BBZSTRID_lib, tableLibRegister);
 
     std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;

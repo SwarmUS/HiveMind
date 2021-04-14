@@ -3,14 +3,19 @@
 
 #include "IBittyBuzzLib.h"
 #include <cstdint>
+#include <optional>
 
 template <typename Container>
 class BittyBuzzLib : public IBittyBuzzLib {
   public:
-    /**@brief BittyBuzzLib constructor
-     * @param libTableId the string id of the table, use 0 to register on the global scope
+    /**@brief BittyBuzzLib constructor, will register on a table/namespace
+     * @param libTableId the string id of the table
      * @param container a container of BittyBuzzLibMemberRegister*/
     BittyBuzzLib(uint16_t libTableId, const Container& container);
+
+    /**@brief BittyBuzzLib constructor, will register on the global scope
+     * @param container a container of BittyBuzzLibMemberRegister*/
+    BittyBuzzLib(const Container& container);
 
     ~BittyBuzzLib() override = default;
 
@@ -19,7 +24,7 @@ class BittyBuzzLib : public IBittyBuzzLib {
   private:
     bool registerLibGlobal();
     bool registerLibTable();
-    const uint16_t m_libTableId;
+    const std::optional<uint16_t> m_libTableId;
     const Container m_container;
 };
 

@@ -12,8 +12,12 @@ BittyBuzzLib<Container>::BittyBuzzLib(uint16_t libTableId, const Container& cont
     m_libTableId(libTableId), m_container(container) {}
 
 template <typename Container>
+BittyBuzzLib<Container>::BittyBuzzLib(const Container& container) :
+    m_libTableId(std::nullopt), m_container(container) {}
+
+template <typename Container>
 bool BittyBuzzLib<Container>::registerLib() {
-    return (m_libTableId == 0) ? registerLibGlobal() : registerLibTable();
+    return m_libTableId ? registerLibTable(): registerLibGlobal();
 }
 
 template <typename Container>
@@ -42,6 +46,10 @@ bool BittyBuzzLib<Container>::registerLibGlobal() {
 template <typename Container>
 bool BittyBuzzLib<Container>::registerLibTable() {
 
+    if (!m_libTableId) {
+        return false;
+    }
+
     bbzvm_pusht(); // table for lib
 
     // Register constants in the lib
@@ -61,7 +69,7 @@ bool BittyBuzzLib<Container>::registerLibTable() {
     }
 
     // Register global symbol with the table
-    bbzvm_gsym_register(m_libTableId, bbzvm_stack_at(0));
+    bbzvm_gsym_register(m_libTableId.value(), bbzvm_stack_at(0));
     bbzvm_pop(); // Pop table from stack
     bbzvm_assert_state(false);
     return true;

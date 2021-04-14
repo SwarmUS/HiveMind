@@ -32,7 +32,7 @@ BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 10>> BittyBuzzFactory::
         {BBZSTRID_call_host_function, BittyBuzzUserFunctions::callHostFunction},
     }};
 
-    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 10>>(0, globalMember);
+    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 10>>(globalMember);
 }
 
 BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 20>> BittyBuzzFactory::

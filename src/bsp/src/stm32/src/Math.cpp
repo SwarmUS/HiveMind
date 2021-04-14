@@ -1,5 +1,5 @@
 #include "bsp/Math.h"
-#include <math.h>
+#include <cmath>
 
 // TODO: Use cmsis math library
 

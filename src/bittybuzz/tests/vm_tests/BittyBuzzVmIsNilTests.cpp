@@ -26,7 +26,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isNil) {
         {{BBZSTRID_is_nil, BittyBuzzUserFunctions::isNil},
          {BBZSTRID_assert_true, buzzAssertTrue},
          {BBZSTRID_assert_false, buzzAssertFalse}}};
-    BittyBuzzLib globalLib(0, functionRegisters);
+    BittyBuzzLib globalLib(functionRegisters);
 
     std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
     libraries.emplace_back(globalLib);

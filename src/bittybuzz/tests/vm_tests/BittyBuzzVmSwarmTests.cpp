@@ -21,7 +21,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledOnce) {
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_log, BittyBuzzUserFunctions::log}}};
-    BittyBuzzLib globalLib(0, functionRegisters);
+    BittyBuzzLib globalLib(functionRegisters);
 
     std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
     libraries.emplace_back(globalLib);
@@ -51,7 +51,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledTwice) {
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_log, BittyBuzzUserFunctions::log}}};
-    BittyBuzzLib globalLib(0, functionRegisters);
+    BittyBuzzLib globalLib(functionRegisters);
 
     std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
     libraries.emplace_back(globalLib);
@@ -82,7 +82,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_InTwoSwarm_FunctionCalledQuad) 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_log, BittyBuzzUserFunctions::log}}};
-    BittyBuzzLib globalLib(0, functionRegisters);
+    BittyBuzzLib globalLib(functionRegisters);
 
     std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
     libraries.emplace_back(globalLib);

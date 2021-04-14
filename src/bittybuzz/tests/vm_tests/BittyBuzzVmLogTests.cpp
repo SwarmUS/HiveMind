@@ -24,7 +24,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_log_FunctionCalled) {
     std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_log, BittyBuzzUserFunctions::log}}};
 
-    BittyBuzzLib globalLib(0, functionRegisters);
+    BittyBuzzLib globalLib(functionRegisters);
 
     std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
     libraries.emplace_back(globalLib);

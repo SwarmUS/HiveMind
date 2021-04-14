@@ -33,7 +33,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_callHostFunction_sendToHost_invalidAr
     std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_call_host_function, BittyBuzzUserFunctions::callHostFunction}}};
 
-    BittyBuzzLib globalLib(0, functionRegisters);
+    BittyBuzzLib globalLib(functionRegisters);
 
     std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
     libraries.emplace_back(globalLib);
