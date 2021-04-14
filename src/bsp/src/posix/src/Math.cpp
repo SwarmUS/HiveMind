@@ -1,6 +1,10 @@
 #include "bsp/Math.h"
 #include <cmath>
 
+const float Math::pi = M_PI;
+
+const float Math::e = M_E;
+
 float Math::cos(float x) { return std::cos(x); }
 
 float Math::sin(float x) { return std::sin(x); }

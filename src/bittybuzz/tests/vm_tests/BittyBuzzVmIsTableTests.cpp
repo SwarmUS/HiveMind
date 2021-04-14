@@ -21,7 +21,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isTable) {
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
-    std::array<UserFunctionRegister, 3> functionRegister = {
+    std::array<BittyBuzzUserFunctionRegister, 3> functionRegister = {
         {{BBZSTRID_is_table, BittyBuzzUserFunctions::isTable},
          {BBZSTRID_assert_true, buzzAssertTrue},
          {BBZSTRID_assert_false, buzzAssertFalse}}};

@@ -19,7 +19,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_AddInt_NoError) {
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
-    std::array<UserFunctionRegister, 0> functionRegister = {};
+    std::array<BittyBuzzUserFunctionRegister, 0> functionRegister = {};
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
 

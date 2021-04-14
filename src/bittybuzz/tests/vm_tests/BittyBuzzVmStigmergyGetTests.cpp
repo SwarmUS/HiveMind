@@ -20,7 +20,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_get) {
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     EXPECT_CALL(messageServiceMock, sendBuzzMessage).Times(2).WillRepeatedly(testing::Return(true));
 
-    std::array<UserFunctionRegister, 1> functionRegister = {{
+    std::array<BittyBuzzUserFunctionRegister, 1> functionRegister = {{
 
         {BBZSTRID_assert_true, buzzAssertTrue}}};
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,

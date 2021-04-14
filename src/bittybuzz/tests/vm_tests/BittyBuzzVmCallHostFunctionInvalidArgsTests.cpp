@@ -29,7 +29,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_callHostFunction_sendToHost_invalidAr
     EXPECT_CALL(messageServiceMock, callHostFunction(testing::_, testing::_, testing::_, 2))
         .Times(0);
 
-    std::array<UserFunctionRegister, 1> functionRegisters = {
+    std::array<BittyBuzzUserFunctionRegister, 1> functionRegisters = {
         {{BBZSTRID_call_host_function, BittyBuzzUserFunctions::callHostFunction}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,

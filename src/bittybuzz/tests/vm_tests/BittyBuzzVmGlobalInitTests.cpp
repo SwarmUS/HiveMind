@@ -21,7 +21,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_globalInit) {
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
-    std::array<UserFunctionRegister, 1> functionRegister = {
+    std::array<BittyBuzzUserFunctionRegister, 1> functionRegister = {
         {{BBZSTRID_assert_true, buzzAssertTrue}},
     };
 

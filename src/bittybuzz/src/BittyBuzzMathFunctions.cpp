@@ -3,12 +3,6 @@
 #include <bbzvm.h>
 #include <bsp/Math.h>
 
-bool BittyBuzzMathFunctions::registerMathTable() {
-    // TODO
-    bbzvm_pusht(); // "math"
-    return true;
-}
-
 void BittyBuzzMathFunctions::bbzmath_abs() {
     bbzvm_assert_lnum(1); // NOLINT
 

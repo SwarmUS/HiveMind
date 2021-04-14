@@ -46,7 +46,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_registerFunction) {
         .Times(1)
         .WillOnce(testing::Return(argFloatName.c_str()));
 
-    std::array<UserFunctionRegister, 2> functionRegisters = {
+    std::array<BittyBuzzUserFunctionRegister, 2> functionRegisters = {
         {{BBZSTRID_assert_true, buzzAssertTrue},
          {BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure}}};
 
@@ -87,7 +87,7 @@ TEST_F(BittyBuzzVmTestFixture,
     RequestDTO request(1, uRequest);
     MessageDTO message(boardId, boardId, request);
 
-    std::array<UserFunctionRegister, 2> functionRegisters = {
+    std::array<BittyBuzzUserFunctionRegister, 2> functionRegisters = {
         {{BBZSTRID_assert_true, buzzAssertTrue},
          {BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure}}};
 

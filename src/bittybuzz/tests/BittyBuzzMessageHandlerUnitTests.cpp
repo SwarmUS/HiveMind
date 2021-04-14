@@ -84,7 +84,7 @@ class BittyBuzzMessageHandlerFixture : public testing::Test {
         m_bittybuzzVmMock = new BittyBuzzVm(
             m_bittybuzzBytecode, m_bittyBuzzStringResolverMock, m_messageHandlerMock,
             m_closureRegisterMock, m_messageServiceMock, m_neighborsManagerMock, *m_bspMock,
-            *m_loggerMock, m_uiMock, std::array<UserFunctionRegister, 0>{});
+            *m_loggerMock, m_uiMock, std::array<BittyBuzzUserFunctionRegister, 0>{});
         // Message Handler
         m_bbzMessageHandler = new BittyBuzzMessageHandler(
             m_closureRegisterMock, m_inputQueueMock, m_hostOutputQueueMock, m_remoteOutputQueueMock,

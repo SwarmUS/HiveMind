@@ -40,8 +40,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
                       BittyBuzzContainer::getBBZNeighborsManager(),
                       BSPContainer::getBSP(),
                       m_logger,
-                      BSPContainer::getUserInterface(),
-                      BittyBuzzFactory::createBittyBuzzFunctionRegisters()) {}
+                      BSPContainer::getUserInterface()) {}
 
     ~BittyBuzzTask() override = default;
 
@@ -52,10 +51,18 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     BittyBuzzVm m_bittybuzzVm;
 
     void task() override {
+        auto bbzFunctions = BittyBuzzFactory::createBittyBuzzFunctionRegisters();
+        auto mathLib = BittyBuzzFactory::createBittyBuzzMathLib();
+        if (m_bittybuzzVm.init(bbzFunctions.data(), bbzFunctions.size(), mathLib)) {
+            m_logger.log(LogLevel::Error, "BBZVM failed to initialize. state: %d err: %d",
+                         m_bittybuzzVm.getSate(), m_bittybuzzVm.getError());
+            return;
+        }
+
         while (true) {
 
             if (!m_bittybuzzVm.step()) {
-                m_logger.log(LogLevel::Error, "BBZVM failed to step! state: %d err: %d",
+                m_logger.log(LogLevel::Error, "BBZVM failed to step. state: %d err: %d",
                              m_bittybuzzVm.getSate(), m_bittybuzzVm.getError());
             }
             Task::delay(100);

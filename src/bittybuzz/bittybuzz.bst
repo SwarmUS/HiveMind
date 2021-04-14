@@ -9,6 +9,8 @@ is_lambda_closure
 register_closure
 call_host_function
 math
+pi
+e
 abs
 floor
 ceil
@@ -19,12 +21,11 @@ log10
 exp
 sqrt
 sin
-cons
+cos
 tan
 asin
 acos
 atan
 min
 max
-pi
 rng_uniform

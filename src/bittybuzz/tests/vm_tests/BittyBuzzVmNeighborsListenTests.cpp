@@ -31,7 +31,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsListen) {
     broadcastMessage.datastart = 0;
     broadcastMessage.dataend = 8;
 
-    std::array<UserFunctionRegister, 1> functionRegister = {
+    std::array<BittyBuzzUserFunctionRegister, 1> functionRegister = {
         {{BBZSTRID_assert_true, buzzAssertTrue}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,

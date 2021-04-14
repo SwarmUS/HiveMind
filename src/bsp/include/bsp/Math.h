@@ -5,9 +5,9 @@
  *@brief Namespace that provides basic mathematical operations. Optized for the platform*/
 namespace Math {
 
-    extern float pi;
+    extern const float pi;
 
-    extern float e;
+    extern const float e;
 
     /**@brief calculate the cosine
      *@param x value in radian

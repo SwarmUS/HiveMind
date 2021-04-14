@@ -13,16 +13,6 @@
 #include <bsp/IUserInterface.h>
 #include <logger/ILogger.h>
 
-class UserFunctionRegister {
-  public:
-    UserFunctionRegister(uint8_t strId, bbzvm_funp functionPtr);
-    uint8_t m_strId;
-    bbzvm_funp m_functionPtr;
-
-  private:
-    UserFunctionRegister();
-};
-
 class BittyBuzzVm : public IBittyBuzzVm {
   public:
     /**
@@ -35,10 +25,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
      *@param neighborsManager a reference to a neighbors manager
      *@param bsp a reference to the bsp
      *@param logger a reference to a logger
-     *@param ui a reference to a user interface
-     *@param container the provided iterator
-     *@tparam Container an iterator of any sort (stl container) that returns a FunctionRegister*/
-    template <typename Container>
+     *@param ui a reference to a user interface */
     BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                 const IBittyBuzzStringResolver& stringResolver,
                 IBittyBuzzMessageHandler& messageHandler,
@@ -47,10 +34,13 @@ class BittyBuzzVm : public IBittyBuzzVm {
                 IBittyBuzzNeighborsManager& neighborsManager,
                 IBSP& bsp,
                 ILogger& logger,
-                IUserInterface& ui,
-                const Container& container);
+                IUserInterface& ui);
 
     ~BittyBuzzVm() override = default;
+
+    bool init(const BittyBuzzUserFunctionRegister* functions,
+              uint32_t functionsLength,
+              IBittyBuzzLib& bbzLibs) override;
 
     bool step() override;
 
@@ -69,7 +59,5 @@ class BittyBuzzVm : public IBittyBuzzVm {
 
     bbzvm_t m_bbzVm;
 };
-
-#include "BittyBuzzVm.tpp"
 
 #endif // __BITTYBUZZVM_H_

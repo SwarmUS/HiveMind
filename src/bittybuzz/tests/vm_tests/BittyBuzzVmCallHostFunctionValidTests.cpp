@@ -43,7 +43,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_callHostFunction_sendToHost_valid) {
         .Times(1)
         .WillOnce(testing::Invoke(test));
 
-    std::array<UserFunctionRegister, 1> functionRegisters = {
+    std::array<BittyBuzzUserFunctionRegister, 1> functionRegisters = {
         {{BBZSTRID_call_host_function, BittyBuzzUserFunctions::callHostFunction}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,

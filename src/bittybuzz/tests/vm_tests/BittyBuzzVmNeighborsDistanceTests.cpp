@@ -37,7 +37,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsDistance) {
     EXPECT_CALL(queueMock, pop).Times(1);
     EXPECT_CALL(interlocMock, getRobotPosition).Times(1).WillOnce(testing::Return(pos));
 
-    std::array<UserFunctionRegister, 1> functionRegister = {
+    std::array<BittyBuzzUserFunctionRegister, 1> functionRegister = {
         {{BBZSTRID_assert_true, buzzAssertTrue}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
@@ -90,7 +90,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsDistance_twiceData) {
         .WillOnce(testing::Return(pos1))
         .WillOnce(testing::Return(pos2));
 
-    std::array<UserFunctionRegister, 1> functionRegister = {
+    std::array<BittyBuzzUserFunctionRegister, 1> functionRegister = {
         {{BBZSTRID_assert_true, buzzAssertTrue}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,

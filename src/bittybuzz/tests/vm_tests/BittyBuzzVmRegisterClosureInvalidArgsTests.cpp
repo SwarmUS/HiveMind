@@ -36,7 +36,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_invalidArgs) {
         .Times(1)
         .WillOnce(testing::Return(functionName.c_str()));
 
-    std::array<UserFunctionRegister, 1> functionRegisters = {
+    std::array<BittyBuzzUserFunctionRegister, 1> functionRegisters = {
         {{BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &closureRegister,

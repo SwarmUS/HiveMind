@@ -2,32 +2,28 @@
 #define __BITTYBUZZFACTORY_H_
 
 #include "BittyBuzzBytecode.h"
+#include "BittyBuzzLib.h"
+#include "BittyBuzzLibMemberRegister.h"
 #include "BittyBuzzStringResolver.h"
 #include "IBittyBuzzVm.h"
 #include <array>
 #include <bittybuzz/BittyBuzzVm.h>
 
 namespace BittyBuzzFactory {
-    /**
-     * @brief Creates a BittyBuzzBytecode with the main.bzz bytecode
-     *
-     * @param logger the logger to inject in the BittyBuzzBytecode
-     *
-     * */
+    /** @brief Creates a BittyBuzzBytecode with the main.bzz bytecode
+     * @param logger the logger to inject in the BittyBuzzBytecode */
     BittyBuzzBytecode createBittyBuzzBytecode(ILogger& logger);
 
-    /**
-     * @brief Creates a BittyBuzzStringResolver with the main.bzz bytecode
-     *
-     * @param logger the logger to inject in the BittyBuzzStringResolver
-     *
-     * */
+    /** @brief Creates a BittyBuzzStringResolver with the main.bzz bytecode
+     * @param logger the logger to inject in the BittyBuzzStringResolver */
     BittyBuzzStringResolver createBittyBuzzStringResolver(ILogger& logger);
 
-    /**
-     * @brief Creates an array of FunctionRegister associated with the code from main.bzz
-     * */
-    std::array<UserFunctionRegister, 10> createBittyBuzzFunctionRegisters();
+    /** @brief Creates an array of FunctionRegister associated with the code from main.bzz */
+    std::array<BittyBuzzUserFunctionRegister, 10> createBittyBuzzFunctionRegisters();
+
+    /** @brief Creates a the math table library for the bvm */
+    BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 20>> createBittyBuzzMathLib();
+
 } // namespace BittyBuzzFactory
 
 #endif // __BITTYBUZZFACTORY_H_

@@ -21,7 +21,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_put_pushSuccess) {
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     EXPECT_CALL(messageServiceMock, sendBuzzMessage).Times(1).WillOnce(testing::Return(true));
 
-    std::array<UserFunctionRegister, 0> functionRegister = {};
+    std::array<BittyBuzzUserFunctionRegister, 0> functionRegister = {};
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
     // Then
@@ -47,7 +47,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_put_pushFail) {
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     EXPECT_CALL(messageServiceMock, sendBuzzMessage).Times(1).WillOnce(testing::Return(false));
 
-    std::array<UserFunctionRegister, 0> functionRegister = {};
+    std::array<BittyBuzzUserFunctionRegister, 0> functionRegister = {};
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
     // Then
