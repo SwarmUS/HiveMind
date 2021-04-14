@@ -26,6 +26,7 @@ SpiEsp::SpiEsp(ICRC& crc, ILogger& logger) :
     m_outboundMessage = {};
     m_inboundRequest = false;
     m_isBusy = false;
+    m_isConnected = false;
     CircularBuff_init(&m_circularBuf, m_data.data(), m_data.size());
     setEspCallback(SpiEsp::espInterruptCallback, this);
 
@@ -38,6 +39,7 @@ bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
         m_logger.log(LogLevel::Warn,
                      "SpiEsp: Message length of %d is larger than maximum allowed of %d", length,
                      ESP_SPI_MAX_MESSAGE_LENGTH);
+        return false;
     }
 
     m_logger.log(LogLevel::Debug, "Sending message of length %d", length);
@@ -70,11 +72,24 @@ bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
     m_sendingTaskHandle = nullptr;
     return true;
 }
+bool SpiEsp::receive(uint8_t* buffer, uint16_t length) {
+    if (buffer == nullptr || length > ESP_SPI_MAX_MESSAGE_LENGTH) {
+        m_logger.log(LogLevel::Warn, "Invalid parameters for SpiStm::Receive");
+        return false;
+    }
+    m_receivingTaskHandle = xTaskGetCurrentTaskHandle();
+    while (CircularBuff_getLength(&m_circularBuf) < length) {
+        ulTaskNotifyTake(pdTRUE, 500);
+        // TODO: check for disconnection
+    }
+    m_receivingTaskHandle = nullptr;
+
+    return CircularBuff_get(&m_circularBuf, buffer, length) == length;
+}
 
 bool SpiEsp::isBusy() const { return m_isBusy; }
 
-// TODO: this function should return true if the last header received from esp was valid.
-bool SpiEsp::isConnected() const { return true; }
+bool SpiEsp::isConnected() const {return m_isConnected;}
 
 void SpiEsp::execute() {
     uint32_t txLengthBytes = 0;
@@ -100,8 +115,11 @@ void SpiEsp::execute() {
                          m_inboundMessage.m_data[0], m_inboundMessage.m_data[1],
                          m_inboundMessage.m_data[2], m_inboundMessage.m_data[3]);
             m_rxState = receiveState::ERROR;
+            m_isConnected = false;
             break;
         }
+        // Simple flag signifying that connection is established with esp
+        m_isConnected = true;
         if (WORDS_TO_BYTES(m_inboundHeader->rxSizeWord) == m_outboundMessage.m_sizeBytes &&
             m_outboundMessage.m_sizeBytes != 0) {
             m_logger.log(LogLevel::Debug, "Received valid header. Can now send payload");
