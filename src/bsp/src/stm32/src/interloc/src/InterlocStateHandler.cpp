@@ -11,11 +11,8 @@ void InterlocStateHandler::setState(InterlocStates state, InterlocEvent event) {
         m_stateTracer.pop();
     }
 
-    auto& stateTransition = m_stateTracer.getNextAllocation().value().get();
-    stateTransition.m_fromState = m_currentStateName;
-    stateTransition.m_toState = state;
-    stateTransition.m_transitionEvent = event;
-    m_stateTracer.advance();
+    StateTransition stateTransition{m_currentStateName, state, event};
+    m_stateTracer.push(stateTransition);
 
     m_currentStateName = state;
     m_currentState = &InterlocStateContainer::getState(state);
