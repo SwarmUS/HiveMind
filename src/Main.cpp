@@ -51,9 +51,10 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     BittyBuzzVm m_bittybuzzVm;
 
     void task() override {
-        auto bbzFunctions = BittyBuzzFactory::createBittyBuzzFunctionRegisters();
+        auto bbzFunctions = BittyBuzzFactory::createBittyBuzzGlobalLib();
         auto mathLib = BittyBuzzFactory::createBittyBuzzMathLib();
-        if (m_bittybuzzVm.init(bbzFunctions.data(), bbzFunctions.size(), mathLib)) {
+        std::array<std::reference_wrapper<IBittyBuzzLib>, 2> buzzLibraries{{bbzFunctions, mathLib}};
+        if (m_bittybuzzVm.init(buzzLibraries.data(), buzzLibraries.size())) {
             m_logger.log(LogLevel::Error, "BBZVM failed to initialize. state: %d err: %d",
                          m_bittybuzzVm.getSate(), m_bittybuzzVm.getError());
             return;

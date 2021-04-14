@@ -5,6 +5,7 @@
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
 #include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
+#include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
 #include <is_string_bytecode.h>

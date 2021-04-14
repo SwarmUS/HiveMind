@@ -1,4 +1,5 @@
 #include "bittybuzz/BittyBuzzClosureRegister.h"
+#include <bittybuzz/BittyBuzzLib.h>
 #include <gtest/gtest.h>
 
 class BittyBuzzClosureRegisterTestFixture : public testing::Test {

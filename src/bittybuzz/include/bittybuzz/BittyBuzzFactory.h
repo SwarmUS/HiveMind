@@ -19,7 +19,7 @@ namespace BittyBuzzFactory {
     BittyBuzzStringResolver createBittyBuzzStringResolver(ILogger& logger);
 
     /** @brief Creates an array of FunctionRegister associated with the code from main.bzz */
-    std::array<BittyBuzzUserFunctionRegister, 10> createBittyBuzzFunctionRegisters();
+    BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 10>> createBittyBuzzGlobalLib();
 
     /** @brief Creates a the math table library for the bvm */
     BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 20>> createBittyBuzzMathLib();

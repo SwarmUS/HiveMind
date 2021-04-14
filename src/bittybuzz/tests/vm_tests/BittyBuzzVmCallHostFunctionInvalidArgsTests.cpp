@@ -4,6 +4,7 @@
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
 #include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
+#include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <call_host_function_invalidArgs_bytecode.h>
 #include <call_host_function_invalidArgs_string.h>
@@ -29,7 +30,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_callHostFunction_sendToHost_invalidAr
     EXPECT_CALL(messageServiceMock, callHostFunction(testing::_, testing::_, testing::_, 2))
         .Times(0);
 
-    std::array<BittyBuzzUserFunctionRegister, 1> functionRegisters = {
+    std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_call_host_function, BittyBuzzUserFunctions::callHostFunction}}};
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,

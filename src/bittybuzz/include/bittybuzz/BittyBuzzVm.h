@@ -38,9 +38,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
 
     ~BittyBuzzVm() override = default;
 
-    bool init(const BittyBuzzUserFunctionRegister* functions,
-              uint32_t functionsLength,
-              IBittyBuzzLib& bbzLibs) override;
+    bool init(std::reference_wrapper<IBittyBuzzLib>* bbzLibs, uint32_t bbzLibsLength) override;
 
     bool step() override;
 

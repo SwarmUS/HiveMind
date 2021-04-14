@@ -5,6 +5,7 @@
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
 #include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
+#include <bittybuzz/BittyBuzzLib.h>
 #include <stigmergy_get_bytecode.h>
 
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_get) {

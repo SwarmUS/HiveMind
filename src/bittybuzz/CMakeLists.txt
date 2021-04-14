@@ -40,8 +40,6 @@ set(LIB_HEADERS
     include/bittybuzz/BittyBuzzNeighborsManager.h
     include/bittybuzz/IBittyBuzzNeighborsManager.h
 
-    include/bittybuzz/BittyBuzzUserFunctionRegister.h
-
     include/bittybuzz/BittyBuzzMathFunctions.h
 
     include/bittybuzz/BittyBuzzLib.h
@@ -71,7 +69,6 @@ set(LIB_SOURCES
     src/BittyBuzzUserFunctions.cpp
     src/BittyBuzzFunctionDescription.cpp
     src/BittyBuzzMathFunctions.cpp
-    src/BittyBuzzUserFunctionRegister.cpp
     src/BittyBuzzLibMemberRegister.cpp
 )
 

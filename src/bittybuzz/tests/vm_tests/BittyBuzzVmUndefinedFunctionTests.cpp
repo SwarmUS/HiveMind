@@ -4,6 +4,7 @@
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
 #include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
+#include <bittybuzz/BittyBuzzLib.h>
 #include <undefined_function_bytecode.h>
 
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_UndefinedFunction_LogCalledOnError) {

@@ -1,9 +1,9 @@
 #ifndef __IBITTYBUZZVM_H_
 #define __IBITTYBUZZVM_H_
 
-#include "BittyBuzzUserFunctionRegister.h"
 #include "IBittyBuzzLib.h"
 #include <bbzvm.h>
+#include <functional>
 
 /**
  *@brief Manages BittyBuzz virtual machine */
@@ -12,12 +12,9 @@ class IBittyBuzzVm {
     virtual ~IBittyBuzzVm() = default;
 
     /**@brief Init the virtual machine
-     *@param functions an array of functions to register
-     *@param functionsLength the length of the functions array
-     *@param bbzLibs the libraries to register on init*/
-    virtual bool init(const BittyBuzzUserFunctionRegister* functions,
-                      uint32_t functionsLength,
-                      IBittyBuzzLib& bbzLibs) = 0;
+     *@param bbzLibs an array of the libraries to init
+     *@param bbzLibsLength the length of the libraries to init*/
+    virtual bool init(std::reference_wrapper<IBittyBuzzLib>* bbzLibs, uint32_t bbzLibsLength) = 0;
 
     /** @brief Does one execution step in the virtual machine.  Thus execute the buzz code in the
      * step function

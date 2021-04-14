@@ -32,20 +32,18 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     BittyBuzzSystem::g_bsp = &bsp;
 }
 
-bool BittyBuzzVm::init(const BittyBuzzUserFunctionRegister* functions,
-                       uint32_t functionsLength,
-                       IBittyBuzzLib& bbzLibs) {
+bool BittyBuzzVm::init(std::reference_wrapper<IBittyBuzzLib>* bbzLibs, uint32_t bbzLibsLength) {
 
     // Init vm
     bbzvm_construct(m_bsp.getUUId());
     bbzvm_set_error_receiver(BittyBuzzSystem::errorReceiver);
     bbzvm_set_bcode(m_bytecode.getBytecodeFetchFunction(), m_bytecode.getBytecodeLength());
 
-    bbzLibs.registerLibs();
-
-    // Function registration
-    for (uint32_t i = 0; i < functionsLength; i++) {
-        bbzvm_function_register(functions[i].getStringId(), functions[i].getFunctionPointer());
+    // Register lib
+    for (uint32_t i = 0; i < bbzLibsLength; i++) {
+        if (!bbzLibs->get().registerLib()) {
+            return false;
+        }
     }
 
     // Execute the global part of the script
@@ -54,9 +52,7 @@ bool BittyBuzzVm::init(const BittyBuzzUserFunctionRegister* functions,
     }
 
     // Verify that the registration and startup was successfull
-    if (vm->state == BBZVM_STATE_ERROR) {
-        return false;
-    }
+    bbzvm_assert_state(false);
 
     // Start init
     vm->state = BBZVM_STATE_READY;

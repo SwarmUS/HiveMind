@@ -9,6 +9,7 @@
 #include "mocks/CircularQueueInterfaceMock.h"
 #include <array>
 #include <bittybuzz/BittyBuzzClosureRegister.h>
+#include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzMessageHandler.h>
 #include <bittybuzz/BittyBuzzStringResolver.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>

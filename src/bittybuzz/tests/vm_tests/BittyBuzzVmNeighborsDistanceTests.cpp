@@ -6,6 +6,7 @@
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
 #include "mocks/CircularQueueInterfaceMock.h"
 #include "mocks/InterlocInterfaceMock.h"
+#include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzNeighborsManager.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>

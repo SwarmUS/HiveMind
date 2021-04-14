@@ -4,6 +4,7 @@
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
 #include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
+#include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <call_host_function_valid_bytecode.h>
 #include <call_host_function_valid_string.h>

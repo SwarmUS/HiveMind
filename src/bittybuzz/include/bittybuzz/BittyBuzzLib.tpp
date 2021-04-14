@@ -12,8 +12,37 @@ BittyBuzzLib<Container>::BittyBuzzLib(uint16_t libTableId, const Container& cont
     m_libTableId(libTableId), m_container(container) {}
 
 template <typename Container>
-void BittyBuzzLib<Container>::registerLibs() {
-    bbzvm_pusht(); // "table for lib"
+bool BittyBuzzLib<Container>::registerLib() {
+    return (m_libTableId == 0) ? registerLibGlobal() : registerLibTable();
+}
+
+template <typename Container>
+bool BittyBuzzLib<Container>::registerLibGlobal() {
+
+    // Register constants in the lib
+    for (const BittyBuzzLibMemberRegister& libRegister : m_container) {
+        std::variant<bbzvm_funp, float, int16_t> value = libRegister.getValue();
+        uint16_t strId = libRegister.getStringId();
+        if (const bbzvm_funp* functionPointer = std::get_if<bbzvm_funp>(&value)) {
+            bbzvm_function_register((int16_t)strId, *functionPointer);
+        } else if (const float* floatVal = std::get_if<float>(&value)) {
+            bbzvm_pushf(bbzfloat_fromfloat(*floatVal));
+            bbzvm_gsym_register(strId, bbzvm_stack_at(0));
+            bbzvm_pop();
+        } else if (const int16_t* intVal = std::get_if<int16_t>(&value)) {
+            bbzvm_pushi(*intVal);
+            bbzvm_gsym_register(strId, bbzvm_stack_at(0));
+            bbzvm_pop();
+        }
+        bbzvm_assert_state(false);
+    }
+    return true;
+}
+
+template <typename Container>
+bool BittyBuzzLib<Container>::registerLibTable() {
+
+    bbzvm_pusht(); // table for lib
 
     // Register constants in the lib
     for (const BittyBuzzLibMemberRegister& libRegister : m_container) {
@@ -28,11 +57,14 @@ void BittyBuzzLib<Container>::registerLibs() {
             bbzheap_idx_t intHeapIdx = bbzint_new(*intVal);
             bbztable_add_data(strId, intHeapIdx);
         }
+        bbzvm_assert_state(false);
     }
 
     // Register global symbol with the table
     bbzvm_gsym_register(m_libTableId, bbzvm_stack_at(0));
     bbzvm_pop(); // Pop table from stack
+    bbzvm_assert_state(false);
+    return true;
 }
 
 #endif // __BITTYBUZZSTDLIB_TPP_

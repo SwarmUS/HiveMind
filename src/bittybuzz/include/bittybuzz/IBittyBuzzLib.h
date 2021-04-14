@@ -7,8 +7,9 @@ class IBittyBuzzLib {
   public:
     virtual ~IBittyBuzzLib() = default;
 
-    /**@brief register the libs in the vm, each lib will have it's own table*/
-    virtual void registerLibs() = 0;
+    /**@brief register the library in the vm, each lib will have it's own table, if the lib table id
+     * is 0, the data will be registered on the global scope */
+    virtual bool registerLib() = 0;
 };
 
 #endif // __IBITTYBUZZLIB_H_
