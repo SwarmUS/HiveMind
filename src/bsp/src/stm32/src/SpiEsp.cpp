@@ -26,7 +26,7 @@ SpiEsp::SpiEsp(ICRC& crc, ILogger& logger) :
     m_outboundMessage = {};
     m_inboundRequest = false;
     m_isBusy = false;
-
+    CircularBuff_init(&m_circularBuf, m_data.data(), m_data.size());
     setEspCallback(SpiEsp::espInterruptCallback, this);
 
     // Starts the task
@@ -34,32 +34,41 @@ SpiEsp::SpiEsp(ICRC& crc, ILogger& logger) :
 }
 
 bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
-    if (isBusy()) { // Not available
-    } else if (length >= ESP_SPI_MAX_MESSAGE_LENGTH) { // Message too long
+    if (length >= ESP_SPI_MAX_MESSAGE_LENGTH) { // Message too long
         m_logger.log(LogLevel::Warn,
                      "SpiEsp: Message length of %d is larger than maximum allowed of %d", length,
                      ESP_SPI_MAX_MESSAGE_LENGTH);
-    } else {
-
-        m_logger.log(LogLevel::Debug, "Sending message of length %d", length);
-        // TODO: this memcpy could change once we have a buffer manager/allocator of some sorts.
-        std::memcpy(m_outboundMessage.m_data.data(), buffer, length);
-        // Padding with 0 up to a word-alligned boundary
-        for (uint8_t i = 0; i < (length % 4); i++) {
-            m_outboundMessage.m_data[length] = 0;
-            length++;
-        }
-        // Appending CRC32
-        *(uint32_t*)(m_outboundMessage.m_data.data() + length) =
-            m_crc.calculateCRC32(m_outboundMessage.m_data.data(), length);
-        length += CRC32_SIZE;
-        m_outboundMessage.m_sizeBytes = length;
-        m_txState = transmitState::SENDING_HEADER;
-        m_isBusy = true;
-        return true;
     }
 
-    return false;
+    m_logger.log(LogLevel::Debug, "Sending message of length %d", length);
+    // TODO: this memcpy could change once we have a buffer manager/allocator of some sorts.
+    std::memcpy(m_outboundMessage.m_data.data(), buffer, length);
+    // Padding with 0 up to a word-alligned boundary
+    for (uint8_t i = 0; i < (length % 4); i++) {
+        m_outboundMessage.m_data[length] = 0;
+        length++;
+    }
+    // Appending CRC32
+    *(uint32_t*)(m_outboundMessage.m_data.data() + length) =
+        m_crc.calculateCRC32(m_outboundMessage.m_data.data(), length);
+    length += CRC32_SIZE;
+    m_outboundMessage.m_sizeBytes = length;
+    m_txState = transmitState::SENDING_HEADER;
+    m_isBusy = true;
+
+    // Wait for transmission to be over
+    m_sendingTaskHandle = xTaskGetCurrentTaskHandle();
+    while (isBusy()) {
+        ulTaskNotifyTake(pdTRUE,500);
+        if (m_hasSentPayload && m_inboundHeader->systemState.espSystemState.failedCrc) {
+            //Crc failed, handler retries in the future
+            m_sendingTaskHandle = nullptr;
+            return false;
+        }
+        // Todo: check for disconnect
+    }
+    m_sendingTaskHandle = nullptr;
+    return true;
 }
 
 bool SpiEsp::isBusy() const { return m_isBusy; }
@@ -117,13 +126,23 @@ void SpiEsp::execute() {
         rxLengthBytes = WORDS_TO_BYTES(m_inboundHeader->txSizeWord);
         break;
     case receiveState::VALIDATE_CRC:
+        // Check payload CRC and log an error and set flag if it fails
         if (m_crc.calculateCRC32(m_inboundMessage.m_data.data(),
                                  m_inboundMessage.m_sizeBytes - CRC32_SIZE) !=
             *(uint32_t*)&m_inboundMessage.m_data[m_inboundMessage.m_sizeBytes - CRC32_SIZE]) {
+            m_logger.log(LogLevel::Error,"Failed payload crc on ESP");
             m_outboundHeader.systemState.stmSystemState.failedCrc = 1;
+        }
+        // If it passes the CRC check, add the data to the circular buffer
+        else if (CircularBuff_put(&m_circularBuf, m_inboundMessage.m_data.data(),
+                                  m_inboundMessage.m_sizeBytes - CRC32_SIZE) ==
+                 CircularBuff_Ret_Ok) {
+            // If a task was waiting to receive bytes, notify it
+            if (m_receivingTaskHandle != nullptr) {
+                xTaskNotifyGive(m_receivingTaskHandle);
+            }
         } else {
-            m_logger.log(LogLevel::Info, "ESP says: %s", m_inboundMessage.m_data.data());
-            m_inboundMessage.m_sizeBytes = 0;
+            m_logger.log(LogLevel::Error, "Failed to add bytes in spi circular buffer");
         }
         m_rxState = receiveState::RECEIVING_HEADER;
         rxLengthBytes = EspHeader::sizeBytes;
@@ -150,6 +169,7 @@ void SpiEsp::execute() {
     case transmitState::SENDING_PAYLOAD:
         txLengthBytes = m_outboundMessage.m_sizeBytes;
         txBuffer = m_outboundMessage.m_data.data();
+        m_hasSentPayload = true;
         break;
     case transmitState::ERROR:
         HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_SET);
@@ -204,5 +224,13 @@ void SpiEsp::espTxRxCallback(void* context) {
     if (instance->m_txState == transmitState::SENDING_PAYLOAD) { // TODO: confirm reception with ack
         instance->m_txState = transmitState::IDLE;
         instance->m_outboundMessage.m_sizeBytes = 0;
+        instance->m_hasSentPayload = true;
+        instance->m_isBusy = false;
+        // notify sending task
+        if (instance->m_sendingTaskHandle != nullptr) {
+            BaseType_t toYield = pdFALSE;
+            vTaskNotifyGiveFromISR(instance->m_sendingTaskHandle, &toYield);
+            portYIELD_FROM_ISR(toYield);
+        }
     }
 }

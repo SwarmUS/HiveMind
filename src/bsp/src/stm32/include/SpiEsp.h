@@ -8,6 +8,7 @@
 #include <BaseTask.h>
 #include <Task.h>
 #include <array>
+#include <c-common/circular_buff.h>
 
 #define CRC32_SIZE sizeof(uint32_t)
 #define ESP_SPI_MAX_MESSAGE_LENGTH (2048u - CRC32_SIZE)
@@ -50,6 +51,9 @@ class SpiEsp : public ICommInterface {
         uint16_t m_sizeBytes;
     } m_inboundMessage, m_outboundMessage;
 
+    std::array<uint8_t, ESP_SPI_MAX_MESSAGE_LENGTH> m_data;
+    CircularBuff m_circularBuf;
+    TaskHandle_t m_receivingTaskHandle, m_sendingTaskHandle = nullptr;
     EspHeader::Header m_outboundHeader;
     EspHeader::Header* m_inboundHeader;
 
@@ -60,6 +64,7 @@ class SpiEsp : public ICommInterface {
     bool m_inboundRequest;
 
     bool m_isBusy;
+    bool m_hasSentPayload;
 };
 
 #endif // __SPIESP_H__
