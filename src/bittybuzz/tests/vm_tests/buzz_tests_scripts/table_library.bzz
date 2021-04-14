@@ -1,0 +1,6 @@
+function init() {
+}
+
+function step() {
+    assert_true(2 * lib.value_5 ==  lib.get_10());
+}

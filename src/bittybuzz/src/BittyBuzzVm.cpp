@@ -42,7 +42,7 @@ bool BittyBuzzVm::init(const std::reference_wrapper<IBittyBuzzLib>* bbzLibs,
 
     // Register lib
     for (uint32_t i = 0; i < bbzLibsLength; i++) {
-        if (!bbzLibs->get().registerLib()) {
+        if (!bbzLibs[i].get().registerLib()) {
             return false;
         }
     }

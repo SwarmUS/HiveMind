@@ -23,6 +23,7 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmNeighborsDistanceTests.cpp
     vm_tests/BittyBuzzVmNeighborsBroadcastTests.cpp
     vm_tests/BittyBuzzVmNeighborsListenTests.cpp
+    vm_tests/BittyBuzzVmTableLibraryTests.cpp
 
     vm_tests/BittyBuzzVmRegisterClosureFunctionTests.cpp
     vm_tests/BittyBuzzVmRegisterClosureFunctionSelfTests.cpp
@@ -186,6 +187,11 @@ bittybuzz_generate_bytecode(neighbors-listen
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
+bittybuzz_generate_bytecode(table-library
+    ${BZZ_TEST_SCRIPTS_LOCATION}/table_library.bzz
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
 add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})
 
 target_link_libraries(${TEST_NAME}
@@ -222,6 +228,7 @@ target_link_libraries(${TEST_NAME}
         neighbors-distance
         neighbors-broadcast
         neighbors-listen
+        table-library
 )
 
 add_test(NAME ${TEST_NAME}
