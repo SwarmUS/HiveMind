@@ -20,7 +20,7 @@ class SpiEsp : public ICommInterface {
 
     bool send(const uint8_t* buffer, uint16_t length) override;
 
-    bool receive(uint8_t* buffer, uint16_t length) override ;
+    bool receive(uint8_t* buffer, uint16_t length) override;
 
     bool isBusy() const;
     bool isConnected() const override;

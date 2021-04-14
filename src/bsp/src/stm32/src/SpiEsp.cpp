@@ -61,9 +61,9 @@ bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
     // Wait for transmission to be over
     m_sendingTaskHandle = xTaskGetCurrentTaskHandle();
     while (isBusy()) {
-        ulTaskNotifyTake(pdTRUE,500);
+        ulTaskNotifyTake(pdTRUE, 500);
         if (m_hasSentPayload && m_inboundHeader->systemState.espSystemState.failedCrc) {
-            //Crc failed, handler retries in the future
+            // Crc failed, handler retries in the future
             m_sendingTaskHandle = nullptr;
             return false;
         }
@@ -89,7 +89,7 @@ bool SpiEsp::receive(uint8_t* buffer, uint16_t length) {
 
 bool SpiEsp::isBusy() const { return m_isBusy; }
 
-bool SpiEsp::isConnected() const {return m_isConnected;}
+bool SpiEsp::isConnected() const { return m_isConnected; }
 
 void SpiEsp::execute() {
     uint32_t txLengthBytes = 0;
@@ -148,7 +148,7 @@ void SpiEsp::execute() {
         if (m_crc.calculateCRC32(m_inboundMessage.m_data.data(),
                                  m_inboundMessage.m_sizeBytes - CRC32_SIZE) !=
             *(uint32_t*)&m_inboundMessage.m_data[m_inboundMessage.m_sizeBytes - CRC32_SIZE]) {
-            m_logger.log(LogLevel::Error,"Failed payload crc on ESP");
+            m_logger.log(LogLevel::Error, "Failed payload crc on ESP");
             m_outboundHeader.systemState.stmSystemState.failedCrc = 1;
         }
         // If it passes the CRC check, add the data to the circular buffer
