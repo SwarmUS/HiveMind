@@ -2,9 +2,21 @@
 #include <bsp/BSPContainer.h>
 
 InterlocStateHandler::InterlocStateHandler() :
-    m_currentState(&InterlocStateContainer::getState(InterlocStates::DEFAULT)) {}
+    m_currentStateName(InterlocStates::DEFAULT),
+    m_currentState(&InterlocStateContainer::getState(InterlocStates::DEFAULT)),
+    m_stateTracer(m_stateTracerData.data(), MAX_TRACER_TRANSITIONS) {}
 
-void InterlocStateHandler::setState(InterlocStates state) {
+void InterlocStateHandler::setState(InterlocStates state, InterlocEvent event) {
+    if (m_stateTracer.isFull()) {
+        m_stateTracer.pop();
+    }
+
+    auto& stateTransition = m_stateTracer.getNextAllocation().value().get();
+    stateTransition.m_fromState = m_currentStateName;
+    stateTransition.m_toState = state;
+    stateTransition.m_transitionEvent = event;
+
+    m_currentStateName = state;
     m_currentState = &InterlocStateContainer::getState(state);
 }
 
