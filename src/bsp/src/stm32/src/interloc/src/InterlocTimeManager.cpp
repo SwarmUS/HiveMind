@@ -1,22 +1,25 @@
 #include "interloc/InterlocTimeManager.h"
 #include <interloc/Decawave.h>
 
+InterlocTimeManager::InterlocTimeManager() { updateTimings(); }
+
 void InterlocTimeManager::updateTimings() {
-    m_pollRxToResponseTxOffsetDTU =
-        (POLL_AIR_TIME_US + POLL_TO_FIRST_RESPONSE_GUARD_US +
-         (MY_SLOT - 1) * (RESPONSE_AIR_TIME_US + RESPONSE_RX_TO_RESPONSE_TX_GUARD_US)) *
-        UUS_TO_DWT_TIME;
+    uint64_t pollRxToResponseTxOffset =
+        POLL_AIR_TIME_US + POLL_TO_FIRST_RESPONSE_GUARD_US +
+        (MY_SLOT - 1) * (RESPONSE_AIR_TIME_US + RESPONSE_RX_TO_RESPONSE_TX_GUARD_US);
 
-    m_pollTxToFinalTxOffsetDTU =
-        (POLL_AIR_TIME_US + POLL_TO_FIRST_RESPONSE_GUARD_US +
-         NUM_SLOTS * (RESPONSE_AIR_TIME_US + RESPONSE_RX_TO_RESPONSE_TX_GUARD_US)) *
-        UUS_TO_DWT_TIME;
+    uint64_t pollTxToFinalTxOffset =
+        POLL_AIR_TIME_US + POLL_TO_FIRST_RESPONSE_GUARD_US +
+        NUM_SLOTS * (RESPONSE_AIR_TIME_US + RESPONSE_RX_TO_RESPONSE_TX_GUARD_US);
 
-    m_pollRxToFinalRxOffsetDTU =
-        m_pollTxToFinalTxOffsetDTU - (RX_BEFORE_TX_GUARD_US * UUS_TO_DWT_TIME);
+    uint64_t pollRxToFinalRxOffset = pollTxToFinalTxOffset - RX_BEFORE_TX_GUARD_US;
 
-    m_slotToSlotOffsetDTU =
-        m_pollTxToFinalTxOffsetDTU + (FINAL_AIR_TIME_US + FINAL_TO_POLL_GUARD_US) * UUS_TO_DWT_TIME;
+    uint64_t slotToSlotOffset = pollTxToFinalTxOffset + FINAL_AIR_TIME_US + FINAL_TO_POLL_GUARD_US;
+
+    m_pollRxToResponseTxOffsetDTU = pollRxToResponseTxOffset * UUS_TO_DWT_TIME;
+    m_pollTxToFinalTxOffsetDTU = pollTxToFinalTxOffset * UUS_TO_DWT_TIME;
+    m_pollRxToFinalRxOffsetDTU = pollRxToFinalRxOffset * UUS_TO_DWT_TIME;
+    m_slotToSlotOffsetDTU = slotToSlotOffset * UUS_TO_DWT_TIME;
 }
 
 uint64_t InterlocTimeManager::getFinalTxTs(uint64_t pollTxTs) const {

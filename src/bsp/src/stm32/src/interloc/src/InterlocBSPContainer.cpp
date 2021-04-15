@@ -9,7 +9,7 @@ InterlocManager& InterlocBSPContainer::getInterlocManager() {
 }
 
 InterlocStateHandler& InterlocBSPContainer::getStateHandler() {
-    static InterlocStateHandler s_stateHandler;
+    static InterlocStateHandler s_stateHandler(getTimeManager());
 
     return s_stateHandler;
 }
@@ -18,4 +18,10 @@ DecawaveArray& InterlocBSPContainer::getDecawaves() {
     static DecawaveArray s_decawaves;
 
     return s_decawaves;
+}
+
+InterlocTimeManager& InterlocBSPContainer::getTimeManager() {
+    static InterlocTimeManager s_timeManager;
+
+    return s_timeManager;
 }

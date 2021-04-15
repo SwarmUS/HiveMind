@@ -23,6 +23,8 @@
 
 class InterlocTimeManager {
   public:
+    InterlocTimeManager();
+
     void updateTimings();
 
     uint64_t getPollTxTs(uint64_t lastSlotStartTs);

@@ -1,7 +1,8 @@
 #include "interloc/InterlocStateHandler.h"
 #include <bsp/BSPContainer.h>
 
-InterlocStateHandler::InterlocStateHandler() :
+InterlocStateHandler::InterlocStateHandler(InterlocTimeManager& timeManager) :
+    m_timeManager(timeManager),
     m_currentStateName(InterlocStates::DEFAULT),
     m_currentState(&InterlocStateContainer::getState(InterlocStates::DEFAULT)),
     m_stateTracer(m_stateTracerData.data(), MAX_TRACER_TRANSITIONS) {}
