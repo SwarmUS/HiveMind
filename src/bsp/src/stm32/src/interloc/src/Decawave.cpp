@@ -152,7 +152,8 @@ void Decawave::receiveDelayed(UWBRxFrame& frame, uint16_t timeoutUs, uint64_t rx
     deca_selectDevice(m_spiDevice);
     dwt_setdelayedtrxtime(rxStartTime >> 8);
 
-    receiveInternal(frame, timeoutUs, rxStartTime);
+//    receiveInternal(frame, timeoutUs,rxStartTime);
+    receiveInternal(frame, timeoutUs,DWT_START_RX_DELAYED);
 }
 
 void Decawave::receiveAsync(UWBRxFrame& frame, uint16_t timeoutUs) {
