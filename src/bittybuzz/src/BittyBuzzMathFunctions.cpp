@@ -15,6 +15,7 @@ std::optional<float> getFloatArg(uint16_t stackAt) {
     } else {
         return {};
     }
+    return arg;
 }
 
 void BittyBuzzMathFunctions::bbzmath_abs() {
