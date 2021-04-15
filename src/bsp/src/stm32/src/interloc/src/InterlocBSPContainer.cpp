@@ -1,4 +1,5 @@
 #include "interloc/InterlocBSPContainer.h"
+#include <bsp/BSPContainer.h>
 #include <logger/LoggerContainer.h>
 
 InterlocManager& InterlocBSPContainer::getInterlocManager() {
@@ -21,7 +22,7 @@ DecawaveArray& InterlocBSPContainer::getDecawaves() {
 }
 
 InterlocTimeManager& InterlocBSPContainer::getTimeManager() {
-    static InterlocTimeManager s_timeManager;
+    static InterlocTimeManager s_timeManager(BSPContainer::getBSP());
 
     return s_timeManager;
 }
