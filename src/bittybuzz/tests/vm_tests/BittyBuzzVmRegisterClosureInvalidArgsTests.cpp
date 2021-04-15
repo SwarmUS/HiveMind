@@ -9,6 +9,7 @@
 #include "mocks/CircularQueueInterfaceMock.h"
 #include <array>
 #include <bittybuzz/BittyBuzzClosureRegister.h>
+#include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzMessageHandler.h>
 #include <bittybuzz/BittyBuzzStringResolver.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
@@ -36,11 +37,15 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_invalidArgs) {
         .Times(1)
         .WillOnce(testing::Return(functionName.c_str()));
 
-    std::array<UserFunctionRegister, 1> functionRegisters = {
+    std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure}}};
+    BittyBuzzLib globalLib(functionRegisters);
+
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
+    libraries.emplace_back(globalLib);
 
     SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &closureRegister,
-          &messageServiceMock, &neighborsManagerMock, functionRegisters);
+          &messageServiceMock, &neighborsManagerMock, libraries);
 
     m_bittybuzzVm->step();
 

@@ -5,6 +5,7 @@
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
 #include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
+#include <bittybuzz/BittyBuzzLib.h>
 #include <gtest/gtest.h>
 #include <stigmergy_put_bytecode.h>
 
@@ -21,9 +22,9 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_put_pushSuccess) {
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     EXPECT_CALL(messageServiceMock, sendBuzzMessage).Times(1).WillOnce(testing::Return(true));
 
-    std::array<UserFunctionRegister, 0> functionRegister = {};
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, libraries);
     // Then
     bool ret = m_bittybuzzVm->step();
 
@@ -47,9 +48,9 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_put_pushFail) {
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
     EXPECT_CALL(messageServiceMock, sendBuzzMessage).Times(1).WillOnce(testing::Return(false));
 
-    std::array<UserFunctionRegister, 0> functionRegister = {};
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, libraries);
     // Then
     bool ret = m_bittybuzzVm->step();
 

@@ -5,6 +5,7 @@
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
 #include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
+#include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <global_init_bytecode.h>
 #include <gmock/gmock.h>
@@ -21,12 +22,16 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_globalInit) {
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
-    std::array<UserFunctionRegister, 1> functionRegister = {
+    std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_assert_true, buzzAssertTrue}},
     };
+    BittyBuzzLib globalLib(functionRegisters);
+
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
+    libraries.emplace_back(globalLib);
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, libraries);
 
     // Then
     m_bittybuzzVm->step();

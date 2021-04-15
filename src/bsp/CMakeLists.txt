@@ -7,6 +7,8 @@ get_filename_component(BSP_CMAKE_DIR ${CMAKE_CURRENT_LIST_FILE} DIRECTORY)
 add_subdirectory(src)
 
 set(LIB_HEADERS
+    include/bsp/Math.h
+
     include/bsp/IBSP.h
     include/bsp/BSPContainer.h
 

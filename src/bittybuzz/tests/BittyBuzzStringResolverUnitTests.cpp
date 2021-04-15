@@ -1,6 +1,7 @@
 #include "bittybuzz/BittyBuzzStringResolver.h"
 #include "mocks/LoggerInterfaceMock.h"
 #include <array>
+#include <bittybuzz/BittyBuzzLib.h>
 #include <gtest/gtest.h>
 
 class BittyBuzzStringResolverTestFixture : public testing::Test {

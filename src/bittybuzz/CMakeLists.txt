@@ -20,7 +20,6 @@ bittybuzz_generate_bytecode(bittybuzz-target
 
 set(LIB_HEADERS
     include/bittybuzz/BittyBuzzVm.h
-    include/bittybuzz/BittyBuzzVm.tpp
     include/bittybuzz/IBittyBuzzVm.h
 
     include/bittybuzz/BittyBuzzBytecode.h
@@ -40,6 +39,13 @@ set(LIB_HEADERS
 
     include/bittybuzz/BittyBuzzNeighborsManager.h
     include/bittybuzz/IBittyBuzzNeighborsManager.h
+
+    include/bittybuzz/BittyBuzzMathFunctions.h
+
+    include/bittybuzz/BittyBuzzLib.h
+    include/bittybuzz/BittyBuzzLib.tpp
+    include/bittybuzz/IBittyBuzzLib.h
+    include/bittybuzz/BittyBuzzLibMemberRegister.h
 
     include/bittybuzz/BittyBuzzSystem.h
     include/bittybuzz/BittyBuzzFactory.h
@@ -62,6 +68,8 @@ set(LIB_SOURCES
     src/BittyBuzzContainer.cpp
     src/BittyBuzzUserFunctions.cpp
     src/BittyBuzzFunctionDescription.cpp
+    src/BittyBuzzMathFunctions.cpp
+    src/BittyBuzzLibMemberRegister.cpp
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_HEADERS})

@@ -48,7 +48,7 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
     endforeach()
     
     # Parsing buzz file
-    add_custom_target(${_TARGET}_bzz_parse
+    add_custom_target(${_TARGET}_bzz_parse ALL
       COMMAND ${BZZPAR} ${bzz_source} ${BASM_FILE} ${BST_FILE}
       DEPENDS ${BST_FILE})
 
@@ -69,6 +69,7 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
     add_custom_target(${_TARGET}_bzz_string
     COMMAND ${PROJECT_SOURCE_DIR}/tools/extract_bzz_strings.sh ${BASM_FILE} ${BST_FILE} ${BHEADER_FILE} ${BHEADER_STRING_FILE_TMP}
     COMMAND cmp --silent ${BHEADER_STRING_FILE_TMP} ${BHEADER_STRING_FILE} || cp ${BHEADER_STRING_FILE_TMP} ${BHEADER_STRING_FILE} 
+    COMMAND cmp ${BHEADER_STRING_FILE_TMP} ${BHEADER_STRING_FILE}
     DEPENDS ${_TARGET}_bzz_cross_compile)
 
     # Create library with file

@@ -46,7 +46,9 @@ class BittyBuzzVmTestFixture : public testing::Test {
         m_bittybuzzVm = new BittyBuzzVm(*m_bittybuzzBytecode, *bittyBuzzStringResolver,
                                         *bittyBuzzMessageHandler, *bittyBuzzClosureRegister,
                                         *bittyBuzzMessageService, *m_neightborsManager, *m_bspMock,
-                                        *m_loggerMock, m_uiMock, container);
+                                        *m_loggerMock, m_uiMock);
+
+        m_bittybuzzVm->init(container.data(), container.size());
     }
 
     void TearDown() override {
