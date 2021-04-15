@@ -10,9 +10,8 @@ class WaitFinalState : public AbstractInterlocState {
     WaitFinalState(ILogger& logger, DecawaveArray& decawaves);
     void process(InterlocStateHandler& context) override;
 
-  private :
+  private:
     UWBRxFrame m_rxFrame;
-
 };
 
 #endif // HIVE_MIND_WAITFINALSTATE_H

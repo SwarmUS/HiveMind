@@ -10,10 +10,8 @@ class WaitResponseState : public AbstractInterlocState {
     WaitResponseState(ILogger& logger, DecawaveArray& decawaves);
     void process(InterlocStateHandler& context) override;
 
-  private :
+  private:
     UWBRxFrame m_rxFrame;
-    UWBMessages::TWRResponse m_respMsg;
-
 };
 
 #endif // HIVE_MIND_WAITRESPONSESTATE_H
