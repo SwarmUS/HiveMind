@@ -19,3 +19,7 @@ src/bsp/src/stm32f4/external/stm32f429zi/stm32f429zi.gpdsc
 
 
 .clangd/
+
+tools/openocd/stm32_f4/nucleo_a.cfg
+
+tools/openocd/stm32_f4/nucleo_b.cfg
