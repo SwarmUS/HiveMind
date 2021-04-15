@@ -14,9 +14,9 @@ void WaitPollState::process(InterlocStateHandler& context) {
             UWBMessages::FunctionCode::TWR_POLL) {
 
         context.getTWR().m_pollRxTs = m_rxFrame.m_rxTimestamp;
-        context.setState(InterlocStates::SEND_RESPONSE);
+        context.setState(InterlocStates::SEND_RESPONSE, InterlocEvent::POLL_RECVD);
         return;
     }
 
-    context.setState(InterlocStates::WAIT_POLL);
+    context.setState(InterlocStates::WAIT_POLL, InterlocEvent::TIMEOUT);
 }

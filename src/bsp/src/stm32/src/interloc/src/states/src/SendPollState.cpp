@@ -25,10 +25,10 @@ void SendPollState::process(InterlocStateHandler& context) {
                                             ->m_subFrameId -
                                         1] = m_responseFrame.m_rxTimestamp;
 
-        context.setState(InterlocStates::SEND_FINAL);
+        context.setState(InterlocStates::SEND_FINAL, InterlocEvent::RESPONSE_RECVD);
     } else {
         // Wait a little and send next poll
         Task::delay(100);
-        context.setState(InterlocStates::SEND_POLL);
+        context.setState(InterlocStates::SEND_POLL, InterlocEvent::TIMEOUT);
     }
 }

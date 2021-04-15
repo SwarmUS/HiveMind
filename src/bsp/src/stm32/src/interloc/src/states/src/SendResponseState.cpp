@@ -33,7 +33,9 @@ void SendResponseState::process(InterlocStateHandler& context) {
         if (distance) {
             m_logger.log(LogLevel::Info, "Distance: %2.3f", distance.value());
         }
+
+        context.setState(InterlocStates::WAIT_POLL, InterlocEvent::FINAL_RECVD);
     }
 
-    context.setState(InterlocStates::WAIT_POLL);
+    context.setState(InterlocStates::WAIT_POLL, InterlocEvent::TIMEOUT);
 }
