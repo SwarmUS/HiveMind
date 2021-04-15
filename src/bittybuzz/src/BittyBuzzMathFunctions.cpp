@@ -2,6 +2,20 @@
 #include "BittyBuzzSystem.h"
 #include <bbzvm.h>
 #include <bsp/Math.h>
+#include <optional>
+
+std::optional<float> getFloatArg(uint16_t stackAt) {
+
+    float arg = 0;
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(stackAt)); // NOLINT
+    if (bbztype_isfloat(*o)) {
+        arg = bbzfloat_tofloat(o->f.value);
+    } else if (bbztype_isint(*o)) {
+        arg = o->i.value;
+    } else {
+        return {};
+    }
+}
 
 void BittyBuzzMathFunctions::bbzmath_abs() {
     bbzvm_assert_lnum(1); // NOLINT
@@ -23,18 +37,13 @@ void BittyBuzzMathFunctions::bbzmath_floor() {
     bbzvm_assert_lnum(1); // NOLINT
 
     // Get args
-    float arg = 0;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    if (bbztype_isfloat(*o)) {
-        arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(*o)) {
-        arg = o->i.value;
-    } else {
+    std::optional<float> arg = getFloatArg(1);
+    if (!arg) {
         bbzvm_seterror(BBZVM_ERROR_MATH);
         return;
     }
 
-    bbzvm_pushi(Math::floor(arg));
+    bbzvm_pushi(Math::floor(arg.value()));
     bbzvm_ret1();
 }
 
@@ -42,18 +51,13 @@ void BittyBuzzMathFunctions::bbzmath_ceil() {
     bbzvm_assert_lnum(1); // NOLINT
 
     // Get args
-    float arg = 0;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    if (bbztype_isfloat(*o)) {
-        arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(*o)) {
-        arg = o->i.value;
-    } else {
+    std::optional<float> arg = getFloatArg(1);
+    if (!arg) {
         bbzvm_seterror(BBZVM_ERROR_MATH);
         return;
     }
 
-    bbzvm_pushi(Math::ceil(arg));
+    bbzvm_pushi(Math::ceil(arg.value()));
     bbzvm_ret1();
 }
 
@@ -61,18 +65,13 @@ void BittyBuzzMathFunctions::bbzmath_round() {
     bbzvm_assert_lnum(1); // NOLINT
 
     // Get args
-    float arg = 0;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    if (bbztype_isfloat(*o)) {
-        arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(*o)) {
-        arg = o->i.value;
-    } else {
+    std::optional<float> arg = getFloatArg(1);
+    if (!arg) {
         bbzvm_seterror(BBZVM_ERROR_MATH);
         return;
     }
 
-    bbzvm_pushi(Math::ceil(arg));
+    bbzvm_pushi(Math::round(arg.value()));
     bbzvm_ret1();
 }
 
@@ -80,203 +79,143 @@ void BittyBuzzMathFunctions::bbzmath_log() {
     bbzvm_assert_lnum(1); // NOLINT
 
     // Get args
-    float arg = 0;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    if (bbztype_isfloat(*o)) {
-        arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(*o)) {
-        arg = o->i.value;
-    } else {
+    std::optional<float> arg = getFloatArg(1);
+    if (!arg) {
         bbzvm_seterror(BBZVM_ERROR_MATH);
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::ln(arg)));
+    bbzvm_pushf(bbzfloat_tofloat(Math::ln(arg.value())));
     bbzvm_ret1();
 }
 
 void BittyBuzzMathFunctions::bbzmath_log2() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg = 0;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    if (bbztype_isfloat(*o)) {
-        arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(*o)) {
-        arg = o->i.value;
-    } else {
+    std::optional<float> arg = getFloatArg(1);
+    if (!arg) {
         bbzvm_seterror(BBZVM_ERROR_MATH);
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::log2(arg)));
+    bbzvm_pushf(bbzfloat_tofloat(Math::log2(arg.value())));
     bbzvm_ret1();
 }
 void BittyBuzzMathFunctions::bbzmath_log10() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg = 0;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    if (bbztype_isfloat(*o)) {
-        arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(*o)) {
-        arg = o->i.value;
-    } else {
+    std::optional<float> arg = getFloatArg(1);
+    if (!arg) {
         bbzvm_seterror(BBZVM_ERROR_MATH);
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::log10(arg)));
+    bbzvm_pushf(bbzfloat_tofloat(Math::log10(arg.value())));
     bbzvm_ret1();
 }
 void BittyBuzzMathFunctions::bbzmath_exp() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg = 0;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    if (bbztype_isfloat(*o)) {
-        arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(*o)) {
-        arg = o->i.value;
-    } else {
+    std::optional<float> arg = getFloatArg(1);
+    if (!arg) {
         bbzvm_seterror(BBZVM_ERROR_MATH);
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::exp(arg)));
+    bbzvm_pushf(bbzfloat_tofloat(Math::exp(arg.value())));
     bbzvm_ret1();
 }
 void BittyBuzzMathFunctions::bbzmath_sqrt() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg = 0;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    if (bbztype_isfloat(*o)) {
-        arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(*o)) {
-        arg = o->i.value;
-    } else {
+    std::optional<float> arg = getFloatArg(1);
+    if (!arg) {
         bbzvm_seterror(BBZVM_ERROR_MATH);
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::sqrt(arg)));
+    bbzvm_pushf(bbzfloat_tofloat(Math::sqrt(arg.value())));
     bbzvm_ret1();
 }
 void BittyBuzzMathFunctions::bbzmath_sin() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg = 0;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    if (bbztype_isfloat(*o)) {
-        arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(*o)) {
-        arg = o->i.value;
-    } else {
+    std::optional<float> arg = getFloatArg(1);
+    if (!arg) {
         bbzvm_seterror(BBZVM_ERROR_MATH);
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::sin(arg)));
+    bbzvm_pushf(bbzfloat_tofloat(Math::sin(arg.value())));
     bbzvm_ret1();
 }
 
 void BittyBuzzMathFunctions::bbzmath_cos() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg = 0;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    if (bbztype_isfloat(*o)) {
-        arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(*o)) {
-        arg = o->i.value;
-    } else {
+    std::optional<float> arg = getFloatArg(1);
+    if (!arg) {
         bbzvm_seterror(BBZVM_ERROR_MATH);
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::cos(arg)));
+    bbzvm_pushf(bbzfloat_tofloat(Math::cos(arg.value())));
     bbzvm_ret1();
 }
 void BittyBuzzMathFunctions::bbzmath_tan() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg = 0;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    if (bbztype_isfloat(*o)) {
-        arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(*o)) {
-        arg = o->i.value;
-    } else {
+    std::optional<float> arg = getFloatArg(1);
+    if (!arg) {
         bbzvm_seterror(BBZVM_ERROR_MATH);
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::tan(arg)));
+    bbzvm_pushf(bbzfloat_tofloat(Math::tan(arg.value())));
     bbzvm_ret1();
 }
 void BittyBuzzMathFunctions::bbzmath_asin() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg = 0;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    if (bbztype_isfloat(*o)) {
-        arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(*o)) {
-        arg = o->i.value;
-    } else {
+    std::optional<float> arg = getFloatArg(1);
+    if (!arg) {
         bbzvm_seterror(BBZVM_ERROR_MATH);
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::asin(arg)));
+    bbzvm_pushf(bbzfloat_tofloat(Math::asin(arg.value())));
     bbzvm_ret1();
 }
 
 void BittyBuzzMathFunctions::bbzmath_acos() {
     bbzvm_assert_lnum(1); // NOLINT
 
-    float arg = 0;
-    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    if (bbztype_isfloat(*o)) {
-        arg = bbzfloat_tofloat(o->f.value);
-    } else if (bbztype_isint(*o)) {
-        arg = o->i.value;
-    } else {
+    std::optional<float> arg = getFloatArg(1);
+    if (!arg) {
         bbzvm_seterror(BBZVM_ERROR_MATH);
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::acos(arg)));
+    bbzvm_pushf(bbzfloat_tofloat(Math::acos(arg.value())));
     bbzvm_ret1();
 }
 
 void BittyBuzzMathFunctions::bbzmath_atan() {
     bbzvm_assert_lnum(2); // NOLINT
 
-    float y = 0;
-    bbzobj_t* a = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    if (bbztype_isfloat(*a)) {
-        y = bbzfloat_tofloat(a->f.value);
-    } else if (bbztype_isint(*a)) {
-        y = a->i.value;
-    } else {
+    std::optional<float> y = getFloatArg(1);
+    if (!y) {
         bbzvm_seterror(BBZVM_ERROR_MATH);
         return;
     }
 
-    float x = 0;
-    bbzobj_t* b = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
-    if (bbztype_isfloat(*b)) {
-        x = bbzfloat_tofloat(b->f.value);
-    } else if (bbztype_isint(*b)) {
-        x = b->i.value;
-    } else {
+    std::optional<float> x = getFloatArg(2);
+    if (!x) {
         bbzvm_seterror(BBZVM_ERROR_MATH);
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::atan2(y, x)));
+    bbzvm_pushf(bbzfloat_tofloat(Math::atan2(y.value(), x.value())));
     bbzvm_ret1();
 }
 
