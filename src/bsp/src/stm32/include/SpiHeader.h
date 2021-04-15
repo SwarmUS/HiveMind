@@ -24,11 +24,11 @@ namespace EspHeader {
         uint8_t rawValue;
     };
 
-    struct Header {
+    struct __attribute__((__packed__)) Header {
         SystemState systemState;
         uint8_t txSizeWord;
         uint8_t rxSizeWord;
-        uint16_t payloadSize;
+        uint16_t payloadSizeBytes;
         uint16_t padding;
         uint8_t crc8; // might be removed in the future
     };

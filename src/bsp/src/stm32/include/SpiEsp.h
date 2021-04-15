@@ -45,6 +45,7 @@ class SpiEsp : public ICommInterface {
     struct message {
         std::array<uint8_t, ESP_SPI_MAX_MESSAGE_LENGTH> m_data;
         uint16_t m_sizeBytes;
+        uint16_t m_payloadSize;
     } m_inboundMessage, m_outboundMessage;
 
     std::array<uint8_t, ESP_SPI_MAX_MESSAGE_LENGTH> m_data;

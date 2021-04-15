@@ -45,8 +45,8 @@ bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
     m_logger.log(LogLevel::Debug, "Sending message of length %d", length);
     // TODO: this memcpy could change once we have a buffer manager/allocator of some sorts.
     std::memcpy(m_outboundMessage.m_data.data(), buffer, length);
-    // Set payload size in header
-    m_outboundHeader.payloadSize = length;
+    // Set payload size
+    m_outboundMessage.m_payloadSize = length;
     // Padding with 0 up to a word-alligned boundary
     for (uint8_t i = 0; i < (length % 4); i++) {
         m_outboundMessage.m_data[length] = 0;
@@ -134,6 +134,7 @@ void SpiEsp::execute() {
         m_inboundMessage.m_sizeBytes = WORDS_TO_BYTES(m_inboundHeader->txSizeWord);
         if (m_inboundMessage.m_sizeBytes == WORDS_TO_BYTES(m_outboundHeader.rxSizeWord) &&
             m_inboundMessage.m_sizeBytes != 0) {
+            m_inboundMessage.m_payloadSize = m_inboundHeader->payloadSizeBytes;
             rxLengthBytes = WORDS_TO_BYTES(m_inboundHeader->txSizeWord);
             m_outboundHeader.systemState.stmSystemState.failedCrc = 0;
             m_rxState = receiveState::RECEIVING_PAYLOAD;
@@ -155,7 +156,7 @@ void SpiEsp::execute() {
         }
         // If it passes the CRC check, add the data to the circular buffer
         else if (CircularBuff_put(&m_circularBuf, m_inboundMessage.m_data.data(),
-                                  m_inboundMessage.m_sizeBytes - CRC32_SIZE) ==
+                                  m_inboundMessage.m_payloadSize) ==
                  CircularBuff_Ret_Ok) {
             // If a task was waiting to receive bytes, notify it
             if (m_receivingTaskHandle != nullptr) {
@@ -164,6 +165,7 @@ void SpiEsp::execute() {
         } else {
             m_logger.log(LogLevel::Error, "Failed to add bytes in spi circular buffer");
         }
+        m_inboundMessage.m_payloadSize = 0;
         m_rxState = receiveState::RECEIVING_HEADER;
         rxLengthBytes = EspHeader::sizeBytes;
         break;
@@ -210,6 +212,7 @@ void SpiEsp::updateOutboundHeader() {
     // TODO: get actual system state
     m_outboundHeader.rxSizeWord = BYTES_TO_WORDS(m_inboundMessage.m_sizeBytes);
     m_outboundHeader.txSizeWord = BYTES_TO_WORDS(m_outboundMessage.m_sizeBytes);
+    m_outboundHeader.payloadSizeBytes = m_outboundMessage.m_payloadSize;
     m_outboundHeader.padding = 0;
     m_outboundHeader.crc8 = m_crc.calculateCRC8(&m_outboundHeader, EspHeader::sizeBytes - 1);
     if (m_outboundHeader.txSizeWord == 0) {
