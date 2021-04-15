@@ -41,8 +41,8 @@ void InterlocManager::startInterloc() {
     syncClocks();
 
     // Uncomment one of the following lines to go into TWR
-    // m_stateHandler.setState(InterlocStates::WAIT_POLL);
-    // m_stateHandler.setState(InterlocStates::SEND_POLL);
+    // m_stateHandler.setState(InterlocStates::WAIT_POLL, InterlocEvent::NO_EVENT);
+    // m_stateHandler.setState(InterlocStates::SEND_POLL, InterlocEvent::NO_EVENT);
 
     while (true) {
         m_stateHandler.process();

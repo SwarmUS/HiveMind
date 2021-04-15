@@ -23,6 +23,18 @@ void SendResponseState::process(InterlocStateHandler& context) {
 
     //transfer to wait final
     context.setState(InterlocStates::WAIT_FINAL);
+    // temp - fix problem with merge
+        context.getTWR().m_finalRxTs = m_rxFrame.m_rxTimestamp;
+        context.getTWR().deserializeFinal(
+            reinterpret_cast<UWBMessages::TWRFinal*>(m_rxFrame.m_rxBuffer.data()));
+        std::optional<double> distance = context.getTWR().calculateDistance();
+        if (distance) {
+            m_logger.log(LogLevel::Info, "Distance: %2.3f", distance.value());
+        }
 
+        context.setState(InterlocStates::WAIT_POLL, InterlocEvent::FINAL_RECVD);
+    }
+
+    context.setState(InterlocStates::WAIT_POLL, InterlocEvent::TIMEOUT);
 }
 
