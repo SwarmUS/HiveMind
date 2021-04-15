@@ -3,7 +3,17 @@
 
 #include "InterlocStateContainer.h"
 
-enum class InterlocEvent { NO_EVENT, TIMEOUT, POLL_RECVD, FINAL_RECVD, RESPONSE_RECVD };
+enum class InterlocEvent {
+    NO_EVENT,
+    TIMEOUT,
+    POLL_RECVD,
+    FINAL_RECVD,
+    RESPONSE_RECVD,
+    DISTANCE_ERROR,
+    RX_ERROR,
+    RX_LAST_RESP,
+    RX_RESP
+};
 
 struct StateTransition {
     InterlocStates m_fromState;

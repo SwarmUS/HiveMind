@@ -8,6 +8,8 @@ enum class InterlocStates {
     SEND_POLL,
     SEND_FINAL,
     WAIT_POLL,
+    WAIT_FINAL,
+    WAIT_RESPONSE,
     SEND_RESPONSE,
     NUM_STATES
 };

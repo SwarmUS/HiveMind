@@ -8,6 +8,8 @@ set(LIB_SOURCES
     src/SendFinalState.cpp
     src/WaitPollState.cpp
     src/SendResponseState.cpp
+    src/WaitFinalState.cpp
+    src/WaitResponseState.cpp
     src/AbstractInterlocState.cpp
         )
 
@@ -20,6 +22,8 @@ set(LIB_HEADERS
     include/states/SendResponseState.h
     include/states/WaitPollState.h
     include/states/StateTransition.h
+    include/states/WaitFinalState.h
+    include/states/WaitResponseState.h
     )
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_HEADERS})

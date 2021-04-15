@@ -1,5 +1,5 @@
-#ifndef HIVE_MIND_WAITFINALSTATE_H
-#define HIVE_MIND_WAITFINALSTATE_H
+#ifndef HIVE_MIND_SENDRESPONSESTATE_H
+#define HIVE_MIND_SENDRESPONSESTATE_H
 
 #include "AbstractInterlocState.h"
 #include <interloc/UWBMessages.h>
@@ -13,7 +13,6 @@ class SendResponseState : public AbstractInterlocState {
 
   private:
     UWBMessages::TWRResponse m_respMsg{};
-    UWBRxFrame m_rxFrame;
 };
 
 #endif // HIVE_MIND_WAITFINALSTATE_H
