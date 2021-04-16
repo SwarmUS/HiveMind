@@ -2,6 +2,7 @@
 #include "mocks/CircularQueueInterfaceMock.h"
 #include "mocks/LoggerInterfaceMock.h"
 #include <array>
+#include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzMessageService.h>
 #include <gtest/gtest.h>
 

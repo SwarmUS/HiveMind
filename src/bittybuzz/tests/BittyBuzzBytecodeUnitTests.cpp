@@ -1,7 +1,7 @@
 #include "bittybuzz/BittyBuzzBytecode.h"
 #include "mocks/LoggerInterfaceMock.h"
-
 #include <array>
+#include <bittybuzz/BittyBuzzLib.h>
 #include <cstring>
 #include <gtest/gtest.h>
 

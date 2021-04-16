@@ -6,8 +6,62 @@
 #include <bbzringbuf.h>
 #include <bbzvm.h>
 
-UserFunctionRegister::UserFunctionRegister(uint8_t strId, bbzvm_funp functionPtr) :
-    m_strId(strId), m_functionPtr(functionPtr) {}
+BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
+                         const IBittyBuzzStringResolver& stringResolver,
+                         IBittyBuzzMessageHandler& messageHandler,
+                         IBittyBuzzClosureRegister& closureRegister,
+                         IBittyBuzzMessageService& messageService,
+                         IBittyBuzzNeighborsManager& neighborsManager,
+                         IBSP& bsp,
+                         ILogger& logger,
+                         IUserInterface& ui) :
+    m_bytecode(bytecode),
+    m_bsp(bsp),
+    m_messageHandler(messageHandler),
+    m_messageService(messageService),
+    m_neighborsManager(neighborsManager),
+    m_logger(logger),
+    m_ui(ui) {
+    // Init global variable
+    vm = &m_bbzVm;
+    BittyBuzzSystem::g_logger = &logger;
+    BittyBuzzSystem::g_ui = &ui;
+    BittyBuzzSystem::g_stringResolver = &stringResolver;
+    BittyBuzzSystem::g_closureRegister = &closureRegister;
+    BittyBuzzSystem::g_messageService = &messageService;
+    BittyBuzzSystem::g_bsp = &bsp;
+}
+
+bool BittyBuzzVm::init(const std::reference_wrapper<IBittyBuzzLib>* bbzLibs,
+                       uint32_t bbzLibsLength) {
+
+    // Init vm
+    bbzvm_construct(m_bsp.getUUId());
+    bbzvm_set_error_receiver(BittyBuzzSystem::errorReceiver);
+    bbzvm_set_bcode(m_bytecode.getBytecodeFetchFunction(), m_bytecode.getBytecodeLength());
+
+    // Register lib
+    for (uint32_t i = 0; i < bbzLibsLength; i++) {
+        if (!bbzLibs[i].get().registerLib()) {
+            return false;
+        }
+    }
+
+    // Execute the global part of the script
+    while (vm->state == BBZVM_STATE_READY) {
+        bbzvm_step();
+    }
+
+    // Verify that the registration and startup was successfull
+    bbzvm_assert_state(false);
+
+    // Start init
+    vm->state = BBZVM_STATE_READY;
+    BittyBuzzSystem::functionCall(__BBZSTRID_init);
+
+    // Verify that the initialization was successfull
+    return vm->state == BBZVM_STATE_READY;
+}
 
 bool BittyBuzzVm::step() {
 

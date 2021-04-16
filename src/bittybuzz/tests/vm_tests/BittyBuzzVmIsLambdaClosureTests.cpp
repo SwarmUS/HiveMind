@@ -5,6 +5,7 @@
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
 #include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
+#include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
 #include <is_lambda_closure_bytecode.h>
@@ -22,13 +23,17 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isLambdaClosure) {
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
-    std::array<UserFunctionRegister, 3> functionRegister = {
+    std::array<BittyBuzzLibMemberRegister, 3> functionRegisters = {
         {{BBZSTRID_is_lambda_closure, BittyBuzzUserFunctions::isLambdaClosure},
          {BBZSTRID_assert_true, buzzAssertTrue},
          {BBZSTRID_assert_false, buzzAssertFalse}}};
+    BittyBuzzLib globalLib(functionRegisters);
+
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
+    libraries.emplace_back(globalLib);
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, libraries);
 
     // Then
     m_bittybuzzVm->step();

@@ -4,6 +4,7 @@
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
 #include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
+#include <bittybuzz/BittyBuzzLib.h>
 #include <no_step_bytecode.h>
 
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_NoStep_NoError) {
@@ -17,10 +18,10 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_NoStep_NoError) {
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
-    std::array<UserFunctionRegister, 0> functionRegister = {};
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, libraries);
 
     // Then
     m_bittybuzzVm->step();

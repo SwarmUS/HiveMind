@@ -1,4 +1,5 @@
 #include <bittybuzz/BittyBuzzFunctionDescription.h>
+#include <bittybuzz/BittyBuzzLib.h>
 #include <gtest/gtest.h>
 
 class BittyBuzzFunctionDescriptionTestFixture : public testing::Test {
