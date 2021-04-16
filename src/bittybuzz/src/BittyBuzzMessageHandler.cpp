@@ -25,10 +25,8 @@ bool BittyBuzzMessageHandler::processMessage() {
         const MessageDTO& messageDTO = message.value();
 
         uint32_t destinationId = messageDTO.getDestinationId();
-        uint32_t sourceId = messageDTO.getSourceId();
 
-        bool isRelevantBroadcast = destinationId == 0 && sourceId != m_bsp.getUUId();
-        if (destinationId == m_bsp.getUUId() || isRelevantBroadcast) {
+        if (destinationId == 0 || destinationId == m_bsp.getUUId()) {
             return handleMessage(message.value());
         }
 
