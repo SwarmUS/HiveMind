@@ -5,7 +5,10 @@ InterlocStateHandler::InterlocStateHandler(InterlocTimeManager& timeManager) :
     m_timeManager(timeManager),
     m_currentStateName(InterlocStates::DEFAULT),
     m_currentState(&InterlocStateContainer::getState(InterlocStates::DEFAULT)),
-    m_stateTracer(m_stateTracerData.data(), MAX_TRACER_TRANSITIONS) {}
+    m_stateTracer(m_stateTracerData.data(), MAX_TRACER_TRANSITIONS) {
+    m_timeManager.setNumSlots(1);
+    m_timeManager.setSlodId(m_slotId);
+}
 
 void InterlocStateHandler::setState(InterlocStates state, InterlocEvent event) {
     if (m_stateTracer.isFull()) {
@@ -50,3 +53,5 @@ bool InterlocStateHandler::constructUWBHeader(uint16_t destinationId,
 
     return true;
 }
+InterlocTimeManager& InterlocStateHandler::getTimeManager() { return m_timeManager; }
+uint16_t InterlocStateHandler::getSlotId() { return m_slotId; }

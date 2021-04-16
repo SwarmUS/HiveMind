@@ -152,8 +152,8 @@ void Decawave::receiveDelayed(UWBRxFrame& frame, uint16_t timeoutUs, uint64_t rx
     deca_selectDevice(m_spiDevice);
     dwt_setdelayedtrxtime(rxStartTime >> 8);
 
-//    receiveInternal(frame, timeoutUs,rxStartTime);
-    receiveInternal(frame, timeoutUs,DWT_START_RX_DELAYED);
+    //    receiveInternal(frame, timeoutUs,rxStartTime);
+    receiveInternal(frame, timeoutUs, DWT_START_RX_DELAYED);
 }
 
 void Decawave::receiveAsync(UWBRxFrame& frame, uint16_t timeoutUs) {
@@ -182,9 +182,10 @@ bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
     int txStatus = dwt_starttx(flags);
 
     if (txStatus < 0) {
+        volatile uint64_t currentTime = getSysTime();
         // TODO: For debugging. Remove and handle correctly in real application
-        while (true) {
-        }
+        //        while (true) {
+        //        }
     }
 
     return true;
@@ -198,6 +199,7 @@ bool Decawave::transmitDelayed(uint8_t* buf, uint16_t length, uint64_t txTimesta
     deca_selectDevice(m_spiDevice);
     dwt_setdelayedtrxtime(txTimestamp >> 8);
 
+    volatile uint64_t currentTime = getSysTime();
     return transmitInternal(buf, length, DWT_START_TX_DELAYED);
 }
 
@@ -373,7 +375,7 @@ uint64_t Decawave::getSysTime() {
 uint64_t Decawave::getTxTimestampFromDelayedTime(uint64_t txTime) const {
     // The DW100 delayed transmit has a resolution of 512 DTUs (so lower 9 bits are masked off the
     // get the time at which it will really be sent)
-    return (txTime & 0xFFFFFE00UL) + getTxAntennaDLY();
+    return (txTime & 0xFFFFFFFE00UL) + getTxAntennaDLY();
 }
 
 DW_STATE Decawave::getState() { return m_state; }

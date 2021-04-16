@@ -8,14 +8,21 @@ WaitResponseState::WaitResponseState(ILogger& logger, DecawaveArray& decawaves) 
     AbstractInterlocState(logger, decawaves) {}
 
 void WaitResponseState::process(InterlocStateHandler& context) {
-//    uint64_t receiveStartTs =
-//        context.getTWR().m_pollTxTs + (POLL_TX_TO_RESP_RX_DLY_UUS * UUS_TO_DWT_TIME);
+    //    uint64_t receiveStartTs =
+    //        context.getTWR().m_pollTxTs + (POLL_TX_TO_RESP_RX_DLY_UUS * UUS_TO_DWT_TIME);
 
-//    m_decawaves[DecawavePort::A].receiveDelayed(m_rxFrame, 0,
-//                                                receiveStartTs); // TODO adjuste delays
+    //    m_decawaves[DecawavePort::A].receiveDelayed(m_rxFrame, 0,
+    //                                                receiveStartTs); // TODO adjuste delays
 
+    //    volatile uint64_t currentTime = m_decawaves[DecawavePort::A].getSysTime();
+    //    volatile uint32_t timeUntilSend = (context.getTWR().m_pollTxTs - currentTime) /
+    //    UUS_TO_DWT_TIME;
 
-m_decawaves[DecawavePort::A].receive(m_rxFrame, 2000);
+    m_decawaves[DecawavePort::A].receive(m_rxFrame, context.getTimeManager().getResponseTimeout());
+
+    //    context.getTWR().m_finalTxTs =
+    //        currentTime +
+    //        (timeUntilSend + context.getTimeManager().getResponseTimeout()) * UUS_TO_DWT_TIME;
 
     // TODO add multiple receive logic
     if (m_rxFrame.m_status == UWBRxStatus::FINISHED &&
@@ -30,7 +37,8 @@ m_decawaves[DecawavePort::A].receive(m_rxFrame, 2000);
 
         context.setState(InterlocStates::SEND_FINAL, InterlocEvent::RX_LAST_RESP);
     } else if (m_rxFrame.m_status == UWBRxStatus::TIMEOUT) {
-        context.setState(InterlocStates::SEND_POLL, InterlocEvent::TIMEOUT);
+        // volatile uint64_t currentTime2 = m_decawaves[DecawavePort::A].getSysTime();
+        context.setState(InterlocStates::SEND_FINAL, InterlocEvent::TIMEOUT);
     } else {
         // Wait a little and send next poll
         Task::delay(100);

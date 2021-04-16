@@ -27,6 +27,8 @@ class InterlocStateHandler {
                             uint16_t bufferLength);
 
     TwoWayRanging& getTWR();
+    InterlocTimeManager& getTimeManager();
+    uint16_t getSlotId();
 
   private:
     InterlocTimeManager& m_timeManager;
@@ -39,6 +41,7 @@ class InterlocStateHandler {
     CircularQueue<StateTransition> m_stateTracer;
 
     uint8_t m_sequenceID = 0;
+    uint16_t m_slotId = 1;
 };
 
 #endif // HIVE_MIND_INTERLOCSTATEHANDLER_H

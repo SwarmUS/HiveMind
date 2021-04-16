@@ -10,10 +10,11 @@ void SendResponseState::process(InterlocStateHandler& context) {
     // TODO: Set destination ID
     context.constructUWBHeader(0x01, UWBMessages::DATA, UWBMessages::TWR_RESPONSE,
                                (uint8_t*)&m_respMsg, sizeof(m_respMsg));
-    m_respMsg.m_subFrameId = RESPONDER_SLOT;
+    m_respMsg.m_subFrameId = context.getSlotId();
 
-    uint64_t respTxTime =
-        context.getTWR().m_pollRxTs + (POLL_RX_TO_RESP_TX_DLY_UUS * UUS_TO_DWT_TIME);
+    uint64_t respTxTime = context.getTimeManager().getResponseTxTs(context.getTWR().m_pollRxTs);
+    //  uint64_t respTxTime = context.getTWR().m_pollRxTs + (POLL_RX_TO_RESP_TX_DLY_UUS *
+    //  UUS_TO_DWT_TIME);
 
     m_decawaves[DecawavePort::A].transmitDelayed((uint8_t*)&m_respMsg, sizeof(m_respMsg),
                                                  respTxTime);

@@ -4,17 +4,20 @@
 #include <bsp/IBSP.h>
 #include <cstdint>
 
-#define RX_BEFORE_TX_GUARD_US 50
-#define TIMEOUT_GUARD_US 50
+#define UINT40_MAX 0xFFFFFFFFFF
 
-#define POLL_TO_FIRST_RESPONSE_GUARD_US 100
-#define RESPONSE_RX_TO_RESPONSE_TX_GUARD_US 370
-#define FINAL_TO_POLL_GUARD_US 100
+#define RX_BEFORE_TX_GUARD_US 100U
+#define TIMEOUT_GUARD_US 1500U
+
+#define POLL_TO_FIRST_RESPONSE_GUARD_US 900U
+#define RESPONSE_RX_TO_RESPONSE_TX_GUARD_US 2000U
+#define FINAL_TO_POLL_GUARD_US 1500U
+#define RESPONSE_RX_TO_FINAL_TX_GUARD_US 900U
 
 // TODO: Calculate these dynamically from the DW settings + number of agents
-#define RESPONSE_AIR_TIME_WITH_PREAMBLE_US 170
-#define POLL_AIR_TIME_WITH_PREAMBLE_US 170
-#define FINAL_AIR_TIME_WITH_PREAMBLE_US 240
+#define POLL_AIR_TIME_WITH_PREAMBLE_US 350U
+#define RESPONSE_AIR_TIME_WITH_PREAMBLE_US 350U
+#define FINAL_AIR_TIME_WITH_PREAMBLE_US 400U
 
 class InterlocTimeManager {
   public:
@@ -24,14 +27,14 @@ class InterlocTimeManager {
     void setSlodId(uint16_t slotId);
 
     uint64_t getPollTxTs(uint64_t lastSlotStartTs) const;
-    static uint64_t getResponseTimeout();
+    uint64_t getResponseTimeout();
     uint64_t getFinalTxTs(uint64_t pollTxTs) const;
 
     uint64_t getPollRxStartTs(uint64_t lastSlotStartTs) const;
-    static uint64_t getPollTimeout();
+    uint64_t getPollTimeout();
     uint64_t getResponseTxTs(uint64_t pollRxTs) const;
     uint64_t getFinalRxStartTs(uint64_t pollRxTs) const;
-    static uint64_t getFinalTimeout();
+    uint64_t getFinalTimeout();
 
     uint32_t getSyncTimeoutUs();
 

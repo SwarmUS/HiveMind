@@ -14,7 +14,6 @@ void Hal_init() {
 
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
-    HAL_RNG_Init(HRNG);
 
     /* Configure the system clock */
     SystemClock_Config();
@@ -37,6 +36,8 @@ void Hal_init() {
     MX_LWIP_Init();
 
     deca_init();
+
+    HAL_RNG_Init(HRNG);
 #ifdef IPERF_SERVER
     lwiperf_start_tcp_server_default(NULL, NULL);
 #endif
