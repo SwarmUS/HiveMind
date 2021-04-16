@@ -236,7 +236,7 @@ class Decawave {
     uint16_t m_rxAntennaDelayDTU = DEFAULT_RX_ANT_DLY;
     uint16_t m_txAntennaDelayDTU = DEFAULT_TX_ANT_DLY;
 
-    TaskHandle_t m_rxTaskHandle;
+    TaskHandle_t m_trxTaskHandle;
     dwt_cb_data_t m_callbackData;
 
     BaseTask<configMINIMAL_STACK_SIZE> m_rxAsyncTask;
@@ -261,6 +261,7 @@ class Decawave {
     void retrieveRxFrame(UWBRxFrame* frame);
 
     static void rxCallback(const dwt_cb_data_t* callbackData, void* context);
+    static void txCallback(const dwt_cb_data_t* callbackData, void* context);
     static void isrCallback(void* context);
     static void rxAsyncTask(void* context);
 };
