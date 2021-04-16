@@ -8,8 +8,7 @@ WaitResponseState::WaitResponseState(ILogger& logger, DecawaveArray& decawaves) 
     AbstractInterlocState(logger, decawaves) {}
 
 void WaitResponseState::process(InterlocStateHandler& context) {
-    m_decawaves[DecawavePort::A].receiveDelayed(m_rxFrame, 0,
-                                                POLL_TX_TO_RESP_RX_DLY_UUS); // TODO adjuste delays
+    m_decawaves[DecawavePort::A].receive(m_rxFrame, InterlocTimeManager::getResponseTimeout());
 
     // TODO add multiple receive logic
     if (m_rxFrame.m_status == UWBRxStatus::FINISHED &&
@@ -24,7 +23,7 @@ void WaitResponseState::process(InterlocStateHandler& context) {
 
         context.setState(InterlocStates::SEND_FINAL, InterlocEvent::RX_LAST_RESP);
     } else if (m_rxFrame.m_status == UWBRxStatus::TIMEOUT) {
-        context.setState(InterlocStates::SEND_POLL, InterlocEvent::TIMEOUT);
+        context.setState(InterlocStates::SEND_FINAL, InterlocEvent::TIMEOUT);
     } else {
         // Wait a little and send next poll
         Task::delay(100);
