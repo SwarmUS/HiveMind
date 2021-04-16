@@ -236,7 +236,7 @@ class Decawave {
     uint16_t m_rxAntennaDelayDTU = DEFAULT_RX_ANT_DLY;
     uint16_t m_txAntennaDelayDTU = DEFAULT_TX_ANT_DLY;
 
-    TaskHandle_t m_rxTaskHandle;
+    TaskHandle_t m_trxTaskHandle;
     dwt_cb_data_t m_callbackData;
 
     BaseTask<configMINIMAL_STACK_SIZE> m_rxAsyncTask;

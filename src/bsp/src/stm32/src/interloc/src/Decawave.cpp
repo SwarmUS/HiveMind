@@ -9,11 +9,11 @@ void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
     BaseType_t taskWoken = pdFALSE;
 
-    if (static_cast<Decawave*>(context)->m_rxTaskHandle != NULL) {
-        vTaskNotifyGiveFromISR(static_cast<Decawave*>(context)->m_rxTaskHandle, &taskWoken);
+    if (static_cast<Decawave*>(context)->m_trxTaskHandle != NULL) {
+        vTaskNotifyGiveFromISR(static_cast<Decawave*>(context)->m_trxTaskHandle, &taskWoken);
     }
 
-    static_cast<Decawave*>(context)->m_rxTaskHandle = NULL;
+    static_cast<Decawave*>(context)->m_trxTaskHandle = NULL;
     portYIELD_FROM_ISR(taskWoken);
 }
 
@@ -22,11 +22,11 @@ void Decawave::txCallback(const dwt_cb_data_t* callbackData, void* context) {
 
     (void)callbackData;
 
-    if (static_cast<Decawave*>(context)->m_rxTaskHandle != NULL) {
-        vTaskNotifyGiveFromISR(static_cast<Decawave*>(context)->m_rxTaskHandle, &taskWoken);
+    if (static_cast<Decawave*>(context)->m_trxTaskHandle != NULL) {
+        vTaskNotifyGiveFromISR(static_cast<Decawave*>(context)->m_trxTaskHandle, &taskWoken);
     }
 
-    static_cast<Decawave*>(context)->m_rxTaskHandle = NULL;
+    static_cast<Decawave*>(context)->m_trxTaskHandle = NULL;
     portYIELD_FROM_ISR(taskWoken);
 }
 
@@ -126,7 +126,7 @@ void Decawave::receiveInternal(UWBRxFrame& frame,
                                uint8_t flags,
                                bool rxStarted) {
     deca_selectDevice(m_spiDevice);
-    m_rxTaskHandle = xTaskGetCurrentTaskHandle();
+    m_trxTaskHandle = xTaskGetCurrentTaskHandle();
 
     frame.m_status = UWBRxStatus::ONGOING;
 
@@ -145,7 +145,7 @@ void Decawave::receiveAsyncInternal(UWBRxFrame& frame,
                                     uint8_t flags,
                                     bool rxStarted) {
     m_rxFrame = &frame;
-    m_rxTaskHandle = m_rxAsyncTask.getTaskHandle();
+    m_trxTaskHandle = m_rxAsyncTask.getTaskHandle();
 
     deca_selectDevice(m_spiDevice);
 
@@ -195,7 +195,7 @@ bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
 
     if (txStatus == 0) {
         // wait for the end of the transmission
-        m_rxTaskHandle = xTaskGetCurrentTaskHandle();
+        m_trxTaskHandle = xTaskGetCurrentTaskHandle();
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
     } else {
         // TODO: For debugging. Remove and handle correctly in real application
