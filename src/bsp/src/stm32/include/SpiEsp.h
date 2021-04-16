@@ -22,7 +22,6 @@ class SpiEsp : public ICommInterface {
 
     bool receive(uint8_t* buffer, uint16_t length) override;
 
-    bool isBusy() const;
     bool isConnected() const override;
 
     void execute();
@@ -60,9 +59,9 @@ class SpiEsp : public ICommInterface {
     void updateOutboundHeader();
     bool m_inboundRequest;
 
-    bool m_isBusy;
+    bool m_crcOK;
+    volatile bool m_hasSentPayload; // changed in ISR
     bool m_isConnected;
-    bool m_hasSentPayload;
 };
 
 #endif // __SPIESP_H__

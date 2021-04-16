@@ -10,7 +10,7 @@
 #define BYTES_TO_WORDS(byte) ((uint8_t)(byte >> 2U))
 
 void task(void* context) {
-    constexpr uint16_t loopRate = 5;
+    constexpr uint16_t loopRate = 20;
     while (true) {
         static_cast<SpiEsp*>(context)->execute();
         Task::delay(loopRate);
@@ -25,8 +25,8 @@ SpiEsp::SpiEsp(ICRC& crc, ILogger& logger) :
     m_inboundMessage = {};
     m_outboundMessage = {};
     m_inboundRequest = false;
-    m_isBusy = false;
     m_isConnected = false;
+    m_crcOK = false;
     CircularBuff_init(&m_circularBuf, m_data.data(), m_data.size());
     setEspCallback(SpiEsp::espInterruptCallback, this);
 
@@ -55,22 +55,19 @@ bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
     // Appending CRC32
     *(uint32_t*)&m_outboundMessage.m_data[length] = m_crc.calculateCRC32(m_outboundMessage.m_data.data(), length);
     m_outboundMessage.m_sizeBytes = (uint16_t)(length + CRC32_SIZE);
-    m_isBusy = true;
     m_txState = transmitState::SENDING_HEADER;
 
     // Wait for transmission to be over
     m_sendingTaskHandle = xTaskGetCurrentTaskHandle();
-    while (isBusy()) {
-        ulTaskNotifyTake(pdTRUE, 500);
-        if (m_hasSentPayload && m_inboundHeader->systemState.espSystemState.failedCrc) {
-            // Crc failed, handler retries in the future
-            m_sendingTaskHandle = nullptr;
-            return false;
-        }
-        // Todo: check for disconnect
+    // Wait for transmission to be over. Will be notified when ACK received or upon error
+    m_sendingTaskHandle = xTaskGetCurrentTaskHandle();
+    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    if (m_txState == transmitState::ERROR) {
+        m_logger.log(LogLevel::Error, "Error occurred...");
+        return false;
     }
-    m_sendingTaskHandle = nullptr;
-    return true;
+    m_logger.log(LogLevel::Info, "Payload sent!");
+    return m_crcOK;
 }
 bool SpiEsp::receive(uint8_t* buffer, uint16_t length) {
     if (buffer == nullptr || length > ESP_SPI_MAX_MESSAGE_LENGTH) {
@@ -87,8 +84,6 @@ bool SpiEsp::receive(uint8_t* buffer, uint16_t length) {
     return CircularBuff_get(&m_circularBuf, buffer, length) == length;
 }
 
-bool SpiEsp::isBusy() const { return m_isBusy; }
-
 bool SpiEsp::isConnected() const { return m_isConnected; }
 
 void SpiEsp::execute() {
@@ -98,6 +93,9 @@ void SpiEsp::execute() {
 
     switch (m_rxState) {
     case receiveState::IDLE:
+        if (!m_inboundRequest) {
+            m_inboundRequest = HAL_GPIO_ReadPin(ESP_CS_GPIO_Port, ESP_CS_Pin) == 1U;
+        }
         if (m_inboundRequest || m_txState != transmitState::IDLE) {
             rxLengthBytes = EspHeader::sizeBytes;
             m_rxState = receiveState::RECEIVING_HEADER;
@@ -115,6 +113,9 @@ void SpiEsp::execute() {
                          m_inboundMessage.m_data[0], m_inboundMessage.m_data[1],
                          m_inboundMessage.m_data[2], m_inboundMessage.m_data[3]);
             m_rxState = receiveState::ERROR;
+            if(m_hasSentPayload) {
+             m_txState = transmitState::ERROR;
+            }
             m_isConnected = false;
             break;
         }
@@ -139,6 +140,13 @@ void SpiEsp::execute() {
         } else {
             rxLengthBytes = EspHeader::sizeBytes;
             m_rxState = receiveState::RECEIVING_HEADER;
+        }
+        // Payload has been sent. Check crc and notify sending task
+        if (m_hasSentPayload) {
+            m_crcOK = !m_inboundHeader->systemState.stmSystemState.failedCrc;
+            if (m_sendingTaskHandle != nullptr) {
+                xTaskNotifyGive(m_sendingTaskHandle);
+            }
         }
         break;
     case receiveState::RECEIVING_PAYLOAD:
@@ -180,7 +188,6 @@ void SpiEsp::execute() {
     // Transmitting state machine
     switch (m_txState) {
     case transmitState::IDLE:
-        m_isBusy = false;
         break;
     case transmitState::SENDING_HEADER:
         updateOutboundHeader();
@@ -194,6 +201,9 @@ void SpiEsp::execute() {
         break;
     case transmitState::ERROR:
         HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_SET);
+        if (m_sendingTaskHandle != nullptr) {
+            xTaskNotifyGive(m_sendingTaskHandle);
+        }
         break;
     }
 
@@ -213,9 +223,6 @@ void SpiEsp::updateOutboundHeader() {
     m_outboundHeader.txSizeWord = BYTES_TO_WORDS(m_outboundMessage.m_sizeBytes);
     m_outboundHeader.payloadSizeBytes = m_outboundMessage.m_payloadSize;
     m_outboundHeader.crc8 = m_crc.calculateCRC8(&m_outboundHeader, EspHeader::sizeBytes - 1);
-    if (m_outboundHeader.txSizeWord == 0) {
-        m_isBusy = false;
-    }
 }
 
 void SpiEsp::espInterruptCallback(void* context) {
@@ -243,17 +250,10 @@ void SpiEsp::espTxRxCallback(void* context) {
         break;
     }
 
-    if (instance->m_txState == transmitState::SENDING_PAYLOAD) { // TODO: confirm reception with ack
+    if (instance->m_txState == transmitState::SENDING_PAYLOAD) {
         instance->m_txState = transmitState::IDLE;
         instance->m_outboundMessage.m_sizeBytes = 0;
         instance->m_outboundMessage.m_payloadSize = 0;
         instance->m_hasSentPayload = true;
-        instance->m_isBusy = false;
-        // notify sending task
-        if (instance->m_sendingTaskHandle != nullptr) {
-            BaseType_t toYield = pdFALSE;
-            vTaskNotifyGiveFromISR(instance->m_sendingTaskHandle, &toYield);
-            portYIELD_FROM_ISR(toYield);
-        }
     }
 }
