@@ -261,6 +261,7 @@ class Decawave {
     void retrieveRxFrame(UWBRxFrame* frame);
 
     static void rxCallback(const dwt_cb_data_t* callbackData, void* context);
+    static void txCallback(const dwt_cb_data_t* callbackData, void* context);
     static void isrCallback(void* context);
     static void rxAsyncTask(void* context);
 };

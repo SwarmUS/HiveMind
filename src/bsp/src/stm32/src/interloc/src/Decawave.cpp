@@ -17,6 +17,19 @@ void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     portYIELD_FROM_ISR(taskWoken);
 }
 
+void Decawave::txCallback(const dwt_cb_data_t* callbackData, void* context) {
+    BaseType_t taskWoken = pdFALSE;
+
+    (void)callbackData;
+
+    if (static_cast<Decawave*>(context)->m_rxTaskHandle != NULL) {
+        vTaskNotifyGiveFromISR(static_cast<Decawave*>(context)->m_rxTaskHandle, &taskWoken);
+    }
+
+    static_cast<Decawave*>(context)->m_rxTaskHandle = NULL;
+    portYIELD_FROM_ISR(taskWoken);
+}
+
 void Decawave::isrCallback(void* context) {
     deca_selectDevice(static_cast<Decawave*>(context)->m_spiDevice);
     dwt_isr();
@@ -60,7 +73,7 @@ bool Decawave::init() {
 
     deca_selectDevice(m_spiDevice);
     deca_setISRCallback(m_spiDevice, isrCallback, this);
-    dwt_setcallbacks(NULL, rxCallback, rxCallback, rxCallback, this);
+    dwt_setcallbacks(txCallback, rxCallback, rxCallback, rxCallback, this);
 
     deca_setFastRate();
 
@@ -76,7 +89,7 @@ bool Decawave::init() {
     dwt_setgpiodirection(DWT_GxM0 | DWT_GxM1 | DWT_GxM2 | DWT_GxM3, 0);
 
     dwt_setinterrupt(DWT_INT_RFCG | DWT_INT_RFTO | DWT_INT_RXPTO | DWT_INT_RPHE | DWT_INT_RFCE |
-                         DWT_INT_RFSL | DWT_INT_SFDT,
+                         DWT_INT_RFSL | DWT_INT_SFDT | DWT_INT_TFRS,
                      1);
 
     setLed(DW_LED::LED_0, true);
@@ -180,7 +193,11 @@ bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
 
     int txStatus = dwt_starttx(flags);
 
-    if (txStatus < 0) {
+    if (txStatus == 0) {
+        // wait for the end of the transmission
+        m_rxTaskHandle = xTaskGetCurrentTaskHandle();
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    } else {
         // TODO: For debugging. Remove and handle correctly in real application
         while (true) {
         }
