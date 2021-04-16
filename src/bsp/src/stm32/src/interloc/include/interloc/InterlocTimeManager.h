@@ -10,7 +10,7 @@
 #define TIMEOUT_GUARD_US 1500U
 
 #define POLL_TO_FIRST_RESPONSE_GUARD_US 900U
-#define RESPONSE_RX_TO_RESPONSE_TX_GUARD_US 2000U
+#define RESPONSE_hRX_TO_RESPONSE_rTX_GUARD_US 2000U
 #define FINAL_TO_POLL_GUARD_US 1500U
 #define RESPONSE_RX_TO_FINAL_TX_GUARD_US 900U
 
@@ -27,14 +27,14 @@ class InterlocTimeManager {
     void setSlodId(uint16_t slotId);
 
     uint64_t getPollTxTs(uint64_t lastSlotStartTs) const;
-    uint64_t getResponseTimeout();
+    static uint64_t getResponseTimeout();
     uint64_t getFinalTxTs(uint64_t pollTxTs) const;
 
     uint64_t getPollRxStartTs(uint64_t lastSlotStartTs) const;
-    uint64_t getPollTimeout();
+    uint64_t getPollTimeout() const;
     uint64_t getResponseTxTs(uint64_t pollRxTs) const;
     uint64_t getFinalRxStartTs(uint64_t pollRxTs) const;
-    uint64_t getFinalTimeout();
+    static uint64_t getFinalTimeout();
 
     uint32_t getSyncTimeoutUs();
 

@@ -28,7 +28,7 @@ class InterlocStateHandler {
 
     TwoWayRanging& getTWR();
     InterlocTimeManager& getTimeManager();
-    uint16_t getSlotId();
+    uint16_t getSlotId() const;
 
   private:
     InterlocTimeManager& m_timeManager;

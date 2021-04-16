@@ -54,4 +54,4 @@ bool InterlocStateHandler::constructUWBHeader(uint16_t destinationId,
     return true;
 }
 InterlocTimeManager& InterlocStateHandler::getTimeManager() { return m_timeManager; }
-uint16_t InterlocStateHandler::getSlotId() { return m_slotId; }
+uint16_t InterlocStateHandler::getSlotId() const { return m_slotId; }

@@ -8,7 +8,7 @@ WaitResponseState::WaitResponseState(ILogger& logger, DecawaveArray& decawaves) 
     AbstractInterlocState(logger, decawaves) {}
 
 void WaitResponseState::process(InterlocStateHandler& context) {
-    m_decawaves[DecawavePort::A].receive(m_rxFrame, context.getTimeManager().getResponseTimeout());
+    m_decawaves[DecawavePort::A].receive(m_rxFrame, InterlocTimeManager::getResponseTimeout());
 
     // TODO add multiple receive logic
     if (m_rxFrame.m_status == UWBRxStatus::FINISHED &&

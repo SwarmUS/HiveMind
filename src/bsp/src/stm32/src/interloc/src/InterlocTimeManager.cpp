@@ -19,21 +19,21 @@ void InterlocTimeManager::updateTimings() {
     volatile uint64_t pollRxToResponseTxOffset =
         POLL_AIR_TIME_WITH_PREAMBLE_US + POLL_TO_FIRST_RESPONSE_GUARD_US +
         (uint64_t)(m_slotId - 1) *
-            (uint64_t)(RESPONSE_AIR_TIME_WITH_PREAMBLE_US + RESPONSE_RX_TO_RESPONSE_TX_GUARD_US);
+            (uint64_t)(RESPONSE_AIR_TIME_WITH_PREAMBLE_US + RESPONSE_hRX_TO_RESPONSE_rTX_GUARD_US);
 
     volatile uint64_t pollTxToFinalTxOffset =
         POLL_AIR_TIME_WITH_PREAMBLE_US + POLL_TO_FIRST_RESPONSE_GUARD_US +
-        m_numSlots * (RESPONSE_AIR_TIME_WITH_PREAMBLE_US + RESPONSE_RX_TO_RESPONSE_TX_GUARD_US);
+        m_numSlots * (RESPONSE_AIR_TIME_WITH_PREAMBLE_US + RESPONSE_hRX_TO_RESPONSE_rTX_GUARD_US);
 
     volatile uint64_t pollRxToFinalRxOffset = pollTxToFinalTxOffset - RX_BEFORE_TX_GUARD_US;
 
-    volatile uint64_t slotToSlotOffset =
+    volatile uint64_t slotToSlotOffsetUs =
         pollTxToFinalTxOffset + FINAL_AIR_TIME_WITH_PREAMBLE_US + FINAL_TO_POLL_GUARD_US;
 
     m_pollRxToResponseTxOffsetDTU = pollRxToResponseTxOffset * UUS_TO_DWT_TIME;
     m_pollTxToFinalTxOffsetDTU = pollTxToFinalTxOffset * UUS_TO_DWT_TIME;
     m_pollRxToFinalRxOffsetDTU = pollRxToFinalRxOffset * UUS_TO_DWT_TIME;
-    m_slotToSlotOffsetDTU = slotToSlotOffset * UUS_TO_DWT_TIME;
+    m_slotToSlotOffsetDTU = slotToSlotOffsetUs * UUS_TO_DWT_TIME;
 }
 
 uint64_t InterlocTimeManager::getFinalTxTs(uint64_t pollTxTs) const {
@@ -48,7 +48,7 @@ uint64_t InterlocTimeManager::getFinalRxStartTs(uint64_t pollRxTs) const {
     return (pollRxTs + m_pollRxToFinalRxOffsetDTU) % UINT40_MAX;
 }
 
-uint64_t InterlocTimeManager::getPollTimeout() {
+uint64_t InterlocTimeManager::getPollTimeout() const {
     // TODO: Change
     return 2 * m_slotToSlotOffsetDTU / UUS_TO_DWT_TIME;
 }
