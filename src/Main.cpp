@@ -100,7 +100,7 @@ class MessageDispatcherTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE>
         if (m_stream != NULL) {
 
             HiveMindHostDeserializer deserializer(*m_stream);
-            HiveMindHostSerializer serializer(*m_stream);
+            HiveMindHostAccumulatorSerializer serializer(*m_stream);
             HiveMindHostApiRequestHandler hivemindApiReqHandler =
                 MessageHandlerContainer::createHiveMindHostApiRequestHandler();
 
@@ -186,7 +186,7 @@ class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
 
                     if (commInterface.isConnected()) {
 
-                        HiveMindHostSerializer serializer(commInterface);
+                        HiveMindHostAccumulatorSerializer serializer(commInterface);
                         HiveMindHostDeserializer deserializer(commInterface);
                         GreetHandler greetHandler(serializer, deserializer, BSPContainer::getBSP());
 
@@ -258,7 +258,7 @@ class TestEspCommunicationTask : public AbstractTask<10 * configMINIMAL_STACK_SI
   private:
     ICommInterface& m_spi;
     void task() override {
-        char message[] = "Message sent by stm";
+        char message[] = "A longer message sent by stm!";
         while (true) {
             m_spi.send((uint8_t*)message, sizeof(message));
             Task::delay(100);
@@ -281,10 +281,14 @@ class TestStmCommunicationTaskReceive : public AbstractTask<10 * configMINIMAL_S
         char messageReceived[50];
         while (true) {
             Task::delay(75);
-            if (m_spi.receive((uint8_t*)messageReceived, 20)) {
-                LoggerContainer::getLogger().log(LogLevel::Info, "Message received: %s",
-                                                 messageReceived);
-            }
+            int i = -1;
+            do {
+                i++;
+                m_spi.receive((uint8_t*)&messageReceived[i], 1);
+            } while (messageReceived[i] != 0);
+
+            LoggerContainer::getLogger().log(LogLevel::Info, "Message received: %s",
+                                             messageReceived);
         }
     }
 };
@@ -318,13 +322,13 @@ int main(int argc, char** argv) {
 
     static TestEspCommunicationTask s_test("test", tskIDLE_PRIORITY + 1);
     static TestStmCommunicationTaskReceive s_recv("test_rcv", tskIDLE_PRIORITY + 1);
-    // s_test.start();
-    // s_recv.start();
+     //s_test.start();
+     //s_recv.start();
     /* s_bittybuzzTask.start();
      s_hardwareInterlocTask.start();
      s_softwareInterlocTask.start();
      s_hostMonitorTask.start();*/
-    s_remoteMonitorTask.start();
+     s_remoteMonitorTask.start();
 
     Task::startScheduler();
 
