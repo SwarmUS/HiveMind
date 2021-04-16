@@ -48,17 +48,15 @@ bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
     // Set payload size
     m_outboundMessage.m_payloadSize = length;
     // Padding with 0 up to a word-alligned boundary
-    for (uint8_t i = 0; i < (length % 4); i++) {
-        m_outboundMessage.m_data[length] = 0;
+    while (length % 4 != 0) {
+        m_outboundMessage.m_data[(uint16_t)(length)] = 0;
         length++;
     }
     // Appending CRC32
-    *(uint32_t*)(m_outboundMessage.m_data.data() + length) =
-        m_crc.calculateCRC32(m_outboundMessage.m_data.data(), length);
-    length += CRC32_SIZE;
-    m_outboundMessage.m_sizeBytes = length;
-    m_txState = transmitState::SENDING_HEADER;
+    *(uint32_t*)&m_outboundMessage.m_data[length] = m_crc.calculateCRC32(m_outboundMessage.m_data.data(), length);
+    m_outboundMessage.m_sizeBytes = (uint16_t)(length + CRC32_SIZE);
     m_isBusy = true;
+    m_txState = transmitState::SENDING_HEADER;
 
     // Wait for transmission to be over
     m_sendingTaskHandle = xTaskGetCurrentTaskHandle();
@@ -149,8 +147,8 @@ void SpiEsp::execute() {
     case receiveState::VALIDATE_CRC:
         // Check payload CRC and log an error and set flag if it fails
         if (m_crc.calculateCRC32(m_inboundMessage.m_data.data(),
-                                 m_inboundMessage.m_sizeBytes - CRC32_SIZE) !=
-            *(uint32_t*)&m_inboundMessage.m_data[m_inboundMessage.m_sizeBytes - CRC32_SIZE]) {
+                                 (uint16_t)(m_inboundMessage.m_sizeBytes - CRC32_SIZE)) !=
+            *(uint32_t*)&m_inboundMessage.m_data[(uint16_t)( m_inboundMessage.m_sizeBytes - CRC32_SIZE)]) {
             m_logger.log(LogLevel::Error, "Failed payload crc on ESP");
             m_outboundHeader.systemState.stmSystemState.failedCrc = 1;
         }
@@ -213,7 +211,6 @@ void SpiEsp::updateOutboundHeader() {
     m_outboundHeader.rxSizeWord = BYTES_TO_WORDS(m_inboundMessage.m_sizeBytes);
     m_outboundHeader.txSizeWord = BYTES_TO_WORDS(m_outboundMessage.m_sizeBytes);
     m_outboundHeader.payloadSizeBytes = m_outboundMessage.m_payloadSize;
-    m_outboundHeader.padding = 0;
     m_outboundHeader.crc8 = m_crc.calculateCRC8(&m_outboundHeader, EspHeader::sizeBytes - 1);
     if (m_outboundHeader.txSizeWord == 0) {
         m_isBusy = false;
@@ -248,6 +245,7 @@ void SpiEsp::espTxRxCallback(void* context) {
     if (instance->m_txState == transmitState::SENDING_PAYLOAD) { // TODO: confirm reception with ack
         instance->m_txState = transmitState::IDLE;
         instance->m_outboundMessage.m_sizeBytes = 0;
+        instance->m_outboundMessage.m_payloadSize = 0;
         instance->m_hasSentPayload = true;
         instance->m_isBusy = false;
         // notify sending task
