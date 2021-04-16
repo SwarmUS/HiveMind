@@ -1,6 +1,7 @@
 #ifndef HIVE_MIND_INTERLOCSTATEHANDLER_H
 #define HIVE_MIND_INTERLOCSTATEHANDLER_H
 
+#include "InterlocTimeManager.h"
 #include "TwoWayRanging.h"
 #include <array>
 #include <cpp-common/CircularQueue.h>
@@ -14,7 +15,7 @@
 
 class InterlocStateHandler {
   public:
-    InterlocStateHandler();
+    InterlocStateHandler(InterlocTimeManager& timeManager);
 
     void setState(InterlocStates state, InterlocEvent event);
     void process();
@@ -28,6 +29,8 @@ class InterlocStateHandler {
     TwoWayRanging& getTWR();
 
   private:
+    InterlocTimeManager& m_timeManager;
+
     InterlocStates m_currentStateName;
     AbstractInterlocState* m_currentState;
     TwoWayRanging m_twr{};
