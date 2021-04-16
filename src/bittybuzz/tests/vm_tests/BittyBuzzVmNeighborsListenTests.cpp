@@ -5,6 +5,7 @@
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
 #include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
+#include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzNeighborsManager.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
@@ -31,11 +32,15 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsListen) {
     broadcastMessage.datastart = 0;
     broadcastMessage.dataend = 8;
 
-    std::array<UserFunctionRegister, 1> functionRegister = {
+    std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_assert_true, buzzAssertTrue}}};
+    BittyBuzzLib globalLib(functionRegisters);
+
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
+    libraries.emplace_back(globalLib);
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, libraries);
 
     bbzinmsg_queue_append(&broadcastMessage);
 

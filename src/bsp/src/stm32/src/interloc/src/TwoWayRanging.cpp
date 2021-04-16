@@ -24,11 +24,11 @@ void TwoWayRanging::constructFinal(UWBMessages::TWRFinal* finalMessage, uint64_t
     DecawaveUtils::tsToBytes((uint8_t*)(&finalMessage->m_finalTxTs), m_finalTxTs);
 }
 
-std::optional<double> TwoWayRanging::calculateDistance() const {
-    uint64_t tRound1 = m_responseRxTs[RESPONDER_SLOT - 1] - m_pollTxTs;
+std::optional<double> TwoWayRanging::calculateDistance(uint16_t slotId) const {
+    uint64_t tRound1 = m_responseRxTs[slotId - 1] - m_pollTxTs;
     uint32_t tRound2 = (uint32_t)m_finalRxTs - (uint32_t)m_responseTxTs;
     uint32_t tReply1 = (uint32_t)m_responseTxTs - (uint32_t)m_pollRxTs;
-    uint64_t tReply2 = m_finalTxTs - m_responseRxTs[RESPONDER_SLOT - 1];
+    uint64_t tReply2 = m_finalTxTs - m_responseRxTs[slotId - 1];
 
     uint64_t tofDtu =
         (tRound1 * tRound2 - tReply1 * tReply2) / (tRound1 + tRound2 + tReply1 + tReply2);

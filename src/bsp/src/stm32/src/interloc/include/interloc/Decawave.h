@@ -14,14 +14,6 @@
 #define DEFAULT_TX_ANT_DLY 16505 // 247ns
 #define DEFAULT_RX_ANT_DLY 16505
 
-#define POLL_TX_TO_RESP_RX_DLY_UUS 300
-#define POLL_RX_TO_RESP_TX_DLY_UUS 1000
-#define POLL_TX_TO_FINAL_TX_DLY_UUS 2500
-
-#define POLL_RX_TIMEOUT_UUS 1000
-#define RESP_RX_TIMEOUT_UUS 1100
-#define FINAL_RX_TIMEOUT_UUS 2000
-
 #define UUS_TO_DWT_TIME 63898
 #define SPEED_OF_LIGHT 299792458
 #define DW_INTERNAL_CLOCK_RFEQ 63897600000
@@ -236,7 +228,7 @@ class Decawave {
     uint16_t m_rxAntennaDelayDTU = DEFAULT_RX_ANT_DLY;
     uint16_t m_txAntennaDelayDTU = DEFAULT_TX_ANT_DLY;
 
-    TaskHandle_t m_rxTaskHandle;
+    TaskHandle_t m_trxTaskHandle;
     dwt_cb_data_t m_callbackData;
 
     BaseTask<configMINIMAL_STACK_SIZE> m_rxAsyncTask;
@@ -261,6 +253,7 @@ class Decawave {
     void retrieveRxFrame(UWBRxFrame* frame);
 
     static void rxCallback(const dwt_cb_data_t* callbackData, void* context);
+    static void txCallback(const dwt_cb_data_t* callbackData, void* context);
     static void isrCallback(void* context);
     static void rxAsyncTask(void* context);
 };

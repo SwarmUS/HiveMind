@@ -2,7 +2,7 @@
 #include "bittybuzz/BittyBuzzNeighborsManager.h"
 #include "mocks/CircularQueueInterfaceMock.h"
 #include "mocks/InterlocInterfaceMock.h"
-
+#include <bittybuzz/BittyBuzzLib.h>
 #include <gtest/gtest.h>
 
 class BittyBuzzNeighborsManagerTestFixture : public testing::Test {

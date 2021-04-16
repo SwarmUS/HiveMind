@@ -4,6 +4,7 @@
 #include "mocks/BittyBuzzMessageServiceInterfaceMock.h"
 #include "mocks/BittyBuzzNeighborsManagerInterfaceMock.h"
 #include "mocks/BittyBuzzStringResolverInterfaceMock.h"
+#include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <swarm_bytecode.h>
 
@@ -18,11 +19,15 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledOnce) {
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
-    std::array<UserFunctionRegister, 1> functionRegister = {
+    std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_log, BittyBuzzUserFunctions::log}}};
+    BittyBuzzLib globalLib(functionRegisters);
+
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
+    libraries.emplace_back(globalLib);
 
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, libraries);
     // Then
     m_bittybuzzVm->step();
 
@@ -44,10 +49,15 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_FunctionCalledTwice) {
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
-    std::array<UserFunctionRegister, 1> functionRegister = {
+    std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_log, BittyBuzzUserFunctions::log}}};
+    BittyBuzzLib globalLib(functionRegisters);
+
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
+    libraries.emplace_back(globalLib);
+
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, libraries);
 
     // Then
     m_bittybuzzVm->step();
@@ -70,10 +80,15 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Swarm_InTwoSwarm_FunctionCalledQuad) 
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
-    std::array<UserFunctionRegister, 1> functionRegister = {
+    std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_log, BittyBuzzUserFunctions::log}}};
+    BittyBuzzLib globalLib(functionRegisters);
+
+    std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
+    libraries.emplace_back(globalLib);
+
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
-          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, functionRegister);
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, libraries);
 
     // Then
     m_bittybuzzVm->step();

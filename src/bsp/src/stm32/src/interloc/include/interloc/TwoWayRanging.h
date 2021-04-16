@@ -13,9 +13,10 @@ class TwoWayRanging {
   public:
     /**
      * @brief Calculates a distance based on the values of the class members
+     * @param slotId The slot ID of the current device
      * @return The distance in meters
      */
-    std::optional<double> calculateDistance() const;
+    std::optional<double> calculateDistance(uint16_t slotId) const;
 
     /**
      * @brief Extracts all timestamps from a Final message

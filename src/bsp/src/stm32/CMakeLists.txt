@@ -12,6 +12,8 @@ set(LIB_SOURCES
     src/SpiEsp.cpp
 
     src/USB.cpp
+
+    src/Math.cpp
 )
 
 set(LIB_PRIVATE_HEADERS
