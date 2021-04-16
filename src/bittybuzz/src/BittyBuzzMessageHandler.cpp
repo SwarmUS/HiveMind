@@ -23,7 +23,12 @@ bool BittyBuzzMessageHandler::processMessage() {
     if (message) {
         m_inputQueue.pop();
         const MessageDTO& messageDTO = message.value();
-        if (messageDTO.getDestinationId() == m_bsp.getUUId()) {
+
+        uint32_t destinationId = messageDTO.getDestinationId();
+        uint32_t sourceId = messageDTO.getSourceId();
+
+        bool isRelevantBroadcast = destinationId == 0 && sourceId != m_bsp.getUUId();
+        if (destinationId == m_bsp.getUUId() || isRelevantBroadcast) {
             return handleMessage(message.value());
         }
 
@@ -101,6 +106,7 @@ FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
                     invalidRequestResponse.setDetails("arg type don't match");
                     return invalidRequestResponse;
                 }
+
                 bbzvm_pushi((int16_t)*intVal);
 
             } else if (const float* floatVal = std::get_if<float>(&arg)) {

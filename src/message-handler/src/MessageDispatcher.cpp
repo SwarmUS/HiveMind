@@ -34,12 +34,19 @@ bool MessageDispatcher::deserializeAndDispatch() {
         }
 
         uint32_t destinationId = message.getDestinationId();
+        uint32_t sourceId = message.getSourceId();
 
-        if (destinationId == m_bsp.getUUId()) {
+        // Handle and Broadcast message
+        if (destinationId == 0 && sourceId == m_bsp.getUUId()) {
+            return m_remoteOutputQueue.push(message) && dispatchMessage(message);
+        }
+
+        // Handle
+        if (destinationId == m_bsp.getUUId() || destinationId == 0) {
             return dispatchMessage(message);
         }
 
-        // Message is for a remote host
+        // Send to remote
         m_logger.log(LogLevel::Debug, "Message sent to remote queue");
         return m_remoteOutputQueue.push(message);
     }
@@ -57,6 +64,11 @@ bool MessageDispatcher::dispatchUserCall(const MessageDTO& message, const UserCa
         return m_buzzOutputQueue.push(message);
     case UserCallTargetDTO::HOST:
         m_logger.log(LogLevel::Debug, "Message sent to host queue");
+        // The message comes from the host, no need to resend it
+        if (message.getDestinationId() == 0 && message.getSourceId() == m_bsp.getUUId()) {
+            return true;
+        }
+
         return m_hostOutputQueue.push(message);
 
     // Discard the message if unknown
@@ -89,6 +101,10 @@ bool MessageDispatcher::dispatchRequest(const MessageDTO& message, const Request
     }
     // Handle the response locally since it a hivemind api request
     if (std::holds_alternative<HiveMindHostApiRequestDTO>(variantReq)) {
+        // The message comes from the host, no need to resend it
+        if (message.getDestinationId() == 0 && message.getSourceId() == m_bsp.getUUId()) {
+            return true;
+        }
         return m_hivemindApiReqHandler.handleRequest(message);
     }
 

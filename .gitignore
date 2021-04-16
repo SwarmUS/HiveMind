@@ -26,6 +26,8 @@ tools/openocd/stm32_f4/nucleo_a.cfg
 
 tools/openocd/stm32_f4/nucleo_b.cfg
 
+cmake-build-debug-coverage/
+
 tools/openocd/stm32_f4/nucleo_c.cfg
 
 build-h7/
