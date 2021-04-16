@@ -19,11 +19,11 @@ void InterlocTimeManager::updateTimings() {
     volatile uint64_t pollRxToResponseTxOffset =
         POLL_AIR_TIME_WITH_PREAMBLE_US + POLL_TO_FIRST_RESPONSE_GUARD_US +
         (uint64_t)(m_slotId - 1) *
-            (uint64_t)(RESPONSE_AIR_TIME_WITH_PREAMBLE_US + RESPONSE_hRX_TO_RESPONSE_rTX_GUARD_US);
+            (uint64_t)(RESPONSE_AIR_TIME_WITH_PREAMBLE_US + RESPONSE_TO_RESPONSE_GUARD_US);
 
     volatile uint64_t pollTxToFinalTxOffset =
         POLL_AIR_TIME_WITH_PREAMBLE_US + POLL_TO_FIRST_RESPONSE_GUARD_US +
-        m_numSlots * (RESPONSE_AIR_TIME_WITH_PREAMBLE_US + RESPONSE_hRX_TO_RESPONSE_rTX_GUARD_US);
+        m_numSlots * (RESPONSE_AIR_TIME_WITH_PREAMBLE_US + RESPONSE_TO_RESPONSE_GUARD_US);
 
     volatile uint64_t pollRxToFinalRxOffset = pollTxToFinalTxOffset - RX_BEFORE_TX_GUARD_US;
 
