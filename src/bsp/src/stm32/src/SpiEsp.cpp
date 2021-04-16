@@ -164,6 +164,7 @@ void SpiEsp::execute() {
             m_logger.log(LogLevel::Error, "Failed to add bytes in spi circular buffer");
         }
         m_inboundMessage.m_payloadSize = 0;
+        m_inboundMessage.m_sizeBytes = 0;
         m_rxState = receiveState::RECEIVING_HEADER;
         rxLengthBytes = EspHeader::sizeBytes;
         break;
@@ -189,7 +190,7 @@ void SpiEsp::execute() {
     case transmitState::SENDING_PAYLOAD:
         txLengthBytes = m_outboundMessage.m_sizeBytes;
         txBuffer = m_outboundMessage.m_data.data();
-        m_hasSentPayload = true;
+        m_hasSentPayload = false;
         break;
     case transmitState::ERROR:
         HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_SET);
