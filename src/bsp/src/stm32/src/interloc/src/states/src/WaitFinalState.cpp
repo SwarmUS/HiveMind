@@ -7,8 +7,6 @@ WaitFinalState::WaitFinalState(ILogger& logger, DecawaveArray& decawaves) :
     AbstractInterlocState(logger, decawaves) {}
 
 void WaitFinalState::process(InterlocStateHandler& context) {
-
-    //    m_decawaves[DecawavePort::A].receiveDelayed(m_rxFrame, FINAL_RX_TIMEOUT_UUS, 0);
     m_decawaves[DecawavePort::A].receive(m_rxFrame, context.getTimeManager().getFinalTimeout());
 
     if (m_rxFrame.m_status == UWBRxStatus::FINISHED &&
@@ -31,8 +29,6 @@ void WaitFinalState::process(InterlocStateHandler& context) {
     } else if (m_rxFrame.m_status == UWBRxStatus::TIMEOUT) {
         context.setState(InterlocStates::SEND_POLL, InterlocEvent::TIMEOUT);
     } else {
-        // getsystime
-
         context.setState(InterlocStates::SEND_POLL, InterlocEvent::RX_ERROR);
     }
 }

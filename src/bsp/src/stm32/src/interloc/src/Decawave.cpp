@@ -183,9 +183,10 @@ bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
 
     if (txStatus < 0) {
         volatile uint64_t currentTime = getSysTime();
+        (void)currentTime;
         // TODO: For debugging. Remove and handle correctly in real application
-        //        while (true) {
-        //        }
+        while (true) {
+        }
     }
 
     return true;
@@ -199,7 +200,6 @@ bool Decawave::transmitDelayed(uint8_t* buf, uint16_t length, uint64_t txTimesta
     deca_selectDevice(m_spiDevice);
     dwt_setdelayedtrxtime(txTimestamp >> 8);
 
-    volatile uint64_t currentTime = getSysTime();
     return transmitInternal(buf, length, DWT_START_TX_DELAYED);
 }
 
