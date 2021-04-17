@@ -86,7 +86,7 @@ void BittyBuzzMathFunctions::bbzmath_log() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::ln(arg.value())));
+    bbzvm_pushf(bbzfloat_fromfloat(Math::ln(arg.value())));
     bbzvm_ret1();
 }
 
@@ -99,7 +99,7 @@ void BittyBuzzMathFunctions::bbzmath_log2() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::log2(arg.value())));
+    bbzvm_pushf(bbzfloat_fromfloat(Math::log2(arg.value())));
     bbzvm_ret1();
 }
 void BittyBuzzMathFunctions::bbzmath_log10() {
@@ -111,7 +111,7 @@ void BittyBuzzMathFunctions::bbzmath_log10() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::log10(arg.value())));
+    bbzvm_pushf(bbzfloat_fromfloat(Math::log10(arg.value())));
     bbzvm_ret1();
 }
 void BittyBuzzMathFunctions::bbzmath_exp() {
@@ -123,7 +123,7 @@ void BittyBuzzMathFunctions::bbzmath_exp() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::exp(arg.value())));
+    bbzvm_pushf(bbzfloat_fromfloat(Math::exp(arg.value())));
     bbzvm_ret1();
 }
 void BittyBuzzMathFunctions::bbzmath_sqrt() {
@@ -135,7 +135,7 @@ void BittyBuzzMathFunctions::bbzmath_sqrt() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::sqrt(arg.value())));
+    bbzvm_pushf(bbzfloat_fromfloat(Math::sqrt(arg.value())));
     bbzvm_ret1();
 }
 void BittyBuzzMathFunctions::bbzmath_sin() {
@@ -147,7 +147,7 @@ void BittyBuzzMathFunctions::bbzmath_sin() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::sin(arg.value())));
+    bbzvm_pushf(bbzfloat_fromfloat(Math::sin(arg.value() * Math::pi / 180)));
     bbzvm_ret1();
 }
 
@@ -160,9 +160,10 @@ void BittyBuzzMathFunctions::bbzmath_cos() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::cos(arg.value())));
+    bbzvm_pushf(bbzfloat_fromfloat(Math::cos(arg.value() * Math::pi / 180)));
     bbzvm_ret1();
 }
+
 void BittyBuzzMathFunctions::bbzmath_tan() {
     bbzvm_assert_lnum(1); // NOLINT
 
@@ -172,7 +173,7 @@ void BittyBuzzMathFunctions::bbzmath_tan() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::tan(arg.value())));
+    bbzvm_pushf(bbzfloat_fromfloat(Math::tan(arg.value() * Math::pi / 180)));
     bbzvm_ret1();
 }
 void BittyBuzzMathFunctions::bbzmath_asin() {
@@ -184,7 +185,7 @@ void BittyBuzzMathFunctions::bbzmath_asin() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::asin(arg.value())));
+    bbzvm_pushf(bbzfloat_fromfloat(Math::asin(arg.value()) * 180 / Math::pi));
     bbzvm_ret1();
 }
 
@@ -197,7 +198,7 @@ void BittyBuzzMathFunctions::bbzmath_acos() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::acos(arg.value())));
+    bbzvm_pushf(bbzfloat_fromfloat(Math::acos(arg.value()) * 180 / Math::pi));
     bbzvm_ret1();
 }
 
@@ -216,7 +217,7 @@ void BittyBuzzMathFunctions::bbzmath_atan() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_tofloat(Math::atan2(y.value(), x.value())));
+    bbzvm_pushf(bbzfloat_fromfloat(Math::atan2(y.value(), x.value()) * 180 / Math::pi));
     bbzvm_ret1();
 }
 
