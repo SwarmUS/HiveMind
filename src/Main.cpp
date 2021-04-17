@@ -145,7 +145,7 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
             while (m_stream->isConnected()) {
                 // Verify that we have a message to process
                 if (m_streamQueue.isEmpty()) {
-                    m_streamQueue.wait(1000);
+                    m_streamQueue.wait(500);
                 }
                 if (!messageSender.processAndSerialize()) {
                     m_logger.log(LogLevel::Warn, "Fail to process/serialize in %s", m_taskName);
@@ -238,7 +238,7 @@ class SoftwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> 
         while (true) {
             // Verify that we have a message to process
             if (m_interlocMessageQueue.isEmpty()) {
-                m_interlocMessageQueue.wait(1000);
+                m_interlocMessageQueue.wait(500);
             }
             m_interlocMessageHandler.processMessage();
         }
