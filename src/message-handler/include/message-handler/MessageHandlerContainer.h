@@ -4,6 +4,7 @@
 #include "HiveMindHostApiRequestHandler.h"
 #include "MessageDispatcher.h"
 #include "MessageSender.h"
+#include <NotificationQueue.h>
 #include <ThreadSafeQueue.h>
 #include <pheromones/IHiveMindHostDeserializer.h>
 #include <pheromones/IHiveMindHostSerializer.h>
@@ -31,17 +32,17 @@ namespace MessageHandlerContainer {
     /**
      *@brief get the host message queue
      *@return A reference to the host message queue */
-    ThreadSafeQueue<MessageDTO>& getHostMsgQueue();
+    NotificationQueue<MessageDTO>& getHostMsgQueue();
 
     /**
      *@brief get the remote message queue
      *@return A reference to the remote message queue */
-    ThreadSafeQueue<MessageDTO>& getRemoteMsgQueue();
+    NotificationQueue<MessageDTO>& getRemoteMsgQueue();
 
     /**
      *@brief get the interloc message queue
      *@return A reference to the interloc message queue */
-    ThreadSafeQueue<MessageDTO>& getInterlocMsgQueue();
+    NotificationQueue<MessageDTO>& getInterlocMsgQueue();
 
 } // namespace MessageHandlerContainer
 
