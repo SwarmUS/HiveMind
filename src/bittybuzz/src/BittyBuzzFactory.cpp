@@ -35,9 +35,44 @@ BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 10>> BittyBuzzFactory::
     return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 10>>(globalMember);
 }
 
-BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 20>> BittyBuzzFactory::
+#include <optional>
+std::optional<float> getFloatArg2(uint16_t stackAt) {
+
+    float arg = 0;
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(stackAt)); // NOLINT
+    if (bbztype_isfloat(*o)) {
+        arg = bbzfloat_tofloat(o->f.value);
+    } else if (bbztype_isint(*o)) {
+        arg = o->i.value;
+    } else {
+        return {};
+    }
+    return arg;
+}
+
+
+void bbzmath_mult() {
+    bbzvm_assert_lnum(2); // NOLINT
+
+    std::optional<float> y = getFloatArg2(1);
+    if (!y) {
+        bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
+    }
+
+    std::optional<float> x = getFloatArg2(2);
+    if (!x) {
+        bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
+    }
+
+    bbzvm_pushf(bbzfloat_fromfloat(y.value() * x.value()));
+    bbzvm_ret1();
+}
+
+BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 21>> BittyBuzzFactory::
     createBittyBuzzMathLib() {
-    std::array<BittyBuzzLibMemberRegister, 20> libMember{{
+    std::array<BittyBuzzLibMemberRegister, 21> libMember{{
         {BBZSTRID_e, Math::e},
         {BBZSTRID_pi, Math::pi},
         {BBZSTRID_abs, BittyBuzzMathFunctions::bbzmath_abs},
@@ -58,6 +93,7 @@ BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 20>> BittyBuzzFactory::
         {BBZSTRID_min, BittyBuzzMathFunctions::bbzmath_min},
         {BBZSTRID_max, BittyBuzzMathFunctions::bbzmath_max},
         {BBZSTRID_rng_uniform, BittyBuzzMathFunctions::bbzmath_rng_uniform},
+        {BBZSTRID_mult, bbzmath_mult}
     }};
-    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 20>>(BBZSTRID_math, libMember);
+    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 21>>(BBZSTRID_math, libMember);
 }

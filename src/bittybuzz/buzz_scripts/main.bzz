@@ -10,7 +10,32 @@ function init() {
   };
 
   register_closure("moveByBuzz", move_by_buzz, args_description, nil);
+  counter = 0;
 }
 
 function step() {
+  if(id != 1) {
+    if(counter > 5){
+      var neighbor = neighbors.get(1);
+      if(neighbor != nil){
+
+        log("distance: ", neighbor.distance, "azimuth: ", neighbor.azimuth, ", id: ", id);
+        var cos_val = math.cos(neighbor.azimuth);
+        var sin_val = math.sin(neighbor.azimuth);
+
+        var x_val = math.mult(cos_val, neighbor.distance);
+        var y_val = math.mult(sin_val, neighbor.distance);
+        y_val = math.mult(y_val, -1.0);
+        log("x: ", x_val, "y: ", y_val);
+
+        call_host_function(id, "moveBy", {.0 = x_val, .1 = y_val});
+        log("Follow leader");
+      }
+      else {
+        log("Neighbor not found, id: ", id);
+      }
+      counter = 0;
+    }
+  }
+  counter = counter + 1;
 }

@@ -65,11 +65,10 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
         while (true) {
 
             if (!m_bittybuzzVm.step()) {
-                m_logger.log(LogLevel::Error, "BBZVM failed to step. state: %s err: %s",
-                             BittyBuzzSystem::getStateString(m_bittybuzzVm.getState()),
-                             BittyBuzzSystem::getErrorString(m_bittybuzzVm.getError()));
+                m_logger.log(LogLevel::Error, "BBZVM failed to step. ID: %d, state: %d err: %d", BSPContainer::getBSP().getUUId(),
+                             m_bittybuzzVm.getSate(), m_bittybuzzVm.getError());
             }
-            Task::delay(100);
+            Task::delay(2000);
         }
     }
 };
