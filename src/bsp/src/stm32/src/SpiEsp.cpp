@@ -104,7 +104,7 @@ void SpiEsp::execute() {
         m_inboundHeader = (EspHeader::Header*)m_inboundMessage.m_data.data();
         if (m_inboundHeader->crc8 !=
             m_crc.calculateCRC8(m_inboundHeader, EspHeader::sizeBytes - 1)) {
-            m_logger.log(LogLevel::Error, "Received corrupted SPI ESP header");
+            m_logger.log(LogLevel::Debug, "Received corrupted SPI ESP header");
             m_logger.log(LogLevel::Debug, "Bytes were: | %d | %d | %d | %d |",
                          m_inboundMessage.m_data[0], m_inboundMessage.m_data[1],
                          m_inboundMessage.m_data[2], m_inboundMessage.m_data[3]);
