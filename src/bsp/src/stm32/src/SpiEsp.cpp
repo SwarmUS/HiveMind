@@ -67,6 +67,7 @@ bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
         return false;
     }
     m_logger.log(LogLevel::Info, "Payload sent!");
+    m_sendingTaskHandle = nullptr;
     return m_crcOK;
 }
 bool SpiEsp::receive(uint8_t* buffer, uint16_t length) {
@@ -143,6 +144,7 @@ void SpiEsp::execute() {
         }
         // Payload has been sent. Check crc and notify sending task
         if (m_hasSentPayload) {
+            m_hasSentPayload = false;
             m_crcOK = !m_inboundHeader->systemState.stmSystemState.failedCrc;
             if (m_sendingTaskHandle != nullptr) {
                 xTaskNotifyGive(m_sendingTaskHandle);
@@ -198,12 +200,15 @@ void SpiEsp::execute() {
         txLengthBytes = m_outboundMessage.m_sizeBytes;
         txBuffer = m_outboundMessage.m_data.data();
         m_hasSentPayload = false;
+        m_crcOK = false;
         break;
     case transmitState::ERROR:
+        m_crcOK = false;
         HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_SET);
         if (m_sendingTaskHandle != nullptr) {
             xTaskNotifyGive(m_sendingTaskHandle);
         }
+        m_txState = transmitState::IDLE;
         break;
     }
 
