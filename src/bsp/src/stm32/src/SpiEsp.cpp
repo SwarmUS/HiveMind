@@ -53,7 +53,8 @@ bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
         length++;
     }
     // Appending CRC32
-    *(uint32_t*)&m_outboundMessage.m_data[length] = m_crc.calculateCRC32(m_outboundMessage.m_data.data(), length);
+    *(uint32_t*)&m_outboundMessage.m_data[length] =
+        m_crc.calculateCRC32(m_outboundMessage.m_data.data(), length);
     m_outboundMessage.m_sizeBytes = (uint16_t)(length + CRC32_SIZE);
     m_txState = transmitState::SENDING_HEADER;
 

@@ -11,7 +11,7 @@
 #include <c-common/circular_buff.h>
 
 constexpr uint8_t CRC32_SIZE = sizeof(uint32_t);
-constexpr uint16_t ESP_SPI_MAX_MESSAGE_LENGTH =  (2048u - CRC32_SIZE);
+constexpr uint16_t ESP_SPI_MAX_MESSAGE_LENGTH = (2048u - CRC32_SIZE);
 
 class SpiEsp : public ICommInterface {
   public:
