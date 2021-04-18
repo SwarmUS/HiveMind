@@ -3,11 +3,6 @@
 #include "hal/hal_gpio.h"
 #include <cstring>
 
-/** These macros are used to convert the units of the size of a buffer from a number of words to a
- * number of bytes and conversely from a size in bytes to a number of words.
- */
-#define WORDS_TO_BYTES(word) ((uint32_t)(word << 2U))
-#define BYTES_TO_WORDS(byte) ((uint8_t)(byte >> 2U))
 
 void task(void* context) {
     constexpr uint16_t loopRate = 20;
@@ -123,7 +118,7 @@ void SpiEsp::execute() {
         }
         // Simple flag signifying that connection is established with esp
         m_isConnected = true;
-        if (WORDS_TO_BYTES(m_inboundHeader->rxSizeWord) == m_outboundMessage.m_sizeBytes &&
+        if (m_inboundHeader->rxSizeBytes == m_outboundMessage.m_sizeBytes &&
             m_outboundMessage.m_sizeBytes != 0) {
             m_logger.log(LogLevel::Debug, "Received valid header. Can now send payload");
             m_txState = transmitState::SENDING_PAYLOAD;
@@ -132,11 +127,11 @@ void SpiEsp::execute() {
             m_logger.log(LogLevel::Debug, "Received valid header but cannot send payload");
         }
         // This will be sent on next header. Payload has priority over headers.
-        m_inboundMessage.m_sizeBytes = WORDS_TO_BYTES(m_inboundHeader->txSizeWord);
-        if (m_inboundMessage.m_sizeBytes == WORDS_TO_BYTES(m_outboundHeader.rxSizeWord) &&
+        m_inboundMessage.m_sizeBytes = m_inboundHeader->txSizeBytes;
+        if (m_inboundMessage.m_sizeBytes == m_outboundHeader.rxSizeBytes &&
             m_inboundMessage.m_sizeBytes != 0) {
             m_inboundMessage.m_payloadSize = m_inboundHeader->payloadSizeBytes;
-            rxLengthBytes = WORDS_TO_BYTES(m_inboundHeader->txSizeWord);
+            rxLengthBytes = m_inboundHeader->txSizeBytes;
             m_outboundHeader.systemState.stmSystemState.failedCrc = 0;
             m_rxState = receiveState::RECEIVING_PAYLOAD;
         } else {
@@ -153,7 +148,7 @@ void SpiEsp::execute() {
         }
         break;
     case receiveState::RECEIVING_PAYLOAD:
-        rxLengthBytes = WORDS_TO_BYTES(m_inboundHeader->txSizeWord);
+        rxLengthBytes = m_inboundHeader->txSizeBytes;
         break;
     case receiveState::VALIDATE_CRC:
         // Check payload CRC and log an error and set flag if it fails
@@ -230,8 +225,8 @@ void SpiEsp::execute() {
 
 void SpiEsp::updateOutboundHeader() {
     // TODO: get actual system state
-    m_outboundHeader.rxSizeWord = BYTES_TO_WORDS(m_inboundMessage.m_sizeBytes);
-    m_outboundHeader.txSizeWord = BYTES_TO_WORDS(m_outboundMessage.m_sizeBytes);
+    m_outboundHeader.rxSizeBytes = m_inboundMessage.m_sizeBytes;
+    m_outboundHeader.txSizeBytes = m_outboundMessage.m_sizeBytes;
     m_outboundHeader.payloadSizeBytes = m_outboundMessage.m_payloadSize;
     m_outboundHeader.crc8 = m_crc.calculateCRC8(&m_outboundHeader, EspHeader::sizeBytes - 1);
 }
