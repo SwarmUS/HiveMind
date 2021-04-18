@@ -181,6 +181,10 @@ void SpiEsp::execute() {
     case receiveState::ERROR:
         rxLengthBytes = EspHeader::sizeBytes;
         m_rxState = receiveState::RECEIVING_HEADER;
+        CircularBuff_clear(&m_circularBuf);
+        if (m_receivingTaskHandle != nullptr) {
+            xTaskNotifyGive(m_receivingTaskHandle);
+        }
         break;
     }
     if (m_inboundRequest && m_txState == transmitState::IDLE) {
@@ -208,11 +212,11 @@ void SpiEsp::execute() {
         if (m_sendingTaskHandle != nullptr) {
             xTaskNotifyGive(m_sendingTaskHandle);
         }
-        m_txState = transmitState::IDLE;
+        m_txState = transmitState::SENDING_HEADER;
         break;
     }
 
-    if ((m_inboundRequest || m_outboundMessage.m_sizeBytes != 0) &&
+    if ((m_inboundRequest || m_outboundMessage.m_sizeBytes != 0 || m_inboundMessage.m_sizeBytes != 0) &&
         m_txState != transmitState::ERROR && m_rxState != receiveState::ERROR) {
         HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_RESET);
         uint32_t finalSize = std::max(txLengthBytes, rxLengthBytes);
