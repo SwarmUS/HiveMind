@@ -146,6 +146,8 @@ void Error_Handler(void);
 #define DW_SYNC_CLEAR_GPIO_Port GPIOD
 #define DW_SYNC_EN_Pin GPIO_PIN_5
 #define DW_SYNC_EN_GPIO_Port GPIOD
+#define WROOM_EN_Pin GPIO_PIN_6
+#define WROOM_EN_GPIO_Port GPIOD
 #define DW_EXTON_A_Pin GPIO_PIN_9
 #define DW_EXTON_A_GPIO_Port GPIOG
 #define RMII_TX_EN_Pin GPIO_PIN_11

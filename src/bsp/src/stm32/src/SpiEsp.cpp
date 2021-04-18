@@ -115,8 +115,8 @@ void SpiEsp::execute() {
                          m_inboundMessage.m_data[0], m_inboundMessage.m_data[1],
                          m_inboundMessage.m_data[2], m_inboundMessage.m_data[3]);
             m_rxState = receiveState::ERROR;
-            if(m_hasSentPayload) {
-             m_txState = transmitState::ERROR;
+            if (m_hasSentPayload) {
+                m_txState = transmitState::ERROR;
             }
             m_isConnected = false;
             break;
@@ -159,14 +159,14 @@ void SpiEsp::execute() {
         // Check payload CRC and log an error and set flag if it fails
         if (m_crc.calculateCRC32(m_inboundMessage.m_data.data(),
                                  (uint16_t)(m_inboundMessage.m_sizeBytes - CRC32_SIZE)) !=
-            *(uint32_t*)&m_inboundMessage.m_data[(uint16_t)( m_inboundMessage.m_sizeBytes - CRC32_SIZE)]) {
+            *(uint32_t*)&m_inboundMessage
+                 .m_data[(uint16_t)(m_inboundMessage.m_sizeBytes - CRC32_SIZE)]) {
             m_logger.log(LogLevel::Error, "Failed payload crc on ESP");
             m_outboundHeader.systemState.stmSystemState.failedCrc = 1;
         }
         // If it passes the CRC check, add the data to the circular buffer
         else if (CircularBuff_put(&m_circularBuf, m_inboundMessage.m_data.data(),
-                                  m_inboundMessage.m_payloadSize) ==
-                 CircularBuff_Ret_Ok) {
+                                  m_inboundMessage.m_payloadSize) == CircularBuff_Ret_Ok) {
             // If a task was waiting to receive bytes, notify it
             if (m_receivingTaskHandle != nullptr) {
                 xTaskNotifyGive(m_receivingTaskHandle);
@@ -217,7 +217,8 @@ void SpiEsp::execute() {
         break;
     }
 
-    if ((m_inboundRequest || m_outboundMessage.m_sizeBytes != 0 || m_inboundMessage.m_sizeBytes != 0) &&
+    if ((m_inboundRequest || m_outboundMessage.m_sizeBytes != 0 ||
+         m_inboundMessage.m_sizeBytes != 0) &&
         m_txState != transmitState::ERROR && m_rxState != receiveState::ERROR) {
         HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_RESET);
         uint32_t finalSize = std::max(txLengthBytes, rxLengthBytes);
