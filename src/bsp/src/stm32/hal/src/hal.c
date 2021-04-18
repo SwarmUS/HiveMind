@@ -1,7 +1,7 @@
 #include "hal/hal.h"
 #include "deca_port.h"
-#include "hal/uart_print.h"
 #include "hal/hal_gpio.h"
+#include "hal/uart_print.h"
 #include "hal/usb.h"
 #include "hivemind_hal.h"
 #include "lwip.h"

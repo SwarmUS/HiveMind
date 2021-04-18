@@ -247,52 +247,6 @@ class SoftwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> 
     }
 };
 
-class TestEspCommunicationTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
-  public:
-    TestEspCommunicationTask(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority),
-        m_spi(BSPContainer::getRemoteCommInterface().value().get()) {}
-
-    ~TestEspCommunicationTask() override = default;
-
-  private:
-    ICommInterface& m_spi;
-    void task() override {
-        char message[] = "A longer message sent by stm!";
-        while (true) {
-            m_spi.send((uint8_t*)message, sizeof(message));
-            Task::delay(100);
-        }
-    }
-};
-
-class TestStmCommunicationTaskReceive : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
-  public:
-    TestStmCommunicationTaskReceive(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority),
-        m_spi(BSPContainer::getRemoteCommInterface().value().get()) {}
-
-    ~TestStmCommunicationTaskReceive() override = default;
-
-  private:
-    ICommInterface& m_spi;
-
-    void task() override {
-        char messageReceived[50];
-        while (true) {
-            Task::delay(75);
-            int i = -1;
-            do {
-                i++;
-                m_spi.receive((uint8_t*)&messageReceived[i], 1);
-            } while (messageReceived[i] != 0);
-
-            LoggerContainer::getLogger().log(LogLevel::Info, "Message received: %s",
-                                             messageReceived);
-        }
-    }
-};
-
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
@@ -320,15 +274,11 @@ int main(int argc, char** argv) {
                                                   s_remoteDispatchTask, s_remoteMessageSender,
                                                   BSPContainer::getRemoteCommInterface);
 
-    static TestEspCommunicationTask s_test("test", tskIDLE_PRIORITY + 1);
-    static TestStmCommunicationTaskReceive s_recv("test_rcv", tskIDLE_PRIORITY + 1);
-     //s_test.start();
-     //s_recv.start();
-    /* s_bittybuzzTask.start();
-     s_hardwareInterlocTask.start();
-     s_softwareInterlocTask.start();
-     s_hostMonitorTask.start();*/
-     s_remoteMonitorTask.start();
+    s_bittybuzzTask.start();
+    s_hardwareInterlocTask.start();
+    s_softwareInterlocTask.start();
+    s_hostMonitorTask.start();
+    s_remoteMonitorTask.start();
 
     Task::startScheduler();
 

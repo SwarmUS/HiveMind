@@ -3,7 +3,6 @@
 #include "hal/hal_gpio.h"
 #include <cstring>
 
-
 void task(void* context) {
     constexpr uint16_t loopRate = 20;
     while (true) {
