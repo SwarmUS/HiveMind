@@ -11,6 +11,8 @@ enum class InterlocStates {
     WAIT_FINAL,
     WAIT_RESPONSE,
     SEND_RESPONSE,
+    IDLE,
+    SYNC,
     NUM_STATES
 };
 

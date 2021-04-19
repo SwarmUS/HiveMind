@@ -1,10 +1,12 @@
 #include <interloc/InterlocBSPContainer.h>
 #include <logger/LoggerContainer.h>
 #include <states/DefaultState.h>
+#include <states/IdleState.h>
 #include <states/InterlocStateContainer.h>
 #include <states/SendFinalState.h>
 #include <states/SendPollState.h>
 #include <states/SendResponseState.h>
+#include <states/SyncState.h>
 #include <states/WaitFinalState.h>
 #include <states/WaitPollState.h>
 #include <states/WaitResponseState.h>
@@ -31,6 +33,12 @@ AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
     static WaitResponseState s_waitResponseState(LoggerContainer::getLogger(),
                                                  InterlocBSPContainer::getDecawaves());
 
+    static IdleState s_idleState(LoggerContainer::getLogger(),
+                                 InterlocBSPContainer::getDecawaves());
+
+    static SyncState s_syncState(LoggerContainer::getLogger(),
+                                 InterlocBSPContainer::getDecawaves());
+
     switch (state) {
     case InterlocStates::DEFAULT:
         return s_defaultState;
@@ -52,6 +60,12 @@ AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
 
     case InterlocStates::WAIT_RESPONSE:
         return s_waitResponseState;
+
+    case InterlocStates::IDLE:
+        return s_idleState;
+
+    case InterlocStates::SYNC:
+        return s_syncState;
 
     default:
         return s_defaultState;
