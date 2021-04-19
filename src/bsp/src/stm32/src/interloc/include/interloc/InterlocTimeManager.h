@@ -35,6 +35,7 @@ class InterlocTimeManager {
     uint64_t getResponseTxTs(uint64_t pollRxTs) const;
     uint64_t getFinalRxStartTs(uint64_t pollRxTs) const;
     static uint64_t getFinalTimeout();
+    static uint64_t getRespRxStartTime(uint64_t pollTxTs, uint8_t responseIdx);
 
     uint32_t getSyncTimeoutUs();
 

@@ -41,7 +41,10 @@ class InterlocStateHandler {
     CircularQueue<StateTransition> m_stateTracer;
 
     uint8_t m_sequenceID = 0;
-    uint16_t m_slotId = 1;
+
+    // TODO : set manually /AprilTag
+    uint16_t m_slotId = 7;
+    uint16_t m_numSlots = 10;
 };
 
 #endif // HIVE_MIND_INTERLOCSTATEHANDLER_H
