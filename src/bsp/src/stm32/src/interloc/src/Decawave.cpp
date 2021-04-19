@@ -94,6 +94,9 @@ bool Decawave::init() {
 
     setLed(DW_LED::LED_0, true);
 
+    uint32_t sysCfgReg = dwt_read32bitoffsetreg(SYS_CFG_ID, 0);
+    dwt_write32bitoffsetreg(SYS_CFG_ID, 0, sysCfgReg | SYS_CFG_RXAUTR);
+
     m_rxAsyncTask.start();
 
     return true;
