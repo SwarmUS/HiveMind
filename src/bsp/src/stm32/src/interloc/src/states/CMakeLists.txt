@@ -11,6 +11,8 @@ set(LIB_SOURCES
     src/WaitFinalState.cpp
     src/WaitResponseState.cpp
     src/AbstractInterlocState.cpp
+    src/IdleState.cpp
+    src/SyncState.cpp
         )
 
 set(LIB_HEADERS
@@ -24,6 +26,8 @@ set(LIB_HEADERS
     include/states/StateTransition.h
     include/states/WaitFinalState.h
     include/states/WaitResponseState.h
+    include/states/IdleState.h
+    include/states/SyncState.h
     )
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_HEADERS})

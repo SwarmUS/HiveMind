@@ -12,7 +12,9 @@ enum class InterlocEvent {
     DISTANCE_ERROR,
     RX_ERROR,
     RX_LAST_RESP,
-    RX_RESP
+    RX_RESP,
+    NEXT_FRAME_LEADER,
+    NOT_NEXT_FRAME_LEADER
 };
 
 struct StateTransition {

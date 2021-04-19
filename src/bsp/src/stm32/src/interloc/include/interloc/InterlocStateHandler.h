@@ -28,7 +28,15 @@ class InterlocStateHandler {
 
     TwoWayRanging& getTWR();
     InterlocTimeManager& getTimeManager();
-    uint16_t getSlotId() const;
+
+    void incrementCurrentFrameId();
+
+    uint8_t getSlotId() const;
+    uint8_t getNumFrames() const;
+    uint8_t getSuperFrameInitiator() const;
+    void setSuperFrameInitiator(uint8_t initiatorId);
+    uint8_t getCurrentFrameId() const;
+    void setCurrentFrameId(uint8_t frameId);
 
   private:
     InterlocTimeManager& m_timeManager;
@@ -41,7 +49,11 @@ class InterlocStateHandler {
     CircularQueue<StateTransition> m_stateTracer;
 
     uint8_t m_sequenceID = 0;
-    uint16_t m_slotId = 1;
+    uint8_t m_slotId = 1;
+
+    uint8_t m_numFrames = 2;
+    uint8_t m_superFrameInitiator = 0;
+    uint8_t m_currentFrameId = 0;
 };
 
 #endif // HIVE_MIND_INTERLOCSTATEHANDLER_H

@@ -41,6 +41,8 @@ namespace UWBMessages {
 
     struct TWRPoll {
         DWFrame m_headerFrame;
+        uint8_t m_superFrameInitiator;
+        uint8_t m_currentFrameId;
     };
 
     struct TWRResponse {
