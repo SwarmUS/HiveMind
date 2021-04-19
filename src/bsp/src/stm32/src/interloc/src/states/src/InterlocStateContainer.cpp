@@ -4,6 +4,7 @@
 #include <states/IdleState.h>
 #include <states/InterlocStateContainer.h>
 #include <states/SendFinalState.h>
+#include <states/SendPollFromSyncState.h>
 #include <states/SendPollState.h>
 #include <states/SendResponseState.h>
 #include <states/SyncState.h>
@@ -39,6 +40,9 @@ AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
     static SyncState s_syncState(LoggerContainer::getLogger(),
                                  InterlocBSPContainer::getDecawaves());
 
+    static SendPollFromSyncState s_pollFromSyncState(LoggerContainer::getLogger(),
+                                                     InterlocBSPContainer::getDecawaves());
+
     switch (state) {
     case InterlocStates::DEFAULT:
         return s_defaultState;
@@ -66,6 +70,9 @@ AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
 
     case InterlocStates::SYNC:
         return s_syncState;
+
+    case InterlocStates::SEND_POLL_FROM_SYNC:
+        return s_pollFromSyncState;
 
     default:
         return s_defaultState;

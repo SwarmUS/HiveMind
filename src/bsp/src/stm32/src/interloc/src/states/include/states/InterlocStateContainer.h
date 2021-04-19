@@ -13,6 +13,7 @@ enum class InterlocStates {
     SEND_RESPONSE,
     IDLE,
     SYNC,
+    SEND_POLL_FROM_SYNC,
     NUM_STATES
 };
 
