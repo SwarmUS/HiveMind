@@ -20,6 +20,8 @@
 #include <pheromones/HiveMindHostDeserializer.h>
 #include <pheromones/HiveMindHostSerializer.h>
 
+#include <pheromones/HiveMindHostAccumulatorSerializer.h>
+
 constexpr uint16_t gc_taskNormalPriority = tskIDLE_PRIORITY + 1;
 constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 30; // Higher priority then LwIP
 
@@ -98,7 +100,7 @@ class MessageDispatcherTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE>
         if (m_stream != NULL) {
 
             HiveMindHostDeserializer deserializer(*m_stream);
-            HiveMindHostSerializer serializer(*m_stream);
+            HiveMindHostAccumulatorSerializer serializer(*m_stream);
             HiveMindHostApiRequestHandler hivemindApiReqHandler =
                 MessageHandlerContainer::createHiveMindHostApiRequestHandler();
 
