@@ -51,9 +51,6 @@ bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
         m_crc.calculateCRC32(m_outboundMessage.m_data.data(), length);
     m_outboundMessage.m_sizeBytes = (uint16_t)(length + CRC32_SIZE);
     m_txState = transmitState::SENDING_HEADER;
-
-    // Wait for transmission to be over
-    m_sendingTaskHandle = xTaskGetCurrentTaskHandle();
     // Wait for transmission to be over. Will be notified when ACK received or upon error
     m_sendingTaskHandle = xTaskGetCurrentTaskHandle();
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
