@@ -9,13 +9,12 @@ WaitFinalState::WaitFinalState(ILogger& logger, DecawaveArray& decawaves) :
 void WaitFinalState::process(InterlocStateHandler& context) {
     m_decawaves[DecawavePort::A].receive(m_rxFrame, InterlocTimeManager::getFinalTimeout());
 
-    if (m_rxFrame.m_status == UWBRxStatus::FINISHED &&
-        reinterpret_cast<UWBMessages::DWFrame*>(m_rxFrame.m_rxBuffer.data())->m_functionCode ==
-            UWBMessages::FunctionCode::TWR_FINAL) {
+    if (m_rxFrame.m_status == UWBRxStatus::FINISHED && DecawaveUtils::isFrameFinal(m_rxFrame)) {
 
-        context.getTWR().m_finalRxTs = m_rxFrame.m_rxTimestamp;
         context.getTWR().deserializeFinal(
             reinterpret_cast<UWBMessages::TWRFinal*>(m_rxFrame.m_rxBuffer.data()));
+        context.getTWR().m_finalRxTs = m_rxFrame.m_rxTimestamp;
+
         std::optional<double> distance = context.getTWR().calculateDistance(context.getSlotId());
 
         if (distance) {

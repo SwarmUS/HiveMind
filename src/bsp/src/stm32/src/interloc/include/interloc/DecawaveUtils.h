@@ -1,6 +1,7 @@
 #ifndef __DECAWAVEUTILS_H__
 #define __DECAWAVEUTILS_H__
 
+#include "UWBRxFrame.h"
 #include <cstdint>
 #include <deca_device_api.h>
 
@@ -54,6 +55,27 @@ namespace DecawaveUtils {
      * @param ts Timestamp to convert
      */
     void tsToBytes(uint8_t* tsField, uint64_t ts);
+
+    /**
+     * @brief Checks if the frame is a TWRResonse
+     * @param rxFrame Received frame to check
+     * @return True if the rxFrame is a TWRResonse
+     */
+    bool isFrameResponse(UWBRxFrame rxFrame);
+
+    /**
+     * @brief Checks if the frame is a TWRFinal
+     * @param rxFrame Received frame to check
+     * @return True if the rxFrame is a TWRFinal
+     */
+    bool isFrameFinal(UWBRxFrame rxFrame);
+
+    /**
+     * @brief Checks if the frame is a TWRPoll
+     * @param rxFrame Received frame to check
+     * @return True if the rxFrame is a TWRPoll
+     */
+    bool isFramePoll(UWBRxFrame rxFrame);
 
 } // namespace DecawaveUtils
 
