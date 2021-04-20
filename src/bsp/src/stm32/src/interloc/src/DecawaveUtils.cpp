@@ -102,17 +102,17 @@ void DecawaveUtils::tsToBytes(uint8_t* tsField, uint64_t ts) {
     }
 }
 
-bool DecawaveUtils::isFrameResponse(UWBRxFrame rxFrame) {
+bool DecawaveUtils::isFrameResponse(UWBRxFrame& rxFrame) {
     return reinterpret_cast<UWBMessages::DWFrame*>(rxFrame.m_rxBuffer.data())->m_functionCode ==
            UWBMessages::FunctionCode::TWR_RESPONSE;
 }
 
-bool DecawaveUtils::isFrameFinal(UWBRxFrame rxFrame) {
+bool DecawaveUtils::isFrameFinal(UWBRxFrame& rxFrame) {
     return reinterpret_cast<UWBMessages::DWFrame*>(rxFrame.m_rxBuffer.data())->m_functionCode ==
            UWBMessages::FunctionCode::TWR_FINAL;
 }
 
-bool DecawaveUtils::isFramePoll(UWBRxFrame rxFrame) {
+bool DecawaveUtils::isFramePoll(UWBRxFrame& rxFrame) {
     return reinterpret_cast<UWBMessages::DWFrame*>(rxFrame.m_rxBuffer.data())->m_functionCode ==
            UWBMessages::FunctionCode::TWR_POLL;
 }

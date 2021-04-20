@@ -17,7 +17,8 @@ enum class InterlocEvent {
     RX_LAST_TIMEOUT,
     NEXT_FRAME_LEADER,
     NOT_NEXT_FRAME_LEADER,
-    BOOTUP
+    BOOTUP,
+    SUPERFRAME_FINISHED
 };
 
 struct StateTransition {

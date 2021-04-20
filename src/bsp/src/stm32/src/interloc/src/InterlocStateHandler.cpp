@@ -73,7 +73,7 @@ void InterlocStateHandler::setSuperFrameInitiator(uint8_t initiatorId) {
     m_superFrameInitiator = initiatorId;
 }
 void InterlocStateHandler::setCurrentFrameId(uint8_t frameId) { m_currentFrameId = frameId; }
-uint64_t InterlocStateHandler::getLastFrameStartTs() const { return m_lastFrameStartTs; }
-void InterlocStateHandler::setLastFrameStartTs(uint64_t timestamp) {
-    m_lastFrameStartTs = timestamp;
+uint64_t InterlocStateHandler::getPreviousFrameStartTs() const { return m_previousFrameStartTs; }
+void InterlocStateHandler::setPreviousFrameStartTs(uint64_t timestamp) {
+    m_previousFrameStartTs = timestamp;
 }

@@ -15,7 +15,7 @@ void IdleState::process(InterlocStateHandler& context) {
     uint8_t currentFrameId = context.getCurrentFrameId();
 
     if (currentFrameId == (context.getSuperFrameInitiator())) {
-        // SET STATE SYNC
+        context.setState(InterlocStates::SYNC, InterlocEvent::SUPERFRAME_FINISHED);
         return;
     }
 

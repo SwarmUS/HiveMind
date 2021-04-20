@@ -20,7 +20,8 @@ void WaitFinalState::process(InterlocStateHandler& context) {
         std::optional<double> distance = context.getTWR().calculateDistance(context.getSlotId());
 
         if (distance) {
-            m_logger.log(LogLevel::Info, "Distance: %2.3f", distance.value());
+            m_logger.log(LogLevel::Info, "Distance from %d: %2.3f", context.getCurrentFrameId(),
+                         distance.value());
 
             context.setState(InterlocStates::IDLE, InterlocEvent::FINAL_RECVD);
         } else {

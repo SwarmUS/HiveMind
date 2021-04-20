@@ -1,4 +1,5 @@
 #include "states/SyncState.h"
+#include <interloc/DecawaveUtils.h>
 #include <interloc/InterlocStateHandler.h>
 
 #define RX_RELOAD_OVERHEAD_US 100
@@ -19,8 +20,7 @@ void SyncState::process(InterlocStateHandler& context) {
             return;
         }
 
-        if (reinterpret_cast<UWBMessages::DWFrame*>(m_rxFrame.m_rxBuffer.data())->m_functionCode ==
-            UWBMessages::TWR_POLL) {
+        if (DecawaveUtils::isFramePoll(m_rxFrame)) {
             return handlePollReceived(context);
         }
 
@@ -42,7 +42,7 @@ void SyncState::handlePollReceived(InterlocStateHandler& context) {
         reinterpret_cast<UWBMessages::TWRPoll*>(m_rxFrame.m_rxBuffer.data());
 
     context.getTWR().m_pollRxTs = m_rxFrame.m_rxTimestamp;
-    context.setLastFrameStartTs(m_rxFrame.m_rxTimestamp);
+    context.setPreviousFrameStartTs(m_rxFrame.m_rxTimestamp);
     context.setSuperFrameInitiator(msg->m_superFrameInitiator);
     context.setCurrentFrameId(msg->m_currentFrameId);
 

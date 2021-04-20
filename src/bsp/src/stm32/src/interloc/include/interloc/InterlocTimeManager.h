@@ -11,7 +11,7 @@
 
 #define POLL_TO_FIRST_RESPONSE_GUARD_US 900U
 #define RESPONSE_TO_RESPONSE_GUARD_US 2000U
-#define FINAL_TO_POLL_GUARD_US 1500U
+#define FINAL_TO_POLL_GUARD_US 2000U
 #define RESPONSE_TO_FINAL_GUARD_US 900U
 
 // TODO: Calculate these dynamically from the DW settings + number of agents
