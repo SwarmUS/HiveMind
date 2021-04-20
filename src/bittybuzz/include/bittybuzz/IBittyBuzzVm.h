@@ -23,10 +23,13 @@ class IBittyBuzzVm {
     virtual bool step() = 0;
 
     /** @brief Get the state of the vm */
-    virtual bbzvm_state getSate() const = 0;
+    virtual const char* getState() const = 0;
 
     /** @brief Get the error state of the VM */
-    virtual bbzvm_error getError() const = 0;
+    virtual const char* getError() const = 0;
+
+    /** @brief Get the current instruction of the VM */
+    virtual const char* getInstruction() const = 0;
 };
 
 #endif // __IBITTYBUZZVM_H_
