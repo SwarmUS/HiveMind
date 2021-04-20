@@ -1,4 +1,3 @@
-#include "Task.h"
 #include <interloc/Decawave.h>
 #include <interloc/InterlocBSPContainer.h>
 #include <states/InterlocStateContainer.h>
@@ -9,13 +8,14 @@ WaitResponseState::WaitResponseState(ILogger& logger, DecawaveArray& decawaves) 
 
 void WaitResponseState::process(InterlocStateHandler& context) {
     uint64_t pollTxTs = 0;
-
+    // record the actual time at wich the Poll was transmitted
     m_decawaves[DecawavePort::A].getTxTimestamp(&pollTxTs);
-    //            volatile uint64_t startRxTime = InterlocTimeManager::getRespRxStartTime(pollTxTs,
-    //        nbTries); m_decawaves[DecawavePort::A].receiveDelayed(
-    //            m_rxFrame, InterlocTimeManager::getResponseTimeout(), startRxTime);
 
-    m_decawaves[DecawavePort::A].receive(m_rxFrame, InterlocTimeManager::getResponseTimeout());
+    // begin to receive for a small time window corresponding to the TWRResponse Rx slot on the
+    // remote agents
+    m_decawaves[DecawavePort::A].receiveDelayed(
+        m_rxFrame, InterlocTimeManager::getResponseTimeout(),
+        InterlocTimeManager::getRespRxStartTime(pollTxTs, nbTries));
 
     if (m_rxFrame.m_status == UWBRxStatus::FINISHED && DecawaveUtils::isFrameResponse(m_rxFrame)) {
         m_decawaves[DecawavePort::A].getTxTimestamp(&context.getTWR().m_pollTxTs);
@@ -46,9 +46,9 @@ void WaitResponseState::process(InterlocStateHandler& context) {
         context.setState(InterlocStates::WAIT_RESPONSE, InterlocEvent::TIMEOUT);
 
     } else {
-        // rx in error. For debugging purposes
-        //        while (true) {
-        //        }
+        // TODO: rx in error. For debugging purposes
+        //         while (true) {
+        //         }
     }
 
     nbTries++;

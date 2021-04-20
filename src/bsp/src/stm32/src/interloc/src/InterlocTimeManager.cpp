@@ -77,8 +77,8 @@ uint64_t InterlocTimeManager::getPollRxStartTs(uint64_t lastSlotStartTs) const {
 uint64_t InterlocTimeManager::getRespRxStartTime(uint64_t pollTxTs, uint8_t responseIdx) {
     // TODO reference the time with an acutal getPollTxTs
     // start to listen a little bit before the actual Response is sent.
-    return pollTxTs + (uint64_t)(responseIdx - 1U) *
-                          ((RESPONSE_AIR_TIME_WITH_PREAMBLE_US + RESPONSE_TO_RESPONSE_GUARD_US) +
-                           POLL_TO_FIRST_RESPONSE_GUARD_US - RX_BEFORE_TX_GUARD_US) *
-                          UUS_TO_DWT_TIME;
+    return pollTxTs +
+           UUS_TO_DWT_TIME * ((uint64_t)(responseIdx - 1U) * (RESPONSE_AIR_TIME_WITH_PREAMBLE_US +
+                                                              RESPONSE_TO_RESPONSE_GUARD_US) +
+                              POLL_TO_FIRST_RESPONSE_GUARD_US - RX_BEFORE_TX_GUARD_US);
 }
