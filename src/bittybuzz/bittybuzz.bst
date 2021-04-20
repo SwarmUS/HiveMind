@@ -29,4 +29,3 @@ atan
 min
 max
 rng_uniform
-mult
