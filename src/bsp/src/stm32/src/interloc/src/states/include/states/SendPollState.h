@@ -13,7 +13,6 @@ class SendPollState : public AbstractInterlocState {
 
   private:
     UWBMessages::TWRPoll m_pollMsg{};
-    UWBRxFrame m_responseFrame;
 };
 
 #endif // HIVE_MIND_SENDPOLLSTATE_H

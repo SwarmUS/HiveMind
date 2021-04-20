@@ -37,6 +37,8 @@ class InterlocStateHandler {
     void setSuperFrameInitiator(uint8_t initiatorId);
     uint8_t getCurrentFrameId() const;
     void setCurrentFrameId(uint8_t frameId);
+    uint64_t getLastFrameStartTs() const;
+    void setLastFrameStartTs(uint64_t timestamp);
 
   private:
     InterlocTimeManager& m_timeManager;
@@ -54,6 +56,7 @@ class InterlocStateHandler {
     uint8_t m_numFrames = 2;
     uint8_t m_superFrameInitiator = 0;
     uint8_t m_currentFrameId = 0;
+    uint64_t m_lastFrameStartTs = 0;
 };
 
 #endif // HIVE_MIND_INTERLOCSTATEHANDLER_H

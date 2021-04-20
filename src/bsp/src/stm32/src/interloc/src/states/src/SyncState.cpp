@@ -15,7 +15,7 @@ void SyncState::process(InterlocStateHandler& context) {
         m_decawaves[DecawavePort::A].receive(m_rxFrame, rxTimeoutUs);
 
         if (m_rxFrame.m_status == UWBRxStatus::TIMEOUT) {
-            // SET STATE POLL FROM SYNC
+            context.setState(InterlocStates::SEND_POLL_FROM_SYNC, InterlocEvent::TIMEOUT);
             return;
         }
 
@@ -42,6 +42,7 @@ void SyncState::handlePollReceived(InterlocStateHandler& context) {
         reinterpret_cast<UWBMessages::TWRPoll*>(m_rxFrame.m_rxBuffer.data());
 
     context.getTWR().m_pollRxTs = m_rxFrame.m_rxTimestamp;
+    context.setLastFrameStartTs(m_rxFrame.m_rxTimestamp);
     context.setSuperFrameInitiator(msg->m_superFrameInitiator);
     context.setCurrentFrameId(msg->m_currentFrameId);
 
