@@ -13,6 +13,8 @@ enum class InterlocEvent {
     RX_ERROR,
     RX_LAST_RESP,
     RX_RESP,
+    RX_RESP_GOOD,
+    RX_LAST_TIMEOUT
     NEXT_FRAME_LEADER,
     NOT_NEXT_FRAME_LEADER
 };

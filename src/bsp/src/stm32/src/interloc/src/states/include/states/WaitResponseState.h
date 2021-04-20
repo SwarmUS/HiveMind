@@ -12,6 +12,7 @@ class WaitResponseState : public AbstractInterlocState {
 
   private:
     UWBRxFrame m_rxFrame;
+    uint8_t nbTries = 0;
 };
 
 #endif // HIVE_MIND_WAITRESPONSESTATE_H
