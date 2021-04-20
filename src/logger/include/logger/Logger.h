@@ -14,6 +14,8 @@ class Logger : public ILogger {
     LogRet log(LogLevel level, const char* format, ...) override;
 
   private:
+    static char logLevelToString(LogLevel logLevel);
+
     IUserInterface& m_ui;
     LogLevel m_logLevel;
 };

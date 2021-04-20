@@ -1,12 +1,13 @@
 #ifndef __USERINTERFACE_H_
 #define __USERINTERFACE_H_
 
+#include "bsp/IBSP.h"
 #include "bsp/IUserInterface.h"
 #include <string>
 
 class UserInterface : public IUserInterface {
   public:
-    UserInterface();
+    UserInterface(const IBSP& bsp);
     ~UserInterface() override = default;
 
     Mutex& getPrintMutex() override;
@@ -17,6 +18,7 @@ class UserInterface : public IUserInterface {
     int printLine(const char* format, va_list args) override;
 
   private:
+    const IBSP& m_bsp;
     std::string m_accumulatedString;
     Mutex m_mutex;
 };
