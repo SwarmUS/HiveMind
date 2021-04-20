@@ -11,7 +11,7 @@ LogRet Logger::log(LogLevel level, const char* format, ...) {
         va_start(args, format);
 
         LockGuard lock = LockGuard(m_ui.getPrintMutex());
-        m_ui.print("%c: ", logLevelToString(level));
+        m_ui.print("[%c] ", logLevelToString(level));
         int retValue = m_ui.printLine(format, args);
         va_end(args);
         if (retValue >= 0) {
