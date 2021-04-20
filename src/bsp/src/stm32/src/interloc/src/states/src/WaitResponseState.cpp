@@ -7,15 +7,11 @@ WaitResponseState::WaitResponseState(ILogger& logger, DecawaveArray& decawaves) 
     AbstractInterlocState(logger, decawaves) {}
 
 void WaitResponseState::process(InterlocStateHandler& context) {
-    uint64_t pollTxTs = 0;
-    // record the actual time at wich the Poll was transmitted
-    m_decawaves[DecawavePort::A].getTxTimestamp(&pollTxTs);
-
     // begin to receive for a small time window corresponding to the TWRResponse Rx slot on the
     // remote agents
     m_decawaves[DecawavePort::A].receiveDelayed(
         m_rxFrame, InterlocTimeManager::getResponseTimeout(),
-        InterlocTimeManager::getRespRxStartTime(pollTxTs, nbTries));
+        context.getTimeManager().getRespRxStartTime(context.getTWR().m_pollTxTs, nbTries));
 
     if (m_rxFrame.m_status == UWBRxStatus::FINISHED && DecawaveUtils::isFrameResponse(m_rxFrame)) {
         m_decawaves[DecawavePort::A].getTxTimestamp(&context.getTWR().m_pollTxTs);
