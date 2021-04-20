@@ -15,7 +15,7 @@ void Hal_init() {
 
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
-    HAL_RNG_Init(HRNG);
+    MX_RNG_Init();
 
     /* Configure the system clock */
     SystemClock_Config();
