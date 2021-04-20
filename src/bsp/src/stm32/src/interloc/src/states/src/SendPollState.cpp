@@ -8,7 +8,6 @@ SendPollState::SendPollState(ILogger& logger, DecawaveArray& decawaves) :
     AbstractInterlocState(logger, decawaves) {}
 
 void SendPollState::process(InterlocStateHandler& context) {
-    Task::delay(10);
     context.constructUWBHeader(UWB_BROADCAST_ADDRESS, UWBMessages::BEACON, UWBMessages::TWR_POLL,
                                (uint8_t*)&m_pollMsg, sizeof(m_pollMsg));
 
