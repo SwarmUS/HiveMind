@@ -7,7 +7,7 @@ IdleState::IdleState(ILogger& logger, DecawaveArray& decawaves) :
 void IdleState::process(InterlocStateHandler& context) {
     // First time we pass by the Idle state
     if (context.getSuperFrameInitiator() == 0) {
-        // SET STATE SYNC
+        context.setState(InterlocStates::SYNC, InterlocEvent::BOOTUP);
         return;
     }
 
