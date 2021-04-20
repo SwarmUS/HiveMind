@@ -9,6 +9,8 @@ SendFinalState::SendFinalState(ILogger& logger, DecawaveArray& decawaves) :
     AbstractInterlocState(logger, decawaves) {}
 
 void SendFinalState::process(InterlocStateHandler& context) {
+    //    the delay on the send final seems to be unstable. Might need to be checked. Rarely it
+    //    causes a Tx error for no apparent reason
     uint64_t finalTxTime = context.getTimeManager().getFinalTxTs(context.getTWR().m_pollTxTs);
 
     // Get the timestamp at which it will really be sent
@@ -19,9 +21,9 @@ void SendFinalState::process(InterlocStateHandler& context) {
                                (uint8_t*)(&m_finalMsg), sizeof(m_finalMsg));
 
     context.getTWR().constructFinal(&m_finalMsg, finalTxTs);
+
     m_decawaves[DecawavePort::A].transmitDelayed((uint8_t*)(&m_finalMsg),
                                                  sizeof(UWBMessages::TWRFinal), finalTxTime);
-    //    m_decawaves[DecawavePort::A].transmit((uint8_t*)(&m_finalMsg),
-    //    sizeof(UWBMessages::TWRFinal));
+
     context.setState(InterlocStates::WAIT_POLL, InterlocEvent::NO_EVENT);
 }

@@ -16,7 +16,6 @@ void SendResponseState::process(InterlocStateHandler& context) {
 
     m_decawaves[DecawavePort::A].transmitDelayed((uint8_t*)&m_respMsg, sizeof(m_respMsg),
                                                  respTxTime);
-    //    m_decawaves[DecawavePort::A].transmit((uint8_t*)&m_respMsg, sizeof(m_respMsg));
 
     // Get the real time at which the response was sent
     context.getTWR().m_responseTxTs =

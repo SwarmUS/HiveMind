@@ -19,9 +19,8 @@ void SendPollState::process(InterlocStateHandler& context) {
 
     context.getTWR().m_pollTxTs =
         m_decawaves[DecawavePort::A].getTxTimestampFromDelayedTime(txTime);
-    //    m_decawaves[DecawavePort::A].transmitDelayed((uint8_t*)&m_pollMsg,
-    //    sizeof(UWBMessages::TWRPoll),txTime);
-    m_decawaves[DecawavePort::A].transmit((uint8_t*)&m_pollMsg, sizeof(UWBMessages::TWRPoll));
+    m_decawaves[DecawavePort::A].transmitDelayed((uint8_t*)&m_pollMsg, sizeof(UWBMessages::TWRPoll),
+                                                 txTime);
 
     context.setState(InterlocStates::WAIT_RESPONSE, InterlocEvent::NO_EVENT);
 }

@@ -1,6 +1,7 @@
 #ifndef __DECAWAVEUTILS_H__
 #define __DECAWAVEUTILS_H__
 
+#include "UWBRxFrame.h"
 #include <cstdint>
 #include <deca_device_api.h>
 
@@ -54,6 +55,10 @@ namespace DecawaveUtils {
      * @param ts Timestamp to convert
      */
     void tsToBytes(uint8_t* tsField, uint64_t ts);
+
+    bool isFrameResponse(UWBRxFrame rxFrame);
+    bool isFrameFinal(UWBRxFrame rxFrame);
+    bool isFramePoll(UWBRxFrame rxFrame);
 
 } // namespace DecawaveUtils
 

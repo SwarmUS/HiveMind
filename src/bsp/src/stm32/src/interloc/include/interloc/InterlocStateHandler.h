@@ -43,8 +43,8 @@ class InterlocStateHandler {
     uint8_t m_sequenceID = 0;
 
     // TODO : set manually /AprilTag
-    uint16_t m_slotId = 7;
-    uint16_t m_numSlots = 10;
+    uint16_t m_slotId = 5;
+    uint16_t m_numSlots = 5;
 };
 
 #endif // HIVE_MIND_INTERLOCSTATEHANDLER_H
