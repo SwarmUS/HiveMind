@@ -1,5 +1,6 @@
 #include "MessageHandlerContainer.h"
 #include "IGreetHandler.h"
+#include <ConditionVariable.h>
 #include <Mutex.h>
 #include <bsp/BSPContainer.h>
 #include <cpp-common/CircularQueueStack.h>
@@ -31,26 +32,35 @@ ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getBuzzMsgQueue() {
     return s_buzzMsgThreadQueue;
 }
 
-ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getHostMsgQueue() {
+NotificationQueue<MessageDTO>& MessageHandlerContainer::getHostMsgQueue() {
     static Mutex s_mutex(10);
     static CircularQueueStack<MessageDTO, gc_queueMaxSize> s_hostMsgQueue;
     static ThreadSafeQueue<MessageDTO> s_hostMsgThreadQueue(s_hostMsgQueue, s_mutex);
+    static ConditionVariable s_hostMsgConditionVariable;
+    static NotificationQueue<MessageDTO> s_hostMsgNotificationQueue(s_hostMsgThreadQueue,
+                                                                    s_hostMsgConditionVariable);
 
-    return s_hostMsgThreadQueue;
+    return s_hostMsgNotificationQueue;
 }
 
-ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getRemoteMsgQueue() {
+NotificationQueue<MessageDTO>& MessageHandlerContainer::getRemoteMsgQueue() {
     static Mutex s_mutex(10);
     static CircularQueueStack<MessageDTO, gc_queueMaxSize> s_remoteMsgQueue;
     static ThreadSafeQueue<MessageDTO> s_remoteMsgThreadQueue(s_remoteMsgQueue, s_mutex);
+    static ConditionVariable s_remoteMsgConditionVariable;
+    static NotificationQueue<MessageDTO> s_remoteMsgNotificationQueue(s_remoteMsgThreadQueue,
+                                                                      s_remoteMsgConditionVariable);
 
-    return s_remoteMsgThreadQueue;
+    return s_remoteMsgNotificationQueue;
 }
 
-ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getInterlocMsgQueue() {
+NotificationQueue<MessageDTO>& MessageHandlerContainer::getInterlocMsgQueue() {
     static Mutex s_mutex(10);
     static CircularQueueStack<MessageDTO, gc_queueMaxSize> s_interlocMsgQueue;
     static ThreadSafeQueue<MessageDTO> s_interlocMsgThreadQueue(s_interlocMsgQueue, s_mutex);
+    static ConditionVariable s_interlocMsgConditionVariable;
+    static NotificationQueue<MessageDTO> s_interlocMsgNotificationQueue(
+        s_interlocMsgThreadQueue, s_interlocMsgConditionVariable);
 
-    return s_interlocMsgThreadQueue;
+    return s_interlocMsgNotificationQueue;
 }

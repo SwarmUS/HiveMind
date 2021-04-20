@@ -1,5 +1,6 @@
 #include "hal/hal.h"
 #include "deca_port.h"
+#include "hal/hal_gpio.h"
 #include "hal/uart_print.h"
 #include "hal/usb.h"
 #include "hivemind_hal.h"
@@ -37,6 +38,7 @@ void Hal_init() {
     MX_LWIP_Init();
 
     deca_init();
+    enableESP();
 #ifdef IPERF_SERVER
     lwiperf_start_tcp_server_default(NULL, NULL);
 #endif

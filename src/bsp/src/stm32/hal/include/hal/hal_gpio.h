@@ -10,6 +10,8 @@ extern "C" {
 typedef void (*gpioCallbackFct_t)(void* instance);
 
 void setEspCallback(gpioCallbackFct_t fct, void* instance);
+
+void enableESP();
 #ifdef __cplusplus
 }
 #endif

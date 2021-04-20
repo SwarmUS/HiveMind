@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <interloc/IInterloc.h>
 #include <interloc/InterlocContainer.h>
+#include <interloc/InterlocMessageHandler.h>
 #include <logger/Logger.h>
 #include <logger/LoggerContainer.h>
 #include <message-handler/GreetHandler.h>
@@ -18,6 +19,8 @@
 #include <message-handler/MessageSender.h>
 #include <pheromones/HiveMindHostDeserializer.h>
 #include <pheromones/HiveMindHostSerializer.h>
+
+#include <pheromones/HiveMindHostAccumulatorSerializer.h>
 
 constexpr uint16_t gc_taskNormalPriority = tskIDLE_PRIORITY + 1;
 constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 30; // Higher priority then LwIP
@@ -54,7 +57,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
         auto bbzFunctions = BittyBuzzFactory::createBittyBuzzGlobalLib();
         auto mathLib = BittyBuzzFactory::createBittyBuzzMathLib();
         std::array<std::reference_wrapper<IBittyBuzzLib>, 2> buzzLibraries{{bbzFunctions, mathLib}};
-        if (m_bittybuzzVm.init(buzzLibraries.data(), buzzLibraries.size())) {
+        if (!m_bittybuzzVm.init(buzzLibraries.data(), buzzLibraries.size())) {
             m_logger.log(LogLevel::Error, "BBZVM failed to initialize. state: %d err: %d",
                          m_bittybuzzVm.getSate(), m_bittybuzzVm.getError());
             return;
@@ -97,7 +100,7 @@ class MessageDispatcherTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE>
         if (m_stream != NULL) {
 
             HiveMindHostDeserializer deserializer(*m_stream);
-            HiveMindHostSerializer serializer(*m_stream);
+            HiveMindHostAccumulatorSerializer serializer(*m_stream);
             HiveMindHostApiRequestHandler hivemindApiReqHandler =
                 MessageHandlerContainer::createHiveMindHostApiRequestHandler();
 
@@ -119,7 +122,7 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     MessageSenderTask(const char* taskName,
                       UBaseType_t priority,
                       ICommInterface* stream,
-                      ICircularQueue<MessageDTO>& streamQueue) :
+                      INotificationQueue<MessageDTO>& streamQueue) :
         AbstractTask(taskName, priority),
         m_taskName(taskName),
         m_stream(stream),
@@ -133,7 +136,7 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   private:
     const char* m_taskName;
     ICommInterface* m_stream;
-    ICircularQueue<MessageDTO>& m_streamQueue;
+    INotificationQueue<MessageDTO>& m_streamQueue;
     ILogger& m_logger;
 
     void task() override {
@@ -142,6 +145,10 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
             MessageSender messageSender(m_streamQueue, serializer, BSPContainer::getBSP(),
                                         m_logger);
             while (m_stream->isConnected()) {
+                // Verify that we have a message to process
+                if (m_streamQueue.isEmpty()) {
+                    m_streamQueue.wait(500);
+                }
                 if (!messageSender.processAndSerialize()) {
                     m_logger.log(LogLevel::Warn, "Fail to process/serialize in %s", m_taskName);
                 }
@@ -217,6 +224,7 @@ class SoftwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> 
     SoftwareInterlocTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority),
         m_interloc(InterlocContainer::getInterloc()),
+        m_interlocMessageQueue(MessageHandlerContainer::getInterlocMsgQueue()),
         m_interlocMessageHandler(InterlocContainer::getInterlocMessageHandler()) {}
 
     ~SoftwareInterlocTask() override = default;
@@ -225,10 +233,15 @@ class SoftwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> 
     // Create the object so it can register it's callbacks
     // TODO: remove once it is used somewhere else
     IInterloc& m_interloc;
+    NotificationQueue<MessageDTO>& m_interlocMessageQueue;
     IInterlocMessageHandler& m_interlocMessageHandler;
 
     void task() override {
         while (true) {
+            // Verify that we have a message to process
+            if (m_interlocMessageQueue.isEmpty()) {
+                m_interlocMessageQueue.wait(500);
+            }
             m_interlocMessageHandler.processMessage();
         }
     }

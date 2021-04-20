@@ -8,9 +8,10 @@
 #include <BaseTask.h>
 #include <Task.h>
 #include <array>
+#include <c-common/circular_buff.h>
 
-#define CRC32_SIZE sizeof(uint32_t)
-#define ESP_SPI_MAX_MESSAGE_LENGTH (2048u - CRC32_SIZE)
+constexpr uint8_t CRC32_SIZE = sizeof(uint32_t);
+constexpr uint16_t ESP_SPI_MAX_MESSAGE_LENGTH = (2048u - CRC32_SIZE);
 
 class SpiEsp : public ICommInterface {
   public:
@@ -19,13 +20,8 @@ class SpiEsp : public ICommInterface {
 
     bool send(const uint8_t* buffer, uint16_t length) override;
 
-    bool receive(uint8_t* buffer, uint16_t length) override {
-        (void)buffer;
-        (void)length;
-        return false;
-    }
+    bool receive(uint8_t* buffer, uint16_t length) override;
 
-    bool isBusy() const;
     bool isConnected() const override;
 
     void execute();
@@ -48,8 +44,12 @@ class SpiEsp : public ICommInterface {
     struct message {
         std::array<uint8_t, ESP_SPI_MAX_MESSAGE_LENGTH> m_data;
         uint16_t m_sizeBytes;
+        uint16_t m_payloadSize;
     } m_inboundMessage, m_outboundMessage;
 
+    std::array<uint8_t, ESP_SPI_MAX_MESSAGE_LENGTH> m_data;
+    CircularBuff m_circularBuf;
+    TaskHandle_t m_receivingTaskHandle, m_sendingTaskHandle = nullptr;
     EspHeader::Header m_outboundHeader;
     EspHeader::Header* m_inboundHeader;
 
@@ -59,7 +59,9 @@ class SpiEsp : public ICommInterface {
     void updateOutboundHeader();
     bool m_inboundRequest;
 
-    bool m_isBusy;
+    bool m_crcOK;
+    volatile bool m_hasSentPayload; // changed in ISR
+    bool m_isConnected;
 };
 
 #endif // __SPIESP_H__
