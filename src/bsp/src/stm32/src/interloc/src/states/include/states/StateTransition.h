@@ -18,7 +18,9 @@ enum class InterlocEvent {
     NEXT_FRAME_LEADER,
     NOT_NEXT_FRAME_LEADER,
     BOOTUP,
-    SUPERFRAME_FINISHED
+    SUPERFRAME_FINISHED,
+    GOOD_DISTANCE,
+    BAD_DISTANCE
 };
 
 struct StateTransition {

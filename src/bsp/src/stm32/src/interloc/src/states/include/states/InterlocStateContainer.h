@@ -14,6 +14,7 @@ enum class InterlocStates {
     IDLE,
     SYNC,
     SEND_POLL_FROM_SYNC,
+    SET_DISTANCE,
     NUM_STATES
 };
 

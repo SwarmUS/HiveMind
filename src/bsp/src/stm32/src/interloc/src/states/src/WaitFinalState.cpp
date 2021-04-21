@@ -17,16 +17,7 @@ void WaitFinalState::process(InterlocStateHandler& context) {
             reinterpret_cast<UWBMessages::TWRFinal*>(m_rxFrame.m_rxBuffer.data()));
         context.getTWR().m_finalRxTs = m_rxFrame.m_rxTimestamp;
 
-        std::optional<double> distance = context.getTWR().calculateDistance(context.getSlotId());
-
-        if (distance) {
-            m_logger.log(LogLevel::Info, "Distance from %d: %2.3f", context.getCurrentFrameId(),
-                         distance.value());
-
-            context.setState(InterlocStates::IDLE, InterlocEvent::FINAL_RECVD);
-        } else {
-            context.setState(InterlocStates::IDLE, InterlocEvent::DISTANCE_ERROR);
-        }
+        context.setState(InterlocStates::SET_DISTANCE, InterlocEvent::FINAL_RECVD);
 
     } else if (m_rxFrame.m_status == UWBRxStatus::TIMEOUT) {
         context.setState(InterlocStates::IDLE, InterlocEvent::TIMEOUT);
