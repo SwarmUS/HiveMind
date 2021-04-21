@@ -16,6 +16,11 @@ void WaitPollState::process(InterlocStateHandler& context) {
 
         context.getTWR().m_pollRxTs = m_rxFrame.m_rxTimestamp;
         context.setPreviousFrameStartTs(m_rxFrame.m_rxTimestamp);
+        context.setSuperFrameInitiator(
+            reinterpret_cast<UWBMessages::TWRPoll*>(m_rxFrame.m_rxBuffer.data())
+                ->m_superFrameInitiator);
+        context.setCurrentFrameId(
+            reinterpret_cast<UWBMessages::TWRPoll*>(m_rxFrame.m_rxBuffer.data())->m_currentFrameId);
 
         context.setState(InterlocStates::SEND_RESPONSE, InterlocEvent::POLL_RECVD);
         return;
