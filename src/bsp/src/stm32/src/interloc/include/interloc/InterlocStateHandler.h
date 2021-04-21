@@ -53,7 +53,7 @@ class InterlocStateHandler {
     uint8_t m_sequenceID = 0;
 
     // TODO : set manually /AprilTag
-    uint16_t m_slotId = 1;
+    uint16_t m_slotId = 2;
 
     uint8_t m_numFrames = MAX_INTERLOC_SUBFRAMES;
     uint8_t m_superFrameInitiator = 0;
