@@ -43,11 +43,11 @@ class BittyBuzzVm : public IBittyBuzzVm {
 
     bool step() override;
 
-    const char* getState() const override;
+    bbzvm_state getState() const override;
 
-    const char* getError() const override;
+    bbzvm_error getError() const override;
 
-    const char* getInstruction() const override;
+    bbzvm_instr getInstruction() const override;
 
   private:
     const IBittyBuzzBytecode& m_bytecode;

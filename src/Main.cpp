@@ -3,6 +3,7 @@
 #include <bittybuzz/BittyBuzzContainer.h>
 #include <bittybuzz/BittyBuzzFactory.h>
 #include <bittybuzz/BittyBuzzMessageHandler.h>
+#include <bittybuzz/BittyBuzzSystem.h>
 #include <bittybuzz/BittyBuzzVm.h>
 #include <bsp/BSPContainer.h>
 #include <bsp/IBSP.h>
@@ -59,7 +60,8 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
         std::array<std::reference_wrapper<IBittyBuzzLib>, 2> buzzLibraries{{bbzFunctions, mathLib}};
         if (!m_bittybuzzVm.init(buzzLibraries.data(), buzzLibraries.size())) {
             m_logger.log(LogLevel::Error, "BBZVM failed to initialize. state: %s err: %s",
-                         m_bittybuzzVm.getState(), m_bittybuzzVm.getError());
+                         BittyBuzzSystem::getStateString(m_bittybuzzVm.getState()),
+                         BittyBuzzSystem::getErrorString(m_bittybuzzVm.getError()));
             return;
         }
 
@@ -67,7 +69,8 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
 
             if (!m_bittybuzzVm.step()) {
                 m_logger.log(LogLevel::Error, "BBZVM failed to step. state: %s err: %s",
-                             m_bittybuzzVm.getState(), m_bittybuzzVm.getError());
+                             BittyBuzzSystem::getStateString(m_bittybuzzVm.getState()),
+                             BittyBuzzSystem::getErrorString(m_bittybuzzVm.getError()));
             }
             Task::delay(100);
         }
