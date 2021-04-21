@@ -6,7 +6,8 @@ InterlocStateHandler::InterlocStateHandler(InterlocTimeManager& timeManager) :
     m_currentStateName(InterlocStates::DEFAULT),
     m_currentState(&InterlocStateContainer::getState(InterlocStates::DEFAULT)),
     m_stateTracer(m_stateTracerData.data(), MAX_TRACER_TRANSITIONS) {
-    m_slotId = BSPContainer::getBSP().getUUId();
+
+    m_slotId = getSlotIdFromBoardId(BSPContainer::getBSP().getUUId());
 
     m_timeManager.setNumSlots(m_numFrames);
     m_timeManager.setSlodId(m_slotId);

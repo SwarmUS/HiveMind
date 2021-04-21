@@ -54,8 +54,6 @@ class InterlocStateHandler {
     CircularQueue<StateTransition> m_stateTracer;
 
     uint8_t m_sequenceID = 0;
-
-    // TODO : set manually /AprilTag
     uint16_t m_slotId;
 
     uint8_t m_numFrames = MAX_INTERLOC_SUBFRAMES;
