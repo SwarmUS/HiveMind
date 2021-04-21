@@ -247,7 +247,7 @@ class SoftwareInterlocTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class LogInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class LogInterlocTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
   public:
     LogInterlocTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority),
@@ -264,7 +264,7 @@ class LogInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
         while (true) {
             PositionsTable interlocData = m_interloc.getPositionsTable();
             for (unsigned int i = 0; i < interlocData.m_positionsLength; i++) {
-                m_logger.log(LogLevel::Info, "Distance from %d : %3.3f m",
+                m_logger.log(LogLevel::Info, "*****Distance from %d : %3.3f m",
                              interlocData.m_positions[i].m_robotId,
                              interlocData.m_positions[i].m_distance);
             }
@@ -304,7 +304,7 @@ int main(int argc, char** argv) {
     s_bittybuzzTask.start();
     s_hardwareInterlocTask.start();
     s_softwareInterlocTask.start();
-    // s_logInterlocTask.start();
+    s_logInterlocTask.start();
     s_hostMonitorTask.start();
     // s_remoteMonitorTask.start();
 
