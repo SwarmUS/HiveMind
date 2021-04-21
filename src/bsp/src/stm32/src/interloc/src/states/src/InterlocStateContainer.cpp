@@ -43,6 +43,7 @@ AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
 
     static SendPollFromSyncState s_pollFromSyncState(LoggerContainer::getLogger(),
                                                      InterlocBSPContainer::getDecawaves());
+    
     static SetDistanceState s_setDistanceState(LoggerContainer::getLogger(),
                                                InterlocBSPContainer::getDecawaves());
 
