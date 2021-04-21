@@ -1,4 +1,5 @@
 #include "interloc/InterlocTimeManager.h"
+#include "interloc/InterlocStateHandler.h"
 #include <interloc/Decawave.h>
 
 InterlocTimeManager::InterlocTimeManager(IBSP& bsp) : m_bsp(bsp), m_numSlots(0), m_slotId(0) {
@@ -47,8 +48,8 @@ uint64_t InterlocTimeManager::getFinalTxTs(uint64_t pollTxTs) const {
     return (pollTxTs + m_pollTxToFinalTxOffsetDTU) % UINT40_MAX;
 }
 
-uint64_t InterlocTimeManager::getResponseTxTs(uint64_t pollRxTs) const {
-    return (pollRxTs + m_pollRxToResponseTxOffsetDTU) % UINT40_MAX;
+uint64_t InterlocTimeManager::getResponseTxTs(uint64_t previousFrameTs) const {
+    return (previousFrameTs + m_pollRxToResponseTxOffsetDTU) % UINT40_MAX;
 }
 
 uint64_t InterlocTimeManager::getFinalRxStartTs(uint64_t pollRxTs) const {
