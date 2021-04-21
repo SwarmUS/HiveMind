@@ -28,7 +28,17 @@ class InterlocStateHandler {
 
     TwoWayRanging& getTWR();
     InterlocTimeManager& getTimeManager();
-    uint16_t getSlotId() const;
+
+    void incrementCurrentFrameId();
+
+    uint8_t getSlotId() const;
+    uint8_t getNumFrames() const;
+    uint8_t getSuperFrameInitiator() const;
+    void setSuperFrameInitiator(uint8_t initiatorId);
+    uint8_t getCurrentFrameId() const;
+    void setCurrentFrameId(uint8_t frameId);
+    uint64_t getPreviousFrameStartTs() const;
+    void setPreviousFrameStartTs(uint64_t timestamp);
 
   private:
     InterlocTimeManager& m_timeManager;
@@ -43,8 +53,12 @@ class InterlocStateHandler {
     uint8_t m_sequenceID = 0;
 
     // TODO : set manually /AprilTag
-    uint16_t m_slotId = 5;
-    uint16_t m_numSlots = 5;
+    uint16_t m_slotId = 1;
+
+    uint8_t m_numFrames = MAX_INTERLOC_SUBFRAMES;
+    uint8_t m_superFrameInitiator = 0;
+    uint8_t m_currentFrameId = 0;
+    uint64_t m_previousFrameStartTs = 0;
 };
 
 #endif // HIVE_MIND_INTERLOCSTATEHANDLER_H
