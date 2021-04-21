@@ -41,7 +41,7 @@ class InterlocStateHandler {
     void setPreviousFrameStartTs(uint64_t timestamp);
 
     uint16_t getSlotIdFromBoardId(uint16_t boardId);
-    uint16_t getBoardIdFromSlotId(uint8_t slotId);
+    uint16_t getBoardIdFromSlotId(uint16_t slotId);
 
   private:
     InterlocTimeManager& m_timeManager;
