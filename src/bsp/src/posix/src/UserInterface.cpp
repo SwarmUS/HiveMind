@@ -2,12 +2,12 @@
 #include <cstdio>
 #include <ros/console.h>
 
-UserInterface::UserInterface() : m_mutex(10) {}
+UserInterface::UserInterface(const IBSP& bsp) : m_bsp(bsp), m_mutex(10) {}
 
 Mutex& UserInterface::getPrintMutex() { return m_mutex; }
 
 void UserInterface::flush() {
-    ROS_INFO("%s", m_accumulatedString.c_str());
+    ROS_INFO("[HM: %d] %s", m_bsp.getUUId(), m_accumulatedString.c_str());
     m_accumulatedString = "";
 }
 

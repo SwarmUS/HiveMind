@@ -26,7 +26,7 @@ TEST_F(LoggerTestFixture, Logger_Log_Same_Level_Log_Once) {
     LogRet ret = m_logger->log(LogLevel::Info, "Info log");
 
     // Expect
-    EXPECT_EQ(m_uiMock->m_printCallCounter, 1);
+    EXPECT_EQ(m_uiMock->m_printCallCounter, 2); // 2 since we print the log level
     EXPECT_EQ(ret, LogRet::Ok);
 }
 
@@ -36,7 +36,7 @@ TEST_F(LoggerTestFixture, Logger_Log_Higher_Level_Log_Once) {
     LogRet ret = m_logger->log(LogLevel::Error, "Error log");
 
     // Expect
-    EXPECT_EQ(m_uiMock->m_printCallCounter, 1);
+    EXPECT_EQ(m_uiMock->m_printCallCounter, 2); // 2 since we print the log level
     EXPECT_EQ(ret, LogRet::Ok);
 }
 
@@ -56,11 +56,11 @@ TEST_F(LoggerTestFixture, Logger_Log_ReleaseSemaphore) {
     LogRet ret = m_logger->log(LogLevel::Error, "Debug log");
 
     // Expect
-    EXPECT_EQ(m_uiMock->m_printCallCounter, 1);
+    EXPECT_EQ(m_uiMock->m_printCallCounter, 2);
     EXPECT_EQ(ret, LogRet::Ok);
 
     // Call a second time and see if it's a success
-    ret = m_logger->log(LogLevel::Error, "Debug log");
+    ret = m_logger->log(LogLevel::Error, "Error log");
     EXPECT_EQ(ret, LogRet::Ok);
-    EXPECT_EQ(m_uiMock->m_printCallCounter, 2);
+    EXPECT_EQ(m_uiMock->m_printCallCounter, 4);
 }
