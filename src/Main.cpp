@@ -208,7 +208,7 @@ class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class HardwareInterlocTask : public AbstractTask<100 * configMINIMAL_STACK_SIZE> {
+class HardwareInterlocTask : public AbstractTask<60 * configMINIMAL_STACK_SIZE> {
   public:
     HardwareInterlocTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority) {}
@@ -278,7 +278,7 @@ int main(int argc, char** argv) {
     s_hardwareInterlocTask.start();
     s_softwareInterlocTask.start();
     s_hostMonitorTask.start();
-    // s_remoteMonitorTask.start();
+    s_remoteMonitorTask.start();
 
     Task::startScheduler();
 

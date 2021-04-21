@@ -11,8 +11,6 @@ void WaitPollState::process(InterlocStateHandler& context) {
         context.getTimeManager().getPollRxStartTs(context.getPreviousFrameStartTs());
     m_decawaves[DecawavePort::A].receiveDelayed(
         m_rxFrame, context.getTimeManager().getPollTimeout(), rxStartTs);
-    // m_decawaves[DecawavePort::A].receive(m_rxFrame,
-    // context.getTimeManager().getPollTimeout());
 
     if (m_rxFrame.m_status == UWBRxStatus::FINISHED && DecawaveUtils::isFramePoll(m_rxFrame)) {
 
