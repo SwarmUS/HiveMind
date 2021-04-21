@@ -19,9 +19,10 @@ void WaitResponseState::process(InterlocStateHandler& context) {
             reinterpret_cast<UWBMessages::TWRResponse*>(m_rxFrame.m_rxBuffer.data())->m_subFrameId -
             1;
         context.getTWR().m_responseRxTs[index] = m_rxFrame.m_rxTimestamp;
-
+        nbRespReceived++;
         if (index == MAX_INTERLOC_SUBFRAMES - 1) {
             // Last Response, sendFinal to all
+            nbRespReceived = 0;
             nbTries = 0;
             context.setState(InterlocStates::SEND_FINAL, InterlocEvent::RX_LAST_RESP);
             return;
@@ -31,9 +32,15 @@ void WaitResponseState::process(InterlocStateHandler& context) {
 
     } else if (m_rxFrame.m_status == UWBRxStatus::TIMEOUT) {
         if (nbTries >= MAX_INTERLOC_SUBFRAMES - 1) {
-            // final Rx timeout
+            if (nbRespReceived > 0) {
+                // final Rx timeout
+                nbRespReceived = 0;
+                nbTries = 0;
+                context.setState(InterlocStates::SEND_FINAL, InterlocEvent::RX_LAST_TIMEOUT);
+                return;
+            }
             nbTries = 0;
-            context.setState(InterlocStates::SEND_FINAL, InterlocEvent::RX_LAST_TIMEOUT);
+            context.setState(InterlocStates::SYNC, InterlocEvent::RX_NO_RESP);
             return;
         }
 
