@@ -18,6 +18,14 @@
 #define SPEED_OF_LIGHT 299792458
 #define DW_INTERNAL_CLOCK_RFEQ 63897600000
 
+// Time management constants
+#define DECAWAVE_TX_RATE_HZ 6800000 // [110k/850k/6.8M]bits/s
+#define PRF_SPEED 16 // MHz [16/64]
+#define SPI_SPEED_HZ 2625000 // bits/s
+#define PREAMBULE_SEQUENCE_LENGTH 256 // symbols
+#define START_FRAME_DELIMITER_LENGTH 8 // symbols
+#define PHY_HEADER_LENGTH 21 // symbols
+
 #define DEFAULT_CHANNEL CHANNEL_2
 
 enum class DW_LED { LED_0 = DWT_GxM0, LED_1 = DWT_GxM1, LED_2 = DWT_GxM2, LED_3 = DWT_GxM3 };

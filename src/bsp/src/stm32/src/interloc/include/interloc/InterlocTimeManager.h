@@ -6,8 +6,8 @@
 
 #define UINT40_MAX 0xFFFFFFFFFF
 
-#define RX_BEFORE_TX_GUARD_US 100U
-#define TIMEOUT_GUARD_US 1500U
+//#define RX_BEFORE_TX_GUARD_US 100U
+//#define TIMEOUT_GUARD_US 1500U
 
 #define POLL_TO_FIRST_RESPONSE_GUARD_US 900U
 #define RESPONSE_TO_RESPONSE_GUARD_US 2000U
@@ -18,6 +18,13 @@
 #define POLL_AIR_TIME_WITH_PREAMBLE_US 350U
 #define RESPONSE_AIR_TIME_WITH_PREAMBLE_US 350U
 #define FINAL_AIR_TIME_WITH_PREAMBLE_US 400U
+
+// new guards
+#define POLL_PROCESSING_GUARD 100U
+#define RESPONSE_PROCESSING_GUARD 200U
+#define FINAL_PROCESSING_GUARD 100U
+#define RX_BEFORE_TX_GUARD_US 10U
+#define TIMEOUT_GUARD_US 100U
 
 class InterlocTimeManager {
   public:
@@ -39,6 +46,16 @@ class InterlocTimeManager {
 
     uint32_t getSyncTimeoutUs();
 
+    static uint16_t getReadWriteSPITimeUs(uint16_t bitLength);
+    static uint16_t getAirTimeUs(uint16_t bitLength);
+    uint16_t computeAirTimeWithPreambleUs(uint16_t bitLength);
+    constexpr uint16_t getPreambleAirTimeUs() const;
+    void computeResponseRxTs_new(uint64_t startOfFrameTs);
+    uint64_t getResponseTxTs_new(uint64_t startOfFrame) const;
+    static uint16_t getTimeoutUs_new(uint16_t msgAirTimeWithPreambleUs);
+    uint64_t getFinalRxTs_new(uint64_t startOfFrameTs) const;
+    uint64_t getFinalTxTs_new(uint64_t startOfFrameTs) const;
+
   private:
     IBSP& m_bsp;
 
@@ -51,6 +68,18 @@ class InterlocTimeManager {
     uint64_t m_pollRxToResponseTxOffsetDTU;
     uint64_t m_pollTxToFinalTxOffsetDTU;
     uint64_t m_pollRxToFinalRxOffsetDTU;
+
+    // fixed length constants
+    // air time
+    const uint16_t m_pollAirTimeWithPreamble;
+    const uint16_t m_responseAirTimeWithPreamble;
+    const uint16_t m_finalAirTimeWithPreamble;
+
+    // variable length guards
+    const uint16_t m_pollToFirstResponseGuardUs;
+
+    // addressable timestamps
+    volatile uint64_t m_responseRxTs_new[10];
 
     void updateTimings();
 };

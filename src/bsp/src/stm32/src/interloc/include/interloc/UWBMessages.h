@@ -14,19 +14,19 @@ namespace UWBMessages {
     enum FrameVersion { VERSION_0 = 0x0, VERSION_1 = 0x1 };
     enum FunctionCode : uint16_t { TWR_POLL = 0x61, TWR_RESPONSE = 0x50, TWR_FINAL = 0x69 };
 
-    struct FrameControl {
+    struct __attribute__((__packed__)) FrameControl {
         FrameType m_frameType : 3;
         uint8_t m_securityEnabled : 1;
         uint8_t m_framePending : 1;
         uint8_t m_ackRequest : 1;
         uint8_t m_panIdCompress : 1; // Always set to 1
-        uint8_t m_reserved : 3;
+        uint8_t m_reserved1 : 3; // reserved field
         AddressMode m_destAddressMode : 2;
         uint8_t m_frameVersion : 2;
         AddressMode m_sourceAddressMode : 2;
     };
 
-    struct MACHeader {
+    struct __attribute__((__packed__)) MACHeader {
         FrameControl m_frameControl;
         uint8_t m_sequenceNumber;
         uint16_t m_destinationPanId;
@@ -34,7 +34,7 @@ namespace UWBMessages {
         uint16_t m_sourceAddress;
     };
 
-    struct DWFrame {
+    struct __attribute__((__packed__)) DWFrame {
         MACHeader m_header;
         FunctionCode m_functionCode;
     };
@@ -45,12 +45,12 @@ namespace UWBMessages {
         uint8_t m_currentFrameId;
     };
 
-    struct TWRResponse {
+    struct __attribute__((__packed__)) TWRResponse {
         DWFrame m_headerFrame;
         uint8_t m_subFrameId;
     };
 
-    struct TWRFinal {
+    struct __attribute__((__packed__)) TWRFinal {
         DWFrame m_headerFrame;
         uint64_t m_pollTxTs;
         uint64_t m_responseRxTs[MAX_INTERLOC_SUBFRAMES];
