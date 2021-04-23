@@ -80,6 +80,8 @@ target_link_libraries(stm32f429zi-linker
         SwarmUS::HiveMind::LWIP
         CMSIS::STM32::F4::RTOS_V2
         HAL::STM32::F4::SPI
+        HAL::STM32::F4::FLASH
+        HAL::STM32::F4::FLASHEx
         )
 
 # Actual bsp library

@@ -10,10 +10,9 @@ set(LIB_SOURCES
     src/TCPClient.cpp
     src/SettingsContainer.cpp
     src/SpiEsp.cpp
-
     src/USB.cpp
-
     src/Math.cpp
+    src/PersistedStorageManager.cpp
 )
 
 set(LIB_PRIVATE_HEADERS
@@ -26,6 +25,8 @@ set(LIB_PRIVATE_HEADERS
     include/SpiEsp.h
     include/SpiHeader.h
     include/USB.h
+    include/PersitedStorage.h
+    include/PersistedStorageManager.h
 )
 
 include(DefaultSettings.cmake)

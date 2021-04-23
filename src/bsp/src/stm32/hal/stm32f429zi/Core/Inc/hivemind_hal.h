@@ -12,6 +12,8 @@ extern "C" {
 #include "rng.h"
 #include "spi.h"
 #include "stm32f4xx_hal_conf.h"
+#include "stm32f4xx_hal_flash.h"
+#include "stm32f4xx_hal_flash_ex.h"
 #include "usart.h"
 
 #define HUART_PRINT (&huart3)
