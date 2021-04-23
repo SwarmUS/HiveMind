@@ -21,10 +21,11 @@
 
 // new guards
 #define POLL_PROCESSING_GUARD 100U
-#define RESPONSE_PROCESSING_GUARD 200U
+#define RESPONSE_PROCESSING_GUARD 100U
 #define FINAL_PROCESSING_GUARD 100U
 #define RX_BEFORE_TX_GUARD_US 10U
-#define TIMEOUT_GUARD_US 100U
+#define TIMEOUT_GUARD_US 50U
+#define DEAD_TIME 200U
 
 class InterlocTimeManager {
   public:
@@ -48,13 +49,15 @@ class InterlocTimeManager {
 
     static uint16_t getReadWriteSPITimeUs(uint16_t bitLength);
     static uint16_t getAirTimeUs(uint16_t bitLength);
-    uint16_t computeAirTimeWithPreambleUs(uint16_t bitLength);
-    constexpr uint16_t getPreambleAirTimeUs() const;
+    static uint16_t computeAirTimeWithPreambleUs(uint16_t bitLength);
+    static constexpr uint16_t getPreambleAirTimeUs();
     void computeResponseRxTs_new(uint64_t startOfFrameTs);
     uint64_t getResponseTxTs_new(uint64_t startOfFrame) const;
     static uint16_t getTimeoutUs_new(uint16_t msgAirTimeWithPreambleUs);
     uint64_t getFinalRxTs_new(uint64_t startOfFrameTs) const;
     uint64_t getFinalTxTs_new(uint64_t startOfFrameTs) const;
+    uint64_t getSupposedNextFrameStart_new(uint64_t startOfFrameTs, uint16_t finalTimeoutUs) const;
+    uint64_t getPollRxStartTs_new(uint64_t startOfFrameTs) const;
 
   private:
     IBSP& m_bsp;
