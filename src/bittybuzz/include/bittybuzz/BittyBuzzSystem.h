@@ -60,6 +60,12 @@ namespace BittyBuzzSystem {
      *@param [in] errcode the error code of the received error */
     void errorReceiver(bbzvm_error errcode);
 
+    const char* getStateString(bbzvm_state state);
+
+    const char* getErrorString(bbzvm_error error);
+
+    const char* getInstructionString(bbzvm_instr instruction);
+
 } // namespace BittyBuzzSystem
 
 #endif // __BITTYBUZZSYSTEM_H_

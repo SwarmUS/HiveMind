@@ -108,5 +108,14 @@ bool BittyBuzzVm::step() {
     return false;
 }
 
-bbzvm_state BittyBuzzVm::getSate() const { return vm->state; }
+bbzvm_state BittyBuzzVm::getState() const { return vm->state; }
+
 bbzvm_error BittyBuzzVm::getError() const { return vm->error; }
+
+bbzvm_instr BittyBuzzVm::getInstruction() const {
+    bbzvm_instr instr =
+        (bbzvm_instr) *
+        (*vm->bcode_fetch_fun)(vm->pc - 1,
+                               1); // -1 since the PC was incremented before the error occured
+    return instr;
+}

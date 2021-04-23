@@ -16,7 +16,7 @@ IBSP& BSPContainer::getBSP() {
 }
 
 IUserInterface& BSPContainer::getUserInterface() {
-    static UserInterface s_ui;
+    static UserInterface s_ui(getBSP());
     return s_ui;
 }
 
