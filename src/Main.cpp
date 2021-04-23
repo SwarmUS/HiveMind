@@ -211,7 +211,7 @@ class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class HardwareInterlocTask : public AbstractTask<60 * configMINIMAL_STACK_SIZE> {
+class HardwareInterlocTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
   public:
     HardwareInterlocTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority) {}
@@ -222,7 +222,7 @@ class HardwareInterlocTask : public AbstractTask<60 * configMINIMAL_STACK_SIZE> 
     void task() override { BSPContainer::getInterlocManager().startInterloc(); }
 };
 
-class SoftwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class SoftwareInterlocTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
   public:
     SoftwareInterlocTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority),
@@ -250,6 +250,32 @@ class SoftwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> 
     }
 };
 
+class LogInterlocTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+  public:
+    LogInterlocTask(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority),
+        m_interloc(InterlocContainer::getInterloc()),
+        m_logger(LoggerContainer::getLogger()) {}
+
+    ~LogInterlocTask() override = default;
+
+  private:
+    IInterloc& m_interloc;
+    ILogger& m_logger;
+
+    void task() override {
+        while (true) {
+            PositionsTable interlocData = m_interloc.getPositionsTable();
+            for (unsigned int i = 0; i < interlocData.m_positionsLength; i++) {
+                m_logger.log(LogLevel::Info, "*****Distance from %d : %3.3f m",
+                             interlocData.m_positions[i].m_robotId,
+                             interlocData.m_positions[i].m_distance);
+            }
+            Task::delay(1000);
+        }
+    }
+};
+
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
@@ -259,6 +285,7 @@ int main(int argc, char** argv) {
     static BittyBuzzTask s_bittybuzzTask("bittybuzz", gc_taskNormalPriority);
     static HardwareInterlocTask s_hardwareInterlocTask("hardware_interloc", gc_taskHighPriority);
     static SoftwareInterlocTask s_softwareInterlocTask("software_interloc", gc_taskNormalPriority);
+    static LogInterlocTask s_logInterlocTask("software_interloc", gc_taskNormalPriority);
 
     static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskNormalPriority, NULL,
                                                     MessageHandlerContainer::getHostMsgQueue());
@@ -280,6 +307,7 @@ int main(int argc, char** argv) {
     s_bittybuzzTask.start();
     s_hardwareInterlocTask.start();
     s_softwareInterlocTask.start();
+    s_logInterlocTask.start();
     s_hostMonitorTask.start();
     s_remoteMonitorTask.start();
 

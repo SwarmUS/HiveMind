@@ -12,8 +12,12 @@ void SetDistanceState::process(InterlocStateHandler& context) {
     if (distance) {
         m_logger.log(LogLevel::Warn, "distance from : %d = %3.3f", context.getCurrentFrameId(),
                      distance.value());
+
+        InterlocBSPContainer::getInterlocManager().updateDistance(
+            InterlocStateHandler::getBoardIdFromSlotId(context.getCurrentFrameId()),
+            distance.value());
+
         context.setState(InterlocStates::IDLE, InterlocEvent::GOOD_DISTANCE);
-        //        TODO notify Buzz that a new distance value is available
     } else {
         context.setState(InterlocStates::IDLE, InterlocEvent::BAD_DISTANCE);
     }

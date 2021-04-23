@@ -177,7 +177,7 @@ void SpiEsp::execute() {
         if (m_receivingTaskHandle != nullptr) {
             xTaskNotifyGive(m_receivingTaskHandle);
         }
-        m_logger.log(LogLevel::Error, "Error within Spi driver ESP - RX");
+        m_logger.log(LogLevel::Debug, "Error within Spi driver ESP - RX");
         break;
     }
     if (m_inboundRequest && m_txState == transmitState::IDLE) {
@@ -206,7 +206,7 @@ void SpiEsp::execute() {
             xTaskNotifyGive(m_sendingTaskHandle);
         }
         m_txState = transmitState::SENDING_HEADER;
-        m_logger.log(LogLevel::Error, "Error within Spi driver ESP - TX");
+        m_logger.log(LogLevel::Debug, "Error within Spi driver ESP - TX");
         break;
     }
 

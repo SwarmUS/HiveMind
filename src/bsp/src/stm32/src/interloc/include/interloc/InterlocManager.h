@@ -23,6 +23,8 @@ class InterlocManager : public IInterlocManager {
     void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
                                    void* context) override;
 
+    void updateDistance(uint16_t robotId, float distance);
+
     /**
      * Syncs the clocks of both DW1000s
      */

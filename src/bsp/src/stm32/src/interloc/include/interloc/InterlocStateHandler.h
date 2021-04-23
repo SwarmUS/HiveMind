@@ -40,6 +40,9 @@ class InterlocStateHandler {
     uint64_t getPreviousFrameStartTs() const;
     void setPreviousFrameStartTs(uint64_t timestamp);
 
+    static uint16_t getSlotIdFromBoardId(uint16_t boardId);
+    static uint16_t getBoardIdFromSlotId(uint16_t slotId);
+
   private:
     InterlocTimeManager& m_timeManager;
 
@@ -51,9 +54,7 @@ class InterlocStateHandler {
     CircularQueue<StateTransition> m_stateTracer;
 
     uint8_t m_sequenceID = 0;
-
-    // TODO : set manually /AprilTag
-    uint16_t m_slotId = 3;
+    uint16_t m_slotId;
 
     uint8_t m_numFrames = MAX_INTERLOC_SUBFRAMES;
     uint8_t m_superFrameInitiator = 0;
