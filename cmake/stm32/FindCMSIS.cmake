@@ -40,6 +40,7 @@ function(cmsis_generate_default_linker_script FAMILY DEVICE CORE)
             -DSTACK_SIZE="${STACK_SIZE}" 
             -DHEAP_SIZE="${HEAP_SIZE}" 
             -DLINKER_SCRIPT="${OUTPUT_LD_FILE}"
+            -DUSER_DATA_FLASH_SIZE="${USER_DATA_FLASH_SIZE}"
             -P "${STM32_CMAKE_DIR}/stm32/linker_ld.cmake"
     )
     add_custom_target(CMSIS_LD_${DEVICE}${CORE_U} DEPENDS "${OUTPUT_LD_FILE}")

@@ -16,6 +16,10 @@ _eccmram = .;\n\
 } >CCMRAM AT> FLASH\n\
         ")
 endif()
+
+if(NOT USER_DATA_FLASH_SIZE)
+    set(USER_DATA_FLASH_SIZE "0K")
+endif()
     
 set(SCRIPT_TEXT 
 "ENTRY(Reset_Handler)\n\
@@ -26,7 +30,7 @@ _Min_Stack_Size = ${STACK_SIZE};\n\
 \n\
 MEMORY\n\
 {\n\
-    FLASH (rx)      : ORIGIN = ${FLASH_ORIGIN}, LENGTH = ${FLASH_SIZE}\n\
+    FLASH (rx)      : ORIGIN = ${FLASH_ORIGIN}, LENGTH = ${FLASH_SIZE}-${USER_DATA_FLASH_SIZE}\n\
     RAM (xrw)      : ORIGIN = ${RAM_ORIGIN}, LENGTH = ${RAM_SIZE}\n\
 ${CCRAM_DEFINITION}\n\
 }\n\

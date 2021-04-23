@@ -21,6 +21,9 @@ add_link_options(
     -Wl,--print-memory-usage
 )
 
+set(USER_DATA_FLASH_SIZE "128K")
+set(USER_DATA_FLASH_START_ADDRESS "0x081E0000")
+
 include(stm32/common)
 # Adding module
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/stm32)
