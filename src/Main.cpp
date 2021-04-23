@@ -120,6 +120,7 @@ class MessageDispatcherTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE>
     }
 };
 
+template<typename SerializerType>
 class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     MessageSenderTask(const char* taskName,
@@ -144,7 +145,7 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
 
     void task() override {
         if (m_stream != NULL) {
-            HiveMindHostSerializer serializer(*m_stream);
+            SerializerType serializer(*m_stream);
             MessageSender messageSender(m_streamQueue, serializer, BSPContainer::getBSP(),
                                         m_logger);
             while (true) {
@@ -162,12 +163,13 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
+template<typename SerializerType>
 class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
   public:
-    CommMonitoringTask(const char* taskName,
+    CommMonitoringTask<SerializerType>(const char* taskName,
                        UBaseType_t priority,
                        MessageDispatcherTask& dispatcherTask,
-                       MessageSenderTask& senderTask,
+                       MessageSenderTask<SerializerType>& senderTask,
                        CommInterfaceGetter commInterfaceGetter) :
         AbstractTask(taskName, priority),
         m_dispatcherTask(dispatcherTask),
@@ -177,7 +179,7 @@ class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
 
   private:
     MessageDispatcherTask& m_dispatcherTask;
-    MessageSenderTask& m_senderTask;
+    MessageSenderTask<SerializerType>& m_senderTask;
     CommInterfaceGetter m_commInterfaceGetter;
     ILogger& m_logger;
 
@@ -191,7 +193,7 @@ class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
 
                     if (commInterface.isConnected()) {
 
-                        HiveMindHostSerializer serializer(commInterface);
+                        SerializerType serializer(commInterface);
                         HiveMindHostDeserializer deserializer(commInterface);
                         GreetHandler greetHandler(serializer, deserializer, BSPContainer::getBSP());
 
@@ -264,18 +266,18 @@ int main(int argc, char** argv) {
 
     static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskNormalPriority, NULL,
                                                     MessageHandlerContainer::getHostMsgQueue());
-    static MessageSenderTask s_hostMessageSender("host_send", gc_taskNormalPriority, NULL,
+    static MessageSenderTask<HiveMindHostSerializer> s_hostMessageSender("host_send", gc_taskNormalPriority, NULL,
                                                  MessageHandlerContainer::getHostMsgQueue());
     static MessageDispatcherTask s_remoteDispatchTask("remote_dispatch", gc_taskNormalPriority,
                                                       NULL,
                                                       MessageHandlerContainer::getRemoteMsgQueue());
-    static MessageSenderTask s_remoteMessageSender("remote_send", gc_taskNormalPriority, NULL,
+    static MessageSenderTask<HiveMindHostAccumulatorSerializer> s_remoteMessageSender("remote_send", gc_taskNormalPriority, NULL,
                                                    MessageHandlerContainer::getRemoteMsgQueue());
 
-    static CommMonitoringTask s_hostMonitorTask("host_monitor", gc_taskNormalPriority,
+    static CommMonitoringTask<HiveMindHostSerializer> s_hostMonitorTask("host_monitor", gc_taskNormalPriority,
                                                 s_hostDispatchTask, s_hostMessageSender,
                                                 BSPContainer::getHostCommInterface);
-    static CommMonitoringTask s_remoteMonitorTask("remote_monitor", gc_taskNormalPriority,
+    static CommMonitoringTask<HiveMindHostAccumulatorSerializer> s_remoteMonitorTask("remote_monitor", gc_taskNormalPriority,
                                                   s_remoteDispatchTask, s_remoteMessageSender,
                                                   BSPContainer::getRemoteCommInterface);
 
