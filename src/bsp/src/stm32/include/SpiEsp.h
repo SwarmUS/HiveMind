@@ -11,7 +11,7 @@
 #include <c-common/circular_buff.h>
 
 constexpr uint8_t CRC32_SIZE = sizeof(uint32_t);
-constexpr uint16_t ESP_SPI_MAX_MESSAGE_LENGTH = (2048u - CRC32_SIZE);
+constexpr uint16_t ESP_SPI_MAX_MESSAGE_LENGTH = (512U - CRC32_SIZE);
 
 class SpiEsp : public ICommInterface {
   public:
@@ -47,7 +47,7 @@ class SpiEsp : public ICommInterface {
         uint16_t m_payloadSize;
     } m_inboundMessage, m_outboundMessage;
 
-    std::array<uint8_t, ESP_SPI_MAX_MESSAGE_LENGTH> m_data;
+    std::array<uint8_t, 4*ESP_SPI_MAX_MESSAGE_LENGTH> m_data;
     CircularBuff m_circularBuf;
     TaskHandle_t m_receivingTaskHandle, m_sendingTaskHandle = nullptr;
     EspHeader::Header m_outboundHeader;
