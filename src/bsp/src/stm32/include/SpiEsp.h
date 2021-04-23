@@ -47,7 +47,7 @@ class SpiEsp : public ICommInterface {
         uint16_t m_payloadSize;
     } m_inboundMessage, m_outboundMessage;
 
-    std::array<uint8_t, 4*ESP_SPI_MAX_MESSAGE_LENGTH> m_data;
+    std::array<uint8_t, 4 * ESP_SPI_MAX_MESSAGE_LENGTH> m_data;
     CircularBuff m_circularBuf;
     TaskHandle_t m_receivingTaskHandle, m_sendingTaskHandle = nullptr;
     EspHeader::Header m_outboundHeader;

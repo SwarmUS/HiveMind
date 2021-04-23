@@ -120,7 +120,7 @@ class MessageDispatcherTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE>
     }
 };
 
-template<typename SerializerType>
+template <typename SerializerType>
 class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     MessageSenderTask(const char* taskName,
@@ -163,14 +163,14 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-template<typename SerializerType>
+template <typename SerializerType>
 class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
   public:
     CommMonitoringTask<SerializerType>(const char* taskName,
-                       UBaseType_t priority,
-                       MessageDispatcherTask& dispatcherTask,
-                       MessageSenderTask<SerializerType>& senderTask,
-                       CommInterfaceGetter commInterfaceGetter) :
+                                       UBaseType_t priority,
+                                       MessageDispatcherTask& dispatcherTask,
+                                       MessageSenderTask<SerializerType>& senderTask,
+                                       CommInterfaceGetter commInterfaceGetter) :
         AbstractTask(taskName, priority),
         m_dispatcherTask(dispatcherTask),
         m_senderTask(senderTask),
@@ -266,20 +266,20 @@ int main(int argc, char** argv) {
 
     static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskNormalPriority, NULL,
                                                     MessageHandlerContainer::getHostMsgQueue());
-    static MessageSenderTask<HiveMindHostSerializer> s_hostMessageSender("host_send", gc_taskNormalPriority, NULL,
-                                                 MessageHandlerContainer::getHostMsgQueue());
+    static MessageSenderTask<HiveMindHostSerializer> s_hostMessageSender(
+        "host_send", gc_taskNormalPriority, NULL, MessageHandlerContainer::getHostMsgQueue());
     static MessageDispatcherTask s_remoteDispatchTask("remote_dispatch", gc_taskNormalPriority,
                                                       NULL,
                                                       MessageHandlerContainer::getRemoteMsgQueue());
-    static MessageSenderTask<HiveMindHostAccumulatorSerializer> s_remoteMessageSender("remote_send", gc_taskNormalPriority, NULL,
-                                                   MessageHandlerContainer::getRemoteMsgQueue());
+    static MessageSenderTask<HiveMindHostAccumulatorSerializer> s_remoteMessageSender(
+        "remote_send", gc_taskNormalPriority, NULL, MessageHandlerContainer::getRemoteMsgQueue());
 
-    static CommMonitoringTask<HiveMindHostSerializer> s_hostMonitorTask("host_monitor", gc_taskNormalPriority,
-                                                s_hostDispatchTask, s_hostMessageSender,
-                                                BSPContainer::getHostCommInterface);
-    static CommMonitoringTask<HiveMindHostAccumulatorSerializer> s_remoteMonitorTask("remote_monitor", gc_taskNormalPriority,
-                                                  s_remoteDispatchTask, s_remoteMessageSender,
-                                                  BSPContainer::getRemoteCommInterface);
+    static CommMonitoringTask<HiveMindHostSerializer> s_hostMonitorTask(
+        "host_monitor", gc_taskNormalPriority, s_hostDispatchTask, s_hostMessageSender,
+        BSPContainer::getHostCommInterface);
+    static CommMonitoringTask<HiveMindHostAccumulatorSerializer> s_remoteMonitorTask(
+        "remote_monitor", gc_taskNormalPriority, s_remoteDispatchTask, s_remoteMessageSender,
+        BSPContainer::getRemoteCommInterface);
 
     s_bittybuzzTask.start();
     s_hardwareInterlocTask.start();
