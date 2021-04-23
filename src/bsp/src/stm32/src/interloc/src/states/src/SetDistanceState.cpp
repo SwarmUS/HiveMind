@@ -14,7 +14,8 @@ void SetDistanceState::process(InterlocStateHandler& context) {
                      distance.value());
 
         InterlocBSPContainer::getInterlocManager().updateDistance(
-            context.getBoardIdFromSlotId(context.getCurrentFrameId()), distance.value());
+            InterlocStateHandler::getBoardIdFromSlotId(context.getCurrentFrameId()),
+            distance.value());
 
         context.setState(InterlocStates::IDLE, InterlocEvent::GOOD_DISTANCE);
     } else {

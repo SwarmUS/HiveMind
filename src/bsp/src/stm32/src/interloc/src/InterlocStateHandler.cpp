@@ -80,5 +80,6 @@ uint64_t InterlocStateHandler::getPreviousFrameStartTs() const { return m_previo
 void InterlocStateHandler::setPreviousFrameStartTs(uint64_t timestamp) {
     m_previousFrameStartTs = timestamp;
 }
+
 uint16_t InterlocStateHandler::getSlotIdFromBoardId(uint16_t boardId) { return boardId; }
 uint16_t InterlocStateHandler::getBoardIdFromSlotId(uint16_t slotId) { return slotId; }
