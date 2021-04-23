@@ -131,12 +131,14 @@ It's possible to change the log level, check how to configure the build dependin
 #### STM32 Target
 CMake variables can be used to override certain default firmware settings.
 | Variable  | Default value   |
-| ---       | ---             | 
-| UUID      | 1 (0 is reserved for broadcast)|
+| ---       | ---             |
 | HOST_PORT | 5555            |
 | HOST_IP   | 192.168.1.101   |
 | LOG_LEVEL | Info            |
 | MAX_ROBOTS_IN_SWARM | 10            |
+
+The CMake variable `UUID_OVERRIDE` may also be used to change the UUID value currently saved in the
+non-volatile memory.
 
 #### ROS Target
 ROS launch parameters are used to configure variables.
