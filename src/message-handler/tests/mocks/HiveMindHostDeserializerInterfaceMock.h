@@ -4,7 +4,7 @@
 #include <gmock/gmock.h>
 #include <pheromones/IHiveMindHostDeserializer.h>
 
-class HiveMindHostDeserializerInterfaceMock final : public IHiveMindHostDeserializer {
+class HiveMindHostDeserializerInterfaceMock : public IHiveMindHostDeserializer {
   public:
     ~HiveMindHostDeserializerInterfaceMock() override = default;
 

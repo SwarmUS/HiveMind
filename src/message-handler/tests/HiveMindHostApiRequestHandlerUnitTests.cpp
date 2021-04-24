@@ -12,8 +12,9 @@ class HiveMindHostApiRequestHandlerFixture : public testing::Test {
     BSPInterfaceMock* m_bspMock;
     LoggerInterfaceMock* m_loggerInterfaceMock;
     HiveMindHostApiRequestHandler* m_hivemindApiReqHandler;
-    CircularQueueInterfaceMock<MessageDTO> m_hostQueueMock;
-    InterlocInterfaceMock m_interlocMock;
+    testing::StrictMock<CircularQueueInterfaceMock<MessageDTO>> m_hostQueueMock;
+    testing::StrictMock<CircularQueueInterfaceMock<MessageDTO>> m_remoteQueueMock;
+    testing::StrictMock<InterlocInterfaceMock> m_interlocMock;
 
     RequestDTO* m_request;
     MessageDTO* m_message;
@@ -26,7 +27,7 @@ class HiveMindHostApiRequestHandlerFixture : public testing::Test {
         m_bspMock = new BSPInterfaceMock(m_boardId);
         m_loggerInterfaceMock = new LoggerInterfaceMock();
         m_hivemindApiReqHandler = new HiveMindHostApiRequestHandler(
-            *m_bspMock, m_hostQueueMock, m_interlocMock, *m_loggerInterfaceMock);
+            *m_bspMock, m_hostQueueMock, m_remoteQueueMock, m_interlocMock, *m_loggerInterfaceMock);
 
         m_request = new RequestDTO(Request{});
         m_message = new MessageDTO(m_boardId, m_boardId, *m_request);
@@ -117,6 +118,24 @@ TEST_F(HiveMindHostApiRequestHandlerFixture,
 
     EXPECT_CALL(m_interlocMock, getPositionsTable).WillOnce(testing::ReturnRef(posTable));
     EXPECT_CALL(m_hostQueueMock, push(MessageGetNeighborsListResponseDTOMatcher(robotsId)))
+        .WillOnce(testing::Return(true));
+
+    // Then
+    bool ret = m_hivemindApiReqHandler->handleRequest(*m_message);
+
+    // Expect
+    EXPECT_TRUE(ret);
+}
+
+TEST_F(HiveMindHostApiRequestHandlerFixture,
+       HiveMindHostApiRequestHandler_handleRequest_agent_list) {
+    // Given
+    GetAgentsListRequestDTO areq;
+    HiveMindHostApiRequestDTO req(areq);
+    m_request->setRequest(req);
+    m_message->setMessage(*m_request);
+
+    EXPECT_CALL(m_remoteQueue, push(MessageGetNeighborsListResponseDTOMatcher(robotsId)))
         .WillOnce(testing::Return(true));
 
     // Then

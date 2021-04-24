@@ -4,7 +4,7 @@
 #include <bsp/IBSP.h>
 #include <gmock/gmock.h>
 
-class BSPInterfaceMock final : public IBSP {
+class BSPInterfaceMock : public IBSP {
   public:
     const uint16_t& m_boardId;
 

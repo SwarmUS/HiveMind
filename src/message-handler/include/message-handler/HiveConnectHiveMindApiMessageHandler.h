@@ -16,7 +16,7 @@ class HiveConnectHiveMindApiMessageHandler : public IHiveConnectHiveMindApiMessa
 
     ~HiveConnectHiveMindApiMessageHandler() override = default;
 
-    bool handleMessage(const HiveConnectHiveMindApiDTO& apiMessage) override;
+    bool handleMessage(const HiveConnectHiveMindApiDTO& message) override;
 
   private:
     const IBSP& m_bsp;

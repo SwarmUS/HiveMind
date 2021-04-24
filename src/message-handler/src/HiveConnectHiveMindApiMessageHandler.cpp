@@ -7,13 +7,18 @@ HiveConnectHiveMindApiMessageHandler::HiveConnectHiveMindApiMessageHandler(
     ILogger& logger) :
     m_bsp(bsp), m_hostQueue(hostQueue), m_remoteQueue(remoteQueue), m_logger(logger) {}
 
-bool HiveConnectHiveMindApiMessageHandlerhandleMessage(
-    const HiveConnectHiveMindApiDTO& apiMessage) {
+bool HiveConnectHiveMindApiMessageHandler::handleMessage(const HiveConnectHiveMindApiDTO& message) {
 
-    if (const auto* req = std::get_if<GetAgentsListRequestDTO>(&apiMessage.getMessage())) {
-        MessageDTO msgDTO(1, 1, apiMessage);
+    // TODO: chekc if we want to filter
+    if (const auto* req = std::get_if<GetAgentsListRequestDTO>(&message.getMessage())) {
+        MessageDTO msgDTO(1, 1, message);
+        m_remoteQueue.push(msgDTO);
     }
-    if (const auto* req = std::get_if<GetAgentsListResponseDTO>(&apiMessage.getMessage())) {
+    if (const auto* req = std::get_if<GetAgentsListResponseDTO>(&message.getMessage())) {
+        HiveMindHostApiResponseDTO apiResponse(*req);
+        ResponseDTO response(1, apiResponse);
+        MessageDTO msgDTO(1, 1, message);
+        m_hostQueue.push(msgDTO);
     }
     return false;
 }

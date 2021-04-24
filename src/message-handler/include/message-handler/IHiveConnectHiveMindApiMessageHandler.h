@@ -14,7 +14,7 @@ class IHiveConnectHiveMindApiMessageHandler {
      *@brief handles HiveConnectHiveMindApi
      *@param message the message dto to handle
      *@return true if the operation was successfull, false if not*/
-    virtual bool handleMessage(const HiveConnectHiveMindApiDTO& apiMessage) = 0;
+    virtual bool handleMessage(const HiveConnectHiveMindApiDTO& message) = 0;
 };
 
 #endif // __IHIVECONNECTHIVEMINDAPIMESSAGEHANDLER_H_

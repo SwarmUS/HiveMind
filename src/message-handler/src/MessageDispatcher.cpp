@@ -2,21 +2,24 @@
 #include "message.pb.h"
 #include <variant>
 
-MessageDispatcher::MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
-                                     ICircularQueue<MessageDTO>& hostOutputQ,
-                                     ICircularQueue<MessageDTO>& remoteOutputQ,
-                                     ICircularQueue<MessageDTO>& interlocQ,
-                                     IHiveMindHostDeserializer& deserializer,
-                                     IHiveMindHostApiRequestHandler& hivemindApiReqHandler,
-                                     IGreetSender& greetSender,
-                                     const IBSP& bsp,
-                                     ILogger& logger) :
+MessageDispatcher::MessageDispatcher(
+    ICircularQueue<MessageDTO>& buzzOutputQ,
+    ICircularQueue<MessageDTO>& hostOutputQ,
+    ICircularQueue<MessageDTO>& remoteOutputQ,
+    ICircularQueue<MessageDTO>& interlocQ,
+    IHiveMindHostDeserializer& deserializer,
+    IHiveMindHostApiRequestHandler& hivemindApiReqHandler,
+    IHiveConnectHiveMindApiMessageHandler& hiveconnectApiMessageHandler,
+    IGreetSender& greetSender,
+    const IBSP& bsp,
+    ILogger& logger) :
     m_buzzOutputQueue(buzzOutputQ),
     m_hostOutputQueue(hostOutputQ),
     m_remoteOutputQueue(remoteOutputQ),
     m_interlocQueue(interlocQ),
     m_deserializer(deserializer),
     m_hivemindApiReqHandler(hivemindApiReqHandler),
+    m_hiveconnectApiMessageHandler(hiveconnectApiMessageHandler),
     m_greetSender(greetSender),
     m_bsp(bsp),
     m_logger(logger) {}
@@ -107,7 +110,8 @@ bool MessageDispatcher::dispatchResponse(const MessageDTO& message, const Respon
 
 bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
     const std::variant<std::monostate, RequestDTO, ResponseDTO, GreetingDTO, BuzzMessageDTO,
-                       NetworkApiDTO, InterlocAPIDTO>& variantMsg = message.getMessage();
+                       NetworkApiDTO, InterlocAPIDTO, HiveConnectHiveMindApiDTO>& variantMsg =
+        message.getMessage();
     if (const auto* request = std::get_if<RequestDTO>(&variantMsg)) {
         return dispatchRequest(message, *request);
     }
@@ -119,6 +123,9 @@ bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
     }
     if (std::holds_alternative<InterlocAPIDTO>(variantMsg)) {
         return m_interlocQueue.push(message);
+    }
+    if (const auto* msg = std::get_if<HiveConnectHiveMindApiDTO>(&variantMsg)) {
+        return m_hiveconnectApiMessageHandler.handleMessage(*msg);
     }
 
     m_logger.log(LogLevel::Warn, "Unknown message, could not dispatch, idx %d", variantMsg.index());

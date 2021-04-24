@@ -4,7 +4,7 @@
 #include <bsp/IInterlocManager.h>
 #include <gmock/gmock.h>
 
-class InterlocManagerInterfaceMock final : public IInterlocManager {
+class InterlocManagerInterfaceMock : public IInterlocManager {
   public:
     void startInterloc() override{};
 
