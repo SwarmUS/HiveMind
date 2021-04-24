@@ -15,20 +15,18 @@ function init() {
 
 function step() {
   if(id != 1) {
-    if(counter > 5){
+    if(counter > 100){
       var neighbor = neighbors.get(1);
-      if(neighbor != nil){
-
+      if(is_table(neighbor)){
         log("distance: ", neighbor.distance, "azimuth: ", neighbor.azimuth, ", id: ", id);
         var cos_val = math.cos(neighbor.azimuth);
         var sin_val = math.sin(neighbor.azimuth);
 
-        var x_val = cos_val * neighbor.distance;
-        var y_val = sin_val * neighbor.distance;
+        var x_val = cos_val * 1;
+        var y_val = sin_val * 1;
         log("x: ", x_val, "y: ", y_val);
 
         call_host_function(id, "moveBy", {.0 = x_val, .1 = y_val});
-        log("Follow leader");
       }
       else {
         log("Neighbor not found, id: ", id);

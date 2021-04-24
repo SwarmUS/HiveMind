@@ -66,7 +66,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
 
             if (!m_bittybuzzVm.step()) {
                 m_logger.log(LogLevel::Error, "BBZVM failed to step. state: %d err: %d",
-                             m_bittybuzzVm.getSate(), m_bittybuzzVm.getError());
+                             m_bittybuzzVm.getState(), m_bittybuzzVm.getError());
             }
             Task::delay(100);
         }
