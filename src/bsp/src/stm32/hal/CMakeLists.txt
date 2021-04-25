@@ -2,10 +2,10 @@ set(LIB_NAME swarmus-hivemind-hal)
 set(LIB_ALIAS "SwarmUS::HiveMind::HAL")
 set(LIB_HAL_LINKER_ALIAS "SwarmUS::HiveMind::HAL::Linker::STM32F4")
 
-
 set(LIB_SOURCES
     src/hal.c
     src/usb.c
+    src/hal_flash.c
 )
 
 set(LIB_HEADERS
@@ -15,7 +15,8 @@ set(LIB_HEADERS
     include/hal/hal_spi.h
     include/hal/esp_spi.h
     include/hal/hal_gpio.h
-    include/hal/usb.h)
+    include/hal/usb.h
+    include/hal/hal_flash.h)
 
 # Sources that needs to be global on the project
 # Ex: interrupts, syscalls, callbacks
