@@ -1,13 +1,13 @@
 #ifndef __PERSISTEDSTORAGEMANAGER_H__
 #define __PERSISTEDSTORAGEMANAGER_H__
 
-#include "PersitedStorage.h"
+#include "PersistantStorage.h"
 #include <logger/ILogger.h>
 
-class PersistedStorageManager {
+class PersistantStorageManager {
   public:
-    PersistedStorageManager(ILogger& logger);
-    virtual ~PersistedStorageManager() = default;
+    PersistantStorageManager(ILogger& logger);
+    virtual ~PersistantStorageManager() = default;
 
     /**
      * @brief Loads all storage from flash into RAM

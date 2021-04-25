@@ -1,4 +1,4 @@
-#include "PersistedStorageManager.h"
+#include "PersistantStorageManager.h"
 #include <DefaultSettings.h>
 #include <Task.h>
 #include <cstdio>
@@ -7,13 +7,13 @@
 
 #define DEFAULT_UUID 1
 
-PersistedStorageManager::PersistedStorageManager(ILogger& logger) : m_logger(logger) {}
+PersistantStorageManager::PersistantStorageManager(ILogger& logger) : m_logger(logger) {}
 
-void PersistedStorageManager::loadFromFlash() {
+void PersistantStorageManager::loadFromFlash() {
     std::memcpy(&m_storage, reinterpret_cast<const void*>(USER_DATA_FLASH_START_ADDRESS),
                 sizeof(m_storage));
 
-    if (UUID_OVERRIDE != UINT16_MAX) {
+    if (UUID_OVERRIDE != 0) {
         setUUID(UUID_OVERRIDE);
     }
 
@@ -23,9 +23,9 @@ void PersistedStorageManager::loadFromFlash() {
     }
 }
 
-uint16_t PersistedStorageManager::getUUID() const { return m_storage.m_uuid; }
+uint16_t PersistantStorageManager::getUUID() const { return m_storage.m_uuid; }
 
-bool PersistedStorageManager::setUUID(uint16_t uuid) {
+bool PersistantStorageManager::setUUID(uint16_t uuid) {
     m_storage.m_uuid = uuid;
     bool ret = saveToFlash();
 
@@ -36,7 +36,7 @@ bool PersistedStorageManager::setUUID(uint16_t uuid) {
     return ret;
 }
 
-bool PersistedStorageManager::saveToFlash() {
+bool PersistantStorageManager::saveToFlash() {
     if (!Flash_eraseSector(USER_DATA_FLASH_SECTOR)) {
         return false;
     }

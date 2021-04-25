@@ -1,7 +1,7 @@
 #ifndef __BSP_H_
 #define __BSP_H_
 
-#include "PersistedStorageManager.h"
+#include "PersistantStorageManager.h"
 #include "bsp/IBSP.h"
 #include <BaseTask.h>
 #include <FreeRTOSConfig.h>
@@ -18,7 +18,7 @@ class BSP : public IBSP {
     uint32_t generateRandomNumber() override;
 
   private:
-    PersistedStorageManager m_storage;
+    PersistantStorageManager m_storage;
 };
 
 #endif // __BSP_H_
