@@ -38,14 +38,14 @@ class InterlocManager : public IInterlocManager {
     positionUpdateCallbackFunction_t m_positionUpdateCallback;
     void* m_positionUpdateContext;
 
-    static tf2::Transform computeRelativeTransform(
-        const geometry_msgs::Pose& currentAgentPoseWorldFrame,
-        const geometry_msgs::TransformStamped& currentAgentHbToRobotTf,
-        const geometry_msgs::Pose& distantAgentPoseWorldFrame,
-        const geometry_msgs::TransformStamped& distantAgentHbToRobotTf);
-
+    static tf2::Stamped<tf2::Transform> getHiveboardTf(
+        const geometry_msgs::Pose& poseWorldFrame,
+        const geometry_msgs::TransformStamped& hiveboardToRobotTf);
     static double getDistance(const tf2::Transform& transform);
     static double getRelativeOrientation(const tf2::Transform& transform);
+    static double getAngleOfArrival(
+        const tf2::Transform& agentToAgentTransform,
+        const tf2::Stamped<tf2::Transform>& currentAgentHiveboardWorldFrame);
 
     void gazeboUpdateCallback(const gazebo_msgs::ModelStates& msg);
     std::optional<geometry_msgs::TransformStamped> getHiveBoardTransform(

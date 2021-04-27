@@ -27,7 +27,7 @@ geometry_msgs::TransformStamped convertPoseToTransformStamped(const geometry_msg
     return transformStamped;
 }
 
-tf2::Stamped<tf2::Transform> getHiveboardTf(
+tf2::Stamped<tf2::Transform> InterlocManager::getHiveboardTf(
     const geometry_msgs::Pose& poseWorldFrame,
     const geometry_msgs::TransformStamped& hiveboardToRobotTf) {
     geometry_msgs::TransformStamped robotToWorldTf = convertPoseToTransformStamped(poseWorldFrame);
@@ -55,16 +55,24 @@ double InterlocManager::getRelativeOrientation(const tf2::Transform& transform) 
     return yaw;
 }
 
-double getAngleOfArrival(const tf2::Transform& agentToAgentTransform,
-                         const tf2::Stamped<tf2::Transform>& currentAgentHiveboardWorldFrame) {
+double InterlocManager::getAngleOfArrival(
+    const tf2::Transform& agentToAgentTransform,
+    const tf2::Stamped<tf2::Transform>& currentAgentHiveboardWorldFrame) {
     double currentHbRoll;
     double currentHbPitch;
     double currentHbYaw;
     tf2::Matrix3x3(currentAgentHiveboardWorldFrame.getRotation())
         .getRPY(currentHbRoll, currentHbPitch, currentHbYaw);
 
-    double vectorAngle =
-        atan(agentToAgentTransform.getOrigin().y() / agentToAgentTransform.getOrigin().x());
+    double vectorAngle = 0;
+
+    // Prevent division by zero in atan
+    if (agentToAgentTransform.getOrigin().x() == 0) {
+        vectorAngle = agentToAgentTransform.getOrigin().y() > 0 ? M_PI_2 : -M_PI_2;
+    } else {
+        vectorAngle =
+            atan(agentToAgentTransform.getOrigin().y() / agentToAgentTransform.getOrigin().x());
+    }
 
     double angleOfArrival = -(currentHbYaw + vectorAngle);
 
@@ -154,21 +162,25 @@ void InterlocManager::gazeboUpdateCallback(const gazebo_msgs::ModelStates& msg) 
 
         double distance = getDistance(relTransform);
         double orientation = getRelativeOrientation(relTransform) * 180 / M_PI;
-        double aoa = getAngleOfArrival(relTransform, currentAgentTf) * 180 / M_PI;
+        double angle = getAngleOfArrival(relTransform, currentAgentTf) * 180 / M_PI;
 
-        (void)aoa;
+        if (distance == 0) {
+            printf("HERE");
+        }
 
         if (m_positionUpdateCallback != nullptr) {
             InterlocUpdate update;
             update.m_robotId = agentId;
             update.m_distance = distance;
             update.m_relativeOrientation = orientation;
+            update.m_angleOfArrival = angle;
             update.m_isInLineOfSight = true; // TODO: maybe add a way to get LOS
 
             m_positionUpdateCallback(m_positionUpdateContext, update);
 
-            m_logger.log(LogLevel::Debug, "Updating position of agent %d. Dist: %f, Orientation %f",
-                         agentId, distance, orientation);
+            m_logger.log(LogLevel::Debug,
+                         "Updating position of agent %d. Dist: %f, Orientation %f, Angle %f",
+                         agentId, distance, orientation, angle);
         }
     }
 
