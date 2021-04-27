@@ -27,33 +27,18 @@ geometry_msgs::TransformStamped convertPoseToTransformStamped(const geometry_msg
     return transformStamped;
 }
 
-tf2::Transform InterlocManager::computeRelativeTransform(
-    const geometry_msgs::Pose& currentAgentPoseWorldFrame,
-    const geometry_msgs::TransformStamped& currentAgentHbToRobotTf,
-    const geometry_msgs::Pose& distantAgentPoseWorldFrame,
-    const geometry_msgs::TransformStamped& distantAgentHbToRobotTf) {
+tf2::Stamped<tf2::Transform> getHiveboardTf(
+    const geometry_msgs::Pose& poseWorldFrame,
+    const geometry_msgs::TransformStamped& hiveboardToRobotTf) {
+    geometry_msgs::TransformStamped robotToWorldTf = convertPoseToTransformStamped(poseWorldFrame);
 
-    geometry_msgs::TransformStamped currentAgentRobotToWorldTf =
-        convertPoseToTransformStamped(currentAgentPoseWorldFrame);
-    geometry_msgs::TransformStamped distantAgentRobotToWorldTf =
-        convertPoseToTransformStamped(distantAgentPoseWorldFrame);
+    geometry_msgs::TransformStamped hiveboardPoseWorldFrame;
+    tf2::doTransform(hiveboardToRobotTf, hiveboardPoseWorldFrame, robotToWorldTf);
 
-    geometry_msgs::TransformStamped currentAgentHbPoseWorldFrame;
-    geometry_msgs::TransformStamped distantAgentHbPoseWorldFrame;
+    tf2::Stamped<tf2::Transform> hiveboardTf;
+    tf2::fromMsg(hiveboardPoseWorldFrame, hiveboardTf);
 
-    tf2::doTransform(currentAgentHbToRobotTf, currentAgentHbPoseWorldFrame,
-                     currentAgentRobotToWorldTf);
-    tf2::doTransform(distantAgentHbToRobotTf, distantAgentHbPoseWorldFrame,
-                     distantAgentRobotToWorldTf);
-
-    tf2::Stamped<tf2::Transform> currentAgentTf;
-    tf2::Stamped<tf2::Transform> distantAgentTf;
-
-    tf2::fromMsg(currentAgentHbPoseWorldFrame, currentAgentTf);
-    tf2::fromMsg(distantAgentHbPoseWorldFrame, distantAgentTf);
-
-    // Equivalent of currentAgentPose - distantAgentPose
-    return distantAgentTf.inverseTimes(currentAgentTf);
+    return hiveboardTf;
 }
 
 double InterlocManager::getDistance(const tf2::Transform& transform) {
@@ -61,13 +46,46 @@ double InterlocManager::getDistance(const tf2::Transform& transform) {
                 pow(transform.getOrigin().z(), 2));
 }
 
-double InterlocManager::getOrientation(const tf2::Transform& transform) {
+double InterlocManager::getRelativeOrientation(const tf2::Transform& transform) {
     double roll;
     double pitch;
     double yaw;
     tf2::Matrix3x3(transform.getRotation()).getRPY(roll, pitch, yaw);
 
     return yaw;
+}
+
+double getAngleOfArrival(const tf2::Transform& agentToAgentTransform,
+                         const tf2::Stamped<tf2::Transform>& currentAgentHiveboardWorldFrame) {
+    double currentHbRoll;
+    double currentHbPitch;
+    double currentHbYaw;
+    tf2::Matrix3x3(currentAgentHiveboardWorldFrame.getRotation())
+        .getRPY(currentHbRoll, currentHbPitch, currentHbYaw);
+
+    double vectorAngle =
+        atan(agentToAgentTransform.getOrigin().y() / agentToAgentTransform.getOrigin().x());
+
+    double angleOfArrival = -(currentHbYaw + vectorAngle);
+
+    if (currentHbYaw > 0) {
+        angleOfArrival += M_PI;
+    }
+
+    if (agentToAgentTransform.getOrigin().y() < 0) {
+        angleOfArrival += M_PI;
+    }
+
+    // Cap between -pi and +pi
+    if (angleOfArrival < -M_PI) {
+        angleOfArrival += 2 * M_PI;
+    }
+
+    if (angleOfArrival > M_PI) {
+        angleOfArrival -= 2 * M_PI;
+    }
+
+    return angleOfArrival;
 }
 
 std::optional<geometry_msgs::TransformStamped> InterlocManager::getHiveBoardTransform(
@@ -127,12 +145,18 @@ void InterlocManager::gazeboUpdateCallback(const gazebo_msgs::ModelStates& msg) 
             continue;
         }
 
-        tf2::Transform relTransform = computeRelativeTransform(
-            msg.pose[idxLookup[currentAgentId]], m_baseLinkToHiveBoardTransforms[currentAgentId],
-            msg.pose[index], m_baseLinkToHiveBoardTransforms[agentId]);
+        tf2::Stamped<tf2::Transform> currentAgentTf = getHiveboardTf(
+            msg.pose[idxLookup[currentAgentId]], m_baseLinkToHiveBoardTransforms[currentAgentId]);
+        tf2::Stamped<tf2::Transform> distantAgentTf =
+            getHiveboardTf(msg.pose[index], m_baseLinkToHiveBoardTransforms[agentId]);
+
+        tf2::Transform relTransform = currentAgentTf.inverseTimes(distantAgentTf);
 
         double distance = getDistance(relTransform);
-        double orientation = getOrientation(relTransform) * 180 / M_PI;
+        double orientation = getRelativeOrientation(relTransform) * 180 / M_PI;
+        double aoa = getAngleOfArrival(relTransform, currentAgentTf) * 180 / M_PI;
+
+        (void)aoa;
 
         if (m_positionUpdateCallback != nullptr) {
             InterlocUpdate update;
