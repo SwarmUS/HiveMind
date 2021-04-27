@@ -164,10 +164,6 @@ void InterlocManager::gazeboUpdateCallback(const gazebo_msgs::ModelStates& msg) 
         double orientation = getRelativeOrientation(relTransform) * 180 / M_PI;
         double angle = getAngleOfArrival(relTransform, currentAgentTf) * 180 / M_PI;
 
-        if (distance == 0) {
-            printf("HERE");
-        }
-
         if (m_positionUpdateCallback != nullptr) {
             InterlocUpdate update;
             update.m_robotId = agentId;
