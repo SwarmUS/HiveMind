@@ -266,17 +266,17 @@ int main(int argc, char** argv) {
 
     static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskNormalPriority, NULL,
                                                     MessageHandlerContainer::getHostMsgQueue());
-    static MessageSenderTask s_hostMessageSender(
-        "host_send", gc_taskNormalPriority, NULL, MessageHandlerContainer::getHostMsgQueue());
+    static MessageSenderTask s_hostMessageSender("host_send", gc_taskNormalPriority, NULL,
+                                                 MessageHandlerContainer::getHostMsgQueue());
     static MessageDispatcherTask s_remoteDispatchTask("remote_dispatch", gc_taskNormalPriority,
                                                       NULL,
                                                       MessageHandlerContainer::getRemoteMsgQueue());
     static MessageSenderTask<HiveMindHostAccumulatorSerializer> s_remoteMessageSender(
         "remote_send", gc_taskNormalPriority, NULL, MessageHandlerContainer::getRemoteMsgQueue());
 
-    static CommMonitoringTask s_hostMonitorTask(
-        "host_monitor", gc_taskNormalPriority, s_hostDispatchTask, s_hostMessageSender,
-        BSPContainer::getHostCommInterface);
+    static CommMonitoringTask s_hostMonitorTask("host_monitor", gc_taskNormalPriority,
+                                                s_hostDispatchTask, s_hostMessageSender,
+                                                BSPContainer::getHostCommInterface);
     static CommMonitoringTask<HiveMindHostAccumulatorSerializer> s_remoteMonitorTask(
         "remote_monitor", gc_taskNormalPriority, s_remoteDispatchTask, s_remoteMessageSender,
         BSPContainer::getRemoteCommInterface);
