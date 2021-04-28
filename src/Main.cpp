@@ -21,6 +21,7 @@
 #include <pheromones/HiveMindHostDeserializer.h>
 #include <pheromones/HiveMindHostSerializer.h>
 
+#include <memory>
 #include <pheromones/HiveMindHostAccumulatorSerializer.h>
 
 constexpr uint16_t gc_taskNormalPriority = tskIDLE_PRIORITY + 1;
@@ -120,7 +121,6 @@ class MessageDispatcherTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE>
     }
 };
 
-template <typename SerializerType = HiveMindHostSerializer>
 class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     MessageSenderTask(const char* taskName,
@@ -136,17 +136,18 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     ~MessageSenderTask() override = default;
 
     void setStream(ICommInterface* stream) { m_stream = stream; }
+    void setSerializer(IHiveMindHostSerializer* serializer) { m_serializer = serializer; }
 
   private:
     const char* m_taskName;
     ICommInterface* m_stream;
     INotificationQueue<MessageDTO>& m_streamQueue;
     ILogger& m_logger;
+    IHiveMindHostSerializer* m_serializer = nullptr;
 
     void task() override {
-        if (m_stream != NULL) {
-            SerializerType serializer(*m_stream);
-            MessageSender messageSender(m_streamQueue, serializer, BSPContainer::getBSP(),
+        if (m_stream != NULL && m_serializer != NULL) {
+            MessageSender messageSender(m_streamQueue, *m_serializer, BSPContainer::getBSP(),
                                         m_logger);
             while (true) {
                 if (m_stream->isConnected()) {
@@ -169,19 +170,22 @@ class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
     CommMonitoringTask<SerializerType>(const char* taskName,
                                        UBaseType_t priority,
                                        MessageDispatcherTask& dispatcherTask,
-                                       MessageSenderTask<SerializerType>& senderTask,
+                                       MessageSenderTask& senderTask,
                                        CommInterfaceGetter commInterfaceGetter) :
         AbstractTask(taskName, priority),
         m_dispatcherTask(dispatcherTask),
         m_senderTask(senderTask),
         m_commInterfaceGetter(commInterfaceGetter),
-        m_logger(LoggerContainer::getLogger()) {}
+        m_logger(LoggerContainer::getLogger()) {
+        m_serializer = std::make_shared<SerializerType>(m_commInterfaceGetter().value());
+    }
 
   private:
     MessageDispatcherTask& m_dispatcherTask;
-    MessageSenderTask<SerializerType>& m_senderTask;
+    MessageSenderTask& m_senderTask;
     CommInterfaceGetter m_commInterfaceGetter;
     ILogger& m_logger;
+    std::shared_ptr<IHiveMindHostSerializer> m_serializer;
 
     void task() override {
         while (true) {
@@ -193,9 +197,10 @@ class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
 
                     if (commInterface.isConnected()) {
 
-                        SerializerType serializer(commInterface);
                         HiveMindHostDeserializer deserializer(commInterface);
-                        GreetHandler greetHandler(serializer, deserializer, BSPContainer::getBSP());
+                        GreetHandler greetHandler(*m_serializer, deserializer,
+                                                  BSPContainer::getBSP());
+                        m_senderTask.setSerializer(m_serializer.get());
 
                         // Handshake
                         if (greetHandler.greet()) {
@@ -271,8 +276,8 @@ int main(int argc, char** argv) {
     static MessageDispatcherTask s_remoteDispatchTask("remote_dispatch", gc_taskNormalPriority,
                                                       NULL,
                                                       MessageHandlerContainer::getRemoteMsgQueue());
-    static MessageSenderTask<HiveMindHostAccumulatorSerializer> s_remoteMessageSender(
-        "remote_send", gc_taskNormalPriority, NULL, MessageHandlerContainer::getRemoteMsgQueue());
+    static MessageSenderTask s_remoteMessageSender("remote_send", gc_taskNormalPriority, NULL,
+                                                   MessageHandlerContainer::getRemoteMsgQueue());
 
     static CommMonitoringTask s_hostMonitorTask("host_monitor", gc_taskNormalPriority,
                                                 s_hostDispatchTask, s_hostMessageSender,
