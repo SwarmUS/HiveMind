@@ -11,14 +11,18 @@ bool HiveConnectHiveMindApiMessageHandler::handleMessage(const HiveConnectHiveMi
 
     // TODO: chekc if we want to filter
     if (const auto* req = std::get_if<GetAgentsListRequestDTO>(&message.getMessage())) {
+        m_logger.log(
+            LogLevel::Warn,
+            "Received Request in HiveConnectMessage handler, should only receive response");
+        // TODO: What am I supposed to do here?
         MessageDTO msgDTO(1, 1, message);
         m_remoteQueue.push(msgDTO);
     }
     if (const auto* req = std::get_if<GetAgentsListResponseDTO>(&message.getMessage())) {
         HiveMindHostApiResponseDTO apiResponse(*req);
-        ResponseDTO response(1, apiResponse);
+        ResponseDTO response(message.getMessageId(), apiResponse);
         MessageDTO msgDTO(1, 1, message);
-        m_hostQueue.push(msgDTO);
+        return m_hostQueue.push(msgDTO);
     }
     return false;
 }
