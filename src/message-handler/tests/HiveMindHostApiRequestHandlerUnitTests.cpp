@@ -135,8 +135,7 @@ TEST_F(HiveMindHostApiRequestHandlerFixture,
     m_request->setRequest(req);
     m_message->setMessage(*m_request);
 
-    EXPECT_CALL(m_remoteQueue, push(MessageGetNeighborsListResponseDTOMatcher(robotsId)))
-        .WillOnce(testing::Return(true));
+    EXPECT_CALL(m_remoteQueueMock, push(testing::_)).WillOnce(testing::Return(true));
 
     // Then
     bool ret = m_hivemindApiReqHandler->handleRequest(*m_message);

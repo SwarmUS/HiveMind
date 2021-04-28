@@ -210,7 +210,8 @@ bool BittyBuzzMessageHandler::handleResponse(const ResponseDTO& response) {
 
 bool BittyBuzzMessageHandler::handleMessage(const MessageDTO& message) {
     const std::variant<std::monostate, RequestDTO, ResponseDTO, GreetingDTO, BuzzMessageDTO,
-                       NetworkApiDTO, InterlocAPIDTO>& variantMsg = message.getMessage();
+                       NetworkApiDTO, InterlocAPIDTO, HiveConnectHiveMindApiDTO>& variantMsg =
+        message.getMessage();
 
     // Handling request
     if (const auto* request = std::get_if<RequestDTO>(&variantMsg)) {

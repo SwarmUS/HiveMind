@@ -6,6 +6,7 @@ set(TEST_SOURCES
     GreetHandlerUnitTests.cpp
     GreetSenderUnitTests.cpp
     HiveMindHostApiRequestHandlerUnitTests.cpp
+    HiveConnectHiveMindApiMessageHandlerUnitTests.cpp
 )
 
 set(TEST_HEADERS

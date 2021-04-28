@@ -1,27 +1,22 @@
 #include "HiveConnectHiveMindApiMessageHandler.h"
 
 HiveConnectHiveMindApiMessageHandler::HiveConnectHiveMindApiMessageHandler(
-    const IBSP& bsp,
-    ICircularQueue<MessageDTO>& hostQueue,
-    ICircularQueue<MessageDTO>& remoteQueue,
-    ILogger& logger) :
-    m_bsp(bsp), m_hostQueue(hostQueue), m_remoteQueue(remoteQueue), m_logger(logger) {}
+    const IBSP& bsp, ICircularQueue<MessageDTO>& hostQueue, ILogger& logger) :
+    m_bsp(bsp), m_hostQueue(hostQueue), m_logger(logger) {}
 
 bool HiveConnectHiveMindApiMessageHandler::handleMessage(const HiveConnectHiveMindApiDTO& message) {
 
-    // TODO: chekc if we want to filter
-    if (const auto* req = std::get_if<GetAgentsListRequestDTO>(&message.getMessage())) {
+    // TODO: what happens if comes from a remote?
+    if (std::holds_alternative<GetAgentsListRequestDTO>(message.getMessage())) {
         m_logger.log(
             LogLevel::Warn,
             "Received Request in HiveConnectMessage handler, should only receive response");
-        // TODO: What am I supposed to do here?
-        MessageDTO msgDTO(1, 1, message);
-        m_remoteQueue.push(msgDTO);
+        return false;
     }
     if (const auto* req = std::get_if<GetAgentsListResponseDTO>(&message.getMessage())) {
         HiveMindHostApiResponseDTO apiResponse(*req);
         ResponseDTO response(message.getMessageId(), apiResponse);
-        MessageDTO msgDTO(1, 1, message);
+        MessageDTO msgDTO(m_bsp.getUUId(), m_bsp.getUUId(), message);
         return m_hostQueue.push(msgDTO);
     }
     return false;

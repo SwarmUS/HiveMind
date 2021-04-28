@@ -11,7 +11,6 @@ class HiveConnectHiveMindApiMessageHandler : public IHiveConnectHiveMindApiMessa
   public:
     HiveConnectHiveMindApiMessageHandler(const IBSP& bsp,
                                          ICircularQueue<MessageDTO>& hostQueue,
-                                         ICircularQueue<MessageDTO>& remoteQueue,
                                          ILogger& logger);
 
     ~HiveConnectHiveMindApiMessageHandler() override = default;
@@ -21,7 +20,6 @@ class HiveConnectHiveMindApiMessageHandler : public IHiveConnectHiveMindApiMessa
   private:
     const IBSP& m_bsp;
     ICircularQueue<MessageDTO>& m_hostQueue;
-    ICircularQueue<MessageDTO>& m_remoteQueue;
     ILogger& m_logger;
 };
 

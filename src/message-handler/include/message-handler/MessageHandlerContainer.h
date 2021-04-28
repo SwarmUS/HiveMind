@@ -1,6 +1,7 @@
 #ifndef __MESSAGEHANDLERCONTAINER_H_
 #define __MESSAGEHANDLERCONTAINER_H_
 
+#include "HiveConnectHiveMindApiMessageHandler.h"
 #include "HiveMindHostApiRequestHandler.h"
 #include "MessageDispatcher.h"
 #include "MessageSender.h"
@@ -15,14 +16,21 @@ namespace MessageHandlerContainer {
     /**
      *@brief create a message handler
      *@return A new message handler */
+    HiveConnectHiveMindApiMessageHandler createHiveConnectHiveMindApiMessageHandler();
+
+    /**
+     *@brief create a request handler
+     *@return A new request handler */
     HiveMindHostApiRequestHandler createHiveMindHostApiRequestHandler();
 
     /**
      *@brief create a message dispatcher
      *@return A new message dispatcher */
-    MessageDispatcher createMessageDispatcher(IHiveMindHostDeserializer& deserializer,
-                                              IHiveMindHostApiRequestHandler& hivemindApiReqHandler,
-                                              IGreetSender& greetSender);
+    MessageDispatcher createMessageDispatcher(
+        IHiveMindHostDeserializer& deserializer,
+        IHiveMindHostApiRequestHandler& hivemindApiReqHandler,
+        IHiveConnectHiveMindApiMessageHandler& hiveconnectApiMessageHandler,
+        IGreetSender& greetSender);
 
     /**
      *@brief get the buzz message queue

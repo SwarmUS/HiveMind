@@ -609,7 +609,8 @@ TEST_F(MessageDispatcherFixture,
 TEST_F(MessageDispatcherFixture,
        MessageDispatcher_deserializeAndDispatch_HiveConnectHiveMindApi_valid) {
     // Given
-    m_message = MessageDTO(m_srcUuid, m_uuid, HiveConnectHiveMindApiDTO(GetAgentsListRequestDTO()));
+    m_message =
+        MessageDTO(m_srcUuid, m_uuid, HiveConnectHiveMindApiDTO(24, GetAgentsListRequestDTO()));
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
     EXPECT_CALL(m_hiveconnectHivemindHandler, handleMessage).WillOnce(testing::Return(true));
@@ -624,7 +625,8 @@ TEST_F(MessageDispatcherFixture,
 TEST_F(MessageDispatcherFixture,
        MessageDispatcher_deserializeAndDispatch_invalidInterlocAPIMessage_invalid) {
     // Given
-    m_message = MessageDTO(m_srcUuid, m_uuid, HiveConnectHiveMindApiDTO(GetAgentsListRequestDTO()));
+    m_message =
+        MessageDTO(m_srcUuid, m_uuid, HiveConnectHiveMindApiDTO(24, GetAgentsListRequestDTO()));
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
     EXPECT_CALL(m_hiveconnectHivemindHandler, handleMessage).WillOnce(testing::Return(false));
