@@ -136,14 +136,16 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     ~MessageSenderTask() override = default;
 
     void setStream(ICommInterface* stream) { m_stream = stream; }
-    void setSerializer(IHiveMindHostSerializer* serializer) { m_serializer = serializer; }
+    void setSerializer(std::shared_ptr<IHiveMindHostSerializer>& serializer) {
+        m_serializer = serializer;
+    }
 
   private:
     const char* m_taskName;
     ICommInterface* m_stream;
     INotificationQueue<MessageDTO>& m_streamQueue;
     ILogger& m_logger;
-    IHiveMindHostSerializer* m_serializer = nullptr;
+    std::shared_ptr<IHiveMindHostSerializer> m_serializer = nullptr;
 
     void task() override {
         if (m_stream != NULL && m_serializer != NULL) {
@@ -200,7 +202,7 @@ class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
                         HiveMindHostDeserializer deserializer(commInterface);
                         GreetHandler greetHandler(*m_serializer, deserializer,
                                                   BSPContainer::getBSP());
-                        m_senderTask.setSerializer(m_serializer.get());
+                        m_senderTask.setSerializer(m_serializer);
 
                         // Handshake
                         if (greetHandler.greet()) {
