@@ -18,5 +18,8 @@ void SendPollFromSyncState::process(InterlocStateHandler& context) {
     m_decawaves[DecawavePort::A].getTxTimestamp(&context.getTWR().m_pollTxTs);
     context.setPreviousFrameStartTs(context.getTWR().m_pollTxTs);
 
+    // set the RxTs values for the wait_response state
+    context.getTimeManager().computeResponseRxTs_new(context.getPreviousFrameStartTs());
+
     context.setState(InterlocStates::WAIT_RESPONSE, InterlocEvent::NO_EVENT);
 }

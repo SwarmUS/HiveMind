@@ -10,8 +10,10 @@ void WaitResponseState::process(InterlocStateHandler& context) {
     // begin to receive for a small time window corresponding to the TWRResponse Rx slot on the
     // remote agents
     m_decawaves[DecawavePort::A].receiveDelayed(
-        m_rxFrame, InterlocTimeManager::getResponseTimeout(),
-        context.getTimeManager().getRespRxStartTime(context.getTWR().m_pollTxTs, nbTries));
+        m_rxFrame,
+        InterlocTimeManager::getTimeoutUs_new(
+            context.getTimeManager().m_responseAirTimeWithPreamble),
+        context.getTimeManager().m_responseRxTs_new[nbTries]);
 
     if (m_rxFrame.m_status == UWBRxStatus::FINISHED && DecawaveUtils::isFrameResponse(m_rxFrame)) {
         m_decawaves[DecawavePort::A].getTxTimestamp(&context.getTWR().m_pollTxTs);
@@ -31,6 +33,8 @@ void WaitResponseState::process(InterlocStateHandler& context) {
         context.setState(InterlocStates::WAIT_RESPONSE, InterlocEvent::RX_RESP_GOOD);
 
     } else if (m_rxFrame.m_status == UWBRxStatus::TIMEOUT) {
+        volatile uint64_t currentTime = m_decawaves[DecawavePort::A].getSysTime();
+        (void)currentTime;
         if (nbTries >= MAX_INTERLOC_SUBFRAMES - 1) {
             if (nbRespReceived > 0) {
                 // final Rx timeout

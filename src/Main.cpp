@@ -274,11 +274,11 @@ int main(int argc, char** argv) {
                                                   s_remoteDispatchTask, s_remoteMessageSender,
                                                   BSPContainer::getRemoteCommInterface);
 
-    s_bittybuzzTask.start();
+    //    s_bittybuzzTask.start();
     s_hardwareInterlocTask.start();
     s_softwareInterlocTask.start();
-    s_hostMonitorTask.start();
-    s_remoteMonitorTask.start();
+    //    s_hostMonitorTask.start();
+    //    s_remoteMonitorTask.start();
 
     Task::startScheduler();
 

@@ -191,7 +191,8 @@ bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
     memcpy(m_txBuffer.data(), buf, length);
 
     // Send two bytes more than requested because of the DW auto-generated CRC16
-    dwt_writetxdata(length + UWB_CRC_LENGTH, m_txBuffer.data(), 0);
+    //    dwt_writetxdata(length + UWB_CRC_LENGTH, m_txBuffer.data(), 0);
+    dwt_writetxdata(length + UWB_CRC_LENGTH, buf, 0);
     dwt_writetxfctrl(length + UWB_CRC_LENGTH, 0, 0);
 
     int txStatus = dwt_starttx(flags);
@@ -200,14 +201,13 @@ bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
         // wait for the end of the transmission
         m_trxTaskHandle = xTaskGetCurrentTaskHandle();
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    } else {
+        volatile uint64_t currentTime = getSysTime();
+        (void)currentTime;
+        //        // TODO: For debugging. Remove and handle correctly in real application
+        //        while (true) {
+        //        }
     }
-    //    else {
-    //        volatile uint64_t currentTime = getSysTime();
-    //        (void)currentTime;
-    //        // TODO: For debugging. Remove and handle correctly in real application
-    //        while (true) {
-    //        }
-    //    }
 
     return true;
 }

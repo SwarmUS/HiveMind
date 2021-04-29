@@ -20,11 +20,13 @@
 #define FINAL_AIR_TIME_WITH_PREAMBLE_US 400U
 
 // new guards
-#define POLL_PROCESSING_GUARD 100U
-#define RESPONSE_PROCESSING_GUARD 100U
+#define POLL_PROCESSING_GUARD 400U
+#define RESPONSE_PROCESSING_GUARD 360U
+#define RESPONSE_PROCESSING_GUARD_GUARD 50U
+#define RESPONSE_TO_FINAL_GUARD 600U
 #define FINAL_PROCESSING_GUARD 100U
 #define RX_BEFORE_TX_GUARD_US 10U
-#define TIMEOUT_GUARD_US 50U
+#define TIMEOUT_GUARD_US 100U
 #define DEAD_TIME 200U
 
 class InterlocTimeManager {
@@ -50,39 +52,40 @@ class InterlocTimeManager {
     static uint16_t getReadWriteSPITimeUs(uint16_t bitLength);
     static uint16_t getAirTimeUs(uint16_t bitLength);
     static uint16_t computeAirTimeWithPreambleUs(uint16_t bitLength);
-    static constexpr uint16_t getPreambleAirTimeUs();
+    static uint16_t getPreambleAirTimeUs();
     void computeResponseRxTs_new(uint64_t startOfFrameTs);
     uint64_t getResponseTxTs_new(uint64_t startOfFrame) const;
     static uint16_t getTimeoutUs_new(uint16_t msgAirTimeWithPreambleUs);
     uint64_t getFinalRxTs_new(uint64_t startOfFrameTs) const;
     uint64_t getFinalTxTs_new(uint64_t startOfFrameTs) const;
-    uint64_t getSupposedNextFrameStart_new(uint64_t startOfFrameTs, uint16_t finalTimeoutUs) const;
+    uint64_t getSupposedNextFrameStart_new(uint64_t startOfFrameTs) const;
     uint64_t getPollRxStartTs_new(uint64_t startOfFrameTs) const;
+    uint64_t getPollTxStartTs_new(uint64_t startOfFrameTs) const;
+    uint16_t getSyncTimeoutUs_new() const;
+    uint16_t getSuperFrameLengthUs_new() const;
+
+    // fixed length constants to be accessed by states
+    uint16_t m_pollAirTimeWithPreamble;
+    uint16_t m_responseAirTimeWithPreamble;
+    uint16_t m_finalAirTimeWithPreamble;
+    // variable length guards
+    uint16_t m_pollToFirstResponseGuardUs;
+
+    uint64_t m_respRxStartOffset[10];
+    // addressable timestamps
+    volatile uint64_t m_responseRxTs_new[10];
 
   private:
     IBSP& m_bsp;
-
     uint16_t m_numSlots;
-    uint16_t m_slotId;
 
+    uint16_t m_slotId;
     // TODO set in function of m_numSlots;
-    uint64_t m_RespRxStartOffset[10];
     uint64_t m_slotToSlotOffsetDTU;
     uint64_t m_pollRxToResponseTxOffsetDTU;
     uint64_t m_pollTxToFinalTxOffsetDTU;
+
     uint64_t m_pollRxToFinalRxOffsetDTU;
-
-    // fixed length constants
-    // air time
-    const uint16_t m_pollAirTimeWithPreamble;
-    const uint16_t m_responseAirTimeWithPreamble;
-    const uint16_t m_finalAirTimeWithPreamble;
-
-    // variable length guards
-    const uint16_t m_pollToFirstResponseGuardUs;
-
-    // addressable timestamps
-    volatile uint64_t m_responseRxTs_new[10];
 
     void updateTimings();
 };
