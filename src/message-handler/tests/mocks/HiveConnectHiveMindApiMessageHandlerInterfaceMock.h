@@ -10,7 +10,10 @@ class HiveConnectHiveMindApiMessageHandlerInterfaceMock
   public:
     ~HiveConnectHiveMindApiMessageHandlerInterfaceMock() override = default;
 
-    MOCK_METHOD(bool, handleMessage, (const HiveConnectHiveMindApiDTO& message), (override));
+    MOCK_METHOD(bool,
+                handleMessage,
+                (uint16_t sourceId, uint16_t destId, const HiveConnectHiveMindApiDTO& message),
+                (override));
 };
 
 #endif // __HIVECONNECTHIVEMINDAPIMESSAGEHANDLERINTERFACEMOCK_H_

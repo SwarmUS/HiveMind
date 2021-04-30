@@ -1,12 +1,13 @@
 #include "HiveConnectHiveMindApiMessageHandler.h"
 
 HiveConnectHiveMindApiMessageHandler::HiveConnectHiveMindApiMessageHandler(
-    const IBSP& bsp, ICircularQueue<MessageDTO>& hostQueue, ILogger& logger) :
-    m_bsp(bsp), m_hostQueue(hostQueue), m_logger(logger) {}
+    ICircularQueue<MessageDTO>& hostQueue, ILogger& logger) :
+    m_hostQueue(hostQueue), m_logger(logger) {}
 
-bool HiveConnectHiveMindApiMessageHandler::handleMessage(const HiveConnectHiveMindApiDTO& message) {
+bool HiveConnectHiveMindApiMessageHandler::handleMessage(uint16_t sourceId,
+                                                         uint16_t destId,
+                                                         const HiveConnectHiveMindApiDTO& message) {
 
-    // TODO: what happens if comes from a remote?
     if (std::holds_alternative<GetAgentsListRequestDTO>(message.getMessage())) {
         m_logger.log(
             LogLevel::Warn,
@@ -16,7 +17,7 @@ bool HiveConnectHiveMindApiMessageHandler::handleMessage(const HiveConnectHiveMi
     if (const auto* req = std::get_if<GetAgentsListResponseDTO>(&message.getMessage())) {
         HiveMindHostApiResponseDTO apiResponse(*req);
         ResponseDTO response(message.getMessageId(), apiResponse);
-        MessageDTO msgDTO(m_bsp.getUUId(), m_bsp.getUUId(), message);
+        MessageDTO msgDTO(sourceId, destId, message);
         return m_hostQueue.push(msgDTO);
     }
     return false;

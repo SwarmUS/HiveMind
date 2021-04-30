@@ -125,7 +125,8 @@ bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
         return m_interlocQueue.push(message);
     }
     if (const auto* msg = std::get_if<HiveConnectHiveMindApiDTO>(&variantMsg)) {
-        return m_hiveconnectApiMessageHandler.handleMessage(*msg);
+        return m_hiveconnectApiMessageHandler.handleMessage(message.getSourceId(),
+                                                            message.getDestinationId(), *msg);
     }
 
     m_logger.log(LogLevel::Warn, "Unknown message, could not dispatch, idx %d", variantMsg.index());

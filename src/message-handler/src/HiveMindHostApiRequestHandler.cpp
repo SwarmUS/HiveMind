@@ -70,7 +70,6 @@ bool HiveMindHostApiRequestHandler::handleHiveMindHostApiRequest(
     }
 
     if (const auto* req = std::get_if<GetAgentsListRequestDTO>(&request.getRequest())) {
-        // TODO: What happens if comes from a remote?
         MessageDTO msg(message.getSourceId(), message.getDestinationId(),
                        HiveConnectHiveMindApiDTO(requestId, *req));
         return m_remoteQueue.push(message);

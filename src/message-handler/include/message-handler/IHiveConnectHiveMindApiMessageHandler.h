@@ -12,9 +12,13 @@ class IHiveConnectHiveMindApiMessageHandler {
 
     /**
      *@brief handles HiveConnectHiveMindApi
+     *@param sourceId the source id of the message
+     *@param destId the source id of the message
      *@param message the message dto to handle
      *@return true if the operation was successfull, false if not*/
-    virtual bool handleMessage(const HiveConnectHiveMindApiDTO& message) = 0;
+    virtual bool handleMessage(uint16_t sourceId,
+                               uint16_t destId,
+                               const HiveConnectHiveMindApiDTO& message) = 0;
 };
 
 #endif // __IHIVECONNECTHIVEMINDAPIMESSAGEHANDLER_H_

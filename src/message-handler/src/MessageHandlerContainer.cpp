@@ -11,8 +11,7 @@ constexpr uint16_t gc_queueMaxSize = 8;
 
 HiveConnectHiveMindApiMessageHandler MessageHandlerContainer::
     createHiveConnectHiveMindApiMessageHandler() {
-    return HiveConnectHiveMindApiMessageHandler(BSPContainer::getBSP(), getHostMsgQueue(),
-                                                LoggerContainer::getLogger());
+    return HiveConnectHiveMindApiMessageHandler(getHostMsgQueue(), LoggerContainer::getLogger());
 }
 
 HiveMindHostApiRequestHandler MessageHandlerContainer::createHiveMindHostApiRequestHandler() {
