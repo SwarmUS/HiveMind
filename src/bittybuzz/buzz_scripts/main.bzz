@@ -1,38 +1,16 @@
-function move_by_buzz(arg_float1, arg_float2){
-  log("Move by buzz called");
-  call_host_function(id, "moveBy", {.0 = arg_float1, .1 = arg_float2});
-}
-
 function init() {
-  var args_description = {
-    .0 = {.arg_float1=0.0},
-    .1 = {.arg_float2=0.0}
-  };
-
-  register_closure("moveByBuzz", move_by_buzz, args_description, nil);
   counter = 0;
+  stig = stigmergy.create(1);
+  if(id == 2){
+    stig.put("leader", 2);
+  }
 }
 
 function step() {
-  if(id != 1) {
-    if(counter > 100){
-      var neighbor = neighbors.get(1);
-      if(is_table(neighbor)){
-        log("distance: ", neighbor.distance, "azimuth: ", neighbor.azimuth, ", id: ", id);
-        var cos_val = math.cos(neighbor.azimuth);
-        var sin_val = math.sin(neighbor.azimuth);
-
-        var x_val = cos_val * 1;
-        var y_val = sin_val * 1;
-        log("x: ", x_val, "y: ", y_val);
-
-        call_host_function(id, "moveBy", {.0 = x_val, .1 = y_val});
-      }
-      else {
-        log("Neighbor not found, id: ", id);
-      }
-      counter = 0;
-    }
+  if(counter == 100 and id == 2) {
+    var data = stig.get("leader");
+    log("Current data in stig: ", data, " size: ", stig.size());
+    counter = 0;
   }
   counter = counter + 1;
 }

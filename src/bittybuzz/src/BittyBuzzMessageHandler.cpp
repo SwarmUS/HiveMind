@@ -182,7 +182,6 @@ bool BittyBuzzMessageHandler::handleGenericResponse(const GenericResponseDTO& re
 }
 
 bool BittyBuzzMessageHandler::handleBuzzMessage(const BuzzMessageDTO& msg) {
-    (void)msg;
     bbzmsg_payload_t payload;
     payload.buffer = const_cast<uint8_t*>(msg.getPayload().data());
     payload.datastart = 0;
