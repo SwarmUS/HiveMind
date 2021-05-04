@@ -1,8 +1,7 @@
 #include "deca_device_api.h"
 #include "deca_port.h"
-#include "hivemind_hal.h"
 #include "main.h"
-#include "stm32f4xx_hal_def.h"
+
 
 /**
  * @brief Low-level SPI function used by Decawave driver to write bytes to the device

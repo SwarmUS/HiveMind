@@ -14,7 +14,10 @@ option(DISABLE_EXTERNAL_WARNINGS "Disables warnings from exernal libs (gtest, fr
 option(ENABLE_TARGET_IPERF_SERVER "Starts an iperf server on the target device for network monitoring" OFF)
 
 # Init compile variable
+set(COMPILE_STM32 0)
 set(COMPILE_STM32_F429ZI 0)
+set(COMPILE_STM32_H735ZG 0)
+
 
 # Define project
 project(hive_mind CXX C ASM)

@@ -13,7 +13,7 @@ target_link_libraries(${LIB_NAME}
     PRIVATE
         SwarmUS::HiveMind::HAL::Decawave::Driver
         SwarmUS::HiveMind::HAL::Decawave::Platform
-        SwarmUS::HiveMind::HAL::STM32F4
+        SwarmUS::HiveMind::HAL::STM32
 )
 
 get_target_property(DECA_DRIVER_INCLUDE SwarmUS::HiveMind::HAL::Decawave::Driver INTERFACE_INCLUDE_DIRECTORIES)

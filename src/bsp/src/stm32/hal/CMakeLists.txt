@@ -1,6 +1,6 @@
 set(LIB_NAME swarmus-hivemind-hal)
 set(LIB_ALIAS "SwarmUS::HiveMind::HAL")
-set(LIB_HAL_LINKER_ALIAS "SwarmUS::HiveMind::HAL::Linker::STM32F4")
+set(LIB_HAL_LINKER_ALIAS "SwarmUS::HiveMind::HAL::Linker::STM32")
 
 set(LIB_SOURCES
     src/hal.c
@@ -30,20 +30,20 @@ set(GLOBAL_SOURCES
 )
 
 # Creating the interface library
-add_library(stm32f4-linker INTERFACE)
-add_library(${LIB_BSP_LINKER_ALIAS} ALIAS stm32f4-linker) # Provide alias for linker options
+add_library(stm32-linker INTERFACE)
+add_library(${LIB_BSP_LINKER_ALIAS} ALIAS stm32-linker) # Provide alias for linker options
 
-target_sources(stm32f4-linker
+target_sources(stm32-linker
     INTERFACE
         ${GLOBAL_SOURCES})
 
-target_link_libraries(stm32f4-linker
+target_link_libraries(stm32-linker
     INTERFACE
-        SwarmUS::HiveMind::HAL::Linker::STM32F4
+        SwarmUS::HiveMind::HAL::Linker::STM32
         SwarmUS::HiveMind::HAL::Decawave
         SwarmUS::Propolis::C::Common)
 
-target_include_directories(stm32f4-linker
+target_include_directories(stm32-linker
     INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
@@ -58,10 +58,10 @@ add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
 target_link_libraries(${LIB_NAME}
     PUBLIC
-        SwarmUS::HiveMind::HAL::STM32F4
+        SwarmUS::HiveMind::HAL::STM32
         SwarmUS::HiveMind::HAL::Decawave
     PRIVATE
-        stm32f4-linker
+        stm32-linker
 )
 
 target_include_directories(${LIB_NAME} 
@@ -75,8 +75,10 @@ target_include_directories(${LIB_NAME}
 add_subdirectory(decawave)
 if (${COMPILE_STM32_F429ZI})
     add_subdirectory(stm32f429zi)
+elseif (${COMPILE_STM32_H735ZG})
+    add_subdirectory(stm32h735zg)
 else()
-    message(FATAL_ERROR "The current board is not supported")
+    message(FATAL_ERROR "STM PORT: The current board is not supported" )
 endif()
 
 

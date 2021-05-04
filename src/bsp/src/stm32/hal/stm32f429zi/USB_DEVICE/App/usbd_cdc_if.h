@@ -66,7 +66,7 @@ extern "C" {
  */
 
 /* USER CODE BEGIN EXPORTED_TYPES */
-extern bool hUsbDeviceVCPOpened;
+
 /* USER CODE END EXPORTED_TYPES */
 
 /**
@@ -95,7 +95,7 @@ extern bool hUsbDeviceVCPOpened;
 extern USBD_CDC_ItfTypeDef USBD_Interface_fops_FS;
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
-
+extern bool hUsbDeviceVCPOpened;
 /* USER CODE END EXPORTED_VARIABLES */
 
 /**

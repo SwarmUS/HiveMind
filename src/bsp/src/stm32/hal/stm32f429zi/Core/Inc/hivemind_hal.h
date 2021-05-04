@@ -14,6 +14,7 @@ extern "C" {
 #include "stm32f4xx_hal_conf.h"
 #include "stm32f4xx_hal_flash.h"
 #include "stm32f4xx_hal_flash_ex.h"
+#include "stm32f4xx_hal_def.h"
 #include "usart.h"
 
 #define HUART_PRINT (&huart3)

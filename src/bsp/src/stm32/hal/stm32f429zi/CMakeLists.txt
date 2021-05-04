@@ -1,5 +1,5 @@
 set(LIB_NAME "swarmus-hivemind-hal-stm32f429zi")
-set(LIB_ALIAS "SwarmUS::HiveMind::HAL::STM32F4")
+set(LIB_ALIAS "SwarmUS::HiveMind::HAL::STM32")
 
 
 set(LIB_SOURCES
@@ -71,6 +71,7 @@ target_include_directories(stm32f429zi-linker
 
 target_link_libraries(stm32f429zi-linker
     INTERFACE
+        STM32::F4
         CMSIS::STM32::F429ZI
         HAL::STM32::F4
         HAL::STM32::F4::TIM
