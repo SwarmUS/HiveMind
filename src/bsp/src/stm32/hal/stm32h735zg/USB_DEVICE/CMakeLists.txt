@@ -31,10 +31,10 @@ target_include_directories(${LIB_NAME}
 target_link_libraries(${LIB_NAME}
     PRIVATE
         CMSIS::STM32::H735ZG
-        HAL::STM32::H7_M7
-        HAL::STM32::H7_M7::PCDEx
-        HAL::STM32::H7_M7::LL_USB
-        CMSIS::STM32::H7_M7::USB
+        HAL::STM32::H7
+        HAL::STM32::H7::PCDEx
+        HAL::STM32::H7::LL_USB
+        CMSIS::STM32::H7::USB
     )
 
 # Removing warnings and compile options

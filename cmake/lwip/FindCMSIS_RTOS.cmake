@@ -76,7 +76,7 @@ foreach(COMP ${CMSIS_RTOS_FIND_COMPONENTS})
             PUBLIC
                 SwarmUS::HiveMind::OS
             PRIVATE
-                CMSIS::STM32::F429ZI
+                CMSIS::STM32::${FAMILY}${CORE_C}
             )
     endif()
 

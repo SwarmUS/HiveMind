@@ -69,16 +69,16 @@ target_include_directories(stm32h735zg-linker
 target_link_libraries(stm32h735zg-linker
     INTERFACE
         CMSIS::STM32::H735ZG
-        HAL::STM32::H7_M7
-        HAL::STM32::H7_M7::TIM
-        HAL::STM32::H7_M7::TIMEx
-        HAL::STM32::H7_M7::RNG
+        HAL::STM32::H7
+        HAL::STM32::H7::TIM
+        HAL::STM32::H7::TIMEx
+        HAL::STM32::H7::RNG
         STM32::NoSys
         SwarmUS::HiveMind::LWIP
-        CMSIS::STM32::H7_M7::RTOS_V2
-        HAL::STM32::H7_M7::SPI
-        HAL::STM32::H7_M7::FLASH
-        HAL::STM32::H7_M7::FLASHEx
+        CMSIS::STM32::H7::RTOS_V2
+        HAL::STM32::H7::SPI
+        HAL::STM32::H7::FLASH
+        HAL::STM32::H7::FLASHEx
         )
 
 # Actual bsp library
@@ -105,7 +105,7 @@ target_include_directories(${LIB_NAME}
 target_link_libraries(${LIB_NAME}
     PUBLIC 
         CMSIS::STM32::H735ZG
-        HAL::STM32::H7_M7::CORTEX
+        HAL::STM32::H7::CORTEX
         STM32::NoSys
         SwarmUS::Propolis::C::Common
         SwarmUS::HiveMind::HAL::STM32H7::USB
@@ -114,14 +114,14 @@ target_link_libraries(${LIB_NAME}
         stm32h735zg-linker
 
         # Drivers
-        HAL::STM32::H7_M7::RCC
-        HAL::STM32::H7_M7::GPIO
-        HAL::STM32::H7_M7::UART
-        HAL::STM32::H7_M7::DMA
-        HAL::STM32::H7_M7::CRC
-        HAL::STM32::H7_M7::SPI
+        HAL::STM32::H7::RCC
+        HAL::STM32::H7::GPIO
+        HAL::STM32::H7::UART
+        HAL::STM32::H7::DMA
+        HAL::STM32::H7::CRC
+        HAL::STM32::H7::SPI
         SwarmUS::HiveMind::LWIP
-        CMSIS::STM32::H7_M7::RTOS_V2
+        CMSIS::STM32::H7::RTOS_V2
 )
 
 add_subdirectory(LWIP)

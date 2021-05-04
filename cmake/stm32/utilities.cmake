@@ -151,4 +151,3 @@ function(stm32_fetch_hal)
         set(STM32_HAL_${FAMILY}_PATH ${${HAL_NAME_L}_SOURCE_DIR} PARENT_SCOPE)
     endforeach()
 endfunction()
-
