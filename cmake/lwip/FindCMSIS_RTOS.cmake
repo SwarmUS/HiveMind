@@ -66,7 +66,6 @@ foreach(COMP ${CMSIS_RTOS_FIND_COMPONENTS})
         add_library(${LIB_NAME_RTOS} STATIC "${CMSIS_${FAMILY}${CORE_U}_CMSIS_RTOS2_PATH}/cmsis_os2.c")
         add_library(${LIB_ALIAS_RTOS} ALIAS ${LIB_NAME_RTOS})
 
-        message("HEELO TEHEEEEEEEERE CMSIS::STM32::${CMAKE_MATCH_1}::${CMAKE_MATCH_2}::${CMAKE_MATCH_1}")
         target_include_directories(${LIB_NAME_RTOS} SYSTEM PUBLIC "${CMSIS_${FAMILY}${CORE_U}_CMSIS_RTOS2_PATH}")
         target_link_libraries(${LIB_NAME_RTOS}
             PUBLIC
