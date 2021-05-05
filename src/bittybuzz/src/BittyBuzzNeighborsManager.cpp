@@ -20,7 +20,7 @@ void BittyBuzzNeighborsManager::updateNeighbors() {
                 neighbor.robot = robotId.value();
                 neighbor.azimuth = bbzfloat_fromfloat(pos.m_relativeOrientation);
                 neighbor.distance = bbzfloat_fromfloat(pos.m_distance);
-                neighbor.elevation = bbzfloat_fromint(0);
+                neighbor.elevation = bbzfloat_fromfloat(pos.m_angle);
                 bbzneighbors_add(&neighbor);
             }
         }

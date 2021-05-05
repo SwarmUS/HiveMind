@@ -2,7 +2,6 @@
 #include <Task.h>
 #include <bittybuzz/BittyBuzzContainer.h>
 #include <bittybuzz/BittyBuzzFactory.h>
-#include <bittybuzz/BittyBuzzMessageHandler.h>
 #include <bittybuzz/BittyBuzzSystem.h>
 #include <bittybuzz/BittyBuzzVm.h>
 #include <bsp/BSPContainer.h>
@@ -10,7 +9,6 @@
 #include <cstdlib>
 #include <interloc/IInterloc.h>
 #include <interloc/InterlocContainer.h>
-#include <interloc/InterlocMessageHandler.h>
 #include <logger/Logger.h>
 #include <logger/LoggerContainer.h>
 #include <message-handler/GreetHandler.h>
@@ -18,11 +16,9 @@
 #include <message-handler/MessageDispatcher.h>
 #include <message-handler/MessageHandlerContainer.h>
 #include <message-handler/MessageSender.h>
+#include <pheromones/HiveMindHostAccumulatorSerializer.h>
 #include <pheromones/HiveMindHostDeserializer.h>
 #include <pheromones/HiveMindHostSerializer.h>
-
-#include <memory>
-#include <pheromones/HiveMindHostAccumulatorSerializer.h>
 
 constexpr uint16_t gc_taskNormalPriority = tskIDLE_PRIORITY + 1;
 constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 30; // Higher priority then LwIP
@@ -136,16 +132,14 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     ~MessageSenderTask() override = default;
 
     void setStream(ICommInterface* stream) { m_stream = stream; }
-    void setSerializer(std::shared_ptr<IHiveMindHostSerializer>& serializer) {
-        m_serializer = serializer;
-    }
+    void setSerializer(IHiveMindHostSerializer* serializer) { m_serializer = serializer; }
 
   private:
     const char* m_taskName;
     ICommInterface* m_stream;
     INotificationQueue<MessageDTO>& m_streamQueue;
     ILogger& m_logger;
-    std::shared_ptr<IHiveMindHostSerializer> m_serializer = nullptr;
+    IHiveMindHostSerializer* m_serializer = NULL;
 
     void task() override {
         if (m_stream != NULL && m_serializer != NULL) {
@@ -175,19 +169,18 @@ class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
                                        MessageSenderTask& senderTask,
                                        CommInterfaceGetter commInterfaceGetter) :
         AbstractTask(taskName, priority),
+        m_taskName(taskName),
         m_dispatcherTask(dispatcherTask),
         m_senderTask(senderTask),
         m_commInterfaceGetter(commInterfaceGetter),
-        m_logger(LoggerContainer::getLogger()) {
-        m_serializer = std::make_shared<SerializerType>(m_commInterfaceGetter().value());
-    }
+        m_logger(LoggerContainer::getLogger()) {}
 
   private:
+    const char* m_taskName;
     MessageDispatcherTask& m_dispatcherTask;
     MessageSenderTask& m_senderTask;
     CommInterfaceGetter m_commInterfaceGetter;
     ILogger& m_logger;
-    std::shared_ptr<IHiveMindHostSerializer> m_serializer;
 
     void task() override {
         while (true) {
@@ -200,18 +193,22 @@ class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
                     if (commInterface.isConnected()) {
 
                         HiveMindHostDeserializer deserializer(commInterface);
-                        GreetHandler greetHandler(*m_serializer, deserializer,
-                                                  BSPContainer::getBSP());
-                        m_senderTask.setSerializer(m_serializer);
+                        SerializerType serializer(commInterface);
+                        GreetHandler greetHandler(serializer, deserializer, BSPContainer::getBSP());
+                        m_senderTask.setSerializer(&serializer);
 
                         // Handshake
                         if (greetHandler.greet()) {
-                            m_logger.log(LogLevel::Info, "Greet succeeded");
+                            m_logger.log(LogLevel::Info, "Greet succeeded in %s", m_taskName);
                             // Restart the tasks with the new streams
                             m_dispatcherTask.setStream(&commInterface);
                             m_senderTask.setStream(&commInterface);
                             m_dispatcherTask.start();
                             m_senderTask.start();
+
+                            while (m_dispatcherTask.isRunning() || m_senderTask.isRunning()) {
+                                Task::delay(1000);
+                            }
                         }
                     }
                 }
@@ -302,6 +299,7 @@ int main(int argc, char** argv) {
                                                     MessageHandlerContainer::getHostMsgQueue());
     static MessageSenderTask s_hostMessageSender("host_send", gc_taskNormalPriority, NULL,
                                                  MessageHandlerContainer::getHostMsgQueue());
+
     static MessageDispatcherTask s_remoteDispatchTask("remote_dispatch", gc_taskNormalPriority,
                                                       NULL,
                                                       MessageHandlerContainer::getRemoteMsgQueue());
