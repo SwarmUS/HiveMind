@@ -48,6 +48,10 @@ find_package(HAL COMPONENTS
             STM32H735ZG_M7
             REQUIRED)
 
+find_package(BSP COMPONENTS 
+            STM32H735ZG_M7
+            REQUIRED)
+
 # Creating the interface library
 add_library(stm32h735zg-linker INTERFACE)
 add_library(${LIB_HAL_LINKER_ALIAS} ALIAS stm32h735zg-linker) # Provide alias for linker options
@@ -69,16 +73,17 @@ target_include_directories(stm32h735zg-linker
 target_link_libraries(stm32h735zg-linker
     INTERFACE
         CMSIS::STM32::H735ZG::M7
+        BSP::STM32::H7::M7::LAN8742
         HAL::STM32::H7::M7
         HAL::STM32::H7::M7::TIM
         HAL::STM32::H7::M7::TIMEx
         HAL::STM32::H7::M7::RNG
-        STM32::NoSys
-        SwarmUS::HiveMind::LWIP
-        CMSIS::STM32::H7::M7::RTOS_V2
         HAL::STM32::H7::M7::SPI
         HAL::STM32::H7::M7::FLASH
         HAL::STM32::H7::M7::FLASHEx
+        STM32::NoSys
+        SwarmUS::HiveMind::LWIP
+        CMSIS::STM32::H7::M7::RTOS_V2
         )
 
 # Actual bsp library
