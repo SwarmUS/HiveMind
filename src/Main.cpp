@@ -193,7 +193,7 @@ class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
                     if (commInterface.isConnected()) {
 
                         HiveMindHostDeserializer deserializer(commInterface);
-                        HiveMindHostSerializer serializer(commInterface);
+                        SerializerType serializer(commInterface);
                         GreetHandler greetHandler(serializer, deserializer, BSPContainer::getBSP());
                         m_senderTask.setSerializer(&serializer);
 
