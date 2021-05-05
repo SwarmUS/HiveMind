@@ -43,9 +43,7 @@ class InterlocManager : public IInterlocManager {
         const geometry_msgs::TransformStamped& hiveboardToRobotTf);
     static double getDistance(const tf2::Transform& transform);
     static double getRelativeOrientation(const tf2::Transform& transform);
-    static double getAngleOfArrival(
-        const tf2::Transform& agentToAgentTransform,
-        const tf2::Stamped<tf2::Transform>& currentAgentHiveboardWorldFrame);
+    static double getAngleOfArrival(const tf2::Transform& agentToAgentTransform);
 
     void gazeboUpdateCallback(const gazebo_msgs::ModelStates& msg);
     std::optional<geometry_msgs::TransformStamped> getHiveBoardTransform(

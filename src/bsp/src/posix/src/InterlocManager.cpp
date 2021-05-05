@@ -55,45 +55,8 @@ double InterlocManager::getRelativeOrientation(const tf2::Transform& transform) 
     return yaw;
 }
 
-double InterlocManager::getAngleOfArrival(
-    const tf2::Transform& agentToAgentTransform,
-    const tf2::Stamped<tf2::Transform>& currentAgentHiveboardWorldFrame) {
-    double currentHbRoll;
-    double currentHbPitch;
-    double currentHbYaw;
-    tf2::Matrix3x3(currentAgentHiveboardWorldFrame.getRotation())
-        .getRPY(currentHbRoll, currentHbPitch, currentHbYaw);
-
-    double vectorAngle = 0;
-
-    // Prevent division by zero in atan
-    if (agentToAgentTransform.getOrigin().x() == 0) {
-        vectorAngle = agentToAgentTransform.getOrigin().y() > 0 ? M_PI_2 : -M_PI_2;
-    } else {
-        vectorAngle =
-            atan(agentToAgentTransform.getOrigin().y() / agentToAgentTransform.getOrigin().x());
-    }
-
-    double angleOfArrival = -(currentHbYaw + vectorAngle);
-
-    if (currentHbYaw > 0) {
-        angleOfArrival += M_PI;
-    }
-
-    if (agentToAgentTransform.getOrigin().y() < 0) {
-        angleOfArrival += M_PI;
-    }
-
-    // Cap between -pi and +pi
-    if (angleOfArrival < -M_PI) {
-        angleOfArrival += 2 * M_PI;
-    }
-
-    if (angleOfArrival > M_PI) {
-        angleOfArrival -= 2 * M_PI;
-    }
-
-    return angleOfArrival;
+double InterlocManager::getAngleOfArrival(const tf2::Transform& agentToAgentTransform) {
+    return atan2(agentToAgentTransform.getOrigin().y(), agentToAgentTransform.getOrigin().x());
 }
 
 std::optional<geometry_msgs::TransformStamped> InterlocManager::getHiveBoardTransform(
@@ -162,7 +125,7 @@ void InterlocManager::gazeboUpdateCallback(const gazebo_msgs::ModelStates& msg) 
 
         double distance = getDistance(relTransform);
         double orientation = getRelativeOrientation(relTransform) * 180 / M_PI;
-        double angle = getAngleOfArrival(relTransform, currentAgentTf) * 180 / M_PI;
+        double angle = getAngleOfArrival(relTransform) * 180 / M_PI;
 
         if (m_positionUpdateCallback != nullptr) {
             InterlocUpdate update;
