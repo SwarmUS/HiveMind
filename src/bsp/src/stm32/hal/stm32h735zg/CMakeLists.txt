@@ -41,17 +41,17 @@ stm32_fetch_hal(H7)
 stm32_fetch_cube(H7)
 
 find_package(CMSIS COMPONENTS
-            STM32H735ZG
+            STM32H735ZG_M7
             REQUIRED)
 
 find_package(HAL COMPONENTS 
-            STM32H735ZG
+            STM32H735ZG_M7
             REQUIRED)
 
 # Creating the interface library
 add_library(stm32h735zg-linker INTERFACE)
 add_library(${LIB_HAL_LINKER_ALIAS} ALIAS stm32h735zg-linker) # Provide alias for linker options
-set_target_properties(CMSIS::STM32::H735ZG PROPERTIES IMPORTED_GLOBAL TRUE)
+set_target_properties(CMSIS::STM32::H735ZG::M7 PROPERTIES IMPORTED_GLOBAL TRUE)
 
 target_sources(stm32h735zg-linker
     INTERFACE
@@ -68,17 +68,17 @@ target_include_directories(stm32h735zg-linker
 
 target_link_libraries(stm32h735zg-linker
     INTERFACE
-        CMSIS::STM32::H735ZG
-        HAL::STM32::H7
-        HAL::STM32::H7::TIM
-        HAL::STM32::H7::TIMEx
-        HAL::STM32::H7::RNG
+        CMSIS::STM32::H735ZG::M7
+        HAL::STM32::H7::M7
+        HAL::STM32::H7::M7::TIM
+        HAL::STM32::H7::M7::TIMEx
+        HAL::STM32::H7::M7::RNG
         STM32::NoSys
         SwarmUS::HiveMind::LWIP
-        CMSIS::STM32::H7::RTOS_V2
-        HAL::STM32::H7::SPI
-        HAL::STM32::H7::FLASH
-        HAL::STM32::H7::FLASHEx
+        CMSIS::STM32::H7::M7::RTOS_V2
+        HAL::STM32::H7::M7::SPI
+        HAL::STM32::H7::M7::FLASH
+        HAL::STM32::H7::M7::FLASHEx
         )
 
 # Actual bsp library
@@ -104,8 +104,8 @@ target_include_directories(${LIB_NAME}
 
 target_link_libraries(${LIB_NAME}
     PUBLIC 
-        CMSIS::STM32::H735ZG
-        HAL::STM32::H7::CORTEX
+        CMSIS::STM32::H735ZG::M7
+        HAL::STM32::H7::M7::CORTEX
         STM32::NoSys
         SwarmUS::Propolis::C::Common
         SwarmUS::HiveMind::HAL::STM32H7::USB
@@ -114,14 +114,14 @@ target_link_libraries(${LIB_NAME}
         stm32h735zg-linker
 
         # Drivers
-        HAL::STM32::H7::RCC
-        HAL::STM32::H7::GPIO
-        HAL::STM32::H7::UART
-        HAL::STM32::H7::DMA
-        HAL::STM32::H7::CRC
-        HAL::STM32::H7::SPI
+        HAL::STM32::H7::M7::RCC
+        HAL::STM32::H7::M7::GPIO
+        HAL::STM32::H7::M7::UART
+        HAL::STM32::H7::M7::DMA
+        HAL::STM32::H7::M7::CRC
+        HAL::STM32::H7::M7::SPI
         SwarmUS::HiveMind::LWIP
-        CMSIS::STM32::H7::RTOS_V2
+        CMSIS::STM32::H7::M7::RTOS_V2
 )
 
 add_subdirectory(LWIP)

@@ -2,7 +2,7 @@ set(LIB_NAME "swarmus-hivemind-hal-stm32h735zg-usb")
 set(LIB_ALIAS "SwarmUS::HiveMind::HAL::STM32H7::USB")
 
 find_package(USB COMPONENTS
-        STM32H735ZG
+        STM32H735ZG_M7
         REQUIRED)
 
 set(LIB_SOURCES
@@ -30,11 +30,11 @@ target_include_directories(${LIB_NAME}
 
 target_link_libraries(${LIB_NAME}
     PRIVATE
-        CMSIS::STM32::H735ZG
-        HAL::STM32::H7
-        HAL::STM32::H7::PCDEx
-        HAL::STM32::H7::LL_USB
-        CMSIS::STM32::H7::USB
+        CMSIS::STM32::H735ZG::M7
+        HAL::STM32::H7::M7
+        HAL::STM32::H7::M7::PCDEx
+        HAL::STM32::H7::M7::LL_USB
+        CMSIS::STM32::H7::M7::USB
     )
 
 # Removing warnings and compile options

@@ -2,11 +2,11 @@ set(LIB_NAME "swarmus-hivemind-lwip")
 set(LIB_ALIAS "SwarmUS::HiveMind::LWIP")
 
 find_package(CMSIS_RTOS COMPONENTS
-        STM32H735ZG
+        STM32H735ZG_M7
         REQUIRED)
 
 find_package(LWIP COMPONENTS
-        STM32H735ZG
+        STM32H735ZG_M7
         REQUIRED)
 
 add_library(${LIB_NAME} STATIC)
@@ -26,13 +26,13 @@ target_include_directories(${LIB_NAME}
 
 target_link_libraries(${LIB_NAME}
     PRIVATE
-        CMSIS::STM32::H735ZG
-        HAL::STM32::H7
-        HAL::STM32::H7::ETH
+        CMSIS::STM32::H735ZG::M7
+        HAL::STM32::H7::M7
+        HAL::STM32::H7::M7::ETH
 
-        CMSIS::STM32::H7::RTOS_V2
-        CMSIS::STM32::H7::LWIP
-        CMSIS::STM32::H7::LWIP::IPV4
+        CMSIS::STM32::H7::M7::RTOS_V2
+        CMSIS::STM32::H7::M7::LWIP
+        CMSIS::STM32::H7::M7::LWIP::IPV4
         SwarmUS::HiveMind::HAL::Linker::STM32
         SwarmUS::Propolis::C::Common
     )
@@ -40,7 +40,7 @@ target_link_libraries(${LIB_NAME}
 if (ENABLE_TARGET_IPERF_SERVER)
     target_link_libraries(${LIB_NAME}
         PRIVATE
-            CMSIS::STM32::H7::LWIP::IPERF
+            CMSIS::STM32::H7::M7::LWIP::IPERF
     )
 endif()
 
