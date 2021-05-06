@@ -8,6 +8,7 @@ extern "C" {
 #include "hal/hal_spi.h"
 #include "hal_spi.h"
 #include "hivemind_hal.h"
+#include <stdbool.h>
 
 /**
  * @brief Typedef for pointer function used as callback for spi operation

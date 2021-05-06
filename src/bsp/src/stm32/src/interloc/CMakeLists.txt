@@ -42,7 +42,7 @@ target_link_libraries(${LIB_NAME}
         # Defined libraries
         SwarmUS::HiveMind::OS
         SwarmUS::HiveMind::Logger
-        SwarmUS::HiveMind::HAL
+        SwarmUS::HiveMind::HAL::Decawave::Driver
         SwarmUS::HiveMind::BSP::Platform::Interloc::States
         SwarmUS::Propolis::Cpp::Common
         )

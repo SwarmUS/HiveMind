@@ -74,16 +74,10 @@ target_link_libraries(stm32f429zi-linker
         STM32::F4
         CMSIS::STM32::F429ZI
         HAL::STM32::F4
-        HAL::STM32::F4::TIM
-        HAL::STM32::F4::TIMEx
-        HAL::STM32::F4::RNG
         STM32::NoSys
         SwarmUS::HiveMind::LWIP
         CMSIS::STM32::F4::RTOS_V2
-        HAL::STM32::F4::SPI
-        HAL::STM32::F4::FLASH
-        HAL::STM32::F4::FLASHEx
-        )
+    )
 
 # Actual bsp library
 add_library(${LIB_NAME} 
@@ -118,6 +112,12 @@ target_link_libraries(${LIB_NAME}
         stm32f429zi-linker
 
         # Drivers
+        HAL::STM32::F4::TIM
+        HAL::STM32::F4::TIMEx
+        HAL::STM32::F4::RNG
+        HAL::STM32::F4::SPI
+        HAL::STM32::F4::FLASH
+        HAL::STM32::F4::FLASHEx
         HAL::STM32::F4::RCC
         HAL::STM32::F4::GPIO
         HAL::STM32::F4::UART

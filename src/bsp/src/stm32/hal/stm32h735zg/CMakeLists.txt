@@ -4,6 +4,7 @@ set(LIB_ALIAS "SwarmUS::HiveMind::HAL::STM32")
 
 set(LIB_SOURCES
     Core/Src/usart.c
+    Core/Src/dma.c
     Core/Src/main.c
     Core/Src/gpio.c
     Core/Src/crc.c
@@ -18,6 +19,7 @@ set(LIB_HEADERS
     Core/Inc/stm32h7xx_hal_conf.h
     Core/Inc/stm32h7xx_it.h
     Core/Inc/hivemind_hal.h
+    Core/Inc/dma.h
     Core/Inc/usart.h
     Core/Inc/main.h
     Core/Inc/gpio.h
@@ -72,19 +74,13 @@ target_include_directories(stm32h735zg-linker
 
 target_link_libraries(stm32h735zg-linker
     INTERFACE
+        STM32::H7::M7
         CMSIS::STM32::H735ZG::M7
-        BSP::STM32::H7::M7::LAN8742
         HAL::STM32::H7::M7
-        HAL::STM32::H7::M7::TIM
-        HAL::STM32::H7::M7::TIMEx
-        HAL::STM32::H7::M7::RNG
-        HAL::STM32::H7::M7::SPI
-        HAL::STM32::H7::M7::FLASH
-        HAL::STM32::H7::M7::FLASHEx
         STM32::NoSys
         SwarmUS::HiveMind::LWIP
         CMSIS::STM32::H7::M7::RTOS_V2
-        )
+    )
 
 # Actual bsp library
 add_library(${LIB_NAME} 
@@ -119,6 +115,13 @@ target_link_libraries(${LIB_NAME}
         stm32h735zg-linker
 
         # Drivers
+        HAL::STM32::H7::M7::TIM
+        HAL::STM32::H7::M7::TIMEx
+        HAL::STM32::H7::M7::RNG
+        HAL::STM32::H7::M7::SPI
+        HAL::STM32::H7::M7::FLASH
+        HAL::STM32::H7::M7::FLASHEx
+        BSP::STM32::H7::M7::LAN8742
         HAL::STM32::H7::M7::RCC
         HAL::STM32::H7::M7::GPIO
         HAL::STM32::H7::M7::UART

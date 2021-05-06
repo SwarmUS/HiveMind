@@ -13,13 +13,13 @@ set(LIB_HEADERS
     )
 
 
-add_library(${LIB_NAME} INTERFACE)
+add_library(${LIB_NAME} INTERFACE ${LIB_SOURCES} ${LIB_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
-target_sources(${LIB_NAME} INTERFACE ${LIB_SOURCES} ${LIB_HEADERS})
+#target_sources(${LIB_NAME} INTERFACE )
 
 target_include_directories(${LIB_NAME}
-    INTERFACE
+    PUBLIC
         include
     )
 
