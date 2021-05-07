@@ -77,8 +77,6 @@ foreach(COMP ${CMSIS_RTOS_FIND_COMPONENTS})
 
     if (DISABLE_EXTERNAL_WARNINGS)
         target_compile_options(${LIB_NAME_RTOS} PRIVATE -w)
-        set_target_properties(${LIB_NAME_RTOS} PROPERTIES CXX_CLANG_TIDY "" )
-        set_target_properties(${LIB_NAME_RTOS} PROPERTIES C_CLANG_TIDY "" )
     endif()
 
     set(CMSIS_RTOS_${COMP}_FOUND true)

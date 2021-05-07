@@ -37,10 +37,6 @@ if (DISABLE_EXTERNAL_WARNINGS)
         PROPERTIES COMPILE_FLAGS
         -w #Disables all warnings
     )
-    set_target_properties(
-        ${EXECUTABLE_NAME}
-        PROPERTIES C_CLANG_TIDY ""
-    )
 endif()
 
 

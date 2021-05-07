@@ -15,7 +15,6 @@ The HiveMind is the embedded application that runs on SwarmUS HiveBoard and uses
 
 * [Clang tools](https://clang.llvm.org/docs/ClangTools.html) are used to match the style and warnings used in the project
     * [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to match the coding style
-    * [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) for additional compiler warnings
 * [Doxygen](https://github.com/doxygen/doxygen) and [graphviz](https://gitlab.com/graphviz/graphviz/) to generate the documentation
 * [Protoc](https://developers.google.com/protocol-buffers) and some python deps to build [Propolis](https://github.com/SwarmUS/Propolis). Check Propolis repo for more info
 
@@ -26,9 +25,6 @@ or adding them to `.bashrc` otherwise the ROS build will fail.
 ```
 source /opt/ros/noetic/setup.bash
 ```
-
-If you have clang-tidy installed, the build will use it for static analysis.
-Check the cmake options for more information.
 
 ```
 mkdir build
@@ -41,7 +37,7 @@ make
 If you want all the warnings used by the team, use this command for cmake build generation
 
 ```
-cmake -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_CLANG_TIDY_CHECK=ON -DENABLE_TESTS=ON -DCMAKE_BUILD_TYPE=Debug ..
+cmake -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON DENABLE_TESTS=ON -DCMAKE_BUILD_TYPE=Debug ..
 
 ```
 
@@ -49,7 +45,7 @@ or using catkin
 
 ```
 cd catkin_ws
-catkin_make -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_CLANG_TIDY_CHECK=ON -DENABLE_TESTS=ON -DCMAKE_BUILD_TYPE=Debug ..
+catkin_make -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_TESTS=ON -DCMAKE_BUILD_TYPE=Debug ..
 
 ```
 

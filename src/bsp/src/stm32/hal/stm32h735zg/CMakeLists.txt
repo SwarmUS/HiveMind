@@ -80,6 +80,7 @@ target_link_libraries(stm32h735zg-linker
         STM32::NoSys
         SwarmUS::HiveMind::LWIP
         CMSIS::STM32::H7::M7::RTOS_V2
+        BSP::STM32::H7::M7::LAN8742
     )
 
 # Actual bsp library
@@ -138,6 +139,4 @@ add_subdirectory(USB_DEVICE)
 # Removing warnings and compile options
 if (DISABLE_EXTERNAL_WARNINGS) 
     target_compile_options(${LIB_NAME} PRIVATE -w)
-    set_target_properties(${LIB_NAME} PROPERTIES CXX_CLANG_TIDY "" )
-    set_target_properties(${LIB_NAME} PROPERTIES C_CLANG_TIDY "" )
 endif()
