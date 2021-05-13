@@ -9,7 +9,20 @@ find_package(LWIP COMPONENTS
         STM32H735ZG_M7
         REQUIRED)
 
-add_library(${LIB_NAME} STATIC)
+set(LIB_SOURCES
+    App/lwip.c
+    Target/ethernetif.c
+)
+
+set(LIB_HEADERS
+    App/lwip.h
+)
+
+add_library(${LIB_NAME} 
+    STATIC
+        ${LIB_SOURCES}
+        ${LIB_HEADERS}
+)
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
 target_include_directories(${LIB_NAME}

@@ -37,6 +37,7 @@ if (DISABLE_EXTERNAL_WARNINGS)
         PROPERTIES COMPILE_FLAGS
         -w #Disables all warnings
     )
+    message("WWOOOOOOOOOOOOOOOOOOOOOOOOOOW ${LINKER_SOURCES}")
 endif()
 
 
