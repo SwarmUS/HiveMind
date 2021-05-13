@@ -83,18 +83,6 @@ target_include_directories(${LIB_NAME}
         src
 )
 
-add_subdirectory(decawave)
-if (${COMPILE_STM32_F429ZI})
-    add_subdirectory(stm32f429zi)
-elseif (${COMPILE_STM32_H735ZG})
-    add_subdirectory(stm32h735zg)
-else()
-    message(FATAL_ERROR "STM PORT: The current board is not supported" )
-endif()
-
-add_subdirectory(decawave)
-
-
 # Disable compiler warnings for couple of files 
 if(DISABLE_EXTERNAL_WARNINGS)
     set_source_files_properties(
