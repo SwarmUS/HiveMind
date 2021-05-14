@@ -42,13 +42,9 @@ target_link_libraries(${LIB_NAME}
         # Defined libraries
         SwarmUS::HiveMind::OS
         SwarmUS::HiveMind::Logger
-        SwarmUS::HiveMind::HAL::Decawave::Driver
+        SwarmUS::HiveMind::HAL
         SwarmUS::HiveMind::BSP::Platform::Interloc::States
         SwarmUS::Propolis::Cpp::Common
         )
 
 add_subdirectory(src/states)
-
-if (DISABLE_EXTERNAL_WARNINGS) 
-        target_compile_options(${LIB_NAME} PRIVATE -w)
-endif()

@@ -51,7 +51,3 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::HAL
         SwarmUS::HiveMind::BSP::Platform::Interloc
         )
-
-if (DISABLE_EXTERNAL_WARNINGS) 
-        target_compile_options(${LIB_NAME} PRIVATE -w)
-endif()
