@@ -42,15 +42,17 @@ set(GLOBAL_SOURCES
 # Creating the interface library
 add_library(stm32-linker INTERFACE)
 add_library(${LIB_BSP_LINKER_ALIAS} ALIAS stm32-linker) # Provide alias for linker options
-get_target_property(LINKER_SOURCES SwarmUS::HiveMind::HAL::Linker::STM32 INTERFACE_SOURCES)
+#get_target_property(LINKER_SOURCES SwarmUS::HiveMind::HAL::Linker::STM32 INTERFACE_SOURCES)
 
 target_sources(stm32-linker
     INTERFACE
         ${GLOBAL_SOURCES}
-        ${LINKER_SOURCES})
+        #${LINKER_SOURCES}
+ )
 
 target_link_libraries(stm32-linker
     INTERFACE
+        SwarmUS::HiveMind::HAL::Linker::STM32
         SwarmUS::HiveMind::HAL::Decawave
         SwarmUS::Propolis::C::Common)
 

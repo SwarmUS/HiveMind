@@ -12,7 +12,6 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::HAL::Decawave::Platform
     PRIVATE
         SwarmUS::HiveMind::HAL::Decawave::Driver
-        SwarmUS::HiveMind::HAL::Decawave::Platform
         SwarmUS::HiveMind::HAL::STM32
 )
 
