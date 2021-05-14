@@ -28,17 +28,8 @@ add_subdirectory(logger)
 add_subdirectory(message-handler)
 add_subdirectory(interloc)
 
-# Removing warnings from interface libraries
-if (DISABLE_EXTERNAL_WARNINGS) 
-
-    get_target_property(LINKER_SOURCES SwarmUS::HiveMind::BSP::Linker INTERFACE_SOURCES)
-    set_source_files_properties(
-        ${LINKER_SOURCES}
-        PROPERTIES COMPILE_FLAGS
-        -w #Disables all warnings
-    )
-    message("WWOOOOOOOOOOOOOOOOOOOOOOOOOOW ${LINKER_SOURCES}")
-endif()
-
-
-
+target_compile_options(${EXECUTABLE_NAME} PRIVATE -w)
+set_source_files_properties(
+    ${LINKER_SOURCES}
+    PROPERTIES COMPILE_FLAGS
+    "${WARNING_FLAG}")

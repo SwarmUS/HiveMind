@@ -10,9 +10,6 @@ set(LIB_SOURCES
     Core/Src/crc.c
     Core/Src/rng.c
     Core/Src/spi.c
-    LWIP/App/lwip.c
-    LWIP/Target/ethernetif.c
-    USB_DEVICE/App/usbd_cdc_if.c
 )
 
 set(LIB_HEADERS
@@ -26,8 +23,6 @@ set(LIB_HEADERS
     Core/Inc/crc.h
     Core/Inc/rng.h
     Core/Inc/spi.h
-    LWIP/App/lwip.h
-    USB_DEVICE/App/usbd_cdc_if.h
 )
 
 # Sources that needs to be global on the project
@@ -80,7 +75,14 @@ target_link_libraries(stm32h735zg-linker
         STM32::NoSys
         SwarmUS::HiveMind::LWIP
         CMSIS::STM32::H7::M7::RTOS_V2
-        BSP::STM32::H7::M7::LAN8742
+
+        # Needed to compile in main
+        HAL::STM32::H7::M7::UARTEx
+        HAL::STM32::H7::M7::RCCEx
+        HAL::STM32::H7::M7::CRCEx
+        HAL::STM32::H7::M7::PWREx
+        HAL::STM32::H7::M7::ETH
+        
     )
 
 # Actual bsp library
@@ -122,14 +124,10 @@ target_link_libraries(${LIB_NAME}
         HAL::STM32::H7::M7::SPI
         HAL::STM32::H7::M7::FLASH
         HAL::STM32::H7::M7::FLASHEx
-        BSP::STM32::H7::M7::LAN8742
-        HAL::STM32::H7::M7::RCC
         HAL::STM32::H7::M7::GPIO
-        HAL::STM32::H7::M7::UART
         HAL::STM32::H7::M7::DMA
         HAL::STM32::H7::M7::CRC
         HAL::STM32::H7::M7::SPI
-        SwarmUS::HiveMind::LWIP
         CMSIS::STM32::H7::M7::RTOS_V2
 )
 
