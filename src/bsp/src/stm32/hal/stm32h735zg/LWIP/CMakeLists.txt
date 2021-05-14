@@ -37,13 +37,11 @@ target_include_directories(${LIB_NAME}
         ${lwip_INC}/
 )
 
-get_target_property(LINKER_SOURCES BSP::STM32::H7::M7::LAN8742 INTERFACE_SOURCES)
-message(WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOW ${LINKER_SOURCES})
-
 target_link_libraries(${LIB_NAME}
     PRIVATE
         CMSIS::STM32::H735ZG::M7
         HAL::STM32::H7::M7
+        HAL::STM32::H7::M7::ETH
 
         CMSIS::STM32::H7::M7::RTOS_V2
         CMSIS::STM32::H7::M7::LWIP
