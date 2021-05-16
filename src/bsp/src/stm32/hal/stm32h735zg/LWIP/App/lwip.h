@@ -21,18 +21,18 @@
 #ifndef __mx_lwip_H
 #define __mx_lwip_H
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "lwip/opt.h"
+#include "ethernetif.h"
+#include "lwip/dhcp.h"
 #include "lwip/mem.h"
 #include "lwip/memp.h"
-#include "netif/etharp.h"
-#include "lwip/dhcp.h"
 #include "lwip/netif.h"
+#include "lwip/opt.h"
 #include "lwip/timeouts.h"
-#include "ethernetif.h"
+#include "netif/etharp.h"
 
 /* Includes for RTOS ---------------------------------------------------------*/
 #if WITH_RTOS
@@ -67,11 +67,11 @@ void MX_LWIP_Process(void);
 #endif /*__ mx_lwip_H */
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

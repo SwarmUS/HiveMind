@@ -6,8 +6,8 @@ extern "C" {
 #endif
 
 #include "hivemind_hal.h"
-#include <stdbool.h>
 #include <deca_device_api.h>
+#include <stdbool.h>
 
 typedef void (*decaISRCallback_t)(void* context);
 

@@ -2,7 +2,6 @@
 #include "deca_port.h"
 #include "main.h"
 
-
 /**
  * @brief Low-level SPI function used by Decawave driver to write bytes to the device
  * @param headerLength Length of header in bytes

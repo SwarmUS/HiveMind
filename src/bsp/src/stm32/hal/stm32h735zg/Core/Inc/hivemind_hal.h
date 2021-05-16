@@ -6,15 +6,15 @@ extern "C" {
 #endif
 
 #include "crc.h"
+#include "dma.h"
 #include "gpio.h"
 #include "main.h"
 #include "rng.h"
 #include "spi.h"
-#include "dma.h"
 #include "stm32h7xx_hal_conf.h"
+#include "stm32h7xx_hal_def.h"
 #include "stm32h7xx_hal_flash.h"
 #include "stm32h7xx_hal_flash_ex.h"
-#include "stm32h7xx_hal_def.h"
 #include "usart.h"
 
 // TODO: Temporary so dw and esp builds
@@ -49,7 +49,7 @@ extern "C" {
 #define DW_EXTON_A_GPIO_Port GPIOG
 
 // TODO: change to match requirements
-#define HUART_PRINT (&huart3) 
+#define HUART_PRINT (&huart3)
 #define HRNG (&hrng)
 
 // Change to ESP_SOC to use th spi channel for the SOC on the HiveSight.
