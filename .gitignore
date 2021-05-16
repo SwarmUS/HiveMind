@@ -27,3 +27,4 @@ tools/openocd/stm32_f4/nucleo_b.cfg
 tools/openocd/stm32_f4/nucleo_c.cfg
 
 build-h7/
+build-f4/
