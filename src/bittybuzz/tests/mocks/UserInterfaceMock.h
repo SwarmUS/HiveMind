@@ -5,7 +5,7 @@
 #include <cstdarg>
 #include <gmock/gmock.h>
 
-class UserInterfaceMock final : public IUserInterface {
+class UserInterfaceMock : public IUserInterface {
   public:
     int m_printCallCounter = 0;
     int m_flushCallCounter = 0;

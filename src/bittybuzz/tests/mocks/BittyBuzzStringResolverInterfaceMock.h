@@ -4,7 +4,7 @@
 #include <bittybuzz/IBittyBuzzStringResolver.h>
 #include <gmock/gmock.h>
 
-class BittyBuzzStringResolverInterfaceMock final : public IBittyBuzzStringResolver {
+class BittyBuzzStringResolverInterfaceMock : public IBittyBuzzStringResolver {
   public:
     ~BittyBuzzStringResolverInterfaceMock() = default;
 

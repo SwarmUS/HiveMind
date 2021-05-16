@@ -1,10 +1,16 @@
 #include "HiveMindHostApiRequestHandler.h"
 
-HiveMindHostApiRequestHandler::HiveMindHostApiRequestHandler(const IBSP& bsp,
-                                                             ICircularQueue<MessageDTO>& hostQueue,
-                                                             const IInterloc& interloc,
-                                                             ILogger& logger) :
-    m_bsp(bsp), m_hostQueue(hostQueue), m_interloc(interloc), m_logger(logger) {}
+HiveMindHostApiRequestHandler::HiveMindHostApiRequestHandler(
+    const IBSP& bsp,
+    ICircularQueue<MessageDTO>& hostQueue,
+    ICircularQueue<MessageDTO>& remoteQueue,
+    const IInterloc& interloc,
+    ILogger& logger) :
+    m_bsp(bsp),
+    m_hostQueue(hostQueue),
+    m_remoteQueue(remoteQueue),
+    m_interloc(interloc),
+    m_logger(logger) {}
 
 bool HiveMindHostApiRequestHandler::handleRequest(const MessageDTO& message) {
 
@@ -61,6 +67,12 @@ bool HiveMindHostApiRequestHandler::handleHiveMindHostApiRequest(
         ResponseDTO resp(requestId, hmResp);
         MessageDTO msg(m_bsp.getUUId(), message.getSourceId(), resp);
         return m_hostQueue.push(msg);
+    }
+
+    if (const auto* req = std::get_if<GetAgentsListRequestDTO>(&request.getRequest())) {
+        MessageDTO msg(message.getSourceId(), message.getDestinationId(),
+                       HiveConnectHiveMindApiDTO(requestId, *req));
+        return m_remoteQueue.push(message);
     }
 
     m_logger.log(LogLevel::Warn, "Received unknown hivemind host api");

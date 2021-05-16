@@ -103,10 +103,12 @@ class MessageDispatcherTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE>
             HiveMindHostAccumulatorSerializer serializer(*m_stream);
             HiveMindHostApiRequestHandler hivemindApiReqHandler =
                 MessageHandlerContainer::createHiveMindHostApiRequestHandler();
+            HiveConnectHiveMindApiMessageHandler hiveconnectApiMessageHandler =
+                MessageHandlerContainer::createHiveConnectHiveMindApiMessageHandler();
 
             GreetSender greetSender(m_streamQueue, BSPContainer::getBSP());
             MessageDispatcher messageDispatcher = MessageHandlerContainer::createMessageDispatcher(
-                deserializer, hivemindApiReqHandler, greetSender);
+                deserializer, hivemindApiReqHandler, hiveconnectApiMessageHandler, greetSender);
 
             while (m_stream->isConnected()) {
                 if (!messageDispatcher.deserializeAndDispatch()) {

@@ -7,7 +7,7 @@
 #include <logger/ILogger.h>
 #include <string>
 
-class LoggerInterfaceMock final : public ILogger {
+class LoggerInterfaceMock : public ILogger {
   public:
     int& m_logCallCounter;
     std::string& m_logLastFormat;

@@ -5,7 +5,7 @@
 #include <cstdarg>
 #include <gmock/gmock.h>
 
-class UserInterfaceMock final : public IUserInterface {
+class UserInterfaceMock : public IUserInterface {
   public:
     int& m_printCallCounter;
     Mutex m_mutex;
