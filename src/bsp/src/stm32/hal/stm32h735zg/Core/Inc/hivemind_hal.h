@@ -51,6 +51,7 @@ extern "C" {
 // TODO: change to match requirements
 #define HUART_PRINT (&huart3)
 #define HRNG (&hrng)
+#define FLASH_PROGRAM_32_BYTES (FLASH_TYPEPROGRAM_FLASHWORD)
 
 // Change to ESP_SOC to use th spi channel for the SOC on the HiveSight.
 // In the future, there might a flag for the HiveBoard.

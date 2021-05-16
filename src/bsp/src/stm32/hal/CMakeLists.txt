@@ -2,16 +2,6 @@ set(LIB_NAME swarmus-hivemind-hal)
 set(LIB_ALIAS "SwarmUS::HiveMind::HAL")
 set(LIB_HAL_LINKER_ALIAS "SwarmUS::HiveMind::HAL::Linker::STM32")
 
-if (${COMPILE_STM32_F429ZI})
-    add_subdirectory(stm32f429zi)
-elseif (${COMPILE_STM32_H735ZG})
-    add_subdirectory(stm32h735zg)
-else()
-    message(FATAL_ERROR "STM PORT: The current board is not supported" )
-endif()
-
-add_subdirectory(decawave)
-
 set(LIB_SOURCES
     src/hal.c
     src/usb.c
@@ -84,6 +74,18 @@ target_include_directories(${LIB_NAME}
     PRIVATE
         src
 )
+
+
+if (${COMPILE_STM32_F429ZI})
+    add_subdirectory(stm32f429zi)
+elseif (${COMPILE_STM32_H735ZG})
+    add_subdirectory(stm32h735zg)
+else()
+    message(FATAL_ERROR "STM PORT: The current board is not supported" )
+endif()
+
+add_subdirectory(decawave)
+
 
 # Disable compiler warnings for couple of files 
 if(DISABLE_EXTERNAL_WARNINGS)

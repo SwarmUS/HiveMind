@@ -50,7 +50,6 @@ target_link_libraries(${LIB_NAME}
 add_subdirectory(src/states)
 
 if (DISABLE_EXTERNAL_WARNINGS) 
-        target_compile_options(${LIB_NAME} PRIVATE -w)
         set_target_properties(${LIB_NAME} PROPERTIES CXX_CLANG_TIDY "" )
         set_target_properties(${LIB_NAME} PROPERTIES C_CLANG_TIDY "" )
 endif()
