@@ -17,21 +17,22 @@ int writetospi(uint16_t headerLength,
     decaIrqStatus_t stat;
     stat = decamutexon();
 
-    decawaveDeviceConfig_t* nssConfig = deca_getSelectedDeviceConfig();
+    decawaveDeviceConfig_t* decaConfig = deca_getSelectedDeviceConfig();
 
-    if (nssConfig == NULL) {
+    if (decaConfig == NULL) {
         return -1;
     }
 
-    while (HAL_SPI_GetState(DW_SPI) != HAL_SPI_STATE_READY) {
+    while (HAL_SPI_GetState(decaConfig->spiHandle) != HAL_SPI_STATE_READY) {
     }
 
-    HAL_GPIO_WritePin(nssConfig->nssPort, nssConfig->nssPin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(decaConfig->nssPort, decaConfig->nssPin, GPIO_PIN_RESET);
 
-    HAL_SPI_Transmit(DW_SPI, (uint8_t*)&headerBuffer[0], headerLength, HAL_MAX_DELAY);
-    HAL_SPI_Transmit(DW_SPI, (uint8_t*)&bodyBuffer[0], bodyLength, HAL_MAX_DELAY);
+    HAL_SPI_Transmit(decaConfig->spiHandle, (uint8_t*)&headerBuffer[0], headerLength,
+                     HAL_MAX_DELAY);
+    HAL_SPI_Transmit(decaConfig->spiHandle, (uint8_t*)&bodyBuffer[0], bodyLength, HAL_MAX_DELAY);
 
-    HAL_GPIO_WritePin(nssConfig->nssPort, nssConfig->nssPin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(decaConfig->nssPort, decaConfig->nssPin, GPIO_PIN_SET);
 
     decamutexoff(stat);
 
@@ -53,23 +54,24 @@ int readfromspi(uint16_t headerLength,
     decaIrqStatus_t stat;
     stat = decamutexon();
 
-    decawaveDeviceConfig_t* nssConfig = deca_getSelectedDeviceConfig();
+    decawaveDeviceConfig_t* decaConfig = deca_getSelectedDeviceConfig();
 
-    if (nssConfig == NULL) {
+    if (decaConfig == NULL) {
         return -1;
     }
 
     /* Blocking: Check whether previous transfer has been finished */
-    while (HAL_SPI_GetState(DW_SPI) != HAL_SPI_STATE_READY) {
+    while (HAL_SPI_GetState(decaConfig->spiHandle) != HAL_SPI_STATE_READY) {
     }
 
-    HAL_GPIO_WritePin(nssConfig->nssPort, nssConfig->nssPin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(decaConfig->nssPort, decaConfig->nssPin, GPIO_PIN_RESET);
 
-    HAL_SPI_Transmit(DW_SPI, (uint8_t*)&headerBuffer[0], headerLength, HAL_MAX_DELAY);
+    HAL_SPI_Transmit(decaConfig->spiHandle, (uint8_t*)&headerBuffer[0], headerLength,
+                     HAL_MAX_DELAY);
 
-    HAL_SPI_Receive(DW_SPI, readBuffer, readlength, HAL_MAX_DELAY);
+    HAL_SPI_Receive(decaConfig->spiHandle, readBuffer, readlength, HAL_MAX_DELAY);
 
-    HAL_GPIO_WritePin(nssConfig->nssPort, nssConfig->nssPin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(decaConfig->nssPort, decaConfig->nssPin, GPIO_PIN_SET);
 
     decamutexoff(stat);
 

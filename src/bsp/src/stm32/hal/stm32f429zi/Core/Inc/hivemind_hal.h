@@ -17,6 +17,25 @@ extern "C" {
 #include "stm32f4xx_hal_flash_ex.h"
 #include "usart.h"
 
+typedef void (*decaISRCallback_t)(void* context);
+
+/**
+ * @brief Structure to hold a port and pin associated with a decawave NSS pin
+ */
+typedef struct {
+    SPI_HandleTypeDef* spiHandle;
+    GPIO_TypeDef* nssPort;
+    uint16_t nssPin;
+    GPIO_TypeDef* irqPort;
+    uint16_t irqPin;
+    GPIO_TypeDef* resetPort;
+    uint16_t resetPin;
+    void* isrContext;
+    decaISRCallback_t isrCallback;
+} decawaveDeviceConfig_t;
+
+extern decawaveDeviceConfig_t g_decawaveConfigs[2];
+
 #define HUART_PRINT (&huart3)
 #define HRNG (&hrng)
 #define FLASH_PROGRAM_32_BYTES (FLASH_TYPEPROGRAM_WORD)

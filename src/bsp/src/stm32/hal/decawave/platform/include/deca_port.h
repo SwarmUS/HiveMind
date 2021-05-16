@@ -9,24 +9,10 @@ extern "C" {
 #include <deca_device_api.h>
 #include <stdbool.h>
 
-typedef void (*decaISRCallback_t)(void* context);
-
 /**
  * @brief Enum to specify which decawave we are addressing
  */
 typedef enum { DW_A = 0, DW_B = 1 } decaDevice_t;
-
-/**
- * @brief Structure to hold a port and pin associated with a decawave NSS pin
- */
-typedef struct {
-    GPIO_TypeDef* nssPort;
-    uint16_t nssPin;
-    GPIO_TypeDef* irqPort;
-    uint16_t irqPin;
-    void* isrContext;
-    decaISRCallback_t isrCallback;
-} decawaveDeviceConfig_t;
 
 /**
  * @brief Performs a hardware reset on a specific decawave
@@ -41,13 +27,15 @@ void deca_hardwareWakeup();
 
 /**
  * @brief Sets decawave SPI to slow rate (used before deca PLL locks)
+ * @param selectedDevice The device to change SPI speed on
  */
-void deca_setSlowRate();
+void deca_setSlowRate(decaDevice_t selectedDevice);
 
 /**
  * @brief Sets decawave SPI to fast rate (used once PLL has locked)
+ * @param selectedDevice The device to change SPI speed on
  */
-void deca_setFastRate();
+void deca_setFastRate(decaDevice_t selectedDevice);
 
 /**
  * @brief Initialises the decawave hardware

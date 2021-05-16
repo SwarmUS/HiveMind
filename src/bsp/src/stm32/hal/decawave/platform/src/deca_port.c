@@ -4,41 +4,20 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-static decawaveDeviceConfig_t g_decawaveConfigs[DWT_NUM_DW_DEV] = {
-    {DW_NSS_A_GPIO_Port, DW_NSS_A_Pin, DW_IRQn_A_GPIO_Port, DW_IRQn_A_Pin, NULL, NULL},
-    {DW_NSS_B_GPIO_Port, DW_NSS_B_Pin, DW_IRQn_B_GPIO_Port, DW_IRQn_B_Pin, NULL, NULL}};
-
 static decaDevice_t g_selectedDecaDevice = DW_A;
 
 void deca_hardwareReset(decaDevice_t selectedDevice) {
-    GPIO_TypeDef* selectedDecaResetPort;
-    uint16_t selectedDecaResetPin;
-
-    switch (selectedDevice) {
-    case DW_A:
-        selectedDecaResetPin = DW_RESET_A_Pin;
-        selectedDecaResetPort = DW_RESET_A_GPIO_Port;
-        break;
-
-    case DW_B:
-        selectedDecaResetPin = DW_RESET_B_Pin;
-        selectedDecaResetPort = DW_RESET_B_GPIO_Port;
-        break;
-
-    default:
-        return;
-    }
-
+    decawaveDeviceConfig_t* decaConfig = deca_getDeviceConfig(selectedDevice);
     GPIO_InitTypeDef gpioInitStruct;
 
     // Enable GPIO used for DW1000 reset as open collector output
-    gpioInitStruct.Pin = selectedDecaResetPin;
+    gpioInitStruct.Pin = decaConfig->resetPin;
     gpioInitStruct.Mode = GPIO_MODE_OUTPUT_OD;
     gpioInitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(selectedDecaResetPort, &gpioInitStruct);
+    HAL_GPIO_Init(decaConfig->resetPort, &gpioInitStruct);
 
     // drive the RSTn pin low
-    HAL_GPIO_WritePin(selectedDecaResetPort, selectedDecaResetPin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(decaConfig->resetPort, decaConfig->resetPin, GPIO_PIN_RESET);
 
     // Use HAL functions instead of FreeRTOS delays as this is called before the scheduler is
     // started
@@ -46,37 +25,35 @@ void deca_hardwareReset(decaDevice_t selectedDevice) {
 
     // put the pin back to tri-state ... as
     // output open-drain (not active)
-    gpioInitStruct.Pin = selectedDecaResetPin;
+    gpioInitStruct.Pin = decaConfig->resetPin;
     gpioInitStruct.Mode = GPIO_MODE_OUTPUT_OD;
     gpioInitStruct.Pull = GPIO_NOPULL;
     gpioInitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    HAL_GPIO_Init(selectedDecaResetPort, &gpioInitStruct);
-    HAL_GPIO_WritePin(selectedDecaResetPort, selectedDecaResetPin, GPIO_PIN_SET);
+    HAL_GPIO_Init(decaConfig->resetPort, &gpioInitStruct);
+    HAL_GPIO_WritePin(decaConfig->resetPort, decaConfig->resetPin, GPIO_PIN_SET);
 
     HAL_Delay(100);
 }
 
-void deca_hardwareWakeup() {
-    HAL_GPIO_WritePin(DW_RESET_A_GPIO_Port, DW_RESET_A_Pin, GPIO_PIN_RESET);
-    HAL_Delay(1);
-    HAL_GPIO_WritePin(DW_RESET_A_GPIO_Port, DW_RESET_A_Pin, GPIO_PIN_SET);
-    HAL_Delay(7); // wait 7ms for DW1000 XTAL to stabilise
+void deca_setSlowRate(decaDevice_t selectedDevice) {
+    decawaveDeviceConfig_t* decaConfig = deca_getDeviceConfig(selectedDevice);
+
+    decaConfig->spiHandle->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
+    HAL_SPI_Init(decaConfig->spiHandle);
 }
 
-void deca_setSlowRate() {
-    DW_SPI->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
-    HAL_SPI_Init(DW_SPI);
-}
+void deca_setFastRate(decaDevice_t selectedDevice) {
+    decawaveDeviceConfig_t* decaConfig = deca_getDeviceConfig(selectedDevice);
 
-void deca_setFastRate() {
-    DW_SPI->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
-    HAL_SPI_Init(DW_SPI);
+    decaConfig->spiHandle->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
+    HAL_SPI_Init(decaConfig->spiHandle);
 }
 
 void deca_init() {
-    deca_hardwareReset(DW_A);
-    deca_hardwareReset(DW_B);
-    deca_setSlowRate();
+    for (int i = 0; i < DWT_NUM_DW_DEV; i++) {
+        deca_hardwareReset(i);
+        deca_setSlowRate(i);
+    }
 }
 
 void deca_selectDevice(decaDevice_t selectedDevice) {
