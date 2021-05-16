@@ -72,6 +72,11 @@ add_subdirectory(hal)
 add_subdirectory(src/interloc)
 
 
-set_target_properties(${LIB_NAME} PROPERTIES CXX_CLANG_TIDY "" )
-set_target_properties(${LIB_NAME} PROPERTIES C_CLANG_TIDY "" )
+# Removing warnings from interface libraries
+if (DISABLE_EXTERNAL_WARNINGS) 
+    set_target_properties(
+        ${LIB_NAME}
+        PROPERTIES C_CLANG_TIDY ""
+    )
+endif()
 
