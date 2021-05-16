@@ -76,7 +76,7 @@ jobs:
       run: |
         mkdir -p build
         cd build
-        cmake -D CMAKE_TOOLCHAIN_FILE=../cmake/stm32_stm32h735gz_gcc.cmake -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_CLANG_TIDY_CHECK=ON ..
+        cmake -D CMAKE_TOOLCHAIN_FILE=../cmake/stm32_stm32h735zg_gcc.cmake -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_CLANG_TIDY_CHECK=ON ..
 
     - name: build
       run: |
