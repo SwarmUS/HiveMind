@@ -45,10 +45,6 @@ find_package(HAL COMPONENTS
             STM32H735ZG_M7
             REQUIRED)
 
-find_package(BSP COMPONENTS 
-            STM32H735ZG_M7
-            REQUIRED)
-
 # Creating the interface library
 add_library(stm32h735zg-linker INTERFACE)
 add_library(${LIB_HAL_LINKER_ALIAS} ALIAS stm32h735zg-linker) # Provide alias for linker options
