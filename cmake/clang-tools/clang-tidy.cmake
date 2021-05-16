@@ -24,7 +24,7 @@ if(CLANG_TIDY_EXE AND ENABLE_CLANG_TIDY_CHECK)
     set(CMAKE_C_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES} ${INCLUDE_COMPILER_HEADERS})
     
     #Setting clang tidy
-    set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE};--extra-arg=-gcc-toolchain;--extra-arg-before=-fms-extensions" CACHE STRING "" FORCE)
+    set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE};--extra-arg=-gcc-toolchain" CACHE STRING "" FORCE)
 
 else()
     message(STATUS "clang-tidy NOT found!")

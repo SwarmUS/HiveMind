@@ -71,3 +71,7 @@ add_custom_target(
 add_subdirectory(hal)
 add_subdirectory(src/interloc)
 
+
+set_target_properties(${LIB_NAME} PROPERTIES CXX_CLANG_TIDY "" )
+set_target_properties(${LIB_NAME} PROPERTIES C_CLANG_TIDY "" )
+

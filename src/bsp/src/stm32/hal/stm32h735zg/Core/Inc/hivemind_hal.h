@@ -17,7 +17,9 @@ extern "C" {
 #include "stm32h7xx_hal_def.h"
 #include "usart.h"
 
-// TODO: Temporary so dw builds
+// TODO: Temporary so dw and esp builds
+#define ESP_CS_Pin GPIO_PIN_0
+#define ESP_CS_GPIO_Port GPIOC
 #define DW_IRQn_B_Pin GPIO_PIN_15
 #define DW_IRQn_B_GPIO_Port GPIOF
 #define DW_IRQn_B_EXTI_IRQn EXTI15_10_IRQn
