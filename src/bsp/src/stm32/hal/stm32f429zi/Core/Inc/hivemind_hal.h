@@ -34,7 +34,6 @@ extern "C" {
 #define ESP_USER0_Port ESP_USER0_SOC_GPIO_Port
 #define ESP_SPI (&hspi5)
 #endif
-#define DW_SPI (&hspi4)
 
 void SystemClock_Config(void);
 

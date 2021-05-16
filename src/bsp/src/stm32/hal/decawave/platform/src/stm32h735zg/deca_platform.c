@@ -60,7 +60,7 @@ decawaveDeviceConfig_t g_decawaveConfigs[DWT_NUM_DW_DEV] = {{.spiHandle = &hspi1
                                                             {.spiHandle = &hspi2, // C1
                                                              .nssPort = SPI_nCS_1C_GPIO_Port,
                                                              .nssPin = SPI_nCS_1C_Pin,
-                                                             .irqPort = CHAN_IRQ_1C_Pin,
+                                                             .irqPort = CHAN_IRQ_1C_GPIO_Port,
                                                              .irqPin = CHAN_IRQ_1C_Pin,
                                                              .resetPort = CHAN_RESET_1C_GPIO_Port,
                                                              .resetPin = CHAN_RESET_1C_Pin,

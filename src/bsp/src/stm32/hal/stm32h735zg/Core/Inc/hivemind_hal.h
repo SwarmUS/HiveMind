@@ -22,19 +22,11 @@ extern "C" {
 #define HRNG (&hrng)
 #define FLASH_PROGRAM_32_BYTES (FLASH_TYPEPROGRAM_FLASHWORD)
 
-// Change to ESP_SOC to use th spi channel for the SOC on the HiveSight.
-// In the future, there might a flag for the HiveBoard.
-#define ESP_WROOM
-
-#ifdef ESP_WROOM
-#define ESP_SPI (&hspi3)
-#define ESP_USER0_Pin 0
-#define ESP_USER0_Port 0
-#elif ESP_SOC
-#define ESP_USER0_Pin ESP_USER0_SOC_Pin
-#define ESP_USER0_Port ESP_USER0_SOC_GPIO_Port
 #define ESP_SPI (&hspi5)
-#endif
+#define ESP_USER0_Pin WROOM_INT_Pin
+#define ESP_USER0_Port WROOM_INT_GPIO_Port
+#define ESP_CS_GPIO_Port SPI_ESP_nCS_GPIO_Port
+#define ESP_CS_Pin SPI_ESP_nCS_Pin
 
 void SystemClock_Config(void);
 

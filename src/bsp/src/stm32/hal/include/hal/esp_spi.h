@@ -62,6 +62,18 @@ bool EspSpi_TransmitReceiveDma(const uint8_t* txBuffer,
                                void* context);
 
 /**
+ * Write to the CS pin
+ * @param state state to write
+ */
+void EspSpi_WriteCS(bool state);
+
+/**
+ * Read the CS pin
+ * @return Status of the pin
+ */
+bool EspSpi_ReadCS();
+
+/**
  * @brief Callback used when reception has finished. Calls the user callback provided in
  * espSpiTransmitDma()
  */
