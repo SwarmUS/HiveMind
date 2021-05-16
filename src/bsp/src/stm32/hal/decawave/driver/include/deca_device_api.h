@@ -17,6 +17,8 @@
 extern "C" {
 #endif
 
+#include <deca_config.h>
+
 #ifndef uint8
 #ifndef _DECA_UINT8_
 #define _DECA_UINT8_
@@ -57,10 +59,6 @@ typedef signed short int16;
 #define _DECA_INT32_
 typedef signed long int32;
 #endif
-#endif
-
-#ifndef DWT_NUM_DW_DEV
-#define DWT_NUM_DW_DEV (2)
 #endif
 
 #define DWT_SUCCESS (0)

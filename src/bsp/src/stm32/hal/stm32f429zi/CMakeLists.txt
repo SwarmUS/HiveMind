@@ -14,7 +14,6 @@ set(LIB_SOURCES
     LWIP/App/lwip.c
     LWIP/Target/ethernetif.c
     USB_DEVICE/App/usbd_cdc_if.c
-    Core/Src/decawave_config.c
 )
 
 set(LIB_HEADERS

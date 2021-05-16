@@ -58,11 +58,15 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define WROOM_EN_Pin GPIO_PIN_2
+#define WROOM_INT_Pin GPIO_PIN_2
+#define WROOM_INT_GPIO_Port GPIOE
+#define WROOM_EN_Pin GPIO_PIN_3
 #define WROOM_EN_GPIO_Port GPIOE
 #define IMU_INT2_Pin GPIO_PIN_4
 #define IMU_INT2_GPIO_Port GPIOE
-#define USB_PWR_DET__Pin GPIO_PIN_5
+#define IO_EXPANDER_INT__Pin GPIO_PIN_5
+#define IO_EXPANDER_INT__GPIO_Port GPIOE
+#define USB_PWR_DET__Pin GPIO_PIN_6
 #define USB_PWR_DET__GPIO_Port GPIOE
 #define MCU_LED_B_Pin GPIO_PIN_14
 #define MCU_LED_B_GPIO_Port GPIOC
@@ -148,7 +152,9 @@ void Error_Handler(void);
 #define SPI_nCS_1B_GPIO_Port GPIOD
 #define CHAN_DET_1B_Pin GPIO_PIN_6
 #define CHAN_DET_1B_GPIO_Port GPIOG
-#define CHAN_EN_1B_Pin GPIO_PIN_7
+#define CHAN_IRQ_1B_Pin GPIO_PIN_7
+#define CHAN_IRQ_1B_GPIO_Port GPIOG
+#define CHAN_EN_1B_Pin GPIO_PIN_8
 #define CHAN_EN_1B_GPIO_Port GPIOG
 #define CHAN_RESET_1B_Pin GPIO_PIN_6
 #define CHAN_RESET_1B_GPIO_Port GPIOC
@@ -164,8 +170,8 @@ void Error_Handler(void);
 #define CHAN_RESET_0B_GPIO_Port GPIOA
 #define SPI_CLK_B_Pin GPIO_PIN_10
 #define SPI_CLK_B_GPIO_Port GPIOC
-#define SPI_MISO_CC11_Pin GPIO_PIN_11
-#define SPI_MISO_CC11_GPIO_Port GPIOC
+#define SPI_MISO_B_Pin GPIO_PIN_11
+#define SPI_MISO_B_GPIO_Port GPIOC
 #define SPI_MOSI_B_Pin GPIO_PIN_12
 #define SPI_MOSI_B_GPIO_Port GPIOC
 #define CHAN_RESET_1A_Pin GPIO_PIN_0

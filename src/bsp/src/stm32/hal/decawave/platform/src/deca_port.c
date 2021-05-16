@@ -4,7 +4,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-static decaDevice_t g_selectedDecaDevice = DW_A;
+static decaDevice_t g_selectedDecaDevice = 0;
 
 void deca_hardwareReset(decaDevice_t selectedDevice) {
     decawaveDeviceConfig_t* decaConfig = deca_getDeviceConfig(selectedDevice);

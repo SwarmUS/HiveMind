@@ -91,6 +91,12 @@ void MX_GPIO_Init(void) {
     HAL_GPIO_WritePin(GPIOG, CHAN_EN_1B_Pin | CHAN_EN_0A_Pin | SPI_nCS_0A_Pin | DEBUG_EN__Pin,
                       GPIO_PIN_RESET);
 
+    /*Configure GPIO pins : PEPin PEPin */
+    GPIO_InitStruct.Pin = WROOM_INT_Pin | IMU_INT2_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
     /*Configure GPIO pins : PEPin PEPin PEPin PEPin */
     GPIO_InitStruct.Pin = WROOM_EN_Pin | SYNC_Pin | CLK_OE_1__Pin | CLK_OE_0__Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -99,10 +105,10 @@ void MX_GPIO_Init(void) {
     HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
     /*Configure GPIO pin : PtPin */
-    GPIO_InitStruct.Pin = IMU_INT2_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+    GPIO_InitStruct.Pin = IO_EXPANDER_INT__Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(IMU_INT2_GPIO_Port, &GPIO_InitStruct);
+    HAL_GPIO_Init(IO_EXPANDER_INT__GPIO_Port, &GPIO_InitStruct);
 
     /*Configure GPIO pins : PEPin PEPin */
     GPIO_InitStruct.Pin = USB_PWR_DET__Pin | CHAN_RESET_1C_Pin;
@@ -205,6 +211,12 @@ void MX_GPIO_Init(void) {
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(CHAN_DET_1B_GPIO_Port, &GPIO_InitStruct);
 
+    /*Configure GPIO pins : PGPin PGPin */
+    GPIO_InitStruct.Pin = CHAN_IRQ_1B_Pin | CHAN_IRQ_0A_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+
     /*Configure GPIO pins : PGPin PGPin PGPin PGPin */
     GPIO_InitStruct.Pin = CHAN_EN_1B_Pin | CHAN_EN_0A_Pin | SPI_nCS_0A_Pin | DEBUG_EN__Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -240,12 +252,6 @@ void MX_GPIO_Init(void) {
     GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(CHAN_IRQ_0B_GPIO_Port, &GPIO_InitStruct);
-
-    /*Configure GPIO pin : PtPin */
-    GPIO_InitStruct.Pin = CHAN_IRQ_0A_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(CHAN_IRQ_0A_GPIO_Port, &GPIO_InitStruct);
 
     /*Configure GPIO pins : PBPin PBPin */
     GPIO_InitStruct.Pin = DEB_PWR_EN_Pin | WROOM_PWR_EN_Pin;

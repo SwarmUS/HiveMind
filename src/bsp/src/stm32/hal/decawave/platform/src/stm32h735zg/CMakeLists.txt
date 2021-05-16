@@ -15,4 +15,4 @@ target_sources(${LIB_NAME} INTERFACE ${LIB_SOURCES})
 target_include_directories(${LIB_NAME}
         INTERFACE
         ./
-    )
+        )

@@ -360,7 +360,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle) {
         PC11     ------> SPI3_MISO
         PC12     ------> SPI3_MOSI
         */
-        GPIO_InitStruct.Pin = SPI_CLK_B_Pin | SPI_MISO_CC11_Pin | SPI_MOSI_B_Pin;
+        GPIO_InitStruct.Pin = SPI_CLK_B_Pin | SPI_MISO_B_Pin | SPI_MOSI_B_Pin;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -494,7 +494,7 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle) {
         PC11     ------> SPI3_MISO
         PC12     ------> SPI3_MOSI
         */
-        HAL_GPIO_DeInit(GPIOC, SPI_CLK_B_Pin | SPI_MISO_CC11_Pin | SPI_MOSI_B_Pin);
+        HAL_GPIO_DeInit(GPIOC, SPI_CLK_B_Pin | SPI_MISO_B_Pin | SPI_MOSI_B_Pin);
 
         /* USER CODE BEGIN SPI3_MspDeInit 1 */
 

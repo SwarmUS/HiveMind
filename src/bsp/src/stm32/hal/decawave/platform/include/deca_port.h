@@ -5,14 +5,10 @@
 extern "C" {
 #endif
 
+#include "deca_platform.h"
 #include "hivemind_hal.h"
 #include <deca_device_api.h>
 #include <stdbool.h>
-
-/**
- * @brief Enum to specify which decawave we are addressing
- */
-typedef enum { DW_A = 0, DW_B = 1 } decaDevice_t;
 
 typedef void (*decaISRCallback_t)(void* context);
 
@@ -31,7 +27,7 @@ typedef struct {
     decaISRCallback_t isrCallback;
 } decawaveDeviceConfig_t;
 
-extern decawaveDeviceConfig_t g_decawaveConfigs[2];
+extern decawaveDeviceConfig_t g_decawaveConfigs[DWT_NUM_DW_DEV];
 
 /**
  * @brief Performs a hardware reset on a specific decawave
