@@ -32,12 +32,10 @@ set(GLOBAL_SOURCES
 # Creating the interface library
 add_library(stm32-linker INTERFACE)
 add_library(${LIB_BSP_LINKER_ALIAS} ALIAS stm32-linker) # Provide alias for linker options
-#get_target_property(LINKER_SOURCES SwarmUS::HiveMind::HAL::Linker::STM32 INTERFACE_SOURCES)
 
 target_sources(stm32-linker
     INTERFACE
         ${GLOBAL_SOURCES}
-        #${LINKER_SOURCES}
  )
 
 target_link_libraries(stm32-linker
@@ -89,14 +87,5 @@ add_subdirectory(decawave)
 
 # Disable compiler warnings for couple of files 
 if(DISABLE_EXTERNAL_WARNINGS)
-    set_source_files_properties(
-        ${GLOBAL_SOURCES}
-        PROPERTIES COMPILE_FLAGS
-            -w #Disables all warnings
-    )
-
-    set_target_properties(
-        ${LIB_NAME}
-        PROPERTIES C_CLANG_TIDY ""
-    )
+    set_target_properties(${LIB_NAME} PROPERTIES C_CLANG_TIDY "")
 endif()
