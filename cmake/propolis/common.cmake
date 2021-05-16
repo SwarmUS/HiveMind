@@ -34,6 +34,7 @@ function(propolis_fetch_populate)
         # Removing warnings from freertos compilation on executable target
         if (DISABLE_EXTERNAL_WARNINGS) 
             target_compile_options(swarmus-propolis-pheromones PRIVATE -w)
+            set_target_properties(swarmus-propolis-pheromones PROPERTIES CXX_CLANG_TIDY "" )
         endif()
 
     endif()

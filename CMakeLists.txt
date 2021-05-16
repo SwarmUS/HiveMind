@@ -6,7 +6,8 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 option(ENABLE_WARNINGS "Enable all warnings on build" OFF)
 option(ENABLE_WARNINGS_AS_ERROR "Enable all warnings as errors" OFF)
 option(ENABLE_TESTS "Build the tests" OFF)
-option(ENABLE_ERROR_ON_MISSING_TOOL "If a tools (clang-format, doxygen) is not disabled and not installed, throws error" OFF)
+option(ENABLE_CLANG_TIDY_CHECK "Enable clang tidy check on compilation" OFF)
+option(ENABLE_ERROR_ON_MISSING_TOOL "If a tools (clang-tidy, clang-format, doxygen) is not disabled and not installed, throws error" OFF)
 
 option(DISABLE_EXTERNAL_WARNINGS "Disables warnings from exernal libs (gtest, freertos, etc)" ON)
 
@@ -28,7 +29,7 @@ set(WARNING_FLAG -Wall -Wextra -Wsign-conversion -Wuninitialized  -Wunused-varia
 set(WARNING_NO_EXCEPTION_FLAG -fno-exceptions)
 set(WARNING_AS_ERROR_FLAG -Werror)
 
-# Generator expression doesn't work with, we need to make an IF statement manually
+# Generator expression doesn't work with clang-tidy, we need to make an IF statement manually
 if(ENABLE_WARNINGS)
 add_compile_options(${WARNING_FLAG})
     if(${CMAKE_CROSSCOMPILING})
@@ -51,6 +52,7 @@ include(utils)
 include(ros/generators.cmake)
 include(catkin/common)
 include(propolis/common)
+include(clang-tools/clang-tidy)
 include(clang-tools/clang-format)
 include(doc/doxygen)
 
@@ -70,3 +72,6 @@ endif()
 # Include src to compile
 add_subdirectory(src)
 
+# Disable clang-tidy after generating all targets so it isn't used for other packages in the same catkin workspace
+set(CMAKE_CXX_CLANG_TIDY "" CACHE STRING "" FORCE)
+set(CMAKE_C_CLANG_TIDY "" CACHE STRING "" FORCE)

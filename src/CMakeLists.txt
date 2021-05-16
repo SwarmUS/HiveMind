@@ -30,6 +30,6 @@ add_subdirectory(interloc)
 
 target_compile_options(${EXECUTABLE_NAME} PRIVATE -w)
 set_source_files_properties(
-    ${LINKER_SOURCES}
+    ${PROJECT_SOURCES}
     PROPERTIES COMPILE_FLAGS
     "${WARNING_FLAG}")

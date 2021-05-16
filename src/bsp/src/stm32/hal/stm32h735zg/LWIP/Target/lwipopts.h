@@ -91,8 +91,6 @@
 #define DEFAULT_TCP_RECVMBOX_SIZE 6
 /*----- Value in opt.h for DEFAULT_ACCEPTMBOX_SIZE: 0 -----*/
 #define DEFAULT_ACCEPTMBOX_SIZE 6
-/*----- Value in opt.h for LWIP_COMPAT_SOCKETS: 1 -----*/
-#define LWIP_COMPAT_SOCKETS 0
 /*----- Value in opt.h for RECV_BUFSIZE_DEFAULT: INT_MAX -----*/
 #define RECV_BUFSIZE_DEFAULT 2000000000
 /*----- Value in opt.h for LWIP_STATS: 1 -----*/

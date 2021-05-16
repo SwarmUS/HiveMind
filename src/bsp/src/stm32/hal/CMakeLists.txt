@@ -92,5 +92,9 @@ if(DISABLE_EXTERNAL_WARNINGS)
         PROPERTIES COMPILE_FLAGS
             -w #Disables all warnings
     )
-    target_compile_options(${LIB_NAME} PRIVATE -w)
+
+    set_target_properties(
+        ${LIB_NAME}
+        PROPERTIES C_CLANG_TIDY ""
+    )
 endif()

@@ -87,9 +87,10 @@ foreach (bbz_exec_src ${BBZ_UTILS_SOURCES})
 endforeach ()
 
 
-# Disable compiler warnings
+# Disable compiler warnings and clang-tidy
 if(DISABLE_EXTERNAL_WARNINGS)
     target_compile_options(BittyBuzz PRIVATE -w)
+    set_target_properties(BittyBuzz PROPERTIES C_CLANG_TIDY "")
 endif()
 
 find_package_handle_standard_args(BittyBuzz
