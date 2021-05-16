@@ -9,6 +9,10 @@ find_package(LWIP COMPONENTS
         STM32H735ZG_M7
         REQUIRED)
 
+find_package(BSP COMPONENTS 
+        STM32H735ZG_M7
+        REQUIRED)
+
 set(LIB_SOURCES
     App/lwip.c
     Target/ethernetif.c
