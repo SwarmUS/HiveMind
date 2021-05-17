@@ -51,3 +51,8 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::HAL
         SwarmUS::HiveMind::BSP::Platform::Interloc
         )
+
+if (DISABLE_EXTERNAL_WARNINGS) 
+        set_target_properties(${LIB_NAME} PROPERTIES CXX_CLANG_TIDY "" )
+        set_target_properties(${LIB_NAME} PROPERTIES C_CLANG_TIDY "" )
+endif()

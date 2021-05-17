@@ -13,7 +13,7 @@ USB_StatusTypeDef usb_hasTxFinished(USBD_CDC_HandleTypeDef* hcdc) {
 }
 
 USB_StatusTypeDef usb_sendData(const uint8_t* buf, uint16_t Len) {
-    uint8_t status = CDC_Transmit_FS((uint8_t*)buf, Len);
+    uint8_t status = USB_TRANSMIT((uint8_t*)buf, Len);
 
     if (status != USBD_OK) {
         return USB_FAIL;

@@ -8,6 +8,7 @@ extern "C" {
 #endif
 #include "hivemind_hal.h"
 #include "hivemind_usb_hal.h"
+#include <c-common/circular_buff.h>
 
 #define CBUFF_USB_DATA_SIZE 2048
 

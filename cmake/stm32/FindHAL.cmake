@@ -157,9 +157,23 @@ set(HAL_LL_DRIVERS_L4
     rcc rng rtc sdmmc spi swpmi tim usart usb utils
 )
 
-foreach(FAMILY ${STM32_SUPPORTED_FAMILIES})
-    list(APPEND HAL_DRIVERS ${HAL_DRIVERS_${FAMILY}})
-    list(APPEND HAL_LL_DRIVERS ${HAL_LL_DRIVERS_${FAMILY}})
+set(HAL_DRIVERS_L5
+    adc comp cortex crc cryp dac dfsdm dma exti fdcan flash flash_ramfunc gpio 
+    gtzc hash i2c icache irda iwdg lptim mmc nand nor opamp ospi pcd pka pwr rcc 
+    rng rtc sai sd smartcard smbus spi sram tim tsc uart usart wwdg
+)
+set(HAL_EX_DRIVERS_L5
+    adc crc cryp dac dfsdm dma flash hash i2c mmc opamp pcd pwr rcc
+    rng rtc sai sd smartcard spi tim uart usart
+)
+set(HAL_LL_DRIVERS_L5
+    adc comp crc crs dac dma exti fmc gpio i2c lptim lpuart opamp pka pwr rcc 
+    rng rtc sdmmc spi tim ucpd usart usb utils
+)
+
+foreach(FAMILY_SUFFIX ${STM32_SUPPORTED_FAMILIES_SHORT_NAME})
+    list(APPEND HAL_DRIVERS ${HAL_DRIVERS_${FAMILY_SUFFIX}})
+    list(APPEND HAL_LL_DRIVERS ${HAL_LL_DRIVERS_${FAMILY_SUFFIX}})
 endforeach()
 list(REMOVE_DUPLICATES HAL_DRIVERS)
 list(REMOVE_DUPLICATES HAL_LL_DRIVERS)
@@ -186,13 +200,9 @@ foreach(COMP ${HAL_FIND_COMPONENTS})
 endforeach()
 
 if(NOT HAL_FIND_COMPONENTS_FAMILIES)
-    set(HAL_FIND_COMPONENTS_FAMILIES
-        STM32F0 STM32F1 STM32F2 STM32F3 STM32F4 STM32F7
-        STM32G0 STM32G4
-        STM32H7_M7 STM32H7_M4
-        STM32L0 STM32L1 STM32L4
-    )
+    set(HAL_FIND_COMPONENTS_FAMILIES ${STM32_SUPPORTED_FAMILIES_LONG_NAME})
 endif()
+
 if(STM32H7 IN_LIST HAL_FIND_COMPONENTS_FAMILIES)
     list(REMOVE_ITEM HAL_FIND_COMPONENTS_FAMILIES STM32H7)
     list(APPEND HAL_FIND_COMPONENTS_FAMILIES STM32H7_M7 STM32H7_M4)
@@ -231,7 +241,25 @@ foreach(COMP ${HAL_FIND_COMPONENTS_FAMILIES})
         set(STM32_CUBE_${FAMILY}_PATH /opt/STM32Cube${FAMILY} CACHE PATH "Path to STM32Cube${FAMILY}")
         message(STATUS "Neither STM32_CUBE_${FAMILY}_PATH nor STM32_HAL_${FAMILY}_PATH specified using default STM32_CUBE_${FAMILY}_PATH: ${STM32_CUBE_${FAMILY}_PATH}")
     endif()
-        
+
+    #Checking HAL patch or release version
+    unset(VERSION_INFO)
+    find_file(PACKAGE_FILE NAMES package.xml PATHS ${STM32_CUBE_${FAMILY}_PATH})
+    if(PACKAGE_FILE)
+        file(READ ${PACKAGE_FILE} PACKAGE_FILE_CONTENT)
+        string(REGEX MATCH "PackDescription Release=\"FW.${FAMILY}.([0-9.]+)\"( Patch=\"FW.${FAMILY}.([0-9.]+)\")?" VERSION_INFO ${PACKAGE_FILE_CONTENT})
+        if(CMAKE_MATCH_3) # This is the "Patch" revision
+            set(HAL_${COMP}_VERSION ${CMAKE_MATCH_3})
+            set(HAL_VERSION ${CMAKE_MATCH_3})
+        else(CMAKE_MATCH_1) #This is the "Release" version 
+            set(HAL_${COMP}_VERSION ${CMAKE_MATCH_1})
+            set(HAL_VERSION ${CMAKE_MATCH_1})
+        endif()
+    endif()
+    if(NOT VERSION_INFO)
+        message(STATUS "Could not read the HAL version from package.xml for ${COMP}")
+    endif()
+
     find_path(HAL_${FAMILY}_PATH
         NAMES Inc/stm32${FAMILY_L}xx_hal.h
         PATHS "${STM32_HAL_${FAMILY}_PATH}" "${STM32_CUBE_${FAMILY}_PATH}/Drivers/STM32${FAMILY}xx_HAL_Driver"
@@ -279,7 +307,7 @@ foreach(COMP ${HAL_FIND_COMPONENTS_FAMILIES})
         )
         list(APPEND HAL_${FAMILY}${CORE_U}_SOURCES "${HAL_${FAMILY}_${DRV}_SOURCE}")
         if(NOT HAL_${FAMILY}${CORE_U}_${DRV}_SOURCE)
-            message(WARNING "Cannot find ${DRV} driver for ${${FAMILY}${CORE_U}}")
+            message(WARNING "Cannot find ${DRV} driver for ${FAMILY}${CORE_U}")
             set(HAL_${DRV_COMP}_FOUND FALSE)
             continue()
         endif()
@@ -299,7 +327,7 @@ foreach(COMP ${HAL_FIND_COMPONENTS_FAMILIES})
             )
             list(APPEND HAL_${FAMILY}${CORE_U}_SOURCES "${HAL_${FAMILY}${CORE_U}_${DRV}_EX_SOURCE}")
             if(NOT HAL_${FAMILY}${CORE_U}_${DRV}_EX_SOURCE)
-                message(WARNING "Cannot find ${DRV}Ex driver for ${${FAMILY}${CORE_U}}")
+                message(WARNING "Cannot find ${DRV}Ex driver for ${FAMILY}${CORE_U}")
             endif()
                         
             if((TARGET HAL::STM32::${FAMILY}${CORE_C}::${DRV}) AND (NOT (TARGET HAL::STM32::${FAMILY}${CORE_C}::${DRV}Ex)))
@@ -326,7 +354,7 @@ foreach(COMP ${HAL_FIND_COMPONENTS_FAMILIES})
         )
         list(APPEND HAL_${FAMILY}${CORE_U}_SOURCES "${HAL_${FAMILY}_${DRV}_LL_SOURCE}")
         if(NOT HAL_${FAMILY}${CORE_U}_${DRV}_LL_SOURCE)
-            message(WARNING "Cannot find LL_${DRV} driver for ${${FAMILY}${CORE_U}}")
+            message(WARNING "Cannot find LL_${DRV} driver for ${FAMILY}${CORE_U}")
             set(HAL_${DRV_COMP}_FOUND FALSE)
             continue()
         endif()
@@ -334,7 +362,7 @@ foreach(COMP ${HAL_FIND_COMPONENTS_FAMILIES})
         set(HAL_${DRV_COMP}_FOUND TRUE)
         if(HAL_${FAMILY}${CORE_U}_${DRV}_LL_SOURCE AND (NOT (TARGET HAL::STM32::${FAMILY}${CORE_C}::LL_${DRV})))
             add_library(HAL::STM32::${FAMILY}${CORE_C}::LL_${DRV} INTERFACE IMPORTED)
-            target_link_libraries(HAL::STM32::${FAMILY}${CORE_C}::LL_${DRV} INTERFACE HAL::STM32::${FAMILY}${CORE_C})
+            target_include_directories(HAL::STM32::${FAMILY}${CORE_C}::LL_${DRV} INTERFACE "${HAL_${FAMILY}${CORE_U}_INCLUDE}")
             target_sources(HAL::STM32::${FAMILY}${CORE_C}::LL_${DRV} INTERFACE "${HAL_${FAMILY}${CORE_U}_${DRV}_LL_SOURCE}")
         endif()
     endforeach()
@@ -353,4 +381,3 @@ find_package_handle_standard_args(HAL
     FOUND_VAR HAL_FOUND
     HANDLE_COMPONENTS
 )
-

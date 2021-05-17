@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "hivemind_hal.h"
+#include <stdbool.h>
 
 /**
  * @brief Erases a sector form flash

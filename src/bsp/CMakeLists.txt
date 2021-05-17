@@ -43,3 +43,5 @@ if(NOT ${CMAKE_CROSSCOMPILING})
     set_target_properties(${LIB_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 endif()
 
+
+

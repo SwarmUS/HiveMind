@@ -47,7 +47,7 @@ jobs:
           . ./devel/setup.sh
           catkin_make doc
 
-  build-stm32:
+  build-stm32f429zi:
     runs-on: ubuntu-latest
     container:
       image: swarmus/embedded
@@ -60,6 +60,24 @@ jobs:
         cd build
         cmake -D CMAKE_TOOLCHAIN_FILE=../cmake/stm32_f429zi_gcc.cmake -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_CLANG_TIDY_CHECK=ON ..
 
+    - name: build
+      run: |
+        cd build
+        make -j
+
+  build-stm32h735gz:
+    runs-on: ubuntu-latest
+    container:
+      image: swarmus/embedded
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: prepare
+      run: |
+        mkdir -p build
+        cd build
+        cmake -D CMAKE_TOOLCHAIN_FILE=../cmake/stm32_h735zg_gcc.cmake -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_CLANG_TIDY_CHECK=ON ..
+        
     - name: build
       run: |
         cd build

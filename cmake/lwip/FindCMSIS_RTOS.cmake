@@ -1,10 +1,5 @@
 if(NOT CMSIS_RTOS_FIND_COMPONENTS)
-    set(CMSIS_RTOS_FIND_COMPONENTS
-            STM32F0 STM32F1 STM32F2 STM32F3 STM32F4 STM32F7
-            STM32G0 STM32G4
-            STM32H7_M7 STM32H7_M4
-            STM32L0 STM32L1 STM32L4
-            )
+    set(CMSIS_RTOS_FIND_COMPONENTS ${STM32_SUPPORTED_FAMILIES_LONG_NAME})
 endif()
 
 if(STM32H7 IN_LIST CMSIS_RTOS_FIND_COMPONENTS)
@@ -76,7 +71,7 @@ foreach(COMP ${CMSIS_RTOS_FIND_COMPONENTS})
             PUBLIC
                 SwarmUS::HiveMind::OS
             PRIVATE
-                CMSIS::STM32::F429ZI
+                CMSIS::STM32::${DEVICES}${CORE_C}
             )
     endif()
 

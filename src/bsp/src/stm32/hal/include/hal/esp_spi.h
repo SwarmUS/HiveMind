@@ -8,6 +8,7 @@ extern "C" {
 #include "hal/hal_spi.h"
 #include "hal_spi.h"
 #include "hivemind_hal.h"
+#include <stdbool.h>
 
 /**
  * @brief Typedef for pointer function used as callback for spi operation
@@ -38,7 +39,7 @@ bool EspSpi_TransmitDMA(const uint8_t* buffer,
  * @param context Pointer to the class instance in which to call the callback
  * @return True if success. Otherwise, false
  */
-bool EspSpi_ReceiveDma(const uint8_t* buffer,
+bool EspSpi_ReceiveDma(uint8_t* buffer,
                        uint16_t length,
                        spiCallbackFct_t cpltCallback,
                        void* context);
@@ -55,7 +56,7 @@ bool EspSpi_ReceiveDma(const uint8_t* buffer,
  * @return True if success. Otherwise, false
  */
 bool EspSpi_TransmitReceiveDma(const uint8_t* txBuffer,
-                               const uint8_t* rxBuffer,
+                               uint8_t* rxBuffer,
                                uint16_t lengthBytes,
                                spiCallbackFct_t cpltCallback,
                                void* context);

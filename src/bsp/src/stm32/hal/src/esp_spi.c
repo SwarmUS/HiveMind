@@ -14,14 +14,14 @@ bool EspSpi_TransmitDMA(const uint8_t* buffer,
     if (HAL_SPI_GetState(ESP_SPI) != HAL_SPI_STATE_BUSY_TX) {
         txCpltCallbackFct = cpltCallback;
         txCallbackContext = context;
-        if (HAL_SPI_Transmit_DMA(ESP_SPI, buffer, length) == HAL_OK) {
+        if (HAL_SPI_Transmit_DMA(ESP_SPI, (uint8_t*)buffer, length) == HAL_OK) {
             return true;
         }
     }
     return false;
 }
 
-bool EspSpi_ReceiveDma(const uint8_t* buffer,
+bool EspSpi_ReceiveDma(uint8_t* buffer,
                        uint16_t length,
                        spiCallbackFct_t cpltCallback,
                        void* context) {
@@ -36,7 +36,7 @@ bool EspSpi_ReceiveDma(const uint8_t* buffer,
 }
 
 bool EspSpi_TransmitReceiveDma(const uint8_t* txBuffer,
-                               const uint8_t* rxBuffer,
+                               uint8_t* rxBuffer,
                                uint16_t lengthBytes,
                                spiCallbackFct_t cpltCallback,
                                void* context) {
@@ -44,7 +44,7 @@ bool EspSpi_TransmitReceiveDma(const uint8_t* txBuffer,
         txrxCpltCallbackFct = cpltCallback;
         txrxCallbackContext = context;
         HAL_StatusTypeDef status =
-            HAL_SPI_TransmitReceive_DMA(ESP_SPI, txBuffer, rxBuffer, lengthBytes);
+            HAL_SPI_TransmitReceive_DMA(ESP_SPI, (uint8_t*)txBuffer, rxBuffer, lengthBytes);
         if (status == HAL_OK) {
             return true;
         }

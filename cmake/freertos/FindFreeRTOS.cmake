@@ -98,7 +98,7 @@ foreach(PORT ${FreeRTOS_FIND_COMPONENTS})
         else() # Default port for gcc
             find_path(FreeRTOS_${PORT}_PATH
                 NAMES portmacro.h
-                PATHS "${FREERTOS_KERNEL_PATH}/portable/GCC/${PORT}"
+                PATHS "${FREERTOS_KERNEL_PATH}/portable/GCC/${PORT}"  "${FREERTOS_KERNEL_PATH}/portable/GCC/${PORT}/r0p1"
                 NO_DEFAULT_PATH
             )
             list(APPEND FreeRTOS_INCLUDE_DIRS "${FreeRTOS_${PORT}_PATH}")

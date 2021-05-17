@@ -1,12 +1,13 @@
 /** @brief This file provides the callbacks and definition for using printf function */
 
 #include "hal/uart_print.h"
+#include <c-common/circular_buff.h>
 
-#define CBUFF_HUART3_DATA_SIZE 2048
+#define CBUFF_HUART_PRINT_DATA_SIZE 2048
 
 CircularBuff cbuffUartPrint;
 uint16_t lastUartPrintTransferSize = 0;
-static uint8_t cbuffUart3Data[CBUFF_HUART3_DATA_SIZE];
+static uint8_t cbuffUartPrintData[CBUFF_HUART_PRINT_DATA_SIZE];
 
 #ifdef __GNUC__
 /* With GCC, small printf (option LD Linker->Libraries->Small printf
@@ -42,7 +43,7 @@ PUTCHAR_PROTOTYPE {
 /** Function definitions **/
 
 void UartPrint_init() {
-    CircularBuff_init(&cbuffUartPrint, cbuffUart3Data, CBUFF_HUART3_DATA_SIZE);
+    CircularBuff_init(&cbuffUartPrint, cbuffUartPrintData, CBUFF_HUART_PRINT_DATA_SIZE);
 }
 
 void UartPrint_sendTxCallback() {

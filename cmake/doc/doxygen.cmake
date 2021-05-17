@@ -32,7 +32,7 @@ if (DOXYGEN_FOUND)
         "*/hal/*/USB_DEVICE/*"
         "*/decawave/driver/*")
 
-    if (${COMPILE_STM32_F429ZI})
+    if (${COMPILE_STM32})
         LIST(APPEND DOXYGEN_EXCLUDE_PATTERNS "*/posix/*")
     else()
         LIST(APPEND DOXYGEN_EXCLUDE_PATTERNS "*/stm32/*")

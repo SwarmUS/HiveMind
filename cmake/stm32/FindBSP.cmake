@@ -218,13 +218,20 @@ set(BSP_L4_DEVICE_STM32L476G_EVAL L476ZG)
 set(BSP_L4_DEVICE_STM32L476G_Discovery L476VG)
 set(BSP_L4_DEVICE_STM32L496G_Discovery L496AG)
 
+set(BSP_L5_BOARDS 
+    STM32L552E_EVAL STM32L562E-Discovery STM32L5xx_Nucleo_144
+)
+set(BSP_L5_COMPONENTS
+    cs42l51 ft6x06 hx8347i iss66wvh8m8 lsm6dso mfxstm32l152 mx25lm51245g
+    st7789h2 stmpe811
+)
+set(BSP_L5_SOURCES_STM32L562E_Discovery audio bus idd lcd motion_sensor ospi sd ts usbpd_pwr)
+set(BSP_L5_SOURCES_STM32L552E_EVAL audio bus idd io lcd ospi sd sram ts usbpd_pwr)
+set(BSP_L5_DEVICE_STM32L562E_Discovery L562QE)
+set(BSP_L5_DEVICE_STM32L552E_EVAL L552ZE)
+
 if(NOT BSP_FIND_COMPONENTS)
-    set(BSP_FIND_COMPONENTS 
-        STM32F0 STM32F1 STM32F2 STM32F3 STM32F4 STM32F7
-        STM32G0 STM32G4 
-        STM32H7_M7 STM32H7_M4
-        STM32L0 STM32L1 STM32L4 
-    )
+    set(BSP_FIND_COMPONENTS ${STM32_SUPPORTED_FAMILIES_LONG_NAME})
 endif()
 
 if(STM32H7 IN_LIST BSP_FIND_COMPONENTS)
@@ -302,6 +309,7 @@ foreach(COMP ${BSP_FIND_COMPONENTS})
         foreach(SRC ${BSP_${FAMILY}_SOURCES_${BOARD_CANONICAL}})
             target_sources(BSP::STM32::${BOARD_CANONICAL}${CORE_C} INTERFACE "${BSP_${BOARD_CANONICAL}_PATH}/${BOARD_CANONICAL_L}_${SRC}.c")
         endforeach()
+
         if(BSP_${FAMILY}_DEVICE_${BOARD_CANONICAL})
             target_link_libraries(BSP::STM32::${BOARD_CANONICAL}${CORE_C} INTERFACE CMSIS::STM32::${BSP_${FAMILY}_DEVICE_${BOARD_CANONICAL}}${CORE_C})
         endif()
@@ -315,13 +323,13 @@ foreach(COMP ${BSP_FIND_COMPONENTS})
         target_link_libraries(BSP::STM32::${FAMILY}${CORE_C}::${BCOMP_U} INTERFACE BSP::STM32::${FAMILY}${CORE_C} CMSIS::STM32::${FAMILY}${CORE_C})
         target_include_directories(BSP::STM32::${FAMILY}${CORE_C}::${BCOMP_U} INTERFACE "${BSP_${FAMILY}_PATH}/Components/${BCOMP}")
         
-        find_file(BSP_${BOARD_CANONICAL}_${COMP}_SOURCE
+        find_file(BSP_${BOARD_CANONICAL}_${BCOMP}_SOURCE
             NAMES ${BCOMP}.c
             PATHS "${BSP_${FAMILY}_PATH}/Components/${BCOMP}"
             NO_DEFAULT_PATH
         )
-        if (BSP_${BOARD_CANONICAL}_${COMP}_SOURCE)
-            target_sources(BSP::STM32::${FAMILY}${CORE_C}::${BCOMP_U} INTERFACE "${BSP_${BOARD_CANONICAL}_${COMP}_SOURCE}")
+        if (BSP_${BOARD_CANONICAL}_${BCOMP}_SOURCE)
+            target_sources(BSP::STM32::${FAMILY}${CORE_C}::${BCOMP_U} INTERFACE "${BSP_${BOARD_CANONICAL}_${BCOMP}_SOURCE}")
         endif()
     endforeach()
     

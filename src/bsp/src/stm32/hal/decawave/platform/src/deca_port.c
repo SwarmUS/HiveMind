@@ -1,7 +1,6 @@
 #include "deca_port.h"
 #include "deca_device_api.h"
 #include "main.h"
-#include "stm32f4xx_hal_conf.h"
 #include <FreeRTOS.h>
 #include <task.h>
 

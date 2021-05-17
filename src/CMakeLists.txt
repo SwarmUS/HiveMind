@@ -42,6 +42,3 @@ if (DISABLE_EXTERNAL_WARNINGS)
         PROPERTIES C_CLANG_TIDY ""
     )
 endif()
-
-
-
