@@ -30,7 +30,12 @@ jobs:
           . /opt/ros/$ROS_DISTRO/setup.sh
           . ./devel/setup.sh
           cd build/HiveMind
-          ctest -V
+          ctest --no-compress-output -V -T Test
+
+      - name: Publish test report
+        uses: mikepenz/action-junit-report@v2
+        with:
+          report_paths: '**/build/HiveMind/Testing/*/Test.xml'
 
       - name: check-format
         run: |
