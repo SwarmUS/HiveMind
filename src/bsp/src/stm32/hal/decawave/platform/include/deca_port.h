@@ -14,6 +14,25 @@ extern "C" {
  */
 typedef enum { DW_A = 0, DW_B = 1 } decaDevice_t;
 
+typedef void (*decaISRCallback_t)(void* context);
+
+/**
+ * @brief Structure to hold a port and pin associated with a decawave NSS pin
+ */
+typedef struct {
+    SPI_HandleTypeDef* spiHandle;
+    GPIO_TypeDef* nssPort;
+    uint16_t nssPin;
+    GPIO_TypeDef* irqPort;
+    uint16_t irqPin;
+    GPIO_TypeDef* resetPort;
+    uint16_t resetPin;
+    void* isrContext;
+    decaISRCallback_t isrCallback;
+} decawaveDeviceConfig_t;
+
+extern decawaveDeviceConfig_t g_decawaveConfigs[2];
+
 /**
  * @brief Performs a hardware reset on a specific decawave
  * @param selectedDevice The device to reset
@@ -78,24 +97,6 @@ void deca_isr(decaDevice_t selectedDevice);
  * @brief Sends a pulse on the DW clock sync
  */
 void deca_pulseSyncSignal();
-
-/**
- * Sets the DW_SYNC pin
- * @param state State to set
- */
-void deca_setSync(bool state);
-
-/**
- * Sets the DW_SYNC_EN pin
- * @param state State to set
- */
-void deca_setSyncEnable(bool state);
-
-/**
- * Sets the DW_SYNC_CLEAR pin
- * @param state State to set
- */
-void deca_setSyncClear(bool state);
 
 #ifdef __cplusplus
 }
