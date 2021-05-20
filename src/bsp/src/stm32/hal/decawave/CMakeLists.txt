@@ -9,7 +9,7 @@ if (${COMPILE_STM32_F429ZI})
 elseif (${COMPILE_STM32_H735ZG})
     set(DWT_NUM_DW_DEV "6")
 else()
-    message(FATAL_ERROR "FLASH: The current board is not supported")
+    message(FATAL_ERROR "DECAWAVE: The current board is not supported")
 endif()
 configure_file(include/deca_config.in.h include/deca_config.h)
 
