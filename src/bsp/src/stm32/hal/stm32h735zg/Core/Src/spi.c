@@ -392,7 +392,11 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle) {
         PE13     ------> SPI4_MISO
         PE14     ------> SPI4_MOSI
         */
+<<<<<<< HEAD
         GPIO_InitStruct.Pin = MEZ_SPI_SCK_Pin | MEZ_SPI_MISO_Pin | MEZ_SPI_MISOE14_Pin;
+=======
+        GPIO_InitStruct.Pin = MEZ_SPI_SCK_Pin | MEZ_SPI_MISO_Pin | MEZ_SPI_MOSI_Pin;
+>>>>>>> fc1448a... Review/update CubeMX
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -507,7 +511,11 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle) {
         PE13     ------> SPI4_MISO
         PE14     ------> SPI4_MOSI
         */
+<<<<<<< HEAD
         HAL_GPIO_DeInit(GPIOE, MEZ_SPI_SCK_Pin | MEZ_SPI_MISO_Pin | MEZ_SPI_MISOE14_Pin);
+=======
+        HAL_GPIO_DeInit(GPIOE, MEZ_SPI_SCK_Pin | MEZ_SPI_MISO_Pin | MEZ_SPI_MOSI_Pin);
+>>>>>>> fc1448a... Review/update CubeMX
 
         /* USER CODE BEGIN SPI4_MspDeInit 1 */
 

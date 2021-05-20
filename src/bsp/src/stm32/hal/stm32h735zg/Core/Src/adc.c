@@ -24,9 +24,9 @@
 
 /* USER CODE END 0 */
 
-ADC_HandleTypeDef hadc1;
 ADC_HandleTypeDef hadc2;
 
+<<<<<<< HEAD
 /* ADC1 init function */
 void MX_ADC1_Init(void) {
 
@@ -82,6 +82,8 @@ void MX_ADC1_Init(void) {
 
     /* USER CODE END ADC1_Init 2 */
 }
+=======
+>>>>>>> fc1448a... Review/update CubeMX
 /* ADC2 init function */
 void MX_ADC2_Init(void) {
 
@@ -97,7 +99,11 @@ void MX_ADC2_Init(void) {
     /** Common config
      */
     hadc2.Instance = ADC2;
+<<<<<<< HEAD
     hadc2.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV6;
+=======
+    hadc2.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV4;
+>>>>>>> fc1448a... Review/update CubeMX
     hadc2.Init.Resolution = ADC_RESOLUTION_16B;
     hadc2.Init.ScanConvMode = ADC_SCAN_DISABLE;
     hadc2.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
@@ -125,6 +131,7 @@ void MX_ADC2_Init(void) {
     sConfig.OffsetSignedSaturation = DISABLE;
     if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK) {
         Error_Handler();
+<<<<<<< HEAD
     }
     /* USER CODE BEGIN ADC2_Init 2 */
 
@@ -234,6 +241,57 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle) {
 
         /* USER CODE BEGIN ADC2_MspDeInit 1 */
 
+=======
+    }
+    /* USER CODE BEGIN ADC2_Init 2 */
+
+    /* USER CODE END ADC2_Init 2 */
+}
+
+void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle) {
+
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    if (adcHandle->Instance == ADC2) {
+        /* USER CODE BEGIN ADC2_MspInit 0 */
+
+        /* USER CODE END ADC2_MspInit 0 */
+        /* ADC2 clock enable */
+        __HAL_RCC_ADC12_CLK_ENABLE();
+
+        __HAL_RCC_GPIOB_CLK_ENABLE();
+        /**ADC2 GPIO Configuration
+        PB0     ------> ADC2_INN5
+        PB1     ------> ADC2_INP5
+        */
+        GPIO_InitStruct.Pin = MEZ_ADC1_N_Pin | MEZ_ADC1_P_Pin;
+        GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+        /* USER CODE BEGIN ADC2_MspInit 1 */
+
+        /* USER CODE END ADC2_MspInit 1 */
+    }
+}
+
+void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle) {
+
+    if (adcHandle->Instance == ADC2) {
+        /* USER CODE BEGIN ADC2_MspDeInit 0 */
+
+        /* USER CODE END ADC2_MspDeInit 0 */
+        /* Peripheral clock disable */
+        __HAL_RCC_ADC12_CLK_DISABLE();
+
+        /**ADC2 GPIO Configuration
+        PB0     ------> ADC2_INN5
+        PB1     ------> ADC2_INP5
+        */
+        HAL_GPIO_DeInit(GPIOB, MEZ_ADC1_N_Pin | MEZ_ADC1_P_Pin);
+
+        /* USER CODE BEGIN ADC2_MspDeInit 1 */
+
+>>>>>>> fc1448a... Review/update CubeMX
         /* USER CODE END ADC2_MspDeInit 1 */
     }
 }

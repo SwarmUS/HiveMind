@@ -196,7 +196,11 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle) {
         PE0     ------> UART8_RX
         PE1     ------> UART8_TX
         */
+<<<<<<< HEAD
         GPIO_InitStruct.Pin = UART2_WROOM_RX_Pin | UART_WROOM_TX_Pin;
+=======
+        GPIO_InitStruct.Pin = UART_WROOM_RX_Pin | UART_WROOM_TX_Pin;
+>>>>>>> fc1448a... Review/update CubeMX
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -269,7 +273,11 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle) {
         PE0     ------> UART8_RX
         PE1     ------> UART8_TX
         */
+<<<<<<< HEAD
         HAL_GPIO_DeInit(GPIOE, UART2_WROOM_RX_Pin | UART_WROOM_TX_Pin);
+=======
+        HAL_GPIO_DeInit(GPIOE, UART_WROOM_RX_Pin | UART_WROOM_TX_Pin);
+>>>>>>> fc1448a... Review/update CubeMX
 
         /* USER CODE BEGIN UART8_MspDeInit 1 */
 
