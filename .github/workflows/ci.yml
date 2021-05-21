@@ -31,11 +31,14 @@ jobs:
           . ./devel/setup.sh
           cd build/HiveMind
           ctest --no-compress-output -V -T Test
+          ls
+          cd Testing
+          ls
 
       - name: Publish test report
         uses: mikepenz/action-junit-report@v2
         with:
-          report_paths: '**/build/HiveMind/Testing/*/Test.xml'
+          report_paths: 'build/HiveMind/Testing/*/Test.xml'
 
       - name: check-format
         run: |
