@@ -33,6 +33,7 @@ jobs:
           ctest --no-compress-output -V -T Test
 
       - name: Publish test report
+        if: always()
         uses: mikepenz/action-junit-report@v2
         with:
           report_paths: 'catkin_ws/build/HiveMind/Testing/*/Test.xml'
