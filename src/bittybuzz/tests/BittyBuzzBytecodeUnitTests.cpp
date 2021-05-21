@@ -38,7 +38,7 @@ TEST_F(BittyBuzzBytecodeTestFixture, BittyBuzzBytecode_getBytecodeFetchFunction_
     for (uint8_t i = 0; i < 3; i++) {
         EXPECT_EQ(buff[i], i);
     }
-    EXPECT_EQ(m_logCounter, 0);
+    EXPECT_EQ(m_logCounter, 1);
 }
 
 TEST_F(BittyBuzzBytecodeTestFixture, BittyBuzzBytecode_getBytecodeFetchFunction_getLastBytes) {
