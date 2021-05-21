@@ -2,6 +2,22 @@ set(LIB_NAME "swarmus-hivemind-hal-stm32h735zg")
 set(LIB_ALIAS "SwarmUS::HiveMind::HAL::STM32")
 
 
+set(LINKER_SCRIPT_CUSTOM_MEMORY "RAM_D2 (xrw)        : ORIGIN = 0x30000000, LENGTH = 288K\n")
+
+set(LINKER_SCRIPT_CUSTOM_SECTION
+    
+"   .lwip_sec (NOLOAD) : {
+    . = ABSOLUTE(0x30000000);
+    *(.RxDecripSection) 
+    
+    . = ABSOLUTE(0x30000060);
+    *(.TxDecripSection)
+    
+    . = ABSOLUTE(0x30000200);
+    *(.RxArraySection) 
+  } >RAM_D2 AT> ROM "
+)
+
 set(LIB_SOURCES
     Core/Src/usart.c
     Core/Src/dma.c
