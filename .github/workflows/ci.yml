@@ -31,12 +31,16 @@ jobs:
           . ./devel/setup.sh
           cd build/HiveMind
           ctest --no-compress-output -V -T Test
+          pwd
 
       - name: Publish test report
         if: always()
         uses: mikepenz/action-junit-report@v2
         with:
           report_paths: 'catkin_ws/build/HiveMind/Testing/*/Test.xml'
+        run: |
+          ls
+          pwd
 
       - name: check-format
         run: |
