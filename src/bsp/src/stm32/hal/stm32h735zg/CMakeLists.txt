@@ -1,28 +1,6 @@
 set(LIB_NAME "swarmus-hivemind-hal-stm32h735zg")
 set(LIB_ALIAS "SwarmUS::HiveMind::HAL::STM32")
 
-
-set(LINKER_SCRIPT_CUSTOM_MEMORY 
-"
-    RAM_D2 (xrw)      : ORIGIN = 0x30000000, LENGTH = 32K\n
-    RAM_D3 (xrw)      : ORIGIN = 0x38000000, LENGTH = 16K\n
-")
-
-set(LINKER_SCRIPT_CUSTOM_SECTION
-    
-"   
-    .lwip_sec (NOLOAD) : {
-    . = ABSOLUTE(0x30000000);
-    *(.RxDecripSection) 
-    
-    . = ABSOLUTE(0x30000060);
-    *(.TxDecripSection)
-    
-    . = ABSOLUTE(0x30000200);
-    *(.RxArraySection) 
-  } >RAM_D2 AT> ROM "
-)
-
 set(LIB_SOURCES
     Core/Src/usart.c
     Core/Src/dma.c
@@ -69,7 +47,7 @@ find_package(HAL COMPONENTS
 # Creating the interface library
 add_library(stm32h735zg-linker INTERFACE)
 add_library(${LIB_HAL_LINKER_ALIAS} ALIAS stm32h735zg-linker) # Provide alias for linker options
-set_target_properties(CMSIS::STM32::H735ZG::M7 PROPERTIES IMPORTED_GLOBAL TRUE)
+
 
 target_sources(stm32h735zg-linker
     INTERFACE
@@ -87,12 +65,16 @@ target_include_directories(stm32h735zg-linker
 target_link_libraries(stm32h735zg-linker
     INTERFACE
         STM32::H7::M7
-        CMSIS::STM32::H735ZG::M7
+        CMSIS::STM32::H735xx::M7
         HAL::STM32::H7::M7
         STM32::NoSys
         SwarmUS::HiveMind::LWIP
         CMSIS::STM32::H7::M7::RTOS_V2
     )
+# linker file
+configure_file(H735ZG_M7.in.ld H735ZG_M7.ld)
+set_default(USER_DATA_FLASH_SIZE "0K")
+stm32_add_linker_script(stm32h735zg-linker INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/H735ZG_M7.ld)
 
 # Actual bsp library
 add_library(${LIB_NAME} 
@@ -117,7 +99,7 @@ target_include_directories(${LIB_NAME}
 
 target_link_libraries(${LIB_NAME}
     PUBLIC 
-        CMSIS::STM32::H735ZG::M7
+        CMSIS::STM32::H735xx::M7
         HAL::STM32::H7::M7::CORTEX
         STM32::NoSys
         SwarmUS::Propolis::C::Common
