@@ -59,7 +59,6 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void PeriphCommonClock_Config(void);
-static void MPU_Config(void);
 void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -161,15 +160,6 @@ void PeriphCommonClock_Config(void) {
 
 /* USER CODE END 4 */
 
-/* MPU Configuration */
-
-void MPU_Config(void) {
-
-    /* Disables the MPU */
-    HAL_MPU_Disable();
-    /* Enables the MPU */
-    HAL_MPU_Enable(MPU_HFNMI_PRIVDEF_NONE);
-}
 /**
  * @brief  Period elapsed callback in non blocking mode
  * @note   This function is called  when TIM1 interrupt took place, inside
