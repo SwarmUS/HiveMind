@@ -57,7 +57,7 @@ Decawave::Decawave(decaDevice_t spiDevice, UWBChannel channel, UWBSpeed speed) :
 
 bool Decawave::init() {
     deca_selectDevice(m_spiDevice);
-    deca_setSlowRate();
+    deca_setSlowRate(m_spiDevice);
     uint32_t deviceID = 0;
     uint8_t i = 0;
 
@@ -75,7 +75,7 @@ bool Decawave::init() {
     deca_setISRCallback(m_spiDevice, isrCallback, this);
     dwt_setcallbacks(txCallback, rxCallback, rxCallback, rxCallback, this);
 
-    deca_setFastRate();
+    deca_setFastRate(m_spiDevice);
 
     dwt_softreset();
     configureDW();

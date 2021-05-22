@@ -3,6 +3,8 @@
 
 cmake-build-debug/
 cmake-build-target/
+cmake-build-target---f4/
+cmake-build-target---h7/
 cmake-build-local/
 
 .builds/

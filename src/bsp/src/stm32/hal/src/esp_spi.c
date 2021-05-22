@@ -52,6 +52,12 @@ bool EspSpi_TransmitReceiveDma(const uint8_t* txBuffer,
     return false;
 }
 
+void EspSpi_WriteCS(bool state) {
+    HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
+}
+
+bool EspSpi_ReadCS() { return HAL_GPIO_ReadPin(ESP_CS_GPIO_Port, ESP_CS_Pin) == GPIO_PIN_SET; }
+
 void EspSpi_RxCallback() {
     if (rxCpltCallbackFct != NULL && rxCallbackContext != NULL) {
         rxCpltCallbackFct(rxCallbackContext);
