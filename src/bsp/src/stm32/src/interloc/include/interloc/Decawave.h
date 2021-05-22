@@ -238,6 +238,8 @@ class Decawave {
 
     DW_STATE m_state;
 
+    bool m_isReady;
+
     void configureDW();
     bool transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags);
 

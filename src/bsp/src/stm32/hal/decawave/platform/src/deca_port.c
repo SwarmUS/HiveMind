@@ -49,13 +49,6 @@ void deca_setFastRate(decaDevice_t selectedDevice) {
     HAL_SPI_Init(decaConfig->spiHandle);
 }
 
-void deca_init() {
-    for (int i = 0; i < DWT_NUM_DW_DEV; i++) {
-        deca_hardwareReset(i);
-        deca_setSlowRate(i);
-    }
-}
-
 void deca_selectDevice(decaDevice_t selectedDevice) {
     if (selectedDevice < DWT_NUM_DW_DEV) {
         g_selectedDecaDevice = selectedDevice;
@@ -95,4 +88,13 @@ void deca_isr(decaDevice_t selectedDevice) {
             deviceConfig->isrCallback(deviceConfig->isrContext);
         }
     }
+}
+
+bool deca_isPresent(decaDevice_t selectedDevice) {
+    decawaveDeviceConfig_t* deviceConfig = deca_getDeviceConfig(selectedDevice);
+    if (deviceConfig == NULL) {
+        return false;
+    }
+
+    return deviceConfig->isPresent;
 }

@@ -31,6 +31,13 @@ void deca_pulseSyncSignal() {
     deca_setSyncEnable(false);
 }
 
+void deca_init() {
+    for (int i = 0; i < DWT_NUM_DW_DEV; i++) {
+        deca_hardwareReset((decaDevice_t)i);
+        deca_setSlowRate((decaDevice_t)i);
+    }
+}
+
 decawaveDeviceConfig_t g_decawaveConfigs[DWT_NUM_DW_DEV] = {{.spiHandle = &hspi4,
                                                              .nssPort = DW_NSS_A_GPIO_Port,
                                                              .nssPin = DW_NSS_A_Pin,
@@ -39,7 +46,8 @@ decawaveDeviceConfig_t g_decawaveConfigs[DWT_NUM_DW_DEV] = {{.spiHandle = &hspi4
                                                              .resetPort = DW_RESET_A_GPIO_Port,
                                                              .resetPin = DW_RESET_A_Pin,
                                                              .isrCallback = NULL,
-                                                             .isrContext = NULL},
+                                                             .isrContext = NULL,
+                                                             .isPresent = true},
                                                             {.spiHandle = &hspi4,
                                                              .nssPort = DW_NSS_B_GPIO_Port,
                                                              .nssPin = DW_NSS_B_Pin,
@@ -48,4 +56,5 @@ decawaveDeviceConfig_t g_decawaveConfigs[DWT_NUM_DW_DEV] = {{.spiHandle = &hspi4
                                                              .resetPort = DW_RESET_B_GPIO_Port,
                                                              .resetPin = DW_RESET_B_Pin,
                                                              .isrCallback = NULL,
-                                                             .isrContext = NULL}};
+                                                             .isrContext = NULL,
+                                                             .isPresent = true}};

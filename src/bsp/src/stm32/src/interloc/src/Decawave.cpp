@@ -47,15 +47,22 @@ Decawave::Decawave(decaDevice_t spiDevice) :
     m_spiDevice(spiDevice),
     m_channel(UWBChannel::DEFAULT_CHANNEL),
     m_speed(UWBSpeed::SPEED_110K),
-    m_rxAsyncTask("dw_rx_task", tskIDLE_PRIORITY + 10, rxAsyncTask, this) {}
+    m_rxAsyncTask("dw_rx_task", tskIDLE_PRIORITY + 10, rxAsyncTask, this),
+    m_isReady(false) {}
 
 Decawave::Decawave(decaDevice_t spiDevice, UWBChannel channel, UWBSpeed speed) :
     m_spiDevice(spiDevice),
     m_channel(channel),
     m_speed(speed),
-    m_rxAsyncTask("dw_rx_task", tskIDLE_PRIORITY + 10, rxAsyncTask, this) {}
+    m_rxAsyncTask("dw_rx_task", tskIDLE_PRIORITY + 10, rxAsyncTask, this),
+    m_isReady(false) {}
 
 bool Decawave::init() {
+    if (!deca_isPresent(m_spiDevice)) {
+        m_isReady = false;
+        return false;
+    }
+
     deca_selectDevice(m_spiDevice);
     deca_setSlowRate(m_spiDevice);
     uint32_t deviceID = 0;
@@ -66,6 +73,11 @@ bool Decawave::init() {
         deviceID = dwt_readdevid();
         Task::delay(1);
     } while (deviceID != DWT_DEVICE_ID && 10 > i++);
+
+    if (deviceID != DWT_DEVICE_ID) {
+        m_isReady = false;
+        return false;
+    }
 
     if (dwt_initialise(DWT_LOADUCODE) == DWT_ERROR) {
         return false;
@@ -99,6 +111,7 @@ bool Decawave::init() {
 
     m_rxAsyncTask.start();
 
+    m_isReady = true;
     return true;
 }
 
