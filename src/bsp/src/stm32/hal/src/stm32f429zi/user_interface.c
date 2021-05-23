@@ -22,3 +22,14 @@ void UI_interruptCallback() {
         g_buttonCallback(g_buttonCallbackContext);
     }
 }
+
+void UI_setLED(led_t led, bool state) {
+    (void)led;
+    (void)state;
+}
+
+void UI_setRGB(bool red, bool green, bool blue) {
+    HAL_GPIO_WritePin(LD1_GPIO_Port, LD3_Pin, green ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(LD2_GPIO_Port, LD3_Pin, blue ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, red ? GPIO_PIN_SET : GPIO_PIN_RESET);
+}

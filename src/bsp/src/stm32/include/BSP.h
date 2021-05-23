@@ -19,6 +19,9 @@ class BSP : public IBSP {
 
   private:
     PersistantStorageManager m_storage;
+
+    static void buttonCallback(void* context);
+    uint8_t m_currentRGBState = 0;
 };
 
 #endif // __BSP_H_

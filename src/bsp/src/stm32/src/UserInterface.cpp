@@ -45,7 +45,34 @@ int UserInterface::printLine(const char* format, va_list args) {
 }
 void UserInterface::setLedState(Led led, bool state) {}
 
-void UserInterface::setRGBLed(RgbColor color) {}
+void UserInterface::setRGBLed(RgbColor color) {
+    switch (color) {
+    case RgbColor::RED:
+        UI_setRGB(true, false, false);
+        break;
+    case RgbColor::GREEN:
+        UI_setRGB(false, true, false);
+        break;
+    case RgbColor::BLUE:
+        UI_setRGB(false, false, true);
+        break;
+    case RgbColor::VIOLET:
+        UI_setRGB(true, false, true);
+        break;
+    case RgbColor::YELLOW:
+        UI_setRGB(false, true, true);
+        break;
+    case RgbColor::BROWN:
+        UI_setRGB(true, true, false);
+        break;
+    case RgbColor::WHITE:
+        UI_setRGB(true, true, true);
+        break;
+    case RgbColor::OFF:
+        UI_setRGB(false, false, false);
+        break;
+    }
+}
 
 void UserInterface::setHexDisplay(uint8_t value) { UI_setHexOutput(value); }
 
