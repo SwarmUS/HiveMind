@@ -25,6 +25,7 @@ typedef struct {
     uint16_t resetPin;
     void* isrContext;
     decaISRCallback_t isrCallback;
+    bool isPresent;
 } decawaveDeviceConfig_t;
 
 extern decawaveDeviceConfig_t g_decawaveConfigs[DWT_NUM_DW_DEV];
@@ -93,6 +94,13 @@ void deca_isr(decaDevice_t selectedDevice);
  * @brief Sends a pulse on the DW clock sync
  */
 void deca_pulseSyncSignal();
+
+/**
+ * @brief Tells if a given decawave is present or not
+ * @param selectedDevice The device to check
+ * @return True if present, false otherwise
+ */
+bool deca_isPresent(decaDevice_t selectedDevice);
 
 #ifdef __cplusplus
 }
