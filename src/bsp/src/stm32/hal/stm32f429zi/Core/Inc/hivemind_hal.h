@@ -21,6 +21,9 @@ extern "C" {
 #define HRNG (&hrng)
 #define FLASH_PROGRAM_32_BYTES (FLASH_TYPEPROGRAM_WORD)
 
+#define UI_INTERRUPT_Pin USER_Btn_Pin
+#define UI_INTERRUPT_Port USER_Btn_Port
+
 // Change to ESP_SOC to use th spi channel for the SOC on the HiveSight.
 // In the future, there might a flag for the HiveBoard.
 #define ESP_WROOM

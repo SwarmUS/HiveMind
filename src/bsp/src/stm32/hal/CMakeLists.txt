@@ -16,7 +16,8 @@ set(LIB_HEADERS
     include/hal/esp_spi.h
     include/hal/hal_gpio.h
     include/hal/usb.h
-    include/hal/hal_flash.h)
+    include/hal/hal_flash.h
+    include/hal/user_interface.h)
 
 # Sources that needs to be global on the project
 # Ex: interrupts, syscalls, callbacks
@@ -63,6 +64,7 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::HAL::Decawave
     PRIVATE
         stm32-linker
+        SwarmUS::HiveMind::HAL::STM32::Platform
 )
 
 target_include_directories(${LIB_NAME} 
@@ -76,8 +78,10 @@ target_include_directories(${LIB_NAME}
 
 if (${COMPILE_STM32_F429ZI})
     add_subdirectory(stm32f429zi)
+    add_subdirectory(src/stm32f429zi)
 elseif (${COMPILE_STM32_H735ZG})
     add_subdirectory(stm32h735zg)
+    add_subdirectory(src/stm32h735zg)
 else()
     message(FATAL_ERROR "STM PORT: The current board is not supported" )
 endif()

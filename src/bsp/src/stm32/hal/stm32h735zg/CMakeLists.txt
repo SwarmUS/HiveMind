@@ -10,6 +10,8 @@ set(LIB_SOURCES
     Core/Src/crc.c
     Core/Src/rng.c
     Core/Src/spi.c
+    Core/Src/i2c.c
+    Drivers/Src/tca9539.c
 )
 
 set(LIB_HEADERS
@@ -23,6 +25,8 @@ set(LIB_HEADERS
     Core/Inc/crc.h
     Core/Inc/rng.h
     Core/Inc/spi.h
+    Core/Inc/i2c.h
+    Drivers/Include/tca9539.h
 )
 
 # Sources that needs to be global on the project
@@ -61,6 +65,7 @@ target_include_directories(stm32h735zg-linker
         LWIP/Target
         USB_DEVICE/App
         USB_DEVICE/Target
+        Drivers/Include
 )
 
 target_link_libraries(stm32h735zg-linker
@@ -122,6 +127,7 @@ target_link_libraries(${LIB_NAME}
         HAL::STM32::H7::M7::RCC
         HAL::STM32::H7::M7::RCCEx
         HAL::STM32::H7::M7::PWREx
+        HAL::STM32::H7::M7::I2C
         CMSIS::STM32::H7::M7::RTOS_V2
 )
 

@@ -1,5 +1,6 @@
 #include "hal/hal_gpio.h"
 #include "deca_port.h"
+#include "hal/user_interface.h"
 
 static void* espCallBackContext = NULL;
 static gpioCallbackFct_t espCallBackFct = NULL;
@@ -18,6 +19,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
         if (espCallBackFct != NULL && espCallBackContext != NULL) {
             espCallBackFct(espCallBackContext);
         }
+    } else if (GPIO_Pin == UI_INTERRUPT_Pin) {
+        UI_interruptCallback();
     } else {
         for (int i = 0; i < DWT_NUM_DW_DEV; i++) {
             decawaveDeviceConfig_t* decaConfig = deca_getDeviceConfig(i);

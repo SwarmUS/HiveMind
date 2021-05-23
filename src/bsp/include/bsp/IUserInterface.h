@@ -8,23 +8,23 @@
  * @brief Represents LEDs present on the boards.
  * (On the HiveSight, LED 3 is not present)
  */
-enum class Led { LED_0, LED_1, LED_2, LED_3 };
+enum class Led { LED_0 = 0, LED_1, LED_2, LED_3 };
 
 /**
  * @brief Possible colors obtainable with an RGB LED
  */
-enum class RgbColor { RED, GREEN, BLUE, VIOLET, YELLOW, BROWN, WHITE, OFF };
+enum class RgbColor { RED = 0, GREEN, BLUE, VIOLET, YELLOW, BROWN, WHITE, OFF };
 
 /**
  * @brief Buttons present on the board.
  * (Button 1 is not available on the HiveSight)
  */
-enum class Button { BUTTON_0, BUTTON_1 };
+enum class Button { BUTTON_0 = 0, BUTTON_1 };
 
 /**
  * @brief Prototype for a callback from a button press
  */
-typedef void (*buttonCallbackFunction_t)(void* instance, bool state);
+typedef void (*buttonCallbackFunction_t)(void* instance);
 
 /**
  * @brief Manages the user interface
@@ -112,7 +112,7 @@ class IUserInterface {
     virtual void setHexDisplay(uint8_t value) = 0;
 
     /**
-     * @brief Sets the callback associated with a given button event (pressed, released)
+     * @brief Sets the callback associated with a given button press
      * @param button Button to register the callback on
      * @param callback Callback to call
      * @param context Context to pass to the callback

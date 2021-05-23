@@ -15,6 +15,12 @@ class UserInterface : public IUserInterface {
     int print(const char* format, va_list args) override;
     int printLine(const char* format, ...) override;
     int printLine(const char* format, va_list args) override;
+    void setLedState(Led led, bool state) override;
+    void setRGBLed(RgbColor color) override;
+    void setHexDisplay(uint8_t value) override;
+    void setButtonCallback(Button button,
+                           buttonCallbackFunction_t callback,
+                           void* context) override;
 
   private:
     Mutex m_mutex;
