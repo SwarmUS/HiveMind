@@ -32,7 +32,7 @@ MEMORY\n\
 {\n\
     FLASH (rx)      : ORIGIN = ${FLASH_ORIGIN}, LENGTH = ${FLASH_SIZE}-${USER_DATA_FLASH_SIZE}\n\
     RAM (xrw)      : ORIGIN = ${RAM_ORIGIN}, LENGTH = ${RAM_SIZE}\n\
-${CCRAM_DEFINITION}\n\
+    ${CCRAM_DEFINITION}\n\
 }\n\
 \n\
 SECTIONS\n\
