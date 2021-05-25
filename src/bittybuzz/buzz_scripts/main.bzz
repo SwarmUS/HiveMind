@@ -1,3 +1,6 @@
+leader = 1
+counter = 0
+
 function init() {
   counter = 0;
   stig = stigmergy.create(1);
@@ -7,10 +10,22 @@ function init() {
 }
 
 function step() {
-  if(counter == 100 and id == 2) {
-    var data = stig.get("leader");
-    log("Current data in stig: ", data, " size: ", stig.size());
-    counter = 0;
+  if(leader != id){
+    neighbors.get(leader);
+    if(counter == 20) {
+      var neighbor = neighbors.get(leader);
+      if(is_table(neighbor)){
+        
+        var x = math.cos(neighbor.elevation);
+        var y = math.sin(neighbor.elevation);
+        log("x:", x, " y:", y);
+        call_host_function(id, "moveBy", {.0 = x, .1 = y});
+      }
+      else{
+        log("Neighbor not found!");
+      }
+      counter = 0;
+    }
+    counter = counter + 1;
   }
-  counter = counter + 1;
 }
