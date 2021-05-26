@@ -1,21 +1,23 @@
-leader = 1
-counter = 0
+stig_counter = 0
+loop_counter = 0
 
 function init() {
   counter = 0;
   stig = stigmergy.create(1);
-  if(id == 2){
-    stig.put("leader", 2);
+  if(id == 1){
+    stig.put("leader", 1);
   }
 }
 
 function step() {
-  if(leader != id){
-    neighbors.get(leader);
-    if(counter == 20) {
+  if(loop_counter == 5) {
+    var leader = stig.get("leader");
+    if(leader != id){
+      log("Getting neighbor")
       var neighbor = neighbors.get(leader);
+
       if(is_table(neighbor)){
-        
+        log("Moving neighbor")
         var x = math.cos(neighbor.elevation);
         var y = math.sin(neighbor.elevation);
         log("x:", x, " y:", y);
@@ -24,8 +26,12 @@ function step() {
       else{
         log("Neighbor not found!");
       }
-      counter = 0;
     }
-    counter = counter + 1;
+    else{
+      stig.put("stig_counter", stig_counter);
+    }
+    log("Stig counter: ", stig.get("stig_counter"));
+    loop_counter = 0;
   }
+  loop_counter = loop_counter + 1;
 }
