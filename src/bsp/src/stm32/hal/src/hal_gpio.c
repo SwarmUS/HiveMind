@@ -18,9 +18,14 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
         if (espCallBackFct != NULL && espCallBackContext != NULL) {
             espCallBackFct(espCallBackContext);
         }
-    } else if (GPIO_Pin == DW_IRQn_A_Pin) {
-        deca_isr(DW_A);
-    } else if (GPIO_Pin == DW_IRQn_B_Pin) {
-        deca_isr(DW_B);
+    } else {
+        for (int i = 0; i < DWT_NUM_DW_DEV; i++) {
+            decawaveDeviceConfig_t* decaConfig = deca_getDeviceConfig(i);
+
+            if (GPIO_Pin == decaConfig->irqPin) {
+                deca_isr(i);
+                break;
+            }
+        }
     }
 }

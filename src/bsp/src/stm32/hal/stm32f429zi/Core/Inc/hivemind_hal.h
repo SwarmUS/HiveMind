@@ -12,10 +12,14 @@ extern "C" {
 #include "rng.h"
 #include "spi.h"
 #include "stm32f4xx_hal_conf.h"
+#include "stm32f4xx_hal_def.h"
+#include "stm32f4xx_hal_flash.h"
+#include "stm32f4xx_hal_flash_ex.h"
 #include "usart.h"
 
 #define HUART_PRINT (&huart3)
 #define HRNG (&hrng)
+#define FLASH_PROGRAM_32_BYTES (FLASH_TYPEPROGRAM_WORD)
 
 // Change to ESP_SOC to use th spi channel for the SOC on the HiveSight.
 // In the future, there might a flag for the HiveBoard.
@@ -30,7 +34,6 @@ extern "C" {
 #define ESP_USER0_Port ESP_USER0_SOC_GPIO_Port
 #define ESP_SPI (&hspi5)
 #endif
-#define DW_SPI (&hspi4)
 
 void SystemClock_Config(void);
 

@@ -1,4 +1,14 @@
-set(STM32_SUPPORTED_FAMILIES F0 F1 F2 F3 F4 F7 G0 G4 H7 L0 L1 L4)
+set(STM32_SUPPORTED_FAMILIES_LONG_NAME
+    STM32F0 STM32F1 STM32F2 STM32F3 STM32F4 STM32F7
+    STM32G0 STM32G4
+    STM32H7_M4 STM32H7_M7
+    STM32L0 STM32L1 STM32L4 STM32L5)
+
+foreach(FAMILY ${STM32_SUPPORTED_FAMILIES_LONG_NAME})
+    string(REGEX MATCH "^STM32([A-Z][0-9])_?(M[47])?" FAMILY ${FAMILY})
+    list(APPEND STM32_SUPPORTED_FAMILIES_SHORT_NAME ${CMAKE_MATCH_1})
+endforeach()
+list(REMOVE_DUPLICATES STM32_SUPPORTED_FAMILIES_SHORT_NAME)
 
 if(NOT STM32_TOOLCHAIN_PATH)
      set(STM32_TOOLCHAIN_PATH "/usr")
@@ -57,9 +67,9 @@ function(stm32_get_chip_info CHIP)
     
     set(STM32_FAMILY ${CMAKE_MATCH_1})
     set(STM32_DEVICE "${CMAKE_MATCH_1}${CMAKE_MATCH_2}")
-    
-    list(FIND STM32_SUPPORTED_FAMILIES ${STM32_FAMILY} STM32_FAMILY_INDEX)
-    if (STM32_FAMILY_INDEX EQUAL -1)
+
+
+    if(NOT (${STM32_FAMILY} IN_LIST STM32_SUPPORTED_FAMILIES_SHORT_NAME))
         message(FATAL_ERROR "Unsupported family ${STM32_FAMILY} for device ${CHIP}")
     endif()
 
@@ -218,6 +228,20 @@ if(NOT (TARGET STM32::NoSys))
     add_library(STM32::NoSys INTERFACE IMPORTED)
     target_compile_options(STM32::NoSys INTERFACE $<$<C_COMPILER_ID:GNU>:--specs=nosys.specs>)
     target_link_options(STM32::NoSys INTERFACE $<$<C_COMPILER_ID:GNU>:--specs=nosys.specs>)
+    #This custom property is used to check that specs is not set yet on a target linking to this one
+    set_property(TARGET STM32::NoSys PROPERTY INTERFACE_CUSTOM_GCC_SPECS "NOSYS")
+    set_property(TARGET STM32::NoSys APPEND PROPERTY
+        COMPATIBLE_INTERFACE_STRING CUSTOM_GCC_SPECS)
+endif()
+
+if(NOT (TARGET STM32::Nano))
+    add_library(STM32::Nano INTERFACE IMPORTED)
+    target_compile_options(STM32::Nano INTERFACE $<$<C_COMPILER_ID:GNU>:--specs=nano.specs>)
+    target_link_options(STM32::Nano INTERFACE $<$<C_COMPILER_ID:GNU>:--specs=nano.specs>)
+    #This custom property is used to check that specs is not set yet on a target linking to this one
+    set_property(TARGET STM32::Nano PROPERTY INTERFACE_CUSTOM_GCC_SPECS "NANO")
+    set_property(TARGET STM32::Nano APPEND PROPERTY
+        COMPATIBLE_INTERFACE_STRING CUSTOM_GCC_SPECS)
 endif()
 
 include(stm32/utilities)
@@ -233,5 +257,6 @@ include(stm32/h7)
 include(stm32/l0)
 include(stm32/l1)
 include(stm32/l4)
+include(stm32/l5)
 
 

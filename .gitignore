@@ -3,6 +3,8 @@
 
 cmake-build-debug/
 cmake-build-target/
+cmake-build-target---f4/
+cmake-build-target---h7/
 cmake-build-local/
 
 .builds/
@@ -25,3 +27,6 @@ tools/openocd/stm32_f4/nucleo_a.cfg
 tools/openocd/stm32_f4/nucleo_b.cfg
 
 tools/openocd/stm32_f4/nucleo_c.cfg
+
+build-h7/
+build-f4/

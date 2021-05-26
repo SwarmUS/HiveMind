@@ -9,19 +9,26 @@
 
 constexpr uint16_t gc_queueMaxSize = 8;
 
+HiveConnectHiveMindApiMessageHandler MessageHandlerContainer::
+    createHiveConnectHiveMindApiMessageHandler() {
+    return HiveConnectHiveMindApiMessageHandler(getHostMsgQueue(), LoggerContainer::getLogger());
+}
+
 HiveMindHostApiRequestHandler MessageHandlerContainer::createHiveMindHostApiRequestHandler() {
     return HiveMindHostApiRequestHandler(BSPContainer::getBSP(), getHostMsgQueue(),
-                                         InterlocContainer::getInterloc(),
+                                         getRemoteMsgQueue(), InterlocContainer::getInterloc(),
                                          LoggerContainer::getLogger());
 }
 
 MessageDispatcher MessageHandlerContainer::createMessageDispatcher(
     IHiveMindHostDeserializer& deserializer,
     IHiveMindHostApiRequestHandler& hivemindApiReqHandler,
+    IHiveConnectHiveMindApiMessageHandler& hiveconnectApiMessageHandler,
     IGreetSender& greetSender) {
     return MessageDispatcher(getBuzzMsgQueue(), getHostMsgQueue(), getRemoteMsgQueue(),
                              getInterlocMsgQueue(), deserializer, hivemindApiReqHandler,
-                             greetSender, BSPContainer::getBSP(), LoggerContainer::getLogger());
+                             hiveconnectApiMessageHandler, greetSender, BSPContainer::getBSP(),
+                             LoggerContainer::getLogger());
 }
 
 ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getBuzzMsgQueue() {

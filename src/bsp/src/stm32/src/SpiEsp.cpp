@@ -87,7 +87,7 @@ void SpiEsp::execute() {
     switch (m_rxState) {
     case receiveState::IDLE:
         if (!m_inboundRequest) {
-            m_inboundRequest = HAL_GPIO_ReadPin(ESP_CS_GPIO_Port, ESP_CS_Pin) == 1U;
+            m_inboundRequest = EspSpi_ReadCS();
         }
         if (m_inboundRequest || m_txState != transmitState::IDLE) {
             rxLengthBytes = EspHeader::sizeBytes;
@@ -177,7 +177,7 @@ void SpiEsp::execute() {
         if (m_receivingTaskHandle != nullptr) {
             xTaskNotifyGive(m_receivingTaskHandle);
         }
-        m_logger.log(LogLevel::Error, "Error within Spi driver ESP - RX");
+        m_logger.log(LogLevel::Debug, "Error within Spi driver ESP - RX");
         break;
     }
     if (m_inboundRequest && m_txState == transmitState::IDLE) {
@@ -201,19 +201,19 @@ void SpiEsp::execute() {
         break;
     case transmitState::ERROR:
         m_crcOK = false;
-        HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_SET);
+        EspSpi_WriteCS(true);
         if (m_sendingTaskHandle != nullptr) {
             xTaskNotifyGive(m_sendingTaskHandle);
         }
         m_txState = transmitState::SENDING_HEADER;
-        m_logger.log(LogLevel::Error, "Error within Spi driver ESP - TX");
+        m_logger.log(LogLevel::Debug, "Error within Spi driver ESP - TX");
         break;
     }
 
     if ((m_inboundRequest || m_outboundMessage.m_sizeBytes != 0 ||
          m_inboundMessage.m_sizeBytes != 0) &&
         m_txState != transmitState::ERROR && m_rxState != receiveState::ERROR) {
-        HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_RESET);
+        EspSpi_WriteCS(false);
         uint32_t finalSize = std::max(txLengthBytes, rxLengthBytes);
         m_inboundMessage.m_data.fill(0);
         EspSpi_TransmitReceiveDma(txBuffer, m_inboundMessage.m_data.data(), finalSize,
@@ -232,13 +232,13 @@ void SpiEsp::updateOutboundHeader() {
 void SpiEsp::espInterruptCallback(void* context) {
     auto* instance = static_cast<SpiEsp*>(context);
     // Interrupt is on both falling edge and rising edge.
-    instance->m_inboundRequest = (HAL_GPIO_ReadPin(ESP_CS_GPIO_Port, ESP_CS_Pin) == 1U);
+    instance->m_inboundRequest = EspSpi_ReadCS();
 }
 
 void SpiEsp::espTxRxCallback(void* context) {
     auto* instance = static_cast<SpiEsp*>(context);
 
-    HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_SET);
+    EspSpi_WriteCS(true);
     switch (instance->m_rxState) {
     case receiveState::RECEIVING_HEADER:
         instance->m_rxState = receiveState::PARSING_HEADER;

@@ -5,7 +5,7 @@
 #include <gmock/gmock.h>
 
 template <typename T>
-class CircularQueueInterfaceMock final : public ICircularQueue<T> {
+class CircularQueueInterfaceMock : public ICircularQueue<T> {
   public:
     ~CircularQueueInterfaceMock() = default;
 

@@ -1,10 +1,5 @@
 if(NOT LWIP_FIND_COMPONENTS)
-    set(LWIP_FIND_COMPONENTS
-            STM32F0 STM32F1 STM32F2 STM32F3 STM32F4 STM32F7
-            STM32G0 STM32G4
-            STM32H7_M7 STM32H7_M4
-            STM32L0 STM32L1 STM32L4
-            )
+    set(LWIP_FIND_COMPONENTS ${STM32_SUPPORTED_FAMILIES_LONG_NAME})
 endif()
 
 if(STM32H7 IN_LIST LWIP_FIND_COMPONENTS)
@@ -22,7 +17,7 @@ foreach(COMP ${LWIP_FIND_COMPONENTS})
     string(REGEX MATCH "^STM32([A-Z][0-9])([0-9A-Z][0-9][A-Z][0-9A-Z])?_?(M[47])?.*$" COMP ${COMP})
 
     if((NOT CMAKE_MATCH_1) AND (NOT CMAKE_MATCH_2))
-        message(FATAL_ERROR "Unknown CMSIS component: ${COMP}")
+        message(FATAL_ERROR "Unknown LWIP component: ${COMP}")
     endif()
 
     if(CMAKE_MATCH_2)

@@ -6,6 +6,9 @@ InterlocStateHandler::InterlocStateHandler(InterlocTimeManager& timeManager) :
     m_currentStateName(InterlocStates::DEFAULT),
     m_currentState(&InterlocStateContainer::getState(InterlocStates::DEFAULT)),
     m_stateTracer(m_stateTracerData.data(), MAX_TRACER_TRANSITIONS) {
+
+    m_slotId = getSlotIdFromBoardId(BSPContainer::getBSP().getUUId());
+
     m_timeManager.setNumSlots(m_numFrames);
     m_timeManager.setSlodId(m_slotId);
 }
@@ -77,3 +80,6 @@ uint64_t InterlocStateHandler::getPreviousFrameStartTs() const { return m_previo
 void InterlocStateHandler::setPreviousFrameStartTs(uint64_t timestamp) {
     m_previousFrameStartTs = timestamp;
 }
+
+uint16_t InterlocStateHandler::getSlotIdFromBoardId(uint16_t boardId) { return boardId; }
+uint16_t InterlocStateHandler::getBoardIdFromSlotId(uint16_t slotId) { return slotId; }

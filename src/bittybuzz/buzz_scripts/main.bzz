@@ -4,7 +4,6 @@ function move_by_buzz(arg_float1, arg_float2){
 }
 
 function init() {
-  
   var args_description = {
     .0 = {.arg_float1=0.0},
     .1 = {.arg_float2=0.0}

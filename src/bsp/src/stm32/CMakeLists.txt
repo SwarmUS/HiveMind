@@ -10,10 +10,9 @@ set(LIB_SOURCES
     src/TCPClient.cpp
     src/SettingsContainer.cpp
     src/SpiEsp.cpp
-
     src/USB.cpp
-
     src/Math.cpp
+    src/PersistantStorageManager.cpp
 )
 
 set(LIB_PRIVATE_HEADERS
@@ -26,6 +25,8 @@ set(LIB_PRIVATE_HEADERS
     include/SpiEsp.h
     include/SpiHeader.h
     include/USB.h
+    include/PersistantStorage.h
+    include/PersistantStorageManager.h
 )
 
 include(DefaultSettings.cmake)
@@ -69,3 +70,11 @@ add_custom_target(
 
 add_subdirectory(hal)
 add_subdirectory(src/interloc)
+
+
+# Removing clang-tidy for this lib
+if (DISABLE_EXTERNAL_WARNINGS) 
+    set_target_properties(${LIB_NAME} PROPERTIES CXX_CLANG_TIDY "" )
+    set_target_properties(${LIB_NAME} PROPERTIES C_CLANG_TIDY "" )
+endif()
+

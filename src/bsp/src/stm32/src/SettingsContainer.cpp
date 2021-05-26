@@ -1,8 +1,5 @@
 #include "bsp/SettingsContainer.h"
 #include "DefaultSettings.h"
-#include <cstring>
-
-uint16_t SettingsContainer::getUUID() { return UUID; }
 
 uint32_t SettingsContainer::getHostPort() { return HOST_PORT; }
 

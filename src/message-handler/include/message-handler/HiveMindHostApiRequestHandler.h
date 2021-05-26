@@ -11,6 +11,7 @@ class HiveMindHostApiRequestHandler : public IHiveMindHostApiRequestHandler {
   public:
     HiveMindHostApiRequestHandler(const IBSP& bsp,
                                   ICircularQueue<MessageDTO>& hostQueue,
+                                  ICircularQueue<MessageDTO>& remoteQueue,
                                   const IInterloc& interloc,
                                   ILogger& logger);
 
@@ -25,6 +26,7 @@ class HiveMindHostApiRequestHandler : public IHiveMindHostApiRequestHandler {
 
     const IBSP& m_bsp;
     ICircularQueue<MessageDTO>& m_hostQueue;
+    ICircularQueue<MessageDTO>& m_remoteQueue;
     const IInterloc& m_interloc;
     ILogger& m_logger;
 };

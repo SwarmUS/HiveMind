@@ -1,1 +1,7 @@
-add_subdirectory(stm32f4)
+if (${COMPILE_STM32_F429ZI})
+    add_subdirectory(stm32f4)
+elseif (${COMPILE_STM32_H735ZG})
+    add_subdirectory(stm32h7)
+else()
+    message(FATAL_ERROR "FREERTOS PORT: The current board is not supported" )
+endif()

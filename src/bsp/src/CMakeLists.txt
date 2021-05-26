@@ -1,4 +1,4 @@
-if (${COMPILE_STM32_F429ZI})
+if (${COMPILE_STM32})
     add_subdirectory(stm32)
 else()
     add_subdirectory(posix)

@@ -15,6 +15,12 @@ struct RelativePosition {
      * @brief Relative orientation in degrees
      */
     float m_relativeOrientation;
+
+    /**
+     * @brief Angle of other agent in current agent frame (in degrees)
+     */
+    float m_angle;
+
     bool m_isInLineOfSight;
 };
 

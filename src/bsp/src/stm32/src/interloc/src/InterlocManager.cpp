@@ -163,3 +163,12 @@ uint8_t InterlocManager::powerCorrection(double twrDistance) {
     return 0;
     // refer to https://confluence.swarmus.jajservers.duckdns.org/display/LOG/DECA+-++Calibration
 }
+
+void InterlocManager::updateDistance(uint16_t robotId, float distance) {
+    if (m_positionUpdateCallback != nullptr) {
+        InterlocUpdate update;
+        update.m_robotId = robotId;
+        update.m_distance = distance;
+        m_positionUpdateCallback(m_positionUpdateCallbackContext, update);
+    }
+}
