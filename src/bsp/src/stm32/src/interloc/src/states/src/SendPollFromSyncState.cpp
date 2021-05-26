@@ -20,6 +20,6 @@ void SendPollFromSyncState::process(InterlocStateHandler& context) {
 
     // set the RxTs values for the wait_response state
     context.getTimeManager().computeResponseRxTs_new(context.getPreviousFrameStartTs());
-
+    m_logger.log(LogLevel::Warn, "ps");
     context.setState(InterlocStates::WAIT_RESPONSE, InterlocEvent::NO_EVENT);
 }

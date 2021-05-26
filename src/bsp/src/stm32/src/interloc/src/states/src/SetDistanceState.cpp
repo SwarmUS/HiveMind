@@ -24,6 +24,8 @@ void SetDistanceState::process(InterlocStateHandler& context) {
 
         context.setState(InterlocStates::IDLE, InterlocEvent::GOOD_DISTANCE);
         //        TODO notify Buzz that a new distance value is available
+        volatile uint64_t currentTime = m_decawaves[DecawavePort::A].getSysTime();
+        (void)currentTime;
     } else {
         context.setState(InterlocStates::IDLE, InterlocEvent::BAD_DISTANCE);
     }

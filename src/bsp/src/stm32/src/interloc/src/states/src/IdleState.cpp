@@ -15,6 +15,8 @@ void IdleState::process(InterlocStateHandler& context) {
     uint8_t currentFrameId = context.getCurrentFrameId();
 
     if (currentFrameId == (context.getSuperFrameInitiator())) {
+        volatile uint64_t currentTime = m_decawaves[DecawavePort::A].getSysTime();
+        (void)currentTime;
         context.setState(InterlocStates::SYNC, InterlocEvent::SUPERFRAME_FINISHED);
         return;
     }

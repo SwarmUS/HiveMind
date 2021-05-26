@@ -27,6 +27,6 @@ void SendFinalState::process(InterlocStateHandler& context) {
 
     m_decawaves[DecawavePort::A].transmitDelayed((uint8_t*)(&m_finalMsg),
                                                  sizeof(UWBMessages::TWRFinal), finalTxTs);
-
+    m_logger.log(LogLevel::Warn, "f");
     context.setState(InterlocStates::IDLE, InterlocEvent::NO_EVENT);
 }
