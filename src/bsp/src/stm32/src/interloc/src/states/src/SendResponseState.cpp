@@ -9,19 +9,17 @@ SendResponseState::SendResponseState(ILogger& logger, DecawaveArray& decawaves) 
 
 void SendResponseState::process(InterlocStateHandler& context) {
     // TODO: Set destination ID
-
     context.constructUWBHeader(0x01, UWBMessages::DATA, UWBMessages::TWR_RESPONSE,
                                (uint8_t*)&m_respMsg, sizeof(m_respMsg));
     m_respMsg.m_subFrameId = context.getSlotId();
 
-    volatile uint64_t respTxTime = context.getTimeManager().getResponseTxTs_new(
+    volatile uint64_t respTxTime = context.getTimeManager().getResponseTxTs(
         context.getPreviousFrameStartTs() +
         InterlocTimeManager::getPreambleAirTimeUs() * UUS_TO_DWT_TIME);
 
     m_decawaves[DecawavePort::A].transmitDelayed((uint8_t*)&m_respMsg, sizeof(m_respMsg),
                                                  respTxTime);
 
-    m_logger.log(LogLevel::Warn, "r");
     // Get the real time at which the response was sent
     context.getTWR().m_responseTxTs =
         m_decawaves[DecawavePort::A].getTxTimestampFromDelayedTime(respTxTime);

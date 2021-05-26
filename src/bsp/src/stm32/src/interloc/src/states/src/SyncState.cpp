@@ -8,9 +8,8 @@ SyncState::SyncState(ILogger& logger, DecawaveArray& decawaves) :
     AbstractInterlocState(logger, decawaves) {}
 
 void SyncState::process(InterlocStateHandler& context) {
-    m_logger.log(LogLevel::Warn, "+%d", context.getCurrentFrameId());
     uint64_t syncStartTs = m_decawaves[DecawavePort::A].getSysTime();
-    uint32_t initialRxTimeoutUs = context.getTimeManager().getSyncTimeoutUs_new();
+    uint32_t initialRxTimeoutUs = context.getTimeManager().getSyncTimeoutUs();
     uint32_t rxTimeoutUs = initialRxTimeoutUs;
 
     while (rxTimeoutUs > RX_RELOAD_OVERHEAD_US) {

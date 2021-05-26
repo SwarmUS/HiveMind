@@ -7,14 +7,12 @@ WaitPollState::WaitPollState(ILogger& logger, DecawaveArray& decawaves) :
     AbstractInterlocState(logger, decawaves) {}
 
 void WaitPollState::process(InterlocStateHandler& context) {
-    //    uint64_t rxStartTs =
-    //        context.getTimeManager().getPollRxStartTs(context.getPreviousFrameStartTs());
     uint64_t rxStartTs =
-        context.getTimeManager().getPollRxStartTs_new(context.getPreviousFrameStartTs());
+        context.getTimeManager().getPollRxStartTs(context.getPreviousFrameStartTs());
 
     m_decawaves[DecawavePort::A].receiveDelayed(
         m_rxFrame,
-        InterlocTimeManager::getTimeoutUs_new(context.getTimeManager().m_pollAirTimeWithPreamble),
+        InterlocTimeManager::getTimeoutUs(context.getTimeManager().m_pollAirTimeWithPreambleUs),
         rxStartTs);
 
     if (m_rxFrame.m_status == UWBRxStatus::FINISHED && DecawaveUtils::isFramePoll(m_rxFrame)) {
