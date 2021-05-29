@@ -71,7 +71,7 @@ void UI_setLED(led_t led, bool state) {
                           state ? GPIO_PIN_SET : GPIO_PIN_RESET);
         break;
     case LED_2:
-        HAL_GPIO_WritePin(MCU_LED_1_GPIO_Port, MCU_LED_1_Pin,
+        HAL_GPIO_WritePin(MCU_LED_2_GPIO_Port, MCU_LED_2_Pin,
                           state ? GPIO_PIN_SET : GPIO_PIN_RESET);
         break;
     case LED_3:
