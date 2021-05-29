@@ -4,6 +4,10 @@
 #include <bsp/Math.h>
 #include <optional>
 
+inline float d2r(float deg) { return deg / 180 * Math::pi; }
+
+inline float r2d(float rad) { return rad / Math::pi * 180; }
+
 std::optional<float> getFloatArg(uint16_t stackAt) {
 
     float arg = 0;
@@ -147,7 +151,7 @@ void BittyBuzzMathFunctions::bbzmath_sin() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_fromfloat(Math::sin(arg.value() * Math::pi / 180)));
+    bbzvm_pushf(bbzfloat_fromfloat(r2d(Math::sin(d2r(arg.value())))));
     bbzvm_ret1();
 }
 
@@ -160,7 +164,7 @@ void BittyBuzzMathFunctions::bbzmath_cos() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_fromfloat(Math::cos(arg.value() * Math::pi / 180)));
+    bbzvm_pushf(bbzfloat_fromfloat(r2d(Math::cos(d2r(arg.value())))));
     bbzvm_ret1();
 }
 
@@ -173,7 +177,7 @@ void BittyBuzzMathFunctions::bbzmath_tan() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_fromfloat(Math::tan(arg.value() * Math::pi / 180)));
+    bbzvm_pushf(bbzfloat_fromfloat(r2d(Math::tan(d2r(arg.value())))));
     bbzvm_ret1();
 }
 void BittyBuzzMathFunctions::bbzmath_asin() {
@@ -185,7 +189,7 @@ void BittyBuzzMathFunctions::bbzmath_asin() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_fromfloat(Math::asin(arg.value()) * 180 / Math::pi));
+    bbzvm_pushf(bbzfloat_fromfloat(r2d(Math::asin(arg.value()))));
     bbzvm_ret1();
 }
 
@@ -198,7 +202,7 @@ void BittyBuzzMathFunctions::bbzmath_acos() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_fromfloat(Math::acos(arg.value()) * 180 / Math::pi));
+    bbzvm_pushf(bbzfloat_fromfloat(r2d(Math::acos(arg.value()))));
     bbzvm_ret1();
 }
 
@@ -217,7 +221,7 @@ void BittyBuzzMathFunctions::bbzmath_atan() {
         return;
     }
 
-    bbzvm_pushf(bbzfloat_fromfloat(Math::atan2(y.value(), x.value()) * 180 / Math::pi));
+    bbzvm_pushf(bbzfloat_fromfloat(r2d(Math::atan2(y.value(), x.value()))));
     bbzvm_ret1();
 }
 
