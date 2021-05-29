@@ -1,6 +1,4 @@
 #include "UserInterface.h"
-#include "../../stm32/include/UserInterface.h"
-
 #include <cstdio>
 #include <ros/console.h>
 
