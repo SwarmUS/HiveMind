@@ -26,7 +26,7 @@ void UI_setHexOutput(uint8_t hexValue) {
 }
 
 void UI_setButtonCallback(button_t button, gpioCallbackFct_t callback, void* context) {
-    if (button < 2) {
+    if (button <= BUTTON_1) {
         g_buttonCallbacks[button] = callback;
         g_buttonCallbackContexts[button] = context;
     }
@@ -82,7 +82,7 @@ void UI_setLED(led_t led, bool state) {
 }
 
 void UI_setRGB(bool red, bool green, bool blue) {
+    HAL_GPIO_WritePin(MCU_LED_R_GPIO_Port, MCU_LED_R_Pin, red ? GPIO_PIN_SET : GPIO_PIN_RESET);
     HAL_GPIO_WritePin(MCU_LED_G_GPIO_Port, MCU_LED_G_Pin, green ? GPIO_PIN_SET : GPIO_PIN_RESET);
     HAL_GPIO_WritePin(MCU_LED_B_GPIO_Port, MCU_LED_B_Pin, blue ? GPIO_PIN_SET : GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(MCU_LED_R_GPIO_Port, MCU_LED_R_Pin, red ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }

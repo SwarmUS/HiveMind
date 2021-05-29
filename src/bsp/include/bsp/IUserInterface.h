@@ -5,28 +5,6 @@
 #include <cstdarg>
 
 /**
- * @brief Represents LEDs present on the boards.
- * (On the HiveSight, LED 3 is not present)
- */
-enum class Led { LED_0 = 0, LED_1, LED_2, LED_3 };
-
-/**
- * @brief Possible colors obtainable with an RGB LED
- */
-enum class RgbColor { RED = 0, GREEN, BLUE, VIOLET, YELLOW, BROWN, WHITE, OFF };
-
-/**
- * @brief Buttons present on the board.
- * (Button 1 is not available on the HiveSight)
- */
-enum class Button { BUTTON_0 = 0, BUTTON_1 };
-
-/**
- * @brief Prototype for a callback from a button press
- */
-typedef void (*buttonCallbackFunction_t)(void* instance);
-
-/**
  * @brief Manages the user interface
  * The user interface can consist of buttons, LED, serial print ports, etc.
  * It is not a graphical interface.
@@ -91,35 +69,6 @@ class IUserInterface {
      *negative number on error
      */
     virtual int printLine(const char* format, va_list args) = 0;
-
-    /**
-     * @brief Sets the state of a LED on the board
-     * @param led The led to operate
-     * @param state True for ON and false for OFF
-     */
-    virtual void setLedState(Led led, bool state) = 0;
-
-    /**
-     * @brief Sets the RGB LED to a given color
-     * @param color The color to set
-     */
-    virtual void setRGBLed(RgbColor color) = 0;
-
-    /**
-     * @brief Sets the hex display to a given 8 bit value (not available on the HiveSight)
-     * @param value The value to set
-     */
-    virtual void setHexDisplay(uint8_t value) = 0;
-
-    /**
-     * @brief Sets the callback associated with a given button press
-     * @param button Button to register the callback on
-     * @param callback Callback to call
-     * @param context Context to pass to the callback
-     */
-    virtual void setButtonCallback(Button button,
-                                   buttonCallbackFunction_t callback,
-                                   void* context) = 0;
 };
 
 #endif // __IUSERINTERFACE_H_

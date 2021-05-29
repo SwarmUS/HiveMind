@@ -1,9 +1,7 @@
 #include "UserInterface.h"
-#include <cstdint>
 #include <cstdio>
 #include <hal/hal_gpio.h>
 #include <hal/user_interface.h>
-#include <hivemind_hal.h>
 
 UserInterface::UserInterface() : m_mutex(10) { UI_initialize(); }
 
@@ -43,7 +41,6 @@ int UserInterface::printLine(const char* format, va_list args) {
 
     return retValue;
 }
-void UserInterface::setLedState(Led led, bool state) {}
 
 void UserInterface::setRGBLed(RgbColor color) {
     switch (color) {

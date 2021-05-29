@@ -3,6 +3,7 @@
 #include "hal/hal_gpio.h"
 #include "hal/uart_print.h"
 #include "hal/usb.h"
+#include "hal/user_interface.h"
 #include "hivemind_hal.h"
 #include "lwip.h"
 #include "usb_device.h"
@@ -39,6 +40,8 @@ void Hal_init() {
 
     deca_init();
     enableESP();
+
+    UI_initialize();
 #ifdef IPERF_SERVER
     lwiperf_start_tcp_server_default(NULL, NULL);
 #endif
