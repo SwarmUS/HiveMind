@@ -41,9 +41,7 @@ add_compile_options(${WARNING_FLAG})
         # Only remove exception support for target as ROS uses exceptions
         add_compile_options(${WARNING_NO_EXCEPTION_FLAG})
         # Disable RTTI for C++ libraries
-        add_compile_options(
-                "$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-fno-rtti>"
-        )
+        add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-fno-rtti>)
     endif()
 endif()
 
