@@ -17,7 +17,7 @@ typedef enum { BUTTON_0 = 0, BUTTON_1 } button_t;
 /**
  * @brief List of available LEDs
  */
-typedef enum { LED_0 = 0, LED_1, LED_2, LED_3 } led_t;
+typedef enum { LED_0 = 0, LED_1, LED_2 } led_t;
 
 /**
  * @brief Initializes any ICs needed for the user interface
@@ -36,6 +36,11 @@ void UI_setButtonCallback(button_t button, gpioCallbackFct_t callback, void* con
  * @brief Function to call when an interrupt happens on a pin associated with the UI
  */
 void UI_interruptCallback();
+
+/***
+ * @brief Callback to call when the heartbeat timer expires
+ */
+void UI_heartbeatCallback();
 
 /**
  * @brief Sets the HEX display to the given 8 bit value

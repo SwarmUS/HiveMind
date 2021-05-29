@@ -25,13 +25,14 @@ void Hal_init() {
     MX_GPIO_Init();
 
     MX_CRC_Init();
-
     MX_DMA_Init();
     MX_USART3_UART_Init();
     MX_SPI3_Init();
     MX_SPI5_Init();
     MX_SPI4_Init();
     MX_USB_DEVICE_Init();
+    //    MX_TIM6_Init();
+    //    MX_TIM11_Init();
 
     UartPrint_init();
     usb_init();
