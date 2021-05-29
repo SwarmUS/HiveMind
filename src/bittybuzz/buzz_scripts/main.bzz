@@ -4,15 +4,20 @@ loop_counter = 0
 function init() {
   counter = 0;
   stig = stigmergy.create(1);
+  stig.onconflict(function(key, ld, rd) {
+    log("Conflict detected: ", key, ld, rd);
+    return ld;
+  });
+  
   if(id == 1){
     stig.put("leader", 1);
   }
 }
 
 function step() {
-  if(loop_counter == 5) {
+  if(loop_counter == 20) {
     var leader = stig.get("leader");
-    if(leader != id){
+    if(leader != id and leader != nil){
       log("Getting neighbor")
       var neighbor = neighbors.get(leader);
 
@@ -31,7 +36,10 @@ function step() {
       stig.put("stig_counter", stig_counter);
     }
     log("Stig counter: ", stig.get("stig_counter"));
+    log("Conflict counter: ", stig.get("conflict"));
+    stig.put("conflict", id);
     loop_counter = 0;
   }
   loop_counter = loop_counter + 1;
+  stig_counter = stig_counter + 1;
 }
