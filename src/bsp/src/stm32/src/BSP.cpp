@@ -20,9 +20,9 @@ void BSP::initChip(void* args) {
 
     Hal_init();
     m_storage.loadFromFlash();
-    dynamic_cast<UserInterface&>(BSPContainer::getUserInterface())
+    reinterpret_cast<UserInterface&>(BSPContainer::getUserInterface())
         .setButtonCallback(Button::BUTTON_0, buttonCallback, this);
-    dynamic_cast<UserInterface&>(BSPContainer::getUserInterface())
+    reinterpret_cast<UserInterface&>(BSPContainer::getUserInterface())
         .setRGBLed(static_cast<RgbColor>(m_currentRGBState));
 }
 

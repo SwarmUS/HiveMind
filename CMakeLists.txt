@@ -40,6 +40,10 @@ add_compile_options(${WARNING_FLAG})
     if(${CMAKE_CROSSCOMPILING})
         # Only remove exception support for target as ROS uses exceptions
         add_compile_options(${WARNING_NO_EXCEPTION_FLAG})
+        # Disable RTTI for C++ libraries
+        add_compile_options(
+                "$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-fno-rtti>"
+        )
     endif()
 endif()
 
