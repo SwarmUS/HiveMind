@@ -11,7 +11,7 @@ BSP::~BSP() = default;
 void BSP::buttonCallback(void* context) {
     static_cast<BSP*>(context)->m_currentRGBState += 1;
     static_cast<BSP*>(context)->m_currentRGBState %= 8;
-    dynamic_cast<UserInterface&>(BSPContainer::getUserInterface())
+    reinterpret_cast<UserInterface&>(BSPContainer::getUserInterface())
         .setRGBLed(static_cast<RgbColor>(static_cast<BSP*>(context)->m_currentRGBState));
 }
 
