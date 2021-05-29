@@ -23,7 +23,7 @@ void UI_interruptCallback() {
     }
 }
 
-void UI_heartbeatCallback() { HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin); }
+void UI_heartbeatCallback() { HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin); }
 
 void UI_setLED(led_t led, bool state) {
     (void)led;

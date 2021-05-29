@@ -26,6 +26,7 @@
 #include "lwip.h"
 #include "rng.h"
 #include "spi.h"
+#include "tim.h"
 #include "usart.h"
 #include "usb_device.h"
 
@@ -59,7 +60,7 @@
 void SystemClock_Config(void);
 void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
-extern void USER_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
+extern void CUSTOM_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -133,7 +134,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
     }
     /* USER CODE BEGIN Callback 1 */
     else {
-        USER_TIM_PeriodElapsedCallback(htim);
+        CUSTOM_TIM_PeriodElapsedCallback(htim);
     }
     /* USER CODE END Callback 1 */
 }

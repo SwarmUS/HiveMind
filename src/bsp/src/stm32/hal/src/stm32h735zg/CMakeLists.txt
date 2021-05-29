@@ -3,8 +3,9 @@ set(LIB_ALIAS "SwarmUS::HiveMind::HAL::STM32::Platform")
 
 set(LIB_SOURCES
         user_interface.c
+        tca9539.c
+        tca9539.h
     )
-
 
 add_library(${LIB_NAME} INTERFACE)
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})

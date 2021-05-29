@@ -1,6 +1,7 @@
 #include "hal/hal.h"
 #include "deca_port.h"
 #include "hal/hal_gpio.h"
+#include "hal/hal_timer.h"
 #include "hal/uart_print.h"
 #include "hal/usb.h"
 #include "hal/user_interface.h"
@@ -31,8 +32,7 @@ void Hal_init() {
     MX_SPI5_Init();
     MX_SPI4_Init();
     MX_USB_DEVICE_Init();
-    //    MX_TIM6_Init();
-    //    MX_TIM11_Init();
+    MX_TIM6_Init();
 
     UartPrint_init();
     usb_init();
@@ -43,6 +43,7 @@ void Hal_init() {
     enableESP();
 
     UI_initialize();
+    Timer_startHeartbeat();
 #ifdef IPERF_SERVER
     lwiperf_start_tcp_server_default(NULL, NULL);
 #endif

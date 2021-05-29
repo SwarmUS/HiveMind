@@ -10,7 +10,7 @@ set(LIB_SOURCES
     Core/Src/rng.c
     Core/Src/spi.c
     Core/Src/i2c.c
-    Drivers/Src/tca9539.c
+    Core/Src/tim.c
 )
 
 set(LIB_HEADERS
@@ -25,7 +25,7 @@ set(LIB_HEADERS
     Core/Inc/rng.h
     Core/Inc/spi.h
     Core/Inc/i2c.h
-    Drivers/Include/tca9539.h
+    Core/Inc/tim.h
 )
 
 # Sources that needs to be global on the project

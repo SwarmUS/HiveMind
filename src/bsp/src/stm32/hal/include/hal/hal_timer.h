@@ -7,6 +7,11 @@ extern "C" {
 
 #include "tim.h"
 
+/**
+ * @brief Starts the heartbeat timer interrupt
+ */
+void Timer_startHeartbeat();
+
 #ifdef __cplusplus
 }
 #endif

@@ -59,6 +59,8 @@ void UI_interruptCallback() {
     g_buttonStates[1] = button1State;
 }
 
+void UI_heartbeatCallback() { HAL_GPIO_TogglePin(MCU_LED_HB_GPIO_Port, MCU_LED_HB_Pin); }
+
 void UI_setLED(led_t led, bool state) {
     switch (led) {
 
@@ -72,10 +74,6 @@ void UI_setLED(led_t led, bool state) {
         break;
     case LED_2:
         HAL_GPIO_WritePin(MCU_LED_2_GPIO_Port, MCU_LED_2_Pin,
-                          state ? GPIO_PIN_SET : GPIO_PIN_RESET);
-        break;
-    case LED_3:
-        HAL_GPIO_WritePin(MCU_LED_HB_GPIO_Port, MCU_LED_HB_Pin,
                           state ? GPIO_PIN_SET : GPIO_PIN_RESET);
         break;
     }
