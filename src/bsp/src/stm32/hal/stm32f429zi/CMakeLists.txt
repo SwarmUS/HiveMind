@@ -11,6 +11,7 @@ set(LIB_SOURCES
     Core/Src/crc.c
     Core/Src/rng.c
     Core/Src/spi.c
+    Core/Src/tim.c
     LWIP/App/lwip.c
     LWIP/Target/ethernetif.c
     USB_DEVICE/App/usbd_cdc_if.c
@@ -27,6 +28,7 @@ set(LIB_HEADERS
     Core/Inc/crc.h
     Core/Inc/rng.h
     Core/Inc/spi.h
+    Core/Inc/tim.h
     LWIP/App/lwip.h
     USB_DEVICE/App/usbd_cdc_if.h
 )

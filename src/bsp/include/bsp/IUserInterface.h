@@ -10,7 +10,6 @@
  * It is not a graphical interface.
  * The board will communicate its state via the UI and the user can send commands via the UI.
  */
-
 class IUserInterface {
   public:
     virtual ~IUserInterface() = default;

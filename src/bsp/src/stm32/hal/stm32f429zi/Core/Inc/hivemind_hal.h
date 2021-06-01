@@ -15,11 +15,16 @@ extern "C" {
 #include "stm32f4xx_hal_def.h"
 #include "stm32f4xx_hal_flash.h"
 #include "stm32f4xx_hal_flash_ex.h"
+#include "tim.h"
 #include "usart.h"
 
 #define HUART_PRINT (&huart3)
 #define HRNG (&hrng)
 #define FLASH_PROGRAM_32_BYTES (FLASH_TYPEPROGRAM_WORD)
+#define HEARTBEAT_TIMER (&htim6)
+
+#define UI_INTERRUPT_Pin USER_Btn_Pin
+#define UI_INTERRUPT_Port USER_Btn_Port
 
 // Change to ESP_SOC to use th spi channel for the SOC on the HiveSight.
 // In the future, there might a flag for the HiveBoard.
