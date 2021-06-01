@@ -47,5 +47,4 @@ void SyncState::handlePollReceived(InterlocStateHandler& context) {
     context.setCurrentFrameId(msg->m_currentFrameId);
 
     context.setState(InterlocStates::SEND_RESPONSE, InterlocEvent::POLL_RECVD);
-    m_logger.log(LogLevel::Warn, "hp %d", context.getSuperFrameInitiator());
 }

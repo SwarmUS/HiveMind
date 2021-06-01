@@ -260,7 +260,7 @@ class SoftwareInterlocTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class LogInterlocTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+class LogInterlocTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
   public:
     LogInterlocTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority),
