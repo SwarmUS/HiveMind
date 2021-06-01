@@ -20,7 +20,7 @@ namespace UWBMessages {
         uint8_t m_framePending : 1;
         uint8_t m_ackRequest : 1;
         uint8_t m_panIdCompress : 1; // Always set to 1
-        uint8_t m_reserved1 : 3; // reserved field
+        uint8_t m_reserved : 3;
         AddressMode m_destAddressMode : 2;
         uint8_t m_frameVersion : 2;
         AddressMode m_sourceAddressMode : 2;

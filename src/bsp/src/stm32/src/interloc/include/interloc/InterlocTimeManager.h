@@ -49,7 +49,6 @@ class InterlocTimeManager {
   private:
     IBSP& m_bsp;
 
-    // these vars are defined in InterlocStateHandler.h
     uint16_t m_numSlots; // MAX_INTERLOC_SUBFRAMES
     uint16_t m_slotId;
 
