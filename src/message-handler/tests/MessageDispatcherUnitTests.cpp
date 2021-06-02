@@ -607,7 +607,6 @@ TEST_F(MessageDispatcherFixture,
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
     EXPECT_CALL(m_buzzQueue, push(testing::_)).WillOnce(testing::Return(true));
-    EXPECT_CALL(m_remoteQueue, push(testing::_)).WillOnce(testing::Return(true));
 
     // Then
     bool ret = m_messageDispatcher->deserializeAndDispatch();
