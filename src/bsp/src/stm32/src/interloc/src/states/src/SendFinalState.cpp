@@ -9,9 +9,7 @@ SendFinalState::SendFinalState(ILogger& logger, DecawaveArray& decawaves) :
     AbstractInterlocState(logger, decawaves) {}
 
 void SendFinalState::process(InterlocStateHandler& context) {
-    uint64_t finalTxTime = context.getTimeManager().getFinalTxTs(
-        context.getPreviousFrameStartTs() +
-        UUS_TO_DWT_TIME * (InterlocTimeManager::getPreambleAirTimeUs()));
+    uint64_t finalTxTime = context.getTimeManager().getFinalTxTs(context.getPreviousFrameStartTs());
 
     // Get the timestamp at which it will really be sent
     uint64_t finalTxTs = m_decawaves[DecawavePort::A].getTxTimestampFromDelayedTime(finalTxTime);

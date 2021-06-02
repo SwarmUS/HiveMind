@@ -32,16 +32,19 @@ void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t
 }
 
 void InterlocManager::startInterloc() {
+    bool allInit = true;
     for (auto& deca : m_decawaves) {
         if (!deca.init()) {
+            allInit = false;
             m_logger.log(LogLevel::Warn, "InterlocManager: Could not start Decawave");
         }
     }
 
     syncClocks();
 
-    // Uncomment the following line to go into TWR
-    m_stateHandler.setState(InterlocStates::IDLE, InterlocEvent::NO_EVENT);
+    if (allInit) {
+        m_stateHandler.setState(InterlocStates::IDLE, InterlocEvent::NO_EVENT);
+    }
 
     while (true) {
         m_stateHandler.process();

@@ -23,19 +23,15 @@ class InterlocTimeManager {
     void setSlodId(uint16_t slotId);
 
     static uint16_t getReadWriteSPITimeUs(uint16_t bitLength);
-    static uint16_t getAirTimeUs(uint16_t bitLength);
-    static uint16_t computeAirTimeWithPreambleUs(uint16_t bitLength);
     static uint16_t getPreambleAirTimeUs();
     void computeResponseRxTs(uint64_t startOfFrameTs);
     uint64_t getResponseTxTs(uint64_t startOfFrame) const;
     static uint16_t getTimeoutUs(uint16_t msgAirTimeWithPreambleUs);
     uint64_t getFinalRxTs(uint64_t startOfFrameTs) const;
     uint64_t getFinalTxTs(uint64_t startOfFrameTs) const;
-    uint64_t getSupposedNextFrameStart(uint64_t startOfFrameTs) const;
     uint64_t getPollRxStartTs(uint64_t startOfFrameTs) const;
     uint64_t getPollTxStartTs(uint64_t startOfFrameTs) const;
     uint16_t getSyncTimeoutUs() const;
-    uint16_t getSuperFrameLengthUs() const;
 
     // fixed length constants to be accessed by states
     uint16_t m_pollAirTimeWithPreambleUs;
@@ -53,6 +49,10 @@ class InterlocTimeManager {
     uint16_t m_slotId;
 
     void updateTimings();
+    uint16_t getSuperFrameLengthUs() const;
+    uint64_t getSupposedNextFrameStart(uint64_t startOfFrameTs) const;
+    static uint16_t computeAirTimeWithPreambleUs(uint16_t bitLength);
+    static uint16_t getAirTimeUs(uint16_t bitLength);
 };
 
 #endif //__INTERLOCTIMEMANAGER_H__

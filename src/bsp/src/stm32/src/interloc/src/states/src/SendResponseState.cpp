@@ -13,9 +13,8 @@ void SendResponseState::process(InterlocStateHandler& context) {
                                (uint8_t*)&m_respMsg, sizeof(m_respMsg));
     m_respMsg.m_subFrameId = context.getSlotId();
 
-    volatile uint64_t respTxTime = context.getTimeManager().getResponseTxTs(
-        context.getPreviousFrameStartTs() +
-        InterlocTimeManager::getPreambleAirTimeUs() * UUS_TO_DWT_TIME);
+    volatile uint64_t respTxTime =
+        context.getTimeManager().getResponseTxTs(context.getPreviousFrameStartTs());
 
     m_decawaves[DecawavePort::A].transmitDelayed((uint8_t*)&m_respMsg, sizeof(m_respMsg),
                                                  respTxTime);

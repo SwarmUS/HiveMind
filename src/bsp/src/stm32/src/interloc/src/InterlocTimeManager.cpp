@@ -98,9 +98,9 @@ constexpr float getPhrSymbolDurationUs() {
         return 1025.64 / 1000;
     }
 }
-uint8_t getSFDLength(){
+uint8_t getSFDLength() {
     // see user manual p.217
-    switch(UWBSpeed::DW_SPEED) {
+    switch (UWBSpeed::DW_SPEED) {
     case UWBSpeed::SPEED_110K:
         return 64;
     default:
@@ -137,7 +137,7 @@ uint16_t InterlocTimeManager::computeAirTimeWithPreambleUs(uint16_t bitLength) {
 uint64_t InterlocTimeManager::getResponseTxTs(uint64_t startOfFrame) const {
     return (startOfFrame +
             UUS_TO_DWT_TIME *
-                (m_pollToFirstResponseGuardUs +
+                (getPreambleAirTimeUs() + m_pollToFirstResponseGuardUs +
                  (m_slotId - 1U) * (getReadWriteSPITimeUs(sizeof(UWBMessages::TWRResponse)) +
                                     RESPONSE_PROCESSING_GUARD + getPreambleAirTimeUs() +
                                     TIMEOUT_GUARD_US + RESPONSE_PROCESSING_GUARD_GUARD))) %
@@ -161,7 +161,7 @@ void InterlocTimeManager::computeResponseRxTs(uint64_t startOfFrameTs) {
 uint64_t InterlocTimeManager::getFinalTxTs(uint64_t startOfFrameTs) const {
     return (startOfFrameTs +
             UUS_TO_DWT_TIME *
-                (m_pollToFirstResponseGuardUs +
+                (getPreambleAirTimeUs() + m_pollToFirstResponseGuardUs +
                  (m_numSlots - 1U) * (getReadWriteSPITimeUs(sizeof(UWBMessages::TWRResponse)) +
                                       RESPONSE_PROCESSING_GUARD + getPreambleAirTimeUs() +
                                       TIMEOUT_GUARD_US + RESPONSE_PROCESSING_GUARD_GUARD) +
@@ -195,7 +195,8 @@ uint64_t InterlocTimeManager::getPollRxStartTs(uint64_t startOfFrameTs) const {
 }
 
 uint64_t InterlocTimeManager::getPollTxStartTs(uint64_t startOfFrameTs) const {
-    return (getSupposedNextFrameStart(startOfFrameTs)) % UINT40_MAX;
+    return (UUS_TO_DWT_TIME * getPreambleAirTimeUs() + getSupposedNextFrameStart(startOfFrameTs)) %
+           UINT40_MAX;
 }
 
 uint16_t InterlocTimeManager::getSyncTimeoutUs() const {

@@ -12,9 +12,7 @@ void SendPollState::process(InterlocStateHandler& context) {
     m_pollMsg.m_currentFrameId = context.getSlotId();
     m_pollMsg.m_superFrameInitiator = context.getSuperFrameInitiator();
 
-    uint64_t txTime = context.getTimeManager().getPollTxStartTs(
-        context.getPreviousFrameStartTs() +
-        (uint64_t)(UUS_TO_DWT_TIME * InterlocTimeManager::getPreambleAirTimeUs()));
+    uint64_t txTime = context.getTimeManager().getPollTxStartTs(context.getPreviousFrameStartTs());
 
     uint64_t pollTxTs = m_decawaves[DecawavePort::A].getTxTimestampFromDelayedTime(txTime);
 
