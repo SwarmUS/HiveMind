@@ -28,8 +28,7 @@ class DecawaveArray {
   private:
     // TODO: Generate based on H7 or F4. (Maybe give names like master, slave_0..n, etc)
     std::array<Decawave, static_cast<unsigned int>(DecawavePort::NUM_PORTS)> m_decawaves = {
-        Decawave(DW_A0, UWBChannel::CHANNEL_5, UWBSpeed::SPEED_6M8),
-        Decawave(DW_B0, UWBChannel::CHANNEL_5, UWBSpeed::SPEED_6M8)};
+        Decawave(DW_A0), Decawave(DW_B0)};
 };
 
 #endif //__DECAWAVEARRAY_H__

@@ -71,10 +71,18 @@ void InterlocTimeManager::updateTimings() {
                                    POLL_PROCESSING_GUARD + getPreambleAirTimeUs();
 }
 
-constexpr float getShrSymbolDurationUs() {
+float getShrSymbolDurationUs() {
     // see table 13 in datasheet
-    switch (PRF_SPEED) {
-    case 16:
+    // see table 61 in user manual
+    switch (DecawaveUtils::getPreambleCode(UWBChannel::DW_CHANNEL)) {
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
         return 993.59 / 1000;
     default:
         return 1017.63 / 1000;
@@ -83,16 +91,25 @@ constexpr float getShrSymbolDurationUs() {
 
 constexpr float getPhrSymbolDurationUs() {
     // see table 13 in datasheet
-    switch (DECAWAVE_TX_RATE_HZ) {
-    case 110000:
+    switch (UWBSpeed::DW_SPEED) {
+    case UWBSpeed::SPEED_110K:
         return 8205.13 / 1000;
     default:
         return 1025.64 / 1000;
     }
 }
+uint8_t getSFDLength(){
+    // see user manual p.217
+    switch(UWBSpeed::DW_SPEED) {
+    case UWBSpeed::SPEED_110K:
+        return 64;
+    default:
+        return 8;
+    }
+}
 
 uint16_t InterlocTimeManager::getPreambleAirTimeUs() {
-    float shrBitLength = PREAMBULE_SEQUENCE_LENGTH + START_FRAME_DELIMITER_LENGTH;
+    float shrBitLength = DecawaveUtils::getPreambleLength(UWBSpeed::DW_SPEED) + getSFDLength();
     float phrBitLength = PHY_HEADER_LENGTH;
 
     return (uint16_t)(shrBitLength * getShrSymbolDurationUs() +
@@ -104,7 +121,14 @@ uint16_t InterlocTimeManager::getReadWriteSPITimeUs(uint16_t bitLength) {
 }
 
 uint16_t InterlocTimeManager::getAirTimeUs(uint16_t bitLength) {
-    return bitLength * 1000000 / DECAWAVE_TX_RATE_HZ;
+    switch (UWBSpeed::DW_SPEED) {
+    case UWBSpeed::SPEED_6M8:
+        return bitLength * 1000000 / 6.8e6;
+    case UWBSpeed::SPEED_850K:
+        return bitLength * 1000000 / 850e3;
+    default:
+        return bitLength * 1000000 / 110e3;
+    }
 }
 
 uint16_t InterlocTimeManager::computeAirTimeWithPreambleUs(uint16_t bitLength) {
