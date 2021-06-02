@@ -263,5 +263,7 @@ class Decawave {
     static void isrCallback(void* context);
     static void rxAsyncTask(void* context);
 };
+// user manual : https://www.decawave.com/sites/default/files/resources/dw1000_user_manual_2.11.pdf
+// datasheet : https://www.decawave.com/sites/default/files/resources/dw1000-datasheet-v2.09.pdf
 
 #endif //__DECAWAVE_H__
