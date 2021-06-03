@@ -28,7 +28,7 @@ offset_size=$(grep "^\w" $2 | wc -l)
 echo "#define BBZSTRING_OFFSET ($offset_size)" >> $4
 echo "" >> $4
 
-array_size=$(grep "^'\w" $1 | wc -l)
+array_size=$(head -n 1 $1 | cut -c 2-)
 echo "#define BBZSTRING_ARRAY_SIZE ($array_size - BBZSTRING_OFFSET)" >> $4
 echo "" >> $4
 

@@ -11,8 +11,8 @@ bool GreetHandler::greet() {
         if (std::holds_alternative<GreetingDTO>(msg.getMessage())) {
             uint16_t uuid = m_bsp.getUUId();
             GreetingDTO greet(uuid);
-            MessageDTO msg(uuid, uuid, greet);
-            return m_serializer.serializeToStream(msg);
+            MessageDTO message(uuid, uuid, greet);
+            return m_serializer.serializeToStream(message);
         }
     }
     return false;

@@ -94,7 +94,7 @@ void BittyBuzzUserFunctions::log() {
             if (optionString) {
                 BittyBuzzSystem::g_ui->print("%s", optionString.value());
             } else {
-                BittyBuzzSystem::g_ui->print("{UNKNOWN STR}");
+                BittyBuzzSystem::g_ui->print("{UNKNOWN STRID: %d}", obj->s.value);
             }
             break;
         }
