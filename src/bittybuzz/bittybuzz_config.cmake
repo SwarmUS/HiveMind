@@ -1,6 +1,6 @@
-set_default(BBZHEAP_SIZE 2048)
+set_default(BBZHEAP_SIZE 8192)
 set_default(BBZHEAP_ELEMS_PER_TSEG 5)
-set_default(BBZSTACK_SIZE 128)
+set_default(BBZSTACK_SIZE 512)
 set_default(BBZVSTIG_CAP 4)
 set_default(BBZNEIGHBORS_CAP 15)
 set_default(BBZINMSG_QUEUE_CAP 10)
@@ -22,6 +22,7 @@ option(BBZ_DISABLE_SWARMS "Disables swarms data structures and messages." OFF)
 option(BBZ_DISABLE_MESSAGES "Disables usage and transfer of any kind of Buzz message." OFF)
 option(BBZ_BYTEWISE_ASSIGNMENT "Enables byte per byte assignment." OFF)
 option(BBZ_NEIGHBORS_USE_FLOATS "Whether to use floats for the neighbor's range and bearing measurments." ON)
+option(BBZ_ENABLE_FLOAT_OPERATIONS "Whether to enable floats operations" ON)
 
 # There is no implementation of the swarmlist broadcast on bittybuzz for now
 option(BBZ_DISABLE_SWARMLIST_BROADCASTS "Whether we disable the broadcasting of our swarmlist to neighboring robots." ON)

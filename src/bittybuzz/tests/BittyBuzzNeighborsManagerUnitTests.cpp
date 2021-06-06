@@ -19,9 +19,9 @@ class BittyBuzzNeighborsManagerTestFixture : public testing::Test {
     static void errCallback(bbzvm_error errcode) { (void)errcode; };
 
     void SetUp() override {
+        vm = &m_bbzvm;
         bbzvm_construct(42);
         bbzvm_set_error_receiver(errCallback);
-        vm->error_receiver_fun = errCallback;
         m_neighborsManager = new BittyBuzzNeighborsManager(m_interlocMock, m_queueMock);
     }
 

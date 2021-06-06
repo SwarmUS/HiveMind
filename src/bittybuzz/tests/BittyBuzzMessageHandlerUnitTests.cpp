@@ -1056,3 +1056,69 @@ TEST_F(BittyBuzzMessageHandlerFixture, BittyBuzzMessageHandler_processMessage_bu
     EXPECT_TRUE(ret);
     EXPECT_EQ(queueSize, 1);
 }
+
+TEST_F(BittyBuzzMessageHandlerFixture,
+       BittyBuzzMessageHandler_processMessage_broadcast_host_pushSuccessful) {
+    // Given
+    MessageDTO message = MessageDTO(m_uuid, 0, *m_request);
+    MessageDTO messageSent;
+    std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
+
+    BittyBuzzRegisteredClosure registeredClosure(1, "", 1, 1);
+    std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> bbzRetValue =
+        registeredClosure;
+
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
+    EXPECT_CALL(m_closureRegisterMock, getRegisteredClosure(testing::An<const char*>()))
+        .Times(1)
+        .WillOnce(testing::Return(bbzRetValue));
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_))
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
+
+    // Then
+    bool ret = m_bbzMessageHandler->processMessage();
+
+    // Expect
+    auto resp = std::get<ResponseDTO>(messageSent.getMessage());
+    auto uresp = std::get<UserCallResponseDTO>(resp.getResponse());
+    auto fresp = std::get<FunctionCallResponseDTO>(uresp.getResponse());
+    EXPECT_TRUE(ret);
+    EXPECT_EQ(fresp.getResponse().getStatus(), GenericResponseStatusDTO::Ok);
+}
+
+TEST_F(BittyBuzzMessageHandlerFixture,
+       BittyBuzzMessageHandler_processMessage_broadcast_remote_pushSuccessful) {
+    // Given
+    MessageDTO message = MessageDTO(m_srcUuid, 0, *m_request);
+    MessageDTO messageSent;
+    std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
+
+    BittyBuzzRegisteredClosure registeredClosure(1, "", 1, 1);
+    std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> bbzRetValue =
+        registeredClosure;
+
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
+    EXPECT_CALL(m_closureRegisterMock, getRegisteredClosure(testing::An<const char*>()))
+        .Times(1)
+        .WillOnce(testing::Return(bbzRetValue));
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_inputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_))
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
+
+    // Then
+    bool ret = m_bbzMessageHandler->processMessage();
+
+    // Expect
+    auto resp = std::get<ResponseDTO>(messageSent.getMessage());
+    auto uresp = std::get<UserCallResponseDTO>(resp.getResponse());
+    auto fresp = std::get<FunctionCallResponseDTO>(uresp.getResponse());
+    EXPECT_TRUE(ret);
+    EXPECT_EQ(fresp.getResponse().getStatus(), GenericResponseStatusDTO::Ok);
+}

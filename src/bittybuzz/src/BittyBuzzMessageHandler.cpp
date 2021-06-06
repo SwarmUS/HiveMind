@@ -23,7 +23,10 @@ bool BittyBuzzMessageHandler::processMessage() {
     if (message) {
         m_inputQueue.pop();
         const MessageDTO& messageDTO = message.value();
-        if (messageDTO.getDestinationId() == m_bsp.getUUId()) {
+
+        uint32_t destinationId = messageDTO.getDestinationId();
+
+        if (destinationId == 0 || destinationId == m_bsp.getUUId()) {
             return handleMessage(message.value());
         }
 
@@ -101,6 +104,7 @@ FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
                     invalidRequestResponse.setDetails("arg type don't match");
                     return invalidRequestResponse;
                 }
+
                 bbzvm_pushi((int16_t)*intVal);
 
             } else if (const float* floatVal = std::get_if<float>(&arg)) {
@@ -178,7 +182,6 @@ bool BittyBuzzMessageHandler::handleGenericResponse(const GenericResponseDTO& re
 }
 
 bool BittyBuzzMessageHandler::handleBuzzMessage(const BuzzMessageDTO& msg) {
-    (void)msg;
     bbzmsg_payload_t payload;
     payload.buffer = const_cast<uint8_t*>(msg.getPayload().data());
     payload.datastart = 0;
