@@ -3,51 +3,52 @@
 #include <interloc/UWBMessages.h>
 
 InterlocTimeManager::InterlocTimeManager(IBSP& bsp) :
-    m_pollAirTimeWithPreambleUs(0),
-    m_responseAirTimeWithPreambleUs(0),
-    m_finalAirTimeWithPreambleUs(0),
-    m_pollToFirstResponseGuardUs(0),
+    m_pollAirTimeWithPreambleUs(0U),
+    m_responseAirTimeWithPreambleUs(0U),
+    m_finalAirTimeWithPreambleUs(0U),
+    m_pollToFirstResponseGuardUs(0U),
     m_bsp(bsp),
     m_numSlots(5),
     m_slotId(2)
 
 {
+
     // keep these around for debug purposes.
     // could be deleted once integrated and tested with the HBx6
     /*
-    m_pollAirTimeWithPreambleUs = computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRPoll) << 3);
-    m_responseAirTimeWithPreambleUs =
-        computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRResponse) << 3);
-    m_finalAirTimeWithPreambleUs = computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRFinal) << 3);
-    m_pollToFirstResponseGuardUs = getReadWriteSPITimeUs(sizeof(UWBMessages::TWRPoll)) +
-                                   POLL_PROCESSING_GUARD + getPreambleAirTimeUs();
+        m_pollAirTimeWithPreambleUs = computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRPoll) <<
+       3); m_responseAirTimeWithPreambleUs =
+            computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRResponse) << 3);
+        m_finalAirTimeWithPreambleUs = computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRFinal) <<
+       3); m_pollToFirstResponseGuardUs = getReadWriteSPITimeUs(sizeof(UWBMessages::TWRPoll)) +
+                                       POLL_PROCESSING_GUARD + getPreambleAirTimeUs();
 
-    uint64_t startOfFrameTs = 0; // Absolute reference in all timings
+        uint64_t startOfFrameTs = 0; // Absolute reference in all timings
 
-    computeResponseRxTs(startOfFrameTs);
+        computeResponseRxTs(startOfFrameTs);
 
-    volatile uint64_t responseTxTs[5];
-    for (unsigned int i = 1; i < 6; i++) {
-        m_slotId = i;
-        responseTxTs[i - 1] = getResponseTxTs(startOfFrameTs);
-    }
-    m_slotId = 2;
-    volatile uint64_t finalRxTs = getFinalRxTs(startOfFrameTs);
-    volatile uint64_t finalTxTs = getFinalTxTs(startOfFrameTs);
-    volatile uint16_t pollTO = getTimeoutUs(m_pollAirTimeWithPreambleUs);
-    volatile uint16_t responseTO = getTimeoutUs(m_responseAirTimeWithPreambleUs);
-    volatile uint16_t finalTO = getTimeoutUs(m_finalAirTimeWithPreambleUs);
-    volatile uint64_t newPollTs = getPollRxStartTs(startOfFrameTs);
+        volatile uint64_t responseTxTs[5];
+        for (unsigned int i = 1; i < 6; i++) {
+            m_slotId = i;
+            responseTxTs[i - 1] = getResponseTxTs(startOfFrameTs);
+        }
+        m_slotId = 2;
+        volatile uint64_t finalRxTs = getFinalRxTs(startOfFrameTs);
+        volatile uint64_t finalTxTs = getFinalTxTs(startOfFrameTs);
+        volatile uint16_t pollTO = getTimeoutUs(m_pollAirTimeWithPreambleUs);
+        volatile uint16_t responseTO = getTimeoutUs(m_responseAirTimeWithPreambleUs);
+        volatile uint16_t finalTO = getTimeoutUs(m_finalAirTimeWithPreambleUs);
+        volatile uint64_t newPollTs = getPollRxStartTs(startOfFrameTs);
 
-    responseTxTs[0]++;
-    finalRxTs++;
-    finalTxTs++;
-    m_responseRxTs[9] = 0;
-    pollTO++;
-    responseTO++;
-    finalTO++;
-    newPollTs++;
-*/
+        responseTxTs[0]++;
+        finalRxTs++;
+        finalTxTs++;
+        m_responseRxTs[9] = 0;
+        pollTO++;
+        responseTO++;
+        finalTO++;
+        newPollTs++;
+    */
     updateTimings();
 }
 
@@ -102,32 +103,53 @@ uint8_t getSFDLength() {
     // see user manual p.217
     switch (UWBSpeed::DW_SPEED) {
     case UWBSpeed::SPEED_110K:
-        return 64;
+        return 64U;
     default:
-        return 8;
+        return 8U;
     }
 }
 
+uint16_t getPreambleLengthDec(uint8_t plenCode) {
+    switch (plenCode) {
+    case DWT_PLEN_4096:
+        return 4096U;
+    case DWT_PLEN_2048:
+        return 2048U;
+    case DWT_PLEN_1536:
+        return 1536U;
+    case DWT_PLEN_1024:
+        return 1024U;
+    case DWT_PLEN_512:
+        return 512U;
+    case DWT_PLEN_256:
+        return 256U;
+    case DWT_PLEN_128:
+        return 128U;
+    default:
+        return 64U;
+    }
+}
 uint16_t InterlocTimeManager::getPreambleAirTimeUs() {
-    float shrBitLength = DecawaveUtils::getPreambleLength(UWBSpeed::DW_SPEED) + getSFDLength();
-    float phrBitLength = PHY_HEADER_LENGTH;
+    uint16_t shrBitLength =
+        getPreambleLengthDec(DecawaveUtils::getPreambleLength(UWBSpeed::DW_SPEED)) + getSFDLength();
+    uint16_t phrBitLength = PHY_HEADER_LENGTH;
 
     return (uint16_t)(shrBitLength * getShrSymbolDurationUs() +
                       phrBitLength * getPhrSymbolDurationUs());
 }
 
 uint16_t InterlocTimeManager::getReadWriteSPITimeUs(uint16_t bitLength) {
-    return bitLength * 1000000 / SPI_SPEED_HZ;
+    return bitLength * 1000000U / SPI_SPEED_HZ;
 }
 
 uint16_t InterlocTimeManager::getAirTimeUs(uint16_t bitLength) {
     switch (UWBSpeed::DW_SPEED) {
     case UWBSpeed::SPEED_6M8:
-        return bitLength * 1000000 / 6.8e6;
+        return bitLength * 1000000U / 6800000U;
     case UWBSpeed::SPEED_850K:
-        return bitLength * 1000000 / 850e3;
+        return bitLength * 1000000U / 850000U;
     default:
-        return bitLength * 1000000 / 110e3;
+        return bitLength * 1000000U / 110000U;
     }
 }
 
@@ -137,7 +159,7 @@ uint16_t InterlocTimeManager::computeAirTimeWithPreambleUs(uint16_t bitLength) {
 uint64_t InterlocTimeManager::getResponseTxTs(uint64_t startOfFrame) const {
     return (startOfFrame +
             UUS_TO_DWT_TIME *
-                (getPreambleAirTimeUs() + m_pollToFirstResponseGuardUs +
+                (getPreambleAirTimeUs() + (uint64_t)m_pollToFirstResponseGuardUs +
                  (m_slotId - 1U) * (getReadWriteSPITimeUs(sizeof(UWBMessages::TWRResponse)) +
                                     RESPONSE_PROCESSING_GUARD + getPreambleAirTimeUs() +
                                     TIMEOUT_GUARD_US + RESPONSE_PROCESSING_GUARD_GUARD))) %
@@ -161,7 +183,7 @@ void InterlocTimeManager::computeResponseRxTs(uint64_t startOfFrameTs) {
 uint64_t InterlocTimeManager::getFinalTxTs(uint64_t startOfFrameTs) const {
     return (startOfFrameTs +
             UUS_TO_DWT_TIME *
-                (getPreambleAirTimeUs() + m_pollToFirstResponseGuardUs +
+                (getPreambleAirTimeUs() + (uint64_t)m_pollToFirstResponseGuardUs +
                  (m_numSlots - 1U) * (getReadWriteSPITimeUs(sizeof(UWBMessages::TWRResponse)) +
                                       RESPONSE_PROCESSING_GUARD + getPreambleAirTimeUs() +
                                       TIMEOUT_GUARD_US + RESPONSE_PROCESSING_GUARD_GUARD) +

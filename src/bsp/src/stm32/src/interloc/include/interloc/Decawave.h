@@ -11,16 +11,16 @@
 #include <memory>
 #include <task.h>
 // calibration constants
-#define DEFAULT_TX_ANT_DLY 16505 // 247ns
-#define DEFAULT_RX_ANT_DLY 16505
+#define DEFAULT_TX_ANT_DLY 16505U // 247ns
+#define DEFAULT_RX_ANT_DLY 16505U
 
 #define UUS_TO_DWT_TIME 63898U
-#define SPEED_OF_LIGHT 299792458
+#define SPEED_OF_LIGHT 299792458U
 #define DW_INTERNAL_CLOCK_RFEQ 63897600000
 
 // Time management constants
-#define SPI_SPEED_HZ 2625000 // bits/s
-#define PHY_HEADER_LENGTH 21 // symbols
+#define SPI_SPEED_HZ 2625000U // bits/s
+#define PHY_HEADER_LENGTH 21U // symbols
 
 #define DW_CHANNEL CHANNEL_2
 #define DW_SPEED SPEED_6M8

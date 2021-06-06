@@ -4,7 +4,7 @@
 #include <bsp/IBSP.h>
 #include <cstdint>
 
-#define UINT40_MAX 0xFFFFFFFFFF
+#define UINT40_MAX 0xFFFFFFFFFFU
 
 #define POLL_PROCESSING_GUARD 400U
 #define RESPONSE_PROCESSING_GUARD 360U
