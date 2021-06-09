@@ -4,11 +4,7 @@ loop_counter = 0
 function init() {
   counter = 0;
   stig = stigmergy.create(1);
-  stig.onconflict(function(key, ld, rd) {
-    log("Conflict detected: ", key, ld, rd);
-    return ld;
-  });
-  
+
   if(id == 1){
     stig.put("leader", 1);
   }
@@ -16,9 +12,10 @@ function init() {
 
 function step() {
   if(loop_counter == 20) {
+    log("Calling inside loop");
     var leader = stig.get("leader");
     if(leader != id and leader != nil){
-      log("Getting neighbor")
+      log("Getting neighbor: ", leader)
       var neighbor = neighbors.get(leader);
 
       if(is_table(neighbor)){
