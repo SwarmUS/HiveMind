@@ -1,21 +1,22 @@
-stig_counter = 0
 loop_counter = 0
 
 function init() {
   counter = 0;
   stig = stigmergy.create(1);
 
-  if(id == 1){
-    stig.put("leader", 1);
-  }
+  stig.put("leader", 1);
+}
+
+function leader_random_walk(){
+    var x = math.rng_uniform();
+    var y = math.rng_uniform();
 }
 
 function step() {
   if(loop_counter == 20) {
-    log("Calling inside loop");
     var leader = stig.get("leader");
+    log("Leader: ", leader);
     if(leader != id and leader != nil){
-      log("Getting neighbor: ", leader)
       var neighbor = neighbors.get(leader);
 
       if(is_table(neighbor)){
@@ -29,14 +30,10 @@ function step() {
         log("Neighbor not found!");
       }
     }
-    else{
-      stig.put("stig_counter", stig_counter);
+    else if(leader == id) {
+        leader_random_walk();
     }
-    log("Stig counter: ", stig.get("stig_counter"));
-    log("Conflict counter: ", stig.get("conflict"));
-    stig.put("conflict", id);
     loop_counter = 0;
   }
   loop_counter = loop_counter + 1;
-  stig_counter = stig_counter + 1;
 }
