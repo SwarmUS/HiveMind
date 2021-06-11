@@ -48,6 +48,7 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommI
 
         // Create new socket
         std::optional<TCPClient> socket = SocketFactory::createTCPClient(address, port, logger);
+        logger.log(LogLevel::Warn, "Trying to connect to host at %s : %d", address, port);
         if (socket) {
             s_clientSocket.emplace(socket.value());
         }

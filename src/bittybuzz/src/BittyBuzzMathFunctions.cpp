@@ -249,4 +249,5 @@ void BittyBuzzMathFunctions::bbzmath_rng_uniform() {
     bbzvm_assert_lnum(0); // NOLINT
     int16_t randomNum = static_cast<int16_t>(BittyBuzzSystem::g_bsp->generateRandomNumber());
     bbzvm_pushi(randomNum);
+    bbzvm_ret1();
 }
