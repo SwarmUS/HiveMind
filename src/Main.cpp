@@ -260,7 +260,7 @@ class SoftwareInterlocTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class LogInterlocTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
+class LogInterlocTask : public AbstractTask<8 * configMINIMAL_STACK_SIZE> {
   public:
     LogInterlocTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority),
@@ -315,7 +315,7 @@ int main(int argc, char** argv) {
         "remote_monitor", gc_taskNormalPriority, s_remoteDispatchTask, s_remoteMessageSender,
         BSPContainer::getRemoteCommInterface);
 
-    s_bittybuzzTask.start();
+    //    s_bittybuzzTask.start();
     s_hardwareInterlocTask.start();
     s_softwareInterlocTask.start();
     s_logInterlocTask.start();

@@ -8,6 +8,10 @@ SyncState::SyncState(ILogger& logger, DecawaveArray& decawaves) :
     AbstractInterlocState(logger, decawaves) {}
 
 void SyncState::process(InterlocStateHandler& context) {
+
+    volatile uint64_t currentTime = m_decawaves[DecawavePort::A].getSysTime();
+    (void)currentTime;
+
     uint64_t syncStartTs = m_decawaves[DecawavePort::A].getSysTime();
     uint32_t initialRxTimeoutUs = context.getTimeManager().getSyncTimeoutUs();
     uint32_t rxTimeoutUs = initialRxTimeoutUs;
@@ -47,4 +51,5 @@ void SyncState::handlePollReceived(InterlocStateHandler& context) {
     context.setCurrentFrameId(msg->m_currentFrameId);
 
     context.setState(InterlocStates::SEND_RESPONSE, InterlocEvent::POLL_RECVD);
+    //    m_logger.log(LogLevel::Warn, "hp %d", context.getCurrentFrameId());
 }

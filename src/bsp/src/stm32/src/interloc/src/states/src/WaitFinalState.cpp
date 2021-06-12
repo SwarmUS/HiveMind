@@ -20,7 +20,8 @@ void WaitFinalState::process(InterlocStateHandler& context) {
         context.getTWR().deserializeFinal(
             reinterpret_cast<UWBMessages::TWRFinal*>(m_rxFrame.m_rxBuffer.data()));
         context.getTWR().m_finalRxTs = m_rxFrame.m_rxTimestamp;
-
+        // temp
+        //        context.setState(InterlocStates::IDLE, InterlocEvent::FINAL_RECVD);
         context.setState(InterlocStates::SET_DISTANCE, InterlocEvent::FINAL_RECVD);
 
     } else if (m_rxFrame.m_status == UWBRxStatus::TIMEOUT) {
