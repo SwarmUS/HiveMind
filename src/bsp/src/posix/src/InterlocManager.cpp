@@ -10,11 +10,13 @@
 #define ROBOT_CENTER_SUFFIX "/base_link"
 #define HIVEBOARD_SUFFIX "/hiveboard"
 
-bool isTfValid(const tf2::Transform& tf){
+bool isTfValid(const tf2::Transform& tf) {
     const tf2::Vector3& origin = tf.getOrigin();
     tf2::Quaternion rot = tf.getRotation();
-    bool validOrigin = isfinite(origin.getX()) && isfinite(origin.getY()) && isfinite(origin.getZ());
-    bool validRot = isfinite(rot.getX()) && isfinite(rot.getY()) && isfinite(rot.getZ()) && isfinite(rot.getW());
+    bool validOrigin =
+        isfinite(origin.getX()) && isfinite(origin.getY()) && isfinite(origin.getZ());
+    bool validRot = isfinite(rot.getX()) && isfinite(rot.getY()) && isfinite(rot.getZ()) &&
+                    isfinite(rot.getW());
     return validOrigin && validRot;
 }
 InterlocManager::InterlocManager(ILogger& logger) :
@@ -130,9 +132,11 @@ void InterlocManager::gazeboUpdateCallback(const gazebo_msgs::ModelStates& msg) 
 
         tf2::Transform relTransform = currentAgentTf.inverseTimes(distantAgentTf);
 
-
-        if (!isTfValid(relTransform)){
-            m_logger.log(LogLevel::Warn, "Could not calculate transform, verify that the transform for id %d and %d exists", currentAgentId, agentId);
+        if (!isTfValid(relTransform)) {
+            m_logger.log(
+                LogLevel::Warn,
+                "Could not calculate transform, verify that the transform for id %d and %d exists",
+                currentAgentId, agentId);
             continue;
         }
 
