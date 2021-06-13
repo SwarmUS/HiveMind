@@ -66,21 +66,21 @@ void UI_setLED(led_t led, bool state) {
 
     case LED_0:
         HAL_GPIO_WritePin(MCU_LED_0_GPIO_Port, MCU_LED_0_Pin,
-                          state ? GPIO_PIN_SET : GPIO_PIN_RESET);
+                          state ? GPIO_PIN_RESET : GPIO_PIN_SET);
         break;
     case LED_1:
         HAL_GPIO_WritePin(MCU_LED_1_GPIO_Port, MCU_LED_1_Pin,
-                          state ? GPIO_PIN_SET : GPIO_PIN_RESET);
+                          state ? GPIO_PIN_RESET : GPIO_PIN_SET);
         break;
     case LED_2:
         HAL_GPIO_WritePin(MCU_LED_2_GPIO_Port, MCU_LED_2_Pin,
-                          state ? GPIO_PIN_SET : GPIO_PIN_RESET);
+                          state ? GPIO_PIN_RESET : GPIO_PIN_SET);
         break;
     }
 }
 
 void UI_setRGB(bool red, bool green, bool blue) {
-    HAL_GPIO_WritePin(MCU_LED_R_GPIO_Port, MCU_LED_R_Pin, red ? GPIO_PIN_SET : GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(MCU_LED_G_GPIO_Port, MCU_LED_G_Pin, green ? GPIO_PIN_SET : GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(MCU_LED_B_GPIO_Port, MCU_LED_B_Pin, blue ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(MCU_LED_R_GPIO_Port, MCU_LED_R_Pin, red ? GPIO_PIN_RESET : GPIO_PIN_SET);
+    HAL_GPIO_WritePin(MCU_LED_G_GPIO_Port, MCU_LED_G_Pin, green ? GPIO_PIN_RESET : GPIO_PIN_SET);
+    HAL_GPIO_WritePin(MCU_LED_B_GPIO_Port, MCU_LED_B_Pin, blue ? GPIO_PIN_RESET : GPIO_PIN_SET);
 }
