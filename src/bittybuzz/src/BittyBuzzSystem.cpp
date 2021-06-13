@@ -23,10 +23,10 @@ void BittyBuzzSystem::errorReceiver(bbzvm_error errcode) {
     if (g_logger != NULL) {
         bbzvm_instr instr = (bbzvm_instr) * (*vm->bcode_fetch_fun)(vm->pc - 1, 1);
         g_logger->log(LogLevel::Error,
-                                       "BittyBuzz virtual machine error, pc: %d, stackptr: %d, "
-                                       "state: %s,  error code: %s, instruction: %s \n",
-                                       vm->pc, vm->stackptr, getStateString(vm->state),
-                                       getErrorString(errcode), getInstructionString(instr));
+                      "BittyBuzz virtual machine error, pc: %d, stackptr: %d, "
+                      "state: %s,  error code: %s, instruction: %s \n",
+                      vm->pc, vm->stackptr, getStateString(vm->state), getErrorString(errcode),
+                      getInstructionString(instr));
     }
 }
 
