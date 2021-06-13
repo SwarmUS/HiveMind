@@ -38,14 +38,14 @@ void deca_hardwareReset(decaDevice_t selectedDevice) {
 void deca_setSlowRate(decaDevice_t selectedDevice) {
     decawaveDeviceConfig_t* decaConfig = deca_getDeviceConfig(selectedDevice);
 
-    decaConfig->spiHandle->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
+    decaConfig->spiHandle->Init.BaudRatePrescaler = DECA_SPI_SLOW_RATE;
     HAL_SPI_Init(decaConfig->spiHandle);
 }
 
 void deca_setFastRate(decaDevice_t selectedDevice) {
     decawaveDeviceConfig_t* decaConfig = deca_getDeviceConfig(selectedDevice);
 
-    decaConfig->spiHandle->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
+    decaConfig->spiHandle->Init.BaudRatePrescaler = DECA_SPI_FAST_RATE;
     HAL_SPI_Init(decaConfig->spiHandle);
 }
 

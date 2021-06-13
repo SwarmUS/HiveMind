@@ -29,8 +29,8 @@ SPI_HandleTypeDef hspi2;
 SPI_HandleTypeDef hspi3;
 SPI_HandleTypeDef hspi4;
 SPI_HandleTypeDef hspi5;
-DMA_HandleTypeDef hdma_spi2_rx;
-DMA_HandleTypeDef hdma_spi2_tx;
+DMA_HandleTypeDef hdma_spi5_rx;
+DMA_HandleTypeDef hdma_spi5_tx;
 
 /* SPI1 init function */
 void MX_SPI1_Init(void) {
@@ -45,9 +45,9 @@ void MX_SPI1_Init(void) {
     hspi1.Instance = SPI1;
     hspi1.Init.Mode = SPI_MODE_MASTER;
     hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-    hspi1.Init.DataSize = SPI_DATASIZE_4BIT;
-    hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
-    hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
+    hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+    hspi1.Init.CLKPolarity = SPI_POLARITY_HIGH;
+    hspi1.Init.CLKPhase = SPI_PHASE_2EDGE;
     hspi1.Init.NSS = SPI_NSS_SOFT;
     hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
     hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
@@ -84,9 +84,9 @@ void MX_SPI2_Init(void) {
     hspi2.Instance = SPI2;
     hspi2.Init.Mode = SPI_MODE_MASTER;
     hspi2.Init.Direction = SPI_DIRECTION_2LINES;
-    hspi2.Init.DataSize = SPI_DATASIZE_4BIT;
-    hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
-    hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
+    hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
+    hspi2.Init.CLKPolarity = SPI_POLARITY_HIGH;
+    hspi2.Init.CLKPhase = SPI_PHASE_2EDGE;
     hspi2.Init.NSS = SPI_NSS_SOFT;
     hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
     hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
@@ -123,9 +123,9 @@ void MX_SPI3_Init(void) {
     hspi3.Instance = SPI3;
     hspi3.Init.Mode = SPI_MODE_MASTER;
     hspi3.Init.Direction = SPI_DIRECTION_2LINES;
-    hspi3.Init.DataSize = SPI_DATASIZE_4BIT;
-    hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
-    hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
+    hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
+    hspi3.Init.CLKPolarity = SPI_POLARITY_HIGH;
+    hspi3.Init.CLKPhase = SPI_PHASE_2EDGE;
     hspi3.Init.NSS = SPI_NSS_SOFT;
     hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
     hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
@@ -162,7 +162,7 @@ void MX_SPI4_Init(void) {
     hspi4.Instance = SPI4;
     hspi4.Init.Mode = SPI_MODE_MASTER;
     hspi4.Init.Direction = SPI_DIRECTION_2LINES;
-    hspi4.Init.DataSize = SPI_DATASIZE_4BIT;
+    hspi4.Init.DataSize = SPI_DATASIZE_8BIT;
     hspi4.Init.CLKPolarity = SPI_POLARITY_LOW;
     hspi4.Init.CLKPhase = SPI_PHASE_1EDGE;
     hspi4.Init.NSS = SPI_NSS_SOFT;
@@ -201,7 +201,7 @@ void MX_SPI5_Init(void) {
     hspi5.Instance = SPI5;
     hspi5.Init.Mode = SPI_MODE_MASTER;
     hspi5.Init.Direction = SPI_DIRECTION_2LINES;
-    hspi5.Init.DataSize = SPI_DATASIZE_4BIT;
+    hspi5.Init.DataSize = SPI_DATASIZE_8BIT;
     hspi5.Init.CLKPolarity = SPI_POLARITY_LOW;
     hspi5.Init.CLKPhase = SPI_PHASE_1EDGE;
     hspi5.Init.NSS = SPI_NSS_SOFT;
@@ -300,41 +300,6 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle) {
         GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
         HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-        /* SPI2 DMA Init */
-        /* SPI2_RX Init */
-        hdma_spi2_rx.Instance = DMA1_Stream0;
-        hdma_spi2_rx.Init.Request = DMA_REQUEST_SPI2_RX;
-        hdma_spi2_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
-        hdma_spi2_rx.Init.PeriphInc = DMA_PINC_DISABLE;
-        hdma_spi2_rx.Init.MemInc = DMA_MINC_ENABLE;
-        hdma_spi2_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
-        hdma_spi2_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-        hdma_spi2_rx.Init.Mode = DMA_NORMAL;
-        hdma_spi2_rx.Init.Priority = DMA_PRIORITY_MEDIUM;
-        hdma_spi2_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-        if (HAL_DMA_Init(&hdma_spi2_rx) != HAL_OK) {
-            Error_Handler();
-        }
-
-        __HAL_LINKDMA(spiHandle, hdmarx, hdma_spi2_rx);
-
-        /* SPI2_TX Init */
-        hdma_spi2_tx.Instance = DMA1_Stream1;
-        hdma_spi2_tx.Init.Request = DMA_REQUEST_SPI2_TX;
-        hdma_spi2_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
-        hdma_spi2_tx.Init.PeriphInc = DMA_PINC_DISABLE;
-        hdma_spi2_tx.Init.MemInc = DMA_MINC_ENABLE;
-        hdma_spi2_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
-        hdma_spi2_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-        hdma_spi2_tx.Init.Mode = DMA_NORMAL;
-        hdma_spi2_tx.Init.Priority = DMA_PRIORITY_MEDIUM;
-        hdma_spi2_tx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-        if (HAL_DMA_Init(&hdma_spi2_tx) != HAL_OK) {
-            Error_Handler();
-        }
-
-        __HAL_LINKDMA(spiHandle, hdmatx, hdma_spi2_tx);
-
         /* USER CODE BEGIN SPI2_MspInit 1 */
 
         /* USER CODE END SPI2_MspInit 1 */
@@ -431,6 +396,44 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle) {
         GPIO_InitStruct.Alternate = GPIO_AF5_SPI5;
         HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
+        /* SPI5 DMA Init */
+        /* SPI5_RX Init */
+        hdma_spi5_rx.Instance = DMA1_Stream2;
+        hdma_spi5_rx.Init.Request = DMA_REQUEST_SPI5_RX;
+        hdma_spi5_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+        hdma_spi5_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+        hdma_spi5_rx.Init.MemInc = DMA_MINC_ENABLE;
+        hdma_spi5_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+        hdma_spi5_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+        hdma_spi5_rx.Init.Mode = DMA_NORMAL;
+        hdma_spi5_rx.Init.Priority = DMA_PRIORITY_LOW;
+        hdma_spi5_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+        if (HAL_DMA_Init(&hdma_spi5_rx) != HAL_OK) {
+            Error_Handler();
+        }
+
+        __HAL_LINKDMA(spiHandle, hdmarx, hdma_spi5_rx);
+
+        /* SPI5_TX Init */
+        hdma_spi5_tx.Instance = DMA1_Stream3;
+        hdma_spi5_tx.Init.Request = DMA_REQUEST_SPI5_TX;
+        hdma_spi5_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+        hdma_spi5_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+        hdma_spi5_tx.Init.MemInc = DMA_MINC_ENABLE;
+        hdma_spi5_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+        hdma_spi5_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+        hdma_spi5_tx.Init.Mode = DMA_NORMAL;
+        hdma_spi5_tx.Init.Priority = DMA_PRIORITY_LOW;
+        hdma_spi5_tx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+        if (HAL_DMA_Init(&hdma_spi5_tx) != HAL_OK) {
+            Error_Handler();
+        }
+
+        __HAL_LINKDMA(spiHandle, hdmatx, hdma_spi5_tx);
+
+        /* SPI5 interrupt Init */
+        HAL_NVIC_SetPriority(SPI5_IRQn, 5, 0);
+        HAL_NVIC_EnableIRQ(SPI5_IRQn);
         /* USER CODE BEGIN SPI5_MspInit 1 */
 
         /* USER CODE END SPI5_MspInit 1 */
@@ -472,9 +475,6 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle) {
         */
         HAL_GPIO_DeInit(GPIOB, SPI_CLK_C_Pin | SPI_MISO_C_Pin | SPI_MOSI_C_Pin);
 
-        /* SPI2 DMA DeInit */
-        HAL_DMA_DeInit(spiHandle->hdmarx);
-        HAL_DMA_DeInit(spiHandle->hdmatx);
         /* USER CODE BEGIN SPI2_MspDeInit 1 */
 
         /* USER CODE END SPI2_MspDeInit 1 */
@@ -526,6 +526,12 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle) {
         */
         HAL_GPIO_DeInit(GPIOF, ESP_SPI_CLK_Pin | ESP_SPI_MISO_Pin | ESP_SPI_MOSI_Pin);
 
+        /* SPI5 DMA DeInit */
+        HAL_DMA_DeInit(spiHandle->hdmarx);
+        HAL_DMA_DeInit(spiHandle->hdmatx);
+
+        /* SPI5 interrupt Deinit */
+        HAL_NVIC_DisableIRQ(SPI5_IRQn);
         /* USER CODE BEGIN SPI5_MspDeInit 1 */
 
         /* USER CODE END SPI5_MspDeInit 1 */

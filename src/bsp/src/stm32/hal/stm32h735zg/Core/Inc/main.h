@@ -60,16 +60,20 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define WROOM_INT_Pin GPIO_PIN_2
 #define WROOM_INT_GPIO_Port GPIOE
+#define WROOM_INT_EXTI_IRQn EXTI2_IRQn
 #define WROOM_EN_Pin GPIO_PIN_3
 #define WROOM_EN_GPIO_Port GPIOE
 #define IMU_INT2_Pin GPIO_PIN_4
 #define IMU_INT2_GPIO_Port GPIOE
+#define IMU_INT2_EXTI_IRQn EXTI4_IRQn
 #define IO_EXPANDER_INT__Pin GPIO_PIN_5
 #define IO_EXPANDER_INT__GPIO_Port GPIOE
+#define IO_EXPANDER_INT__EXTI_IRQn EXTI9_5_IRQn
 #define USB_PWR_DET__Pin GPIO_PIN_6
 #define USB_PWR_DET__GPIO_Port GPIOE
 #define IMU_INT1_Pin GPIO_PIN_13
 #define IMU_INT1_GPIO_Port GPIOC
+#define IMU_INT1_EXTI_IRQn EXTI15_10_IRQn
 #define MCU_LED_B_Pin GPIO_PIN_14
 #define MCU_LED_B_GPIO_Port GPIOC
 #define MCU_LED_G_Pin GPIO_PIN_15
@@ -100,6 +104,7 @@ void Error_Handler(void);
 #define CHAN_RESET_0C_GPIO_Port GPIOA
 #define CHAN_IRQ_1C_Pin GPIO_PIN_6
 #define CHAN_IRQ_1C_GPIO_Port GPIOA
+#define CHAN_IRQ_1C_EXTI_IRQn EXTI9_5_IRQn
 #define MEZ_ADC1_N_Pin GPIO_PIN_0
 #define MEZ_ADC1_N_GPIO_Port GPIOB
 #define MEZ_ADC1_P_Pin GPIO_PIN_1
@@ -130,6 +135,7 @@ void Error_Handler(void);
 #define MEZ_SPI_MOSI_GPIO_Port GPIOE
 #define CHAN_IRQ_0C_Pin GPIO_PIN_15
 #define CHAN_IRQ_0C_GPIO_Port GPIOE
+#define CHAN_IRQ_0C_EXTI_IRQn EXTI15_10_IRQn
 #define SPI_CLK_C_Pin GPIO_PIN_10
 #define SPI_CLK_C_GPIO_Port GPIOB
 #define SPI_MISO_C_Pin GPIO_PIN_14
@@ -146,6 +152,7 @@ void Error_Handler(void);
 #define CHAN_RESET_1B_GPIO_Port GPIOD
 #define CHAN_IRQ_1B_Pin GPIO_PIN_12
 #define CHAN_IRQ_1B_GPIO_Port GPIOD
+#define CHAN_IRQ_1B_EXTI_IRQn EXTI15_10_IRQn
 #define CHAN_RESET_0B_Pin GPIO_PIN_13
 #define CHAN_RESET_0B_GPIO_Port GPIOD
 #define CHAN_EN_1B_Pin GPIO_PIN_14
@@ -164,6 +171,7 @@ void Error_Handler(void);
 #define CHAN_DET_0B_GPIO_Port GPIOC
 #define CHAN_IRQ_0B_Pin GPIO_PIN_8
 #define CHAN_IRQ_0B_GPIO_Port GPIOC
+#define CHAN_IRQ_0B_EXTI_IRQn EXTI9_5_IRQn
 #define SPI_nCS_0B_Pin GPIO_PIN_9
 #define SPI_nCS_0B_GPIO_Port GPIOC
 #define CHAN_EN_0B_Pin GPIO_PIN_8
@@ -184,6 +192,7 @@ void Error_Handler(void);
 #define CHAN_EN_1A_GPIO_Port GPIOD
 #define CHAN_IRQ_1A_Pin GPIO_PIN_3
 #define CHAN_IRQ_1A_GPIO_Port GPIOD
+#define CHAN_IRQ_1A_EXTI_IRQn EXTI3_IRQn
 #define SPI_nCS_1A_Pin GPIO_PIN_4
 #define SPI_nCS_1A_GPIO_Port GPIOD
 #define CHAN_DET_1A_Pin GPIO_PIN_5
@@ -196,6 +205,7 @@ void Error_Handler(void);
 #define SPI_MISO_A_GPIO_Port GPIOG
 #define CHAN_IRQ_0A_Pin GPIO_PIN_10
 #define CHAN_IRQ_0A_GPIO_Port GPIOG
+#define CHAN_IRQ_0A_EXTI_IRQn EXTI15_10_IRQn
 #define SPI_CLK_A_Pin GPIO_PIN_11
 #define SPI_CLK_A_GPIO_Port GPIOG
 #define CHAN_EN_0A_Pin GPIO_PIN_12
