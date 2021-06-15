@@ -225,7 +225,7 @@ uint64_t InterlocTimeManager::getPollTxStartTs(uint64_t startOfFrameTs) const {
 
 uint16_t InterlocTimeManager::getSyncTimeoutUs() const {
     uint32_t slotToSlotOffsetUs = getFrameLengthUs();
-    return slotToSlotOffsetUs + (m_bsp.generateRandomNumber() % 25) * 500;
+    return slotToSlotOffsetUs + (m_bsp.generateRandomNumber() % 25) * 150;
 }
 
 uint16_t InterlocTimeManager::getFrameLengthUs() const {

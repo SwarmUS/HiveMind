@@ -19,12 +19,8 @@ void SendPollState::process(InterlocStateHandler& context) {
 
     context.getTWR().m_pollTxTs = pollTxTs;
 
-    volatile uint64_t currentTime = m_decawaves[DecawavePort::A].getSysTime();
-    (void)currentTime;
-
-    volatile uint64_t ret = m_decawaves[DecawavePort::A].transmitDelayed(
-        (uint8_t*)&m_pollMsg, sizeof(UWBMessages::TWRPoll), txTime);
-    (void)ret;
+    m_decawaves[DecawavePort::A].transmitDelayed((uint8_t*)&m_pollMsg, sizeof(UWBMessages::TWRPoll),
+                                                 txTime);
 
     m_decawaves[DecawavePort::A].getTxTimestamp(&context.getTWR().m_pollTxTs);
     context.setPreviousFrameStartTs(context.getTWR().m_pollTxTs);
@@ -32,5 +28,4 @@ void SendPollState::process(InterlocStateHandler& context) {
     // set the RxTs values for the wait_response state
     context.getTimeManager().computeResponseRxTs(context.getPreviousFrameStartTs());
     context.setState(InterlocStates::WAIT_RESPONSE, InterlocEvent::NO_EVENT);
-    m_logger.log(LogLevel::Warn, "sp %d", context.getCurrentFrameId());
 }

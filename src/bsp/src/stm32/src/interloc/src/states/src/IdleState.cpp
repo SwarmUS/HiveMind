@@ -15,17 +15,7 @@ void IdleState::process(InterlocStateHandler& context) {
     uint8_t currentFrameId = context.getCurrentFrameId();
 
     if (currentFrameId == (context.getSuperFrameInitiator())) {
-        // temp wait for closer sync
-        volatile uint64_t currentTime = m_decawaves[DecawavePort::A].getSysTime();
-        (void)currentTime;
-        //        uint64_t delayDWT =
-        //            context.getTimeManager().getPollTxStartTs(context.getPreviousFrameStartTs()) -
-        //            (currentTime - context.getPreviousFrameStartTs()) - 400U * UUS_TO_DWT_TIME;
-        //        UWBRxFrame m_rxFrame;
-        //        m_decawaves[DecawavePort::A].receive(m_rxFrame, delayDWT / UUS_TO_DWT_TIME);
         context.setState(InterlocStates::SYNC, InterlocEvent::SUPERFRAME_FINISHED);
-
-        //        context.setState(InterlocStates::WAIT_POLL, InterlocEvent::NOT_NEXT_FRAME_LEADER);
         return;
     }
 
@@ -34,9 +24,6 @@ void IdleState::process(InterlocStateHandler& context) {
         return;
     }
 
-    // TEMP
     // if not next_frame_leader
     context.setState(InterlocStates::WAIT_POLL, InterlocEvent::NOT_NEXT_FRAME_LEADER);
-    //    context.setState(InterlocStates::SYNC, InterlocEvent::NOT_NEXT_FRAME_LEADER);
-    //    context.setState(InterlocStates::SEND_POLL, InterlocEvent::NOT_NEXT_FRAME_LEADER);
 }
