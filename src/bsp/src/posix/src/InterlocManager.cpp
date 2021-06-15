@@ -99,11 +99,11 @@ void InterlocManager::gazeboUpdateCallback(const gazebo_msgs::ModelStates& msg) 
                 m_baseLinkToHiveBoardTransforms[agentId] = transform.value();
             }
 
-            idxLookup[agentId] = id;
+            idxLookup[agentId] = i;
         }
     }
 
-    if (m_baseLinkToHiveBoardTransforms.count(currentAgentId) == 0 || idxLookup.count(currentAgentId)) {
+    if (m_baseLinkToHiveBoardTransforms.count(currentAgentId) == 0 || idxLookup.count(currentAgentId) == 0) {
         return;
     }
 
