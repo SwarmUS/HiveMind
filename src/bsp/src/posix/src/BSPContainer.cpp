@@ -48,6 +48,7 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommI
 
         // Create new socket
         std::optional<TCPClient> socket = SocketFactory::createTCPClient(address, port, logger);
+        logger.log(LogLevel::Warn, "Trying to connect to host at %s : %d", address, port);
         if (socket) {
             s_clientSocket.emplace(socket.value());
         }
@@ -66,7 +67,7 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getRemoteCom
     std::call_once(s_onceOpenSocket, [&]() {
         std::shared_ptr<ros::NodeHandle> rosNodeHandle =
             static_cast<BSP&>(BSPContainer::getBSP()).getRosNodeHandle();
-        int port = rosNodeHandle->param("remote_mock_port", 9001);
+        int port = rosNodeHandle->param("remote_mock_port", 8001);
         s_remoteCommTCPServer.openSocket(port);
     });
 
