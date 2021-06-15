@@ -7,8 +7,9 @@ WaitPollState::WaitPollState(ILogger& logger, DecawaveArray& decawaves) :
     AbstractInterlocState(logger, decawaves) {}
 
 void WaitPollState::process(InterlocStateHandler& context) {
-    uint64_t rxStartTs =
-        context.getTimeManager().getPollRxStartTs(context.getPreviousFrameStartTs());
+
+    uint64_t rxStartTs = context.getTimeManager().getPollRxStartTs(
+        context.getPreviousFrameStartTs() + 140 * UUS_TO_DWT_TIME);
 
     m_decawaves[DecawavePort::A].receiveDelayed(
         m_rxFrame,
@@ -17,20 +18,21 @@ void WaitPollState::process(InterlocStateHandler& context) {
 
     if (m_rxFrame.m_status == UWBRxStatus::FINISHED && DecawaveUtils::isFramePoll(m_rxFrame)) {
 
-        context.getTWR().m_pollRxTs = m_rxFrame.m_rxTimestamp;
+        UWBMessages::TWRPoll* msg =
+            reinterpret_cast<UWBMessages::TWRPoll*>(m_rxFrame.m_rxBuffer.data());
 
-        // sychronisation parameters
+        context.getTWR().m_pollRxTs = m_rxFrame.m_rxTimestamp;
         context.setPreviousFrameStartTs(m_rxFrame.m_rxTimestamp);
-        context.setSuperFrameInitiator(
-            reinterpret_cast<UWBMessages::TWRPoll*>(m_rxFrame.m_rxBuffer.data())
-                ->m_superFrameInitiator);
-        context.setCurrentFrameId(
-            reinterpret_cast<UWBMessages::TWRPoll*>(m_rxFrame.m_rxBuffer.data())->m_currentFrameId);
+        context.setSuperFrameInitiator(msg->m_superFrameInitiator);
+        context.setCurrentFrameId(msg->m_currentFrameId);
 
         context.setState(InterlocStates::SEND_RESPONSE, InterlocEvent::POLL_RECVD);
         return;
     }
-
-    context.setPreviousFrameStartTs(rxStartTs + RX_BEFORE_TX_GUARD_US * UUS_TO_DWT_TIME);
+    context.setPreviousFrameStartTs(rxStartTs +
+                                    (RX_BEFORE_TX_GUARD_US +
+                                     (uint64_t)context.getTimeManager().getPreambleAirTimeUs() +
+                                     POLL_PROCESSING_GUARD) *
+                                        UUS_TO_DWT_TIME);
     context.setState(InterlocStates::IDLE, InterlocEvent::TIMEOUT);
 }

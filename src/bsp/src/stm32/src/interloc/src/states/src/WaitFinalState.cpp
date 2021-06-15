@@ -7,13 +7,10 @@ WaitFinalState::WaitFinalState(ILogger& logger, DecawaveArray& decawaves) :
     AbstractInterlocState(logger, decawaves) {}
 
 void WaitFinalState::process(InterlocStateHandler& context) {
-    volatile uint64_t finalTxTs =
-        context.getTimeManager().getFinalRxTs(context.getTWR().m_pollRxTs);
-
     m_decawaves[DecawavePort::A].receiveDelayed(
         m_rxFrame,
         InterlocTimeManager::getTimeoutUs(context.getTimeManager().m_finalAirTimeWithPreambleUs),
-        finalTxTs);
+        context.getTimeManager().getFinalRxTs(context.getTWR().m_pollRxTs));
 
     if (m_rxFrame.m_status == UWBRxStatus::FINISHED && DecawaveUtils::isFrameFinal(m_rxFrame)) {
 

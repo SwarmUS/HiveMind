@@ -50,7 +50,7 @@ bool TCPServer::openSocket(int port) {
     }
 
     if (m_listenTask.start()) {
-        m_logger.log(LogLevel::Info, "TCP server server waiting for client on port %d", m_port);
+        m_logger.log(LogLevel::Info, "TCP server waiting for client on port %d", m_port);
     } else {
 
         m_logger.log(LogLevel::Info, "TCP server already listening on port %d", m_port);

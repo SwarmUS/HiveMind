@@ -18,6 +18,7 @@ void SetDistanceState::process(InterlocStateHandler& context) {
 
         context.setState(InterlocStates::IDLE, InterlocEvent::GOOD_DISTANCE);
     } else {
+        m_logger.log(LogLevel::Warn, "distance from : %d = Err", context.getCurrentFrameId());
         context.setState(InterlocStates::IDLE, InterlocEvent::BAD_DISTANCE);
     }
 }

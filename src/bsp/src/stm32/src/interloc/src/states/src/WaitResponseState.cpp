@@ -15,6 +15,7 @@ void WaitResponseState::process(InterlocStateHandler& context) {
         context.getTimeManager().m_responseRxTs[nbTries]);
 
     if (m_rxFrame.m_status == UWBRxStatus::FINISHED && DecawaveUtils::isFrameResponse(m_rxFrame)) {
+
         m_decawaves[DecawavePort::A].getTxTimestamp(&context.getTWR().m_pollTxTs);
         uint8_t index =
             reinterpret_cast<UWBMessages::TWRResponse*>(m_rxFrame.m_rxBuffer.data())->m_subFrameId -
@@ -32,6 +33,7 @@ void WaitResponseState::process(InterlocStateHandler& context) {
         context.setState(InterlocStates::WAIT_RESPONSE, InterlocEvent::RX_RESP_GOOD);
 
     } else if (m_rxFrame.m_status == UWBRxStatus::TIMEOUT) {
+        // a timeout takes about 205us to return
         if (nbTries >= MAX_INTERLOC_SUBFRAMES - 1) {
             if (nbRespReceived > 0) {
                 // final Rx timeout
@@ -41,7 +43,8 @@ void WaitResponseState::process(InterlocStateHandler& context) {
                 return;
             }
             nbTries = 0;
-            context.setState(InterlocStates::SYNC, InterlocEvent::RX_NO_RESP);
+            context.setState(InterlocStates::SEND_FINAL, InterlocEvent::RX_NO_RESP);
+            m_logger.log(LogLevel::Warn, "no resp : %d", context.getCurrentFrameId());
             return;
         }
 

@@ -8,9 +8,9 @@
 
 #define POLL_PROCESSING_GUARD 400U
 #define RESPONSE_PROCESSING_GUARD 360U
-#define RESPONSE_PROCESSING_GUARD_GUARD 50U
+#define RESPONSE_PROCESSING_GUARD_GUARD 100U // 50U
 #define RESPONSE_TO_FINAL_GUARD 600U
-#define FINAL_PROCESSING_GUARD 700U
+#define FINAL_PROCESSING_GUARD 1000U
 #define RX_BEFORE_TX_GUARD_US 10U
 #define TIMEOUT_GUARD_US 100U
 #define DEAD_TIME 200U
@@ -33,6 +33,8 @@ class InterlocTimeManager {
     uint64_t getPollTxStartTs(uint64_t startOfFrameTs) const;
     uint16_t getSyncTimeoutUs() const;
 
+    uint16_t getFrameLengthUs() const;
+
     // fixed length constants to be accessed by states
     uint16_t m_pollAirTimeWithPreambleUs;
     uint16_t m_responseAirTimeWithPreambleUs;
@@ -49,7 +51,6 @@ class InterlocTimeManager {
     uint16_t m_slotId;
 
     void updateTimings();
-    uint16_t getSuperFrameLengthUs() const;
     uint64_t getSupposedNextFrameStart(uint64_t startOfFrameTs) const;
     static uint16_t computeAirTimeWithPreambleUs(uint16_t bitLength);
     static uint16_t getAirTimeUs(uint16_t bitLength);
