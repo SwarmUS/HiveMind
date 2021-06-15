@@ -200,7 +200,7 @@ bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
     dwt_writetxdata(length + UWB_CRC_LENGTH, m_txBuffer.data(), 0);
     dwt_writetxfctrl(length + UWB_CRC_LENGTH, 0, 0);
 
-    volatile int txStatus = dwt_starttx(flags);
+    int txStatus = dwt_starttx(flags);
 
     if (txStatus == 0) {
         // wait for the end of the transmission

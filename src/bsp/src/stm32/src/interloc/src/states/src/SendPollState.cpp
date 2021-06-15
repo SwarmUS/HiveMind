@@ -14,14 +14,10 @@ void SendPollState::process(InterlocStateHandler& context) {
     // moment to start the transmit
     volatile uint64_t txTime =
         context.getTimeManager().getPollTxStartTs(context.getPreviousFrameStartTs());
-    // moment the actual message is transmit
-    volatile uint64_t pollTxTs = m_decawaves[DecawavePort::A].getTxTimestampFromDelayedTime(txTime);
-
-    context.getTWR().m_pollTxTs = pollTxTs;
 
     m_decawaves[DecawavePort::A].transmitDelayed((uint8_t*)&m_pollMsg, sizeof(UWBMessages::TWRPoll),
                                                  txTime);
-
+    // moment the actual message is transmit
     m_decawaves[DecawavePort::A].getTxTimestamp(&context.getTWR().m_pollTxTs);
     context.setPreviousFrameStartTs(context.getTWR().m_pollTxTs);
 

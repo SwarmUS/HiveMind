@@ -15,41 +15,42 @@ InterlocTimeManager::InterlocTimeManager(IBSP& bsp) :
 
     // keep these around for debug purposes.
     // could be deleted once integrated and tested with the HBx6
+    /*
+        m_pollAirTimeWithPreambleUs = computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRPoll) <<
+       3); m_responseAirTimeWithPreambleUs =
+            computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRResponse) << 3);
+        m_finalAirTimeWithPreambleUs = computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRFinal) <<
+       3); m_pollToFirstResponseGuardUs = getReadWriteSPITimeUs(sizeof(UWBMessages::TWRPoll)) +
+                                       POLL_PROCESSING_GUARD + getPreambleAirTimeUs();
 
-    m_pollAirTimeWithPreambleUs = computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRPoll) << 3);
-    m_responseAirTimeWithPreambleUs =
-        computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRResponse) << 3);
-    m_finalAirTimeWithPreambleUs = computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRFinal) << 3);
-    m_pollToFirstResponseGuardUs = getReadWriteSPITimeUs(sizeof(UWBMessages::TWRPoll)) +
-                                   POLL_PROCESSING_GUARD + getPreambleAirTimeUs();
+        uint64_t startOfFrameTs = 0; // Absolute reference in all timings
 
-    uint64_t startOfFrameTs = 0; // Absolute reference in all timings
+        computeResponseRxTs(startOfFrameTs);
 
-    computeResponseRxTs(startOfFrameTs);
+        volatile uint64_t responseTxTs[MAX_INTERLOC_SUBFRAMES];
+        for (unsigned int i = 1; i < 6; i++) {
+            m_slotId = i;
+            responseTxTs[i - 1] = getResponseTxTs(startOfFrameTs);
+        }
+        m_slotId = 2;
+        volatile uint64_t finalRxTs = getFinalRxTs(startOfFrameTs);
+        volatile uint64_t finalTxTs = getFinalTxTs(startOfFrameTs);
+        volatile uint16_t pollTO = getTimeoutUs(m_pollAirTimeWithPreambleUs);
+        volatile uint16_t responseTO = getTimeoutUs(m_responseAirTimeWithPreambleUs);
+        volatile uint16_t finalTO = getTimeoutUs(m_finalAirTimeWithPreambleUs);
+        volatile uint64_t newPollRxTs = getPollRxStartTs(startOfFrameTs);
+        volatile uint64_t newPollTxTs = getPollTxStartTs(startOfFrameTs);
 
-    volatile uint64_t responseTxTs[MAX_INTERLOC_SUBFRAMES];
-    for (unsigned int i = 1; i < 6; i++) {
-        m_slotId = i;
-        responseTxTs[i - 1] = getResponseTxTs(startOfFrameTs);
-    }
-    m_slotId = 2;
-    volatile uint64_t finalRxTs = getFinalRxTs(startOfFrameTs);
-    volatile uint64_t finalTxTs = getFinalTxTs(startOfFrameTs);
-    volatile uint16_t pollTO = getTimeoutUs(m_pollAirTimeWithPreambleUs);
-    volatile uint16_t responseTO = getTimeoutUs(m_responseAirTimeWithPreambleUs);
-    volatile uint16_t finalTO = getTimeoutUs(m_finalAirTimeWithPreambleUs);
-    volatile uint64_t newPollRxTs = getPollRxStartTs(startOfFrameTs);
-    volatile uint64_t newPollTxTs = getPollTxStartTs(startOfFrameTs);
-
-    responseTxTs[0]++;
-    finalRxTs++;
-    finalTxTs++;
-    m_responseRxTs[9] = 0;
-    pollTO++;
-    responseTO++;
-    finalTO++;
-    newPollRxTs++;
-    newPollTxTs++;
+        responseTxTs[0]++;
+        finalRxTs++;
+        finalTxTs++;
+        m_responseRxTs[9] = 0;
+        pollTO++;
+        responseTO++;
+        finalTO++;
+        newPollRxTs++;
+        newPollTxTs++;
+        */
 
     updateTimings();
 }
