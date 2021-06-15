@@ -42,7 +42,7 @@ TEST_F(HiveConnectHiveMindApiMessageHandlerFixture,
 
     // Expect
     EXPECT_TRUE(ret);
-    EXPECT_TRUE(std::holds_alternative<HiveConnectHiveMindApiDTO>(messageSent.getMessage()));
+    EXPECT_TRUE(std::holds_alternative<ResponseDTO>(messageSent.getMessage()));
 }
 
 TEST_F(HiveConnectHiveMindApiMessageHandlerFixture,
