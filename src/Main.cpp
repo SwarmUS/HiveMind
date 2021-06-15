@@ -315,7 +315,7 @@ int main(int argc, char** argv) {
         "remote_monitor", gc_taskNormalPriority, s_remoteDispatchTask, s_remoteMessageSender,
         BSPContainer::getRemoteCommInterface);
 
-    //    s_bittybuzzTask.start();
+    s_bittybuzzTask.start();
     s_hardwareInterlocTask.start();
     s_softwareInterlocTask.start();
     s_logInterlocTask.start();

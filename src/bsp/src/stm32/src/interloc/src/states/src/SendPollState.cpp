@@ -12,8 +12,8 @@ void SendPollState::process(InterlocStateHandler& context) {
     m_pollMsg.m_currentFrameId = context.getSlotId();
     m_pollMsg.m_superFrameInitiator = context.getSuperFrameInitiator();
     // moment to start the transmit
-    volatile uint64_t txTime = context.getTimeManager().getPollTxStartTs(
-        context.getPreviousFrameStartTs() + 70 * UUS_TO_DWT_TIME);
+    volatile uint64_t txTime =
+        context.getTimeManager().getPollTxStartTs(context.getPreviousFrameStartTs());
     // moment the actual message is transmit
     volatile uint64_t pollTxTs = m_decawaves[DecawavePort::A].getTxTimestampFromDelayedTime(txTime);
 

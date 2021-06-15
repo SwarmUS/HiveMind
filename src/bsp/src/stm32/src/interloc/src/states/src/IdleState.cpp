@@ -24,6 +24,5 @@ void IdleState::process(InterlocStateHandler& context) {
         return;
     }
 
-    // if not next_frame_leader
     context.setState(InterlocStates::WAIT_POLL, InterlocEvent::NOT_NEXT_FRAME_LEADER);
 }
