@@ -99,17 +99,18 @@ void InterlocManager::gazeboUpdateCallback(const gazebo_msgs::ModelStates& msg) 
                 m_baseLinkToHiveBoardTransforms[agentId] = transform.value();
             }
 
-            idxLookup[i] = agentId;
+            idxLookup[agentId] = i;
         }
     }
 
-    if (idxLookup.count(currentAgentId) == 0) {
+    if (m_baseLinkToHiveBoardTransforms.count(currentAgentId) == 0 ||
+        idxLookup.count(currentAgentId) == 0) {
         return;
     }
 
     for (auto& x : idxLookup) {
-        uint16_t index = x.first;
-        uint16_t agentId = x.second;
+        uint16_t agentId = x.first;
+        uint16_t index = x.second;
 
         if (agentId == currentAgentId) {
             // Do not calculate interloc with ourself
