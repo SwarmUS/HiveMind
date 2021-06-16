@@ -103,7 +103,8 @@ void InterlocManager::gazeboUpdateCallback(const gazebo_msgs::ModelStates& msg) 
         }
     }
 
-    if (m_baseLinkToHiveBoardTransforms.count(currentAgentId) == 0 || idxLookup.count(currentAgentId) == 0) {
+    if (m_baseLinkToHiveBoardTransforms.count(currentAgentId) == 0 ||
+        idxLookup.count(currentAgentId) == 0) {
         return;
     }
 
