@@ -36,13 +36,14 @@ void Hal_init() {
     usb_init();
 
     MX_LWIP_Init();
+}
 
+void Hal_bootup() {
     deca_init();
-
     enableESP();
-
     UI_initialize();
     Timer_startHeartbeat();
+
 #ifdef IPERF_SERVER
     lwiperf_start_tcp_server_default(NULL, NULL);
 #endif

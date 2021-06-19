@@ -8,9 +8,14 @@ extern "C" {
 #include <stdint.h>
 
 /**
- * @brief  Inits the hal of the device
+ * @brief  Initializes LL drivers for all used peripherals
  */
 void Hal_init();
+
+/**
+ * @brief Powers on and configures all external peripherals used
+ */
+void Hal_bootup();
 
 /**
  * @brief Calculates the 32bit CRC of the data

@@ -5,6 +5,9 @@
 extern "C" {
 #endif
 
+/**
+ * @brief Initializes board specific HAL peripherals
+ */
 void Hal_initPlatformSpecific();
 
 #ifdef __cplusplus
