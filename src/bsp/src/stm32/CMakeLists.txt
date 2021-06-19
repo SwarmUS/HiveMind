@@ -71,6 +71,8 @@ add_custom_target(
 add_subdirectory(hal)
 add_subdirectory(src/interloc)
 
+add_subdirectory(tests)
+
 
 # Removing clang-tidy for this lib
 if (DISABLE_EXTERNAL_WARNINGS) 
