@@ -1,0 +1,7 @@
+<map id="BittyBuzzMessageService" name="BittyBuzzMessageService">
+<area shape="rect" id="node1" title=" " alt="" coords="343,204,570,325"/>
+<area shape="rect" id="node2" href="$classIBittyBuzzMessageService.html" title="message service use by the BBVM. Constructs the messages and dispatches it at the appropriate place (..." alt="" coords="5,13,236,119"/>
+<area shape="rect" id="node3" href="$classIBSP.html" title=" " alt="" coords="261,5,471,127"/>
+<area shape="rect" id="node4" href="$classILogger.html" title="A logger class with basic logging capabilities." alt="" coords="495,20,602,112"/>
+<area shape="rect" id="node5" title=" " alt="" coords="626,27,874,105"/>
+</map>

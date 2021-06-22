@@ -1,0 +1,10 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classAbstractTask.html" title=" " alt="" coords="5,173,111,200"/>
+<area shape="rect" id="node2" href="$classBittyBuzzTask.html" title=" " alt="" coords="191,5,305,32"/>
+<area shape="rect" id="node3" href="$classCommMonitoringTask.html" title=" " alt="" coords="166,57,330,98"/>
+<area shape="rect" id="node4" href="$classHardwareInterlocTask.html" title=" " alt="" coords="167,123,329,149"/>
+<area shape="rect" id="node5" href="$classLogInterlocTask.html" title=" " alt="" coords="187,173,309,200"/>
+<area shape="rect" id="node6" href="$classMessageDispatcherTask.html" title=" " alt="" coords="159,224,337,251"/>
+<area shape="rect" id="node7" href="$classMessageSenderTask.html" title=" " alt="" coords="171,275,325,301"/>
+<area shape="rect" id="node8" href="$classSoftwareInterlocTask.html" title=" " alt="" coords="169,325,327,352"/>
+</map>

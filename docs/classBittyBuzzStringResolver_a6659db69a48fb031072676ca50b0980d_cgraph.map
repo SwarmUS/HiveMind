@@ -1,0 +1,4 @@
+<map id="BittyBuzzStringResolver::getString" name="BittyBuzzStringResolver::getString">
+<area shape="rect" id="node1" title="Get the string from the stringId." alt="" coords="5,5,184,47"/>
+<area shape="rect" id="node2" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="232,13,331,39"/>
+</map>

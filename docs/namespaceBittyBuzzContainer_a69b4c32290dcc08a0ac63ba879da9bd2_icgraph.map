@@ -1,0 +1,4 @@
+<map id="BittyBuzzContainer::getBBZClosureRegister" name="BittyBuzzContainer::getBBZClosureRegister">
+<area shape="rect" id="node1" title="return an instance of a bittybuzz function register" alt="" coords="240,5,421,47"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzContainer.html#a1ef56e8ef1cfe6996273564e6c3d4c1a" title="return an instance of a bittybuzz message handler" alt="" coords="5,5,192,47"/>
+</map>

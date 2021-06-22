@@ -1,0 +1,6 @@
+<map id="SettingsContainer::getUUID" name="SettingsContainer::getUUID">
+<area shape="rect" id="node1" title="Returns the UUID of the board." alt="" coords="5,23,152,65"/>
+<area shape="rect" id="node2" href="$SettingsContainer_8cpp.html#aa63a236fe3a758cf751aa3785be2699d" title=" " alt="" coords="200,31,347,57"/>
+<area shape="rect" id="node3" href="$namespaceBSPContainer.html#af0d55176bf6bb6f6c628b60b391f49f6" title="Returns an instance of the platform dependent BSP." alt="" coords="403,5,567,32"/>
+<area shape="rect" id="node4" href="$classBSP.html#a7d2c52887b2902ceeed7b98f02dd0a14" title=" " alt="" coords="395,56,575,83"/>
+</map>

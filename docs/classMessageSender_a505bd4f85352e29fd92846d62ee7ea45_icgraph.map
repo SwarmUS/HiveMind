@@ -1,0 +1,4 @@
+<map id="MessageSender::processAndSerialize" name="MessageSender::processAndSerialize">
+<area shape="rect" id="node1" title="process an item in the queue, serializes it and sends it to the deserializer" alt="" coords="244,5,452,47"/>
+<area shape="rect" id="node2" href="$classMessageSenderTask.html#a728d9d1d0cb5ddd1fd17fea265c3e324" title=" " alt="" coords="5,13,196,39"/>
+</map>

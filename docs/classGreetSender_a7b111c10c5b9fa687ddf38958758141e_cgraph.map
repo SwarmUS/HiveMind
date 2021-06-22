@@ -1,0 +1,4 @@
+<map id="GreetSender::sendGreet" name="GreetSender::sendGreet">
+<area shape="rect" id="node1" title="send a greet to the output queue" alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node2" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="232,5,344,32"/>
+</map>

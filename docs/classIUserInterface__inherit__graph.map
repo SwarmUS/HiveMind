@@ -1,0 +1,4 @@
+<map id="IUserInterface" name="IUserInterface">
+<area shape="rect" id="node1" title="Manages the user interface The user interface can consist of buttons, LED, serial print ports,..." alt="" coords="17,5,167,171"/>
+<area shape="rect" id="node2" href="$classUserInterface.html" title=" " alt="" coords="5,219,179,428"/>
+</map>

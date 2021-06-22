@@ -1,0 +1,11 @@
+<map id="BSP" name="BSP">
+<area shape="rect" id="node1" title=" " alt="" coords="415,469,625,620"/>
+<area shape="rect" id="node2" href="$classIBSP.html" title=" " alt="" coords="5,285,216,407"/>
+<area shape="rect" id="node3" title=" " alt="" coords="241,300,455,392"/>
+<area shape="rect" id="node4" title=" " alt="" coords="480,307,560,385"/>
+<area shape="rect" id="node5" title=" " alt="" coords="584,300,763,392"/>
+<area shape="rect" id="node6" title=" " alt="" coords="787,300,941,392"/>
+<area shape="rect" id="node7" title=" " alt="" coords="758,145,861,223"/>
+<area shape="rect" id="node8" title="STL class." alt="" coords="885,145,1043,223"/>
+<area shape="rect" id="node9" title=" " alt="" coords="945,5,983,83"/>
+</map>

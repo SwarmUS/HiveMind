@@ -1,0 +1,7 @@
+<map id="BittyBuzzSystem::errorReceiver" name="BittyBuzzSystem::errorReceiver">
+<area shape="rect" id="node1" title="Callback to handle errors on bittybuzz vm." alt="" coords="5,111,235,138"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzSystem.html#ad75f5dec1d962311080aeffd1dfed170" title=" " alt="" coords="301,5,495,47"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzSystem.html#af137cc4c46446bf57c37e56d27f8d64c" title=" " alt="" coords="283,71,513,112"/>
+<area shape="rect" id="node4" href="$namespaceBittyBuzzSystem.html#acba1f5eb19ac21b8a4465e5e1a844c18" title=" " alt="" coords="300,136,496,177"/>
+<area shape="rect" id="node5" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="349,202,447,229"/>
+</map>

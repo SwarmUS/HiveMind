@@ -1,0 +1,4 @@
+<map id="IHiveMindHostApiRequestHandler" name="IHiveMindHostApiRequestHandler">
+<area shape="rect" id="node1" title="Handles HiveMindApi requests and sends the response to the appropriate target." alt="" coords="21,5,264,112"/>
+<area shape="rect" id="node2" href="$classHiveMindHostApiRequestHandler.html" title=" " alt="" coords="5,160,280,340"/>
+</map>

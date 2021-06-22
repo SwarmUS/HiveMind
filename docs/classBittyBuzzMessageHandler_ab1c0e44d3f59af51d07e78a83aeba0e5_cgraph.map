@@ -1,0 +1,7 @@
+<map id="BittyBuzzMessageHandler::handleFunctionCallRequest" name="BittyBuzzMessageHandler::handleFunctionCallRequest">
+<area shape="rect" id="node1" title=" " alt="" coords="5,104,212,145"/>
+<area shape="rect" id="node2" href="$classBittyBuzzFunctionDescription.html#a26f324df9301fc1af60d824f00931dc7" title="get the array of arguments description" alt="" coords="260,5,473,47"/>
+<area shape="rect" id="node3" href="$classBittyBuzzFunctionDescription.html#a6a17609e3dcb8258dee2ec21546e5718" title="get the length of the array" alt="" coords="260,71,473,112"/>
+<area shape="rect" id="node4" href="$classIBittyBuzzClosureRegister.html#abd507eb79dd2aedc0b2eada6c8e086e8" title="get the id of a stored function by it&#39;s associated name" alt="" coords="271,136,462,177"/>
+<area shape="rect" id="node5" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="317,202,416,229"/>
+</map>

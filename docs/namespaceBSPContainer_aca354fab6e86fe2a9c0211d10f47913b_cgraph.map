@@ -1,0 +1,13 @@
+<map id="BSPContainer::getHostCommInterface" name="BSPContainer::getHostCommInterface">
+<area shape="rect" id="node1" title="Return an instance of the connected host comm interface." alt="" coords="5,99,217,141"/>
+<area shape="rect" id="node2" href="$namespaceSocketFactory.html#a3db68f34aabdf33164c3eb61127d45d0" title=" " alt="" coords="265,5,488,32"/>
+<area shape="rect" id="node3" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="560,27,659,53"/>
+<area shape="rect" id="node4" href="$namespaceSettingsContainer.html#aa6beefb18bff81defeba2cafb549d97e" title="Copies the host IP address into the given buffer." alt="" coords="536,99,683,141"/>
+<area shape="rect" id="node8" href="$namespaceSettingsContainer.html#a7f026f827f3af6e70f908db6d29b7813" title="Returns the TCP port on which the host has opened a port." alt="" coords="303,158,450,199"/>
+<area shape="rect" id="node9" href="$namespaceLoggerContainer.html#a565f20495305a829becfc81ebe58957e" title="Return a reference to the global logger." alt="" coords="275,224,478,251"/>
+<area shape="rect" id="node5" href="$SettingsContainer_8cpp.html#aa63a236fe3a758cf751aa3785be2699d" title=" " alt="" coords="771,195,917,221"/>
+<area shape="rect" id="node6" href="$namespaceBSPContainer.html#af0d55176bf6bb6f6c628b60b391f49f6" title="Returns an instance of the platform dependent BSP." alt="" coords="1013,247,1177,273"/>
+<area shape="rect" id="node7" href="$classBSP.html#a7d2c52887b2902ceeed7b98f02dd0a14" title=" " alt="" coords="1005,195,1185,221"/>
+<area shape="rect" id="node10" href="$namespaceSettingsContainer.html#ab4185c5b2119ac81daf50e334a1d928c" title="Get the log level of the application." alt="" coords="536,217,683,258"/>
+<area shape="rect" id="node11" href="$namespaceBSPContainer.html#ab21aa4c040bcb98d5bbc83488c008fdd" title="Returns an instance of the platform dependent UserInterface." alt="" coords="731,251,957,277"/>
+</map>

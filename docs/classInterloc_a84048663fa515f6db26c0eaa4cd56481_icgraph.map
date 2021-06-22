@@ -1,0 +1,4 @@
+<map id="Interloc::getRobotPosition" name="Interloc::getRobotPosition">
+<area shape="rect" id="node1" title="Returns the last known relative position of a given robot." alt="" coords="219,5,409,32"/>
+<area shape="rect" id="node2" href="$classInterloc.html#abbf666a1ebd81b293da49f8a248b7a5c" title="Tells if a robot is in line of sight." alt="" coords="5,5,171,32"/>
+</map>

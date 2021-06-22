@@ -1,0 +1,8 @@
+<map id="BittyBuzzUserFunctions::log" name="BittyBuzzUserFunctions::log">
+<area shape="rect" id="node1" title="Logs to the default output." alt="" coords="779,46,983,73"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzFactory.html#a3d9d0e6f38dcf942049c483ecf1cbdd3" title="Creates an array of FunctionRegister associated with the code from main.bzz." alt="" coords="429,5,608,47"/>
+<area shape="rect" id="node4" href="$namespaceMath.html#a86ec285e634de7d17e508d47d0b14e26" title="Calculates the natural logarithm." alt="" coords="656,71,731,98"/>
+<area shape="rect" id="node3" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,46,155,73"/>
+<area shape="rect" id="node5" href="$namespaceBittyBuzzMathFunctions.html#adb1e5561724df16baaa4ce5e56a941f3" title="Calculates the natural logarithm (ln)" alt="" coords="429,71,608,112"/>
+<area shape="rect" id="node6" href="$namespaceBittyBuzzFactory.html#abdf23572672f660843f2941ea4ceca18" title="Creates a the math table library for the bvm." alt="" coords="203,68,381,109"/>
+</map>

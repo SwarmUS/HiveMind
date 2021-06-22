@@ -1,0 +1,4 @@
+<map id="TCPServer::openSocket" name="TCPServer::openSocket">
+<area shape="rect" id="node1" title="opens the socket on a certain port" alt="" coords="5,5,176,32"/>
+<area shape="rect" id="node2" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="224,5,323,32"/>
+</map>

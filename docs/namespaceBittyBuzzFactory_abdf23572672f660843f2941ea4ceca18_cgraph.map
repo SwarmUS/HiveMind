@@ -1,0 +1,43 @@
+<map id="BittyBuzzFactory::createBittyBuzzMathLib" name="BittyBuzzFactory::createBittyBuzzMathLib">
+<area shape="rect" id="node1" title="Creates a the math table library for the bvm." alt="" coords="5,597,184,638"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzMathFunctions.html#aaa72dfdb89c9241e3bf91bca5c229b92" title="Calculates the absolute value." alt="" coords="232,41,411,82"/>
+<area shape="rect" id="node5" href="$namespaceBittyBuzzMathFunctions.html#ad5cb405a70efc23f74fe9b35cb81c0f8" title="Calculates the arc cosine." alt="" coords="232,106,411,147"/>
+<area shape="rect" id="node8" href="$namespaceBittyBuzzMathFunctions.html#aea8814cee0732837550f31cc179ebc7c" title="Calculates the arc sine." alt="" coords="232,171,411,213"/>
+<area shape="rect" id="node10" href="$namespaceBittyBuzzMathFunctions.html#a9d2492c5400071fbb290a38a4787b00a" title="Calculates the arc cosine." alt="" coords="232,237,411,278"/>
+<area shape="rect" id="node12" href="$namespaceBittyBuzzMathFunctions.html#a35a4d7aee3c4d853c96c47bff0dc275a" title="Ceil a value." alt="" coords="232,302,411,343"/>
+<area shape="rect" id="node14" href="$namespaceBittyBuzzMathFunctions.html#a881796dfb8f77a3893f951d3c547dcce" title="Calculates the cosine." alt="" coords="232,367,411,409"/>
+<area shape="rect" id="node16" href="$namespaceBittyBuzzMathFunctions.html#a29b53c1284c52bd8ae429c26e36fe909" title="Calculates the exponent." alt="" coords="232,433,411,474"/>
+<area shape="rect" id="node18" href="$namespaceBittyBuzzMathFunctions.html#a3860d69640df9e41dadb791d797ac972" title="Floor a value." alt="" coords="232,498,411,539"/>
+<area shape="rect" id="node20" href="$namespaceBittyBuzzMathFunctions.html#adb1e5561724df16baaa4ce5e56a941f3" title="Calculates the natural logarithm (ln)" alt="" coords="232,563,411,605"/>
+<area shape="rect" id="node26" href="$namespaceBittyBuzzMathFunctions.html#a4920791243a26d4bd35bad91fb246016" title="Calculates the logarithm base 10." alt="" coords="232,629,411,670"/>
+<area shape="rect" id="node28" href="$namespaceBittyBuzzMathFunctions.html#a55c70a89d5365dfb0ad25287bdfc4edf" title="Calculates the logarithm base 2." alt="" coords="232,694,411,735"/>
+<area shape="rect" id="node30" href="$namespaceBittyBuzzMathFunctions.html#a7ab8e7610e00fd1cd1e8e203c69c0f3f" title="Return the max." alt="" coords="232,1021,411,1062"/>
+<area shape="rect" id="node31" href="$namespaceBittyBuzzMathFunctions.html#adfb2e4f9138fe52644bc94ae1978bdd1" title="Return the min." alt="" coords="232,1086,411,1127"/>
+<area shape="rect" id="node32" href="$namespaceBittyBuzzMathFunctions.html#a9929277d3cc61ad605f23028284f26ac" title="Return a number with a uniform distribution." alt="" coords="232,1151,411,1193"/>
+<area shape="rect" id="node34" href="$namespaceBittyBuzzMathFunctions.html#a41228dd4915da622fa6e0201bc343821" title="Rounds a value." alt="" coords="232,759,411,801"/>
+<area shape="rect" id="node36" href="$namespaceBittyBuzzMathFunctions.html#ab6b208c5ca766a9293c9119cd66e4ae1" title="Calculates the sine." alt="" coords="232,825,411,866"/>
+<area shape="rect" id="node38" href="$namespaceBittyBuzzMathFunctions.html#a99b2646503c8ce9940f7e2ae047bc56b" title="Calculates the square root." alt="" coords="232,890,411,931"/>
+<area shape="rect" id="node40" href="$namespaceBittyBuzzMathFunctions.html#ae88e02f14f0eac2b3ec1a059d8b46c65" title="Calculates the tengent." alt="" coords="232,955,411,997"/>
+<area shape="rect" id="node3" href="$namespaceMath.html#a44e89e8d6a7e3c24685a1a50dac1c492" title="Return the absolute value." alt="" coords="527,5,613,32"/>
+<area shape="rect" id="node4" href="$namespaceMath.html#a9f2e2a533761a681565c458c5cb0d09b" title="Return the absolute value." alt="" coords="525,56,615,83"/>
+<area shape="rect" id="node6" href="$namespaceMath.html#a5f29c5070b9836eb16599f9c2667cadd" title="calculate the arc cosine" alt="" coords="523,113,617,140"/>
+<area shape="rect" id="node7" href="$BittyBuzzMathFunctions_8cpp.html#a4bfd55f852fffcd9b9c7abfa61c3f9e9" title=" " alt="" coords="521,539,619,565"/>
+<area shape="rect" id="node9" href="$namespaceMath.html#a37f8fe84dda1507be6fe109a6c35a6ab" title="calculate the arc sine" alt="" coords="525,179,615,205"/>
+<area shape="rect" id="node11" href="$namespaceMath.html#ac118e51b307f872013e7f9ec54d866c7" title="calculate the arc of x/y" alt="" coords="520,244,620,271"/>
+<area shape="rect" id="node13" href="$namespaceMath.html#aa3fa8bd8467553135077d99a57f70a3a" title="Round x upward." alt="" coords="527,309,613,336"/>
+<area shape="rect" id="node15" href="$namespaceMath.html#a5c9c4e393236268caa618fb339ee6862" title="calculate the cosine" alt="" coords="527,375,613,401"/>
+<area shape="rect" id="node17" href="$namespaceMath.html#ad2201d4d97197f21e48461b453c25185" title="Calculates the exponent." alt="" coords="527,437,613,464"/>
+<area shape="rect" id="node19" href="$namespaceMath.html#a376d960381e81cd239e9ab1e49394863" title="Floor x downward." alt="" coords="524,488,616,515"/>
+<area shape="rect" id="node21" href="$namespaceMath.html#a86ec285e634de7d17e508d47d0b14e26" title="Calculates the natural logarithm." alt="" coords="533,589,607,616"/>
+<area shape="rect" id="node22" href="$namespaceBittyBuzzUserFunctions.html#a65c4ae451d706067e40ed2aa314b87b9" title="Logs to the default output." alt="" coords="729,589,933,616"/>
+<area shape="rect" id="node23" href="$classIUserInterface.html#a513f198b1bf646291649494eb1717e67" title="Adds a newline and flushes the input to the serial port." alt="" coords="996,531,1149,557"/>
+<area shape="rect" id="node24" href="$classIBittyBuzzStringResolver.html#ac3355fa9dbc7241e57c7984608879360" title="Get the string from the stringId." alt="" coords="981,582,1164,623"/>
+<area shape="rect" id="node25" href="$classIUserInterface.html#abd78d00aab73513e3089259985fe3982" title="Provides an interface to print to the console or serial port. The arguments and return values match t..." alt="" coords="997,648,1149,675"/>
+<area shape="rect" id="node27" href="$namespaceMath.html#ac28746ab7c3c3b1f2b57408bfd2b38fd" title="Calculates the logarithm base 10." alt="" coords="521,640,619,667"/>
+<area shape="rect" id="node29" href="$namespaceMath.html#a1f4e6ba9e584d187c9760964d99a1f5e" title="Calculates the logarithm base 2." alt="" coords="525,701,615,728"/>
+<area shape="rect" id="node33" href="$classIBSP.html#a2e30c2a65673c2818c0451cb0a9e8cd9" title="Returns a positive random number, uses an hardware RNG if available." alt="" coords="459,1159,681,1185"/>
+<area shape="rect" id="node35" href="$namespaceMath.html#aa9fd17f92d2dbfd5034b64bf1ec4a667" title="Round x." alt="" coords="520,767,620,793"/>
+<area shape="rect" id="node37" href="$namespaceMath.html#a032efabc85988e4a8d278333fa42df4b" title="calculate the sine" alt="" coords="529,832,611,859"/>
+<area shape="rect" id="node39" href="$namespaceMath.html#ad382526f9a70ad1fcda022aa887ee0f5" title="Calculates the square root." alt="" coords="526,897,614,924"/>
+<area shape="rect" id="node41" href="$namespaceMath.html#aec4ad03e17bb52a89b26cd268d9fd231" title="calculate the tangent" alt="" coords="528,963,612,989"/>
+</map>

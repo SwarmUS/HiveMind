@@ -1,0 +1,4 @@
+<map id="ITCPClient" name="ITCPClient">
+<area shape="rect" id="node1" title=" " alt="" coords="49,5,137,83"/>
+<area shape="rect" id="node2" href="$classTCPClientWrapper.html" title="A TCP client wrapper that is as a common socket between platforms." alt="" coords="5,131,180,281"/>
+</map>

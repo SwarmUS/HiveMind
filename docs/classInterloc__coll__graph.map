@@ -1,0 +1,15 @@
+<map id="Interloc" name="Interloc">
+<area shape="rect" id="node1" title=" " alt="" coords="355,712,604,907"/>
+<area shape="rect" id="node2" href="$classIInterloc.html" title=" " alt="" coords="5,513,167,620"/>
+<area shape="rect" id="node3" title=" " alt="" coords="191,521,365,613"/>
+<area shape="rect" id="node4" href="$structPositionsTable.html" title=" " alt="" coords="390,528,505,605"/>
+<area shape="rect" id="node5" title=" " alt="" coords="458,329,669,421"/>
+<area shape="rect" id="node6" href="$structRelativePosition.html" title=" " alt="" coords="493,175,621,252"/>
+<area shape="rect" id="node7" title=" " alt="" coords="689,5,739,83"/>
+<area shape="rect" id="node8" title=" " alt="" coords="379,5,454,83"/>
+<area shape="rect" id="node9" title=" " alt="" coords="525,5,575,83"/>
+<area shape="rect" id="node10" title="STL class." alt="" coords="745,175,867,252"/>
+<area shape="rect" id="node11" title=" " alt="" coords="880,5,919,83"/>
+<area shape="rect" id="node12" href="$classIInterlocManager.html" title=" " alt="" coords="529,484,752,649"/>
+<area shape="rect" id="node13" href="$classILogger.html" title="A logger class with basic logging capabilities." alt="" coords="777,521,883,613"/>
+</map>

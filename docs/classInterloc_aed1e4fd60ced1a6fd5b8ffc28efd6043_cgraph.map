@@ -1,0 +1,6 @@
+<map id="Interloc::onPositionUpdateCallback" name="Interloc::onPositionUpdateCallback">
+<area shape="rect" id="node1" title=" " alt="" coords="5,49,200,90"/>
+<area shape="rect" id="node2" href="$classInterloc.html#afbecfb5bff976984fe4439faa20613b3" title=" " alt="" coords="251,5,460,32"/>
+<area shape="rect" id="node3" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="306,56,405,83"/>
+<area shape="rect" id="node4" href="$classInterloc.html#a44a7c992eef3807b11dd54e62f060060" title=" " alt="" coords="248,107,463,133"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="HiveMindHostApiRequestHandler::handleHiveMindHostApiRequest" name="HiveMindHostApiRequestHandler::handleHiveMindHostApiRequest">
+<area shape="rect" id="node1" title=" " alt="" coords="5,74,245,115"/>
+<area shape="rect" id="node2" href="$classIInterloc.html#a52288c4f2f0dee3b847dd7ee804d01bc" title="Returns the position table for all robots in the swarm." alt="" coords="293,5,491,32"/>
+<area shape="rect" id="node3" href="$classIInterloc.html#ac6759e82078cd95ecffbeb07ecb43426" title="Returns the last known relative position of a given robot." alt="" coords="295,56,489,83"/>
+<area shape="rect" id="node4" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="336,107,448,133"/>
+<area shape="rect" id="node5" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="343,157,441,184"/>
+</map>

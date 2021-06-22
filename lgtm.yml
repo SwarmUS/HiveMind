@@ -1,0 +1,6 @@
+path_classifiers:
+  docs:
+    - README.md
+    - LICENSE
+  test:
+    - "src/*/tests/*.cpp" # tests are in src/MODULE/tests

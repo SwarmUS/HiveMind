@@ -1,0 +1,9 @@
+<map id="Math::atan2" name="Math::atan2">
+<area shape="rect" id="node1" title="calculate the arc of x/y" alt="" coords="789,46,889,73"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzMathFunctions.html#a9d2492c5400071fbb290a38a4787b00a" title="Calculates the arc cosine." alt="" coords="555,5,733,47"/>
+<area shape="rect" id="node5" href="$classInterlocManager.html#a5f9250090d278003572d7b07b333e00d" title=" " alt="" coords="547,71,741,112"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzFactory.html#abdf23572672f660843f2941ea4ceca18" title="Creates a the math table library for the bvm." alt="" coords="294,5,473,47"/>
+<area shape="rect" id="node4" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="38,13,187,39"/>
+<area shape="rect" id="node6" href="$classInterlocManager.html#a45ed8a605df6ebeb17151eb19f030362" title=" " alt="" coords="268,71,499,112"/>
+<area shape="rect" id="node7" href="$classInterlocManager.html#a35d17c862ba78bc00a9aaefdf6cddf1a" title="Dummy function to demonstrate working DW1000s." alt="" coords="5,78,220,105"/>
+</map>

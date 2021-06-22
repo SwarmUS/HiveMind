@@ -1,0 +1,9 @@
+<map id="Interloc::Interloc" name="Interloc::Interloc">
+<area shape="rect" id="node1" title=" " alt="" coords="5,89,133,116"/>
+<area shape="rect" id="node2" href="$classInterloc.html#a994b32a5a091d0a5699d7f1f00e2725b" title=" " alt="" coords="190,49,385,90"/>
+<area shape="rect" id="node7" href="$classIInterlocManager.html#aa8f6d7f2137af36a84d38f788fda1f5c" title="Sets the callback to be called when new interloc data is available." alt="" coords="181,114,393,155"/>
+<area shape="rect" id="node3" href="$classInterloc.html#aed1e4fd60ced1a6fd5b8ffc28efd6043" title=" " alt="" coords="441,49,636,90"/>
+<area shape="rect" id="node4" href="$classInterloc.html#afbecfb5bff976984fe4439faa20613b3" title=" " alt="" coords="687,5,896,32"/>
+<area shape="rect" id="node5" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="742,56,841,83"/>
+<area shape="rect" id="node6" href="$classInterloc.html#a44a7c992eef3807b11dd54e62f060060" title=" " alt="" coords="684,107,899,133"/>
+</map>

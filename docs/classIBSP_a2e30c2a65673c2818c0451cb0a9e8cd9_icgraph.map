@@ -1,0 +1,7 @@
+<map id="IBSP::generateRandomNumber" name="IBSP::generateRandomNumber">
+<area shape="rect" id="node1" title="Returns a positive random number, uses an hardware RNG if available." alt="" coords="668,46,891,73"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzMathFunctions.html#a9929277d3cc61ad605f23028284f26ac" title="Return a number with a uniform distribution." alt="" coords="435,5,614,47"/>
+<area shape="rect" id="node5" href="$classBittyBuzzMessageService.html#a627ec6e6321e6b8cefb3e63e4f1022d0" title="call a function to a host" alt="" coords="429,71,620,112"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzFactory.html#abdf23572672f660843f2941ea4ceca18" title="Creates a the math table library for the bvm." alt="" coords="203,5,381,47"/>
+<area shape="rect" id="node4" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,13,155,39"/>
+</map>

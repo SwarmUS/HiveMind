@@ -1,0 +1,8 @@
+<map id="LoggerContainer::getLogger" name="LoggerContainer::getLogger">
+<area shape="rect" id="node1" title="Return a reference to the global logger." alt="" coords="5,42,208,69"/>
+<area shape="rect" id="node2" href="$namespaceSettingsContainer.html#ab4185c5b2119ac81daf50e334a1d928c" title="Get the log level of the application." alt="" coords="256,5,403,47"/>
+<area shape="rect" id="node6" href="$namespaceBSPContainer.html#ab21aa4c040bcb98d5bbc83488c008fdd" title="Returns an instance of the platform dependent UserInterface." alt="" coords="451,67,677,94"/>
+<area shape="rect" id="node3" href="$SettingsContainer_8cpp.html#aa63a236fe3a758cf751aa3785be2699d" title=" " alt="" coords="491,15,637,42"/>
+<area shape="rect" id="node4" href="$namespaceBSPContainer.html#af0d55176bf6bb6f6c628b60b391f49f6" title="Returns an instance of the platform dependent BSP." alt="" coords="733,66,897,93"/>
+<area shape="rect" id="node5" href="$classBSP.html#a7d2c52887b2902ceeed7b98f02dd0a14" title=" " alt="" coords="725,15,905,42"/>
+</map>

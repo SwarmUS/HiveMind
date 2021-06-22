@@ -1,0 +1,4 @@
+<map id="BSPContainer::getUserInterface" name="BSPContainer::getUserInterface">
+<area shape="rect" id="node1" title="Returns an instance of the platform dependent UserInterface." alt="" coords="5,5,232,32"/>
+<area shape="rect" id="node2" href="$namespaceBSPContainer.html#af0d55176bf6bb6f6c628b60b391f49f6" title="Returns an instance of the platform dependent BSP." alt="" coords="280,5,444,32"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="BittyBuzzVm" name="BittyBuzzVm">
+<area shape="rect" id="node1" title=" " alt="" coords="942,233,1085,399"/>
+<area shape="rect" id="node2" href="$classIBittyBuzzVm.html" title="Manages BittyBuzz virtual machine." alt="" coords="5,13,152,163"/>
+<area shape="rect" id="node3" href="$classIBittyBuzzNeighborsManager.html" title=" " alt="" coords="177,42,423,134"/>
+<area shape="rect" id="node4" href="$classIBittyBuzzMessageService.html" title="message service use by the BBVM. Constructs the messages and dispatches it at the appropriate place (..." alt="" coords="447,35,678,141"/>
+<area shape="rect" id="node5" href="$classIBSP.html" title=" " alt="" coords="703,27,913,149"/>
+<area shape="rect" id="node6" href="$classIUserInterface.html" title="Manages the user interface The user interface can consist of buttons, LED, serial print ports,..." alt="" coords="938,5,1089,171"/>
+<area shape="rect" id="node7" title=" " alt="" coords="1113,49,1191,127"/>
+<area shape="rect" id="node8" href="$classILogger.html" title="A logger class with basic logging capabilities." alt="" coords="1216,42,1323,134"/>
+<area shape="rect" id="node9" href="$classIBittyBuzzBytecode.html" title="Manages the BittyBuzz byte code." alt="" coords="1347,35,1565,141"/>
+<area shape="rect" id="node10" href="$classIBittyBuzzMessageHandler.html" title="Handles messages destined to the bbvm." alt="" coords="1590,35,1823,141"/>
+</map>

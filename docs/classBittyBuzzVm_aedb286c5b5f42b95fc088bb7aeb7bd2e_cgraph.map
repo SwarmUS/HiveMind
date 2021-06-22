@@ -1,0 +1,12 @@
+<map id="BittyBuzzVm::init" name="BittyBuzzVm::init">
+<area shape="rect" id="node1" title="Init the virtual machine." alt="" coords="5,221,140,247"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzSystem.html#aa754a6e295190dc75cfb95fb20eeeffb" title="Callback to handle errors on bittybuzz vm." alt="" coords="188,111,417,138"/>
+<area shape="rect" id="node7" href="$namespaceBittyBuzzSystem.html#aaaa3b4ee96aca935adb6db82b707d1cb" title="Call a bittybuzz function that takes not arguments (init, step, etc),." alt="" coords="193,162,412,189"/>
+<area shape="rect" id="node8" href="$classIBittyBuzzBytecode.html#abf4b1937d79ebc985a81cd76e8f64a1e" title="Obtain the function that fetches the BittyBuzz byte code." alt="" coords="201,213,404,255"/>
+<area shape="rect" id="node9" href="$classIBittyBuzzBytecode.html#a2b1e8f497665cc92efaa6d2ed8ad804d" title="Get the size of the BittyBuzz byte code." alt="" coords="225,279,381,320"/>
+<area shape="rect" id="node10" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="247,345,359,371"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzSystem.html#ad75f5dec1d962311080aeffd1dfed170" title=" " alt="" coords="484,5,677,47"/>
+<area shape="rect" id="node4" href="$namespaceBittyBuzzSystem.html#af137cc4c46446bf57c37e56d27f8d64c" title=" " alt="" coords="465,71,696,112"/>
+<area shape="rect" id="node5" href="$namespaceBittyBuzzSystem.html#acba1f5eb19ac21b8a4465e5e1a844c18" title=" " alt="" coords="483,136,679,177"/>
+<area shape="rect" id="node6" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="531,202,630,229"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="UserInterface::flush" name="UserInterface::flush">
+<area shape="rect" id="node1" title="Adds a newline and flushes the input to the serial port." alt="" coords="228,5,377,32"/>
+<area shape="rect" id="node2" href="$classUserInterface.html#ad4aa9b1824949b2bc5343c777144525f" title="Provides an interface to print to the console or serial port using an initialized va_list...." alt="" coords="5,5,180,32"/>
+</map>

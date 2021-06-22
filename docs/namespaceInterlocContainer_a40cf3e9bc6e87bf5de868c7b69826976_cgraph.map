@@ -1,0 +1,13 @@
+<map id="InterlocContainer::getInterlocMessageHandler" name="InterlocContainer::getInterlocMessageHandler">
+<area shape="rect" id="node1" title=" " alt="" coords="5,148,207,189"/>
+<area shape="rect" id="node2" href="$namespaceBSPContainer.html#af0d55176bf6bb6f6c628b60b391f49f6" title="Returns an instance of the platform dependent BSP." alt="" coords="1225,67,1389,94"/>
+<area shape="rect" id="node3" href="$namespaceMessageHandlerContainer.html#ab8fa31b7a3f2934e7f2caf4b4c7301c7" title="get the host message queue" alt="" coords="255,53,449,94"/>
+<area shape="rect" id="node4" href="$namespaceBSPContainer.html#a5f94bca428cac0db9f625492a6dea694" title="Returns an instance of the interloc manager." alt="" coords="258,118,446,160"/>
+<area shape="rect" id="node5" href="$namespaceLoggerContainer.html#a565f20495305a829becfc81ebe58957e" title="Return a reference to the global logger." alt="" coords="497,126,700,152"/>
+<area shape="rect" id="node10" href="$namespaceMessageHandlerContainer.html#a4a0abeb4f314766df7e549dca6f78cc7" title="get the interloc message queue" alt="" coords="255,236,449,277"/>
+<area shape="rect" id="node11" href="$namespaceMessageHandlerContainer.html#ab2e1517e77a5f37bc3ff2690945dcf7c" title="get the remote message queue" alt="" coords="255,301,449,342"/>
+<area shape="rect" id="node6" href="$namespaceSettingsContainer.html#ab4185c5b2119ac81daf50e334a1d928c" title="Get the log level of the application." alt="" coords="748,118,895,160"/>
+<area shape="rect" id="node9" href="$namespaceBSPContainer.html#ab21aa4c040bcb98d5bbc83488c008fdd" title="Returns an instance of the platform dependent UserInterface." alt="" coords="943,67,1169,94"/>
+<area shape="rect" id="node7" href="$SettingsContainer_8cpp.html#aa63a236fe3a758cf751aa3785be2699d" title=" " alt="" coords="983,122,1129,148"/>
+<area shape="rect" id="node8" href="$classBSP.html#a7d2c52887b2902ceeed7b98f02dd0a14" title=" " alt="" coords="1217,122,1397,148"/>
+</map>

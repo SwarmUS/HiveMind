@@ -1,0 +1,6 @@
+<map id="TCPServer::waitForClient" name="TCPServer::waitForClient">
+<area shape="rect" id="node1" title=" " alt="" coords="5,31,188,57"/>
+<area shape="rect" id="node2" href="$classTCPServer.html#a846866b32de047df0f815505cc05c5b9" title=" " alt="" coords="236,5,404,32"/>
+<area shape="rect" id="node4" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="271,56,369,83"/>
+<area shape="rect" id="node3" href="$classTCPServer.html#a5b1effc4fe4dab2384a23e1da9a5de84" title=" " alt="" coords="452,5,583,32"/>
+</map>

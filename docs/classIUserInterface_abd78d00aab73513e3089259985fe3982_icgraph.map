@@ -1,0 +1,10 @@
+<map id="IUserInterface::print" name="IUserInterface::print">
+<area shape="rect" id="node1" title="Provides an interface to print to the console or serial port. The arguments and return values match t..." alt="" coords="1031,31,1183,57"/>
+<area shape="rect" id="node2" href="$classLogger.html#acc252d372dbaefa2524dafcbc9c1eec3" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="833,5,928,32"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzUserFunctions.html#a65c4ae451d706067e40ed2aa314b87b9" title="Logs to the default output." alt="" coords="779,56,983,83"/>
+<area shape="rect" id="node4" href="$namespaceBittyBuzzFactory.html#a3d9d0e6f38dcf942049c483ecf1cbdd3" title="Creates an array of FunctionRegister associated with the code from main.bzz." alt="" coords="429,15,608,57"/>
+<area shape="rect" id="node6" href="$namespaceMath.html#a86ec285e634de7d17e508d47d0b14e26" title="Calculates the natural logarithm." alt="" coords="656,81,731,108"/>
+<area shape="rect" id="node5" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,56,155,83"/>
+<area shape="rect" id="node7" href="$namespaceBittyBuzzMathFunctions.html#adb1e5561724df16baaa4ce5e56a941f3" title="Calculates the natural logarithm (ln)" alt="" coords="429,81,608,122"/>
+<area shape="rect" id="node8" href="$namespaceBittyBuzzFactory.html#abdf23572672f660843f2941ea4ceca18" title="Creates a the math table library for the bvm." alt="" coords="203,78,381,119"/>
+</map>

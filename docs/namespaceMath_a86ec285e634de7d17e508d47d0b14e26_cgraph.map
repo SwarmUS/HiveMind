@@ -1,0 +1,7 @@
+<map id="Math::ln" name="Math::ln">
+<area shape="rect" id="node1" title="Calculates the natural logarithm." alt="" coords="5,64,80,91"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzUserFunctions.html#a65c4ae451d706067e40ed2aa314b87b9" title="Logs to the default output." alt="" coords="128,64,332,91"/>
+<area shape="rect" id="node3" href="$classIUserInterface.html#a513f198b1bf646291649494eb1717e67" title="Adds a newline and flushes the input to the serial port." alt="" coords="395,5,548,32"/>
+<area shape="rect" id="node4" href="$classIBittyBuzzStringResolver.html#ac3355fa9dbc7241e57c7984608879360" title="Get the string from the stringId." alt="" coords="380,57,563,98"/>
+<area shape="rect" id="node5" href="$classIUserInterface.html#abd78d00aab73513e3089259985fe3982" title="Provides an interface to print to the console or serial port. The arguments and return values match t..." alt="" coords="395,123,547,149"/>
+</map>

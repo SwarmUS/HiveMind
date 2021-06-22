@@ -1,0 +1,5 @@
+<map id="IBittyBuzzBytecode::getBytecodeFetchFunction" name="IBittyBuzzBytecode::getBytecodeFetchFunction">
+<area shape="rect" id="node1" title="Obtain the function that fetches the BittyBuzz byte code." alt="" coords="385,5,588,47"/>
+<area shape="rect" id="node2" href="$classBittyBuzzVm.html#aedb286c5b5f42b95fc088bb7aeb7bd2e" title="Init the virtual machine." alt="" coords="203,13,337,39"/>
+<area shape="rect" id="node3" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,13,155,39"/>
+</map>

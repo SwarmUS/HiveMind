@@ -1,0 +1,12 @@
+<map id="InterlocMessageHandler::handleCalibrationMessage" name="InterlocMessageHandler::handleCalibrationMessage">
+<area shape="rect" id="node1" title=" " alt="" coords="5,195,208,236"/>
+<area shape="rect" id="node2" href="$classInterlocMessageHandler.html#ab18daf602d674b49cccbd4ccc86ff5e9" title=" " alt="" coords="268,64,483,105"/>
+<area shape="rect" id="node7" href="$classIInterlocManager.html#a1712b09f58c0ab5b58e757c4c835c2c9" title="Sets the targeted distance for calibration." alt="" coords="279,129,472,171"/>
+<area shape="rect" id="node8" href="$classIInterlocManager.html#aac64fba96e409b71c52b3f1cb71b0f3e" title="Start calibration in initiator mode, it polls in TWR and send the final msg." alt="" coords="274,195,477,236"/>
+<area shape="rect" id="node9" href="$classIInterlocManager.html#aa2100e076076725b576d871e11ef602a" title="Start calibration in responder mode, it sends the response msg and compute the distance." alt="" coords="274,260,477,301"/>
+<area shape="rect" id="node10" href="$classIInterlocManager.html#ac92f45828992e0f3e43baa5df5723d95" title="Stops an ongoing calibration." alt="" coords="256,326,495,353"/>
+<area shape="rect" id="node3" href="$classInterlocMessageHandler.html#a6ffdc74026f050f7ece3a050acca08c4" title=" " alt="" coords="543,64,723,105"/>
+<area shape="rect" id="node4" href="$classInterlocMessageHandler.html#a1a050085ff68140313e3a814f0eb3ff0" title=" " alt="" coords="771,5,959,47"/>
+<area shape="rect" id="node5" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="1007,42,1119,69"/>
+<area shape="rect" id="node6" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="815,122,914,149"/>
+</map>

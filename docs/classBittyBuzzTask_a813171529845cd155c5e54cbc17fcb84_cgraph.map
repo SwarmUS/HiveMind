@@ -1,0 +1,77 @@
+<map id="BittyBuzzTask::task" name="BittyBuzzTask::task">
+<area shape="rect" id="node1" title=" " alt="" coords="5,2116,155,2143"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzFactory.html#a3d9d0e6f38dcf942049c483ecf1cbdd3" title="Creates an array of FunctionRegister associated with the code from main.bzz." alt="" coords="203,1530,381,1571"/>
+<area shape="rect" id="node7" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="773,1857,871,1884"/>
+<area shape="rect" id="node23" href="$namespaceBittyBuzzFactory.html#abdf23572672f660843f2941ea4ceca18" title="Creates a the math table library for the bvm." alt="" coords="203,629,381,670"/>
+<area shape="rect" id="node60" href="$classBittyBuzzVm.html#a05075a71d6e606ca50b7a7f1d885295f" title="Get the error state of the VM." alt="" coords="209,2608,375,2635"/>
+<area shape="rect" id="node61" href="$namespaceBittyBuzzSystem.html#ad75f5dec1d962311080aeffd1dfed170" title=" " alt="" coords="725,2138,919,2179"/>
+<area shape="rect" id="node62" href="$classBittyBuzzVm.html#ac28bf170145a6c35a3c47f8e97d80335" title="Get the state of the vm." alt="" coords="207,2659,377,2685"/>
+<area shape="rect" id="node63" href="$namespaceBittyBuzzSystem.html#acba1f5eb19ac21b8a4465e5e1a844c18" title=" " alt="" coords="724,2523,920,2565"/>
+<area shape="rect" id="node64" href="$classBittyBuzzVm.html#aedb286c5b5f42b95fc088bb7aeb7bd2e" title="Init the virtual machine." alt="" coords="225,2360,359,2387"/>
+<area shape="rect" id="node71" href="$classBittyBuzzVm.html#a40d5b69610d0a43a53d2b09ce981f157" title="Does one execution step in the virtual machine. Thus execute the buzz code in the step function." alt="" coords="221,2116,363,2143"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzUserFunctions.html#a83b2359b062198954a8acd65b044cc61" title="calls a function to a host" alt="" coords="456,1530,632,1571"/>
+<area shape="rect" id="node8" href="$namespaceBittyBuzzUserFunctions.html#aa7246a869859ff0dab27d96340350a26" title="Checks if a variable is a function closure." alt="" coords="456,1269,632,1310"/>
+<area shape="rect" id="node9" href="$namespaceBittyBuzzUserFunctions.html#aa04d5559c190cb74075b1c3a3d8542b5" title="Checks if a variable is a float." alt="" coords="456,1334,632,1375"/>
+<area shape="rect" id="node10" href="$namespaceBittyBuzzUserFunctions.html#a6ea1d169ce6532da6e6acb817c0d1eba" title="Checks if a variable is an int." alt="" coords="456,1399,632,1441"/>
+<area shape="rect" id="node11" href="$namespaceBittyBuzzUserFunctions.html#a8a8b2ebe03c7195b957c5ce482fb70c6" title="Checks if a variable is a lambda, unamed closure." alt="" coords="456,1465,632,1506"/>
+<area shape="rect" id="node12" href="$namespaceBittyBuzzUserFunctions.html#aabfbb734bb203eee7036dc150db984f1" title="Checks if a variable is nil." alt="" coords="456,1661,632,1702"/>
+<area shape="rect" id="node13" href="$namespaceBittyBuzzUserFunctions.html#a5440d48b6c17b99d512cca91c85ab3b6" title="Checks if a variable is a float." alt="" coords="456,1726,632,1767"/>
+<area shape="rect" id="node14" href="$namespaceBittyBuzzUserFunctions.html#a47f43221b7fd135259c540016ae55544" title="Checks if a variable is a table." alt="" coords="456,1791,632,1833"/>
+<area shape="rect" id="node15" href="$namespaceBittyBuzzUserFunctions.html#a65c4ae451d706067e40ed2aa314b87b9" title="Logs to the default output." alt="" coords="985,1217,1189,1244"/>
+<area shape="rect" id="node18" href="$namespaceBittyBuzzUserFunctions.html#ac811216af659c79e67702c3de61a9d1b" title="register a new function, exposing it to the remote composant of the swarm" alt="" coords="456,1595,632,1637"/>
+<area shape="rect" id="node4" href="$classIBittyBuzzMessageService.html#a32bb7056bc7f239babdb02bc476406cd" title="call a function to a host" alt="" coords="725,1385,919,1426"/>
+<area shape="rect" id="node5" href="$BittyBuzzUserFunctions_8cpp.html#a00981aa1432b2d3e40d7dfcbf23cd512" title=" " alt="" coords="739,1451,905,1477"/>
+<area shape="rect" id="node6" href="$classIBittyBuzzStringResolver.html#ac3355fa9dbc7241e57c7984608879360" title="Get the string from the stringId." alt="" coords="1237,1494,1420,1535"/>
+<area shape="rect" id="node16" href="$classIUserInterface.html#a513f198b1bf646291649494eb1717e67" title="Adds a newline and flushes the input to the serial port." alt="" coords="1252,1243,1405,1269"/>
+<area shape="rect" id="node17" href="$classIUserInterface.html#abd78d00aab73513e3089259985fe3982" title="Provides an interface to print to the console or serial port. The arguments and return values match t..." alt="" coords="1253,1192,1405,1219"/>
+<area shape="rect" id="node19" href="$classBittyBuzzFunctionDescription.html#a277509fa9c0de16643927aedf5bd9124" title="add an argument to the list of the description" alt="" coords="715,1719,929,1761"/>
+<area shape="rect" id="node20" href="$BittyBuzzUserFunctions_8cpp.html#abc03dd076b0ab0367754a18a1889a268" title=" " alt="" coords="739,1785,905,1812"/>
+<area shape="rect" id="node21" href="$BittyBuzzUserFunctions_8cpp.html#a6d857b43342e43446f64abadc67b7fcf" title=" " alt="" coords="763,1603,881,1629"/>
+<area shape="rect" id="node22" href="$classIBittyBuzzClosureRegister.html#a3176a82a0b43f8273ad6c9ae635532c9" title="register a closure to the list" alt="" coords="727,1654,917,1695"/>
+<area shape="rect" id="node24" href="$namespaceBittyBuzzMathFunctions.html#aaa72dfdb89c9241e3bf91bca5c229b92" title="Calculates the absolute value." alt="" coords="455,41,633,82"/>
+<area shape="rect" id="node27" href="$namespaceBittyBuzzMathFunctions.html#ad5cb405a70efc23f74fe9b35cb81c0f8" title="Calculates the arc cosine." alt="" coords="455,890,633,931"/>
+<area shape="rect" id="node30" href="$namespaceBittyBuzzMathFunctions.html#aea8814cee0732837550f31cc179ebc7c" title="Calculates the arc sine." alt="" coords="455,955,633,997"/>
+<area shape="rect" id="node32" href="$namespaceBittyBuzzMathFunctions.html#a9d2492c5400071fbb290a38a4787b00a" title="Calculates the arc cosine." alt="" coords="455,1021,633,1062"/>
+<area shape="rect" id="node34" href="$namespaceBittyBuzzMathFunctions.html#a35a4d7aee3c4d853c96c47bff0dc275a" title="Ceil a value." alt="" coords="455,1086,633,1127"/>
+<area shape="rect" id="node36" href="$namespaceBittyBuzzMathFunctions.html#a881796dfb8f77a3893f951d3c547dcce" title="Calculates the cosine." alt="" coords="455,171,633,213"/>
+<area shape="rect" id="node38" href="$namespaceBittyBuzzMathFunctions.html#a29b53c1284c52bd8ae429c26e36fe909" title="Calculates the exponent." alt="" coords="455,237,633,278"/>
+<area shape="rect" id="node40" href="$namespaceBittyBuzzMathFunctions.html#a3860d69640df9e41dadb791d797ac972" title="Floor a value." alt="" coords="455,302,633,343"/>
+<area shape="rect" id="node42" href="$namespaceBittyBuzzMathFunctions.html#adb1e5561724df16baaa4ce5e56a941f3" title="Calculates the natural logarithm (ln)" alt="" coords="455,1151,633,1193"/>
+<area shape="rect" id="node44" href="$namespaceBittyBuzzMathFunctions.html#a4920791243a26d4bd35bad91fb246016" title="Calculates the logarithm base 10." alt="" coords="455,367,633,409"/>
+<area shape="rect" id="node46" href="$namespaceBittyBuzzMathFunctions.html#a55c70a89d5365dfb0ad25287bdfc4edf" title="Calculates the logarithm base 2." alt="" coords="455,433,633,474"/>
+<area shape="rect" id="node48" href="$namespaceBittyBuzzMathFunctions.html#a7ab8e7610e00fd1cd1e8e203c69c0f3f" title="Return the max." alt="" coords="455,694,633,735"/>
+<area shape="rect" id="node49" href="$namespaceBittyBuzzMathFunctions.html#adfb2e4f9138fe52644bc94ae1978bdd1" title="Return the min." alt="" coords="455,759,633,801"/>
+<area shape="rect" id="node50" href="$namespaceBittyBuzzMathFunctions.html#a9929277d3cc61ad605f23028284f26ac" title="Return a number with a uniform distribution." alt="" coords="455,106,633,147"/>
+<area shape="rect" id="node52" href="$namespaceBittyBuzzMathFunctions.html#a41228dd4915da622fa6e0201bc343821" title="Rounds a value." alt="" coords="455,498,633,539"/>
+<area shape="rect" id="node54" href="$namespaceBittyBuzzMathFunctions.html#ab6b208c5ca766a9293c9119cd66e4ae1" title="Calculates the sine." alt="" coords="455,563,633,605"/>
+<area shape="rect" id="node56" href="$namespaceBittyBuzzMathFunctions.html#a99b2646503c8ce9940f7e2ae047bc56b" title="Calculates the square root." alt="" coords="455,629,633,670"/>
+<area shape="rect" id="node58" href="$namespaceBittyBuzzMathFunctions.html#ae88e02f14f0eac2b3ec1a059d8b46c65" title="Calculates the tengent." alt="" coords="455,825,633,866"/>
+<area shape="rect" id="node25" href="$namespaceMath.html#a44e89e8d6a7e3c24685a1a50dac1c492" title="Return the absolute value." alt="" coords="779,56,865,83"/>
+<area shape="rect" id="node26" href="$namespaceMath.html#a9f2e2a533761a681565c458c5cb0d09b" title="Return the absolute value." alt="" coords="777,5,867,32"/>
+<area shape="rect" id="node28" href="$namespaceMath.html#a5f29c5070b9836eb16599f9c2667cadd" title="calculate the arc cosine" alt="" coords="775,897,869,924"/>
+<area shape="rect" id="node29" href="$BittyBuzzMathFunctions_8cpp.html#a4bfd55f852fffcd9b9c7abfa61c3f9e9" title=" " alt="" coords="773,613,871,640"/>
+<area shape="rect" id="node31" href="$namespaceMath.html#a37f8fe84dda1507be6fe109a6c35a6ab" title="calculate the arc sine" alt="" coords="777,963,867,989"/>
+<area shape="rect" id="node33" href="$namespaceMath.html#ac118e51b307f872013e7f9ec54d866c7" title="calculate the arc of x/y" alt="" coords="772,1028,872,1055"/>
+<area shape="rect" id="node35" href="$namespaceMath.html#aa3fa8bd8467553135077d99a57f70a3a" title="Round x upward." alt="" coords="779,1093,865,1120"/>
+<area shape="rect" id="node37" href="$namespaceMath.html#a5c9c4e393236268caa618fb339ee6862" title="calculate the cosine" alt="" coords="779,179,865,205"/>
+<area shape="rect" id="node39" href="$namespaceMath.html#ad2201d4d97197f21e48461b453c25185" title="Calculates the exponent." alt="" coords="779,244,865,271"/>
+<area shape="rect" id="node41" href="$namespaceMath.html#a376d960381e81cd239e9ab1e49394863" title="Floor x downward." alt="" coords="776,309,868,336"/>
+<area shape="rect" id="node43" href="$namespaceMath.html#a86ec285e634de7d17e508d47d0b14e26" title="Calculates the natural logarithm." alt="" coords="785,1163,859,1189"/>
+<area shape="rect" id="node45" href="$namespaceMath.html#ac28746ab7c3c3b1f2b57408bfd2b38fd" title="Calculates the logarithm base 10." alt="" coords="773,375,871,401"/>
+<area shape="rect" id="node47" href="$namespaceMath.html#a1f4e6ba9e584d187c9760964d99a1f5e" title="Calculates the logarithm base 2." alt="" coords="777,440,867,467"/>
+<area shape="rect" id="node51" href="$classIBSP.html#a2e30c2a65673c2818c0451cb0a9e8cd9" title="Returns a positive random number, uses an hardware RNG if available." alt="" coords="711,113,933,140"/>
+<area shape="rect" id="node53" href="$namespaceMath.html#aa9fd17f92d2dbfd5034b64bf1ec4a667" title="Round x." alt="" coords="772,505,872,532"/>
+<area shape="rect" id="node55" href="$namespaceMath.html#a032efabc85988e4a8d278333fa42df4b" title="calculate the sine" alt="" coords="781,563,863,589"/>
+<area shape="rect" id="node57" href="$namespaceMath.html#ad382526f9a70ad1fcda022aa887ee0f5" title="Calculates the square root." alt="" coords="778,664,866,691"/>
+<area shape="rect" id="node59" href="$namespaceMath.html#aec4ad03e17bb52a89b26cd268d9fd231" title="calculate the tangent" alt="" coords="780,832,864,859"/>
+<area shape="rect" id="node65" href="$namespaceBittyBuzzSystem.html#aa754a6e295190dc75cfb95fb20eeeffb" title="Callback to handle errors on bittybuzz vm." alt="" coords="429,2440,659,2467"/>
+<area shape="rect" id="node67" href="$namespaceBittyBuzzSystem.html#aaaa3b4ee96aca935adb6db82b707d1cb" title="Call a bittybuzz function that takes not arguments (init, step, etc),." alt="" coords="435,2272,653,2299"/>
+<area shape="rect" id="node68" href="$classIBittyBuzzBytecode.html#abf4b1937d79ebc985a81cd76e8f64a1e" title="Obtain the function that fetches the BittyBuzz byte code." alt="" coords="443,2491,645,2533"/>
+<area shape="rect" id="node69" href="$classIBittyBuzzBytecode.html#a2b1e8f497665cc92efaa6d2ed8ad804d" title="Get the size of the BittyBuzz byte code." alt="" coords="466,2323,622,2365"/>
+<area shape="rect" id="node70" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="488,2389,600,2416"/>
+<area shape="rect" id="node66" href="$namespaceBittyBuzzSystem.html#af137cc4c46446bf57c37e56d27f8d64c" title=" " alt="" coords="707,2433,937,2474"/>
+<area shape="rect" id="node72" href="$classIBittyBuzzMessageHandler.html#a99d8be9ea3f00f966b126543165186e4" title="gets the number of message to be processed in the queue" alt="" coords="445,2010,643,2051"/>
+<area shape="rect" id="node73" href="$classIBittyBuzzMessageHandler.html#a08ce1fa093ce62577df54859326a13bb" title="process a message and sends a response if needed. A response is sent to the appropriate queue on a re..." alt="" coords="445,2075,643,2117"/>
+<area shape="rect" id="node74" href="$classIBittyBuzzMessageService.html#ac33cabd0adb5b2b8dd4417601b88e917" title="send a buzz message, broadcasted to other buzz vm, sends it to the remote queue" alt="" coords="447,2141,641,2182"/>
+<area shape="rect" id="node75" href="$classIBittyBuzzNeighborsManager.html#a1065e9ed7a5437aa94b3bf3615b41a24" title=" " alt="" coords="439,2206,649,2247"/>
+</map>

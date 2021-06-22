@@ -1,0 +1,19 @@
+<map id="getFloatArg" name="getFloatArg">
+<area shape="rect" id="node1" title=" " alt="" coords="656,438,755,465"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzMathFunctions.html#ad5cb405a70efc23f74fe9b35cb81c0f8" title="Calculates the arc cosine." alt="" coords="429,5,608,47"/>
+<area shape="rect" id="node5" href="$namespaceBittyBuzzMathFunctions.html#aea8814cee0732837550f31cc179ebc7c" title="Calculates the arc sine." alt="" coords="429,71,608,112"/>
+<area shape="rect" id="node6" href="$namespaceBittyBuzzMathFunctions.html#a9d2492c5400071fbb290a38a4787b00a" title="Calculates the arc cosine." alt="" coords="429,136,608,177"/>
+<area shape="rect" id="node7" href="$namespaceBittyBuzzMathFunctions.html#a35a4d7aee3c4d853c96c47bff0dc275a" title="Ceil a value." alt="" coords="429,201,608,243"/>
+<area shape="rect" id="node8" href="$namespaceBittyBuzzMathFunctions.html#a881796dfb8f77a3893f951d3c547dcce" title="Calculates the cosine." alt="" coords="429,267,608,308"/>
+<area shape="rect" id="node9" href="$namespaceBittyBuzzMathFunctions.html#a29b53c1284c52bd8ae429c26e36fe909" title="Calculates the exponent." alt="" coords="429,332,608,373"/>
+<area shape="rect" id="node10" href="$namespaceBittyBuzzMathFunctions.html#a3860d69640df9e41dadb791d797ac972" title="Floor a value." alt="" coords="429,397,608,439"/>
+<area shape="rect" id="node11" href="$namespaceBittyBuzzMathFunctions.html#adb1e5561724df16baaa4ce5e56a941f3" title="Calculates the natural logarithm (ln)" alt="" coords="429,463,608,504"/>
+<area shape="rect" id="node12" href="$namespaceBittyBuzzMathFunctions.html#a4920791243a26d4bd35bad91fb246016" title="Calculates the logarithm base 10." alt="" coords="429,528,608,569"/>
+<area shape="rect" id="node13" href="$namespaceBittyBuzzMathFunctions.html#a55c70a89d5365dfb0ad25287bdfc4edf" title="Calculates the logarithm base 2." alt="" coords="429,593,608,635"/>
+<area shape="rect" id="node14" href="$namespaceBittyBuzzMathFunctions.html#a41228dd4915da622fa6e0201bc343821" title="Rounds a value." alt="" coords="429,659,608,700"/>
+<area shape="rect" id="node15" href="$namespaceBittyBuzzMathFunctions.html#ab6b208c5ca766a9293c9119cd66e4ae1" title="Calculates the sine." alt="" coords="429,724,608,765"/>
+<area shape="rect" id="node16" href="$namespaceBittyBuzzMathFunctions.html#a99b2646503c8ce9940f7e2ae047bc56b" title="Calculates the square root." alt="" coords="429,789,608,831"/>
+<area shape="rect" id="node17" href="$namespaceBittyBuzzMathFunctions.html#ae88e02f14f0eac2b3ec1a059d8b46c65" title="Calculates the tengent." alt="" coords="429,855,608,896"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzFactory.html#abdf23572672f660843f2941ea4ceca18" title="Creates a the math table library for the bvm." alt="" coords="203,431,381,472"/>
+<area shape="rect" id="node4" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,438,155,465"/>
+</map>

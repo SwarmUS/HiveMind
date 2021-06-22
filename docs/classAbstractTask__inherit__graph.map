@@ -1,0 +1,10 @@
+<map id="AbstractTask" name="AbstractTask">
+<area shape="rect" id="node1" title=" " alt="" coords="714,5,819,83"/>
+<area shape="rect" id="node2" href="$classBittyBuzzTask.html" title=" " alt="" coords="5,160,200,325"/>
+<area shape="rect" id="node3" href="$classCommMonitoringTask.html" title=" " alt="" coords="224,153,427,333"/>
+<area shape="rect" id="node4" href="$classHardwareInterlocTask.html" title=" " alt="" coords="451,175,653,311"/>
+<area shape="rect" id="node5" href="$classLogInterlocTask.html" title=" " alt="" coords="677,167,856,318"/>
+<area shape="rect" id="node6" href="$classMessageDispatcherTask.html" title=" " alt="" coords="881,145,1095,340"/>
+<area shape="rect" id="node7" href="$classMessageSenderTask.html" title=" " alt="" coords="1119,131,1318,355"/>
+<area shape="rect" id="node8" href="$classSoftwareInterlocTask.html" title=" " alt="" coords="1342,160,1551,325"/>
+</map>

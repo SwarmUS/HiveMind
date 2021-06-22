@@ -1,0 +1,5 @@
+<map id="LogInterlocTask::task" name="LogInterlocTask::task">
+<area shape="rect" id="node1" title=" " alt="" coords="5,31,164,57"/>
+<area shape="rect" id="node2" href="$classIInterloc.html#a52288c4f2f0dee3b847dd7ee804d01bc" title="Returns the position table for all robots in the swarm." alt="" coords="212,5,409,32"/>
+<area shape="rect" id="node3" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="261,56,360,83"/>
+</map>

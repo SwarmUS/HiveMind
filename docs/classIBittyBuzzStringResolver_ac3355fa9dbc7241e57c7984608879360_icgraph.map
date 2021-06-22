@@ -1,0 +1,11 @@
+<map id="IBittyBuzzStringResolver::getString" name="IBittyBuzzStringResolver::getString">
+<area shape="rect" id="node1" title="Get the string from the stringId." alt="" coords="1135,71,1317,112"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzUserFunctions.html#a83b2359b062198954a8acd65b044cc61" title="calls a function to a host" alt="" coords="897,5,1073,47"/>
+<area shape="rect" id="node5" href="$namespaceBittyBuzzUserFunctions.html#a65c4ae451d706067e40ed2aa314b87b9" title="Logs to the default output." alt="" coords="883,137,1087,163"/>
+<area shape="rect" id="node9" href="$namespaceBittyBuzzUserFunctions.html#ac811216af659c79e67702c3de61a9d1b" title="register a new function, exposing it to the remote composant of the swarm" alt="" coords="897,71,1073,112"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzFactory.html#a3d9d0e6f38dcf942049c483ecf1cbdd3" title="Creates an array of FunctionRegister associated with the code from main.bzz." alt="" coords="656,71,835,112"/>
+<area shape="rect" id="node4" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,107,155,134"/>
+<area shape="rect" id="node6" href="$namespaceMath.html#a86ec285e634de7d17e508d47d0b14e26" title="Calculates the natural logarithm." alt="" coords="708,137,783,163"/>
+<area shape="rect" id="node7" href="$namespaceBittyBuzzMathFunctions.html#adb1e5561724df16baaa4ce5e56a941f3" title="Calculates the natural logarithm (ln)" alt="" coords="429,129,608,171"/>
+<area shape="rect" id="node8" href="$namespaceBittyBuzzFactory.html#abdf23572672f660843f2941ea4ceca18" title="Creates a the math table library for the bvm." alt="" coords="203,129,381,171"/>
+</map>

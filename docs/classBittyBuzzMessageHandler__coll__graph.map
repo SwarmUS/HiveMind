@@ -1,0 +1,8 @@
+<map id="BittyBuzzMessageHandler" name="BittyBuzzMessageHandler">
+<area shape="rect" id="node1" title=" " alt="" coords="437,233,666,531"/>
+<area shape="rect" id="node2" href="$classIBittyBuzzMessageHandler.html" title="Handles messages destined to the bbvm." alt="" coords="5,20,239,127"/>
+<area shape="rect" id="node3" href="$classIBSP.html" title=" " alt="" coords="263,13,474,134"/>
+<area shape="rect" id="node4" href="$classILogger.html" title="A logger class with basic logging capabilities." alt="" coords="498,27,605,119"/>
+<area shape="rect" id="node5" href="$classIBittyBuzzClosureRegister.html" title="A class to register buzz function/closures id and associate them with a string." alt="" coords="629,5,860,141"/>
+<area shape="rect" id="node6" title=" " alt="" coords="885,35,1133,112"/>
+</map>

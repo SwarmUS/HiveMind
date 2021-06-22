@@ -1,0 +1,4 @@
+<map id="MessageDispatcher::deserializeAndDispatch" name="MessageDispatcher::deserializeAndDispatch">
+<area shape="rect" id="node1" title="deserialize a message and dispatches it in the appropriate queue" alt="" coords="232,5,407,47"/>
+<area shape="rect" id="node2" href="$classMessageDispatcherTask.html#a60cada64ac6cc6337788328ae328e3b4" title=" " alt="" coords="5,5,184,47"/>
+</map>

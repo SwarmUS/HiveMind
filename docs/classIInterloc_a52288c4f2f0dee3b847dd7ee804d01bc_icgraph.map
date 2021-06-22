@@ -1,0 +1,6 @@
+<map id="IInterloc::getPositionsTable" name="IInterloc::getPositionsTable">
+<area shape="rect" id="node1" title="Returns the position table for all robots in the swarm." alt="" coords="580,42,777,69"/>
+<area shape="rect" id="node2" href="$classHiveMindHostApiRequestHandler.html#a26680797c57e4eca01138a5170ae6c5f" title=" " alt="" coords="292,5,532,47"/>
+<area shape="rect" id="node4" href="$classLogInterlocTask.html#adde011a06dfb1224f113420ac0e540cf" title=" " alt="" coords="333,71,491,98"/>
+<area shape="rect" id="node3" href="$classHiveMindHostApiRequestHandler.html#a2eead1a151c022a8c2a84cef209b4597" title="handles HiveMindHostAPI request and sends a response to the approriate target" alt="" coords="5,5,244,47"/>
+</map>
