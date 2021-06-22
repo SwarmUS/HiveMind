@@ -72,7 +72,7 @@ bool HiveMindHostApiRequestHandler::handleHiveMindHostApiRequest(
     if (const auto* req = std::get_if<GetAgentsListRequestDTO>(&request.getRequest())) {
         MessageDTO msg(message.getSourceId(), message.getDestinationId(),
                        HiveConnectHiveMindApiDTO(requestId, *req));
-        return m_remoteQueue.push(message);
+        return m_remoteQueue.push(msg);
     }
 
     m_logger.log(LogLevel::Warn, "Received unknown hivemind host api");

@@ -17,7 +17,7 @@ bool HiveConnectHiveMindApiMessageHandler::handleMessage(uint16_t sourceId,
     if (const auto* req = std::get_if<GetAgentsListResponseDTO>(&message.getMessage())) {
         HiveMindHostApiResponseDTO apiResponse(*req);
         ResponseDTO response(message.getMessageId(), apiResponse);
-        MessageDTO msgDTO(sourceId, destId, message);
+        MessageDTO msgDTO(sourceId, destId, response);
         return m_hostQueue.push(msgDTO);
     }
     return false;
