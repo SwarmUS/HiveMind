@@ -8,8 +8,8 @@ WaitPollState::WaitPollState(ILogger& logger, DecawaveArray& decawaves) :
 
 void WaitPollState::process(InterlocStateHandler& context) {
 
-    uint64_t rxStartTs = context.getTimeManager().getPollRxStartTs(
-        context.getPreviousFrameStartTs() + 140 * UUS_TO_DWT_TIME);
+    uint64_t rxStartTs =
+        context.getTimeManager().getPollRxStartTs(context.getPreviousFrameStartTs());
 
     m_decawaves[DecawavePort::A].receiveDelayed(
         m_rxFrame,

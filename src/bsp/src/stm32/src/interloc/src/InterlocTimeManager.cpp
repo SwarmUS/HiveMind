@@ -215,7 +215,8 @@ uint64_t InterlocTimeManager::getSupposedNextFrameStart(uint64_t startOfFrameTs)
 }
 
 uint64_t InterlocTimeManager::getPollRxStartTs(uint64_t startOfFrameTs) const {
-    return (getSupposedNextFrameStart(startOfFrameTs) - RX_BEFORE_TX_GUARD_US * UUS_TO_DWT_TIME) %
+    return (getSupposedNextFrameStart(startOfFrameTs) - RX_BEFORE_TX_GUARD_US * UUS_TO_DWT_TIME +
+            140 * UUS_TO_DWT_TIME) %
            UINT40_MAX;
 }
 
