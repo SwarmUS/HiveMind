@@ -28,6 +28,7 @@ struct StateTransition {
     InterlocStates m_fromState;
     InterlocStates m_toState;
     InterlocEvent m_transitionEvent;
+    uint8_t m_currentFrameId;
 };
 
 #endif //__STATETRANSITION_H__

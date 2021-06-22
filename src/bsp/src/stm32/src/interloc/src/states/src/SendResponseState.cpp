@@ -1,5 +1,6 @@
 #include <interloc/Decawave.h>
 #include <interloc/InterlocBSPContainer.h>
+#include <interloc/InterlocTimeManager.h>
 #include <states/InterlocStateContainer.h>
 #include <states/SendResponseState.h>
 
@@ -12,7 +13,8 @@ void SendResponseState::process(InterlocStateHandler& context) {
                                (uint8_t*)&m_respMsg, sizeof(m_respMsg));
     m_respMsg.m_subFrameId = context.getSlotId();
 
-    uint64_t respTxTime = context.getTimeManager().getResponseTxTs(context.getTWR().m_pollRxTs);
+    volatile uint64_t respTxTime =
+        context.getTimeManager().getResponseTxTs(context.getPreviousFrameStartTs());
 
     m_decawaves[DecawavePort::A].transmitDelayed((uint8_t*)&m_respMsg, sizeof(m_respMsg),
                                                  respTxTime);

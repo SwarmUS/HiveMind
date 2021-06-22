@@ -8,8 +8,9 @@ WaitFinalState::WaitFinalState(ILogger& logger, DecawaveArray& decawaves) :
 
 void WaitFinalState::process(InterlocStateHandler& context) {
     m_decawaves[DecawavePort::A].receiveDelayed(
-        m_rxFrame, InterlocTimeManager::getFinalTimeout(),
-        context.getTimeManager().getFinalRxStartTs(context.getTWR().m_pollRxTs));
+        m_rxFrame,
+        InterlocTimeManager::getTimeoutUs(context.getTimeManager().m_finalAirTimeWithPreambleUs),
+        context.getTimeManager().getFinalRxTs(context.getTWR().m_pollRxTs));
 
     if (m_rxFrame.m_status == UWBRxStatus::FINISHED && DecawaveUtils::isFrameFinal(m_rxFrame)) {
 

@@ -45,15 +45,8 @@ void Decawave::rxAsyncTask(void* context) {
 
 Decawave::Decawave(decaDevice_t spiDevice) :
     m_spiDevice(spiDevice),
-    m_channel(UWBChannel::DEFAULT_CHANNEL),
-    m_speed(UWBSpeed::SPEED_110K),
-    m_rxAsyncTask("dw_rx_task", tskIDLE_PRIORITY + 10, rxAsyncTask, this),
-    m_isReady(false) {}
-
-Decawave::Decawave(decaDevice_t spiDevice, UWBChannel channel, UWBSpeed speed) :
-    m_spiDevice(spiDevice),
-    m_channel(channel),
-    m_speed(speed),
+    m_channel(UWBChannel::DW_CHANNEL),
+    m_speed(UWBSpeed::DW_SPEED),
     m_rxAsyncTask("dw_rx_task", tskIDLE_PRIORITY + 10, rxAsyncTask, this),
     m_isReady(false) {}
 
@@ -213,14 +206,14 @@ bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
         // wait for the end of the transmission
         m_trxTaskHandle = xTaskGetCurrentTaskHandle();
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    } else {
+        //        volatile uint64_t currentTime = getSysTime();
+        //        (void)currentTime;
+        // TODO: For debugging. Remove and handle correctly in real application
+        //        while (true) {
+        //        }
+        return false;
     }
-    //    else {
-    //        volatile uint64_t currentTime = getSysTime();
-    //        (void)currentTime;
-    //        // TODO: For debugging. Remove and handle correctly in real application
-    //        while (true) {
-    //        }
-    //    }
 
     return true;
 }
