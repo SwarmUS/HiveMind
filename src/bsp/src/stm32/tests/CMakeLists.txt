@@ -3,11 +3,13 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform::Tests")
 
 set(LIB_SOURCES
         src/TestUI.cpp
+        src/TestChannels.cpp
 )
 
 set(LIB_PRIVATE_HEADERS
         include/IHardwareTest.h
         include/TestUI.h
+        include/TestChannels.h
 )
 
 add_library(${LIB_NAME}
