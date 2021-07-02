@@ -1,6 +1,10 @@
 #ifndef HIVE_MIND_DECA_PLATFORM_H
 #define HIVE_MIND_DECA_PLATFORM_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "hivemind_hal.h"
 #include <stdbool.h>
 
@@ -45,4 +49,9 @@ void beeboard_enableChannel(decaDevice_t channel);
  * @param channel Channel to enable the clock for
  */
 void beeboard_enableClock(decaDevice_t channel);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif // HIVE_MIND_DECA_PLATFORM_H

@@ -49,12 +49,12 @@ void TestUI::test04_Buttons() {
     UI_setButtonCallback(BUTTON_1, button1Callback, this);
 
     // Press button 0 to continue
-    while (!button0Pressed) {
+    while (!m_button0Pressed) {
         HAL_Delay(100);
     }
 
     // Press button 1 to continue
-    while (!button1Pressed) {
+    while (!m_button1Pressed) {
         HAL_Delay(100);
     }
 }
@@ -72,9 +72,9 @@ void TestUI::test05_HexDisplay() {
 }
 
 void TestUI::button0Callback(void* context) {
-    static_cast<TestUI*>(context)->button0Pressed = true;
+    static_cast<TestUI*>(context)->m_button0Pressed = true;
 }
 
 void TestUI::button1Callback(void* context) {
-    static_cast<TestUI*>(context)->button1Pressed = true;
+    static_cast<TestUI*>(context)->m_button1Pressed = true;
 }

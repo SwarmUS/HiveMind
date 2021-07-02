@@ -19,8 +19,8 @@ class TestUI : public IHardwareTest {
     void test04_Buttons();
     static void test05_HexDisplay();
 
-    bool button0Pressed = false;
-    bool button1Pressed = false;
+    bool m_button0Pressed = false;
+    bool m_button1Pressed = false;
 
     static void button0Callback(void* context);
     static void button1Callback(void* context);

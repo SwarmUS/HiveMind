@@ -1,3 +1,4 @@
+#include "deca_platform.h"
 #include "deca_port.h"
 #include <FreeRTOS.h>
 #include <task.h>

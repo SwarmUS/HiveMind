@@ -71,7 +71,13 @@ add_custom_target(
 add_subdirectory(hal)
 add_subdirectory(src/interloc)
 
-add_subdirectory(tests)
+if (ENABLE_HARDWARE_TESTS)
+    add_subdirectory(tests)
+    target_link_libraries(${LIB_NAME}
+            PRIVATE
+            SwarmUS::HiveMind::BSP::Platform::Tests
+    )
+endif()
 
 
 # Removing clang-tidy for this lib

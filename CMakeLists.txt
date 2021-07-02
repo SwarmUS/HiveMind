@@ -13,6 +13,8 @@ option(DISABLE_EXTERNAL_WARNINGS "Disables warnings from exernal libs (gtest, fr
 
 option(ENABLE_TARGET_IPERF_SERVER "Starts an iperf server on the target device for network monitoring" OFF)
 
+option(ENABLE_HARDWARE_TESTS "Compiles a second executable to do various hardware tests (only works for STM32H7)" OFF)
+
 # Init compile variable
 
 set(COMPILE_STM32 0)

@@ -1,5 +1,4 @@
 #include "TestUSB.h"
-#include "../../include/USB.h"
 #include <cstdio>
 #include <hal/usb.h>
 

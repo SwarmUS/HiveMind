@@ -37,7 +37,7 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::Propolis::C::Common
     )
 
-if (ENABLE_TARGET_IPERF_SERVER)
+if (ENABLE_TARGET_IPERF_SERVER OR ENABLE_HARDWARE_TESTS)
     target_link_libraries(${LIB_NAME}
         PRIVATE
             CMSIS::STM32::F4::LWIP::IPERF
