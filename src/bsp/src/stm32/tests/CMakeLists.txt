@@ -6,6 +6,7 @@ set(LIB_SOURCES
         src/TestChannels.cpp
         src/TestUSB.cpp
         src/TestNetwork.cpp
+        src/TestClock.cpp
 )
 
 set(LIB_PRIVATE_HEADERS
@@ -14,6 +15,7 @@ set(LIB_PRIVATE_HEADERS
         include/TestChannels.h
         include/TestUSB.h
         include/TestNetwork.h
+        include/TestClock.h
 )
 
 add_library(${LIB_NAME}

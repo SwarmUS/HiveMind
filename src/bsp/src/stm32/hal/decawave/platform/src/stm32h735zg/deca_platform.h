@@ -45,10 +45,22 @@ bool beeboard_isChannelPopulated(decaDevice_t channel);
 void beeboard_enableChannel(decaDevice_t channel);
 
 /**
+ * @brief Disables the channel hardware (except for the clock)
+ * @param channel Channel to disable
+ */
+void beeboard_disableChannel(decaDevice_t channel);
+
+/**
  * @brief Enables the clock for a given channel tree
  * @param channel Channel to enable the clock for
  */
 void beeboard_enableClock(decaDevice_t channel);
+
+/**
+ * @brief Disables the clock for a given channel tree
+ * @param channel Channel to disable the clock for
+ */
+void beeboard_disableClock(decaDevice_t channel);
 
 #ifdef __cplusplus
 }

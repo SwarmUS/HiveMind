@@ -40,6 +40,7 @@ void Hal_bootup() {
     deca_init();
     enableESP();
     UI_initialize();
+
     Timer_startHeartbeat();
 
     MX_LWIP_Init();
