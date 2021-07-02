@@ -5,6 +5,7 @@ set(LIB_SOURCES
         src/TestUI.cpp
         src/TestChannels.cpp
         src/TestUSB.cpp
+        src/TestNetwork.cpp
 )
 
 set(LIB_PRIVATE_HEADERS
@@ -12,6 +13,7 @@ set(LIB_PRIVATE_HEADERS
         include/TestUI.h
         include/TestChannels.h
         include/TestUSB.h
+        include/TestNetwork.h
 )
 
 add_library(${LIB_NAME}
@@ -36,6 +38,7 @@ target_link_libraries(${LIB_NAME}
     PRIVATE
         SwarmUS::HiveMind::HAL
         SwarmUS::HiveMind::LWIP
+        stm32-linker
 )
 
 # Removing clang-tidy for this lib

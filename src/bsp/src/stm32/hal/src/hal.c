@@ -34,8 +34,6 @@ void Hal_init() {
 
     MX_USB_DEVICE_Init();
     usb_init();
-
-    MX_LWIP_Init();
 }
 
 void Hal_bootup() {
@@ -44,6 +42,7 @@ void Hal_bootup() {
     UI_initialize();
     Timer_startHeartbeat();
 
+    MX_LWIP_Init();
 #ifdef IPERF_SERVER
     lwiperf_start_tcp_server_default(NULL, NULL);
 #endif
