@@ -26,8 +26,7 @@ add_library(${LIB_NAME}
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
 target_include_directories(${LIB_NAME} 
-    PRIVATE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    PUBLIC
         include
 )
 

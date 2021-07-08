@@ -1,10 +1,10 @@
+#include "../bsp/src/stm32/tests/include/TestChannels.h"
+#include "../bsp/src/stm32/tests/include/TestClock.h"
+#include "../bsp/src/stm32/tests/include/TestNetwork.h"
+#include "../bsp/src/stm32/tests/include/TestUI.h"
+#include "../bsp/src/stm32/tests/include/TestUSB.h"
 #include <bsp/BSPContainer.h>
 #include <bsp/IBSP.h>
-#include <bsp/src/stm32/tests/include/TestChannels.h>
-#include <bsp/src/stm32/tests/include/TestClock.h>
-#include <bsp/src/stm32/tests/include/TestNetwork.h>
-#include <bsp/src/stm32/tests/include/TestUI.h>
-#include <bsp/src/stm32/tests/include/TestUSB.h>
 
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};

@@ -74,7 +74,7 @@ add_subdirectory(src/interloc)
 if (ENABLE_HARDWARE_TESTS)
     add_subdirectory(tests)
     target_link_libraries(${LIB_NAME}
-            PRIVATE
+            PUBLIC
             SwarmUS::HiveMind::BSP::Platform::Tests
     )
 endif()
