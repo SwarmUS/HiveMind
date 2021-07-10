@@ -21,7 +21,7 @@ target_link_libraries(${EXECUTABLE_NAME}
       SwarmUS::HiveMind::Interloc
 )
 
-if (${ENABLE_HARDWARE_TESTS})
+if (${CMAKE_CROSSCOMPILING} AND (ENABLE_HARDWARE_TESTS OR DECAWAVE_TESTS))
     add_subdirectory(hardware-tests)
 endif()
 

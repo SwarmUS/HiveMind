@@ -79,7 +79,41 @@ openocd -f ./tools/openocd/stm32_f4/stm32_f4.cfg -c "program build/src/hive-mind
 ```
 
 ## Running tests
+
+### Software Tests
 You can use `make test` or `ctest` to launch the tests.
+
+### Hardware Tests
+Two different kind of tests can be run to verify the functionality of the HiveBoard. 
+
+The first series of tests use the HAL library directly and are therefore purely hardware/driver tests. 
+These tests can only be run one the HiveBoard (STM32H7) as some tested components are not available
+on the previous Nucleo STM32F4 + HiveSight assembly. To compile the tests, CMake must be run with the
+`ENABLE_HARDWARE_TESTS` variable.
+
+```
+cmake -D CMAKE_BUILD_TYPE=Debug -D ENABLE_HARDWARE_TESTS -D CMAKE_TOOLCHAIN_FILE=../cmake/stm32_f429zi_gcc.cmake .. 
+```
+
+From there, a second target, `hardware_tests.elf` can be compiled and flashed with OpenOCD. 
+The `make flash_tests` command exists as a shortcut.
+
+The tests are not self-validating and must be run through a debugger stepping instruction by instruction to
+verify everything is working.
+
+The second series of tests are aimed at validating the functionality of the BeeBoards and more specifically,
+the DW1000 UWB Radio. These tests are activated by setting the `DECAWAVE_TESTS` variable to one of three
+values:
+* `TX`, to transmit data via UWB in a loop
+* `RX`, to receive UWB data and log it to the serial logger
+* `SPI`, to perform a SPI write/readback test on the DW1000 in a loop
+
+For example, to test TX, you would compile with: 
+```
+cmake -D CMAKE_BUILD_TYPE=Debug -D DECAWAVE_TESTS=TX -D CMAKE_TOOLCHAIN_FILE=../cmake/stm32_f429zi_gcc.cmake .. 
+```
+
+As with the hardware tests, a make target (`make flash_deca_tests`) was created for flashing the board.
 
 ## Formatting
 You can run `make format` and `make check-format` to match the formatting convention used.
@@ -106,16 +140,6 @@ To open the server on the device, simply build with the `ENABLE_TARGET_IPERF_SER
 ```
 cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_TARGET_IPERF_SERVER -DCMAKE_TOOLCHAIN_FILE=../cmake/stm32_f429zi_gcc.cmake .. 
 ```
-
-
-#### Cellphone
-The firmware has been configured with the following pins for the uart connection to a cellphone
-| RX  | TX  |
-| --- | --- |
-| PD6 | PD5 |
-
-![alt text](https://os.mbed.com/media/uploads/jeromecoutant/nucleo_f429zi_zio_left_2019_8_29.png "NUCLEO CONNECTION")
-
 
 ### Configuration
 Different firmware settings can be configured at build time (for the STM32 target) or runtime (for the ROS target).

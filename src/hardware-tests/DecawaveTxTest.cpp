@@ -109,9 +109,20 @@ int main(int argc, char** argv) {
     IBSP& bsp = BSPContainer::getBSP();
     bsp.initChip((void*)&cmdLineArgs);
 
+#ifdef DECA_TEST_TX
     static TxTask s_txTask("tx_task", 10);
-
     s_txTask.start();
+#endif
+
+#ifdef DECA_TEST_RX
+    static RxTask s_rxTask("rx_task", 10);
+    s_rxTask.start();
+#endif
+
+#ifdef DECA_TEST_SPI
+    static SpiTest s_spiTask("spi_task", 10);
+    s_spiTask.start();
+#endif
 
     Task::startScheduler();
 
