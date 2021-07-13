@@ -1,39 +1,26 @@
-loop_counter = 0
+loop_counter = 0;
 
-function init() {
-  counter = 0;
-  stig = stigmergy.create(1);
-
-  stig.put("leader", 1);
+function greater_conflict_resolver(key, remote, local) {
+    log("conflict called");
+    if(remote.robot < local.robot) {
+        log("Choosed local: ", local.robot, remote.robot);
+        return local;
+    }
+    log("Choosed remote: ", local.robot, remote.robot);
+    return remote;
 }
 
-function leader_random_walk(){
-    var x = math.rng_uniform() % 4;
-    var y = math.rng_uniform() % 4;
-    log("Moving to x: ", x, " y: ", y);
-    call_host_function(id, "moveBy", {.0 = x, .1 = y});
+function init() {
+  stig = stigmergy.create(1);
+
+  stig.put("key", id);
+  log("Init: ", stig.get("key"));
+  stig.onconflict(greater_conflict_resolver);
 }
 
 function step() {
-  if(loop_counter == 50) {
-    var leader = stig.get("leader");
-    if(leader != id and leader != nil){
-      var neighbor = neighbors.get(leader);
-
-      if(is_table(neighbor)){
-        var angle = neighbor.elevation;
-        var x = math.cos(angle);
-        var y = math.sin(angle);
-        log("Angle: ", angle, ". Moving to leader", leader, " at x:", x, " y:", y);
-        call_host_function(id, "moveBy", {.0 = x, .1 = y});
-      }
-      else{
-        log("Neighbor not found!");
-      }
-    }
-    else if(leader == id) {
-        # leader_random_walk();
-    }
+  if(loop_counter == 100) {
+    log("Loop: ", stig.get("key"));
     loop_counter = 0;
   }
   loop_counter = loop_counter + 1;
