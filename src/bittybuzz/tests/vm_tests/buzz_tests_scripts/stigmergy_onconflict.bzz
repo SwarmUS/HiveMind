@@ -1,0 +1,17 @@
+function greater_conflict_resolver(key, remote, local) {
+    if(remote.data < local.data) {
+        return local;
+    }
+    return remote;
+}
+
+function init() {
+  stig = stigmergy.create(1);
+
+  stig.put("key", 1);
+  stig.onconflict(greater_conflict_resolver);
+}
+
+function step() {
+  assert_true(stig.get("key") == 2);
+}
