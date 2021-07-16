@@ -49,12 +49,12 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
     
     # Parsing buzz file
     add_custom_target(${_TARGET}_bzz_parse ALL
-      COMMAND ${BZZPAR} ${bzz_source} ${BASM_FILE} ${BST_FILE}
+            COMMAND export BUZZ_INCLUDE_PATH=$ENV{BUZZ_INCLUDE_PATH} && ${BZZPAR} ${bzz_source} ${BASM_FILE} ${BST_FILE}
       DEPENDS ${BST_FILE})
 
     # Compiling buzz file
     add_custom_target(${_TARGET}_bzz_compile
-      COMMAND ${BZZASM} ${BASM_FILE} ${BO_FILE} ${BDB_FILE}
+      COMMAND export BUZZ_INCLUDE_PATH=$ENV{BUZZ_INCLUDE_PATH} && ${BZZASM} ${BASM_FILE} ${BO_FILE} ${BDB_FILE}
       DEPENDS ${_TARGET}_bzz_parse)
 
 
@@ -64,13 +64,13 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
       COMMAND cmp --silent ${BHEADER_FILE_TMP} ${BHEADER_FILE} || cp ${BHEADER_FILE_TMP} ${BHEADER_FILE}
       WORKING_DIRECTORY ${BBZ_BINARY_PATH}
       DEPENDS zooids_bcodegen bo2bbo ${_TARGET}_bzz_compile)
-      
+
     # Creating string header file
     add_custom_target(${_TARGET}_bzz_string
-    COMMAND ${PROJECT_SOURCE_DIR}/tools/extract_bzz_strings.sh ${BASM_FILE} ${BST_FILE} ${BHEADER_FILE} ${BHEADER_STRING_FILE_TMP}
-    COMMAND cmp --silent ${BHEADER_STRING_FILE_TMP} ${BHEADER_STRING_FILE} || cp ${BHEADER_STRING_FILE_TMP} ${BHEADER_STRING_FILE} 
-    COMMAND cmp ${BHEADER_STRING_FILE_TMP} ${BHEADER_STRING_FILE}
-    DEPENDS ${_TARGET}_bzz_cross_compile)
+        COMMAND ${PROJECT_SOURCE_DIR}/tools/extract_bzz_strings.sh ${BASM_FILE} ${BST_FILE} ${BHEADER_FILE} ${BHEADER_STRING_FILE_TMP}
+        COMMAND cmp --silent ${BHEADER_STRING_FILE_TMP} ${BHEADER_STRING_FILE} || cp ${BHEADER_STRING_FILE_TMP} ${BHEADER_STRING_FILE}
+        COMMAND cmp ${BHEADER_STRING_FILE_TMP} ${BHEADER_STRING_FILE}
+        DEPENDS ${_TARGET}_bzz_cross_compile)
 
     # Create library with file
     add_library(${_TARGET} INTERFACE)

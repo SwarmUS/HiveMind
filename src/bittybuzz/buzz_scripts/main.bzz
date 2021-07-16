@@ -1,6 +1,8 @@
-include "/home/xgroleau/catkin_ws_isolated/src/SwarmUS-ROS/contrib/HiveMind/src/bittybuzz/buzz_scripts/executor.bzz"
+include "include/executor.bzz"
 
 
+counter = 0
+counter2 = 0;
 function greater_conflict_resolver(key, remote, local) {
     #log("conflict called");
     #if(remote.robot < local.robot) {
@@ -13,18 +15,15 @@ function greater_conflict_resolver(key, remote, local) {
 }
 
 function tick(param) {
-    log("Loop: ", stig.get("key"));
-    stig.put("key", counter);
+    counter = counter + 1
     log("Updated to: ", counter);
-
-    counter = (counter + 1) % 100;
     loop_counter = 0;
 }
 
 function init() {
     stig = stigmergy.create(1);
     counter = 0;
-    exect = executor.new(20, tick, nil);
+    exec = executor.new(20, tick, nil);
 
     stig.put("key", counter);
     log("Init: ", stig.get("key") ," Id: ", id);
@@ -32,7 +31,5 @@ function init() {
 }
 
 function step() {
-    log("Calling exec");
-    exect.step();
-    log("step");
+    exec.step();
 }

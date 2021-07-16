@@ -10,7 +10,7 @@ executor = {
             .m_current_step = 0,
             .m_closure = closure,
             .m_context = context,
-            .step = step
+            .step = executor.step
         }
     },
 
