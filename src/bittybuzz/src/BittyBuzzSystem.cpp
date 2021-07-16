@@ -1,4 +1,5 @@
 #include "bittybuzz/BittyBuzzSystem.h"
+#include <cstdio>
 
 ILogger* BittyBuzzSystem::g_logger = NULL;
 IUserInterface* BittyBuzzSystem::g_ui = NULL;
@@ -27,6 +28,117 @@ void BittyBuzzSystem::errorReceiver(bbzvm_error errcode) {
                       "state: %s,  error code: %s, instruction: %s \n",
                       vm->pc, vm->stackptr, getStateString(vm->state), getErrorString(errcode),
                       getInstructionString(instr));
+        logVmHeap(LogLevel::Error);
+    }
+}
+
+// https://github.com/MISTLab/BittyBuzz/blob/6ec05e816272ae62dfa148ebf8a2c4231445620f/src/bittybuzz/bbzheap.c
+// Returns '+' if the object is permanent, '-' if not
+inline char perm(bbzobj_t* obj) {
+    if (bbzheap_obj_ispermanent(*obj)) {
+        return '+';
+    }
+    return '-';
+}
+void BittyBuzzSystem::logVmHeap(LogLevel logLevel) {
+    if (g_logger != NULL) {
+        g_logger->log(logLevel, "---------------");
+        g_logger->log(logLevel, "- HEAP STATUS -");
+        g_logger->log(logLevel, "---------------\n");
+        /* Object-related stuff */
+        uint16_t objimax = (vm->heap.rtobj - vm->heap.data) / sizeof(bbzobj_t);
+        g_logger->log(logLevel, "Max object index: %d", objimax - 1);
+        uint16_t objnum = 0;
+        for (uint16_t i = 0; i < objimax; ++i)
+            if (bbzheap_obj_isvalid(*bbzheap_obj_at(i)))
+                ++objnum;
+        g_logger->log(logLevel, "Valid objects: %d", objnum);
+        g_logger->log(logLevel, "Size per object: %zu", sizeof(bbzobj_t));
+        for (uint16_t i = 0; i < objimax; ++i) {
+            bbzobj_t* obj = bbzheap_obj_at(i); // NOLINT
+            if (bbzheap_obj_isvalid(*obj)) {
+                switch (bbztype(*obj)) {
+                case BBZTYPE_NIL: {
+                    g_logger->log(logLevel, "\t#%d: [nil] %c", i, perm(obj));
+                    break;
+                }
+                case BBZTYPE_INT: {
+                    g_logger->log(logLevel, "\t#%d: %d %c", i, obj->i.value, perm(obj));
+                    break;
+                }
+                case BBZTYPE_FLOAT: {
+                    g_logger->log(logLevel, "\t#%d: %f %c", i, bbzfloat_tofloat(obj->f.value),
+                                  perm(obj));
+                    break;
+                }
+                case BBZTYPE_TABLE: {
+                    g_logger->log(logLevel, "\t#%d: [t:%d] %c", i, obj->t.value, perm(obj));
+                    break;
+                }
+                case BBZTYPE_STRING: {
+                    std::optional<const char*> optionString =
+                        BittyBuzzSystem::g_stringResolver->getString(obj->s.value);
+                    if (optionString) {
+                        g_logger->log(logLevel, "\t#%d: %s %c", i, optionString.value(), perm(obj));
+                    } else {
+                        g_logger->log(logLevel, "\t#%d: {UNKNOWN STRID: %d} %c", i, obj->s.value,
+                                      perm(obj));
+                    }
+                    break;
+                }
+                case BBZTYPE_CLOSURE: {
+                    if (bbztype_isclosurelambda(*obj)) {
+                        g_logger->log(logLevel, "\t#%d: [cl: %d} %c", i, obj->l.value.ref,
+                                      perm(obj));
+                    } else {
+                        g_logger->log(logLevel, "\t#%d: [c: %d] %c", i, (int)(intptr_t)obj->c.value,
+                                      perm(obj));
+                    }
+                    break;
+                }
+                case BBZTYPE_USERDATA: {
+                    g_logger->log(logLevel, "\t#%d: [u: %d] %c", i, (int)obj->u.value, perm(obj));
+                    break;
+                }
+                default: {
+                    g_logger->log(logLevel, "\t#%d: {UNKNOWN TYPE} %c", i, perm(obj));
+                    break;
+                }
+                }
+            }
+        }
+        /* Segment-related stuff */
+        int tsegimax = (vm->heap.data + BBZHEAP_SIZE - vm->heap.ltseg) / sizeof(bbzheap_tseg_t); //NOLINT
+        printf("Max table segment index: %d\n", tsegimax);
+        int tsegnum = 0;
+        for (int i = 0; i < tsegimax; ++i)
+            if (bbzheap_tseg_isvalid(*bbzheap_tseg_at(i)))
+                ++tsegnum;
+        g_logger->log(logLevel,"Valid table segments: %d\n", tsegnum);
+        g_logger->log(logLevel,"Size per table segment: %zu\n", sizeof(bbzheap_tseg_t));
+        bbzheap_tseg_t* seg;
+        for (int i = 0; i < tsegimax; ++i) {
+            seg = bbzheap_tseg_at(i);
+            if (bbzheap_tseg_isvalid(*seg)) {
+                g_logger->log(logLevel,"\t#%d: {", i);
+                for (int j = 0; j < BBZHEAP_ELEMS_PER_TSEG; ++j)
+                    if (bbzheap_tseg_elem_isvalid(seg->keys[j]))
+                        g_logger->log(logLevel,"\t\t(%d,%d)", bbzheap_tseg_elem_get(seg->keys[j]),
+                               bbzheap_tseg_elem_get(seg->values[j]));
+                g_logger->log(logLevel,"\t\t/next=(%x|%d)", bbzheap_tseg_next_get(seg),
+                       bbzheap_tseg_next_get(seg));
+                g_logger->log(logLevel, "\t}");
+            }
+        }
+        int usage = (objnum * sizeof(bbzobj_t)) + (tsegnum * sizeof(bbzheap_tseg_t));
+        g_logger->log(logLevel,"Heap usage (B): %04d/%04d (%.1f%%)\n", usage, BBZHEAP_SIZE,
+               ((double)usage / BBZHEAP_SIZE) * 100.0);
+        g_logger->log(logLevel,"Heap usage (B) for 16-bit pointers: %04d\n",
+               (int)(objnum * 3 + (tsegnum * sizeof(bbzheap_tseg_t))));
+        int uspace = ((vm->heap.ltseg) - (vm->heap.rtobj));
+        g_logger->log(logLevel,"Unclaimed space (B): %d (=%d object(s) or %d segment(s))\n", uspace,
+               (int)(uspace / sizeof(bbzobj_t)), (int)(uspace / sizeof(bbzheap_tseg_t)));
+        g_logger->log(logLevel,"\n");
     }
 }
 

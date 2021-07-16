@@ -60,6 +60,12 @@ namespace BittyBuzzSystem {
      *@param [in] errcode the error code of the received error */
     void errorReceiver(bbzvm_error errcode);
 
+    /**
+     *@brief Logs the current heap status
+     *
+     *@param [in] errcode the error code of the received error */
+    void logVmHeap(LogLevel logLevel);
+
     const char* getStateString(bbzvm_state state);
 
     const char* getErrorString(bbzvm_error error);

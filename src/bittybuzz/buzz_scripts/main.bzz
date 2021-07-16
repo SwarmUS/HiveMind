@@ -1,27 +1,38 @@
-loop_counter = 0;
+include "/home/xgroleau/catkin_ws_isolated/src/SwarmUS-ROS/contrib/HiveMind/src/bittybuzz/buzz_scripts/executor.bzz"
+
 
 function greater_conflict_resolver(key, remote, local) {
-    log("conflict called");
-    if(remote.robot < local.robot) {
-        log("Choosed local: ", local.robot, remote.robot);
-        return local;
-    }
-    log("Choosed remote: ", local.robot, remote.robot);
-    return remote;
+    #log("conflict called");
+    #if(remote.robot < local.robot) {
+    #    log("Choosed local: ", local.robot, remote.robot);
+    #    return local;
+    #}
+    #log("Choosed remote: ", local.robot, remote.robot);
+    #return remote;
+    log("Hello there!")
+}
+
+function tick(param) {
+    log("Loop: ", stig.get("key"));
+    stig.put("key", counter);
+    log("Updated to: ", counter);
+
+    counter = (counter + 1) % 100;
+    loop_counter = 0;
 }
 
 function init() {
-  stig = stigmergy.create(1);
+    stig = stigmergy.create(1);
+    counter = 0;
+    exect = executor.new(20, tick, nil);
 
-  stig.put("key", id);
-  log("Init: ", stig.get("key"));
-  stig.onconflict(greater_conflict_resolver);
+    stig.put("key", counter);
+    log("Init: ", stig.get("key") ," Id: ", id);
+    stig.onconflict(greater_conflict_resolver);
 }
 
 function step() {
-  if(loop_counter == 100) {
-    log("Loop: ", stig.get("key"));
-    loop_counter = 0;
-  }
-  loop_counter = loop_counter + 1;
+    log("Calling exec");
+    exect.step();
+    log("step");
 }
