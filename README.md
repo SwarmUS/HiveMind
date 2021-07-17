@@ -107,6 +107,7 @@ values:
 * `TX`, to transmit data via UWB in a loop
 * `RX`, to receive UWB data and log it to the serial logger
 * `SPI`, to perform a SPI write/readback test on the DW1000 in a loop
+* `LED`, to flash all LEDs that are controlled by the DW1000
 
 For example, to test TX, you would compile with: 
 ```
