@@ -11,7 +11,7 @@ void TestUSB::runTests() {
 
 void TestUSB::test01_UART() {
     // Connect to COM port from PC
-    printf("Hello World!");
+    printf("Hello World!\n\r");
     HAL_Delay(2000);
 }
 

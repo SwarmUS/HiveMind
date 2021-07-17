@@ -3,10 +3,10 @@ set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform::Tests")
 
 set(LIB_SOURCES
         src/TestUI.cpp
-        #src/TestChannels.cpp
+        src/TestChannels.cpp
         src/TestUSB.cpp
         src/TestNetwork.cpp
-        #src/TestClock.cpp
+        src/TestClock.cpp
 )
 
 set(LIB_PRIVATE_HEADERS

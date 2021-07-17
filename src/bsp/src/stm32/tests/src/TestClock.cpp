@@ -1,6 +1,7 @@
 #include "TestClock.h"
 #include <deca_platform.h>
 #include <hal/hal_timer.h>
+#include <hal/user_interface.h>
 #include <hivemind_hal.h>
 
 void TestClock::runTests() {
@@ -14,16 +15,24 @@ void TestClock::runTests() {
         beeboard_enableClock(channel);
         beeboard_enableChannel(channel);
 
+        waitButtonPress();
+
         // Step 2.1
         beeboard_disableChannel(channel);
+
+        waitButtonPress();
 
         // Step 2.2
         beeboard_enableChannel(channel);
         beeboard_disableClock(channel);
 
+        waitButtonPress();
+
         // Cleanup
         beeboard_disableChannel(channel);
         beeboard_disableClock(channel);
+
+        waitButtonPress();
     }
 }
 
@@ -48,3 +57,17 @@ void TestClock::setupSyncSquareWave() {
 void TestClock::startSquareWave() { Timer_startHeartbeat(); }
 
 void TestClock::stopSquareWave() { Timer_stopHeartbeat(); }
+
+void TestClock::waitButtonPress() {
+    m_buttonPressed = false;
+    UI_setButtonCallback(BUTTON_0, buttonCallback, this);
+    UI_setButtonCallback(BUTTON_1, buttonCallback, this);
+
+    while (m_buttonPressed != true) {
+        HAL_Delay(100);
+    }
+}
+
+void TestClock::buttonCallback(void* context) {
+    static_cast<TestClock*>(context)->m_buttonPressed = true;
+}

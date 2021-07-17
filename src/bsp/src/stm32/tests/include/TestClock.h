@@ -12,6 +12,10 @@ class TestClock : public IHardwareTest {
     static void clockQualification();
 
   private:
+    bool m_buttonPressed = false;
+    void waitButtonPress();
+    static void buttonCallback(void* context);
+
     static void startSquareWave();
     static void stopSquareWave();
     static void setupSyncSquareWave();
