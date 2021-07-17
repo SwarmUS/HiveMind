@@ -9,6 +9,7 @@ if (${COMPILE_STM32_H735ZG})
             SwarmUS::HiveMind::BSP
             SwarmUS::HiveMind::OS
             SwarmUS::HiveMind::Logger
+            SwarmUS::HiveMind::BSP::Platform::Tests
             )
 
     set_target_properties(
@@ -28,10 +29,12 @@ if (DECAWAVE_TESTS)
         add_definitions(-DDECA_TEST_RX)
     elseif(${DECAWAVE_TESTS} STREQUAL "SPI")
         add_definitions(-DDECA_TEST_SPI)
+    elseif(${DECAWAVE_TESTS} STREQUAL "LED")
+        add_definitions(-DDECA_TEST_LED)
     endif()
 
     set(DECAWAVE_TESTS_EXECUTABLE "decawave_tests.elf")
-    set(DECAWAVE_TESTS_SOURCES DecawaveTxTest.cpp)
+    set(DECAWAVE_TESTS_SOURCES DecawaveTests.cpp)
 
     add_executable(${DECAWAVE_TESTS_EXECUTABLE} ${DECAWAVE_TESTS_SOURCES})
     target_link_libraries(${DECAWAVE_TESTS_EXECUTABLE}

@@ -52,10 +52,11 @@ class RxTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
         deca.init();
 
         while (true) {
-            deca.receive(m_rxFrame, 2000);
+            deca.receive(m_rxFrame, 20000);
 
             if (m_rxFrame.m_status == UWBRxStatus::FINISHED) {
-                m_logger.log(LogLevel::Info, "Received UWB message: %s", m_rxFrame.m_rxBuffer);
+                m_logger.log(LogLevel::Info, "Received UWB message: %s",
+                             m_rxFrame.m_rxBuffer.data());
             } else if (m_rxFrame.m_status == UWBRxStatus::ERROR) {
                 m_logger.log(LogLevel::Error, "Error while receiving UWB message");
             }
@@ -103,6 +104,35 @@ class SpiTest : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
+class LedTest : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+  public:
+    LedTest(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
+
+    ~LedTest() override = default;
+
+  private:
+    ILogger& m_logger;
+    std::array<DW_LED, 2> m_ledsToTest = {DW_LED::LED_2, DW_LED::LED_3};
+
+    void task() override {
+        Decawave deca(testedChannel);
+        deca.init();
+
+        while (true) {
+            for (auto led : m_ledsToTest) {
+                deca.setLed(led, true);
+                Task::delay(500);
+            }
+
+            for (auto led : m_ledsToTest) {
+                deca.setLed(led, false);
+                Task::delay(500);
+            }
+        }
+    }
+};
+
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
@@ -122,6 +152,11 @@ int main(int argc, char** argv) {
 #ifdef DECA_TEST_SPI
     static SpiTest s_spiTask("spi_task", 10);
     s_spiTask.start();
+#endif
+
+#ifdef DECA_TEST_LED
+    static LedTest s_ledTask("led_task", 10);
+    s_ledTask.start();
 #endif
 
     Task::startScheduler();
