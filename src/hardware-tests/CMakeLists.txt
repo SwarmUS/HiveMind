@@ -1,4 +1,4 @@
-if (${COMPILE_STM32_H735ZG})
+if (TRUE)
     set(HARDWARE_TESTS_EXECUTABLE "hardware_tests.elf")
     set(HARDWARE_TESTS_SOURCES HardwareTests.cpp)
 

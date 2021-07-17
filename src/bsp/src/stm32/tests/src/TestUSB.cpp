@@ -12,26 +12,31 @@ void TestUSB::runTests() {
 void TestUSB::test01_UART() {
     // Connect to COM port from PC
     printf("Hello World!");
+    HAL_Delay(2000);
 }
 
 void TestUSB::test02_USB() {
+    HAL_Delay(2000);
     // Disconnect USB from PC
     if (usb_isConnected()) {
         while (true) {
         }
     }
 
+    HAL_Delay(2000);
     // Connect USB to PC without opening VCP
     if (usb_isConnected()) {
         while (true) {
         }
     }
 
+    HAL_Delay(2000);
     if (USB_DEVICE.dev_state != USBD_STATE_CONFIGURED) {
         while (true) {
         }
     }
 
+    HAL_Delay(2000);
     // Open VCP
     if (!usb_isConnected()) {
         while (true) {
@@ -49,6 +54,7 @@ void TestUSB::test02_USB() {
 
     // Verify received data
     (void)cbuffUsb;
+    HAL_Delay(100); // Put breakpoint here
 }
 
 void TestUSB::rxCallback(void* context, uint8_t* buffer, uint32_t length) {
