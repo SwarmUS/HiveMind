@@ -3,6 +3,7 @@ set(LIB_ALIAS "SwarmUS::HiveMind::HAL::STM32::Platform")
 
 set(LIB_SOURCES
         user_interface.c
+        hal_init.c
     )
 
 

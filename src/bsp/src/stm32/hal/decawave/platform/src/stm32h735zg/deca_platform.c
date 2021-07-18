@@ -1,3 +1,4 @@
+#include "deca_platform.h"
 #include "deca_port.h"
 #include <FreeRTOS.h>
 #include <task.h>
@@ -28,9 +29,19 @@ void beeboard_enableChannel(decaDevice_t channel) {
                       g_beeboardChannelsConfig[channel].m_channelEnablePin, GPIO_PIN_SET);
 }
 
+void beeboard_disableChannel(decaDevice_t channel) {
+    HAL_GPIO_WritePin(g_beeboardChannelsConfig[channel].m_channelEnablePort,
+                      g_beeboardChannelsConfig[channel].m_channelEnablePin, GPIO_PIN_RESET);
+}
+
 void beeboard_enableClock(decaDevice_t channel) {
     HAL_GPIO_WritePin(g_beeboardChannelsConfig[channel].m_nClockEnablePort,
                       g_beeboardChannelsConfig[channel].m_nClockEnablePin, GPIO_PIN_RESET);
+}
+
+void beeboard_disableClock(decaDevice_t channel) {
+    HAL_GPIO_WritePin(g_beeboardChannelsConfig[channel].m_nClockEnablePort,
+                      g_beeboardChannelsConfig[channel].m_nClockEnablePin, GPIO_PIN_SET);
 }
 
 void deca_init() {

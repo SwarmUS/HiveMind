@@ -18,7 +18,8 @@ set(LIB_HEADERS
     include/hal/usb.h
     include/hal/hal_flash.h
     include/hal/user_interface.h
-    include/hal/hal_timer.h)
+    include/hal/hal_timer.h
+    include/hal/hal_init.h)
 
 # Sources that needs to be global on the project
 # Ex: interrupts, syscalls, callbacks
