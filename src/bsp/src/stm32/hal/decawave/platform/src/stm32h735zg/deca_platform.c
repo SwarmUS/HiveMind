@@ -45,6 +45,10 @@ void beeboard_disableClock(decaDevice_t channel) {
 }
 
 void deca_init() {
+    if (!channels_powerEnabled()) {
+        return;
+    }
+
     for (decaDevice_t channel = 0; channel < DWT_NUM_DW_DEV; channel++) {
         if (beeboard_isChannelPopulated(channel)) {
             g_decawaveConfigs[channel].isPresent = true;
@@ -55,6 +59,10 @@ void deca_init() {
             deca_setSlowRate(channel);
         }
     }
+}
+
+bool channels_powerEnabled() {
+    return HAL_GPIO_ReadPin(CH_CL_PWR_EN_GPIO_Port, CH_CL_PWR_EN_Pin) == GPIO_PIN_SET;
 }
 
 decawaveDeviceConfig_t g_decawaveConfigs[DWT_NUM_DW_DEV] = {{.spiHandle = &hspi1, // A0

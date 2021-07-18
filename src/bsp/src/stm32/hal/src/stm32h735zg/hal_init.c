@@ -20,3 +20,13 @@ void Hal_initPlatformSpecific() {
     // IO Expander
     MX_I2C1_Init();
 }
+
+bool Hal_wroomPowerEnabled() {
+    return HAL_GPIO_ReadPin(WROOM_PWR_EN_GPIO_Port, WROOM_PWR_EN_Pin) == GPIO_PIN_SET;
+}
+void Hal_enableWroom() { HAL_GPIO_WritePin(WROOM_EN_GPIO_Port, WROOM_EN_Pin, GPIO_PIN_SET); }
+
+bool Hal_ethernetPowerEnabled() {
+    return HAL_GPIO_ReadPin(ETH_PWR_EN_GPIO_Port, ETH_PWR_EN_Pin) == GPIO_PIN_SET;
+}
+void Hal_enableEthernet() { HAL_GPIO_WritePin(PHY_nRST_GPIO_Port, PHY_nRST_Pin, GPIO_PIN_SET); }

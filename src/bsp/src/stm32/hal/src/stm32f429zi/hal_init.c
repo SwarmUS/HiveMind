@@ -15,3 +15,11 @@ void Hal_initPlatformSpecific() {
     // Heartbeat timer
     MX_TIM6_Init();
 }
+
+bool Hal_wroomPowerEnabled() { return true; }
+void Hal_enableWroom() { HAL_GPIO_WritePin(WROOM_EN_GPIO_Port, WROOM_EN_Pin, GPIO_PIN_SET); }
+
+bool Hal_ethernetPowerEnabled() { return true; }
+void Hal_enableEthernet() {
+    // Nothing to do here on the F4
+}

@@ -38,15 +38,21 @@ void Hal_init() {
 
 void Hal_bootup() {
     deca_init();
-    enableESP();
-    UI_initialize();
 
+    UI_initialize();
     Timer_startHeartbeat();
 
-    MX_LWIP_Init();
+    if (Hal_wroomPowerEnabled()) {
+        Hal_enableWroom();
+    }
+
+    if (Hal_ethernetPowerEnabled()) {
+        Hal_enableEthernet();
+        MX_LWIP_Init();
 #ifdef IPERF_SERVER
-    lwiperf_start_tcp_server_default(NULL, NULL);
+        lwiperf_start_tcp_server_default(NULL, NULL);
 #endif
+    }
 }
 
 uint32_t Hal_calculateCRC32(const uint8_t* buffer, uint32_t length) {

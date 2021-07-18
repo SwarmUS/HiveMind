@@ -67,6 +67,12 @@ void beeboard_enableClock(decaDevice_t channel);
  */
 void beeboard_disableClock(decaDevice_t channel);
 
+/**
+ * @brief Tells if channel hardware has power running to it or not
+ * @return True if powered
+ */
+bool channels_powerEnabled();
+
 #ifdef __cplusplus
 }
 #endif
