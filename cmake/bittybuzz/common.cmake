@@ -46,7 +46,8 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
         file(READ ${BST} CONTENTS)
         file(APPEND ${BST_FILE} "${CONTENTS}")
     endforeach()
-    
+
+    # TODO: bzzparse return 0 if a file is not found during parsing, raise an issue to buzz
     # Parsing buzz file
     add_custom_target(${_TARGET}_bzz_parse ALL
             COMMAND export BUZZ_INCLUDE_PATH=$ENV{BUZZ_INCLUDE_PATH} && ${BZZPAR} ${bzz_source} ${BASM_FILE} ${BST_FILE}
