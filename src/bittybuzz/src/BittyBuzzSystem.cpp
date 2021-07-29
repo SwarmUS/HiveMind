@@ -114,7 +114,7 @@ void BittyBuzzSystem::logVmHeap(LogLevel logLevel) {
         uint16_t heapTsegSize = sizeof(bbzheap_tseg_t);
         uint16_t tsegimax =
             (uint16_t)(vm->heap.data + BBZHEAP_SIZE - vm->heap.ltseg) / heapTsegSize; // NOLINT
-        printf("Max table segment index: %d\n", tsegimax);
+        g_logger->log(logLevel, "Max table segment index: %d\n", tsegimax);
         uint16_t tsegnum = 0;
         for (uint16_t i = 0; i < tsegimax; ++i) {
             if (bbzheap_tseg_isvalid(*bbzheap_tseg_at(i))) {

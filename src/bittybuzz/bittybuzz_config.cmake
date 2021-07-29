@@ -1,4 +1,4 @@
-set_default(BBZHEAP_SIZE 8192)
+set_default(BBZHEAP_SIZE 16384)
 set_default(BBZHEAP_ELEMS_PER_TSEG 5)
 set_default(BBZSTACK_SIZE 1024)
 set_default(BBZVSTIG_CAP 4)

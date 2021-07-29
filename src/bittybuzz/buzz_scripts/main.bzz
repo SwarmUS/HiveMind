@@ -2,21 +2,14 @@ include "utils/executor.bzz"
 
 counter = 0
 
-function greater_conflict_resolver(key, local, remote) {
-    log("conflict called, remote:", remote, ": ", remote.data, " local:", local, ": ", remote.data);
-    if(remote.robot < local.robot) {
-        log("Choosed local: ", local.robot, remote.robot);
-        return local;
-    }
-    log("Choosed remote: ", local.robot, remote.robot);
+greater_conflict_resolver = function(key, local, remote) {
+    log("Choosed remote: ",remote.robot, " data: ", remote.data);
     return remote;
 }
 
 function tick(param) {
-    counter = counter + 1
-    table = {}
-    log("Loop: ", stig.get("key"));
-    log("Table: ", table);
+    counter = counter + 1;
+    log("Stig at: ", stig.get("key"), ", updated to ", counter);
     stig.put("key", counter);
 }
 

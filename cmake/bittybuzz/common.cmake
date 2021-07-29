@@ -47,24 +47,24 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
         file(APPEND ${BST_FILE} "${CONTENTS}")
     endforeach()
 
-    # TODO: bzzparse return 0 if a file is not found during parsing, raise an issue to buzz
+    # TODO: bzzparse return 0 if a file is not found during parsing, but the build still passes, this should be fixed in the buzz compiler
     # Parsing buzz file
     add_custom_target(${_TARGET}_bzz_parse ALL
-            COMMAND export BUZZ_INCLUDE_PATH=$ENV{BUZZ_INCLUDE_PATH} && ${BZZPAR} ${bzz_source} ${BASM_FILE} ${BST_FILE}
-      DEPENDS ${BST_FILE})
+        COMMAND export BUZZ_INCLUDE_PATH=$ENV{BUZZ_INCLUDE_PATH} && ${BZZPAR} ${bzz_source} ${BASM_FILE} ${BST_FILE}
+        DEPENDS ${BST_FILE})
 
     # Compiling buzz file
     add_custom_target(${_TARGET}_bzz_compile
-      COMMAND export BUZZ_INCLUDE_PATH=$ENV{BUZZ_INCLUDE_PATH} && ${BZZASM} ${BASM_FILE} ${BO_FILE} ${BDB_FILE}
-      DEPENDS ${_TARGET}_bzz_parse)
+        COMMAND export BUZZ_INCLUDE_PATH=$ENV{BUZZ_INCLUDE_PATH} && ${BZZASM} ${BASM_FILE} ${BO_FILE} ${BDB_FILE}
+        DEPENDS ${_TARGET}_bzz_parse)
 
 
     # Cross compiling and verifying that the file changed to prevent recompiling
     add_custom_target(${_TARGET}_bzz_cross_compile
-      COMMAND ${BBZ_zooids_bcodegen} ${BO_FILE} ${BHEADER_FILE_TMP}
-      COMMAND cmp --silent ${BHEADER_FILE_TMP} ${BHEADER_FILE} || cp ${BHEADER_FILE_TMP} ${BHEADER_FILE}
-      WORKING_DIRECTORY ${BBZ_BINARY_PATH}
-      DEPENDS zooids_bcodegen bo2bbo ${_TARGET}_bzz_compile)
+        COMMAND ${BBZ_zooids_bcodegen} ${BO_FILE} ${BHEADER_FILE_TMP}
+        COMMAND cmp --silent ${BHEADER_FILE_TMP} ${BHEADER_FILE} || cp ${BHEADER_FILE_TMP} ${BHEADER_FILE}
+        WORKING_DIRECTORY ${BBZ_BINARY_PATH}
+        DEPENDS zooids_bcodegen bo2bbo ${_TARGET}_bzz_compile)
 
     # Creating string header file
     add_custom_target(${_TARGET}_bzz_string
