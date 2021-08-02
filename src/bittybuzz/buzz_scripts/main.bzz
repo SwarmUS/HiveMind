@@ -1,25 +1,7 @@
-include "utils/executor.bzz"
-
-counter = 0
-
-greater_conflict_resolver = function(key, local, remote) {
-    log("Choosed remote: ",remote.robot, " data: ", remote.data);
-    return remote;
-}
-
-function tick(param) {
-    counter = counter + 1;
-    log("Stig at: ", stig.get("key"), ", updated to ", counter);
-    stig.put("key", counter);
-}
+include "onconflict.bzz"
 
 function init() {
-    stig = stigmergy.create(1);
-    exec = executor.new(40, tick, nil);
-
-    stig.put("key", counter);
-    log("Init: ", stig.get("key") ," Id: ", id);
-    stig.onconflict(greater_conflict_resolver);
+  exec = create_exec()
 }
 
 function step() {

@@ -1,5 +1,6 @@
 #include "bittybuzz/BittyBuzzUserFunctions.h"
 #include "bittybuzz/BittyBuzzSystem.h"
+#include "bbzvm.h"
 #include <LockGuard.h>
 
 struct ForeachHostFContext {
