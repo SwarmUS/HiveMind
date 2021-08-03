@@ -1,6 +1,6 @@
 #include "bittybuzz/BittyBuzzSystem.h"
-#include <cstdio>
 #include <bbzvm.h>
+#include <cstdio>
 
 ILogger* BittyBuzzSystem::g_logger = NULL;
 IUserInterface* BittyBuzzSystem::g_ui = NULL;
