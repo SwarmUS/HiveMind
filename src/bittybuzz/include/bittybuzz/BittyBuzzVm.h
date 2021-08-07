@@ -41,7 +41,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
     bool init(const std::reference_wrapper<IBittyBuzzLib>* bbzLibs,
               uint32_t bbzLibsLength) override;
 
-    bool step() override;
+    BBVMRet step() override;
 
     bbzvm_state getState() const override;
 

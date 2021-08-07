@@ -5,6 +5,9 @@
 #include <bbzvm.h>
 #include <functional>
 
+/*@brief Return codes of the VM when executing*/
+enum class BBVMRet { Ok = 0, VmErr = 1, OutMsgErr = 2 };
+
 /**
  *@brief Manages BittyBuzz virtual machine */
 class IBittyBuzzVm {
@@ -18,9 +21,8 @@ class IBittyBuzzVm {
                       uint32_t bbzLibsLength) = 0;
 
     /** @brief Does one execution step in the virtual machine.  Thus execute the buzz code in the
-     * step function
-     * @return true if the operation was successful, false if not. */
-    virtual bool step() = 0;
+     * step function */
+    virtual BBVMRet step() = 0;
 
     /** @brief Get the state of the vm */
     virtual bbzvm_state getState() const = 0;

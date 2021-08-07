@@ -42,9 +42,10 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_get) {
     bbzPayloadBuff.dataend = 9;
 
     bbzinmsg_queue_append(&bbzPayloadBuff);
-    m_bittybuzzVm->step();
+    BBVMRet ret = m_bittybuzzVm->step();
 
     // Expect
+    EXPECT_EQ(ret, BBVMRet::Ok);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
     EXPECT_EQ(g_assertTrueCallCount, 1);

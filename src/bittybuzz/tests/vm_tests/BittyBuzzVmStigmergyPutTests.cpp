@@ -26,10 +26,10 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_put_pushSuccess) {
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, libraries);
     // Then
-    bool ret = m_bittybuzzVm->step();
+    BBVMRet ret = m_bittybuzzVm->step();
 
     // Expect
-    EXPECT_TRUE(ret);
+    EXPECT_EQ(ret, BBVMRet::Ok);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
     EXPECT_EQ(bbzoutmsg_queue_size(), 0);
@@ -52,10 +52,10 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_put_pushFail) {
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
           &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, libraries);
     // Then
-    bool ret = m_bittybuzzVm->step();
+    BBVMRet ret = m_bittybuzzVm->step();
 
     // Expect
-    EXPECT_FALSE(ret);
+    EXPECT_EQ(ret, BBVMRet::OutMsgErr);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
     EXPECT_EQ(bbzoutmsg_queue_size(), 1);

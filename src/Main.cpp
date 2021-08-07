@@ -63,11 +63,24 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
         }
 
         while (true) {
+            BBVMRet statusCode = m_bittybuzzVm.step();
+            switch (statusCode) {
+            case BBVMRet::Ok:
+                break;
+            case BBVMRet::OutMsgErr: {
+                m_logger.log(LogLevel::Warn, "Buzz could not sent message");
+                break;
+            }
+            case BBVMRet::VmErr: {
 
-            if (!m_bittybuzzVm.step()) {
                 m_logger.log(LogLevel::Error, "BBZVM failed to step. state: %s err: %s",
                              BittyBuzzSystem::getStateString(m_bittybuzzVm.getState()),
                              BittyBuzzSystem::getErrorString(m_bittybuzzVm.getError()));
+                break;
+            }
+            default: {
+                m_logger.log(LogLevel::Warn, "Unkown bbzvm step status code");
+            }
             }
             Task::delay(100);
         }
@@ -186,7 +199,8 @@ class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
 
     void task() override {
         while (true) {
-            // TODO use notification instead of polling, need to add it in propolis os
+            // TODO use notification instead of polling, need to add it in
+            // propolis os
             if (!m_dispatcherTask.isRunning() && !m_senderTask.isRunning()) {
                 auto commInterfaceOpt = m_commInterfaceGetter();
                 if (commInterfaceOpt) {

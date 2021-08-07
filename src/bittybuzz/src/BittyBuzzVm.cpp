@@ -63,9 +63,9 @@ bool BittyBuzzVm::init(const std::reference_wrapper<IBittyBuzzLib>* bbzLibs,
     return vm->state == BBZVM_STATE_READY;
 }
 
-bool BittyBuzzVm::step() {
+BBVMRet BittyBuzzVm::step() {
 
-    if (vm->state != BBZVM_STATE_ERROR) {
+    if (vm->state == BBZVM_STATE_READY) {
         // Handle incomming messages from remote
         m_neighborsManager.updateNeighbors();
         uint16_t messagesLength = m_messageHandler.messageQueueLength();
@@ -96,16 +96,16 @@ bool BittyBuzzVm::step() {
 
             if (!m_messageService.sendBuzzMessage(msg)) {
                 m_logger.log(LogLevel::Warn, "BBVM: Could not send buzz message"); // Should we pop?
-                return false;
+                return BBVMRet::OutMsgErr;
             }
 
             bbzoutmsg_queue_next();
         }
 
-        return true;
+        return vm->state == BBZVM_STATE_READY ? BBVMRet::Ok : BBVMRet::VmErr;
     }
 
-    return false;
+    return BBVMRet::VmErr;
 }
 
 bbzvm_state BittyBuzzVm::getState() const { return vm->state; }
