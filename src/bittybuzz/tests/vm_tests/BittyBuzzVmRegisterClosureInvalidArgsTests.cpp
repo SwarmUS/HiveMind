@@ -22,20 +22,21 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_invalidArgs) {
     uint16_t boardId = 42;
     std::string functionName = "registeredFunction";
 
-    BittyBuzzClosureRegisterInterfaceMock closureRegister;
-    BittyBuzzStringResolverInterfaceMock stringResolver;
-    BittyBuzzMessageHandlerInterfaceMock messageHandler;
+    BittyBuzzClosureRegisterInterfaceMock closureRegisterMock;
+    BittyBuzzStringResolverInterfaceMock stringResolverMock;
+    BittyBuzzMessageHandlerInterfaceMock messageHandlerMock;
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
     BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(0);
-    EXPECT_CALL(messageHandler, messageQueueLength).Times(0);
-    EXPECT_CALL(closureRegister, registerClosure(testing::_, testing::_, testing::_, testing::_))
+    EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(0);
+    EXPECT_CALL(closureRegisterMock,
+                registerClosure(testing::_, testing::_, testing::_, testing::_))
         .Times(0);
 
-    EXPECT_CALL(stringResolver, getString(BBZSTRID_registeredFunction))
-        .Times(1)
-        .WillOnce(testing::Return(functionName.c_str()));
+    EXPECT_CALL(stringResolverMock, getString).WillRepeatedly(testing::Return("Irrelevant"));
+    EXPECT_CALL(stringResolverMock, getString(BBZSTRID_registeredFunction))
+        .WillRepeatedly(testing::Return(functionName.c_str()));
 
     std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure}}};
@@ -44,13 +45,13 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_invalidArgs) {
     std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
     libraries.emplace_back(globalLib);
 
-    SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &closureRegister,
-          &messageServiceMock, &neighborsManagerMock, libraries);
+    SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
+          &closureRegisterMock, &messageServiceMock, &neighborsManagerMock, libraries);
 
     m_bittybuzzVm->step();
 
     // Expect
-    EXPECT_EQ(m_loggerMock->m_logCallCounter, 2);
+    EXPECT_TRUE(logCounter > 0);
     EXPECT_EQ(vm->state, BBZVM_STATE_ERROR);
     EXPECT_EQ(vm->error, BBZVM_ERROR_TYPE);
 }
