@@ -1,6 +1,6 @@
 #include "bittybuzz/BittyBuzzSystem.h"
 #include <bbzvm.h>
-#include <cstdio>
+#include <bittybuzz/BittyBuzzUtils.h>
 
 ILogger* BittyBuzzSystem::g_logger = NULL;
 IUserInterface* BittyBuzzSystem::g_ui = NULL;
@@ -58,56 +58,17 @@ void BittyBuzzSystem::logVmHeap(LogLevel logLevel) {
 
         g_logger->log(logLevel, "Valid objects: %d", objnum);
         g_logger->log(logLevel, "Size per object: %zu", sizeof(bbzobj_t));
+
+        constexpr uint16_t objStrSize = 32;
+        char objStr[objStrSize];
         for (uint16_t i = 0; i < objimax; ++i) {
             bbzobj_t* obj = bbzheap_obj_at(i); // NOLINT
             if (bbzheap_obj_isvalid(*obj)) {
-                switch (bbztype(*obj)) {
-                case BBZTYPE_NIL: {
-                    g_logger->log(logLevel, "\t#%d: [nil] %c", i, perm(obj));
-                    break;
-                }
-                case BBZTYPE_INT: {
-                    g_logger->log(logLevel, "\t#%d: %d %c", i, obj->i.value, perm(obj));
-                    break;
-                }
-                case BBZTYPE_FLOAT: {
-                    g_logger->log(logLevel, "\t#%d: %f %c", i, bbzfloat_tofloat(obj->f.value),
-                                  perm(obj));
-                    break;
-                }
-                case BBZTYPE_TABLE: {
-                    g_logger->log(logLevel, "\t#%d: [t:%d] %c", i, obj->t.value, perm(obj));
-                    break;
-                }
-                case BBZTYPE_STRING: {
-                    std::optional<const char*> optionString =
-                        BittyBuzzSystem::g_stringResolver->getString(obj->s.value);
-                    if (optionString) {
-                        g_logger->log(logLevel, "\t#%d: %s %c", i, optionString.value(), perm(obj));
-                    } else {
-                        g_logger->log(logLevel, "\t#%d: {UNKNOWN STRID: %d} %c", i, obj->s.value,
-                                      perm(obj));
-                    }
-                    break;
-                }
-                case BBZTYPE_CLOSURE: {
-                    if (bbztype_isclosurelambda(*obj)) {
-                        g_logger->log(logLevel, "\t#%d: [cl: %d} %c", i, obj->l.value.ref,
-                                      perm(obj));
-                    } else {
-                        g_logger->log(logLevel, "\t#%d: [c: %d] %c", i, (int)(intptr_t)obj->c.value,
-                                      perm(obj));
-                    }
-                    break;
-                }
-                case BBZTYPE_USERDATA: {
-                    g_logger->log(logLevel, "\t#%d: [u: %d] %c", i, (int)obj->u.value, perm(obj));
-                    break;
-                }
-                default: {
-                    g_logger->log(logLevel, "\t#%d: {UNKNOWN TYPE} %c", i, perm(obj));
-                    break;
-                }
+                if (BittyBuzzUtils::logObj(obj, objStr, objStrSize) >= 0) {
+                    BittyBuzzSystem::g_ui->print("%s", objStr);
+                    g_logger->log(logLevel, "\t#%d: %s %c", i, objStr, perm(obj));
+                } else {
+                    g_logger->log(logLevel, "\t#%d: Fail to log obj %c", i, perm(obj));
                 }
             }
         }

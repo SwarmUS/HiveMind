@@ -6,14 +6,20 @@
 Logger::Logger(LogLevel level, IUserInterface& ui) : m_ui(ui) { m_logLevel = level; }
 
 LogRet Logger::log(LogLevel level, const char* format, ...) {
-    if (level >= m_logLevel) {
-        va_list args;
-        va_start(args, format);
 
+    va_list args;
+    va_start(args, format);
+    LogRet retValue = log(level, format, args);
+    va_end(args);
+    return retValue;
+}
+
+LogRet Logger::log(LogLevel level, const char* format, va_list args) {
+
+    if (level >= m_logLevel) {
         LockGuard lock = LockGuard(m_ui.getPrintMutex());
         m_ui.print("[%c] ", logLevelToString(level));
         int retValue = m_ui.printLine(format, args);
-        va_end(args);
         if (retValue >= 0) {
             return LogRet::Ok;
         }

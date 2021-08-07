@@ -63,26 +63,24 @@ FunctionDescriptionArgumentTypeDTO getbbzObjType(bbzobj_t* bbzObj) {
 }
 
 void BittyBuzzUserFunctions::log() {
+
     // Get the number of args
     uint16_t nArgs = bbzvm_locals_count();
 
     LockGuard lock(BittyBuzzSystem::g_ui->getPrintMutex());
 
-    static const auto s_userFct = [](const char* format, ...) {
-        va_list args;
-        va_start(args, format);
-        BittyBuzzSystem::g_ui->print(format, args);
-        va_end(args);
-    };
-
+    constexpr uint16_t objStrSize = 32;
+    char objStr[objStrSize];
     // Iterate through args, we start a arg 1 up to the nb of
     BittyBuzzSystem::g_ui->print("BBZ USER: ");
     for (uint16_t i = 1; i <= nArgs; i++) {
-
         bbzobj_t* obj = bbzheap_obj_at(bbzvm_locals_at(i)); // NOLINT
-        BittyBuzzUtils::logObj(obj, s_userFct);
+        if (BittyBuzzUtils::logObj(obj, objStr, objStrSize) >= 0) {
+            BittyBuzzSystem::g_ui->print("%s", objStr);
+        } else {
+            BittyBuzzSystem::g_ui->print("Fail to log");
+        }
     }
-
     BittyBuzzSystem::g_ui->flush();
     bbzvm_ret0();
 }
