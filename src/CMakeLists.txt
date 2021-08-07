@@ -21,6 +21,10 @@ target_link_libraries(${EXECUTABLE_NAME}
       SwarmUS::HiveMind::Interloc
 )
 
+if (${CMAKE_CROSSCOMPILING} AND (ENABLE_HARDWARE_TESTS OR DECAWAVE_TESTS))
+    add_subdirectory(hardware-tests)
+endif()
+
 add_subdirectory(bittybuzz)
 add_subdirectory(bsp)
 add_subdirectory(os)

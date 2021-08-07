@@ -1,6 +1,7 @@
 #include "hal/hal.h"
 #include "deca_port.h"
 #include "hal/hal_gpio.h"
+#include "hal/hal_init.h"
 #include "hal/hal_timer.h"
 #include "hal/uart_print.h"
 #include "hal/usb.h"
@@ -13,7 +14,7 @@
 #include <lwip/apps/lwiperf.h>
 #endif
 
-void Hal_init() {
+void Hal_initMcu() {
 
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
@@ -27,26 +28,31 @@ void Hal_init() {
 
     MX_CRC_Init();
     MX_DMA_Init();
-    MX_USART3_UART_Init();
-    MX_SPI3_Init();
-    MX_SPI5_Init();
-    MX_SPI4_Init();
-    MX_USB_DEVICE_Init();
-    MX_TIM6_Init();
 
+    PHal_initMcu();
     UartPrint_init();
+
+    MX_USB_DEVICE_Init();
     usb_init();
+}
 
-    MX_LWIP_Init();
-
+void Hal_initBoard() {
     deca_init();
-    enableESP();
 
     UI_initialize();
     Timer_startHeartbeat();
+
+    if (Hal_wroomPowerEnabled()) {
+        Hal_enableWroom();
+    }
+
+    if (Hal_ethernetPowerEnabled()) {
+        Hal_enableEthernet();
+        MX_LWIP_Init();
 #ifdef IPERF_SERVER
-    lwiperf_start_tcp_server_default(NULL, NULL);
+        lwiperf_start_tcp_server_default(NULL, NULL);
 #endif
+    }
 }
 
 uint32_t Hal_calculateCRC32(const uint8_t* buffer, uint32_t length) {

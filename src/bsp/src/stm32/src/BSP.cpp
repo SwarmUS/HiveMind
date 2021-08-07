@@ -18,8 +18,12 @@ void BSP::buttonCallback(void* context) {
 void BSP::initChip(void* args) {
     (void)args;
 
-    Hal_init();
+    Hal_initMcu();
+    Hal_initBoard();
+
     m_storage.loadFromFlash();
+
+    // TODO: Temporary for testing
     reinterpret_cast<UserInterface&>(BSPContainer::getUserInterface())
         .setButtonCallback(Button::BUTTON_0, buttonCallback, this);
     reinterpret_cast<UserInterface&>(BSPContainer::getUserInterface())

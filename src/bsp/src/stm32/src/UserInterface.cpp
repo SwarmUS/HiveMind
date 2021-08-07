@@ -3,7 +3,7 @@
 #include <hal/hal_gpio.h>
 #include <hal/user_interface.h>
 
-UserInterface::UserInterface() : m_mutex(10) { UI_initialize(); }
+UserInterface::UserInterface() : m_mutex(10) {}
 
 Mutex& UserInterface::getPrintMutex() { return m_mutex; }
 

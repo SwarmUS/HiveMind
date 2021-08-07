@@ -131,6 +131,7 @@ target_link_libraries(${LIB_NAME}
         HAL::STM32::H7::M7::RCCEx
         HAL::STM32::H7::M7::PWREx
         HAL::STM32::H7::M7::I2C
+        HAL::STM32::H7::M7::I2CEx
         CMSIS::STM32::H7::M7::RTOS_V2
 )
 

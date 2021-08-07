@@ -1,3 +1,4 @@
+#include "deca_platform.h"
 #include "deca_port.h"
 #include <FreeRTOS.h>
 #include <task.h>
@@ -28,12 +29,26 @@ void beeboard_enableChannel(decaDevice_t channel) {
                       g_beeboardChannelsConfig[channel].m_channelEnablePin, GPIO_PIN_SET);
 }
 
+void beeboard_disableChannel(decaDevice_t channel) {
+    HAL_GPIO_WritePin(g_beeboardChannelsConfig[channel].m_channelEnablePort,
+                      g_beeboardChannelsConfig[channel].m_channelEnablePin, GPIO_PIN_RESET);
+}
+
 void beeboard_enableClock(decaDevice_t channel) {
     HAL_GPIO_WritePin(g_beeboardChannelsConfig[channel].m_nClockEnablePort,
                       g_beeboardChannelsConfig[channel].m_nClockEnablePin, GPIO_PIN_RESET);
 }
 
+void beeboard_disableClock(decaDevice_t channel) {
+    HAL_GPIO_WritePin(g_beeboardChannelsConfig[channel].m_nClockEnablePort,
+                      g_beeboardChannelsConfig[channel].m_nClockEnablePin, GPIO_PIN_SET);
+}
+
 void deca_init() {
+    if (!channels_powerEnabled()) {
+        return;
+    }
+
     for (decaDevice_t channel = 0; channel < DWT_NUM_DW_DEV; channel++) {
         if (beeboard_isChannelPopulated(channel)) {
             g_decawaveConfigs[channel].isPresent = true;
@@ -44,6 +59,10 @@ void deca_init() {
             deca_setSlowRate(channel);
         }
     }
+}
+
+bool channels_powerEnabled() {
+    return HAL_GPIO_ReadPin(CH_CL_PWR_EN_GPIO_Port, CH_CL_PWR_EN_Pin) == GPIO_PIN_SET;
 }
 
 decawaveDeviceConfig_t g_decawaveConfigs[DWT_NUM_DW_DEV] = {{.spiHandle = &hspi1, // A0
