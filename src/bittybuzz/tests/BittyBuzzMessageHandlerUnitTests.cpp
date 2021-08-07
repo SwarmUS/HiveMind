@@ -18,7 +18,8 @@
 const uint8_t* mockbcodeFetcher(bbzpc_t offset, uint8_t size) {
     (void)offset;
     (void)size;
-    static uint8_t s_data[4] = {BBZVM_INSTR_DONE, BBZVM_INSTR_DONE, BBZVM_INSTR_DONE, BBZVM_INSTR_DONE};
+    static uint8_t s_data[4] = {BBZVM_INSTR_DONE, BBZVM_INSTR_DONE, BBZVM_INSTR_DONE,
+                                BBZVM_INSTR_DONE};
     return s_data;
 }
 
@@ -160,7 +161,8 @@ TEST_F(BittyBuzzMessageHandlerFixture,
         registeredClosure;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString).WillRepeatedly(testing::Return("Irrelevant"));
+    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString)
+        .WillRepeatedly(testing::Return("Irrelevant"));
     EXPECT_CALL(m_closureRegisterMock, getRegisteredClosure(testing::An<const char*>()))
         .WillOnce(testing::Return(bbzRetValue));
 
@@ -194,7 +196,8 @@ TEST_F(BittyBuzzMessageHandlerFixture,
         registeredClosure;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString).WillRepeatedly(testing::Return("Irrelevant"));
+    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString)
+        .WillRepeatedly(testing::Return("Irrelevant"));
     EXPECT_CALL(m_closureRegisterMock, getRegisteredClosure(testing::An<const char*>()))
         .WillOnce(testing::Return(bbzRetValue));
 
@@ -457,7 +460,8 @@ TEST_F(BittyBuzzMessageHandlerFixture,
         registeredClosure;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString).WillRepeatedly(testing::Return("Irrelevant"));
+    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString)
+        .WillRepeatedly(testing::Return("Irrelevant"));
     EXPECT_CALL(m_closureRegisterMock, getRegisteredClosure(testing::An<const char*>()))
         .WillOnce(testing::Return(bbzRetValue));
 
@@ -490,7 +494,8 @@ TEST_F(BittyBuzzMessageHandlerFixture,
         registeredClosure;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString).WillRepeatedly(testing::Return("Irrelevant"));
+    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString)
+        .WillRepeatedly(testing::Return("Irrelevant"));
     EXPECT_CALL(m_closureRegisterMock, getRegisteredClosure(testing::An<const char*>()))
         .WillOnce(testing::Return(bbzRetValue));
 
@@ -859,7 +864,8 @@ TEST_F(BittyBuzzMessageHandlerFixture,
         registeredClosure;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString).WillRepeatedly(testing::Return("Irrelevant"));
+    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString)
+        .WillRepeatedly(testing::Return("Irrelevant"));
     EXPECT_CALL(m_closureRegisterMock, getRegisteredClosure(testing::TypedEq<uint16_t>(0)))
         .WillOnce(testing::Return(bbzRetValue));
 
@@ -974,7 +980,8 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString).WillRepeatedly(testing::Return("Irrelevant"));
+    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString)
+        .WillRepeatedly(testing::Return("Irrelevant"));
     EXPECT_CALL(m_closureRegisterMock, getRegisteredClosureLength)
         .WillOnce(testing::Return(length));
 
@@ -1068,7 +1075,8 @@ TEST_F(BittyBuzzMessageHandlerFixture,
         registeredClosure;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString).WillRepeatedly(testing::Return("Irrelevant"));
+    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString)
+        .WillRepeatedly(testing::Return("Irrelevant"));
     EXPECT_CALL(m_closureRegisterMock, getRegisteredClosure(testing::An<const char*>()))
         .WillOnce(testing::Return(bbzRetValue));
 
@@ -1101,7 +1109,8 @@ TEST_F(BittyBuzzMessageHandlerFixture,
         registeredClosure;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
-    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString).WillRepeatedly(testing::Return("Irrelevant"));
+    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString)
+        .WillRepeatedly(testing::Return("Irrelevant"));
     EXPECT_CALL(m_closureRegisterMock, getRegisteredClosure(testing::An<const char*>()))
         .WillOnce(testing::Return(bbzRetValue));
 

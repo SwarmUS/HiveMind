@@ -3,7 +3,6 @@
 #include "bittybuzz/BittyBuzzSystem.h"
 #include "bittybuzz/BittyBuzzUtils.h"
 #include <LockGuard.h>
-#include <cstdarg>
 
 struct ForeachHostFContext {
     bool m_err = false;
