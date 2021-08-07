@@ -18,6 +18,16 @@ std::optional<float> getFloatArg(uint16_t stackAt) {
     return arg;
 }
 
+typedef void (*callbackFloatArg)(float arg);
+void callIfNumber(uint16_t argPos, callbackFloatArg callback) {
+    std::optional<float> arg = getFloatArg(argPos);
+    if (!arg) {
+        bbzvm_seterror(BBZVM_ERROR_MATH);
+        return;
+    }
+    callback(arg.value());
+}
+
 void BittyBuzzMathFunctions::bbzmath_abs() {
     bbzvm_assert_lnum(1); // NOLINT
 
@@ -34,45 +44,46 @@ void BittyBuzzMathFunctions::bbzmath_abs() {
     }
     bbzvm_ret1();
 }
-void BittyBuzzMathFunctions::bbzmath_floor() {
+
+void BittyBuzzMathFunctions::bbzmath_floori() {
     bbzvm_assert_lnum(1); // NOLINT
-
-    // Get args
-    std::optional<float> arg = getFloatArg(1);
-    if (!arg) {
-        bbzvm_seterror(BBZVM_ERROR_MATH);
-        return;
-    }
-
-    bbzvm_pushi(Math::floor(arg.value()));
+    auto fun = [](float arg) { bbzvm_pushi(Math::floor(arg)); };
+    callIfNumber(1, fun);
     bbzvm_ret1();
 }
 
-void BittyBuzzMathFunctions::bbzmath_ceil() {
+void BittyBuzzMathFunctions::bbzmath_floorf() {
     bbzvm_assert_lnum(1); // NOLINT
-
-    // Get args
-    std::optional<float> arg = getFloatArg(1);
-    if (!arg) {
-        bbzvm_seterror(BBZVM_ERROR_MATH);
-        return;
-    }
-
-    bbzvm_pushi(Math::ceil(arg.value()));
+    auto fun = [](float arg) { bbzvm_pushf(bbzfloat_fromfloat(Math::floor(arg))); };
+    callIfNumber(1, fun);
     bbzvm_ret1();
 }
 
-void BittyBuzzMathFunctions::bbzmath_round() {
+void BittyBuzzMathFunctions::bbzmath_ceili() {
     bbzvm_assert_lnum(1); // NOLINT
+    auto fun = [](float arg) { bbzvm_pushi(Math::ceil(arg)); };
+    callIfNumber(1, fun);
+    bbzvm_ret1();
+}
 
-    // Get args
-    std::optional<float> arg = getFloatArg(1);
-    if (!arg) {
-        bbzvm_seterror(BBZVM_ERROR_MATH);
-        return;
-    }
+void BittyBuzzMathFunctions::bbzmath_ceilf() {
+    bbzvm_assert_lnum(1); // NOLINT
+    auto fun = [](float arg) { bbzvm_pushf(bbzfloat_fromfloat(Math::ceil(arg))); };
+    callIfNumber(1, fun);
+    bbzvm_ret1();
+}
 
-    bbzvm_pushi(Math::round(arg.value()));
+void BittyBuzzMathFunctions::bbzmath_roundi() {
+    bbzvm_assert_lnum(1); // NOLINT
+    auto fun = [](float arg) { bbzvm_pushi(Math::ceil(arg)); };
+    callIfNumber(1, fun);
+    bbzvm_ret1();
+}
+
+void BittyBuzzMathFunctions::bbzmath_roundf() {
+    bbzvm_assert_lnum(1); // NOLINT
+    auto fun = [](float arg) { bbzvm_pushf(bbzfloat_fromfloat(Math::ceil(arg))); };
+    callIfNumber(1, fun);
     bbzvm_ret1();
 }
 

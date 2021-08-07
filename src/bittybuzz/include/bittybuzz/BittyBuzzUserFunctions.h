@@ -12,6 +12,7 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief Logs to the default output
+     *@b Signature log(args...)
      *@details This closure can take variadic arguments. So the number and type can vary.
      *@code
      * log("Hello world, magic number: ", 42);
@@ -21,6 +22,7 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief register a new function, exposing it to the remote composant of the swarm
+     *@b Signature register_closure(fname, closure, args_desc)
      *@details This closure expects four parameters, the closure can be a lambda.
      * -# stringId (name of the function)
      * -# a closure (the callback function)
@@ -47,6 +49,7 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief calls a function to a host
+     *@b Signature call_host_function(host_id, fname, params)
      *@details This closure expects three parameters.
      * -# the id of the host to call (0 for broadcast, id for local host)
      * -# the name of the function
@@ -61,6 +64,7 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief Checks if a variable is nil
+     *@b Signature is_nil(arg1)
      *@details This closure expects one parameter
      * -# the variable to verify the type
      * returns 1 on true, 0 on false
@@ -73,6 +77,7 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief Checks if a variable is an int
+     *@b Signature is_int(arg1)
      *@details This closure expects one parameter
      * -# the variable to verify the type
      * returns 1 on true, 0 on false
@@ -97,6 +102,7 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief Checks if a variable is a float
+     *@b Signature is_table(arg1)
      *@details This closure expects one parameter
      * -# the variable to verify the type
      * returns 1 on true, 0 on false
@@ -109,6 +115,7 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief Checks if a variable is a table
+     *@b Signature is_table(arg1)
      *@details This closure expects one parameter
      * -# the variable to verify the type
      * returns 1 on true, 0 on false
@@ -121,6 +128,7 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief Checks if a variable is a function closure
+     *@b Signature is_closure(arg1)
      *@details This closure expects one parameter
      * -# the variable to verify the type
      * returns 1 on true, 0 on false
@@ -133,6 +141,7 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief Checks if a variable is a lambda, unamed closure
+     *@b Signature is_lambda_closure(arg1)
      *@details This closure expects one parameter
      * -# the variable to verify the type
      * returns 1 on true, 0 on false
@@ -142,6 +151,34 @@ namespace BittyBuzzUserFunctions {
      * }
      *@endcode */
     void isLambdaClosure();
+
+    /**
+     *@brief Casts a type to int
+     *@b Signature int(arg1)
+     *@details This closure expects one parameter
+     * -# the variable to cast
+     * returns the casted value of the variable
+     * Only works with float, if the type is not supported, nil is returned
+     *@code
+     * let f = 3.14;
+     * let i = int(f);
+     * function_that_takes_int(i);
+     *@endcode */
+    void toInt();
+
+    /**
+     *@brief Casts a type to float
+     *@b Signature float(arg1)
+     *@details This closure expects one parameter
+     * -# the variable to cast
+     * returns the casted value of the variable
+     * Only works with int, if the type is not supported, nil is returned
+     *@code
+     * let i = 3;
+     * let f = float(3);
+     * function_that_takes_float(f);
+     * @endcode */
+    void toFloat();
 
 } // namespace BittyBuzzUserFunctions
 

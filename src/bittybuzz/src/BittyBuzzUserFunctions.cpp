@@ -264,3 +264,31 @@ void BittyBuzzUserFunctions::isLambdaClosure() {
 
     bbzvm_ret1();
 }
+
+void BittyBuzzUserFunctions::toInt() {
+    bbzvm_assert_lnum(1); // NOLINT
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
+        bbzvm_pushi((int16_t)bbzfloat_tofloat(o->f.value));
+    } else if (bbztype_isint(*o)) {
+        bbzvm_pushi(o->i.value);
+    } else {
+        bbzvm_pushnil();
+    }
+
+    bbzvm_ret1();
+}
+
+void BittyBuzzUserFunctions::toFloat() {
+    bbzvm_assert_lnum(1); // NOLINT
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
+        bbzvm_pushf(o->f.value);
+    } else if (bbztype_isint(*o)) {
+        bbzvm_pushf(bbzfloat_fromint(o->i.value));
+    } else {
+        bbzvm_pushnil();
+    }
+
+    bbzvm_ret1();
+}

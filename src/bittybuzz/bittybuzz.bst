@@ -12,9 +12,12 @@ math
 pi
 e
 abs
-floor
-ceil
-round
+floori
+floorf
+ceili
+ceilf
+roundi
+roundf
 log
 log2
 log10

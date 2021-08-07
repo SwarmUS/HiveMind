@@ -22,7 +22,7 @@ namespace BittyBuzzFactory {
     BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 10>> createBittyBuzzGlobalLib();
 
     /** @brief Creates a the math table library for the bvm */
-    BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 20>> createBittyBuzzMathLib();
+    BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 23>> createBittyBuzzMathLib();
 
 } // namespace BittyBuzzFactory
 
