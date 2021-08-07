@@ -43,7 +43,7 @@ void TestUSB::test02_USB() {
         }
     }
 
-    uint8_t data[13] = "Hello World!";
+    uint8_t data[] = "Hello World!";
     usb_sendData(data, sizeof(data));
 
     // Send data on VCP to continue

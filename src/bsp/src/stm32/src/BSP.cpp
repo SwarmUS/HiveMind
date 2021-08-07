@@ -18,8 +18,8 @@ void BSP::buttonCallback(void* context) {
 void BSP::initChip(void* args) {
     (void)args;
 
-    Hal_init();
-    Hal_bootup();
+    Hal_initMcu();
+    Hal_initBoard();
 
     m_storage.loadFromFlash();
 

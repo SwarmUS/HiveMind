@@ -14,7 +14,7 @@
 #include <lwip/apps/lwiperf.h>
 #endif
 
-void Hal_init() {
+void Hal_initMcu() {
 
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
@@ -29,14 +29,14 @@ void Hal_init() {
     MX_CRC_Init();
     MX_DMA_Init();
 
-    Hal_initPlatformSpecific();
+    PHal_initMcu();
     UartPrint_init();
 
     MX_USB_DEVICE_Init();
     usb_init();
 }
 
-void Hal_bootup() {
+void Hal_initBoard() {
     deca_init();
 
     UI_initialize();

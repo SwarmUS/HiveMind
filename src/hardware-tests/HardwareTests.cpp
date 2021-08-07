@@ -8,7 +8,7 @@
 int main(int argc, char** argv) {
     (void)argc;
     (void)argv;
-    Hal_init();
+    Hal_initMcu();
 
     static TestUI s_testUI;
     static TestUSB s_testUsb;

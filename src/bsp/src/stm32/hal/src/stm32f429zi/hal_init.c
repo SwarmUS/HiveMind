@@ -1,7 +1,7 @@
 #include "hal/hal_init.h"
 #include <hivemind_hal.h>
 
-void Hal_initPlatformSpecific() {
+void PHal_initMcu() {
     // UART Print
     MX_USART3_UART_Init();
 

@@ -10,7 +10,7 @@ extern "C" {
 /**
  * @brief Initializes board specific HAL peripherals
  */
-void Hal_initPlatformSpecific();
+void PHal_initMcu();
 
 /**
  * @brief Tells if the WROOM has power running to it
