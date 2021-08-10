@@ -68,7 +68,7 @@ void BittyBuzzSystem::logVmHeap(LogLevel logLevel) {
                     BittyBuzzSystem::g_ui->print("%s", objStr);
                     g_logger->log(logLevel, "\t#%d: %s %c", i, objStr, perm(obj));
                 } else {
-                    g_logger->log(logLevel, "\t#%d: Fail to log obj %c", i, perm(obj));
+                    g_logger->log(logLevel, "\t#%d: Failed to log obj %c", i, perm(obj));
                 }
             }
         }

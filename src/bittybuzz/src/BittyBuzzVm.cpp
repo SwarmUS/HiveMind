@@ -95,7 +95,6 @@ BBVMRet BittyBuzzVm::step() {
             msg.setRawPayloadLength(bbzringbuf_size(&outPayload));
 
             if (!m_messageService.sendBuzzMessage(msg)) {
-                m_logger.log(LogLevel::Warn, "BBVM: Could not send buzz message"); // Should we pop?
                 return BBVMRet::OutMsgErr;
             }
 
