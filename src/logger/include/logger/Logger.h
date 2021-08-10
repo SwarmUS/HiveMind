@@ -12,6 +12,7 @@ class Logger : public ILogger {
     ~Logger() override = default;
 
     LogRet log(LogLevel level, const char* format, ...) override;
+    LogRet log(LogLevel level, const char* format, va_list args) override;
 
   private:
     static char logLevelToString(LogLevel logLevel);

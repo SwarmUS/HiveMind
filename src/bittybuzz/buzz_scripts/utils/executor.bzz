@@ -1,0 +1,25 @@
+# Class to allow a number of step before executing a closure
+executor = {
+    # Class constructor
+    # step_count: number of step until execution
+    # closure: the closure to execute after x step_count, takes one argument, the context
+    # context: context to pass to the closure
+    .new = function(step_count, closure, context) {
+        return {
+            .m_step_count = step_count,
+            .m_current_step = 0,
+            .m_closure = closure,
+            .m_context = context,
+            .step = executor.step
+        }
+    },
+
+    # Step the executor once
+    .step = function() {
+        if (self.m_current_step >= self.m_step_count) {
+            self.m_current_step = 0;
+            self.m_closure(self.m_context);
+        }
+        self.m_current_step = self.m_current_step + 1;
+    }
+}

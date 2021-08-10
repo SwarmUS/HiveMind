@@ -16,8 +16,9 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_UndefinedFunction_LogCalledOnError) {
     BittyBuyzzMessageServiceInterfaceMock messageServiceMock;
     BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
-    EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
-    EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
+    EXPECT_CALL(neighborsManagerMock, updateNeighbors);
+    EXPECT_CALL(messageHandlerMock, messageQueueLength).WillOnce(testing::Return(0));
+    EXPECT_CALL(stringResolverMock, getString).WillRepeatedly(testing::Return("Irrelevant"));
 
     std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
@@ -27,7 +28,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_UndefinedFunction_LogCalledOnError) {
     m_bittybuzzVm->step();
 
     // Expect
-    EXPECT_EQ(logCounter, 1);
+    EXPECT_TRUE(logCounter > 0);
     EXPECT_EQ(vm->state, BBZVM_STATE_ERROR);
     EXPECT_EQ(vm->error, BBZVM_ERROR_TYPE);
 }

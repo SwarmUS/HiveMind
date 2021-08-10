@@ -17,19 +17,23 @@ class LoggerInterfaceMock : public ILogger {
     ~LoggerInterfaceMock() override = default;
 
     LogRet log(LogLevel level, const char* format, ...) override {
-        (void)level;
-        const int bufferSize = 1024;
-        char buffer[bufferSize];
 
         va_list args;
         va_start(args, format);
+        LogRet retValue = log(level, format, args);
+        va_end(args);
+        return retValue;
+    }
 
+    LogRet log(LogLevel level, const char* format, va_list args) override {
+        (void)level;
+
+        const int bufferSize = 1024;
+        char buffer[bufferSize];
         vsnprintf(buffer, bufferSize, format, args);
         m_logLastFormat = std::string(buffer);
-
-        va_end(args);
-
         m_logCallCounter++;
+
         return LogRet::Ok;
     }
 };

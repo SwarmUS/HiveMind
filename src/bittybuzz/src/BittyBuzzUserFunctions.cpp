@@ -1,5 +1,7 @@
 #include "bittybuzz/BittyBuzzUserFunctions.h"
+#include "bbzvm.h"
 #include "bittybuzz/BittyBuzzSystem.h"
+#include "bittybuzz/BittyBuzzUtils.h"
 #include <LockGuard.h>
 
 struct ForeachHostFContext {
@@ -60,60 +62,22 @@ FunctionDescriptionArgumentTypeDTO getbbzObjType(bbzobj_t* bbzObj) {
 }
 
 void BittyBuzzUserFunctions::log() {
+
     // Get the number of args
     uint16_t nArgs = bbzvm_locals_count();
 
     LockGuard lock(BittyBuzzSystem::g_ui->getPrintMutex());
 
-    // Iterate through args, we start a arg 1 up to the nb of args
+    constexpr uint16_t objStrSize = 32;
+    char objStr[objStrSize];
+    // Iterate through args, we start a arg 1 up to the nb of
     BittyBuzzSystem::g_ui->print("BBZ USER: ");
     for (uint16_t i = 1; i <= nArgs; i++) {
-
         bbzobj_t* obj = bbzheap_obj_at(bbzvm_locals_at(i)); // NOLINT
-
-        switch (bbztype(*obj)) {
-        case BBZTYPE_NIL: {
-            BittyBuzzSystem::g_ui->print("[nil]");
-            break;
-        }
-        case BBZTYPE_INT: {
-            BittyBuzzSystem::g_ui->print("%d", obj->i.value);
-            break;
-        }
-        case BBZTYPE_FLOAT: {
-            BittyBuzzSystem::g_ui->print("%f", bbzfloat_tofloat(obj->f.value));
-            break;
-        }
-        case BBZTYPE_TABLE: {
-            BittyBuzzSystem::g_ui->print("[t:%d]", obj->t.value);
-            break;
-        }
-        case BBZTYPE_STRING: {
-            std::optional<const char*> optionString =
-                BittyBuzzSystem::g_stringResolver->getString(obj->s.value);
-            if (optionString) {
-                BittyBuzzSystem::g_ui->print("%s", optionString.value());
-            } else {
-                BittyBuzzSystem::g_ui->print("{UNKNOWN STRID: %d}", obj->s.value);
-            }
-            break;
-        }
-        case BBZTYPE_CLOSURE: {
-            if (bbztype_isclosurelambda(*obj)) {
-                BittyBuzzSystem::g_ui->print("[cl: %d}", obj->l.value.ref);
-            } else {
-                BittyBuzzSystem::g_ui->print("[c: %d]", (int)(intptr_t)obj->c.value);
-            }
-            break;
-        }
-        case BBZTYPE_USERDATA: {
-            BittyBuzzSystem::g_ui->print("[u: %d]", (int)obj->u.value);
-            break;
-        }
-        default: {
-            printf("{UNKNOWN TYPE}");
-            break;
-        }
+        if (BittyBuzzUtils::logObj(obj, objStr, objStrSize) >= 0) {
+            BittyBuzzSystem::g_ui->print("%s", objStr);
+        } else {
+            BittyBuzzSystem::g_ui->print("Fail to log");
         }
     }
     BittyBuzzSystem::g_ui->flush();

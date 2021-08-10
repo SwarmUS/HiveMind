@@ -1,6 +1,8 @@
 #ifndef __ILOGGER_H_
 #define __ILOGGER_H_
 
+#include <cstdarg>
+
 /**
  * @brief The log level used for the logger
  */
@@ -36,16 +38,21 @@ class ILogger {
 
     /**
      * @brief Logs if the provided level is higher than the current log level (Thread-safe)
-     *
      * @param [in] level the log level of the current call
-     *
      * @param [in] format Text to be written, can contain format specifiers that will be replaced by
      *values specified in the additionnal arguments, matches the standard printf function
-     *
      * @param [in] ... Additionnal arguments for the format parameter
-     *
      */
     virtual LogRet log(LogLevel level, const char* format, ...) = 0;
+
+    /**
+     * @brief Logs if the provided level is higher than the current log level (Thread-safe)
+     * @param [in] level the log level of the current call
+     * @param [in] format Text to be written, can contain format specifiers that will be replaced by
+     *values specified in the additionnal arguments, matches the standard printf function
+     * @param [in] args Additionnal arguments for the format parameter
+     */
+    virtual LogRet log(LogLevel level, const char* format, va_list args) = 0;
 };
 
 #endif // __ILOGGER_H_

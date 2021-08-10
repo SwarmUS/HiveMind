@@ -22,10 +22,11 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_callHostFunction_sendToHost_invalidAr
     BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
-    EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
+    EXPECT_CALL(messageHandlerMock, messageQueueLength).WillOnce(testing::Return(0));
     EXPECT_CALL(stringResolverMock, getString(BBZSTRID_hostFunction))
-        .Times(1)
-        .WillOnce(testing::Return(strFunctionName.c_str()));
+        .WillRepeatedly(testing::Return(strFunctionName.c_str()));
+
+    EXPECT_CALL(stringResolverMock, getString).WillRepeatedly(testing::Return("Irrelevant"));
 
     EXPECT_CALL(messageServiceMock, callHostFunction(testing::_, testing::_, testing::_, 2))
         .Times(0);
@@ -45,7 +46,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_callHostFunction_sendToHost_invalidAr
     m_bittybuzzVm->step();
 
     // Expect
-    EXPECT_EQ(m_loggerMock->m_logCallCounter, 2);
+    EXPECT_TRUE(m_loggerMock->m_logCallCounter > 0);
     EXPECT_EQ(vm->state, BBZVM_STATE_ERROR);
     EXPECT_EQ(vm->error, BBZVM_ERROR_TYPE);
 }

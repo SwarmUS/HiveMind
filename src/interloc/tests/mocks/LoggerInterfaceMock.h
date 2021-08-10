@@ -18,6 +18,13 @@ class LoggerInterfaceMock : public ILogger {
 
         return LogRet::Ok;
     }
+
+    LogRet log(LogLevel level, const char* format, va_list args) override {
+        (void)level;
+        (void)format;
+        (void)args;
+        return LogRet::Ok;
+    }
 };
 
 #endif // __LOGGERINTERFACEMOCK_H_
