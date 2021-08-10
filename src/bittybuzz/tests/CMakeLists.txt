@@ -34,6 +34,8 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmCallHostFunctionInvalidArgsTests.cpp
     vm_tests/BittyBuzzVmCallHostFunctionInvalidKeysTests.cpp
 
+    vm_tests/BittyBuzzVmCastFloat.cpp
+    vm_tests/BittyBuzzVmCastInt.cpp
     vm_tests/BittyBuzzVmIsNilTests.cpp
     vm_tests/BittyBuzzVmIsIntTests.cpp
     vm_tests/BittyBuzzVmIsFloatTests.cpp
@@ -148,6 +150,17 @@ bittybuzz_generate_bytecode(register-closure_lambda
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
+
+bittybuzz_generate_bytecode(cast-float
+    ${BZZ_TEST_SCRIPTS_LOCATION}/cast_float.bzz
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
+bittybuzz_generate_bytecode(cast-int
+    ${BZZ_TEST_SCRIPTS_LOCATION}/cast_int.bzz
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
 bittybuzz_generate_bytecode(call-host-function-valid
     ${BZZ_TEST_SCRIPTS_LOCATION}/call_host_function_valid.bzz
     "${BZZ_TEST_SCRIPTS_LOCATION}"
@@ -227,8 +240,11 @@ target_link_libraries(${TEST_NAME}
         register-closure_invalid_args
         register-closure_lambda
         call-host-function-valid
+        call-host-function-valid
         call-host-function-invalid-args
         call-host-function-invalid-keys
+        cast-float
+        cast-int
         stigmergy-put
         stigmergy-get
         stigmergy-onconflict
