@@ -23,7 +23,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_cast_int) {
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
     std::array<BittyBuzzLibMemberRegister, 2> functionRegisters = {
-        {{BBZSTRID_int, BittyBuzzUserFunctions::isInt}, {BBZSTRID_assert_true, buzzAssertTrue}}};
+        {{BBZSTRID_int, BittyBuzzUserFunctions::toInt}, {BBZSTRID_assert_true, buzzAssertTrue}}};
     BittyBuzzLib globalLib(functionRegisters);
 
     std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
