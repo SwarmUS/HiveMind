@@ -40,10 +40,13 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
     set(BHEADER_STRING_FILE  ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}_string.h)
     set(BHEADER_STRING_FILE_TMP  ${BHEADER_STRING_FILE}.tmp)
 
-    # Concatenating BST files
+    # Concatenating BST files we configure/copy so cmake reruns when bst are changed
     configure_file(${BITTYBUZZ_SRC_PATH}/src/bittybuzz/util/BittyBuzzStrings.bst ${BST_FILE} COPYONLY)
-    foreach(BST ${bzz_bst_list}) 
-        file(READ ${BST} CONTENTS)
+    foreach(BST ${bzz_bst_list})
+        get_filename_component(BST_FILENAME ${BST} NAME)
+        set(BST_FILENAME ${CMAKE_CURRENT_BINARY_DIR}/${BST_FILENAME})
+        configure_file(${BST} ${BST_FILENAME} COPYONLY)
+        file(READ ${BST_FILENAME} CONTENTS)
         file(APPEND ${BST_FILE} "${CONTENTS}")
     endforeach()
 
