@@ -11,10 +11,10 @@ int main(int argc, char** argv) {
     Hal_initMcu();
 
     static TestUI s_testUI;
-    static TestUSB s_testUsb;
-    static TestChannels s_testChannels;
-    static TestNetwork s_testNetwork;
-    static TestClock s_testClock;
+    //    static TestUSB s_testUsb;
+    //    static TestChannels s_testChannels;
+    //    static TestNetwork s_testNetwork;
+    //    static TestClock s_testClock;
 
     // *************
     // Activate the test you want to run by uncommenting the appropriate line

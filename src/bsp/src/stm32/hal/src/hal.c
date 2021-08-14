@@ -18,7 +18,7 @@ void Hal_initMcu() {
 
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
-    MX_RNG_Init();
+    // MX_RNG_Init();
 
     /* Configure the system clock */
     SystemClock_Config();
@@ -32,8 +32,8 @@ void Hal_initMcu() {
     PHal_initMcu();
     UartPrint_init();
 
-    MX_USB_DEVICE_Init();
-    usb_init();
+    // MX_USB_DEVICE_Init();
+    // usb_init();
 }
 
 void Hal_initBoard() {
