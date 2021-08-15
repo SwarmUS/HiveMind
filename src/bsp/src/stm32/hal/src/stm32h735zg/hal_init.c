@@ -19,6 +19,10 @@ void PHal_initMcu() {
 
     // IO Expander
     MX_I2C1_Init();
+
+    // TODO: Reactivate once USB voltage input is fixed
+    // MX_USB_DEVICE_Init();
+    // usb_init();
 }
 
 bool Hal_wroomPowerEnabled() {

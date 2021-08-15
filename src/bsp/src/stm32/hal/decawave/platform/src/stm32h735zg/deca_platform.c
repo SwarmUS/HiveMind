@@ -52,8 +52,10 @@ void deca_init() {
     for (decaDevice_t channel = 0; channel < DWT_NUM_DW_DEV; channel++) {
         if (beeboard_isChannelPopulated(channel)) {
             g_decawaveConfigs[channel].isPresent = true;
-            beeboard_enableClock(channel);
             beeboard_enableChannel(channel);
+            HAL_Delay(500); // Leave time for BB to detect USB-C orientation
+
+            beeboard_enableClock(channel);
 
             deca_hardwareReset(channel);
             deca_setSlowRate(channel);

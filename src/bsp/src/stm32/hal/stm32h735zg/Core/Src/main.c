@@ -103,8 +103,8 @@ void SystemClock_Config(void) {
     RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
     RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-    RCC_OscInitStruct.PLL.PLLM = 1;
-    RCC_OscInitStruct.PLL.PLLN = 32;
+    RCC_OscInitStruct.PLL.PLLM = 2;
+    RCC_OscInitStruct.PLL.PLLN = 42;
     RCC_OscInitStruct.PLL.PLLP = 1;
     RCC_OscInitStruct.PLL.PLLQ = 4;
     RCC_OscInitStruct.PLL.PLLR = 2;
@@ -142,8 +142,8 @@ void PeriphCommonClock_Config(void) {
     /** Initializes the peripherals clock
      */
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB | RCC_PERIPHCLK_ADC;
-    PeriphClkInitStruct.PLL3.PLL3M = 1;
-    PeriphClkInitStruct.PLL3.PLL3N = 12;
+    PeriphClkInitStruct.PLL3.PLL3M = 2;
+    PeriphClkInitStruct.PLL3.PLL3N = 16;
     PeriphClkInitStruct.PLL3.PLL3P = 2;
     PeriphClkInitStruct.PLL3.PLL3Q = 2;
     PeriphClkInitStruct.PLL3.PLL3R = 2;

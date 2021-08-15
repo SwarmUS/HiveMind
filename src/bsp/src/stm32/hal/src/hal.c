@@ -31,9 +31,6 @@ void Hal_initMcu() {
 
     PHal_initMcu();
     UartPrint_init();
-
-    // MX_USB_DEVICE_Init();
-    // usb_init();
 }
 
 void Hal_initBoard() {

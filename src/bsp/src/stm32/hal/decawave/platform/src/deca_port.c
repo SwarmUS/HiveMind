@@ -79,11 +79,11 @@ void deca_setISRCallback(decaDevice_t device, decaISRCallback_t callback, void* 
 
 void deca_isr(decaDevice_t selectedDevice) {
     decawaveDeviceConfig_t* deviceConfig = deca_getDeviceConfig(selectedDevice);
-    if (deviceConfig == NULL) {
+    if (deviceConfig == NULL || deca_getDeviceConfig(selectedDevice)->isPresent == false) {
         return;
     }
 
-    while (HAL_GPIO_ReadPin(deviceConfig->irqPort, deviceConfig->irqPin) != GPIO_PIN_RESET) {
+    while (HAL_GPIO_ReadPin(deviceConfig->irqPort, deviceConfig->irqPin) != DECA_IRQ_IDLE_STATE) {
         if (deviceConfig->isrCallback) {
             deviceConfig->isrCallback(deviceConfig->isrContext);
         }

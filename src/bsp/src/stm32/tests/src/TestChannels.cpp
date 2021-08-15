@@ -3,15 +3,19 @@
 #include <deca_port.h>
 
 void TestChannels::runTests() {
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 6; i++) {
         decaDevice_t channel = (decaDevice_t)i;
 
         test01_Detect(channel);
         test02_Enable(channel);
         test03_Reset(channel);
-        test04_IRQ(channel);
-        test05_SPI(channel);
+
+        // Hard to test with breakout. Uncomment only if you know what you are doing
+        // test04_IRQ(channel);
+        // test05_SPI(channel);
         test06_CS(channel);
+
+        beeboard_disableChannel(channel);
     }
 }
 
@@ -32,6 +36,7 @@ void TestChannels::test03_Reset(decaDevice_t channel) {
 
 void TestChannels::test04_IRQ(decaDevice_t channel) {
     deca_setISRCallback(channel, isr, this);
+    g_decawaveConfigs[channel].isPresent = true;
 
     // Pulse IRQ to continue
     while (!m_isrCalled) {

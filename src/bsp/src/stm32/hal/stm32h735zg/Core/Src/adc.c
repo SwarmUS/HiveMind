@@ -41,7 +41,7 @@ void MX_ADC2_Init(void) {
     /** Common config
      */
     hadc2.Instance = ADC2;
-    hadc2.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
+    hadc2.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV8;
     hadc2.Init.Resolution = ADC_RESOLUTION_16B;
     hadc2.Init.ScanConvMode = ADC_SCAN_DISABLE;
     hadc2.Init.EOCSelection = ADC_EOC_SINGLE_CONV;

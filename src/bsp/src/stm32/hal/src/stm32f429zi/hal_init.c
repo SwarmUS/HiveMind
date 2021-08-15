@@ -1,5 +1,7 @@
 #include "hal/hal_init.h"
+#include <hal/usb.h>
 #include <hivemind_hal.h>
+#include <usb_device.h>
 
 void PHal_initMcu() {
     // UART Print
@@ -14,6 +16,9 @@ void PHal_initMcu() {
 
     // Heartbeat timer
     MX_TIM6_Init();
+
+    MX_USB_DEVICE_Init();
+    usb_init();
 }
 
 bool Hal_wroomPowerEnabled() { return true; }
