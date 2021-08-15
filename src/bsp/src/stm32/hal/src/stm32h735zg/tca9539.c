@@ -20,6 +20,8 @@ void tca9539_configure(uint8_t io0, uint8_t io1) {
 
     HAL_I2C_Mem_Write(IO_EXPANDER_I2C, TCA9539_I2C_ADDRESS, TCA9539_CONFIG_PORT_1_REG_ADDR,
                       I2C_MEMADD_SIZE_8BIT, &io1, sizeof(io1), TC9539_I2C_TIMEOUT);
+
+    tca9539_clearInterrupts();
 }
 
 void tca9539_setOutputs(uint8_t io0, uint8_t io1) {
@@ -36,4 +38,12 @@ void tca9539_readInputs(uint8_t* io0, uint8_t* io1) {
 
     HAL_I2C_Mem_Read(IO_EXPANDER_I2C, TCA9539_I2C_ADDRESS, TCA9539_INPUT_PORT_1_REG_ADDR,
                      I2C_MEMADD_SIZE_8BIT, io1, sizeof(&io1), TC9539_I2C_TIMEOUT);
+}
+
+void tca9539_clearInterrupts() {
+    uint8_t tmp;
+    HAL_I2C_Mem_Read(IO_EXPANDER_I2C, TCA9539_I2C_ADDRESS, TCA9539_INPUT_PORT_0_REG_ADDR,
+                     I2C_MEMADD_SIZE_8BIT, &tmp, sizeof(tmp), TC9539_I2C_TIMEOUT);
+    HAL_I2C_Mem_Read(IO_EXPANDER_I2C, TCA9539_I2C_ADDRESS, TCA9539_INPUT_PORT_1_REG_ADDR,
+                     I2C_MEMADD_SIZE_8BIT, &tmp, sizeof(tmp), TC9539_I2C_TIMEOUT);
 }

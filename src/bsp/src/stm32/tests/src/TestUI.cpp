@@ -8,7 +8,7 @@ void TestUI::runTests() {
     test01_Heartbeat();
     test02_Leds();
     test03_RGB();
-    //test04_Buttons();
+    test04_Buttons();
     test05_HexDisplay();
 }
 
@@ -59,11 +59,13 @@ void TestUI::test04_Buttons() {
     UI_setButtonCallback(BUTTON_1, button1Callback, this);
 
     // Press button 0 to continue
+    m_button0Pressed = false;
     while (!m_button0Pressed) {
         HAL_Delay(100);
     }
 
     // Press button 1 to continue
+    m_button1Pressed = false;
     while (!m_button1Pressed) {
         HAL_Delay(100);
     }

@@ -1,9 +1,9 @@
 #include "hal/user_interface.h"
 #include "tca9539.h"
 
-// https://forum.hosteng.com/wndm/HTMLHelp1/Instruction_Set/SEG_Hex_BCD_to_7_Segment_Display.htm
-static uint8_t g_binaryToSegmentMap[16] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07,
-                                           0x7F, 0x67, 0x77, 0x7C, 0x39, 0x5E, 0x79, 0x71};
+// Hardware lines are in the order (F, G, E, D, A, B, C) (LSB to MSB)
+static uint8_t g_binaryToSegmentMap[16] = {0x7D, 0x60, 0x3E, 0x7A, 0x63, 0x5B, 0x5F, 0x70,
+                                           0x7F, 0x7B, 0x77, 0x4F, 0x0E, 0x6E, 0x1F, 0x17};
 
 static gpioCallbackFct_t g_buttonCallbacks[2] = {NULL, NULL};
 static void* g_buttonCallbackContexts[2] = {NULL, NULL};
@@ -18,9 +18,11 @@ void UI_setHexOutput(uint8_t hexValue) {
     // IO0 has segment A_1 on pin 7 and G_0 to A_0 on pins 6 to 0
     uint8_t io0 = (((g_binaryToSegmentMap[hexDigit1] << 7) & 0x80) |
                    (g_binaryToSegmentMap[hexDigit0] & 0x7F));
+    io0 = ~io0; // LED drive is inverted (1 closes the LED and 0 opens it)
 
     // IO1 has segments G_1 to B_1 on pins 5 to 0
-    uint8_t io1 = (g_binaryToSegmentMap[hexDigit1] >> 1) & 0x3F;
+    uint8_t io1 = g_binaryToSegmentMap[hexDigit1] >> 1;
+    io1 = (~io1) & 0x3F; // Invert LED drive and set both buttons to 0
 
     tca9539_setOutputs(io0, io1);
 }
