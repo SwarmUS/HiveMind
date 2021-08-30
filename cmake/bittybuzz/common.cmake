@@ -44,7 +44,7 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
     configure_file(${BITTYBUZZ_SRC_PATH}/src/bittybuzz/util/BittyBuzzStrings.bst ${BST_FILE} COPYONLY)
     foreach(BST ${bzz_bst_list})
         get_filename_component(BST_FILENAME ${BST} NAME)
-        set(BST_FILENAME ${CMAKE_CURRENT_BINARY_DIR}/${BST_FILENAME})
+        set(BST_FILENAME ${CMAKE_CURRENT_BINARY_DIR}/${_TARGET}-${BST_FILENAME})
         configure_file(${BST} ${BST_FILENAME} COPYONLY)
         file(READ ${BST_FILENAME} CONTENTS)
         file(APPEND ${BST_FILE} "${CONTENTS}")
