@@ -5,7 +5,7 @@
 #include "UserStates.h"
 
 class IApplicationInterface {
-  public: // TODO: Check if return values make sense
+  public:
     /**@brief set the system ESP handshake and light the necessary LED*/
     virtual bool setSystemESPHandshaked(bool handshaked) = 0;
 
@@ -18,14 +18,14 @@ class IApplicationInterface {
     /**@brief set the system Connection state and set the seven segment accordingly*/
     virtual bool setSystemDeviceState(DeviceState state) = 0;
 
-    /**@brief set the system states*/
-    virtual const SystemStates& getSystemStates() const = 0;
-
     /**@brief set the user LED*/
     virtual bool setUserLed(bool state) = 0;
 
     /**@brief set the seven segment*/
     virtual bool setSevenSegment(SevenSegment segment) = 0;
+
+    /**@brief set the system states*/
+    virtual const SystemStates& getSystemStates() const = 0;
 
     /**@brief get the user states*/
     virtual const UserStates& getUserStates() const = 0;
