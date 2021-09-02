@@ -18,6 +18,8 @@ void Hal_initMcu() {
 
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
+
+    // TODO: Fix RNG Init
     // MX_RNG_Init();
 
     /* Configure the system clock */
