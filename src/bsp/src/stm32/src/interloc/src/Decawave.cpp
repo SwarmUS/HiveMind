@@ -97,7 +97,7 @@ bool Decawave::init() {
                          DWT_INT_RFSL | DWT_INT_SFDT | DWT_INT_TFRS,
                      1);
 
-    setLed(DW_LED::LED_0, true);
+    setLed(DW_LED::LED_2, true);
 
     uint32_t sysCfgReg = dwt_read32bitoffsetreg(SYS_CFG_ID, 0);
     dwt_write32bitoffsetreg(SYS_CFG_ID, 0, sysCfgReg | SYS_CFG_RXAUTR);
