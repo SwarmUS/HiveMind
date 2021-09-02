@@ -9,9 +9,9 @@ extern "C" {
 #include <stdbool.h>
 
 // TODO: Set to correct prescalers (maximum ratings: slow=3MHz, fast=20MHz)
-// SPI Base clock = 130 MHz
+// SPI Base clock = 64 MHz
 #define DECA_SPI_SLOW_RATE SPI_BAUDRATEPRESCALER_32
-#define DECA_SPI_FAST_RATE SPI_BAUDRATEPRESCALER_32
+#define DECA_SPI_FAST_RATE SPI_BAUDRATEPRESCALER_16
 
 #define DECA_IRQ_IDLE_STATE GPIO_PIN_SET
 
