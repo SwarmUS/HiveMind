@@ -106,7 +106,7 @@ extern "C" {
  */
 #if !defined(HSE_VALUE)
 #define HSE_VALUE                                                                                  \
-    (16000000UL) /*!< Value of the External oscillator in Hz : FPGA case fixed to 60MHZ */
+    (24000000UL) /*!< Value of the External oscillator in Hz : FPGA case fixed to 60MHZ */
 #endif /* HSE_VALUE */
 
 #if !defined(HSE_STARTUP_TIMEOUT)

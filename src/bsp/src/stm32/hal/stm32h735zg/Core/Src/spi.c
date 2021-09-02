@@ -46,10 +46,10 @@ void MX_SPI1_Init(void) {
     hspi1.Init.Mode = SPI_MODE_MASTER;
     hspi1.Init.Direction = SPI_DIRECTION_2LINES;
     hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
-    hspi1.Init.CLKPolarity = SPI_POLARITY_HIGH;
+    hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
     hspi1.Init.CLKPhase = SPI_PHASE_2EDGE;
     hspi1.Init.NSS = SPI_NSS_SOFT;
-    hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+    hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
     hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
     hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
     hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -85,7 +85,7 @@ void MX_SPI2_Init(void) {
     hspi2.Init.Mode = SPI_MODE_MASTER;
     hspi2.Init.Direction = SPI_DIRECTION_2LINES;
     hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
-    hspi2.Init.CLKPolarity = SPI_POLARITY_HIGH;
+    hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
     hspi2.Init.CLKPhase = SPI_PHASE_2EDGE;
     hspi2.Init.NSS = SPI_NSS_SOFT;
     hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
@@ -124,7 +124,7 @@ void MX_SPI3_Init(void) {
     hspi3.Init.Mode = SPI_MODE_MASTER;
     hspi3.Init.Direction = SPI_DIRECTION_2LINES;
     hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
-    hspi3.Init.CLKPolarity = SPI_POLARITY_HIGH;
+    hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
     hspi3.Init.CLKPhase = SPI_PHASE_2EDGE;
     hspi3.Init.NSS = SPI_NSS_SOFT;
     hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;

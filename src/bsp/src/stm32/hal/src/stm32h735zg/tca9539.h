@@ -32,6 +32,11 @@ void tca9539_setOutputs(uint8_t io0, uint8_t io1);
  */
 void tca9539_readInputs(uint8_t* io0, uint8_t* io1);
 
+/**
+ * Clears any pending interrupts by reading from both IO ports
+ */
+void tca9539_clearInterrupts();
+
 #ifdef __cplusplus
 }
 #endif

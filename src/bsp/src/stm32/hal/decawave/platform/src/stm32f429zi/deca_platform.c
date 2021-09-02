@@ -39,6 +39,35 @@ void deca_init() {
     }
 }
 
+void deca_hardwareReset(decaDevice_t selectedDevice) {
+    decawaveDeviceConfig_t* decaConfig = deca_getDeviceConfig(selectedDevice);
+    GPIO_InitTypeDef gpioInitStruct;
+
+    // Enable GPIO used for DW1000 reset as open collector output
+    gpioInitStruct.Pin = decaConfig->resetPin;
+    gpioInitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+    gpioInitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(decaConfig->resetPort, &gpioInitStruct);
+
+    // drive the RSTn pin low
+    HAL_GPIO_WritePin(decaConfig->resetPort, decaConfig->resetPin, GPIO_PIN_RESET);
+
+    // Use HAL functions instead of FreeRTOS delays as this is called before the scheduler is
+    // started
+    HAL_Delay(1);
+
+    // put the pin back to tri-state ... as
+    // output open-drain (not active)
+    gpioInitStruct.Pin = decaConfig->resetPin;
+    gpioInitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+    gpioInitStruct.Pull = GPIO_NOPULL;
+    gpioInitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(decaConfig->resetPort, &gpioInitStruct);
+    HAL_GPIO_WritePin(decaConfig->resetPort, decaConfig->resetPin, GPIO_PIN_SET);
+
+    HAL_Delay(100);
+}
+
 decawaveDeviceConfig_t g_decawaveConfigs[DWT_NUM_DW_DEV] = {{.spiHandle = &hspi4,
                                                              .nssPort = DW_NSS_A_GPIO_Port,
                                                              .nssPin = DW_NSS_A_Pin,

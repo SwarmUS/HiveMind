@@ -5,7 +5,7 @@
 #include <bsp/IBSP.h>
 #include <logger/LoggerContainer.h>
 
-static decaDevice_t testedChannel = DW_A0;
+static decaDevice_t testedChannel = DW_C0;
 
 class TxTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:

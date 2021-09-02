@@ -8,6 +8,8 @@ extern "C" {
 #define DECA_SPI_SLOW_RATE SPI_BAUDRATEPRESCALER_32
 #define DECA_SPI_FAST_RATE SPI_BAUDRATEPRESCALER_32
 
+#define DECA_IRQ_IDLE_STATE GPIO_PIN_RESET
+
 /**
  * @brief Enum to specify which decawave we are addressing
  */

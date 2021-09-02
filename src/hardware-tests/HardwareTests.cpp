@@ -20,14 +20,14 @@ int main(int argc, char** argv) {
     // Activate the test you want to run by uncommenting the appropriate line
     // *************
 
-    s_testUI.runTests();
+    // s_testUI.runTests();
     // s_testUsb.runTests();
     // s_testChannels.runTests();
     // s_testClock.runTests();
 
     // The network tests start the FreeRTOS scheduler and are therefore blocking.
     // They should be run last
-    // s_testNetwork.runTests();
+    s_testNetwork.runTests();
 
     return 0;
 }

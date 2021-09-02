@@ -52,13 +52,25 @@ void deca_init() {
     for (decaDevice_t channel = 0; channel < DWT_NUM_DW_DEV; channel++) {
         if (beeboard_isChannelPopulated(channel)) {
             g_decawaveConfigs[channel].isPresent = true;
-            beeboard_enableClock(channel);
             beeboard_enableChannel(channel);
+            HAL_Delay(500); // Leave time for BB to detect USB-C orientation
+
+            beeboard_enableClock(channel);
 
             deca_hardwareReset(channel);
             deca_setSlowRate(channel);
         }
     }
+
+    HAL_Delay(1000);
+}
+
+void deca_hardwareReset(decaDevice_t selectedDevice) {
+    decawaveDeviceConfig_t* decaConfig = deca_getDeviceConfig(selectedDevice);
+
+    HAL_GPIO_WritePin(decaConfig->resetPort, decaConfig->resetPin, GPIO_PIN_RESET);
+    HAL_Delay(1);
+    HAL_GPIO_WritePin(decaConfig->resetPort, decaConfig->resetPin, GPIO_PIN_SET);
 }
 
 bool channels_powerEnabled() {

@@ -31,7 +31,7 @@ set(COMPILE_STM32_H735ZG 1)
 
 set(ENABLE_TESTS OFF)
 set(CATKIN_ENABLE_TESTING 0)
-set(OPENOCD_CFG_PATH ${PROJECT_SOURCE_DIR}/tools/openocd/stm32_h7/stm32_h7.cfg)
+set(OPENOCD_CFG_PATH ${PROJECT_SOURCE_DIR}/tools/openocd/stm32_h7/hiveboard.cfg)
 
 
 
