@@ -61,6 +61,16 @@ void deca_init() {
             deca_setSlowRate(channel);
         }
     }
+
+    HAL_Delay(1000);
+}
+
+void deca_hardwareReset(decaDevice_t selectedDevice) {
+    decawaveDeviceConfig_t* decaConfig = deca_getDeviceConfig(selectedDevice);
+
+    HAL_GPIO_WritePin(decaConfig->resetPort, decaConfig->resetPin, GPIO_PIN_RESET);
+    HAL_Delay(1);
+    HAL_GPIO_WritePin(decaConfig->resetPort, decaConfig->resetPin, GPIO_PIN_SET);
 }
 
 bool channels_powerEnabled() {
