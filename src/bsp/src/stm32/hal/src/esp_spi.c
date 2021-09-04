@@ -44,7 +44,7 @@ bool EspSpi_TransmitReceiveDma(const uint8_t* txBuffer,
         txrxCpltCallbackFct = cpltCallback;
         txrxCallbackContext = context;
         HAL_StatusTypeDef status =
-            HAL_SPI_TransmitReceive_DMA(ESP_SPI, (uint8_t*)txBuffer, rxBuffer, lengthBytes);
+            HAL_SPI_TransmitReceive(ESP_SPI, (uint8_t*)txBuffer, rxBuffer, lengthBytes, HAL_MAX_DELAY);
         if (status == HAL_OK) {
             return true;
         }
