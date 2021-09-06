@@ -8,13 +8,17 @@
 /**
  * @brief Possible colors obtainable with an RGB LED
  */
-enum class RgbColor { RED = 0, GREEN, BLUE, VIOLET, YELLOW, BROWN, WHITE, OFF };
+enum class RgbColor { RED = 0, GREEN, BLUE, VIOLET, YELLOW, ORANGE, WHITE, OFF };
 
 /**
  * @brief Buttons present on the board.
- * (Button 1 is not available on the HiveSight)
  */
-enum class Button { BUTTON_0 = 0, BUTTON_1 };
+enum class Button { BUTTON_0 = 0, BUTTON_1, BUTTON_MAX };
+
+/**
+ * @brief LED present on the board
+ */
+enum class LED { LED_0 = 0, LED_1, LED_MAX };
 
 /**
  * @brief Prototype for a callback from a button press
@@ -92,6 +96,13 @@ class IUserInterface {
      * @param color The color to set
      */
     virtual void setRGBLed(RgbColor color) = 0;
+
+    /**
+     * @brief Sets an LED on or off
+     * @param led wich led to toggle
+     * @param state which state to put the led  (on or off)
+     */
+    virtual void setLed(LED led, bool state) = 0;
 
     /**
      * @brief Sets the hex display to a given 8 bit value (not available on the HiveSight)

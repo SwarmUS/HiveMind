@@ -1,10 +1,10 @@
 #include "BSP.h"
 #include "TCPServer.h"
 #include "bsp/SettingsContainer.h"
-#include "ros/ros.h"
 #include <Task.h>
 #include <bsp/BSPContainer.h>
 #include <random>
+#include <ros/ros.h>
 
 /**
  * @brief Task that kills FreeRTOS when ROS node is stopped
