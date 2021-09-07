@@ -49,6 +49,23 @@ class UserInterfaceMock : public IUserInterface {
         m_printCallCounter++;
         return 0;
     }
+
+    void setRGBLed(RgbColor color) override { (void)color; }
+
+    void setLed(LED led, bool state) override {
+        (void)led;
+        (void)state;
+    }
+
+    void setHexDisplay(uint8_t value) override { (void)value; }
+
+    void setButtonCallback(Button button,
+                           buttonCallbackFunction_t callback,
+                           void* context) override {
+        (void)button;
+        (void)callback;
+        (void)context;
+    }
 };
 
 #endif // __USERINTERFACEMOCK_H_
