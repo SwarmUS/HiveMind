@@ -15,7 +15,6 @@ struct ButtonState {
 struct UIState {
     UIState();
     RgbColor m_rgbLed;
-    std::array<bool, static_cast<int>(Button::BUTTON_MAX)> m_buttonStates;
     std::array<bool, static_cast<int>(LED::LED_MAX)> m_ledStates;
     uint8_t m_hexDisplay;
 };
