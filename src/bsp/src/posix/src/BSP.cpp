@@ -7,7 +7,7 @@
 #include <ros/ros.h>
 
 /**
- * @brief Task that kills FreeRTOS when ROS node is stopped
+ * @brief Task that kills OS when ROS node is stopped
  */
 void rosWatcher(void* param) {
     (void)param;

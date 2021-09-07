@@ -38,7 +38,8 @@ UserInterface::UserInterface(const IBSP& bsp) : m_bsp(bsp), m_mutex(10) {}
 Mutex& UserInterface::getPrintMutex() { return m_mutex; }
 
 void UserInterface::flush() {
-    ROS_INFO("[HM: %d] %s", m_bsp.getUUId(), m_accumulatedString.c_str());
+    ROS_INFO("[HM: %d] %s %s", m_bsp.getUUId(), uiStateToString().c_str(),
+             m_accumulatedString.c_str());
     m_accumulatedString = "";
 }
 
@@ -97,38 +98,37 @@ void UserInterface::setButtonCallback(Button button,
                                       buttonCallbackFunction_t callback,
                                       void* context) {
     ros::NodeHandle nodeHandle = ros::NodeHandle("~");
+    uint buttonId = static_cast<uint>(button);
+
     std::string buttonTopic =
         nodeHandle.param("buttonTopic", std::string("/agent_1/user_interface/button"));
     buttonTopic += "/";
-    buttonTopic += static_cast<int>(button);
+    buttonTopic += std::to_string(buttonId);
 
     auto bindedFunction = [callback, context](const std_msgs::Empty::ConstPtr& msg) {
         (void)msg;
         callback(context);
     };
 
-    nodeHandle.subscribe<std_msgs::Empty>(buttonTopic, 1000, bindedFunction);
+    m_buttonSubscribers[buttonId] =
+        nodeHandle.subscribe<std_msgs::Empty>(buttonTopic, 10, bindedFunction);
 }
 
 std::string UserInterface::uiStateToString() {
-    static const std::string_view s_formatStr = "[UI: rgb: %c btn: %s led %s hex %02X]";
-
-    std::string btnStr;
-    for (const bool& btnState : m_uiState.m_buttonStates) {
-        btnStr += std::to_string(static_cast<uint8_t>(btnState));
-    }
+    static const std::string_view s_formatStr = "[UI: rgb: %c led: %s hex: %02X]";
 
     std::string ledStr;
     for (const bool& ledState : m_uiState.m_ledStates) {
         ledStr += std::to_string(static_cast<uint8_t>(ledState));
     }
-    const int requiredLength =
-        std::snprintf(NULL, 0, s_formatStr.data(), colorToChar(m_uiState.m_rgbLed), btnStr.data(),
-                      ledStr.data(), m_uiState.m_hexDisplay);
+    const size_t requiredLength =
+        (size_t)std::snprintf(NULL, 0, s_formatStr.data(), colorToChar(m_uiState.m_rgbLed),
+                              ledStr.data(), m_uiState.m_hexDisplay);
     std::string formattedStr;
-    formattedStr.resize((size_t)requiredLength);
+    formattedStr.resize(requiredLength);
 
-    std::snprintf(formattedStr.data(), 0, s_formatStr.data(), colorToChar(m_uiState.m_rgbLed),
-                  btnStr.data(), ledStr.data(), m_uiState.m_hexDisplay);
+    std::snprintf(formattedStr.data(), requiredLength + 1, s_formatStr.data(),
+                  colorToChar(m_uiState.m_rgbLed), ledStr.data(), m_uiState.m_hexDisplay);
+
     return formattedStr;
 }

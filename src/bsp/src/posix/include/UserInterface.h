@@ -4,6 +4,7 @@
 #include "bsp/IBSP.h"
 #include "bsp/IUserInterface.h"
 #include <array>
+#include <ros/subscriber.h>
 #include <string>
 
 struct ButtonState {
@@ -40,6 +41,7 @@ class UserInterface : public IUserInterface {
 
   private:
     std::string uiStateToString();
+    std::array<ros::Subscriber, static_cast<uint>(LED::LED_MAX)> m_buttonSubscribers;
 
     const IBSP& m_bsp;
     std::string m_accumulatedString;
