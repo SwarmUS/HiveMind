@@ -28,10 +28,7 @@ char colorToChar(RgbColor color) {
     }
 }
 
-UIState::UIState() : m_rgbLed(RgbColor::OFF), m_hexDisplay(0x00) {
-    m_buttonStates.fill(false);
-    m_ledStates.fill(false);
-}
+UIState::UIState() : m_rgbLed(RgbColor::OFF), m_hexDisplay(0x00) { m_ledStates.fill(false); }
 
 UserInterface::UserInterface(const IBSP& bsp) : m_bsp(bsp), m_mutex(10) {}
 
