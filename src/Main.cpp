@@ -87,7 +87,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class MessageDispatcherTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
+class MessageDispatcherTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     MessageDispatcherTask(const char* taskName,
                           UBaseType_t priority,
@@ -132,7 +132,7 @@ class MessageDispatcherTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE>
     }
 };
 
-class MessageSenderTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
+class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     MessageSenderTask(const char* taskName,
                       UBaseType_t priority,
@@ -176,7 +176,7 @@ class MessageSenderTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
 };
 
 template <typename SerializerType = HiveMindHostSerializer>
-class CommMonitoringTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
+class CommMonitoringTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     CommMonitoringTask<SerializerType>(const char* taskName,
                                        UBaseType_t priority,
@@ -300,27 +300,6 @@ class LogInterlocTask : public AbstractTask<8 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class DummySendAndReceive : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
-  public:
-    DummySendAndReceive(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
-
-    void task() override {
-        auto& spi = BSPContainer::getRemoteCommInterface().value().get();
-        char messageSent[] = "Message sent by STM";
-        char messageReceived[64];
-        while (1) {
-            spi.send((uint8_t*)messageSent, sizeof(messageSent));
-            spi.receive((uint8_t*)messageReceived, sizeof(messageSent));
-            m_logger.log(LogLevel::Info, "%s", messageReceived);
-            Task::delay(2000);
-        }
-    }
-
-  private:
-    ILogger& m_logger;
-};
-
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
@@ -357,8 +336,6 @@ int main(int argc, char** argv) {
     // s_hostMonitorTask.start();
     // s_hostMonitorTask.start();*/
     s_remoteMonitorTask.start();
-    // static DummySendAndReceive s_test("dummy_test", tskIDLE_PRIORITY+1);
-    // s_test.start();
     Task::startScheduler();
 
     return 0;
