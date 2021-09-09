@@ -43,6 +43,10 @@ bool EspSpi_TransmitReceiveDma(const uint8_t* txBuffer,
     if (HAL_SPI_GetState(ESP_SPI) != HAL_SPI_STATE_BUSY_TX_RX) {
         txrxCpltCallbackFct = cpltCallback;
         txrxCallbackContext = context;
+        #ifdef SYSTEM_STM32H7XX_H // Required to use DMA on H7 (https://community.st.com/s/article/FAQ-DMA-is-not-working-on-STM32H7-devices, see solution 3)
+            SCB_CleanDCache_by_Addr((uint32_t*)(((uint32_t)txBuffer) & ~(uint32_t)0x1F), lengthBytes+32);
+            SCB_CleanDCache_by_Addr((uint32_t*)(((uint32_t)rxBuffer) & ~(uint32_t)0x1F), lengthBytes+32);
+        #endif
         HAL_StatusTypeDef status =
             HAL_SPI_TransmitReceive_IT(ESP_SPI, (uint8_t*)txBuffer, rxBuffer, lengthBytes);
         if (status == HAL_OK) {
