@@ -49,7 +49,7 @@ bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
     }
     // Appending CRC32
     *(uint32_t*)&m_outboundMessage.m_data[length] =
-        calculateCRC32_software(m_outboundMessage.m_data.data(), length);
+        m_crc.calculateCRC32(m_outboundMessage.m_data.data(), length);
     m_outboundMessage.m_sizeBytes = (uint16_t)(length + CRC32_SIZE);
     m_txState = transmitState::SENDING_HEADER;
     // Wait for transmission to be over. Will be notified when ACK received or upon error
@@ -84,7 +84,6 @@ void SpiEsp::execute() {
     uint32_t txLengthBytes = 0;
     uint32_t rxLengthBytes = 0;
     auto* txBuffer = (uint8_t*)&m_outboundHeader; // Send header by default;
-    volatile uint32_t v_crc32 = 0;
 
     switch (m_rxState) {
     case receiveState::IDLE:
@@ -150,10 +149,10 @@ void SpiEsp::execute() {
         break;
     case receiveState::VALIDATE_CRC:
         // Check payload CRC and log an error and set flag if it fails
-        v_crc32 = calculateCRC32_software(m_inboundMessage.m_data.data(),
-                                          (uint16_t)(m_inboundMessage.m_sizeBytes - CRC32_SIZE));
-        if (v_crc32 != *(uint32_t*)&m_inboundMessage
-                            .m_data[(uint16_t)(m_inboundMessage.m_sizeBytes - CRC32_SIZE)]) {
+        if (m_crc.calculateCRC32(m_inboundMessage.m_data.data(),
+                                 (uint16_t)(m_inboundMessage.m_sizeBytes - CRC32_SIZE)) !=
+            *(uint32_t*)&m_inboundMessage
+                 .m_data[(uint16_t)(m_inboundMessage.m_sizeBytes - CRC32_SIZE)]) {
             m_logger.log(LogLevel::Error, "Failed payload crc on ESP");
             m_outboundHeader.systemState.stmSystemState.failedCrc = 1;
         }
