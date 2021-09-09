@@ -2,12 +2,12 @@
 #define APPLICATIONINTERFACE_H_
 
 #include "IApplicationInterface.h"
+#include <IMutex.h>
 #include <bsp/IUserInterface.h>
-#include <os/mutex.h>
 
 class ApplicationInterface : public IApplicationInterface {
   public:
-    ApplicationInterface(IUserInterface& userInterface);
+    ApplicationInterface(IUserInterface& userInterface, IMutex& mutex);
 
     void setSystemESPHandshaked(bool handshaked) override;
 
@@ -19,19 +19,22 @@ class ApplicationInterface : public IApplicationInterface {
 
     void setUserLed(bool state) override;
 
-    void setSevenSegment(SevenSegment segment) override;
+    void setUserSegment(UserSegment segment) override;
 
-    const SystemStates& getSystemStates() const override;
+    SystemStates getSystemStates() const override;
 
-    const UserStates& getUserStates() const override;
+    UserStates getUserStates() const override;
+
+    ApplicationStates getApplicationState() const override;
 
   private:
     static constexpr LED s_espLed = LED::LED_0;
-    static constexpr LED s_hostLed = LED::LED_0;
+    static constexpr LED s_hostLed = LED::LED_1;
+    static constexpr LED s_userLed = LED::LED_2;
 
     IUserInterface& m_userInterface;
-    UserStates m_userStates;
-    SystemStates m_systemStates;
+    IMutex& m_mutex;
+    ApplicationStates m_states;
 };
 
 #endif // APPLICATIONINTERFACE_H_

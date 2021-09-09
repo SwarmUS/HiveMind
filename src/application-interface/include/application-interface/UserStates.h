@@ -1,7 +1,7 @@
 #ifndef USERSTATES_H_
 #define USERSTATES_H_
 
-enum class SevenSegment {
+enum class UserSegment {
     Zero = 0,
     One = 1,
     Two = 2,
@@ -22,7 +22,7 @@ enum class SevenSegment {
 
 struct UserStates {
     bool m_userLed;
-    SevenSegment m_userSegment;
+    UserSegment m_userSegment;
 };
 
 #endif // USERSTATES_H_

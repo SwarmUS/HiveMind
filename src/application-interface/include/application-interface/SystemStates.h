@@ -1,15 +1,25 @@
 #ifndef SYSTEMSTATES_H_
 #define SYSTEMSTATES_H_
 
-enum class ConnectionState {
-    Unconnected = 0,
-    Booting = 0,
-    USBHost = 0,
-    EthernetHost = 0,
-    Error = 0,
-};
+enum class ConnectionState { Unconnected = 0, Booting, USBHost, EthernetHost, Error };
 
-enum class DeviceState { Ok = 0, Error = 1 };
+enum class DeviceState {
+    Ok = 0,
+    ErrorVMInstr,
+    ErrorVMStack,
+    ErrorVMLnum,
+    ErrorVMPc,
+    ErrorVMFlist,
+    ErrorVMType,
+    ErrorVMOutofrange,
+    ErrorVMNotimpl,
+    ErrorVMRet,
+    ErrorVMString,
+    ErrorVMSwarm,
+    ErrorVMVstig,
+    ErrorVMMem,
+    ErrorVMMath
+};
 
 struct SystemStates {
     /**@brief if the handshake with the esp is successfull*/

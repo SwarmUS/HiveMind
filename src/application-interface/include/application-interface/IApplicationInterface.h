@@ -1,8 +1,7 @@
 #ifndef IAPPLICATIONINTERFACE_H_
 #define IAPPLICATIONINTERFACE_H_
 
-#include "SystemStates.h"
-#include "UserStates.h"
+#include "ApplicationStates.h"
 
 class IApplicationInterface {
   public:
@@ -21,14 +20,17 @@ class IApplicationInterface {
     /**@brief set the user LED*/
     virtual void setUserLed(bool state) = 0;
 
-    /**@brief set the seven segment*/
-    virtual void setSevenSegment(SevenSegment segment) = 0;
+    /**@brief set the user seven segment*/
+    virtual void setUserSegment(UserSegment segment) = 0;
 
     /**@brief set the system states*/
-    virtual const SystemStates& getSystemStates() const = 0;
+    virtual SystemStates getSystemStates() const = 0;
 
     /**@brief get the user states*/
-    virtual const UserStates& getUserStates() const = 0;
+    virtual UserStates getUserStates() const = 0;
+
+    /**@brief get the application states*/
+    virtual ApplicationStates getApplicationState() const = 0;
 };
 
 #endif // IAPPLICATIONINTERFACE_H_
