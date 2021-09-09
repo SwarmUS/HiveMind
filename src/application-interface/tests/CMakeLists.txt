@@ -1,9 +1,12 @@
 set(TEST_NAME test-application-interface)
 
 set(TEST_SOURCES
+  ApplicationInterfaceTests.cpp
 )
 
 set(TEST_HEADERS
+  mocks/MutexInterfaceMock.h
+  mocks/UserInterfaceMock.h
 )
 
 add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})

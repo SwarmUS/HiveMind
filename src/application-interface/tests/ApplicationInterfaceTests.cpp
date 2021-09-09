@@ -1,35 +1,29 @@
-#include "ApplicationInterface.h"
-#include <gmock/gmock.h>
+#include "mocks/MutexInterfaceMock.h"
+#include "mocks/UserInterfaceMock.h"
+#include <application-interface/ApplicationInterface.h>
 #include <gtest/gtest.h>
 
 class ApplicationInterfaceFixture : public testing::Test {
   protected:
-    ApplicationInterface* m_greetHandler;
+    ApplicationInterface* m_appInterface;
 
-    BSPInterfaceMock* m_bspMock;
-    HiveMindHostSerializerInterfaceMock m_serializerMock;
-    HiveMindHostDeserializerInterfaceMock m_deserializerMock;
-    LoggerInterfaceMock m_loggerMock;
-    MessageDTO m_message;
+    testing::StrictMock<MutexInterfaceMock> m_mutexMock;
+    UserInterfaceMock m_uiMock;
 
-    uint16_t m_uuid = 42;
-    void SetUp() override {
-        m_bspMock = new BSPInterfaceMock(m_uuid);
-        m_greetHandler = new GreetHandler(m_serializerMock, m_deserializerMock, *m_bspMock);
-    }
-    void TearDown() override { delete m_greetHandler; }
+    void SetUp() override { m_appInterface = new ApplicationInterface(m_uiMock, m_mutexMock); }
+
+    void TearDown() override { delete m_appInterface; }
 };
 
-TEST_F(GreetHandlerFixture, GreetHandler_greet_notGreet) {
+TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setSystemESPHandshaked_default) {
     // Given
-    m_message.setMessage(std::monostate());
-    EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
-        .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
-    EXPECT_CALL(m_serializerMock, serializeToStream(testing::_)).Times(0);
+    EXPECT_CALL(m_mutexMock, lock()).Times(2).WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(m_mutexMock, unlock()).Times(2).WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(m_uiMock, setLed(ApplicationInterface::s_espLed, true)).Times(1);
 
     // Then
-    bool ret = m_greetHandler->greet();
+    m_appInterface->setSystemESPHandshaked(true);
 
     // Expect
-    EXPECT_FALSE(ret);
+    EXPECT_TRUE(m_appInterface->getApplicationState().m_systemStates.m_espHandshaked);
 }

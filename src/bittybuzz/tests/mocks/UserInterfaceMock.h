@@ -50,22 +50,16 @@ class UserInterfaceMock : public IUserInterface {
         return 0;
     }
 
-    void setRGBLed(RgbColor color) override { (void)color; }
+    MOCK_METHOD(void, setRGBLed, (RgbColor color), (override));
 
-    void setLed(LED led, bool state) override {
-        (void)led;
-        (void)state;
-    }
+    MOCK_METHOD(void, setLed, (LED led, bool state), (override));
 
-    void setHexDisplay(uint8_t value) override { (void)value; }
+    MOCK_METHOD(void, setHexDisplay, (uint8_t value), (override));
 
-    void setButtonCallback(Button button,
-                           buttonCallbackFunction_t callback,
-                           void* context) override {
-        (void)button;
-        (void)callback;
-        (void)context;
-    }
+    MOCK_METHOD(void,
+                setButtonCallback,
+                (Button button, buttonCallbackFunction_t callback, void* context),
+                (override));
 };
 
 #endif // __USERINTERFACEMOCK_H_

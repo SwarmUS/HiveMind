@@ -9,6 +9,8 @@ class ApplicationInterface : public IApplicationInterface {
   public:
     ApplicationInterface(IUserInterface& userInterface, IMutex& mutex);
 
+    ~ApplicationInterface() override = default;
+
     void setSystemESPHandshaked(bool handshaked) override;
 
     void setSystemHostHandshaked(bool handshaked) override;
@@ -27,11 +29,11 @@ class ApplicationInterface : public IApplicationInterface {
 
     ApplicationStates getApplicationState() const override;
 
-  private:
     static constexpr LED s_espLed = LED::LED_0;
     static constexpr LED s_hostLed = LED::LED_1;
     static constexpr LED s_userLed = LED::LED_2;
 
+  private:
     IUserInterface& m_userInterface;
     IMutex& m_mutex;
     ApplicationStates m_states;

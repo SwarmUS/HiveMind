@@ -5,6 +5,8 @@
 
 class IApplicationInterface {
   public:
+    virtual ~IApplicationInterface() = default;
+
     /**@brief set the system ESP handshake and light the necessary LED*/
     virtual void setSystemESPHandshaked(bool handshaked) = 0;
 
