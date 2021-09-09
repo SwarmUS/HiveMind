@@ -306,7 +306,7 @@ int main(int argc, char** argv) {
     IBSP& bsp = BSPContainer::getBSP();
     bsp.initChip((void*)&cmdLineArgs);
 
-    /*static BittyBuzzTask s_bittybuzzTask("bittybuzz", gc_taskNormalPriority);
+    static BittyBuzzTask s_bittybuzzTask("bittybuzz", gc_taskNormalPriority);
     static HardwareInterlocTask s_hardwareInterlocTask("hardware_interloc", gc_taskHighPriority);
     static SoftwareInterlocTask s_softwareInterlocTask("software_interloc", gc_taskNormalPriority);
     static LogInterlocTask s_logInterlocTask("software_interloc", gc_taskNormalPriority);
@@ -314,7 +314,7 @@ int main(int argc, char** argv) {
     static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskNormalPriority, NULL,
                                                     MessageHandlerContainer::getHostMsgQueue());
     static MessageSenderTask s_hostMessageSender("host_send", gc_taskNormalPriority, NULL,
-                                                 MessageHandlerContainer::getHostMsgQueue());*/
+                                                 MessageHandlerContainer::getHostMsgQueue());
 
     static MessageDispatcherTask s_remoteDispatchTask("remote_dispatch", gc_taskNormalPriority,
                                                       NULL,
@@ -322,19 +322,19 @@ int main(int argc, char** argv) {
     static MessageSenderTask s_remoteMessageSender("remote_send", gc_taskNormalPriority, NULL,
                                                    MessageHandlerContainer::getRemoteMsgQueue());
 
-    /*static CommMonitoringTask s_hostMonitorTask("host_monitor", gc_taskNormalPriority,
+    static CommMonitoringTask s_hostMonitorTask("host_monitor", gc_taskNormalPriority,
                                                 s_hostDispatchTask, s_hostMessageSender,
-                                                BSPContainer::getHostCommInterface);*/
+                                                BSPContainer::getHostCommInterface);
     static CommMonitoringTask<HiveMindHostAccumulatorSerializer> s_remoteMonitorTask(
         "remote_monitor", gc_taskNormalPriority, s_remoteDispatchTask, s_remoteMessageSender,
         BSPContainer::getRemoteCommInterface);
 
-    // s_bittybuzzTask.start();
-    // s_hardwareInterlocTask.start();
-    // s_softwareInterlocTask.start();
-    // s_logInterlocTask.start();
-    // s_hostMonitorTask.start();
-    // s_hostMonitorTask.start();*/
+    s_bittybuzzTask.start();
+    s_hardwareInterlocTask.start();
+    s_softwareInterlocTask.start();
+    s_logInterlocTask.start();
+    s_hostMonitorTask.start();
+    s_hostMonitorTask.start();
     s_remoteMonitorTask.start();
     Task::startScheduler();
 
