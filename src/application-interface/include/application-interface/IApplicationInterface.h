@@ -7,22 +7,22 @@
 class IApplicationInterface {
   public:
     /**@brief set the system ESP handshake and light the necessary LED*/
-    virtual bool setSystemESPHandshaked(bool handshaked) = 0;
+    virtual void setSystemESPHandshaked(bool handshaked) = 0;
 
     /**@brief set the system Host handshake and light the necessary LED*/
-    virtual bool setSystemHostHandshaked(bool handshaked) = 0;
+    virtual void setSystemHostHandshaked(bool handshaked) = 0;
 
     /**@brief set the system Connection state and light the necessary LED the right color*/
-    virtual bool setSystemConnectionState(ConnectionState state) = 0;
+    virtual void setSystemConnectionState(ConnectionState state) = 0;
 
     /**@brief set the system Connection state and set the seven segment accordingly*/
-    virtual bool setSystemDeviceState(DeviceState state) = 0;
+    virtual void setSystemDeviceState(DeviceState state) = 0;
 
     /**@brief set the user LED*/
-    virtual bool setUserLed(bool state) = 0;
+    virtual void setUserLed(bool state) = 0;
 
     /**@brief set the seven segment*/
-    virtual bool setSevenSegment(SevenSegment segment) = 0;
+    virtual void setSevenSegment(SevenSegment segment) = 0;
 
     /**@brief set the system states*/
     virtual const SystemStates& getSystemStates() const = 0;

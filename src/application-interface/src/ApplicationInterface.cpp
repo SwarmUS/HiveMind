@@ -1,20 +1,29 @@
 #include "ApplicationInterface.h"
 
+ApplicationInterface::ApplicationInterface(IUserInterface& userInterface) :
+    m_userInterface(userInterface) {}
 
- 
-    bool ApplicationInterface::setSystemESPHandshaked(bool handshaked) {}
+void ApplicationInterface::setSystemESPHandshaked(bool handshaked) {
+    m_userInterface.setLed(s_espLed, handshaked);
+    m_systemStates.m_espHandshaked = true;
+}
 
-    bool ApplicationInterface::setSystemHostHandshaked(bool handshaked) {}
+void ApplicationInterface::setSystemHostHandshaked(bool handshaked) {
+    m_userInterface.setLed(s_hostLed, handshaked);
+    m_systemStates.m_hostHandshaked = true;
+}
 
-    bool ApplicationInterface::setSystemConnectionState(ConnectionState state) {}
+void ApplicationInterface::setSystemConnectionState(ConnectionState state) {
+    m_systemStates.m_connection = state;
+    m_userInterface.
+}
 
-    bool ApplicationInterface::setSystemDeviceState(DeviceState state) {}
+void ApplicationInterface::setSystemDeviceState(DeviceState state) {}
 
-bool ApplicationInterface::setUserLed(bool state) {}
+void ApplicationInterface::setUserLed(bool state) {}
 
-bool ApplicationInterface::setSevenSegment(SevenSegment segment){}
+void ApplicationInterface::setSevenSegment(SevenSegment segment) {}
 
-    const SystemStates& ApplicationInterface::getSystemStates() {}
+const SystemStates& ApplicationInterface::getSystemStates() const {}
 
-const UserStates& ApplicationInterface::getUserStates() {}
-
+const UserStates& ApplicationInterface::getUserStates() const {}

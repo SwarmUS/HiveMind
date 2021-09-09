@@ -2,9 +2,16 @@ set(LIB_NAME "swarmus-hivemind-application-interface")
 set(LIB_ALIAS "SwarmUS::HiveMind::ApplicationInterface")
 
 set(LIB_SOURCES
+  src/ApplicationInterface.cpp
 )
 
 set(LIB_HEADERS
+  include/application-interface/ApplicationStates.h
+  include/application-interface/SystemStates.h
+  include/application-interface/UserStates.h
+
+  include/application-interface/IApplicationInterface
+  include/application-interface/ApplicationInterface.h
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS} ${LIB_SOURCES})
@@ -16,11 +23,12 @@ target_include_directories(${LIB_NAME}
        $<INSTALL_INTERFACE:include>
 
     PRIVATE
-       include/user-interface
+       include/application-interface
 )
 
 target_link_libraries(${LIB_NAME}
     PUBLIC
+        SwarmUS::HiveMind::OS
         SwarmUS::HiveMind::BSP
         SwarmUS::HiveMind::Logger
 )
