@@ -78,10 +78,27 @@ void MX_ADC2_Init(void) {
 void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle) {
 
     GPIO_InitTypeDef GPIO_InitStruct = {0};
+    RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
     if (adcHandle->Instance == ADC2) {
         /* USER CODE BEGIN ADC2_MspInit 0 */
 
         /* USER CODE END ADC2_MspInit 0 */
+        /** Initializes the peripherals clock
+         */
+        PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+        PeriphClkInitStruct.PLL3.PLL3M = 2;
+        PeriphClkInitStruct.PLL3.PLL3N = 16;
+        PeriphClkInitStruct.PLL3.PLL3P = 2;
+        PeriphClkInitStruct.PLL3.PLL3Q = 4;
+        PeriphClkInitStruct.PLL3.PLL3R = 4;
+        PeriphClkInitStruct.PLL3.PLL3RGE = RCC_PLL3VCIRANGE_3;
+        PeriphClkInitStruct.PLL3.PLL3VCOSEL = RCC_PLL3VCOWIDE;
+        PeriphClkInitStruct.PLL3.PLL3FRACN = 0;
+        PeriphClkInitStruct.AdcClockSelection = RCC_ADCCLKSOURCE_PLL3;
+        if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK) {
+            Error_Handler();
+        }
+
         /* ADC2 clock enable */
         __HAL_RCC_ADC12_CLK_ENABLE();
 
