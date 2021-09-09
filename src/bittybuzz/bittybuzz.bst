@@ -1,4 +1,6 @@
 log
+int
+float
 is_nil
 is_int
 is_float
@@ -12,9 +14,12 @@ math
 pi
 e
 abs
-floor
-ceil
-round
+floori
+floorf
+ceili
+ceilf
+roundi
+roundf
 log
 log2
 log10

@@ -17,10 +17,12 @@ BittyBuzzStringResolver BittyBuzzFactory::createBittyBuzzStringResolver(ILogger&
                                    BBZSTRING_OFFSET, logger);
 }
 
-BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 10>> BittyBuzzFactory::
+BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 12>> BittyBuzzFactory::
     createBittyBuzzGlobalLib() {
-    std::array<BittyBuzzLibMemberRegister, 10> globalMember = {{
+    std::array<BittyBuzzLibMemberRegister, 12> globalMember = {{
         {BBZSTRID_log, BittyBuzzUserFunctions::log},
+        {BBZSTRID_int, BittyBuzzUserFunctions::toInt},
+        {BBZSTRID_float, BittyBuzzUserFunctions::toFloat},
         {BBZSTRID_is_nil, BittyBuzzUserFunctions::isNil},
         {BBZSTRID_is_int, BittyBuzzUserFunctions::isInt},
         {BBZSTRID_is_float, BittyBuzzUserFunctions::isFloat},
@@ -32,18 +34,21 @@ BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 10>> BittyBuzzFactory::
         {BBZSTRID_call_host_function, BittyBuzzUserFunctions::callHostFunction},
     }};
 
-    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 10>>(globalMember);
+    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 12>>(globalMember);
 }
 
-BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 20>> BittyBuzzFactory::
+BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 23>> BittyBuzzFactory::
     createBittyBuzzMathLib() {
-    std::array<BittyBuzzLibMemberRegister, 20> libMember{{
+    std::array<BittyBuzzLibMemberRegister, 23> libMember{{
         {BBZSTRID_e, Math::e},
         {BBZSTRID_pi, Math::pi},
         {BBZSTRID_abs, BittyBuzzMathFunctions::bbzmath_abs},
-        {BBZSTRID_floor, BittyBuzzMathFunctions::bbzmath_floor},
-        {BBZSTRID_ceil, BittyBuzzMathFunctions::bbzmath_ceil},
-        {BBZSTRID_round, BittyBuzzMathFunctions::bbzmath_round},
+        {BBZSTRID_floori, BittyBuzzMathFunctions::bbzmath_floori},
+        {BBZSTRID_floorf, BittyBuzzMathFunctions::bbzmath_floorf},
+        {BBZSTRID_ceili, BittyBuzzMathFunctions::bbzmath_ceili},
+        {BBZSTRID_ceilf, BittyBuzzMathFunctions::bbzmath_ceilf},
+        {BBZSTRID_roundi, BittyBuzzMathFunctions::bbzmath_roundi},
+        {BBZSTRID_roundf, BittyBuzzMathFunctions::bbzmath_roundf},
         {BBZSTRID_log, BittyBuzzMathFunctions::bbzmath_log},
         {BBZSTRID_log2, BittyBuzzMathFunctions::bbzmath_log2},
         {BBZSTRID_log10, BittyBuzzMathFunctions::bbzmath_log10},
@@ -59,5 +64,5 @@ BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 20>> BittyBuzzFactory::
         {BBZSTRID_max, BittyBuzzMathFunctions::bbzmath_max},
         {BBZSTRID_rng_uniform, BittyBuzzMathFunctions::bbzmath_rng_uniform},
     }};
-    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 20>>(BBZSTRID_math, libMember);
+    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 23>>(BBZSTRID_math, libMember);
 }

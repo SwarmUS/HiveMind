@@ -1,0 +1,7 @@
+function init() {
+}
+
+function step() {
+    var f = float(3);
+    assert_true(f == 3.0);
+}
