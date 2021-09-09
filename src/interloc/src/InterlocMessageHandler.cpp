@@ -71,7 +71,7 @@ bool InterlocMessageHandler::handleCalibrationMessage(const CalibrationMessageDT
     }
 
     if (const auto* setDistanceMsg = std::get_if<SetCalibrationDistanceDTO>(&messageVariant)) {
-        m_interlocManager.setCalibDistance(setDistanceMsg->getDistance() * 100);
+        m_interlocManager.configureTWRCalibration(setDistanceMsg->getDistance() * 100);
         return true;
     }
 

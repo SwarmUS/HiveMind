@@ -14,12 +14,17 @@ class InterlocManager : public IInterlocManager {
     ~InterlocManager() override = default;
 
     void startInterloc() override;
-    void startCalibSingleInitiator() override;
-    void startCalibSingleResponder(uint16_t initiatorId,
-                                   calibrationEndedCallbackFunction_t callback,
-                                   void* context) override;
-    void stopCalibration() override;
-    void setCalibDistance(uint16_t distanceCalibCm) override;
+
+    void configureTWRCalibration(uint16_t distanceCalibCm) override;
+
+    void configureAngleCalibration(uint32_t numberOfFrames) override;
+
+    void setInterlocManagerStateChangeCallback(
+        interlocManagerStateChangeCallbackFunction_t callback, void* context) override;
+
+    void setInterlocManagerRawAngleDataCallback(interlocRawAngleDataCallbackFunction_t callback,
+                                                void* context) override;
+
     void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
                                    void* context) override;
 
@@ -39,15 +44,9 @@ class InterlocManager : public IInterlocManager {
     uint16_t m_distanceCalibCm = 75;
 
     positionUpdateCallbackFunction_t m_positionUpdateCallback;
-    calibrationEndedCallbackFunction_t m_calibrationEndedCallback;
     void* m_positionUpdateCallbackContext;
     void* m_calibrationEndedCallbackContext;
     uint16_t m_calibrationInitiatorId;
-
-    void startDeviceCalibSingleInitiator(uint16_t destinationId, Decawave& device);
-    void startDeviceCalibSingleResponder(uint16_t destinationId, Decawave& device);
-    bool sendTWRSequence(uint16_t destinationId, Decawave& device);
-    double receiveTWRSequence(uint16_t destinationId, Decawave& device);
 
     bool isFrameOk(UWBRxFrame frame);
     static uint8_t powerCorrection(double twrDistance);

@@ -24,7 +24,7 @@ class InterlocManager : public IInterlocManager {
                                    calibrationEndedCallbackFunction_t callback,
                                    void* context) override;
     void stopCalibration() override;
-    void setCalibDistance(uint16_t distanceCalibCm) override;
+    void configureTWRCalibration(uint16_t distanceCalibCm) override;
 
   private:
     ILogger& m_logger;
