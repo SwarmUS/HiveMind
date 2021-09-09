@@ -87,7 +87,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class MessageDispatcherTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class MessageDispatcherTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
     MessageDispatcherTask(const char* taskName,
                           UBaseType_t priority,
@@ -132,7 +132,7 @@ class MessageDispatcherTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE>
     }
 };
 
-class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class MessageSenderTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
     MessageSenderTask(const char* taskName,
                       UBaseType_t priority,
@@ -176,7 +176,7 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
 };
 
 template <typename SerializerType = HiveMindHostSerializer>
-class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
+class CommMonitoringTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
     CommMonitoringTask<SerializerType>(const char* taskName,
                                        UBaseType_t priority,
@@ -300,13 +300,34 @@ class LogInterlocTask : public AbstractTask<8 * configMINIMAL_STACK_SIZE> {
     }
 };
 
+class DummySendAndReceive : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
+  public:
+    DummySendAndReceive(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
+
+    void task() override {
+        auto& spi = BSPContainer::getRemoteCommInterface().value().get();
+        char messageSent[] = "Message sent by STM";
+        char messageReceived[64];
+        while (1) {
+            spi.send((uint8_t*)messageSent, sizeof(messageSent));
+            spi.receive((uint8_t*)messageReceived, sizeof(messageSent));
+            m_logger.log(LogLevel::Info, "%s", messageReceived);
+            Task::delay(2000);
+        }
+    }
+
+  private:
+    ILogger& m_logger;
+};
+
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
     IBSP& bsp = BSPContainer::getBSP();
     bsp.initChip((void*)&cmdLineArgs);
 
-    static BittyBuzzTask s_bittybuzzTask("bittybuzz", gc_taskNormalPriority);
+    /*static BittyBuzzTask s_bittybuzzTask("bittybuzz", gc_taskNormalPriority);
     static HardwareInterlocTask s_hardwareInterlocTask("hardware_interloc", gc_taskHighPriority);
     static SoftwareInterlocTask s_softwareInterlocTask("software_interloc", gc_taskNormalPriority);
     static LogInterlocTask s_logInterlocTask("software_interloc", gc_taskNormalPriority);
@@ -314,7 +335,7 @@ int main(int argc, char** argv) {
     static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskNormalPriority, NULL,
                                                     MessageHandlerContainer::getHostMsgQueue());
     static MessageSenderTask s_hostMessageSender("host_send", gc_taskNormalPriority, NULL,
-                                                 MessageHandlerContainer::getHostMsgQueue());
+                                                 MessageHandlerContainer::getHostMsgQueue());*/
 
     static MessageDispatcherTask s_remoteDispatchTask("remote_dispatch", gc_taskNormalPriority,
                                                       NULL,
@@ -322,20 +343,22 @@ int main(int argc, char** argv) {
     static MessageSenderTask s_remoteMessageSender("remote_send", gc_taskNormalPriority, NULL,
                                                    MessageHandlerContainer::getRemoteMsgQueue());
 
-    static CommMonitoringTask s_hostMonitorTask("host_monitor", gc_taskNormalPriority,
+    /*static CommMonitoringTask s_hostMonitorTask("host_monitor", gc_taskNormalPriority,
                                                 s_hostDispatchTask, s_hostMessageSender,
-                                                BSPContainer::getHostCommInterface);
+                                                BSPContainer::getHostCommInterface);*/
     static CommMonitoringTask<HiveMindHostAccumulatorSerializer> s_remoteMonitorTask(
         "remote_monitor", gc_taskNormalPriority, s_remoteDispatchTask, s_remoteMessageSender,
         BSPContainer::getRemoteCommInterface);
 
-    s_bittybuzzTask.start();
-    s_hardwareInterlocTask.start();
-    s_softwareInterlocTask.start();
-    s_logInterlocTask.start();
-    s_hostMonitorTask.start();
+    // s_bittybuzzTask.start();
+    // s_hardwareInterlocTask.start();
+    // s_softwareInterlocTask.start();
+    // s_logInterlocTask.start();
+    // s_hostMonitorTask.start();
+    // s_hostMonitorTask.start();*/
     s_remoteMonitorTask.start();
-
+    // static DummySendAndReceive s_test("dummy_test", tskIDLE_PRIORITY+1);
+    // s_test.start();
     Task::startScheduler();
 
     return 0;
