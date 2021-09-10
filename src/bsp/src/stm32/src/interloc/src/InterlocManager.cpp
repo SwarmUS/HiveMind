@@ -31,6 +31,18 @@ void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t
     m_positionUpdateCallbackContext = context;
 }
 
+void InterlocManager::setInterlocManagerStateChangeCallback(
+    interlocManagerStateChangeCallbackFunction_t callback, void* context) {
+    m_stateChangeCallback = callback;
+    m_stateChangeCallbackContext = context;
+}
+
+void InterlocManager::setInterlocManagerRawAngleDataCallback(
+    interlocRawAngleDataCallbackFunction_t callback, void* context) {
+    m_rawAngleDataCallback = callback;
+    m_rawAngleDataCallbackContext = context;
+}
+
 void InterlocManager::startInterloc() {
     bool allInit = true;
     for (auto& deca : m_decawaves) {
@@ -86,10 +98,22 @@ void InterlocManager::updateDistance(uint16_t robotId, float distance) {
     }
 }
 
-void InterlocManager::configureAngleCalibration(uint32_t numberOfFrames) {}
+void InterlocManager::configureAngleCalibration(uint32_t numberOfFrames) {
+    m_stateHandler.setAngleCalibNumberOfFrames(numberOfFrames);
+}
 
-void InterlocManager::setInterlocManagerStateChangeCallback(
-    interlocManagerStateChangeCallbackFunction_t callback, void* context) {}
+void InterlocManager::setInterlocManagerState(InterlocStateDTO state) {
+    if (m_stateChangeCallback != nullptr) {
+        m_stateChangeCallback(m_stateChangeCallbackContext, m_state, state);
+    }
 
-void InterlocManager::setInterlocManagerRawAngleDataCallback(
-    interlocRawAngleDataCallbackFunction_t callback, void* context) {}
+    m_state = state;
+}
+
+void InterlocManager::sendRawAngleData(BspInterlocRawAngleData& data) {
+    if (m_rawAngleDataCallback != nullptr) {
+        m_rawAngleDataCallback(m_rawAngleDataCallbackContext, data);
+    }
+
+    setInterlocManagerState(InterlocStateDTO::STANDBY);
+}

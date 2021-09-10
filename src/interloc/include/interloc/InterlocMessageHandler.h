@@ -6,8 +6,8 @@
 #include <bsp/IInterlocManager.h>
 #include <cpp-common/ICircularQueue.h>
 #include <logger/ILogger.h>
-#include <pheromones/InterlocAPIDTO.h>
 #include <pheromones/MessageDTO.h>
+#include <pheromones/interloc/InterlocAPIDTO.h>
 
 class InterlocMessageHandler : public IInterlocMessageHandler {
   public:
@@ -30,12 +30,25 @@ class InterlocMessageHandler : public IInterlocMessageHandler {
     ICircularQueue<MessageDTO>& m_hostQueue;
     ICircularQueue<MessageDTO>& m_remoteQueue;
 
-    bool handleMessage(const MessageDTO& dto) const;
-    bool handleCalibrationMessage(const CalibrationMessageDTO& dto, uint16_t sourceId) const;
+    uint16_t m_messageSourceId;
+
+    bool handleMessage(const MessageDTO& dto);
+    bool handleStateChangeMessage(const SetInterlocStateDTO dto) const;
+    bool handleConfigurationMessage(const InterlocConfigurationDTO& dto) const;
+
+    // bool handleCalibrationMessage(const CalibrationMessageDTO& dto, uint16_t sourceId) const;
     ICircularQueue<MessageDTO>& getQueueForDestination(uint16_t destinationId) const;
 
-    void notifyCalibrationEnded(uint16_t initiatorId);
-    static void notifyCalibrationEndedStatic(void* context, uint16_t initiatorId);
+    void stateChangeCallback(InterlocStateDTO previousState, InterlocStateDTO newState);
+    static void stateChangeCallbackStatic(void* context,
+                                          InterlocStateDTO previousState,
+                                          InterlocStateDTO newState);
+
+    void rawAngleDataCallback(BspInterlocRawAngleData& data);
+    static void rawAngleDataCallbackStatic(void* context, BspInterlocRawAngleData& data);
+
+    //    void notifyCalibrationEnded(uint16_t initiatorId);
+    //    static void notifyCalibrationEndedStatic(void* context, uint16_t initiatorId);
 };
 
 #endif //__INTERLOCMESSAGEHANDLER_H__

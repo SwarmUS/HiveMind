@@ -83,3 +83,9 @@ void InterlocStateHandler::setPreviousFrameStartTs(uint64_t timestamp) {
 
 uint16_t InterlocStateHandler::getSlotIdFromBoardId(uint16_t boardId) { return boardId; }
 uint16_t InterlocStateHandler::getBoardIdFromSlotId(uint16_t slotId) { return slotId; }
+
+void InterlocStateHandler::setAngleCalibNumberOfFrames(uint32_t numberOfFrames) {
+    m_angleCalibNumberOfFrames = numberOfFrames;
+}
+
+uint32_t InterlocStateHandler::getAngleNumberOfFrames() const { return m_angleCalibNumberOfFrames; }

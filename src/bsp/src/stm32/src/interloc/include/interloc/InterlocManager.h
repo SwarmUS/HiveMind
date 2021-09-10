@@ -15,6 +15,8 @@ class InterlocManager : public IInterlocManager {
 
     void startInterloc() override;
 
+    void setInterlocManagerState(InterlocStateDTO state) override;
+
     void configureTWRCalibration(uint16_t distanceCalibCm) override;
 
     void configureAngleCalibration(uint32_t numberOfFrames) override;
@@ -29,6 +31,8 @@ class InterlocManager : public IInterlocManager {
                                    void* context) override;
 
     void updateDistance(uint16_t robotId, float distance);
+
+    void sendRawAngleData(BspInterlocRawAngleData& data);
 
     /**
      * Syncs the clocks of both DW1000s
@@ -45,8 +49,12 @@ class InterlocManager : public IInterlocManager {
 
     positionUpdateCallbackFunction_t m_positionUpdateCallback;
     void* m_positionUpdateCallbackContext;
-    void* m_calibrationEndedCallbackContext;
-    uint16_t m_calibrationInitiatorId;
+    interlocManagerStateChangeCallbackFunction_t m_stateChangeCallback;
+    void* m_stateChangeCallbackContext;
+    interlocRawAngleDataCallbackFunction_t m_rawAngleDataCallback;
+    void* m_rawAngleDataCallbackContext;
+
+    InterlocStateDTO m_state;
 
     bool isFrameOk(UWBRxFrame frame);
     static uint8_t powerCorrection(double twrDistance);
