@@ -6,7 +6,7 @@ void TestUSB::runTests() {
     setup();
 
     test01_UART();
-    // test02_USB();
+    test02_USB();
 }
 
 void TestUSB::test01_UART() {

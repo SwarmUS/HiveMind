@@ -65,23 +65,21 @@ USBD_StatusTypeDef USBD_Get_USB_Status(HAL_StatusTypeDef hal_status);
 /* MSP Init */
 
 void HAL_PCD_MspInit(PCD_HandleTypeDef* pcdHandle) {
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
     if (pcdHandle->Instance == USB_OTG_HS) {
         /* USER CODE BEGIN USB_OTG_HS_MspInit 0 */
 
         /* USER CODE END USB_OTG_HS_MspInit 0 */
+        /** Initializes the peripherals clock
+         */
+        PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB;
+        PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
+        if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK) {
+            Error_Handler();
+        }
         /** Enable USB Voltage detector
          */
         HAL_PWREx_EnableUSBVoltageDetector();
-
-        __HAL_RCC_GPIOA_CLK_ENABLE();
-        /**USB_OTG_HS GPIO Configuration
-        PA9     ------> USB_OTG_HS_VBUS
-        */
-        GPIO_InitStruct.Pin = GPIO_PIN_9;
-        GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
-        HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
         /* Peripheral clock enable */
         __HAL_RCC_USB_OTG_HS_CLK_ENABLE();
@@ -102,11 +100,6 @@ void HAL_PCD_MspDeInit(PCD_HandleTypeDef* pcdHandle) {
         /* USER CODE END USB_OTG_HS_MspDeInit 0 */
         /* Peripheral clock disable */
         __HAL_RCC_USB_OTG_HS_CLK_DISABLE();
-
-        /**USB_OTG_HS GPIO Configuration
-        PA9     ------> USB_OTG_HS_VBUS
-        */
-        HAL_GPIO_DeInit(GPIOA, GPIO_PIN_9);
 
         /* Peripheral interrupt Deinit*/
         HAL_NVIC_DisableIRQ(OTG_HS_IRQn);
@@ -327,7 +320,7 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef* pdev) {
         hpcd_USB_OTG_HS.Init.low_power_enable = DISABLE;
         hpcd_USB_OTG_HS.Init.lpm_enable = DISABLE;
         hpcd_USB_OTG_HS.Init.battery_charging_enable = ENABLE;
-        hpcd_USB_OTG_HS.Init.vbus_sensing_enable = ENABLE;
+        hpcd_USB_OTG_HS.Init.vbus_sensing_enable = DISABLE;
         hpcd_USB_OTG_HS.Init.use_dedicated_ep1 = DISABLE;
         hpcd_USB_OTG_HS.Init.use_external_vbus = DISABLE;
         if (HAL_PCD_Init(&hpcd_USB_OTG_HS) != HAL_OK) {
