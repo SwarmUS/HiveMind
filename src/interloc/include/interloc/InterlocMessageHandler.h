@@ -47,8 +47,10 @@ class InterlocMessageHandler : public IInterlocMessageHandler {
     void rawAngleDataCallback(BspInterlocRawAngleData& data);
     static void rawAngleDataCallbackStatic(void* context, BspInterlocRawAngleData& data);
 
-    //    void notifyCalibrationEnded(uint16_t initiatorId);
-    //    static void notifyCalibrationEndedStatic(void* context, uint16_t initiatorId);
+    void ensureSendMessage(MessageDTO& msg);
+    static InterlocRawAngleDataDTO constructRawDataMessage(BspInterlocRawAngleData& data,
+                                                           uint32_t fromId,
+                                                           uint8_t numFrames);
 };
 
 #endif //__INTERLOCMESSAGEHANDLER_H__

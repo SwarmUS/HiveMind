@@ -1,4 +1,5 @@
 
+#include <Task.h>
 #include <cpp-common/ICircularQueue.h>
 #include <interloc/InterlocMessageHandler.h>
 
@@ -52,47 +53,6 @@ bool InterlocMessageHandler::handleMessage(const MessageDTO& dto) {
     return false;
 }
 
-// bool InterlocMessageHandler::handleCalibrationMessage(const CalibrationMessageDTO& dto,
-//                                                      uint16_t sourceId) const {
-//    auto messageVariant = dto.getCall();
-//
-//    if (const auto* startCalibMsg = std::get_if<StartCalibrationDTO>(&messageVariant)) {
-//        if (startCalibMsg->getCalibrationMode() == CalibrationModeDTO::RESPONDER) {
-//            m_interlocManager.startCalibSingleResponder(sourceId, notifyCalibrationEndedStatic,
-//                                                        (void*)this);
-//            return true;
-//        }
-//
-//        if (startCalibMsg->getCalibrationMode() == CalibrationModeDTO::INITIATOR) {
-//            m_interlocManager.startCalibSingleInitiator();
-//            return true;
-//        }
-//
-//        return false;
-//    }
-//
-//    if (std::holds_alternative<StopCalibrationDTO>(messageVariant)) {
-//        m_interlocManager.stopCalibration();
-//        return true;
-//    }
-//
-//    if (const auto* setDistanceMsg = std::get_if<SetCalibrationDistanceDTO>(&messageVariant)) {
-//        m_interlocManager.configureTWRCalibration(setDistanceMsg->getDistance() * 100);
-//        return true;
-//    }
-//
-//    return false;
-//}
-//
-// void InterlocMessageHandler::notifyCalibrationEnded(uint16_t initiatorId) {
-//    MessageDTO message = MessageDTO(m_bsp.getUUId(), initiatorId,
-//                                    InterlocAPIDTO(CalibrationMessageDTO(CalibrationEndedDTO())));
-//
-//    if (!getQueueForDestination(initiatorId).push(message)) {
-//        m_logger.log(LogLevel::Warn, "Could not push calibration ended message on queue");
-//    }
-//}
-
 ICircularQueue<MessageDTO>& InterlocMessageHandler::getQueueForDestination(
     uint16_t destinationId) const {
     if (destinationId == m_bsp.getUUId()) {
@@ -142,11 +102,63 @@ void InterlocMessageHandler::stateChangeCallback(InterlocStateDTO previousState,
 
 void InterlocMessageHandler::rawAngleDataCallback(BspInterlocRawAngleData& data) {
     if (m_messageSourceId == 0) {
-        m_logger.log(
-            LogLevel::Warn,
-            "Interloc Manager changed state without having received a stateChange message");
+        m_logger.log(LogLevel::Warn,
+                     "Interloc Manager sending raw data without having received request");
         return;
     }
+
+    uint8_t maxFramesPerMessage = InterlocRawAngleDataDTO::INTERLOC_RAW_ANGLE_FRAMES_MAX_SIZE;
+
+    for (uint8_t i = 0; i < data.m_framesLength / maxFramesPerMessage; i++) {
+
+        MessageDTO msg = MessageDTO(m_bsp.getUUId(), m_messageSourceId,
+                                    InterlocAPIDTO(InterlocOutputMessageDTO(constructRawDataMessage(
+                                        data, i * maxFramesPerMessage, maxFramesPerMessage))));
+
+        ensureSendMessage(msg);
+    }
+
+    uint8_t remaining = data.m_framesLength % maxFramesPerMessage;
+    MessageDTO msg = MessageDTO(m_bsp.getUUId(), m_messageSourceId,
+                                InterlocAPIDTO(InterlocOutputMessageDTO(constructRawDataMessage(
+                                    data, data.m_framesLength - remaining, remaining))));
+
+    ensureSendMessage(msg);
+}
+
+void InterlocMessageHandler::ensureSendMessage(MessageDTO& msg) {
+    // TODO: add timeout so we don't block forever
+    while (getQueueForDestination(m_messageSourceId).isFull()) {
+        Task::delay(10);
+    }
+    getQueueForDestination(m_messageSourceId).push(msg);
+}
+
+InterlocRawAngleDataDTO InterlocMessageHandler::constructRawDataMessage(
+    BspInterlocRawAngleData& data, uint32_t fromId, uint8_t numFrames) {
+    InterlocRxFrameInfoDTO
+        frameInfos[InterlocRxFrameRawAngleDataDTO::INTERLOC_BEEBOARDS_SIZE_MAX_LENGTH];
+    InterlocRxFrameRawAngleDataDTO
+        frames[InterlocRawAngleDataDTO::INTERLOC_RAW_ANGLE_FRAMES_MAX_SIZE];
+    InterlocRawAngleDataDTO dataDto;
+
+    for (uint8_t j = 0; j < numFrames; j++) {
+        uint32_t frameId = fromId + j;
+
+        for (uint8_t k = 0; k < data.m_frames[frameId].m_frameInfosLength; k++) {
+            frameInfos[k].setBeeboardPort(data.m_frames[frameId].m_frameInfos[k].m_beeboardPort);
+            frameInfos[k].setRxTimestamp(data.m_frames[frameId].m_frameInfos[k].m_rxTimestamp);
+            frameInfos[k].setSfdAngle(data.m_frames[frameId].m_frameInfos[k].m_sfdAngle);
+            frameInfos[k].setAccumulatorAngle(
+                data.m_frames[frameId].m_frameInfos[k].m_accumulatorAngle);
+        }
+
+        frames[j].setFrameInfos(frameInfos, data.m_frames[frameId].m_frameInfosLength);
+        frames[j].setFrameId(frameId);
+    }
+
+    dataDto.setFrames(frames, numFrames);
+    return dataDto;
 }
 
 void InterlocMessageHandler::rawAngleDataCallbackStatic(void* context,
@@ -159,8 +171,3 @@ void InterlocMessageHandler::stateChangeCallbackStatic(void* context,
                                                        InterlocStateDTO newState) {
     static_cast<InterlocMessageHandler*>(context)->stateChangeCallback(previousState, newState);
 }
-
-// void InterlocMessageHandler::notifyCalibrationEndedStatic(void* context, uint16_t
-// initiatorId) {
-//    static_cast<InterlocMessageHandler*>(context)->notifyCalibrationEnded(initiatorId);
-//}
