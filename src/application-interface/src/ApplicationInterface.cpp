@@ -7,13 +7,13 @@ ApplicationInterface::ApplicationInterface(IUserInterface& userInterface, IMutex
 void ApplicationInterface::setSystemESPHandshaked(bool handshaked) {
     LockGuard lock(m_mutex);
     m_userInterface.setLed(s_espLed, handshaked);
-    m_states.m_systemStates.m_espHandshaked = true;
+    m_states.m_systemStates.m_espHandshaked = handshaked;
 }
 
 void ApplicationInterface::setSystemHostHandshaked(bool handshaked) {
     LockGuard lock(m_mutex);
     m_userInterface.setLed(s_hostLed, handshaked);
-    m_states.m_systemStates.m_hostHandshaked = true;
+    m_states.m_systemStates.m_hostHandshaked = handshaked;
 }
 
 void ApplicationInterface::setSystemConnectionState(ConnectionState state) {
@@ -43,11 +43,8 @@ void ApplicationInterface::setSystemDeviceState(DeviceState state) {
     m_states.m_systemStates.m_device = state;
 
     uint8_t userHex = static_cast<uint8_t>(m_states.m_userStates.m_userSegment);
-    uint8_t maskedUserHex = 0xff & userHex; // so the number start with 0x0X
-
     uint8_t value = static_cast<uint8_t>(state) << 4;
-
-    value = value & maskedUserHex;
+    value = value + userHex;
     m_userInterface.setHexDisplay(value);
 }
 

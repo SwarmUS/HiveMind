@@ -21,8 +21,8 @@ enum class UserSegment {
 };
 
 struct UserStates {
-    bool m_userLed;
-    UserSegment m_userSegment;
+    bool m_userLed = false;
+    UserSegment m_userSegment = UserSegment::Zero;
 };
 
 #endif // USERSTATES_H_
