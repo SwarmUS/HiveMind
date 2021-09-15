@@ -14,6 +14,7 @@ set(LIB_SOURCES
   src/HostHandshakeUI.cpp
 
   src/ApplicationInterface.cpp
+  src/ApplicationInterfaceContainer.cpp
 )
 
 set(LIB_HEADERS
@@ -39,6 +40,8 @@ set(LIB_HEADERS
 
   include/application-interface/IApplicationInterface
   include/application-interface/ApplicationInterface.h
+
+  include/application-interface/ApplicationInterfaceContainer.h
 )
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS} ${LIB_SOURCES})
