@@ -19,12 +19,17 @@ class InterlocManager : public IInterlocManager {
                                    void* context) override;
 
     // Calib API is not needed in simulation. Can just ignore any calls to these functions
-    void startCalibSingleInitiator() override;
-    void startCalibSingleResponder(uint16_t initiatorId,
-                                   calibrationEndedCallbackFunction_t callback,
-                                   void* context) override;
-    void stopCalibration() override;
+    void setInterlocManagerState(InterlocStateDTO state) override;
+
     void configureTWRCalibration(uint16_t distanceCalibCm) override;
+
+    void configureAngleCalibration(uint32_t numberOfFrames) override;
+
+    void setInterlocManagerStateChangeCallback(
+        interlocManagerStateChangeCallbackFunction_t callback, void* context) override;
+
+    void setInterlocManagerRawAngleDataCallback(interlocRawAngleDataCallbackFunction_t callback,
+                                                void* context) override;
 
   private:
     ILogger& m_logger;
