@@ -124,11 +124,13 @@ void InterlocMessageHandler::rawAngleDataCallback(BspInterlocRawAngleData& data)
     }
 
     uint8_t remaining = data.m_framesLength % maxFramesPerMessage;
-    MessageDTO msg = MessageDTO(m_bsp.getUUId(), m_messageSourceId,
-                                InterlocAPIDTO(InterlocOutputMessageDTO(constructRawDataMessage(
-                                    data, data.m_framesLength - remaining, remaining))));
+    if (remaining > 0) {
+        MessageDTO msg = MessageDTO(m_bsp.getUUId(), m_messageSourceId,
+                                    InterlocAPIDTO(InterlocOutputMessageDTO(constructRawDataMessage(
+                                        data, data.m_framesLength - remaining, remaining))));
 
-    ensureSendMessage(msg);
+        ensureSendMessage(msg);
+    }
 }
 
 void InterlocMessageHandler::ensureSendMessage(MessageDTO& msg) {
