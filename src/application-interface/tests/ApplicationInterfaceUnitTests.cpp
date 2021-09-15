@@ -19,26 +19,26 @@ TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setSystemESPHandshaked_
     // Given
     EXPECT_CALL(m_mutexMock, lock()).Times(2).WillRepeatedly(testing::Return(true));
     EXPECT_CALL(m_mutexMock, unlock()).Times(2).WillRepeatedly(testing::Return(true));
-    EXPECT_CALL(m_uiMock, setLed(ApplicationInterface::s_espLed, true)).Times(1);
+    EXPECT_CALL(m_uiMock, setLed(ApplicationInterface::s_remoteLed, true)).Times(1);
 
     // Then
-    m_appInterface->setSystemESPHandshaked(true);
+    m_appInterface->setSystemRemoteHandshaked(true);
 
     // Expect
-    EXPECT_TRUE(m_appInterface->getApplicationState().m_systemStates.m_espHandshaked);
+    EXPECT_TRUE(m_appInterface->getApplicationState().m_systemStates.m_remoteHandshaked);
 }
 
 TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setSystemESPHandshaked_false) {
     // Given
     EXPECT_CALL(m_mutexMock, lock()).Times(2).WillRepeatedly(testing::Return(true));
     EXPECT_CALL(m_mutexMock, unlock()).Times(2).WillRepeatedly(testing::Return(true));
-    EXPECT_CALL(m_uiMock, setLed(ApplicationInterface::s_espLed, false)).Times(1);
+    EXPECT_CALL(m_uiMock, setLed(ApplicationInterface::s_remoteLed, false)).Times(1);
 
     // Then
-    m_appInterface->setSystemESPHandshaked(false);
+    m_appInterface->setSystemRemoteHandshaked(false);
 
     // Expect
-    EXPECT_FALSE(m_appInterface->getApplicationState().m_systemStates.m_espHandshaked);
+    EXPECT_FALSE(m_appInterface->getApplicationState().m_systemStates.m_remoteHandshaked);
 }
 
 TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setSystemHostHandshaked_true) {
@@ -88,11 +88,11 @@ TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setSystemConnectionStat
     EXPECT_CALL(m_uiMock, setRGBLed(RgbColor::GREEN)).Times(1);
 
     // Then
-    m_appInterface->setSystemConnectionState(ConnectionState::EthernetHost);
+    m_appInterface->setSystemConnectionState(ConnectionState::Ethernet);
 
     // Expect
     EXPECT_EQ(m_appInterface->getApplicationState().m_systemStates.m_connection,
-              ConnectionState::EthernetHost);
+              ConnectionState::Ethernet);
 }
 
 TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setSystemConnectionState_USBHost) {
@@ -102,11 +102,11 @@ TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setSystemConnectionStat
     EXPECT_CALL(m_uiMock, setRGBLed(RgbColor::BLUE)).Times(1);
 
     // Then
-    m_appInterface->setSystemConnectionState(ConnectionState::USBHost);
+    m_appInterface->setSystemConnectionState(ConnectionState::USB);
 
     // Expect
     EXPECT_EQ(m_appInterface->getApplicationState().m_systemStates.m_connection,
-              ConnectionState::USBHost);
+              ConnectionState::USB);
 }
 
 TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setSystemConnectionState_Error) {
@@ -194,8 +194,8 @@ TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setUserLed_false) {
 
 TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setUserSegment_valid) {
     // Given
-    EXPECT_CALL(m_mutexMock, lock()).Times(2).WillRepeatedly(testing::Return(true));
-    EXPECT_CALL(m_mutexMock, unlock()).Times(2).WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(m_mutexMock, lock()).Times(3).WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(m_mutexMock, unlock()).Times(3).WillRepeatedly(testing::Return(true));
     EXPECT_CALL(m_uiMock, setHexDisplay(0x0C)).Times(1);
 
     // Then
@@ -207,8 +207,8 @@ TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setUserSegment_valid) {
 
 TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setUserSegment_invalid) {
     // Given
-    EXPECT_CALL(m_mutexMock, lock()).Times(2).WillRepeatedly(testing::Return(true));
-    EXPECT_CALL(m_mutexMock, unlock()).Times(2).WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(m_mutexMock, lock()).Times(3).WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(m_mutexMock, unlock()).Times(3).WillRepeatedly(testing::Return(true));
     EXPECT_CALL(m_uiMock, setHexDisplay(0x0C)).Times(1);
 
     // Then

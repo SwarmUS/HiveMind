@@ -11,7 +11,7 @@ class ApplicationInterface : public IApplicationInterface {
 
     ~ApplicationInterface() override = default;
 
-    void setSystemESPHandshaked(bool handshaked) override;
+    void setSystemRemoteHandshaked(bool handshaked) override;
 
     void setSystemHostHandshaked(bool handshaked) override;
 
@@ -29,7 +29,7 @@ class ApplicationInterface : public IApplicationInterface {
 
     ApplicationStates getApplicationState() const override;
 
-    static constexpr LED s_espLed = LED::LED_0;
+    static constexpr LED s_remoteLed = LED::LED_0;
     static constexpr LED s_hostLed = LED::LED_1;
     static constexpr LED s_userLed = LED::LED_2;
 

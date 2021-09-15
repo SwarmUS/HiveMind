@@ -1,7 +1,9 @@
 set(TEST_NAME test-application-interface)
 
 set(TEST_SOURCES
-  ApplicationInterfaceTests.cpp
+  ApplicationInterfaceUnitTests.cpp
+  HostHandshakeUIUnitTests.cpp
+  RemoteHandshakeUIUnitTests.cpp
 )
 
 set(TEST_HEADERS

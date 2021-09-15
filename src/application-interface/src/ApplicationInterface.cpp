@@ -4,10 +4,10 @@
 ApplicationInterface::ApplicationInterface(IUserInterface& userInterface, IMutex& mutex) :
     m_userInterface(userInterface), m_mutex(mutex) {}
 
-void ApplicationInterface::setSystemESPHandshaked(bool handshaked) {
+void ApplicationInterface::setSystemRemoteHandshaked(bool handshaked) {
     LockGuard lock(m_mutex);
-    m_userInterface.setLed(s_espLed, handshaked);
-    m_states.m_systemStates.m_espHandshaked = handshaked;
+    m_userInterface.setLed(s_remoteLed, handshaked);
+    m_states.m_systemStates.m_remoteHandshaked = handshaked;
 }
 
 void ApplicationInterface::setSystemHostHandshaked(bool handshaked) {
@@ -23,10 +23,10 @@ void ApplicationInterface::setSystemConnectionState(ConnectionState state) {
     case ConnectionState::Booting:
         m_userInterface.setRGBLed(RgbColor::YELLOW);
         break;
-    case ConnectionState::EthernetHost:
+    case ConnectionState::Ethernet:
         m_userInterface.setRGBLed(RgbColor::GREEN);
         break;
-    case ConnectionState::USBHost:
+    case ConnectionState::USB:
         m_userInterface.setRGBLed(RgbColor::BLUE);
         break;
     case ConnectionState::Error:
@@ -44,7 +44,7 @@ void ApplicationInterface::setSystemDeviceState(DeviceState state) {
 
     uint8_t userHex = static_cast<uint8_t>(m_states.m_userStates.m_userSegment);
     uint8_t value = static_cast<uint8_t>(state) << 4;
-    value = value + userHex;
+    value = (0xf0 & value) + (0x0f & userHex); // Bound the values
     m_userInterface.setHexDisplay(value);
 }
 

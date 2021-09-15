@@ -1,7 +1,7 @@
 #ifndef SYSTEMSTATES_H_
 #define SYSTEMSTATES_H_
 
-enum class ConnectionState { Booting = 0, Unconnected, USBHost, EthernetHost, Error };
+enum class ConnectionState { Booting = 0, Unconnected, USB, Ethernet, Error };
 
 enum class DeviceState {
     Ok = 0,
@@ -23,7 +23,7 @@ enum class DeviceState {
 
 struct SystemStates {
     /**@brief if the handshake with the esp is successfull*/
-    bool m_espHandshaked = false;
+    bool m_remoteHandshaked = false;
 
     /**@brief if the handshake with the host is successfull*/
     bool m_hostHandshaked = false;

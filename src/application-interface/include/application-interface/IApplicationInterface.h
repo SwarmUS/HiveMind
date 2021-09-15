@@ -1,14 +1,14 @@
 #ifndef IAPPLICATIONINTERFACE_H_
 #define IAPPLICATIONINTERFACE_H_
 
-#include "ApplicationStates.h"
+#include <application-interface/ApplicationStates.h>
 
 class IApplicationInterface {
   public:
     virtual ~IApplicationInterface() = default;
 
-    /**@brief set the system ESP handshake and light the necessary LED*/
-    virtual void setSystemESPHandshaked(bool handshaked) = 0;
+    /**@brief set the system Remote handshake and light the necessary LED*/
+    virtual void setSystemRemoteHandshaked(bool handshaked) = 0;
 
     /**@brief set the system Host handshake and light the necessary LED*/
     virtual void setSystemHostHandshaked(bool handshaked) = 0;

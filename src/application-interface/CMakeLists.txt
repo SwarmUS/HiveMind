@@ -2,10 +2,17 @@ set(LIB_NAME "swarmus-hivemind-application-interface")
 set(LIB_ALIAS "SwarmUS::HiveMind::ApplicationInterface")
 
 set(LIB_SOURCES
+  src/RemoteHandshakeUI.cpp
+  src/HostHandshakeUI.cpp
+
   src/ApplicationInterface.cpp
 )
 
 set(LIB_HEADERS
+  include/application-interface/HostHandshakeUI.h
+  include/application-interface/RemoteHandshakeUI.h
+  include/application-interface/IHandshakeUI.h
+
   include/application-interface/ApplicationStates.h
   include/application-interface/SystemStates.h
   include/application-interface/UserStates.h
