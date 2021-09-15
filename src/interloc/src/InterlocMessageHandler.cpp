@@ -44,8 +44,13 @@ bool InterlocMessageHandler::handleMessage(const MessageDTO& dto) {
     if (const auto* apiCall = std::get_if<InterlocAPIDTO>(&message)) {
         m_messageSourceId = dto.getSourceId();
 
-        if (const auto* calibCall = std::get_if<SetInterlocStateDTO>(&(apiCall->getAPICall()))) {
-            return handleStateChangeMessage(*calibCall);
+        if (const auto* setState = std::get_if<SetInterlocStateDTO>(&(apiCall->getAPICall()))) {
+            return handleStateChangeMessage(*setState);
+        }
+
+        if (const auto* configure =
+                std::get_if<InterlocConfigurationDTO>(&(apiCall->getAPICall()))) {
+            return handleConfigurationMessage(*configure);
         }
     }
 
@@ -75,7 +80,7 @@ bool InterlocMessageHandler::handleConfigurationMessage(const InterlocConfigurat
     }
 
     if (const auto* twrConfig = std::get_if<ConfigureTWRCalibrationDTO>(&messageVariant)) {
-        m_interlocManager.configureTWRCalibration(twrConfig->getDistance());
+        m_interlocManager.configureTWRCalibration(twrConfig->getDistance() * 100);
         return true;
     }
 
