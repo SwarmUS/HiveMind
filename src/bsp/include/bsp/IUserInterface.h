@@ -13,13 +13,13 @@ enum class RgbColor { RED = 0, GREEN, BLUE, VIOLET, YELLOW, ORANGE, WHITE, OFF }
 /**
  * @brief Buttons present on the board.
  */
-enum class Button { BUTTON_0 = 0, BUTTON_1};
+enum class Button { BUTTON_0 = 0, BUTTON_1 };
 constexpr uint16_t g_brButton = static_cast<uint16_t>(Button::BUTTON_1) + 1;
 
 /**
  * @brief LED present on the board
  */
-enum class LED { LED_0 = 0, LED_1, LED_2};
+enum class LED { LED_0 = 0, LED_1, LED_2 };
 constexpr uint16_t g_nbrLED = static_cast<uint16_t>(LED::LED_2) + 1;
 
 /**

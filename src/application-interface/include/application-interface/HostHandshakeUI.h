@@ -10,7 +10,8 @@ class HostHandshakeUI : public IHandshakeUI {
     ~HostHandshakeUI() override = default;
 
     void handshake(bool handshaked) override;
-    private:
+
+  private:
     IApplicationInterface& m_appInterface;
 };
 
