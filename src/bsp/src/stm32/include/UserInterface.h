@@ -17,7 +17,7 @@ class UserInterface : public IUserInterface {
     int printLine(const char* format, va_list args) override;
 
     void setRGBLed(RgbColor color) override;
-    void setLed(RgbColor color) override;
+    void setLed(LED led, bool state) override;
     void setHexDisplay(uint8_t value) override;
     void setButtonCallback(Button button,
                            buttonCallbackFunction_t callback,

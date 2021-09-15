@@ -15,7 +15,7 @@ struct ButtonState {
 struct UIState {
     UIState();
     RgbColor m_rgbLed;
-    std::array<bool, static_cast<int>(LED::LED_MAX)> m_ledStates;
+    std::array<bool, g_nbrLED> m_ledStates;
     uint8_t m_hexDisplay;
 };
 
@@ -40,7 +40,7 @@ class UserInterface : public IUserInterface {
 
   private:
     std::string uiStateToString();
-    std::array<ros::Subscriber, static_cast<uint>(LED::LED_MAX)> m_buttonSubscribers;
+    std::array<ros::Subscriber, g_nbrLED> m_buttonSubscribers;
 
     const IBSP& m_bsp;
     std::string m_accumulatedString;
