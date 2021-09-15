@@ -166,6 +166,19 @@ TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setSystemDeviceState_in
     EXPECT_EQ(m_appInterface->getApplicationState().m_systemStates.m_device, (DeviceState)0xff);
 }
 
+void sysbtn_testfun(void* context) { (void)context; }
+TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setSystemButtonCallback) {
+    // Given
+    EXPECT_CALL(m_mutexMock, lock()).Times(0);
+    EXPECT_CALL(m_mutexMock, unlock()).Times(0);
+    EXPECT_CALL(m_uiMock, setButtonCallback(Button::BUTTON_0, sysbtn_testfun, NULL)).Times(1);
+
+    // Then
+    m_appInterface->setSystemButtonCallback(Button::BUTTON_0, sysbtn_testfun, NULL);
+
+    // Expect
+}
+
 TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setUserLed_true) {
     // Given
     EXPECT_CALL(m_mutexMock, lock()).Times(2).WillRepeatedly(testing::Return(true));

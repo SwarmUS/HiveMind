@@ -2,8 +2,12 @@ set(TEST_NAME test-application-interface)
 
 set(TEST_SOURCES
   ApplicationInterfaceUnitTests.cpp
+  ConnectionStateUIUnitTests.cpp
+  DeviceStateUIUnitTests.cpp
   HostHandshakeUIUnitTests.cpp
   RemoteHandshakeUIUnitTests.cpp
+  UserUIUnitTests.cpp
+  ButtonCallbackRegisterUnitTests.cpp
 )
 
 set(TEST_HEADERS

@@ -48,6 +48,12 @@ void ApplicationInterface::setSystemDeviceState(DeviceState state) {
     m_userInterface.setHexDisplay(value);
 }
 
+void ApplicationInterface::setSystemButtonCallback(Button button,
+                                                   buttonCallbackFunction_t callback,
+                                                   void* context) {
+    m_userInterface.setButtonCallback(button, callback, context);
+}
+
 void ApplicationInterface::setUserLed(bool state) {
     LockGuard lock(m_mutex);
     m_states.m_userStates.m_userLed = state;

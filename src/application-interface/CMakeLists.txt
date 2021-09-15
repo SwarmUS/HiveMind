@@ -2,6 +2,14 @@ set(LIB_NAME "swarmus-hivemind-application-interface")
 set(LIB_ALIAS "SwarmUS::HiveMind::ApplicationInterface")
 
 set(LIB_SOURCES
+  src/ButtonCallbackRegister.cpp
+
+  src/UserUI.cpp
+
+  src/DeviceStateUI.cpp
+
+  src/ConnectionStateUI.cpp
+
   src/RemoteHandshakeUI.cpp
   src/HostHandshakeUI.cpp
 
@@ -9,9 +17,21 @@ set(LIB_SOURCES
 )
 
 set(LIB_HEADERS
+  include/application-interface/IButtonCallbackRegister.h
+  include/application-interface/ButtonCallbackRegister.h
+
+  include/application-interface/IUserUI.h
+  include/application-interface/UserUI.h
+
+  include/application-interface/IDeviceStateUI.h
+  include/application-interface/DeviceStateUI.h
+
+  include/application-interface/IConnectionStateUI.h
+  include/application-interface/ConnectionStateUI.h
+
+  include/application-interface/IHandshakeUI.h
   include/application-interface/HostHandshakeUI.h
   include/application-interface/RemoteHandshakeUI.h
-  include/application-interface/IHandshakeUI.h
 
   include/application-interface/ApplicationStates.h
   include/application-interface/SystemStates.h

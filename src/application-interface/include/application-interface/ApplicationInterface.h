@@ -19,6 +19,10 @@ class ApplicationInterface : public IApplicationInterface {
 
     void setSystemDeviceState(DeviceState state) override;
 
+    void setSystemButtonCallback(Button button,
+                                 buttonCallbackFunction_t callback,
+                                 void* context) override;
+
     void setUserLed(bool state) override;
 
     void setUserSegment(UserSegment segment) override;

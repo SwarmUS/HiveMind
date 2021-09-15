@@ -2,6 +2,7 @@
 #define IAPPLICATIONINTERFACE_H_
 
 #include <application-interface/ApplicationStates.h>
+#include <bsp/IUserInterface.h>
 
 class IApplicationInterface {
   public:
@@ -18,6 +19,11 @@ class IApplicationInterface {
 
     /**@brief set the system Connection state and set the seven segment accordingly*/
     virtual void setSystemDeviceState(DeviceState state) = 0;
+
+    /**@brief set the systems button to a callback*/
+    virtual void setSystemButtonCallback(Button button,
+                                         buttonCallbackFunction_t callback,
+                                         void* context) = 0;
 
     /**@brief set the user LED*/
     virtual void setUserLed(bool state) = 0;
