@@ -4,6 +4,8 @@
 #include <bsp/Math.h>
 #include <optional>
 
+bool isNumber(bbzobj_t* obj) { return bbztype_isint(*obj) || bbztype_isfloat(*obj); }
+
 std::optional<float> getFloatArg(uint16_t stackAt) {
 
     float arg = 0;
@@ -38,8 +40,7 @@ void BittyBuzzMathFunctions::bbzmath_abs() {
     } else if (bbztype_isint(*o)) {
         bbzvm_pushi(Math::abs(o->i.value));
     } else {
-
-        bbzvm_seterror(BBZVM_ERROR_MATH);
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
         return;
     }
     bbzvm_ret1();
@@ -93,7 +94,7 @@ void BittyBuzzMathFunctions::bbzmath_log() {
     // Get args
     std::optional<float> arg = getFloatArg(1);
     if (!arg) {
-        bbzvm_seterror(BBZVM_ERROR_MATH);
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
         return;
     }
 
@@ -106,7 +107,7 @@ void BittyBuzzMathFunctions::bbzmath_log2() {
 
     std::optional<float> arg = getFloatArg(1);
     if (!arg) {
-        bbzvm_seterror(BBZVM_ERROR_MATH);
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
         return;
     }
 
@@ -118,7 +119,7 @@ void BittyBuzzMathFunctions::bbzmath_log10() {
 
     std::optional<float> arg = getFloatArg(1);
     if (!arg) {
-        bbzvm_seterror(BBZVM_ERROR_MATH);
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
         return;
     }
 
@@ -130,7 +131,7 @@ void BittyBuzzMathFunctions::bbzmath_exp() {
 
     std::optional<float> arg = getFloatArg(1);
     if (!arg) {
-        bbzvm_seterror(BBZVM_ERROR_MATH);
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
         return;
     }
 
@@ -142,7 +143,7 @@ void BittyBuzzMathFunctions::bbzmath_sqrt() {
 
     std::optional<float> arg = getFloatArg(1);
     if (!arg) {
-        bbzvm_seterror(BBZVM_ERROR_MATH);
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
         return;
     }
 
@@ -154,7 +155,7 @@ void BittyBuzzMathFunctions::bbzmath_sin() {
 
     std::optional<float> arg = getFloatArg(1);
     if (!arg) {
-        bbzvm_seterror(BBZVM_ERROR_MATH);
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
         return;
     }
 
@@ -167,7 +168,7 @@ void BittyBuzzMathFunctions::bbzmath_cos() {
 
     std::optional<float> arg = getFloatArg(1);
     if (!arg) {
-        bbzvm_seterror(BBZVM_ERROR_MATH);
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
         return;
     }
 
@@ -180,7 +181,7 @@ void BittyBuzzMathFunctions::bbzmath_tan() {
 
     std::optional<float> arg = getFloatArg(1);
     if (!arg) {
-        bbzvm_seterror(BBZVM_ERROR_MATH);
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
         return;
     }
 
@@ -192,7 +193,7 @@ void BittyBuzzMathFunctions::bbzmath_asin() {
 
     std::optional<float> arg = getFloatArg(1);
     if (!arg) {
-        bbzvm_seterror(BBZVM_ERROR_MATH);
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
         return;
     }
 
@@ -205,7 +206,7 @@ void BittyBuzzMathFunctions::bbzmath_acos() {
 
     std::optional<float> arg = getFloatArg(1);
     if (!arg) {
-        bbzvm_seterror(BBZVM_ERROR_MATH);
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
         return;
     }
 
@@ -218,13 +219,13 @@ void BittyBuzzMathFunctions::bbzmath_atan() {
 
     std::optional<float> y = getFloatArg(1);
     if (!y) {
-        bbzvm_seterror(BBZVM_ERROR_MATH);
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
         return;
     }
 
     std::optional<float> x = getFloatArg(2);
     if (!x) {
-        bbzvm_seterror(BBZVM_ERROR_MATH);
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
         return;
     }
 
@@ -237,6 +238,10 @@ void BittyBuzzMathFunctions::bbzmath_min() {
     /* Get arguments */
     bbzobj_t* a = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
     bbzobj_t* b = bbzheap_obj_at(bbzvm_locals_at(2)); // NOLINT
+    if (!isNumber(a) || !isNumber(b)) {
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
+        return;
+    }
 
     /* Compare them and return the smaller one */
     int cmp = bbztype_cmp(a, b);
@@ -249,6 +254,10 @@ void BittyBuzzMathFunctions::bbzmath_max() {
     /* Get arguments */
     bbzobj_t* a = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
     bbzobj_t* b = bbzheap_obj_at(bbzvm_locals_at(2)); // NOLINT
+    if (!isNumber(a) || !isNumber(b)) {
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
+        return;
+    }
 
     /* Compare them and return the bigger one */
     int cmp = bbztype_cmp(a, b);

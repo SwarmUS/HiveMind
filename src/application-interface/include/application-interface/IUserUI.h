@@ -12,7 +12,7 @@ class IUserUI {
      *@param state the state to set the led*/
     virtual void setLed(bool state) = 0;
 
-    /**@brief Set the user seven segment ot a value
+    /**@brief Set the user seven segment to a value
      *@param segment the value to set to the segment */
     virtual void setSegment(UserSegment segment) = 0;
 };
