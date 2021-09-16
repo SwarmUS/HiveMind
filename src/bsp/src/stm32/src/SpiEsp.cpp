@@ -116,7 +116,7 @@ void SpiEsp::execute() {
         // Simple flag signifying that connection is established with esp
         m_isConnected = true;
         if (m_inboundHeader->rxSizeBytes == m_outboundMessage.m_sizeBytes &&
-            m_outboundMessage.m_sizeBytes != 0) { // Check if bytes
+            m_outboundMessage.m_sizeBytes != 0) {
             m_logger.log(LogLevel::Debug, "Received valid header. Can now send payload");
             m_txState = transmitState::SENDING_PAYLOAD;
         } else {
