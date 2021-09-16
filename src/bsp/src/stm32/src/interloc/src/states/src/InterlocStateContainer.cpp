@@ -1,5 +1,7 @@
 #include <interloc/InterlocBSPContainer.h>
 #include <logger/LoggerContainer.h>
+#include <states/AngleReceiverState.h>
+#include <states/AngleSenderState.h>
 #include <states/DefaultState.h>
 #include <states/IdleState.h>
 #include <states/InterlocStateContainer.h>
@@ -47,6 +49,12 @@ AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
     static SetDistanceState s_setDistanceState(LoggerContainer::getLogger(),
                                                InterlocBSPContainer::getDecawaves());
 
+    static AngleSenderState s_angleSender(LoggerContainer::getLogger(),
+                                          InterlocBSPContainer::getDecawaves());
+
+    static AngleReceiverState s_angleReceiver(LoggerContainer::getLogger(),
+                                              InterlocBSPContainer::getDecawaves());
+
     switch (state) {
     case InterlocStates::DEFAULT:
         return s_defaultState;
@@ -80,6 +88,12 @@ AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
 
     case InterlocStates::SET_DISTANCE:
         return s_setDistanceState;
+
+    case InterlocStates::ANGLE_SENDER:
+        return s_angleSender;
+
+    case InterlocStates::ANGLE_RECEIVER:
+        return s_angleReceiver;
 
     default:
         return s_defaultState;

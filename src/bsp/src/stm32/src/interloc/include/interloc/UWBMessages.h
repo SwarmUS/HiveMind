@@ -12,7 +12,12 @@ namespace UWBMessages {
     enum FrameType { BEACON = 0x0, DATA = 0x2, ACK = 0x3, MAC_COMMAND = 0x4 };
     enum AddressMode { SHORT_ADDRESS = 0x2 };
     enum FrameVersion { VERSION_0 = 0x0, VERSION_1 = 0x1 };
-    enum FunctionCode : uint16_t { TWR_POLL = 0x61, TWR_RESPONSE = 0x50, TWR_FINAL = 0x69 };
+    enum FunctionCode : uint16_t {
+        TWR_POLL = 0x61,
+        TWR_RESPONSE = 0x50,
+        TWR_FINAL = 0x69,
+        ANGLE = 0x42
+    };
 
     struct __attribute__((__packed__)) FrameControl {
         FrameType m_frameType : 3;
@@ -39,7 +44,7 @@ namespace UWBMessages {
         FunctionCode m_functionCode;
     };
 
-    struct TWRPoll {
+    struct __attribute__((__packed__)) TWRPoll {
         DWFrame m_headerFrame;
         uint8_t m_superFrameInitiator;
         uint8_t m_currentFrameId;
@@ -55,6 +60,11 @@ namespace UWBMessages {
         uint64_t m_pollTxTs;
         uint64_t m_responseRxTs[MAX_INTERLOC_SUBFRAMES];
         uint64_t m_finalTxTs;
+    };
+
+    struct __attribute__((__packed__)) AngleMsg {
+        DWFrame m_headerFrame;
+        uint32_t m_frameId;
     };
 
 } // namespace UWBMessages

@@ -29,6 +29,7 @@ class InterlocStateHandler {
                             uint16_t bufferLength);
 
     TwoWayRanging& getTWR();
+    BspInterlocRawAngleData& getRawAngleData();
     InterlocTimeManager& getTimeManager();
 
     void incrementCurrentFrameId();

@@ -15,6 +15,8 @@ set(LIB_SOURCES
         src/SyncState.cpp
         src/SendPollFromSyncState.cpp
         src/SetDistanceState.cpp
+        src/AngleReceiverState.cpp
+        src/AngleSenderState.cpp
         )
 
 set(LIB_HEADERS
@@ -32,6 +34,8 @@ set(LIB_HEADERS
         include/states/SyncState.h
         include/states/SendPollFromSyncState.h
         include/states/SetDistanceState.h
+        include/states/AngleSenderState.h
+        include/states/AngleReceiverState.h
         )
 
 add_library(${LIB_NAME} STATIC ${LIB_SOURCES} ${LIB_HEADERS})

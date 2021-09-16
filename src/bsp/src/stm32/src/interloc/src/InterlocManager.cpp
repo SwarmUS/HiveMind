@@ -55,8 +55,12 @@ void InterlocManager::startInterloc() {
     syncClocks();
 
     if (allInit) {
-        m_stateHandler.setState(InterlocStates::IDLE, InterlocEvent::NO_EVENT);
+        m_state = InterlocStateDTO::OPERATING;
+    } else {
+        m_state = InterlocStateDTO::STANDBY;
     }
+
+    m_stateHandler.setState(InterlocStates::IDLE, InterlocEvent::NO_EVENT);
 
     while (true) {
         m_stateHandler.process();
@@ -117,3 +121,5 @@ void InterlocManager::sendRawAngleData(BspInterlocRawAngleData& data) {
 
     setInterlocManagerState(InterlocStateDTO::STANDBY);
 }
+
+InterlocStateDTO InterlocManager::getState() const { return m_state; }

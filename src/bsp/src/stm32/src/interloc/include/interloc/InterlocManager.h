@@ -34,6 +34,8 @@ class InterlocManager : public IInterlocManager {
 
     void sendRawAngleData(BspInterlocRawAngleData& data);
 
+    InterlocStateDTO getState() const;
+
     /**
      * Syncs the clocks of both DW1000s
      */
