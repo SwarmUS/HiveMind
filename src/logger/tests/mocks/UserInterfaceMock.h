@@ -15,7 +15,7 @@ class UserInterfaceMock : public IUserInterface {
 
     Mutex& getPrintMutex() override { return m_mutex; }
 
-    void flush() override{};
+    MOCK_METHOD(void, flush, (), (override));
 
     int printLine(const char* format, ...) override {
         va_list args;
@@ -47,6 +47,17 @@ class UserInterfaceMock : public IUserInterface {
         m_printCallCounter++;
         return 0;
     }
+
+    MOCK_METHOD(void, setRGBLed, (RgbColor color), (override));
+
+    MOCK_METHOD(void, setLed, (LED led, bool state), (override));
+
+    MOCK_METHOD(void, setHexDisplay, (uint8_t value), (override));
+
+    MOCK_METHOD(void,
+                setButtonCallback,
+                (Button button, buttonCallbackFunction_t callback, void* context),
+                (override));
 };
 
 #endif // __MOCK_UI_H_

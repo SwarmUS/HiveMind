@@ -1,28 +1,22 @@
-#ifndef __USERINTERFACEMOCK_H_
-#define __USERINTERFACEMOCK_H_
+#ifndef USERINTERFACEMOCK_H_
+#define USERINTERFACEMOCK_H_
 
 #include <bsp/IUserInterface.h>
-#include <cstdarg>
 #include <gmock/gmock.h>
 
 class UserInterfaceMock : public IUserInterface {
+
   public:
-    int m_printCallCounter = 0;
-    int m_flushCallCounter = 0;
-    Mutex m_mutex;
-
-    UserInterfaceMock() : m_mutex(10) {}
-
+    UserInterfaceMock() {}
     ~UserInterfaceMock() override = default;
 
-    Mutex& getPrintMutex() override { return m_mutex; }
+    MOCK_METHOD(Mutex&, getPrintMutex, (), (override));
 
-    void flush() override { m_flushCallCounter++; };
+    MOCK_METHOD(void, flush, (), (override));
 
     int printLine(const char* format, ...) override {
         va_list args;
         va_start(args, format);
-        m_printCallCounter++;
         va_end(args);
         return 0;
     }
@@ -30,7 +24,6 @@ class UserInterfaceMock : public IUserInterface {
     int printLine(const char* format, va_list args) override {
         (void)format;
         (void)args;
-        m_printCallCounter++;
         return 0;
     }
 
@@ -38,7 +31,6 @@ class UserInterfaceMock : public IUserInterface {
     int print(const char* format, ...) override {
         va_list args;
         va_start(args, format);
-        m_printCallCounter++;
         va_end(args);
         return 0;
     }
@@ -46,7 +38,6 @@ class UserInterfaceMock : public IUserInterface {
     int print(const char* format, va_list args) override {
         (void)format;
         (void)args;
-        m_printCallCounter++;
         return 0;
     }
 
@@ -62,4 +53,4 @@ class UserInterfaceMock : public IUserInterface {
                 (override));
 };
 
-#endif // __USERINTERFACEMOCK_H_
+#endif // USERINTERFACEMOCK_H_
