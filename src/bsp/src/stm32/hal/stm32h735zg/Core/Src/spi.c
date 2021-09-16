@@ -205,7 +205,7 @@ void MX_SPI5_Init(void) {
     hspi5.Init.CLKPolarity = SPI_POLARITY_HIGH;
     hspi5.Init.CLKPhase = SPI_PHASE_2EDGE;
     hspi5.Init.NSS = SPI_NSS_SOFT;
-    hspi5.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
+    hspi5.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
     hspi5.Init.FirstBit = SPI_FIRSTBIT_MSB;
     hspi5.Init.TIMode = SPI_TIMODE_DISABLE;
     hspi5.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;

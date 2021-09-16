@@ -334,7 +334,6 @@ int main(int argc, char** argv) {
     s_softwareInterlocTask.start();
     s_logInterlocTask.start();
     s_hostMonitorTask.start();
-    s_hostMonitorTask.start();
     s_remoteMonitorTask.start();
     Task::startScheduler();
 
