@@ -10,7 +10,7 @@ namespace BittyBuzzUIFunctions {
     void setLed();
 
     /**@brief Sets the user sevent segment to a value*/
-    void setSegment();
+    void setHex();
 } // namespace BittyBuzzUIFunctions
 
 #endif // BITTYBUZZUIFUNCTIONS_H_

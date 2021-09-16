@@ -34,3 +34,6 @@ atan
 min
 max
 rng_uniform
+ui
+set_led
+set_hex

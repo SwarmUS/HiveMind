@@ -19,7 +19,7 @@ void BittyBuzzUIFunctions::setLed() {
     bbzvm_ret0();
 }
 
-void BittyBuzzUIFunctions::setSegment() {
+void BittyBuzzUIFunctions::setHex() {
     bbzvm_assert_lnum(1); // NOLINT
     bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
     if (bbztype_isint(*o)) {

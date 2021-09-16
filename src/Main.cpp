@@ -1,5 +1,6 @@
 #include <AbstractTask.h>
 #include <Task.h>
+#include <application-interface/ApplicationInterfaceContainer.h>
 #include <bittybuzz/BittyBuzzContainer.h>
 #include <bittybuzz/BittyBuzzFactory.h>
 #include <bittybuzz/BittyBuzzSystem.h>
@@ -39,6 +40,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
                       BittyBuzzContainer::getBBZClosureRegister(),
                       BittyBuzzContainer::getBBZMessageService(),
                       BittyBuzzContainer::getBBZNeighborsManager(),
+                      ApplicationInterfaceContainer::getUserUI(),
                       BSPContainer::getBSP(),
                       m_logger,
                       BSPContainer::getUserInterface()) {}

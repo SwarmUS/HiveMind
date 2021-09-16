@@ -12,6 +12,7 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
                          IBittyBuzzClosureRegister& closureRegister,
                          IBittyBuzzMessageService& messageService,
                          IBittyBuzzNeighborsManager& neighborsManager,
+                         IUserUI& userUI,
                          IBSP& bsp,
                          ILogger& logger,
                          IUserInterface& ui) :
@@ -30,6 +31,7 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     BittyBuzzSystem::g_closureRegister = &closureRegister;
     BittyBuzzSystem::g_messageService = &messageService;
     BittyBuzzSystem::g_bsp = &bsp;
+    BittyBuzzSystem::g_userUI = &userUI;
 }
 
 bool BittyBuzzVm::init(const std::reference_wrapper<IBittyBuzzLib>* bbzLibs,
