@@ -22,7 +22,7 @@ bool Flash_program(uint32_t address, uint8_t* data, uint32_t size) {
     HAL_FLASH_Unlock();
 
     for (unsigned int i = 0; i < size; i += 4) {
-        if (HAL_FLASH_Program(FLASH_PROGRAM_32_BYTES, address, (uint64_t)(*data)) != HAL_OK) {
+        if (HAL_FLASH_Program(FLASH_PROGRAM_32_BITS, address, (uint64_t)(*data)) != HAL_OK) {
             HAL_FLASH_Lock();
             return false;
         }
