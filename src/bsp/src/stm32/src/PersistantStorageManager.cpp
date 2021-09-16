@@ -11,7 +11,7 @@ PersistantStorageManager::PersistantStorageManager(ILogger& logger) : m_logger(l
 
 void PersistantStorageManager::loadFromFlash() {
     std::memcpy(&m_storage, reinterpret_cast<const void*>(USER_DATA_FLASH_START_ADDRESS),
-                sizeof(m_storage));
+                PersistedStorage::getSize());
 
     if (UUID_OVERRIDE != 0) {
         setUUID(UUID_OVERRIDE);
@@ -41,6 +41,7 @@ bool PersistantStorageManager::saveToFlash() {
         return false;
     }
 
+    // The size is given in words
     return Flash_program(USER_DATA_FLASH_START_ADDRESS, reinterpret_cast<uint8_t*>(&m_storage),
-                         sizeof(m_storage));
+                         PersistedStorage::getSize() / 4);
 }
