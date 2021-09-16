@@ -59,7 +59,7 @@ bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
         m_logger.log(LogLevel::Error, "Error occurred...");
         return false;
     }
-    m_logger.log(LogLevel::Info, "Payload sent!");
+    m_logger.log(LogLevel::Debug, "Payload sent!");
     m_sendingTaskHandle = nullptr;
     return m_crcOK;
 }
