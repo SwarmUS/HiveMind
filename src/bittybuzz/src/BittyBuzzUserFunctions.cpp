@@ -298,7 +298,7 @@ void BittyBuzzUserFunctions::delay() {
     bbzvm_assert_lnum(1); // NOLINT
     bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
     if (bbztype_isint(*o) && o->i.value >= 0) {
-        Task::delay(o->i.value);
+        Task::delay(static_cast<uint16_t>(o->i.value));
         bbzvm_ret0();
     } else {
         bbzvm_seterror(BBZVM_ERROR_TYPE);

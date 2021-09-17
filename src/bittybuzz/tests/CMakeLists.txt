@@ -264,6 +264,7 @@ target_link_libraries(${TEST_NAME}
         neighbors-distance
         neighbors-broadcast
         neighbors-listen
+        table-library
         user-interface
         user-interface-invalid-hex
 )
