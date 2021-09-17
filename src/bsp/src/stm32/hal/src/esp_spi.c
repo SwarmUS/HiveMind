@@ -46,7 +46,8 @@ bool EspSpi_TransmitReceiveDma(const uint8_t* txBuffer,
 
 #ifdef SYSTEM_STM32H7XX_H
         // Clear cache regarding these addresses for transfers, especially on RX
-        // See https://community.st.com/s/article/FAQ-DMA-is-not-working-on-STM32H7-devices, solution 3
+        // See https://community.st.com/s/article/FAQ-DMA-is-not-working-on-STM32H7-devices,
+        // solution 3
         SCB_CleanDCache_by_Addr((uint32_t*)(((uint32_t)txBuffer) & ~(uint32_t)0x1F),
                                 lengthBytes + 32);
         SCB_CleanDCache_by_Addr((uint32_t*)(((uint32_t)rxBuffer) & ~(uint32_t)0x1F),
