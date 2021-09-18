@@ -30,6 +30,8 @@ bool TCPClient::send(const uint8_t* data, uint16_t length) {
 
 bool TCPClient::isConnected() const { return m_connected; }
 
+ConnectionType TCPClient::getType() const { return ConnectionType::Ethernet; }
+
 bool TCPClient::close() {
     m_logger.log(LogLevel::Info, "Closing Socket");
     m_connected = false;

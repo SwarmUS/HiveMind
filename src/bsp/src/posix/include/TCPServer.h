@@ -27,6 +27,8 @@ class TCPServer : public ICommInterface {
 
     void close();
 
+    ConnectionType getType() const override;
+
   private:
     void closeClient();
 

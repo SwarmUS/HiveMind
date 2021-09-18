@@ -90,6 +90,8 @@ void TCPServer::close() {
     }
 }
 
+ConnectionType TCPServer::getType() const { return ConnectionType::Ethernet; }
+
 void TCPServer::waitForClient() {
     // Always tries to reconnect to client
     while (m_serverFd > 0) {

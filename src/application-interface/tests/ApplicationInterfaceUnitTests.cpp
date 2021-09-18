@@ -71,7 +71,7 @@ TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setSystemConnectionStat
     // Given
     EXPECT_CALL(m_mutexMock, lock()).Times(2).WillRepeatedly(testing::Return(true));
     EXPECT_CALL(m_mutexMock, unlock()).Times(2).WillRepeatedly(testing::Return(true));
-    EXPECT_CALL(m_uiMock, setRGBLed(RgbColor::YELLOW)).Times(1);
+    EXPECT_CALL(m_uiMock, setRGBLed(RgbColor::TEAL)).Times(1);
 
     // Then
     m_appInterface->setSystemConnectionState(ConnectionState::Booting);
@@ -127,7 +127,7 @@ TEST_F(ApplicationInterfaceFixture, ApplicationInterface_setSystemConnectionStat
     // Given
     EXPECT_CALL(m_mutexMock, lock()).Times(2).WillRepeatedly(testing::Return(true));
     EXPECT_CALL(m_mutexMock, unlock()).Times(2).WillRepeatedly(testing::Return(true));
-    EXPECT_CALL(m_uiMock, setRGBLed(RgbColor::ORANGE)).Times(1);
+    EXPECT_CALL(m_uiMock, setRGBLed(RgbColor::YELLOW)).Times(1);
 
     // Then
     m_appInterface->setSystemConnectionState(ConnectionState::Unconnected);

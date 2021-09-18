@@ -17,6 +17,7 @@ class USB : public ICommInterface {
     bool send(const uint8_t* buffer, uint16_t length) override;
     bool receive(uint8_t* buffer, uint16_t length) override;
     bool isConnected() const override;
+    ConnectionType getType() const override;
 
   private:
     static void interruptRxCallback(void* context, uint8_t* buffer, uint32_t length);

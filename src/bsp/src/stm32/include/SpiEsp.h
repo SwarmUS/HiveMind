@@ -24,6 +24,8 @@ class SpiEsp : public ICommInterface {
 
     bool isConnected() const override;
 
+    ConnectionType getType() const override;
+
     void execute();
 
   private:

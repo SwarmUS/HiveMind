@@ -26,3 +26,5 @@ bool TCPClient::close() {
     int ret = ::close(m_socketFd);
     return ret == 0;
 }
+
+ConnectionType TCPClient::getType() const { return ConnectionType::Ethernet; }

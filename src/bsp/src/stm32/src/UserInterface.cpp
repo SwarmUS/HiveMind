@@ -56,10 +56,10 @@ void UserInterface::setRGBLed(RgbColor color) {
     case RgbColor::VIOLET:
         UI_setRGB(true, false, true);
         break;
-    case RgbColor::YELLOW:
+    case RgbColor::TEAL:
         UI_setRGB(false, true, true);
         break;
-    case RgbColor::ORANGE:
+    case RgbColor::YELLOW:
         UI_setRGB(true, true, false);
         break;
     case RgbColor::WHITE:

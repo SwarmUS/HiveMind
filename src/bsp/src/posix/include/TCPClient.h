@@ -23,6 +23,8 @@ class TCPClient : public ICommInterface {
 
     bool close();
 
+    ConnectionType getType() const override;
+
     friend void rxThread(TCPClient* context);
 
   private:

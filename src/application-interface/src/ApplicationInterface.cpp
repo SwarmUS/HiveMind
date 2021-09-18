@@ -21,19 +21,19 @@ void ApplicationInterface::setSystemConnectionState(ConnectionState state) {
     m_states.m_systemStates.m_connection = state;
     switch (state) {
     case ConnectionState::Booting:
-        m_userInterface.setRGBLed(RgbColor::YELLOW);
+        m_userInterface.setRGBLed(RgbColor::WHITE);
         break;
     case ConnectionState::Ethernet:
-        m_userInterface.setRGBLed(RgbColor::GREEN);
+        m_userInterface.setRGBLed(RgbColor::BLUE);
         break;
     case ConnectionState::USB:
-        m_userInterface.setRGBLed(RgbColor::BLUE);
+        m_userInterface.setRGBLed(RgbColor::TEAL);
         break;
     case ConnectionState::Error:
         m_userInterface.setRGBLed(RgbColor::RED);
         break;
     case ConnectionState::Unconnected:
-        m_userInterface.setRGBLed(RgbColor::ORANGE);
+        m_userInterface.setRGBLed(RgbColor::VIOLET);
         break;
     }
 }
