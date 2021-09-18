@@ -32,7 +32,12 @@ IInterlocManager& BSPContainer::getInterlocManager() {
 }
 
 std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommInterface() {
+    static USB s_usb(LoggerContainer::getLogger());
     static std::optional<TCPClient> s_clientSocket{};
+
+    if (s_usb.isConnected()) {
+        return s_usb;
+    }
 
     // If disconnected, try to create a new socket
     if (!s_clientSocket || !s_clientSocket.value().isConnected()) {
