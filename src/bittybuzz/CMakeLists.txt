@@ -42,6 +42,8 @@ set(LIB_HEADERS
 
     include/bittybuzz/BittyBuzzMathFunctions.h
 
+    include/bittybuzz/BittyBuzzUIFunctions.h
+
     include/bittybuzz/BittyBuzzLib.h
     include/bittybuzz/BittyBuzzLib.tpp
     include/bittybuzz/IBittyBuzzLib.h
@@ -71,6 +73,7 @@ set(LIB_SOURCES
     src/BittyBuzzUserFunctions.cpp
     src/BittyBuzzFunctionDescription.cpp
     src/BittyBuzzMathFunctions.cpp
+    src/BittyBuzzUIFunctions.cpp
     src/BittyBuzzLibMemberRegister.cpp
 )
 
@@ -95,6 +98,7 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::Logger
         SwarmUS::HiveMind::Interloc
         SwarmUS::HiveMind::MessageHandler
+        SwarmUS::HiveMind::ApplicationInterface
         SwarmUS::Propolis::Cpp::Common
         SwarmUS::Propolis::Pheromones
 

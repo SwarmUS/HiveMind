@@ -1,0 +1,14 @@
+
+function init() {
+}
+
+function step() {
+  ui.set_led(1); # true
+  ui.set_led(0) # false
+  ui.set_led("") # false
+  ui.set_led(nil) # false
+
+  ui.set_hex(1); # 0x1
+  ui.set_hex(300); # 0xF
+  ui.set_hex(-200); # 0x0
+}

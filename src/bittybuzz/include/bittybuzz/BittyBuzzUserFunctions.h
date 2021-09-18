@@ -180,6 +180,19 @@ namespace BittyBuzzUserFunctions {
      * @endcode */
     void toFloat();
 
+    /**
+     *@brief wait for a certain delay
+     *@b Signature delay(arg1)
+     *@b Warning this function make the whole VM sleep which can prevents the VM to processes
+     *messages from it's host or the swarm. Eventually the queue can overflow, you should use the
+     *executor to execute something every X steps. It is not recommended to use.
+     *@details This closure expects one positive int
+     * -# the time toe wait
+     *@code
+     *  delay(10); # Waits for 10ms
+     *@endcode */
+    void delay();
+
 } // namespace BittyBuzzUserFunctions
 
 #endif // __BITTYBUZZUSERFUNCTIONS_H_

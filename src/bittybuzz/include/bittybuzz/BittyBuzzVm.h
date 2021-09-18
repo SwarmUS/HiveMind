@@ -8,6 +8,7 @@
 #include "IBittyBuzzNeighborsManager.h"
 #include "IBittyBuzzStringResolver.h"
 #include "IBittyBuzzVm.h"
+#include <application-interface/IUserUI.h>
 #include <array>
 #include <bsp/IBSP.h>
 #include <bsp/IUserInterface.h>
@@ -23,6 +24,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
      *@param closureRegister a reference to the closure register
      *@param messageService a reference to the message service
      *@param neighborsManager a reference to a neighbors manager
+     *@param userUI the ui accessible to the user (led, hex display, etc)
      *@param bsp a reference to the bsp
      *@param logger a reference to a logger
      *@param ui a reference to a user interface */
@@ -32,6 +34,7 @@ class BittyBuzzVm : public IBittyBuzzVm {
                 IBittyBuzzClosureRegister& closureRegister,
                 IBittyBuzzMessageService& messageService,
                 IBittyBuzzNeighborsManager& neighborsManager,
+                IUserUI& userUI,
                 IBSP& bsp,
                 ILogger& logger,
                 IUserInterface& ui);

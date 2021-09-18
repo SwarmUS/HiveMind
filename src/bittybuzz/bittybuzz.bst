@@ -10,9 +10,10 @@ is_closure
 is_lambda_closure
 register_closure
 call_host_function
+delay
 math
-pi
-e
+PI
+E
 abs
 floori
 floorf
@@ -34,3 +35,6 @@ atan
 min
 max
 rng_uniform
+ui
+set_led
+set_hex

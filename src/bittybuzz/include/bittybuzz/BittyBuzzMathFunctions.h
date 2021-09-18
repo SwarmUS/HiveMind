@@ -1,9 +1,25 @@
 #ifndef __BITTYBUZZMATHFUNCTIONS_H_
 #define __BITTYBUZZMATHFUNCTIONS_H_
 
+#include <bsp/Math.h>
+
 /**@brief Provides math function for the standard lib provided with the vm see IBittyBuzzLib.
  *In the buzz code, the functions are situated in the math namespace */
 namespace BittyBuzzMathFunctions {
+
+    /**@brief The euleur number as a constant
+     *note that since buzz approximates ln(e) may not equal 1
+     *@code
+     *assert_true(math.ln(math.E) == 1);
+     *@endcode */
+    const float E = Math::e;
+
+    /**@brief The value of PI as a constant
+     *note that since it approximates cos(pi) may not equal 0
+     *@code
+     *assert_true(math.cos(math.PI) == 1);
+     *@endcode */
+    const float PI = Math::pi;
 
     /**@brief Calculates the absolute value
      *@b Signature abs(arg1)
@@ -13,7 +29,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *assert_true(math.abs(-3), 3);
      *@endcode */
-    void bbzmath_abs();
+    void abs();
 
     /**@brief Floor a value
      *@b Signature floori(arg1)
@@ -23,7 +39,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *assert_true(math.floori(3.55), 3);
      *@endcode */
-    void bbzmath_floori();
+    void floori();
 
     /**@brief Floor a value
      *@b Signature floorf(arg1)
@@ -33,7 +49,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *assert_true(math.floorf(3.55), 3.0);
      *@endcode */
-    void bbzmath_floorf();
+    void floorf();
 
     /**@brief Ceil a value
      *@b Signature ceili(arg1)
@@ -43,7 +59,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *assert_true(math.ceili(2.55), 3);
      *@endcode */
-    void bbzmath_ceili();
+    void ceili();
 
     /**@brief Ceil a value
      *@b Signature ceilf(arg1)
@@ -53,7 +69,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *assert_true(math.ceilf(2.55), 3.0);
      *@endcode */
-    void bbzmath_ceilf();
+    void ceilf();
 
     /**@brief Rounds a value
      *@b Signature roundi(arg1)
@@ -64,7 +80,7 @@ namespace BittyBuzzMathFunctions {
      *assert_true(math.roundi(2.55), 3);
      *assert_true(math.roundi(2.45), 2);
      *@endcode */
-    void bbzmath_roundi();
+    void roundi();
 
     /**@brief Rounds a value
      *@b Signature roundf(arg1)
@@ -75,7 +91,7 @@ namespace BittyBuzzMathFunctions {
      *assert_true(math.roundf(2.55), 3.0);
      *assert_true(math.roundf(2.45), 2.0);
      *@endcode */
-    void bbzmath_roundf();
+    void roundf();
 
     /**@brief Calculates the natural logarithm (ln)
      *@b Signature log(arg1)
@@ -85,7 +101,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *var ln_3 = math.log(3);
      *@endcode */
-    void bbzmath_log();
+    void log();
 
     /**@brief Calculates the logarithm base 2
      *@b Signature log2(arg1)
@@ -95,7 +111,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *var log2_3 = math.log2(3);
      *@endcode */
-    void bbzmath_log2();
+    void log2();
 
     /**@brief Calculates the logarithm base 10
      *@b Signature log10(arg1)
@@ -105,7 +121,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *var log10_3 = math.log10(3);
      *@endcode */
-    void bbzmath_log10();
+    void log10();
 
     /**@brief Calculates the exponent
      *@details expect one argument
@@ -114,7 +130,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *var exp_3 = math.exp(3);
      *@endcode */
-    void bbzmath_exp();
+    void exp();
 
     /**@brief Calculates the square root
      *@b Signature sqrt(arg1)
@@ -124,7 +140,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *var sqrt_3 = math.sqrt(3);
      *@endcode */
-    void bbzmath_sqrt();
+    void sqrt();
 
     /**@brief Calculates the sine
      *@b Signature sin(arg1)
@@ -134,7 +150,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *var sin_3 = math.sin(3);
      *@endcode */
-    void bbzmath_sin();
+    void sin();
 
     /**@brief Calculates the cosine
      *@b Signature cos(arg1)
@@ -144,7 +160,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *var cos_3 = math.cos(3);
      *@endcode */
-    void bbzmath_cos();
+    void cos();
 
     /**@brief Calculates the tengent
      *@b Signature tan(arg1)
@@ -154,7 +170,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *var tan_3 = math.tan(3);
      *@endcode */
-    void bbzmath_tan();
+    void tan();
 
     /**@brief Calculates the arc sine
      *@b Signature asin(arg1)
@@ -164,7 +180,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *var asin_03 = math.asin(0.3);
      *@endcode */
-    void bbzmath_asin();
+    void asin();
 
     /**@brief Calculates the arc cosine
      *@b Signature acos(arg1)
@@ -174,7 +190,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *var acos_03 = math.acos(0.3);
      *@endcode */
-    void bbzmath_acos();
+    void acos();
 
     /**@brief Calculates the arc cosine
      *@b Signature atan(arg1)
@@ -185,7 +201,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *var atan_03 = math.atan(0.3);
      *@endcode */
-    void bbzmath_atan();
+    void atan();
 
     /**@brief Return the min
      *@b Signature min(arg1, arg2)
@@ -196,7 +212,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      *assert_true(math.min(2,3), 2);
      *@endcode */
-    void bbzmath_min();
+    void min();
 
     /**@brief Return the max
      *@b Signature max(arg1, arg2)
@@ -208,7 +224,7 @@ namespace BittyBuzzMathFunctions {
      *assert_true(math.min(2,3), 3);
      *@endcode */
 
-    void bbzmath_max();
+    void max();
 
     /**@brief Return a number with a uniform distribution
      *@b Signature rng_uniform()
@@ -217,7 +233,7 @@ namespace BittyBuzzMathFunctions {
      *@code
      * var random_number = math.rng_uniform();
      *@endcode */
-    void bbzmath_rng_uniform();
+    void rng_uniform();
 
 } // namespace BittyBuzzMathFunctions
 
