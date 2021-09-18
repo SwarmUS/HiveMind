@@ -162,15 +162,13 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
         if (m_stream != NULL && m_serializer != NULL) {
             MessageSender messageSender(m_streamQueue, *m_serializer, BSPContainer::getBSP(),
                                         m_logger);
-            while (true) {
-                if (m_stream->isConnected()) {
-                    // Verify that we have a message to process
-                    if (m_streamQueue.isEmpty()) {
-                        m_streamQueue.wait(500);
-                    }
-                    if (!messageSender.processAndSerialize()) {
-                        m_logger.log(LogLevel::Warn, "Fail to process/serialize in %s", m_taskName);
-                    }
+            while (m_stream->isConnected()) {
+                // Verify that we have a message to process
+                if (m_streamQueue.isEmpty()) {
+                    m_streamQueue.wait(500);
+                }
+                if (!messageSender.processAndSerialize()) {
+                    m_logger.log(LogLevel::Warn, "Fail to process/serialize in %s", m_taskName);
                 }
             }
         }
