@@ -176,7 +176,7 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
 };
 
 template <typename SerializerType = HiveMindHostSerializer>
-class CommMonitoringTask : public AbstractTask<5 * configMINIMAL_STACK_SIZE> {
+class CommMonitoringTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     CommMonitoringTask<SerializerType>(const char* taskName,
                                        UBaseType_t priority,
@@ -335,7 +335,6 @@ int main(int argc, char** argv) {
     s_logInterlocTask.start();
     s_hostMonitorTask.start();
     s_remoteMonitorTask.start();
-
     Task::startScheduler();
 
     return 0;
