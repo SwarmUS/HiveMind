@@ -24,6 +24,9 @@ namespace BittyBuzzFactory {
     /** @brief Creates a the math table library for the bvm */
     BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 23>> createBittyBuzzMathLib();
 
+    /** @brief Creates a the ui table library for the bvm */
+    BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 2>> createBittyBuzzUILib();
+
 } // namespace BittyBuzzFactory
 
 #endif // __BITTYBUZZFACTORY_H_

@@ -39,8 +39,9 @@ void ApplicationInterface::setSystemConnectionState(ConnectionState state) {
 }
 
 void ApplicationInterface::setSystemDeviceState(DeviceState state) {
-    LockGuard lock(m_mutex);
+    m_mutex.lock();
     m_states.m_systemStates.m_device = state;
+    m_mutex.unlock();
 
     uint8_t userHex = static_cast<uint8_t>(m_states.m_userStates.m_userSegment);
     uint8_t value = static_cast<uint8_t>(state) << 4;

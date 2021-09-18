@@ -1,5 +1,6 @@
 #include "BittyBuzzFactory.h"
 #include "BittyBuzzMathFunctions.h"
+#include "BittyBuzzUIFunctions.h"
 #include "BittyBuzzUserFunctions.h"
 #include <bsp/Math.h>
 
@@ -66,4 +67,11 @@ BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 23>> BittyBuzzFactory::
         {BBZSTRID_rng_uniform, BittyBuzzMathFunctions::rng_uniform},
     }};
     return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 23>>(BBZSTRID_math, libMember);
+}
+
+BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 2>> BittyBuzzFactory::createBittyBuzzUILib() {
+    std::array<BittyBuzzLibMemberRegister, 2> libMember{
+        {{BBZSTRID_set_led, BittyBuzzUIFunctions::setLed},
+         {BBZSTRID_set_hex, BittyBuzzUIFunctions::setHex}}};
+    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 2>>(BBZSTRID_ui, libMember);
 }
