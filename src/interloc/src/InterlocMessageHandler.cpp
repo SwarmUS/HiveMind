@@ -100,9 +100,7 @@ void InterlocMessageHandler::stateChangeCallback(InterlocStateDTO previousState,
         m_bsp.getUUId(), m_messageSourceId,
         InterlocAPIDTO(InterlocOutputMessageDTO(InterlocStateChangeDTO(previousState, newState))));
 
-    if (!getQueueForDestination(m_messageSourceId).push(msg)) {
-        m_logger.log(LogLevel::Warn, "Could not push InterlocStateChange message in queue");
-    }
+    ensureSendMessage(msg);
 }
 
 void InterlocMessageHandler::rawAngleDataCallback(BspInterlocRawAngleData& data) {

@@ -7,26 +7,24 @@ IdleState::IdleState(ILogger& logger, DecawaveArray& decawaves) :
     AbstractInterlocState(logger, decawaves) {}
 
 void IdleState::process(InterlocStateHandler& context) {
-    while (true) {
-        InterlocStateDTO managerState = InterlocBSPContainer::getInterlocManager().getState();
+    InterlocStateDTO managerState = InterlocBSPContainer::getInterlocManager().getState();
 
-        switch (managerState) {
-        case InterlocStateDTO::OPERATING:
-            processOperatingMode(context);
-            return;
+    switch (managerState) {
+    case InterlocStateDTO::OPERATING:
+        processOperatingMode(context);
+        return;
 
-        case InterlocStateDTO::ANGLE_CALIB_SENDER:
-            context.setState(InterlocStates::ANGLE_SENDER, InterlocEvent::API_MESSAGE);
-            return;
+    case InterlocStateDTO::ANGLE_CALIB_SENDER:
+        context.setState(InterlocStates::ANGLE_SENDER, InterlocEvent::API_MESSAGE);
+        return;
 
-        case InterlocStateDTO::ANGLE_CALIB_RECEIVER:
-            context.setState(InterlocStates::ANGLE_RECEIVER, InterlocEvent::API_MESSAGE);
-            return;
+    case InterlocStateDTO::ANGLE_CALIB_RECEIVER:
+        context.setState(InterlocStates::ANGLE_RECEIVER, InterlocEvent::API_MESSAGE);
+        return;
 
-        default:
-            // Wait and recheck state
-            Task::delay(10);
-        }
+    default:
+        // Wait and recheck state
+        Task::delay(10);
     }
 }
 
