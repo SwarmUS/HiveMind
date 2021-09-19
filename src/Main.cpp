@@ -81,11 +81,12 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
         std::array<std::reference_wrapper<IBittyBuzzLib>, 3> buzzLibraries{
             {bbzFunctions, mathLib, uiLib}};
 
-        // set state and register btn function
-        m_deviceStateUI.setDeviceState(DeviceState::Ok);
+        // register btn function
         m_buttonCallbackRegister.setCallback(resetVmButtonCallback, &m_resetVm);
 
         while (true) {
+            m_deviceStateUI.setDeviceState(DeviceState::Ok);
+
             if (!m_bittybuzzVm.init(buzzLibraries.data(), buzzLibraries.size())) {
                 m_logger.log(LogLevel::Error, "BBZVM failed to initialize. state: %s err: %s",
                              BittyBuzzSystem::getStateString(m_bittybuzzVm.getState()),
@@ -119,7 +120,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
                 Task::delay(100);
             }
             // VM needs to be resetted so we terminate it and init it again
-            m_resetVm = true;
+            m_resetVm = false;
             m_bittybuzzVm.terminate();
         }
     }

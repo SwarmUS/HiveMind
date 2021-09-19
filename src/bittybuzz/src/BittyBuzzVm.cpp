@@ -68,6 +68,7 @@ bool BittyBuzzVm::init(const std::reference_wrapper<IBittyBuzzLib>* bbzLibs,
 
 void BittyBuzzVm::terminate() {
     // Destroy the vm
+    m_bbzVm.state = BBZVM_STATE_STOPPED;
     bbzvm_destruct();
     // Clear registered closures
     m_closureRegister.clearClosures();
