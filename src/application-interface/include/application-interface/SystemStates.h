@@ -18,7 +18,8 @@ enum class DeviceState {
     ErrorVMSwarm,
     ErrorVMVstig,
     ErrorVMMem,
-    ErrorVMMath
+    ErrorVMMath,
+    Error // Error outside the scope of the user code
 };
 
 struct SystemStates {

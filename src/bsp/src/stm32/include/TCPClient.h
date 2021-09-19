@@ -17,6 +17,8 @@ class TCPClient : public ICommInterface {
 
     bool isConnected() const override;
 
+    ConnectionType getType() const override;
+
     bool close();
 
   private:

@@ -8,7 +8,7 @@
 /**
  * @brief Possible colors obtainable with an RGB LED
  */
-enum class RgbColor { RED = 0, GREEN, BLUE, VIOLET, YELLOW, ORANGE, WHITE, OFF };
+enum class RgbColor { RED = 0, GREEN, BLUE, VIOLET, TEAL, YELLOW, WHITE, OFF };
 
 /**
  * @brief Buttons present on the board.

@@ -262,3 +262,5 @@ void SpiEsp::espTxRxCallback(void* context) {
         instance->m_hasSentPayload = true;
     }
 }
+
+ConnectionType SpiEsp::getType() const { return ConnectionType::SPI; }

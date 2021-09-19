@@ -15,10 +15,10 @@ char colorToChar(RgbColor color) {
         return 'B';
     case RgbColor::VIOLET:
         return 'V';
+    case RgbColor::TEAL:
+        return 'T';
     case RgbColor::YELLOW:
         return 'Y';
-    case RgbColor::ORANGE:
-        return 'O';
     case RgbColor::WHITE:
         return 'W';
     case RgbColor::OFF:

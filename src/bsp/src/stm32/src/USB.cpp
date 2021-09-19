@@ -79,4 +79,6 @@ void USB::receiveItCallback(uint8_t* buf, uint32_t len) {
     portYIELD_FROM_ISR(toYield);
 }
 
+ConnectionType USB::getType() const { return ConnectionType::USB; }
+
 USB::USB(ILogger& logger) : m_logger(logger) { usb_setRxCallback(USB::interruptRxCallback, this); }
