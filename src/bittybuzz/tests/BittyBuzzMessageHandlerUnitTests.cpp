@@ -1132,3 +1132,14 @@ TEST_F(BittyBuzzMessageHandlerFixture,
     EXPECT_TRUE(ret);
     EXPECT_EQ(fresp.getResponse().getStatus(), GenericResponseStatusDTO::Ok);
 }
+
+TEST_F(BittyBuzzMessageHandlerFixture, BittyBuzzMessageHandler_clear) {
+    // Given
+
+    EXPECT_CALL(m_inputQueueMock, clear).Times(1);
+
+    // Then
+    m_bbzMessageHandler->clearMessages();
+
+    // Expect
+}

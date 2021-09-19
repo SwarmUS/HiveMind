@@ -20,6 +20,10 @@ class IBittyBuzzVm {
     virtual bool init(const std::reference_wrapper<IBittyBuzzLib>* bbzLibs,
                       uint32_t bbzLibsLength) = 0;
 
+    /**@brief Force terminate the virtual machine and removes all messages that was supposed to be
+     * sent */
+    virtual void terminate() = 0;
+
     /** @brief Does one execution step in the virtual machine.  Thus execute the buzz code in the
      * step function */
     virtual BBVMRet step() = 0;

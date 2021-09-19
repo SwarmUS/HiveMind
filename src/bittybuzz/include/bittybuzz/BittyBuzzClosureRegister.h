@@ -19,6 +19,8 @@ class BittyBuzzClosureRegister : public IBittyBuzzClosureRegister {
                          bbzheap_idx_t selfHeapIdx,
                          const BittyBuzzFunctionDescription& description) override;
 
+    void clearClosures() override;
+
     std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> getRegisteredClosure(
         const char* functionName) const override;
 

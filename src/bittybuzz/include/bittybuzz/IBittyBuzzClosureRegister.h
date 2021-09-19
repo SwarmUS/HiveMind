@@ -41,6 +41,8 @@ class IBittyBuzzClosureRegister {
                                  bbzheap_idx_t selfHeapIdx,
                                  const BittyBuzzFunctionDescription& description) = 0;
 
+    /**@brief Clears all the registered closures*/
+    virtual void clearClosures() = 0;
     /**
      *@brief get the id of a stored function by it's associated name
      *@param functionName the name of the function to fetch

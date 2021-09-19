@@ -21,6 +21,7 @@ BittyBuzzVm::BittyBuzzVm(const IBittyBuzzBytecode& bytecode,
     m_messageHandler(messageHandler),
     m_messageService(messageService),
     m_neighborsManager(neighborsManager),
+    m_closureRegister(closureRegister),
     m_logger(logger),
     m_ui(ui) {
     // Init global variable
@@ -63,6 +64,15 @@ bool BittyBuzzVm::init(const std::reference_wrapper<IBittyBuzzLib>* bbzLibs,
 
     // Verify that the initialization was successfull
     return vm->state == BBZVM_STATE_READY;
+}
+
+void BittyBuzzVm::terminate() {
+    // Destroy the vm
+    bbzvm_destruct();
+    // Clear registered closures
+    m_closureRegister.clearClosures();
+    // Clear all the pending messages since they will be out of date anyway
+    m_messageHandler.clearMessages();
 }
 
 BBVMRet BittyBuzzVm::step() {

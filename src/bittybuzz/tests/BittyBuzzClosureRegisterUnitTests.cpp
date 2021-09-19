@@ -86,6 +86,19 @@ TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_registerClo
     EXPECT_FALSE(ret);
 }
 
+TEST_F(BittyBuzzClosureRegisterTestFixture, BittyBuzzClosureRegister_clear) {
+    // Given
+
+    bbzheap_idx_t closureHeapIdx = bbzclosure_new(42);
+    m_closureRegister->registerClosure("Hello World", closureHeapIdx, m_bbzvm.nil, *m_description);
+
+    // Then
+    m_closureRegister->clearClosures();
+
+    // Expect
+    EXPECT_EQ(m_closureRegister->getRegisteredClosureLength(), 0);
+}
+
 TEST_F(BittyBuzzClosureRegisterTestFixture,
        BittyBuzzClosureRegister_getRegisteredClosure_name_empty) {
     // Given
