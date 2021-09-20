@@ -58,12 +58,10 @@ void AngleReceiverState::saveAngleData(BspInterlocRawAngleData& data,
     //        frame.getAccumulatorAngle(); j++;
     //    }
 
-    uint8_t j = 0;
-    for (auto& frame : rxFrames) {
+    for (uint8_t j = 0; j < rxFrames.size(); j++) {
         data.m_frames[frameIndex].m_frameInfos[j].m_beeboardPort = j;
         data.m_frames[frameIndex].m_frameInfos[j].m_rxTimestamp = frameIndex + j;
         data.m_frames[frameIndex].m_frameInfos[j].m_sfdAngle = frameIndex + 1 + j;
         data.m_frames[frameIndex].m_frameInfos[j].m_accumulatorAngle = frameIndex + 2 + j;
-        j++;
     }
 }

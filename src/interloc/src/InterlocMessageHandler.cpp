@@ -112,11 +112,12 @@ void InterlocMessageHandler::rawAngleDataCallback(BspInterlocRawAngleData& data)
 
     uint8_t maxFramesPerMessage = InterlocRawAngleDataDTO::INTERLOC_RAW_ANGLE_FRAMES_MAX_SIZE;
 
-    for (uint8_t i = 0; i < data.m_framesLength / maxFramesPerMessage; i++) {
+    for (uint32_t i = 0; i < data.m_framesLength / maxFramesPerMessage; i++) {
 
-        MessageDTO msg = MessageDTO(m_bsp.getUUId(), m_messageSourceId,
-                                    InterlocAPIDTO(InterlocOutputMessageDTO(constructRawDataMessage(
-                                        data, i * maxFramesPerMessage, maxFramesPerMessage))));
+        MessageDTO msg =
+            MessageDTO(m_bsp.getUUId(), m_messageSourceId,
+                       InterlocAPIDTO(InterlocOutputMessageDTO(constructRawDataMessage(
+                           data, (uint32_t)(i * maxFramesPerMessage), maxFramesPerMessage))));
 
         ensureSendMessage(msg);
     }
