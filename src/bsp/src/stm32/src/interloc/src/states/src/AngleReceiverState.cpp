@@ -24,6 +24,9 @@ void AngleReceiverState::process(InterlocStateHandler& context) {
 }
 
 void AngleReceiverState::readAngleFrame(std::array<UWBRxFrame, numDecas>& rxFrames) {
+    // TODO: reactivate before using with BeeBoards
+    (void)rxFrames;
+
     //    bool allDataReceived = true;
     //    do {
     //        // TODO: Map dynamically
@@ -44,6 +47,7 @@ void AngleReceiverState::saveAngleData(BspInterlocRawAngleData& data,
                                        std::array<UWBRxFrame, numDecas>& rxFrames,
                                        uint32_t frameIndex) {
     data.m_frames[frameIndex].m_frameInfosLength = rxFrames.size();
+    // TODO: reactivate before using with BeeBoards
 
     //    uint8_t j = 0;
     //    for (auto& frame : rxFrames) {
