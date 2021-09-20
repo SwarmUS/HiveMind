@@ -6,7 +6,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} PARENT_SCOPE)
 function(bittybuzz_fetch)
     FetchContent_Declare(
         bittybuzz
-        GIT_REPOSITORY https://github.com/MISTLab/BittyBuzz
+        GIT_REPOSITORY https://github.com/buzz-lang/BittyBuzz
         GIT_TAG        0015fa92468533dddb178e6ba14c7b850ad0cc0e
         GIT_PROGRESS   TRUE
     ) 
@@ -40,16 +40,19 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
     set(BHEADER_STRING_FILE  ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}_string.h)
     set(BHEADER_STRING_FILE_TMP  ${BHEADER_STRING_FILE}.tmp)
 
-    # Concatenating BST files
+    # Concatenating BST files we configure/copy so cmake reruns when bst are changed
     configure_file(${BITTYBUZZ_SRC_PATH}/src/bittybuzz/util/BittyBuzzStrings.bst ${BST_FILE} COPYONLY)
-    foreach(BST ${bzz_bst_list}) 
-        file(READ ${BST} CONTENTS)
+    foreach(BST ${bzz_bst_list})
+        get_filename_component(BST_FILENAME ${BST} NAME)
+        set(BST_FILENAME ${CMAKE_CURRENT_BINARY_DIR}/${_TARGET}-${BST_FILENAME})
+        configure_file(${BST} ${BST_FILENAME} COPYONLY)
+        file(READ ${BST_FILENAME} CONTENTS)
         file(APPEND ${BST_FILE} "${CONTENTS}")
     endforeach()
 
     # TODO: bzzparse return 0 if a file is not found during parsing, but the build still passes, this should be fixed in the buzz compiler
     # Parsing buzz file
-    add_custom_target(${_TARGET}_bzz_parse ALL
+    add_custom_target(${_TARGET}_bzz_parse
         COMMAND export BUZZ_INCLUDE_PATH=$ENV{BUZZ_INCLUDE_PATH} && ${BZZPAR} ${bzz_source} ${BASM_FILE} ${BST_FILE}
         DEPENDS ${BST_FILE})
 

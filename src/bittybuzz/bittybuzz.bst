@@ -1,4 +1,6 @@
 log
+int
+float
 is_nil
 is_int
 is_float
@@ -8,13 +10,17 @@ is_closure
 is_lambda_closure
 register_closure
 call_host_function
+delay
 math
-pi
-e
+PI
+E
 abs
-floor
-ceil
-round
+floori
+floorf
+ceili
+ceilf
+roundi
+roundf
 log
 log2
 log10
@@ -29,3 +35,6 @@ atan
 min
 max
 rng_uniform
+ui
+set_led
+set_hex

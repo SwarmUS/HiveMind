@@ -19,6 +19,7 @@ target_link_libraries(${EXECUTABLE_NAME}
       SwarmUS::HiveMind::BittyBuzz
       SwarmUS::HiveMind::MessageHandler
       SwarmUS::HiveMind::Interloc
+      SwarmUS::HiveMind::ApplicationInterface
 )
 
 if (${CMAKE_CROSSCOMPILING} AND (ENABLE_HARDWARE_TESTS OR DECAWAVE_TESTS))
@@ -31,6 +32,7 @@ add_subdirectory(os)
 add_subdirectory(logger)
 add_subdirectory(message-handler)
 add_subdirectory(interloc)
+add_subdirectory(application-interface)
 
 # Removing warnings from interface libraries
 if (DISABLE_EXTERNAL_WARNINGS) 

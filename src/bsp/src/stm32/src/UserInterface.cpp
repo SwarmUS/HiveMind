@@ -56,10 +56,10 @@ void UserInterface::setRGBLed(RgbColor color) {
     case RgbColor::VIOLET:
         UI_setRGB(true, false, true);
         break;
-    case RgbColor::YELLOW:
+    case RgbColor::TEAL:
         UI_setRGB(false, true, true);
         break;
-    case RgbColor::BROWN:
+    case RgbColor::YELLOW:
         UI_setRGB(true, true, false);
         break;
     case RgbColor::WHITE:
@@ -69,6 +69,24 @@ void UserInterface::setRGBLed(RgbColor color) {
         UI_setRGB(false, false, false);
         break;
     }
+}
+
+void UserInterface::setLed(LED led, bool state) {
+    led_t halLed;
+    switch (led) {
+    case LED::LED_0:
+        halLed = LED_0;
+        break;
+    case LED::LED_1:
+        halLed = LED_1;
+        break;
+    case LED::LED_2:
+        halLed = LED_2;
+        break;
+    default:
+        return;
+    }
+    UI_setLED(halLed, state);
 }
 
 void UserInterface::setHexDisplay(uint8_t value) { UI_setHexOutput(value); }

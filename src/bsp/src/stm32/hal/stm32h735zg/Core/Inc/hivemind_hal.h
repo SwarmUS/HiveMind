@@ -21,7 +21,7 @@ extern "C" {
 // TODO: change to match requirements
 #define HUART_PRINT (&huart3)
 #define HRNG (&hrng)
-#define FLASH_PROGRAM_32_BYTES (FLASH_TYPEPROGRAM_FLASHWORD)
+#define FLASH_PROGRAM_32_BITS (FLASH_TYPEPROGRAM_FLASHWORD)
 #define HEARTBEAT_TIMER (&htim13)
 
 #define UI_INTERRUPT_Pin IO_EXPANDER_INT__Pin

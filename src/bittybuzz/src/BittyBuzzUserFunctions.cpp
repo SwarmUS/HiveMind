@@ -3,6 +3,7 @@
 #include "bittybuzz/BittyBuzzSystem.h"
 #include "bittybuzz/BittyBuzzUtils.h"
 #include <LockGuard.h>
+#include <Task.h>
 
 struct ForeachHostFContext {
     bool m_err = false;
@@ -263,4 +264,43 @@ void BittyBuzzUserFunctions::isLambdaClosure() {
     bbzvm_pushi(bbztype_isclosurelambda(*bbzObj));
 
     bbzvm_ret1();
+}
+
+void BittyBuzzUserFunctions::toInt() {
+    bbzvm_assert_lnum(1); // NOLINT
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
+        bbzvm_pushi((int16_t)bbzfloat_tofloat(o->f.value));
+    } else if (bbztype_isint(*o)) {
+        bbzvm_pushi(o->i.value);
+    } else {
+        bbzvm_pushnil();
+    }
+
+    bbzvm_ret1();
+}
+
+void BittyBuzzUserFunctions::toFloat() {
+    bbzvm_assert_lnum(1); // NOLINT
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isfloat(*o)) {
+        bbzvm_pushf(o->f.value);
+    } else if (bbztype_isint(*o)) {
+        bbzvm_pushf(bbzfloat_fromint(o->i.value));
+    } else {
+        bbzvm_pushnil();
+    }
+
+    bbzvm_ret1();
+}
+
+void BittyBuzzUserFunctions::delay() {
+    bbzvm_assert_lnum(1); // NOLINT
+    bbzobj_t* o = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    if (bbztype_isint(*o) && o->i.value >= 0) {
+        Task::delay(static_cast<uint16_t>(o->i.value));
+        bbzvm_ret0();
+    } else {
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
+    }
 }

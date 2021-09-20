@@ -19,10 +19,13 @@ namespace BittyBuzzFactory {
     BittyBuzzStringResolver createBittyBuzzStringResolver(ILogger& logger);
 
     /** @brief Creates an array of FunctionRegister associated with the code from main.bzz */
-    BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 10>> createBittyBuzzGlobalLib();
+    BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 13>> createBittyBuzzGlobalLib();
 
     /** @brief Creates a the math table library for the bvm */
-    BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 20>> createBittyBuzzMathLib();
+    BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 23>> createBittyBuzzMathLib();
+
+    /** @brief Creates a the ui table library for the bvm */
+    BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 2>> createBittyBuzzUILib();
 
 } // namespace BittyBuzzFactory
 

@@ -11,6 +11,7 @@
 #include "mocks/BSPInterfaceMock.h"
 #include "mocks/LoggerInterfaceMock.h"
 #include "mocks/UserInterfaceMock.h"
+#include "mocks/UserUIInterfaceMock.h"
 #include <gtest/gtest.h>
 
 class BittyBuzzVmTestFixture : public testing::Test {
@@ -20,6 +21,7 @@ class BittyBuzzVmTestFixture : public testing::Test {
     LoggerInterfaceMock* m_loggerMock;
     BSPInterfaceMock* m_bspMock;
     UserInterfaceMock m_uiMock;
+    testing::StrictMock<UserUIInterfaceMock> m_userUIMock;
 
     int logCounter = 0;
     std::string logLastFormat;
@@ -45,8 +47,8 @@ class BittyBuzzVmTestFixture : public testing::Test {
 
         m_bittybuzzVm = new BittyBuzzVm(*m_bittybuzzBytecode, *bittyBuzzStringResolver,
                                         *bittyBuzzMessageHandler, *bittyBuzzClosureRegister,
-                                        *bittyBuzzMessageService, *m_neightborsManager, *m_bspMock,
-                                        *m_loggerMock, m_uiMock);
+                                        *bittyBuzzMessageService, *m_neightborsManager,
+                                        m_userUIMock, *m_bspMock, *m_loggerMock, m_uiMock);
 
         m_bittybuzzVm->init(container.data(), container.size());
     }

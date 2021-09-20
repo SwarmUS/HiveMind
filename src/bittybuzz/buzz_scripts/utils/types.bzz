@@ -1,0 +1,11 @@
+# Types used for the description of function
+# Ex:
+# var args_description = {
+#    .0 = {.arg_int=types.INT}, // We just pass value so the type is registered
+#    .1 = {.arg_float=types.FLOAT} // Same here
+# };
+# register_closure("someFunction", someClojure, args_description, nil);
+types = {
+  .INT = 0,
+  .FLOAT = 0.0,
+}

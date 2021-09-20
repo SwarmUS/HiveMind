@@ -1,0 +1,6 @@
+function init() {
+}
+
+function step() {
+  ui.set_hex(""); # invalid, cause type error
+}

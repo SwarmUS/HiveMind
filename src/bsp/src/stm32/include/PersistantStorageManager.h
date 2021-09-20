@@ -21,7 +21,7 @@ class PersistantStorageManager {
     uint16_t getUUID() const;
 
   private:
-    PersistedStorage m_storage{};
+    PersistedStorage m_storage __attribute__((aligned(4))){};
     ILogger& m_logger;
 
     bool setUUID(uint16_t uuid);

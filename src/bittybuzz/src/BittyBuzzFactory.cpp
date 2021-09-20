@@ -1,5 +1,6 @@
 #include "BittyBuzzFactory.h"
 #include "BittyBuzzMathFunctions.h"
+#include "BittyBuzzUIFunctions.h"
 #include "BittyBuzzUserFunctions.h"
 #include <bsp/Math.h>
 
@@ -17,10 +18,12 @@ BittyBuzzStringResolver BittyBuzzFactory::createBittyBuzzStringResolver(ILogger&
                                    BBZSTRING_OFFSET, logger);
 }
 
-BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 10>> BittyBuzzFactory::
+BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 13>> BittyBuzzFactory::
     createBittyBuzzGlobalLib() {
-    std::array<BittyBuzzLibMemberRegister, 10> globalMember = {{
+    std::array<BittyBuzzLibMemberRegister, 13> globalMember = {{
         {BBZSTRID_log, BittyBuzzUserFunctions::log},
+        {BBZSTRID_int, BittyBuzzUserFunctions::toInt},
+        {BBZSTRID_float, BittyBuzzUserFunctions::toFloat},
         {BBZSTRID_is_nil, BittyBuzzUserFunctions::isNil},
         {BBZSTRID_is_int, BittyBuzzUserFunctions::isInt},
         {BBZSTRID_is_float, BittyBuzzUserFunctions::isFloat},
@@ -30,34 +33,45 @@ BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 10>> BittyBuzzFactory::
         {BBZSTRID_is_lambda_closure, BittyBuzzUserFunctions::isLambdaClosure},
         {BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure},
         {BBZSTRID_call_host_function, BittyBuzzUserFunctions::callHostFunction},
+        {BBZSTRID_delay, BittyBuzzUserFunctions::delay},
     }};
 
-    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 10>>(globalMember);
+    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 13>>(globalMember);
 }
 
-BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 20>> BittyBuzzFactory::
+BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 23>> BittyBuzzFactory::
     createBittyBuzzMathLib() {
-    std::array<BittyBuzzLibMemberRegister, 20> libMember{{
-        {BBZSTRID_e, Math::e},
-        {BBZSTRID_pi, Math::pi},
-        {BBZSTRID_abs, BittyBuzzMathFunctions::bbzmath_abs},
-        {BBZSTRID_floor, BittyBuzzMathFunctions::bbzmath_floor},
-        {BBZSTRID_ceil, BittyBuzzMathFunctions::bbzmath_ceil},
-        {BBZSTRID_round, BittyBuzzMathFunctions::bbzmath_round},
-        {BBZSTRID_log, BittyBuzzMathFunctions::bbzmath_log},
-        {BBZSTRID_log2, BittyBuzzMathFunctions::bbzmath_log2},
-        {BBZSTRID_log10, BittyBuzzMathFunctions::bbzmath_log10},
-        {BBZSTRID_exp, BittyBuzzMathFunctions::bbzmath_exp},
-        {BBZSTRID_sqrt, BittyBuzzMathFunctions::bbzmath_sqrt},
-        {BBZSTRID_sin, BittyBuzzMathFunctions::bbzmath_sin},
-        {BBZSTRID_cos, BittyBuzzMathFunctions::bbzmath_cos},
-        {BBZSTRID_tan, BittyBuzzMathFunctions::bbzmath_tan},
-        {BBZSTRID_asin, BittyBuzzMathFunctions::bbzmath_asin},
-        {BBZSTRID_acos, BittyBuzzMathFunctions::bbzmath_acos},
-        {BBZSTRID_atan, BittyBuzzMathFunctions::bbzmath_atan},
-        {BBZSTRID_min, BittyBuzzMathFunctions::bbzmath_min},
-        {BBZSTRID_max, BittyBuzzMathFunctions::bbzmath_max},
-        {BBZSTRID_rng_uniform, BittyBuzzMathFunctions::bbzmath_rng_uniform},
+    std::array<BittyBuzzLibMemberRegister, 23> libMember{{
+        {BBZSTRID_E, BittyBuzzMathFunctions::E},
+        {BBZSTRID_PI, BittyBuzzMathFunctions::PI},
+        {BBZSTRID_abs, BittyBuzzMathFunctions::abs},
+        {BBZSTRID_floori, BittyBuzzMathFunctions::floori},
+        {BBZSTRID_floorf, BittyBuzzMathFunctions::floorf},
+        {BBZSTRID_ceili, BittyBuzzMathFunctions::ceili},
+        {BBZSTRID_ceilf, BittyBuzzMathFunctions::ceilf},
+        {BBZSTRID_roundi, BittyBuzzMathFunctions::roundi},
+        {BBZSTRID_roundf, BittyBuzzMathFunctions::roundf},
+        {BBZSTRID_log, BittyBuzzMathFunctions::log},
+        {BBZSTRID_log2, BittyBuzzMathFunctions::log2},
+        {BBZSTRID_log10, BittyBuzzMathFunctions::log10},
+        {BBZSTRID_exp, BittyBuzzMathFunctions::exp},
+        {BBZSTRID_sqrt, BittyBuzzMathFunctions::sqrt},
+        {BBZSTRID_sin, BittyBuzzMathFunctions::sin},
+        {BBZSTRID_cos, BittyBuzzMathFunctions::cos},
+        {BBZSTRID_tan, BittyBuzzMathFunctions::tan},
+        {BBZSTRID_asin, BittyBuzzMathFunctions::asin},
+        {BBZSTRID_acos, BittyBuzzMathFunctions::acos},
+        {BBZSTRID_atan, BittyBuzzMathFunctions::atan},
+        {BBZSTRID_min, BittyBuzzMathFunctions::min},
+        {BBZSTRID_max, BittyBuzzMathFunctions::max},
+        {BBZSTRID_rng_uniform, BittyBuzzMathFunctions::rng_uniform},
     }};
-    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 20>>(BBZSTRID_math, libMember);
+    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 23>>(BBZSTRID_math, libMember);
+}
+
+BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 2>> BittyBuzzFactory::createBittyBuzzUILib() {
+    std::array<BittyBuzzLibMemberRegister, 2> libMember{
+        {{BBZSTRID_set_led, BittyBuzzUIFunctions::setLed},
+         {BBZSTRID_set_hex, BittyBuzzUIFunctions::setHex}}};
+    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 2>>(BBZSTRID_ui, libMember);
 }

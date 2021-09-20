@@ -4,6 +4,7 @@
 #include "IBittyBuzzClosureRegister.h"
 #include "IBittyBuzzMessageService.h"
 #include "IBittyBuzzStringResolver.h"
+#include <application-interface/IUserUI.h>
 #include <bbzvm.h>
 #include <bsp/IBSP.h>
 #include <bsp/IUserInterface.h>
@@ -46,6 +47,11 @@ namespace BittyBuzzSystem {
      *@brief BSP used by the bbvm for random numbers
      **/
     extern IBSP* g_bsp;
+
+    /**
+     *@brief User interface (LED, Hex display, etc) available to the user via buzz
+     **/
+    extern IUserUI* g_userUI;
 
     /**
      *@brief Call a bittybuzz function that takes not arguments (init, step, etc),

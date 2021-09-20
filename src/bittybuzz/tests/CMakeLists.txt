@@ -25,6 +25,8 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmNeighborsBroadcastTests.cpp
     vm_tests/BittyBuzzVmNeighborsListenTests.cpp
     vm_tests/BittyBuzzVmTableLibraryTests.cpp
+    vm_tests/BittyBuzzVmUITests.cpp
+    vm_tests/BittyBuzzVmUIInvalidHexTests.cpp
 
     vm_tests/BittyBuzzVmRegisterClosureFunctionTests.cpp
     vm_tests/BittyBuzzVmRegisterClosureFunctionSelfTests.cpp
@@ -34,6 +36,8 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmCallHostFunctionInvalidArgsTests.cpp
     vm_tests/BittyBuzzVmCallHostFunctionInvalidKeysTests.cpp
 
+    vm_tests/BittyBuzzVmCastFloat.cpp
+    vm_tests/BittyBuzzVmCastInt.cpp
     vm_tests/BittyBuzzVmIsNilTests.cpp
     vm_tests/BittyBuzzVmIsIntTests.cpp
     vm_tests/BittyBuzzVmIsFloatTests.cpp
@@ -51,6 +55,7 @@ set(TEST_HEADERS
     mocks/BittyBuzzMessageHandlerInterfaceMock.h
     mocks/BittyBuzzMessageServiceInterfaceMock.h
     mocks/BittyBuzzNeighborsManagerInterfaceMock.h
+    mocks/UserUIInterfaceMock.h
     mocks/InterlocInterfaceMock.h
     
     vm_tests/BittyBuzzVmFixture.h
@@ -148,6 +153,17 @@ bittybuzz_generate_bytecode(register-closure_lambda
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
+
+bittybuzz_generate_bytecode(cast-float
+    ${BZZ_TEST_SCRIPTS_LOCATION}/cast_float.bzz
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
+bittybuzz_generate_bytecode(cast-int
+    ${BZZ_TEST_SCRIPTS_LOCATION}/cast_int.bzz
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
 bittybuzz_generate_bytecode(call-host-function-valid
     ${BZZ_TEST_SCRIPTS_LOCATION}/call_host_function_valid.bzz
     "${BZZ_TEST_SCRIPTS_LOCATION}"
@@ -198,6 +214,16 @@ bittybuzz_generate_bytecode(table-library
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
+bittybuzz_generate_bytecode(user-interface
+    ${BZZ_TEST_SCRIPTS_LOCATION}/user_interface.bzz
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
+bittybuzz_generate_bytecode(user-interface-invalid-hex
+    ${BZZ_TEST_SCRIPTS_LOCATION}/user_interface_invalid_hex.bzz
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
 add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})
 
 target_link_libraries(${TEST_NAME}
@@ -227,8 +253,11 @@ target_link_libraries(${TEST_NAME}
         register-closure_invalid_args
         register-closure_lambda
         call-host-function-valid
+        call-host-function-valid
         call-host-function-invalid-args
         call-host-function-invalid-keys
+        cast-float
+        cast-int
         stigmergy-put
         stigmergy-get
         stigmergy-onconflict
@@ -236,6 +265,8 @@ target_link_libraries(${TEST_NAME}
         neighbors-broadcast
         neighbors-listen
         table-library
+        user-interface
+        user-interface-invalid-hex
 )
 
 add_test(NAME ${TEST_NAME}

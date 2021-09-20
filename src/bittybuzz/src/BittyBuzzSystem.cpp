@@ -8,6 +8,7 @@ const IBittyBuzzStringResolver* BittyBuzzSystem::g_stringResolver = NULL;
 IBittyBuzzClosureRegister* BittyBuzzSystem::g_closureRegister = NULL;
 IBittyBuzzMessageService* BittyBuzzSystem::g_messageService = NULL;
 IBSP* BittyBuzzSystem::g_bsp = NULL;
+IUserUI* BittyBuzzSystem::g_userUI;
 
 void BittyBuzzSystem::functionCall(uint16_t stringId) {
     bbzvm_pushs(stringId);

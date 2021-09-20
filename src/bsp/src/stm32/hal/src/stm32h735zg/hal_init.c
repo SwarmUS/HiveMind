@@ -1,6 +1,8 @@
 #include "hal/hal_init.h"
+#include <hal/usb.h>
 #include <hivemind_hal.h>
 #include <tim.h>
+#include <usb_device.h>
 
 static void Hal_initMPU();
 static void Hal_initCache();
@@ -24,8 +26,8 @@ void PHal_initMcu() {
     MX_I2C1_Init();
 
     // TODO: Reactivate once USB voltage input is fixed
-    // MX_USB_DEVICE_Init();
-    // usb_init();
+    MX_USB_DEVICE_Init();
+    usb_init();
 
     Hal_initMPU();
     Hal_initCache();
