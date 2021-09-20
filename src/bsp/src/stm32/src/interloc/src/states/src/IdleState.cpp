@@ -1,10 +1,34 @@
 #include "states/IdleState.h"
+#include <Task.h>
+#include <interloc/InterlocBSPContainer.h>
 #include <interloc/InterlocStateHandler.h>
 
 IdleState::IdleState(ILogger& logger, DecawaveArray& decawaves) :
     AbstractInterlocState(logger, decawaves) {}
 
 void IdleState::process(InterlocStateHandler& context) {
+    InterlocStateDTO managerState = InterlocBSPContainer::getInterlocManager().getState();
+
+    switch (managerState) {
+    case InterlocStateDTO::OPERATING:
+        processOperatingMode(context);
+        return;
+
+    case InterlocStateDTO::ANGLE_CALIB_SENDER:
+        context.setState(InterlocStates::ANGLE_SENDER, InterlocEvent::API_MESSAGE);
+        return;
+
+    case InterlocStateDTO::ANGLE_CALIB_RECEIVER:
+        context.setState(InterlocStates::ANGLE_RECEIVER, InterlocEvent::API_MESSAGE);
+        return;
+
+    default:
+        // Wait and recheck state
+        Task::delay(10);
+    }
+}
+
+void IdleState::processOperatingMode(InterlocStateHandler& context) {
     // First time we pass by the Idle state
     if (context.getSuperFrameInitiator() == 0) {
         context.setState(InterlocStates::SYNC, InterlocEvent::BOOTUP);

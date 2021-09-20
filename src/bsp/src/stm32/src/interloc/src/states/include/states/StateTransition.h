@@ -22,6 +22,9 @@ enum class InterlocEvent {
     SUPERFRAME_FINISHED,
     GOOD_DISTANCE,
     BAD_DISTANCE,
+    API_MESSAGE,
+    ANGLE_RECEIVED,
+    ANGLES_SENT
     DECA_INIT_ERROR
 };
 

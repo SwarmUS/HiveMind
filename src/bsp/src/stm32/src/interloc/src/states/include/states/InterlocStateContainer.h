@@ -15,6 +15,8 @@ enum class InterlocStates {
     SYNC,
     SEND_POLL_FROM_SYNC,
     SET_DISTANCE,
+    ANGLE_SENDER,
+    ANGLE_RECEIVER,
     NUM_STATES
 };
 

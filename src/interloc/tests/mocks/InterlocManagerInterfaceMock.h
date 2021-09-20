@@ -14,16 +14,30 @@ class InterlocManagerInterfaceMock : public IInterlocManager {
         m_positionUpdateContext = context;
     }
 
-    MOCK_METHOD(void, startCalibSingleInitiator, (), (override));
-    MOCK_METHOD(void, stopCalibration, (), (override));
-    MOCK_METHOD(void,
-                startCalibSingleResponder,
-                (uint16_t initiatorId, calibrationEndedCallbackFunction_t callback, void* context),
-                (override));
-    MOCK_METHOD(void, setCalibDistance, (uint16_t distanceCalibCm), (override));
+    void setInterlocManagerStateChangeCallback(
+        interlocManagerStateChangeCallbackFunction_t callback, void* context) override {
+        m_stateChangeCallback = callback;
+        m_stateChangeContext = context;
+    }
+
+    void setInterlocManagerRawAngleDataCallback(interlocRawAngleDataCallbackFunction_t callback,
+                                                void* context) override {
+        m_angleDataCallback = callback;
+        m_angleDataContext = context;
+    }
+
+    MOCK_METHOD(void, setInterlocManagerState, (InterlocStateDTO state), (override));
+    MOCK_METHOD(void, configureTWRCalibration, (uint16_t distanceCalibCm), (override));
+    MOCK_METHOD(void, configureAngleCalibration, (uint32_t numberOfFrames), (override));
 
     positionUpdateCallbackFunction_t m_positionUpdateCallback;
     void* m_positionUpdateContext;
+
+    interlocManagerStateChangeCallbackFunction_t m_stateChangeCallback;
+    void* m_stateChangeContext;
+
+    interlocRawAngleDataCallbackFunction_t m_angleDataCallback;
+    void* m_angleDataContext;
 };
 
 #endif // __INTERLOCMANAGERMOCK_H_

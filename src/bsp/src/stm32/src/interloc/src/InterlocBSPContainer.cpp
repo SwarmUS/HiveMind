@@ -1,4 +1,5 @@
 #include "interloc/InterlocBSPContainer.h"
+#include "interloc/InterlocManager.h"
 #include <bsp/BSPContainer.h>
 #include <logger/LoggerContainer.h>
 

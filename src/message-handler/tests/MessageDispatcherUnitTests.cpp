@@ -538,8 +538,8 @@ TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_greet_
 
 TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_validInterlocAPIMessage) {
     // Given
-    m_message =
-        MessageDTO(m_srcUuid, m_uuid, InterlocAPIDTO(CalibrationMessageDTO(StopCalibrationDTO())));
+    m_message = MessageDTO(m_srcUuid, m_uuid,
+                           InterlocAPIDTO(SetInterlocStateDTO(InterlocStateDTO::STANDBY)));
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
@@ -555,8 +555,8 @@ TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_validI
 TEST_F(MessageDispatcherFixture,
        MessageDispatcher_deserializeAndDispatch_invalidInterlocAPIMessage) {
     // Given
-    m_message =
-        MessageDTO(m_srcUuid, m_uuid, InterlocAPIDTO(CalibrationMessageDTO(StopCalibrationDTO())));
+    m_message = MessageDTO(m_srcUuid, m_uuid,
+                           InterlocAPIDTO(SetInterlocStateDTO(InterlocStateDTO::STANDBY)));
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
     EXPECT_CALL(m_interlocQueue, push(testing::_)).Times(1).WillOnce(testing::Return(false));
