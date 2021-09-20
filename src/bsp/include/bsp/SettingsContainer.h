@@ -30,9 +30,14 @@ namespace SettingsContainer {
 
     /**
      *@brief Get the log level of the application
-     *
      *@return the log level*/
     LogLevel getLogLevel();
+
+    /**
+     *@brief Get the delay between each steps of the vm
+     *@return the delay between each steps of the vm*/
+    uint16_t getBBZVMStepDelay();
+
 } // namespace SettingsContainer
 
 #endif //__SETTINGSCONTAINER_H__

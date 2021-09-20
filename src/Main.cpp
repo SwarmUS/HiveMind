@@ -8,6 +8,7 @@
 #include <bittybuzz/BittyBuzzVm.h>
 #include <bsp/BSPContainer.h>
 #include <bsp/IBSP.h>
+#include <bsp/SettingsContainer.h>
 #include <cstdlib>
 #include <interloc/IInterloc.h>
 #include <interloc/InterlocContainer.h>
@@ -75,6 +76,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 
     void task() override {
+        const uint16_t stepDelay = SettingsContainer::getBBZVMStepDelay();
         auto bbzFunctions = BittyBuzzFactory::createBittyBuzzGlobalLib();
         auto mathLib = BittyBuzzFactory::createBittyBuzzMathLib();
         auto uiLib = BittyBuzzFactory::createBittyBuzzUILib();
@@ -123,7 +125,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
                 }
                 }
             }
-                Task::delay(100);
+            Task::delay(stepDelay);
             }
             // VM needs to be resetted so we terminate it and init it again
             m_resetVm = false;
