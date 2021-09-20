@@ -48,9 +48,10 @@ void InterlocManager::startInterloc() {
 
     syncClocks();
 
-    if (allInit) {
+    if (m_decawaves.canDoTWR()) {
         m_state = InterlocStateDTO::OPERATING;
     } else {
+        m_logger.log(LogLevel::Error, "Could not initialize enough Decawaves to do TWR");
         m_state = InterlocStateDTO::STANDBY;
     }
 

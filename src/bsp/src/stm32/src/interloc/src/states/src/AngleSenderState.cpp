@@ -22,6 +22,6 @@ void AngleSenderState::sendAngleFrames(const InterlocStateHandler& context) {
     for (uint32_t i = 0; i < context.getAngleNumberOfFrames() * m_transmissionContingencyFactor;
          i++) {
         m_msg.m_frameId = i;
-        m_decawaves[DecawavePort::A].transmit((uint8_t*)&m_msg, sizeof(m_msg));
+        m_decawaves.getMasterAntenna()->get().transmit((uint8_t*)&m_msg, sizeof(m_msg));
     }
 }

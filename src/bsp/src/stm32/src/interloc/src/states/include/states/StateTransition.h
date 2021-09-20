@@ -24,7 +24,7 @@ enum class InterlocEvent {
     BAD_DISTANCE,
     API_MESSAGE,
     ANGLE_RECEIVED,
-    ANGLES_SENT
+    ANGLES_SENT,
     DECA_INIT_ERROR
 };
 
