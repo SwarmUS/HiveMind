@@ -16,6 +16,9 @@ class IBittyBuzzMessageHandler {
      *reply could not be send (i.e. the queue was full or the message was could not be understood)*/
     virtual bool processMessage() = 0;
 
+    /**@brief clears all the pending messages in the input queue without processing them*/
+    virtual void clearMessages() = 0;
+
     /**
      *@brief gets the number of message to be processed in the queue
      *@return The number of message in the queue

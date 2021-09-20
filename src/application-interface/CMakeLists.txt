@@ -38,7 +38,7 @@ set(LIB_HEADERS
   include/application-interface/SystemStates.h
   include/application-interface/UserStates.h
 
-  include/application-interface/IApplicationInterface
+  include/application-interface/IApplicationInterface.h
   include/application-interface/ApplicationInterface.h
 
   include/application-interface/ApplicationInterfaceContainer.h
