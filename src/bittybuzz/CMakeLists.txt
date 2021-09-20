@@ -2,7 +2,8 @@ set(LIB_NAME "swarmus-hivemind-bittybuzz")
 set(LIB_ALIAS "SwarmUS::HiveMind::BittyBuzz")
 
 include(bittybuzz/common)
-include(bittybuzz_config.cmake) # not a module, need to specify "".cmake"
+include(bittybuzz_config.cmake) # not a module, need to specify .cmake
+include(buzz_scripts/user_bst_files.cmake)
 
 # Settings
 configure_file(include/bittybuzz/BittyBuzzSettings.in.h include/bittybuzz/BittyBuzzSettings.h)
@@ -11,12 +12,17 @@ configure_file(include/bittybuzz/BittyBuzzSettings.in.h include/bittybuzz/BittyB
 bittybuzz_fetch()
 find_package(BittyBuzz)
 
+# System bst file
 set(BITTYBUZZ_HIVEMIND_BST ${CMAKE_CURRENT_SOURCE_DIR}/bittybuzz.bst)
+
+# Concat with user bst file
+set(BITTYBUZZ_BST_FILES ${USER_BST_FILES} ${BITTYBUZZ_HIVEMIND_BST})
+
 # BittyBuzz script bytecode generation
 bittybuzz_generate_bytecode(bittybuzz-target
         ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts/main.bzz
         ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts
-        ${BITTYBUZZ_HIVEMIND_BST})
+        "${BITTYBUZZ_BST_FILES}")
 
 set(LIB_HEADERS
     include/bittybuzz/BittyBuzzVm.h

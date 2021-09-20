@@ -99,6 +99,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
             }
 
             while (!m_resetVm) {
+            if(m_bittybuzzVm.getState() == BBZVM_STATE_READY){
                 BBVMRet statusCode = m_bittybuzzVm.step();
                 switch (statusCode) {
                 case BBVMRet::Ok:
@@ -121,6 +122,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
                     break;
                 }
                 }
+            }
                 Task::delay(100);
             }
             // VM needs to be resetted so we terminate it and init it again
