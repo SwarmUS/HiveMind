@@ -21,7 +21,8 @@ enum class InterlocEvent {
     BOOTUP,
     SUPERFRAME_FINISHED,
     GOOD_DISTANCE,
-    BAD_DISTANCE
+    BAD_DISTANCE,
+    DECA_INIT_ERROR
 };
 
 struct StateTransition {

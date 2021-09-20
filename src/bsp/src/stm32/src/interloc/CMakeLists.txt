@@ -9,7 +9,8 @@ set(LIB_SOURCES
         src/InterlocStateHandler.cpp
         src/InterlocBSPContainer.cpp
         src/TwoWayRanging.cpp
-        src/InterlocTimeManager.cpp)
+        src/InterlocTimeManager.cpp
+        src/DecawaveArray.cpp)
 
 set(LIB_HEADERS
         include/interloc/Decawave.h
@@ -22,6 +23,14 @@ set(LIB_HEADERS
         include/interloc/TwoWayRanging.h
         include/interloc/DecawaveArray.h
         include/interloc/InterlocTimeManager.h)
+
+if (${COMPILE_STM32_F429ZI})
+        list(APPEND LIB_SOURCES src/DecawaveArray_HiveSight.cpp)
+elseif (${COMPILE_STM32_H735ZG})
+        list(APPEND LIB_SOURCES src/DecawaveArray_HiveBoard.cpp)
+else()
+        message(FATAL_ERROR "BSP Interloc: The current board is not supported" )
+endif()
 
 add_library(${LIB_NAME}
         ${LIB_SOURCES}

@@ -407,3 +407,5 @@ uint64_t Decawave::getTxTimestampFromDelayedTime(uint64_t txTime) const {
 DW_STATE Decawave::getState() { return m_state; }
 
 void Decawave::setState(DW_STATE state) { m_state = state; }
+
+bool Decawave::isReady() const { return m_isReady; }

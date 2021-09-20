@@ -32,18 +32,14 @@ void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t
 }
 
 void InterlocManager::startInterloc() {
-    bool allInit = true;
-    for (auto& deca : m_decawaves) {
-        if (!deca.init()) {
-            allInit = false;
-            m_logger.log(LogLevel::Warn, "InterlocManager: Could not start Decawave");
-        }
-    }
+    m_decawaves.initializeAll();
 
     syncClocks();
 
-    if (allInit) {
+    if (m_decawaves.canDoTWR()) {
         m_stateHandler.setState(InterlocStates::IDLE, InterlocEvent::NO_EVENT);
+    } else {
+        m_logger.log(LogLevel::Error, "Could not initialize enough Decawaves to do TWR");
     }
 
     while (true) {
@@ -55,13 +51,17 @@ void InterlocManager::syncClocks() {
     vPortEnterCritical();
 
     for (auto& deca : m_decawaves) {
-        deca.setSyncMode(DW_SYNC_MODE::OSTR);
+        if (deca.isReady()) {
+            deca.setSyncMode(DW_SYNC_MODE::OSTR);
+        }
     }
 
     deca_pulseSyncSignal();
 
     for (auto& deca : m_decawaves) {
-        deca.setSyncMode(DW_SYNC_MODE::OFF);
+        if (deca.isReady()) {
+            deca.setSyncMode(DW_SYNC_MODE::OFF);
+        }
     }
 
     vPortExitCritical();
