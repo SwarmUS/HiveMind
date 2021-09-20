@@ -91,7 +91,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
             if (!m_bittybuzzVm.init(buzzLibraries.data(), buzzLibraries.size()) ||
                 !m_bittybuzzVm.start()) {
 
-                m_logger.log(LogLevel::Error, "",
+                m_logger.log(LogLevel::Error, "BBZVM failed to initialize. state: %s err: %s",
                              BittyBuzzSystem::getStateString(m_bittybuzzVm.getState()),
                              BittyBuzzSystem::getErrorString(m_bittybuzzVm.getError()));
                 m_deviceStateUI.setDeviceState(DeviceState::Error);
