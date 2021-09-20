@@ -69,8 +69,9 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 
     static void resetVmButtonCallback(void* context) {
-        std::atomic_bool* resetVm = (std::atomic_bool*)context;
-        *resetVm = true;
+        BittyBuzzTask* bbvmTask = (BittyBuzzTask*)context;
+        bbvmTask->m_resetVm = true;
+        bbvmTask->m_bittybuzzVm.stop(); // Stopping the vm so it can be terminated and started again
     }
 
     void task() override {
@@ -82,13 +83,15 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
             {bbzFunctions, mathLib, uiLib}};
 
         // register btn function
-        m_buttonCallbackRegister.setCallback(resetVmButtonCallback, &m_resetVm);
+        m_buttonCallbackRegister.setCallback(resetVmButtonCallback, this);
 
         while (true) {
             m_deviceStateUI.setDeviceState(DeviceState::Ok);
 
-            if (!m_bittybuzzVm.init(buzzLibraries.data(), buzzLibraries.size())) {
-                m_logger.log(LogLevel::Error, "BBZVM failed to initialize. state: %s err: %s",
+            if (!m_bittybuzzVm.init(buzzLibraries.data(), buzzLibraries.size()) ||
+                !m_bittybuzzVm.start()) {
+
+                m_logger.log(LogLevel::Error, "",
                              BittyBuzzSystem::getStateString(m_bittybuzzVm.getState()),
                              BittyBuzzSystem::getErrorString(m_bittybuzzVm.getError()));
                 m_deviceStateUI.setDeviceState(DeviceState::Error);
@@ -100,6 +103,11 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
                 switch (statusCode) {
                 case BBVMRet::Ok:
                     break;
+                case BBVMRet::Stopped: {
+                    m_logger.log(LogLevel::Warn, "BBZVM is stopped, cannot step");
+                    m_deviceStateUI.setDeviceState(DeviceState::Error);
+                    break;
+                }
                 case BBVMRet::OutMsgErr: {
                     m_logger.log(LogLevel::Warn, "Buzz could not sent message");
                     m_deviceStateUI.setDeviceState(DeviceState::Error);
@@ -111,10 +119,6 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
                                  BittyBuzzSystem::getErrorString(m_bittybuzzVm.getError()));
                     m_deviceStateUI.setDeviceState(vmErrorToDeviceState(m_bittybuzzVm.getError()));
                     break;
-                }
-                default: {
-                    m_logger.log(LogLevel::Warn, "Unkown bbzvm step status code");
-                    m_deviceStateUI.setDeviceState(DeviceState::Error);
                 }
                 }
                 Task::delay(100);
@@ -373,8 +377,9 @@ int main(int argc, char** argv) {
     ApplicationInterfaceContainer::getConnectionStateUI().setConnectionState(
         ConnectionState::Booting);
 
-    static BittyBuzzTask s_bittybuzzTask("bittybuzz", gc_taskNormalPriority,
-                                         ApplicationInterfaceContainer::getDeviceStateUI());
+    static BittyBuzzTask s_bittybuzzTask(
+        "bittybuzz", gc_taskNormalPriority, ApplicationInterfaceContainer::getDeviceStateUI(),
+        ApplicationInterfaceContainer::getButton1CallbackRegister());
 
     static HardwareInterlocTask s_hardwareInterlocTask("hardware_interloc", gc_taskHighPriority);
     static SoftwareInterlocTask s_softwareInterlocTask("software_interloc", gc_taskNormalPriority);

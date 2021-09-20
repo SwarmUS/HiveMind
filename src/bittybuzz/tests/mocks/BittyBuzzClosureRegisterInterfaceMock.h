@@ -26,6 +26,8 @@ class BittyBuzzClosureRegisterInterfaceMock : public IBittyBuzzClosureRegister {
                 (uint16_t idx),
                 (const override));
 
+    MOCK_METHOD(void, clearClosures, (), (override));
+
     MOCK_METHOD(uint16_t, getRegisteredClosureLength, (), (const override));
 };
 

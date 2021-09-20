@@ -58,12 +58,21 @@ bool BittyBuzzVm::init(const std::reference_wrapper<IBittyBuzzLib>* bbzLibs,
     // Verify that the registration and startup was successfull
     bbzvm_assert_state(false);
 
+    return vm->state == BBZVM_STATE_DONE;
+}
+
+bool BittyBuzzVm::start() {
     // Start init
     vm->state = BBZVM_STATE_READY;
     BittyBuzzSystem::functionCall(__BBZSTRID_init);
 
     // Verify that the initialization was successfull
     return vm->state == BBZVM_STATE_READY;
+}
+
+void BittyBuzzVm::stop() {
+    // Start init
+    vm->state = BBZVM_STATE_STOPPED;
 }
 
 void BittyBuzzVm::terminate() {
@@ -115,6 +124,10 @@ BBVMRet BittyBuzzVm::step() {
         }
 
         return vm->state == BBZVM_STATE_READY ? BBVMRet::Ok : BBVMRet::VmErr;
+    }
+
+    if (vm->state == BBZVM_STATE_STOPPED) {
+        return BBVMRet::Stopped;
     }
 
     return BBVMRet::VmErr;
