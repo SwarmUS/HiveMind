@@ -1,7 +1,7 @@
 #include "bittybuzz/BittyBuzzSystem.h"
+#include <Task.h>
 #include <bbzvm.h>
 #include <bittybuzz/BittyBuzzUtils.h>
-#include <Task.h>
 
 ILogger* BittyBuzzSystem::g_logger = NULL;
 IUserInterface* BittyBuzzSystem::g_ui = NULL;
@@ -11,7 +11,8 @@ IBittyBuzzMessageService* BittyBuzzSystem::g_messageService = NULL;
 IBSP* BittyBuzzSystem::g_bsp = NULL;
 IUserUI* BittyBuzzSystem::g_userUI;
 
-static constexpr uint16_t VM_DUMP_LOG_WAIT_TIME = 5; // Wait time between logs for the VM dump to avoid fulling the buffer
+static constexpr uint16_t VM_DUMP_LOG_WAIT_TIME =
+    5; // Wait time between logs for the VM dump to avoid fulling the buffer
 
 void BittyBuzzSystem::functionCall(uint16_t stringId) {
     bbzvm_pushs(stringId);
@@ -117,9 +118,8 @@ void BittyBuzzSystem::logVmHeap(LogLevel logLevel) {
         g_logger->log(logLevel, "Heap usage (B) for 16-bit pointers: %04d",
                       (uint16_t)(objnum * 3 + tsegSize));
         uint16_t uspace = ((vm->heap.ltseg) - (vm->heap.rtobj));
-        g_logger->log(logLevel, "Unclaimed space (B): %d (=%d object(s) or %d segment(s))",
-                      uspace, (uint16_t)(uspace / sizeof(bbzobj_t)),
-                      (uint16_t)(uspace / heapTsegSize));
+        g_logger->log(logLevel, "Unclaimed space (B): %d (=%d object(s) or %d segment(s))", uspace,
+                      (uint16_t)(uspace / sizeof(bbzobj_t)), (uint16_t)(uspace / heapTsegSize));
         g_logger->log(logLevel, "----- END VM DUMP -----");
     }
 }

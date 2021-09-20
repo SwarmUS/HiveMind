@@ -9,6 +9,4 @@ uint8_t SettingsContainer::getHostIP(char* buf, uint8_t length) {
 
 LogLevel SettingsContainer::getLogLevel() { return LOG_LEVEL; }
 
-uint16_t SettingsContainer::getBBZVMStepDelay() {
-    return BBZVM_STEP_DELAY;
-}
+uint16_t SettingsContainer::getBBZVMStepDelay() { return BBZVM_STEP_DELAY; }

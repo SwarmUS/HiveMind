@@ -50,7 +50,7 @@ LogLevel SettingsContainer::getLogLevel() {
     return LogLevel::Info;
 }
 
-uint16_t SettingsContainer::getBBZVMStepDelay(){
+uint16_t SettingsContainer::getBBZVMStepDelay() {
     auto handle = getRosNodeHandle();
     return handle->param("bbzvm_step_delay", 10);
 }
