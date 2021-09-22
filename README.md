@@ -14,12 +14,13 @@ The HiveMind is the embedded application that provides swarm capabilities which 
 
 - [Buzz](https://github.com/buzz-lang/Buzz) to compile the user buzz script.
 
+- [Protoc](https://developers.google.com/protocol-buffers) and some python deps to build [Propolis](https://github.com/SwarmUS/Propolis). Check Propolis repo for more info
+
 - Development tools
   - [Clang tools](https://clang.llvm.org/docs/ClangTools.html) are used to match the style and warnings used in the project
     - [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to match the coding style
     - [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) for additional compiler warnings
   - [Doxygen](https://github.com/doxygen/doxygen) and [graphviz](https://gitlab.com/graphviz/graphviz/) to generate the documentation
-  - [Protoc](https://developers.google.com/protocol-buffers) and some python deps to build [Propolis](https://github.com/SwarmUS/Propolis). Check Propolis repo for more info
 
 ## Building
 
