@@ -1,4 +1,5 @@
 #include "bittybuzz/BittyBuzzSystem.h"
+#include <Task.h>
 #include <bbzvm.h>
 #include <bittybuzz/BittyBuzzUtils.h>
 
@@ -9,6 +10,9 @@ IBittyBuzzClosureRegister* BittyBuzzSystem::g_closureRegister = NULL;
 IBittyBuzzMessageService* BittyBuzzSystem::g_messageService = NULL;
 IBSP* BittyBuzzSystem::g_bsp = NULL;
 IUserUI* BittyBuzzSystem::g_userUI;
+
+static constexpr uint16_t VM_DUMP_LOG_WAIT_TIME_MS =
+    5; // Wait time between logs for the VM dump to avoid fulling the buffer
 
 void BittyBuzzSystem::functionCall(uint16_t stringId) {
     bbzvm_pushs(stringId);
@@ -44,9 +48,8 @@ inline char perm(bbzobj_t* obj) {
 }
 void BittyBuzzSystem::logVmHeap(LogLevel logLevel) {
     if (g_logger != NULL) {
-        g_logger->log(logLevel, "---------------");
-        g_logger->log(logLevel, "- HEAP STATUS -");
-        g_logger->log(logLevel, "---------------\n");
+        g_logger->log(logLevel, "----- START VM DUMP -----");
+        g_logger->log(logLevel, "--- HEAP STATUS ---");
         /* Object-related stuff */
         uint16_t objimax = (uint16_t)(vm->heap.rtobj - vm->heap.data) / sizeof(bbzobj_t);
         g_logger->log(logLevel, "Max object index: %d", objimax - 1);
@@ -58,7 +61,7 @@ void BittyBuzzSystem::logVmHeap(LogLevel logLevel) {
         }
 
         g_logger->log(logLevel, "Valid objects: %d", objnum);
-        g_logger->log(logLevel, "Size per object: %zu", sizeof(bbzobj_t));
+        g_logger->log(logLevel, "Size per object: %d", sizeof(bbzobj_t));
 
         constexpr uint16_t objStrSize = 32;
         char objStr[objStrSize];
@@ -66,18 +69,21 @@ void BittyBuzzSystem::logVmHeap(LogLevel logLevel) {
             bbzobj_t* obj = bbzheap_obj_at(i); // NOLINT
             if (bbzheap_obj_isvalid(*obj)) {
                 if (BittyBuzzUtils::logObj(obj, objStr, objStrSize) >= 0) {
-                    BittyBuzzSystem::g_ui->print("%s", objStr);
                     g_logger->log(logLevel, "\t#%d: %s %c", i, objStr, perm(obj));
                 } else {
                     g_logger->log(logLevel, "\t#%d: Failed to log obj %c", i, perm(obj));
                 }
+                Task::delay(VM_DUMP_LOG_WAIT_TIME_MS);
             }
         }
-        /* Segment-related stuff */
+
+        /* Table Segment related stuff */
+        g_logger->log(logLevel, "--- TABLE SEGMENTS ---");
+
         uint16_t heapTsegSize = sizeof(bbzheap_tseg_t);
         uint16_t tsegimax =
             (uint16_t)(vm->heap.data + BBZHEAP_SIZE - vm->heap.ltseg) / heapTsegSize; // NOLINT
-        g_logger->log(logLevel, "Max table segment index: %d\n", tsegimax);
+        g_logger->log(logLevel, "Max table segment index: %d", tsegimax);
         uint16_t tsegnum = 0;
         for (uint16_t i = 0; i < tsegimax; ++i) {
             if (bbzheap_tseg_isvalid(*bbzheap_tseg_at(i))) {
@@ -86,8 +92,8 @@ void BittyBuzzSystem::logVmHeap(LogLevel logLevel) {
         }
 
         uint16_t tsegSize = tsegnum * heapTsegSize;
-        g_logger->log(logLevel, "Valid table segments: %d\n", tsegnum);
-        g_logger->log(logLevel, "Size per table segment: %zu\n", heapTsegSize);
+        g_logger->log(logLevel, "Valid table segments: %d", tsegnum);
+        g_logger->log(logLevel, "Size per table segment: %d", heapTsegSize);
         bbzheap_tseg_t* seg;
         for (uint16_t i = 0; i < tsegimax; ++i) {
             seg = bbzheap_tseg_at(i);
@@ -97,23 +103,24 @@ void BittyBuzzSystem::logVmHeap(LogLevel logLevel) {
                     if (bbzheap_tseg_elem_isvalid(seg->keys[j])) {
                         g_logger->log(logLevel, "\t\t(%d,%d)", bbzheap_tseg_elem_get(seg->keys[j]),
                                       bbzheap_tseg_elem_get(seg->values[j]));
+                        Task::delay(VM_DUMP_LOG_WAIT_TIME_MS);
                     }
                 }
                 g_logger->log(logLevel, "\t\t/next=(%x|%d)", bbzheap_tseg_next_get(seg),
                               bbzheap_tseg_next_get(seg));
                 g_logger->log(logLevel, "\t}");
+                Task::delay(VM_DUMP_LOG_WAIT_TIME_MS);
             }
         }
         uint16_t usage = (objnum * sizeof(bbzobj_t)) + tsegSize;
-        g_logger->log(logLevel, "Heap usage (B): %04d/%04d (%.1f%%)\n", usage, BBZHEAP_SIZE,
+        g_logger->log(logLevel, "Heap usage (B): %04d/%04d (%.1f%%)", usage, BBZHEAP_SIZE,
                       ((double)usage / BBZHEAP_SIZE) * 100.0);
-        g_logger->log(logLevel, "Heap usage (B) for 16-bit pointers: %04d\n",
+        g_logger->log(logLevel, "Heap usage (B) for 16-bit pointers: %04d",
                       (uint16_t)(objnum * 3 + tsegSize));
         uint16_t uspace = ((vm->heap.ltseg) - (vm->heap.rtobj));
-        g_logger->log(logLevel, "Unclaimed space (B): %d (=%d object(s) or %d segment(s))\n",
-                      uspace, (uint16_t)(uspace / sizeof(bbzobj_t)),
-                      (uint16_t)(uspace / heapTsegSize));
-        g_logger->log(logLevel, "\n");
+        g_logger->log(logLevel, "Unclaimed space (B): %d (=%d object(s) or %d segment(s))", uspace,
+                      (uint16_t)(uspace / sizeof(bbzobj_t)), (uint16_t)(uspace / heapTsegSize));
+        g_logger->log(logLevel, "----- END VM DUMP -----");
     }
 }
 

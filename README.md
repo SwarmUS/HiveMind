@@ -178,6 +178,7 @@ CMake variables can be used to override certain default firmware settings.
 | HOST_IP | 192.168.1.101 |
 | LOG_LEVEL | Info |
 | MAX_ROBOTS_IN_SWARM | 10 |
+| BBZVM_STEP_DELAY_MS | 10 |
 
 The CMake variable `UUID_OVERRIDE` may also be used to change the UUID value currently saved in the
 non-volatile memory.
@@ -186,9 +187,10 @@ non-volatile memory.
 
 ROS launch parameters are used to configure variables.
 | Variable | Default value |
-| --- | --- |
+|---------------------|---------------------------------|
 | board_uuid | 1 (0 is reserved for broadcast) |
 | host_tcp_port | 5555 |
 | host_tcp_address | 127.0.0.1 |
 | remote_mock_port | 12346 |
 | log_level | Info |
+| bbzvm_step_delay_ms | 10 |

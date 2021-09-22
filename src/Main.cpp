@@ -8,6 +8,7 @@
 #include <bittybuzz/BittyBuzzVm.h>
 #include <bsp/BSPContainer.h>
 #include <bsp/IBSP.h>
+#include <bsp/SettingsContainer.h>
 #include <cstdlib>
 #include <interloc/IInterloc.h>
 #include <interloc/InterlocContainer.h>
@@ -75,6 +76,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 
     void task() override {
+        const uint16_t stepDelay = SettingsContainer::getBBZVMStepDelayMs();
         auto bbzFunctions = BittyBuzzFactory::createBittyBuzzGlobalLib();
         auto mathLib = BittyBuzzFactory::createBittyBuzzMathLib();
         auto uiLib = BittyBuzzFactory::createBittyBuzzUILib();
@@ -99,29 +101,32 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
             }
 
             while (!m_resetVm) {
-                BBVMRet statusCode = m_bittybuzzVm.step();
-                switch (statusCode) {
-                case BBVMRet::Ok:
-                    break;
-                case BBVMRet::Stopped: {
-                    m_logger.log(LogLevel::Warn, "BBZVM is stopped, cannot step");
-                    m_deviceStateUI.setDeviceState(DeviceState::Error);
-                    break;
+                if (m_bittybuzzVm.getState() == BBZVM_STATE_READY) {
+                    BBVMRet statusCode = m_bittybuzzVm.step();
+                    switch (statusCode) {
+                    case BBVMRet::Ok:
+                        break;
+                    case BBVMRet::Stopped: {
+                        m_logger.log(LogLevel::Warn, "BBZVM is stopped, cannot step");
+                        m_deviceStateUI.setDeviceState(DeviceState::Error);
+                        break;
+                    }
+                    case BBVMRet::OutMsgErr: {
+                        m_logger.log(LogLevel::Warn, "Buzz could not sent message");
+                        m_deviceStateUI.setDeviceState(DeviceState::Error);
+                        break;
+                    }
+                    case BBVMRet::VmErr: {
+                        m_logger.log(LogLevel::Error, "BBZVM failed to step. state: %s err: %s",
+                                     BittyBuzzSystem::getStateString(m_bittybuzzVm.getState()),
+                                     BittyBuzzSystem::getErrorString(m_bittybuzzVm.getError()));
+                        m_deviceStateUI.setDeviceState(
+                            vmErrorToDeviceState(m_bittybuzzVm.getError()));
+                        break;
+                    }
+                    }
                 }
-                case BBVMRet::OutMsgErr: {
-                    m_logger.log(LogLevel::Warn, "Buzz could not sent message");
-                    m_deviceStateUI.setDeviceState(DeviceState::Error);
-                    break;
-                }
-                case BBVMRet::VmErr: {
-                    m_logger.log(LogLevel::Error, "BBZVM failed to step. state: %s err: %s",
-                                 BittyBuzzSystem::getStateString(m_bittybuzzVm.getState()),
-                                 BittyBuzzSystem::getErrorString(m_bittybuzzVm.getError()));
-                    m_deviceStateUI.setDeviceState(vmErrorToDeviceState(m_bittybuzzVm.getError()));
-                    break;
-                }
-                }
-                Task::delay(100);
+                Task::delay(stepDelay);
             }
             // VM needs to be resetted so we terminate it and init it again
             m_resetVm = false;
