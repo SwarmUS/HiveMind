@@ -76,7 +76,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 
     void task() override {
-        const uint16_t stepDelay = SettingsContainer::getBBZVMStepDelay();
+        const uint16_t stepDelay = SettingsContainer::getBBZVMStepDelayMs();
         auto bbzFunctions = BittyBuzzFactory::createBittyBuzzGlobalLib();
         auto mathLib = BittyBuzzFactory::createBittyBuzzMathLib();
         auto uiLib = BittyBuzzFactory::createBittyBuzzUILib();

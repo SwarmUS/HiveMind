@@ -35,8 +35,8 @@ namespace SettingsContainer {
 
     /**
      *@brief Get the delay between each steps of the vm
-     *@return the delay between each steps of the vm*/
-    uint16_t getBBZVMStepDelay();
+     *@return the delay between each steps of the vm in ms*/
+    uint16_t getBBZVMStepDelayMs();
 
 } // namespace SettingsContainer
 

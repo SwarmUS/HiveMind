@@ -11,7 +11,7 @@ IBittyBuzzMessageService* BittyBuzzSystem::g_messageService = NULL;
 IBSP* BittyBuzzSystem::g_bsp = NULL;
 IUserUI* BittyBuzzSystem::g_userUI;
 
-static constexpr uint16_t VM_DUMP_LOG_WAIT_TIME =
+static constexpr uint16_t VM_DUMP_LOG_WAIT_TIME_MS =
     5; // Wait time between logs for the VM dump to avoid fulling the buffer
 
 void BittyBuzzSystem::functionCall(uint16_t stringId) {
@@ -73,7 +73,7 @@ void BittyBuzzSystem::logVmHeap(LogLevel logLevel) {
                 } else {
                     g_logger->log(logLevel, "\t#%d: Failed to log obj %c", i, perm(obj));
                 }
-                Task::delay(VM_DUMP_LOG_WAIT_TIME);
+                Task::delay(VM_DUMP_LOG_WAIT_TIME_MS);
             }
         }
 
@@ -103,13 +103,13 @@ void BittyBuzzSystem::logVmHeap(LogLevel logLevel) {
                     if (bbzheap_tseg_elem_isvalid(seg->keys[j])) {
                         g_logger->log(logLevel, "\t\t(%d,%d)", bbzheap_tseg_elem_get(seg->keys[j]),
                                       bbzheap_tseg_elem_get(seg->values[j]));
-                        Task::delay(VM_DUMP_LOG_WAIT_TIME);
+                        Task::delay(VM_DUMP_LOG_WAIT_TIME_MS);
                     }
                 }
                 g_logger->log(logLevel, "\t\t/next=(%x|%d)", bbzheap_tseg_next_get(seg),
                               bbzheap_tseg_next_get(seg));
                 g_logger->log(logLevel, "\t}");
-                Task::delay(VM_DUMP_LOG_WAIT_TIME);
+                Task::delay(VM_DUMP_LOG_WAIT_TIME_MS);
             }
         }
         uint16_t usage = (objnum * sizeof(bbzobj_t)) + tsegSize;
