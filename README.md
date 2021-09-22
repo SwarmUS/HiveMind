@@ -49,27 +49,6 @@ catkin_make
 
 ### Embedded
 
-You **may** need to add the udev rules and add groups permissions to your user. If you get a `LIBUSB_ERROR_ACCESS` follow these step.
-
-Copy the udev rules
-```sh
-sudo cp ./tools/udev-rules/* /etc/udev/rules.d/
-```
-
-
-Reload the udev manager
-```sh
-sudo udevadm control --reload-rules
-sudo udevadm trigger
-```
-
-
-Add yourself in the plugdev (to flash) and dialout to read the tty output
-```sh
-sudo usermod -a -G plugdev $USER
-sudo usermod -a -G dialout $USER
-```
-
 Then to generate the build system and compile
 
 For the F4
@@ -83,6 +62,28 @@ cmake -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=../cmake/stm32_h735zg_gc
 ```
 
 You can then flash using `make flash` and see the log output using `screen /dev/ttyUSBXXX` where XXX is the USB number of the board.
+
+#### OpenOCD Lib USB error
+
+You **may** need to add the udev rules and add groups permissions to your user. If you get a `LIBUSB_ERROR_ACCESS` follow these step.
+
+Copy the udev rules
+```sh
+sudo cp ./tools/udev-rules/* /etc/udev/rules.d/
+```
+
+Reload the udev manager
+```sh
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+```
+
+Add yourself in the plugdev (to flash) and dialout to read the tty output without sudo
+```sh
+sudo usermod -a -G plugdev $USER
+sudo usermod -a -G dialout $USER
+```
+
 
 ### Development
 For development you may want to use the warnings and static checks used by the team
