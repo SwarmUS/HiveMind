@@ -20,13 +20,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     } else if (GPIO_Pin == UI_INTERRUPT_Pin) {
         UI_interruptCallback();
     } else {
-        //        for (int i = 0; i < DWT_NUM_DW_DEV; i++) {
-        //            decawaveDeviceConfig_t* decaConfig = deca_getDeviceConfig(i);
-        //
-        //            if (GPIO_Pin == decaConfig->irqPin) {
-        //                deca_isr(i);
-        //                break;
-        //            }
-        //        }
+        for (int i = 0; i < DWT_NUM_DW_DEV; i++) {
+            decawaveDeviceConfig_t* decaConfig = deca_getDeviceConfig(i);
+
+            if (GPIO_Pin == decaConfig->irqPin) {
+                deca_isr(i);
+                break;
+            }
+        }
     }
 }

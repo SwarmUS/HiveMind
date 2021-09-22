@@ -5,8 +5,6 @@
 #include <array>
 #include <iterator>
 
-enum class DecawavePort { A = 0, B, NUM_PORTS };
-
 /**
  * @brief Wrapper class that allows accessing DW1000s through an enum
  */
@@ -21,14 +19,26 @@ class DecawaveArray {
     inline Decawave* end() { return m_decawaves.end(); }
     inline const Decawave* end() const { return m_decawaves.end(); }
 
-    inline Decawave& operator[](DecawavePort port) {
-        return m_decawaves[static_cast<unsigned int>(port)];
-    }
+    void initializeAll();
+    bool canDoTWR() const;
+    bool canCalculateAngles() const;
+
+    std::optional<std::reference_wrapper<Decawave>> getMasterAntenna();
+    std::optional<std::reference_wrapper<Decawave>> getLeftAntenna();
+    std::optional<std::reference_wrapper<Decawave>> getRightAntenna();
 
   private:
-    // TODO: Generate based on H7 or F4. (Maybe give names like master, slave_0..n, etc)
-    std::array<Decawave, static_cast<unsigned int>(DecawavePort::NUM_PORTS)> m_decawaves = {
-        Decawave(DW_A0), Decawave(DW_B0)};
+    uint8_t m_workingDecasLength = 0;
+
+    // Because the Decawave class is not copyable or moveable (atomic variable inside of a task), we
+    // have to assign the arrays here
+#ifdef STM32F4
+    std::array<Decawave, DWT_NUM_DW_DEV> m_decawaves = {Decawave(DW_A0), Decawave(DW_B0)};
+#elif STM32H7
+    std::array<Decawave, DWT_NUM_DW_DEV> m_decawaves = {Decawave(DW_A0), Decawave(DW_A1),
+                                                        Decawave(DW_B0), Decawave(DW_B1),
+                                                        Decawave(DW_C0), Decawave(DW_C1)};
+#endif
 };
 
 #endif //__DECAWAVEARRAY_H__

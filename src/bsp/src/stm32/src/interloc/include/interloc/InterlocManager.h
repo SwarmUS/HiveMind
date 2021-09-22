@@ -5,12 +5,16 @@
 #include "DecawaveArray.h"
 #include "InterlocStateHandler.h"
 #include "UWBMessages.h"
+#include <application-interface/IButtonCallbackRegister.h>
 #include <bsp/IInterlocManager.h>
 #include <logger/ILogger.h>
 
 class InterlocManager : public IInterlocManager {
   public:
-    InterlocManager(ILogger& logger, InterlocStateHandler& stateHandler, DecawaveArray& decawaves);
+    InterlocManager(ILogger& logger,
+                    InterlocStateHandler& stateHandler,
+                    DecawaveArray& decawaves,
+                    IButtonCallbackRegister& buttonCallbackRegister);
     ~InterlocManager() override = default;
 
     void startInterloc() override;
@@ -41,9 +45,13 @@ class InterlocManager : public IInterlocManager {
      */
     void syncClocks();
 
+    void buttonCallback();
+    static void staticButtonCallback(void* context);
+
   private:
     ILogger& m_logger;
     InterlocStateHandler& m_stateHandler;
+    IButtonCallbackRegister& m_buttonCallbackRegister;
 
     DecawaveArray& m_decawaves;
 

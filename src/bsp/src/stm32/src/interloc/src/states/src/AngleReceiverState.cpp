@@ -6,6 +6,11 @@ AngleReceiverState::AngleReceiverState(ILogger& logger, DecawaveArray& decawaves
     AbstractInterlocState(logger, decawaves) {}
 
 void AngleReceiverState::process(InterlocStateHandler& context) {
+    if (!m_decawaves.canCalculateAngles()) {
+        context.setState(InterlocStates::IDLE, InterlocEvent::DECA_INIT_ERROR);
+        return;
+    }
+
     std::array<UWBRxFrame, numDecas> rxFrames;
 
     // TODO: Add some kind of timeout
@@ -24,44 +29,37 @@ void AngleReceiverState::process(InterlocStateHandler& context) {
 }
 
 void AngleReceiverState::readAngleFrame(std::array<UWBRxFrame, numDecas>& rxFrames) {
-    // TODO: reactivate before using with BeeBoards
-    (void)rxFrames;
+    bool allDataReceived = true;
+    do {
+        // TODO: Map dynamically
+        m_decawaves.getLeftAntenna()->get().receiveAsync(rxFrames[0], 0);
+        m_decawaves.getRightAntenna()->get().receiveAsync(rxFrames[2], 0);
+        m_decawaves.getMasterAntenna()->get().receive(rxFrames[1], 0);
 
-    //    bool allDataReceived = true;
-    //    do {
-    //        // TODO: Map dynamically
-    //        m_decawaves[DecawavePort::B].receiveAsync(rxFrames[1], 0);
-    //        m_decawaves[DecawavePort::A].receive(rxFrames[0], 0);
-    //
-    //        allDataReceived = true;
-    //        for (auto& frame : rxFrames) {
-    //            if (frame.m_status != UWBRxStatus::FINISHED) {
-    //                allDataReceived = false;
-    //            }
-    //        }
-    //
-    //    } while (!allDataReceived);
+        allDataReceived = true;
+        for (auto& frame : rxFrames) {
+            if (frame.m_status != UWBRxStatus::FINISHED) {
+                allDataReceived = false;
+            }
+
+            auto* x = reinterpret_cast<UWBMessages::AngleMsg*>(frame.m_rxBuffer.data());
+            x->m_headerFrame.m_functionCode = UWBMessages::ANGLE;
+        }
+
+    } while (!allDataReceived);
 }
 
 void AngleReceiverState::saveAngleData(BspInterlocRawAngleData& data,
                                        std::array<UWBRxFrame, numDecas>& rxFrames,
                                        uint32_t frameIndex) {
     data.m_frames[frameIndex].m_frameInfosLength = rxFrames.size();
-    // TODO: reactivate before using with BeeBoards
 
-    //    uint8_t j = 0;
-    //    for (auto& frame : rxFrames) {
-    //        data.m_frames[frameIndex].m_frameInfos[j].m_beeboardPort = j;
-    //        data.m_frames[frameIndex].m_frameInfos[j].m_rxTimestamp = frame.m_rxTimestamp;
-    //        data.m_frames[frameIndex].m_frameInfos[j].m_sfdAngle = frame.getSFDAngle();
-    //        data.m_frames[frameIndex].m_frameInfos[j].m_accumulatorAngle =
-    //        frame.getAccumulatorAngle(); j++;
-    //    }
-
-    for (uint8_t j = 0; j < rxFrames.size(); j++) {
+    uint8_t j = 0;
+    for (auto& frame : rxFrames) {
         data.m_frames[frameIndex].m_frameInfos[j].m_beeboardPort = j;
-        data.m_frames[frameIndex].m_frameInfos[j].m_rxTimestamp = frameIndex + j;
-        data.m_frames[frameIndex].m_frameInfos[j].m_sfdAngle = frameIndex + 1 + j;
-        data.m_frames[frameIndex].m_frameInfos[j].m_accumulatorAngle = frameIndex + 2 + j;
+        data.m_frames[frameIndex].m_frameInfos[j].m_rxTimestamp = frame.m_rxTimestamp;
+        data.m_frames[frameIndex].m_frameInfos[j].m_sfdAngle = frame.getSFDAngle();
+        data.m_frames[frameIndex].m_frameInfos[j].m_accumulatorAngle = frame.getAccumulatorAngle();
+        j++;
     }
 }

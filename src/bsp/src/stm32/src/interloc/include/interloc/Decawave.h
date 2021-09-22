@@ -223,6 +223,12 @@ class Decawave {
      */
     void setState(DW_STATE state);
 
+    /**
+     * Tells if the specified DW is ready (AKA was successfully configured)
+     * @return Readiness flag
+     */
+    bool isReady() const;
+
   private:
     decaDevice_t m_spiDevice;
     dwt_config_t m_dwConfig;

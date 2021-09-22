@@ -22,8 +22,14 @@ bool InterlocManager::isFrameOk(UWBRxFrame frame) {
 
 InterlocManager::InterlocManager(ILogger& logger,
                                  InterlocStateHandler& stateHandler,
-                                 DecawaveArray& decawaves) :
-    m_logger(logger), m_stateHandler(stateHandler), m_decawaves(decawaves) {}
+                                 DecawaveArray& decawaves,
+                                 IButtonCallbackRegister& buttonCallbackRegister) :
+    m_logger(logger),
+    m_stateHandler(stateHandler),
+    m_buttonCallbackRegister(buttonCallbackRegister),
+    m_decawaves(decawaves) {
+    m_buttonCallbackRegister.setCallback(staticButtonCallback, this);
+}
 
 void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
                                                 void* context) {
@@ -44,19 +50,14 @@ void InterlocManager::setInterlocManagerRawAngleDataCallback(
 }
 
 void InterlocManager::startInterloc() {
-    bool allInit = true;
-    for (auto& deca : m_decawaves) {
-        if (!deca.init()) {
-            allInit = false;
-            m_logger.log(LogLevel::Warn, "InterlocManager: Could not start Decawave");
-        }
-    }
+    m_decawaves.initializeAll();
 
     syncClocks();
 
-    if (allInit) {
+    if (m_decawaves.canDoTWR()) {
         m_state = InterlocStateDTO::OPERATING;
     } else {
+        m_logger.log(LogLevel::Error, "Could not initialize enough Decawaves to do TWR");
         m_state = InterlocStateDTO::STANDBY;
     }
 
@@ -71,13 +72,17 @@ void InterlocManager::syncClocks() {
     vPortEnterCritical();
 
     for (auto& deca : m_decawaves) {
-        deca.setSyncMode(DW_SYNC_MODE::OSTR);
+        if (deca.isReady()) {
+            deca.setSyncMode(DW_SYNC_MODE::OSTR);
+        }
     }
 
     deca_pulseSyncSignal();
 
     for (auto& deca : m_decawaves) {
-        deca.setSyncMode(DW_SYNC_MODE::OFF);
+        if (deca.isReady()) {
+            deca.setSyncMode(DW_SYNC_MODE::OFF);
+        }
     }
 
     vPortExitCritical();
@@ -123,3 +128,9 @@ void InterlocManager::sendRawAngleData(BspInterlocRawAngleData& data) {
 }
 
 InterlocStateDTO InterlocManager::getState() const { return m_state; }
+
+void InterlocManager::staticButtonCallback(void* context) {
+    static_cast<InterlocManager*>(context)->buttonCallback();
+}
+
+void InterlocManager::buttonCallback() { m_state = InterlocStateDTO::ANGLE_CALIB_SENDER; }

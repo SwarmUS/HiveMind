@@ -5,7 +5,7 @@
 
 class AngleReceiverState : public AbstractInterlocState {
   public:
-    constexpr static uint8_t numDecas = 2; // MAXIMUM 3
+    constexpr static uint8_t numDecas = 3; // MAXIMUM 3
 
     AngleReceiverState(ILogger& logger, DecawaveArray& decawaves);
 
