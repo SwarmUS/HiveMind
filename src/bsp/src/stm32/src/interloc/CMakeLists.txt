@@ -54,6 +54,7 @@ target_link_libraries(${LIB_NAME}
         SwarmUS::HiveMind::HAL
         SwarmUS::HiveMind::BSP::Platform::Interloc::States
         SwarmUS::Propolis::Cpp::Common
+        SwarmUS::HiveMind::ApplicationInterface
         )
 
 add_subdirectory(src/states)

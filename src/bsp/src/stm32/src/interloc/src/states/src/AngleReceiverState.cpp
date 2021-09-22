@@ -41,6 +41,9 @@ void AngleReceiverState::readAngleFrame(std::array<UWBRxFrame, numDecas>& rxFram
             if (frame.m_status != UWBRxStatus::FINISHED) {
                 allDataReceived = false;
             }
+
+            auto* x = reinterpret_cast<UWBMessages::AngleMsg*>(frame.m_rxBuffer.data());
+            x->m_headerFrame.m_functionCode = UWBMessages::ANGLE;
         }
 
     } while (!allDataReceived);

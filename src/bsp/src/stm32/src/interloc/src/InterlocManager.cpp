@@ -22,8 +22,14 @@ bool InterlocManager::isFrameOk(UWBRxFrame frame) {
 
 InterlocManager::InterlocManager(ILogger& logger,
                                  InterlocStateHandler& stateHandler,
-                                 DecawaveArray& decawaves) :
-    m_logger(logger), m_stateHandler(stateHandler), m_decawaves(decawaves) {}
+                                 DecawaveArray& decawaves,
+                                 IButtonCallbackRegister& buttonCallbackRegister) :
+    m_logger(logger),
+    m_stateHandler(stateHandler),
+    m_buttonCallbackRegister(buttonCallbackRegister),
+    m_decawaves(decawaves) {
+    m_buttonCallbackRegister.setCallback(staticButtonCallback, this);
+}
 
 void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
                                                 void* context) {
@@ -122,3 +128,9 @@ void InterlocManager::sendRawAngleData(BspInterlocRawAngleData& data) {
 }
 
 InterlocStateDTO InterlocManager::getState() const { return m_state; }
+
+void InterlocManager::staticButtonCallback(void* context) {
+    static_cast<InterlocManager*>(context)->buttonCallback();
+}
+
+void InterlocManager::buttonCallback() { m_state = InterlocStateDTO::ANGLE_CALIB_SENDER; }
