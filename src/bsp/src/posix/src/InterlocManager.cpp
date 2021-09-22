@@ -164,20 +164,20 @@ void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t
 }
 
 // Calib API is not needed in simulation. Can just ignore any calls to these functions
-void InterlocManager::setInterlocManagerState(InterlocStateDTO state) { (void)state; };
+void InterlocManager::setInterlocManagerState(InterlocStateDTO state) { (void)state; }
 
-void InterlocManager::configureTWRCalibration(uint16_t distanceCalibCm) { (void)distanceCalibCm; };
+void InterlocManager::configureTWRCalibration(uint16_t distanceCalibCm) { (void)distanceCalibCm; }
 
-void InterlocManager::configureAngleCalibration(uint32_t numberOfFrames) { (void)numberOfFrames; };
+void InterlocManager::configureAngleCalibration(uint32_t numberOfFrames) { (void)numberOfFrames; }
 
 void InterlocManager::setInterlocManagerStateChangeCallback(
     interlocManagerStateChangeCallbackFunction_t callback, void* context) {
     (void)callback;
     (void)context;
-};
+}
 
 void InterlocManager::setInterlocManagerRawAngleDataCallback(
     interlocRawAngleDataCallbackFunction_t callback, void* context) {
     (void)callback;
     (void)context;
-};
+}
