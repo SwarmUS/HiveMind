@@ -84,7 +84,6 @@ sudo usermod -a -G plugdev $USER
 sudo usermod -a -G dialout $USER
 ```
 
-
 ### Development
 For development you may want to use the warnings and static checks used by the team
 
@@ -116,7 +115,7 @@ Note that as of now, the tests can only be built on the native target.
 
 You can run the ROS build using this command.
 
-```
+```sh
 roslaunch hive_mind hive_mind.launch
 ```
 
@@ -127,12 +126,12 @@ you can edit, or create a new launch file to change the parameters
 Install [OpenOCD](http://openocd.org/). Then you can flash using the provided `make flash`command or directly via openocd.
 
 For the F4
-```
+```sh
 openocd -f ./tools/openocd/stm32_f4/stm32_f4.cfg -c "program build/src/hive-mind.elf verify reset exit"
 ```
 
 For the H7
-```
+```sh
 openocd -f ./tools/openocd/stm32_h7/hiveboard.cfg -c "program build/src/hive-mind.elf verify reset exit"
 ```
 
