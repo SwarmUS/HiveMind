@@ -21,6 +21,8 @@ class BittyBuzzMessageHandler : public IBittyBuzzMessageHandler {
 
     bool processMessage() override;
 
+    void clearMessages() override;
+
     uint16_t messageQueueLength() const override;
 
   private:

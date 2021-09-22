@@ -37,6 +37,8 @@ bool BittyBuzzMessageHandler::processMessage() {
     return true;
 }
 
+void BittyBuzzMessageHandler::clearMessages() { m_inputQueue.clear(); }
+
 uint16_t BittyBuzzMessageHandler::messageQueueLength() const { return m_inputQueue.getLength(); }
 
 FunctionListLengthResponseDTO BittyBuzzMessageHandler::handleFunctionListLengthRequest(

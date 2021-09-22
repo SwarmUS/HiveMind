@@ -10,6 +10,8 @@ class BittyBuzzMessageHandlerInterfaceMock : public IBittyBuzzMessageHandler {
 
     MOCK_METHOD(bool, processMessage, (), (override));
 
+    MOCK_METHOD(void, clearMessages, (), (override));
+
     MOCK_METHOD(uint16_t, messageQueueLength, (), (const override));
 };
 

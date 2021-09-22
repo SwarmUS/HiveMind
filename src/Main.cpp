@@ -1,6 +1,7 @@
 #include <AbstractTask.h>
 #include <Task.h>
 #include <application-interface/ApplicationInterfaceContainer.h>
+#include <atomic>
 #include <bittybuzz/BittyBuzzContainer.h>
 #include <bittybuzz/BittyBuzzFactory.h>
 #include <bittybuzz/BittyBuzzSystem.h>
@@ -29,11 +30,15 @@ typedef std::optional<std::reference_wrapper<ICommInterface>> (*commInterfaceGet
 
 class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
-    BittyBuzzTask(const char* taskName, UBaseType_t priority, IDeviceStateUI& deviceStateUI) :
+    BittyBuzzTask(const char* taskName,
+                  UBaseType_t priority,
+                  IDeviceStateUI& deviceStateUI,
+                  IButtonCallbackRegister& buttonCallbackRegister) :
 
         AbstractTask(taskName, priority),
         m_logger(LoggerContainer::getLogger()),
         m_deviceStateUI(deviceStateUI),
+        m_buttonCallbackRegister(buttonCallbackRegister),
         m_bytecode(BittyBuzzFactory::createBittyBuzzBytecode(m_logger)),
         m_stringResolver(BittyBuzzFactory::createBittyBuzzStringResolver(m_logger)),
         m_bittybuzzVm(m_bytecode,
@@ -52,12 +57,21 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   private:
     ILogger& m_logger;
     IDeviceStateUI& m_deviceStateUI;
+    IButtonCallbackRegister& m_buttonCallbackRegister;
     BittyBuzzBytecode m_bytecode;
     BittyBuzzStringResolver m_stringResolver;
     BittyBuzzVm m_bittybuzzVm;
 
+    std::atomic_bool m_resetVm = false;
+
     static DeviceState vmErrorToDeviceState(bbzvm_error err) {
         return static_cast<DeviceState>(err);
+    }
+
+    static void resetVmButtonCallback(void* context) {
+        BittyBuzzTask* bbvmTask = (BittyBuzzTask*)context;
+        bbvmTask->m_resetVm = true;
+        bbvmTask->m_bittybuzzVm.stop(); // Stopping the vm so it can be terminated and started again
     }
 
     void task() override {
@@ -68,39 +82,50 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
         std::array<std::reference_wrapper<IBittyBuzzLib>, 3> buzzLibraries{
             {bbzFunctions, mathLib, uiLib}};
 
-        m_deviceStateUI.setDeviceState(DeviceState::Ok);
-
-        if (!m_bittybuzzVm.init(buzzLibraries.data(), buzzLibraries.size())) {
-            m_logger.log(LogLevel::Error, "BBZVM failed to initialize. state: %s err: %s",
-                         BittyBuzzSystem::getStateString(m_bittybuzzVm.getState()),
-                         BittyBuzzSystem::getErrorString(m_bittybuzzVm.getError()));
-            m_deviceStateUI.setDeviceState(DeviceState::Error);
-            return;
-        }
+        // register btn function
+        m_buttonCallbackRegister.setCallback(resetVmButtonCallback, this);
 
         while (true) {
-            BBVMRet statusCode = m_bittybuzzVm.step();
-            switch (statusCode) {
-            case BBVMRet::Ok:
-                break;
-            case BBVMRet::OutMsgErr: {
-                m_logger.log(LogLevel::Warn, "Buzz could not sent message");
-                m_deviceStateUI.setDeviceState(DeviceState::Error);
-                break;
-            }
-            case BBVMRet::VmErr: {
-                m_logger.log(LogLevel::Error, "BBZVM failed to step. state: %s err: %s",
+            m_deviceStateUI.setDeviceState(DeviceState::Ok);
+
+            if (!m_bittybuzzVm.init(buzzLibraries.data(), buzzLibraries.size()) ||
+                !m_bittybuzzVm.start()) {
+
+                m_logger.log(LogLevel::Error, "BBZVM failed to initialize. state: %s err: %s",
                              BittyBuzzSystem::getStateString(m_bittybuzzVm.getState()),
                              BittyBuzzSystem::getErrorString(m_bittybuzzVm.getError()));
-                m_deviceStateUI.setDeviceState(vmErrorToDeviceState(m_bittybuzzVm.getError()));
-                break;
-            }
-            default: {
-                m_logger.log(LogLevel::Warn, "Unkown bbzvm step status code");
                 m_deviceStateUI.setDeviceState(DeviceState::Error);
+                return;
             }
+
+            while (!m_resetVm) {
+                BBVMRet statusCode = m_bittybuzzVm.step();
+                switch (statusCode) {
+                case BBVMRet::Ok:
+                    break;
+                case BBVMRet::Stopped: {
+                    m_logger.log(LogLevel::Warn, "BBZVM is stopped, cannot step");
+                    m_deviceStateUI.setDeviceState(DeviceState::Error);
+                    break;
+                }
+                case BBVMRet::OutMsgErr: {
+                    m_logger.log(LogLevel::Warn, "Buzz could not sent message");
+                    m_deviceStateUI.setDeviceState(DeviceState::Error);
+                    break;
+                }
+                case BBVMRet::VmErr: {
+                    m_logger.log(LogLevel::Error, "BBZVM failed to step. state: %s err: %s",
+                                 BittyBuzzSystem::getStateString(m_bittybuzzVm.getState()),
+                                 BittyBuzzSystem::getErrorString(m_bittybuzzVm.getError()));
+                    m_deviceStateUI.setDeviceState(vmErrorToDeviceState(m_bittybuzzVm.getError()));
+                    break;
+                }
+                }
+                Task::delay(100);
             }
-            Task::delay(100);
+            // VM needs to be resetted so we terminate it and init it again
+            m_resetVm = false;
+            m_bittybuzzVm.terminate();
         }
     }
 };
@@ -352,8 +377,9 @@ int main(int argc, char** argv) {
     ApplicationInterfaceContainer::getConnectionStateUI().setConnectionState(
         ConnectionState::Booting);
 
-    static BittyBuzzTask s_bittybuzzTask("bittybuzz", gc_taskNormalPriority,
-                                         ApplicationInterfaceContainer::getDeviceStateUI());
+    static BittyBuzzTask s_bittybuzzTask(
+        "bittybuzz", gc_taskNormalPriority, ApplicationInterfaceContainer::getDeviceStateUI(),
+        ApplicationInterfaceContainer::getButton1CallbackRegister());
 
     static HardwareInterlocTask s_hardwareInterlocTask("hardware_interloc", gc_taskHighPriority);
     static SoftwareInterlocTask s_softwareInterlocTask("software_interloc", gc_taskNormalPriority);

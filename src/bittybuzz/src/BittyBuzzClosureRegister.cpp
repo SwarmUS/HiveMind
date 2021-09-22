@@ -46,6 +46,11 @@ bool BittyBuzzClosureRegister::registerClosure(const char* functionName,
     return ret;
 }
 
+void BittyBuzzClosureRegister::clearClosures() {
+    m_closureRegisterMap.clear();
+    m_closureNameRegisters.clear();
+}
+
 std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> BittyBuzzClosureRegister::
     getRegisteredClosure(const char* functionName) const {
     return m_closureRegisterMap.at(functionName);
