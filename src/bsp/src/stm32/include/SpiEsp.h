@@ -29,7 +29,7 @@ class SpiEsp : public ICommInterface {
     void execute();
 
   private:
-    BaseTask<configMINIMAL_STACK_SIZE * 3> m_driverTask;
+    BaseTask<configMINIMAL_STACK_SIZE * 6> m_driverTask;
     ICRC& m_crc;
     ILogger& m_logger;
 
