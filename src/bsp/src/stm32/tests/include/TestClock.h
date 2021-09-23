@@ -5,21 +5,27 @@
 
 class TestClock : public IHardwareTest {
   public:
+    enum class TestMode { SINGLE_PULSE, MULTI_PUSLE, SQUARE_WAVE, NUM_MODES };
+
     TestClock() = default;
     ~TestClock() = default;
 
     void runTests() override;
-    static void clockQualification();
 
   private:
-    bool m_buttonPressed = false;
-    void waitButtonPress();
-    static void buttonCallback(void* context);
+    TestMode m_testMode = TestMode::SINGLE_PULSE;
+
+    void updateHex();
 
     static void startSquareWave();
-    static void stopSquareWave();
-    static void setupSyncSquareWave();
-    static void heartbeatCallback();
+    void cycleMode();
+
+    static void button0Callback(void* context);
+    static void button1Callback(void* context);
+
+    static void multiPulseTimerCallback();
+    static void sqareWaveTimerCallback();
+    static void pulseSync();
 };
 
 #endif //__TESTCLOCK_H__
