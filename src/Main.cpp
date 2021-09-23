@@ -87,6 +87,8 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
         // register btn function
         m_buttonCallbackRegister.setCallback(resetVmButtonCallback, this);
 
+        Task::Time prevWake = Task::getTime();
+
         while (true) {
             m_deviceStateUI.setDeviceState(DeviceState::Ok);
 
@@ -126,7 +128,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
                     }
                     }
                 }
-                Task::delay(stepDelay);
+                Task::delayUntil(prevWake, stepDelay);
             }
             // VM needs to be resetted so we terminate it and init it again
             m_resetVm = false;
