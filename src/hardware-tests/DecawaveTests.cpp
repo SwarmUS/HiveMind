@@ -1,4 +1,6 @@
+#include "../bsp/src/stm32/src/interloc/include/interloc/Decawave.h"
 #include "../bsp/src/stm32/src/interloc/include/interloc/DecawaveArray.h"
+#include "../bsp/src/stm32/src/interloc/include/interloc/InterlocBSPContainer.h"
 #include <AbstractTask.h>
 #include <Task.h>
 #include <bsp/BSPContainer.h>
@@ -6,9 +8,9 @@
 #include <hal/user_interface.h>
 #include <logger/LoggerContainer.h>
 
-static DecawaveArray g_decaArray;
+DecawaveArray& g_decaArray = InterlocBSPContainer::getDecawaves();
 
-class TxTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class TxTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
     TxTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority),
@@ -43,7 +45,7 @@ class TxTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class RxTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class RxTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
     RxTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
@@ -83,7 +85,7 @@ class RxTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class SpiTest : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class SpiTest : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
     SpiTest(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()), m_numWrites(0) {}
@@ -103,8 +105,6 @@ class SpiTest : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
             return;
         }
 
-        // If only one BB plugged in, will return the channel that is used
-        Decawave& deca = g_decaArray.getMasterAntenna()->get();
         UI_setRGB(true, true, false);
 
         while (true) {
@@ -131,7 +131,7 @@ class SpiTest : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class LedTest : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class LedTest : public AbstractTask<30 * configMINIMAL_STACK_SIZE> {
   public:
     LedTest(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
@@ -172,6 +172,15 @@ int main(int argc, char** argv) {
 
     IBSP& bsp = BSPContainer::getBSP();
     bsp.initChip((void*)&cmdLineArgs);
+
+#ifdef DECA_TEST_IDLE
+    g_decaArray.initializeAll();
+    if (!g_decaArray.canDoTWR()) {
+        UI_setRGB(true, false, false); // Set RGB red
+    } else {
+        UI_setRGB(true, true, true);
+    }
+#endif
 
 #ifdef DECA_TEST_TX
     static TxTask s_txTask("tx_task", 10);

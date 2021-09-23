@@ -29,6 +29,8 @@ if (DECAWAVE_TESTS)
         add_definitions(-DDECA_TEST_RX)
     elseif(${DECAWAVE_TESTS} STREQUAL "SPI")
         add_definitions(-DDECA_TEST_SPI)
+    elseif(${DECAWAVE_TESTS} STREQUAL "IDLE")
+        add_definitions(-DDECA_TEST_IDLE)
     elseif(${DECAWAVE_TESTS} STREQUAL "LED")
         add_definitions(-DDECA_TEST_LED)
     endif()
@@ -41,6 +43,7 @@ if (DECAWAVE_TESTS)
             PUBLIC
             SwarmUS::HiveMind::BSP::Linker
             SwarmUS::HiveMind::BSP
+            SwarmUS::HiveMind::BSP::Platform::Interloc
             SwarmUS::HiveMind::OS
             SwarmUS::HiveMind::Logger
             )
