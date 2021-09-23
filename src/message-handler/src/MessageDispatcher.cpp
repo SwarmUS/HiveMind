@@ -125,7 +125,7 @@ bool MessageDispatcher::dispatchResponse(const MessageDTO& message, const Respon
 }
 
 bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
-    const std::variant<std::monostate, RequestDTO, ResponseDTO, GreetingDTO, BuzzMessageDTO,
+    const std::variant<std::monostate, RequestDTO, ResponseDTO, GreetingDTO, VmMessageDTO,
                        NetworkApiDTO, InterlocAPIDTO, HiveConnectHiveMindApiDTO>& variantMsg =
         message.getMessage();
     if (const auto* request = std::get_if<RequestDTO>(&variantMsg)) {
@@ -134,7 +134,7 @@ bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
     if (const auto* response = std::get_if<ResponseDTO>(&variantMsg)) {
         return dispatchResponse(message, *response);
     }
-    if (std::holds_alternative<BuzzMessageDTO>(variantMsg)) {
+    if (std::holds_alternative<VmMessageDTO>(variantMsg)) {
         return m_buzzOutputQueue.push(message);
     }
     if (std::holds_alternative<InterlocAPIDTO>(variantMsg)) {
