@@ -16,6 +16,8 @@ The HiveMind is the embedded application that provides swarm capabilities which 
 
 - [Protoc](https://developers.google.com/protocol-buffers) and some python deps to build [Propolis](https://github.com/SwarmUS/Propolis). Check Propolis repo for more info
 
+- [OpenOCD](https://openocd.org/). Note that **version 0.11 or higher** is required for the HiveBoard.
+
 - Development tools
   - [Clang tools](https://clang.llvm.org/docs/ClangTools.html) are used to match the style and warnings used in the project
     - [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to match the coding style
@@ -25,6 +27,7 @@ The HiveMind is the embedded application that provides swarm capabilities which 
 ## Building
 
 ### ROS
+
 Before building for the ROS environment variables need to be sourced by running the command
 or adding them to `.bashrc` otherwise the ROS build will fail.
 
@@ -42,22 +45,30 @@ make
 ```
 
 Or you can simply use `catkin_make` instead.
+
 ```sh
 cd catkin_ws
-catkin_make 
+catkin_make
 ```
 
 ### Embedded
 
-Then to generate the build system and compile
+To generate the build system and compile
+
+```sh
+mkdir build
+cd build
+```
 
 For the F4
-``` sh
+
+```sh
 cmake -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=../cmake/stm32_f429zi_gcc.cmake ..
 ```
 
 For the H7/HiveBoard
-``` sh
+
+```sh
 cmake -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=../cmake/stm32_h735zg_gcc.cmake ..
 ```
 
@@ -68,23 +79,27 @@ You can then flash using `make flash` and see the log output using `screen /dev/
 You **may** need to add the udev rules and add groups permissions to your user. If you get a `LIBUSB_ERROR_ACCESS` follow these step.
 
 Copy the udev rules
+
 ```sh
 sudo cp ./tools/udev-rules/* /etc/udev/rules.d/
 ```
 
 Reload the udev manager
+
 ```sh
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 ```
 
 Add yourself in the plugdev (to flash) and dialout to read the tty output without sudo
+
 ```sh
 sudo usermod -a -G plugdev $USER
 sudo usermod -a -G dialout $USER
 ```
 
 ### Development
+
 For development you may want to use the warnings and static checks used by the team
 
 If you want all the warnings used by the team, use this command for cmake build generation.
@@ -126,11 +141,13 @@ you can edit, or create a new launch file to change the parameters
 Install [OpenOCD](http://openocd.org/). Then you can flash using the provided `make flash`command or directly via openocd.
 
 For the F4
+
 ```sh
 openocd -f ./tools/openocd/stm32_f4/stm32_f4.cfg -c "program build/src/hive-mind.elf verify reset exit"
 ```
 
 For the H7
+
 ```sh
 openocd -f ./tools/openocd/stm32_h7/hiveboard.cfg -c "program build/src/hive-mind.elf verify reset exit"
 ```
@@ -193,12 +210,13 @@ An up to date version of the master branch documentation for the native build ca
 OpenOCD has a gdb server that defaults to port 3333, you can then connect to it using arm-none-eabi-gdb. The server can be launched using this command
 
 For the F4:
+
 ```sh
 openocd -f ./tools/openocd/stm32_f4/stm32_f4.cfg -c init -c \"reset init\"
 ```
 
-
 For the H7/HiveBoard:
+
 ```sh
 openocd -f ./tools/openocd/stm32_h7/hiveboard.cfg -c init -c \"reset init\"
 ```
@@ -239,7 +257,6 @@ CMake variables can be used to override certain default firmware settings.
 | LOG_LEVEL | Info |
 | MAX_ROBOTS_IN_SWARM | 10 |
 | BBZVM_STEP_DELAY_MS | 10 |
-
 
 The CMake variable `UUID_OVERRIDE` may also be used to change the UUID value currently saved in the
 non-volatile memory. Make sure each UUID in your swarm is unique.
