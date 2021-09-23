@@ -34,7 +34,7 @@ class InterlocManager : public IInterlocManager {
   private:
     ILogger& m_logger;
     ros::Subscriber m_sub;
-    int m_interlocRefreshDelayMs;
+    uint m_interlocRefreshDelayMs;
     std::map<uint16_t, geometry_msgs::TransformStamped> m_baseLinkToHiveBoardTransforms;
 
     tf2_ros::Buffer m_tfBuffer;

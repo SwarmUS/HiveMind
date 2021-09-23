@@ -151,7 +151,7 @@ void InterlocManager::startInterloc() {
     ros::NodeHandle node("~");
     m_sub = node.subscribe("/gazebo/model_states", 1, &InterlocManager::gazeboUpdateCallback, this);
     double interlocRefreshRate = node.param("interloc_refresh_rate", 10.0);
-    m_interlocRefreshDelayMs = (int)(1.0 / interlocRefreshRate * 1000);
+    m_interlocRefreshDelayMs = (uint)(1.0 / interlocRefreshRate * 1000);
 
     m_logger.log(LogLevel::Info, "Starting interloc with a refresh rate of %.2f Hz",
                  interlocRefreshRate);
