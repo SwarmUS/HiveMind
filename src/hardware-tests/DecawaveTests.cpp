@@ -1,11 +1,12 @@
-#include "../bsp/src/stm32/src/interloc/include/interloc/Decawave.h"
+#include "../bsp/src/stm32/src/interloc/include/interloc/DecawaveArray.h"
 #include <AbstractTask.h>
 #include <Task.h>
 #include <bsp/BSPContainer.h>
 #include <bsp/IBSP.h>
+#include <hal/user_interface.h>
 #include <logger/LoggerContainer.h>
 
-static decaDevice_t testedChannel = DW_C0;
+static DecawaveArray g_decaArray;
 
 class TxTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
@@ -22,15 +23,22 @@ class TxTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     int m_numTransmits;
 
     void task() override {
-        Decawave deca(testedChannel);
+        g_decaArray.initializeAll();
+        if (!g_decaArray.canDoTWR()) {
+            UI_setRGB(true, false, false); // Set RGB red
+            return;
+        }
 
-        deca.init();
+        // If only one BB plugged in, will return the channel that is used
+        Decawave& deca = g_decaArray.getMasterAntenna()->get();
+        UI_setRGB(false, false, true); // Set RGB blue
 
         while (true) {
             int size = snprintf(m_buffer, sizeof(m_buffer), "Hello World #%d\n", m_numTransmits);
             deca.transmit((uint8_t*)m_buffer, size);
+            UI_setHexOutput(static_cast<uint8_t>(m_numTransmits % 0x0F));
             m_numTransmits++;
-            Task::delay(1000);
+            Task::delay(500);
         }
     }
 };
@@ -47,16 +55,27 @@ class RxTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     UWBRxFrame m_rxFrame;
 
     void task() override {
-        Decawave deca(testedChannel);
+        g_decaArray.initializeAll();
+        if (!g_decaArray.canDoTWR()) {
+            UI_setRGB(true, false, false); // Set RGB red
+            return;
+        }
 
-        deca.init();
+        // If only one BB plugged in, will return the channel that is used
+        Decawave& deca = g_decaArray.getMasterAntenna()->get();
+        UI_setRGB(false, true, false); // Set RGB green
+
+        uint8_t receivedMsgs = 0;
 
         while (true) {
-            deca.receive(m_rxFrame, 20000);
+            deca.receive(m_rxFrame, 2000);
 
             if (m_rxFrame.m_status == UWBRxStatus::FINISHED) {
                 m_logger.log(LogLevel::Info, "Received UWB message: %s",
                              m_rxFrame.m_rxBuffer.data());
+                receivedMsgs++;
+
+                UI_setHexOutput(receivedMsgs % 0x0F);
             } else if (m_rxFrame.m_status == UWBRxStatus::ERROR) {
                 m_logger.log(LogLevel::Error, "Error while receiving UWB message");
             }
@@ -78,8 +97,15 @@ class SpiTest : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     int m_numWrites;
 
     void task() override {
-        Decawave deca(testedChannel);
-        deca.init();
+        g_decaArray.initializeAll();
+        if (!g_decaArray.canDoTWR()) {
+            UI_setRGB(true, false, false); // Set RGB red
+            return;
+        }
+
+        // If only one BB plugged in, will return the channel that is used
+        Decawave& deca = g_decaArray.getMasterAntenna()->get();
+        UI_setRGB(true, true, false);
 
         while (true) {
             for (uint8_t& val : m_writeBuffer) {
@@ -98,6 +124,7 @@ class SpiTest : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
             }
 
             m_logger.log(LogLevel::Info, "Read back #%d successful", m_numWrites);
+            UI_setHexOutput(static_cast<uint8_t>(m_numWrites % 0x0F));
             m_numWrites++;
             Task::delay(1000);
         }
@@ -116,8 +143,15 @@ class LedTest : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     std::array<DW_LED, 2> m_ledsToTest = {DW_LED::LED_2, DW_LED::LED_3};
 
     void task() override {
-        Decawave deca(testedChannel);
-        deca.init();
+        g_decaArray.initializeAll();
+        if (!g_decaArray.canDoTWR()) {
+            UI_setRGB(true, false, false); // Set RGB red
+            return;
+        }
+
+        // If only one BB plugged in, will return the channel that is used
+        Decawave& deca = g_decaArray.getMasterAntenna()->get();
+        UI_setRGB(false, true, true);
 
         while (true) {
             for (auto led : m_ledsToTest) {
