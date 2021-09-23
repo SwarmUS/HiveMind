@@ -19,8 +19,8 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_put_pushSuccess) {
     BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
-    EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
-    EXPECT_CALL(messageServiceMock, sendBuzzMessage).Times(1).WillOnce(testing::Return(true));
+    EXPECT_CALL(messageHandlerMock, messageQueueLength).WillOnce(testing::Return(0));
+    EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
 
     std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
@@ -32,7 +32,6 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_put_pushSuccess) {
     EXPECT_EQ(ret, BBVMRet::Ok);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
-    EXPECT_EQ(bbzoutmsg_queue_size(), 0);
 }
 
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_put_pushFail) {
@@ -45,8 +44,8 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_put_pushFail) {
     BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
-    EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
-    EXPECT_CALL(messageServiceMock, sendBuzzMessage).Times(1).WillOnce(testing::Return(false));
+    EXPECT_CALL(messageHandlerMock, messageQueueLength).WillOnce(testing::Return(0));
+    EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(false));
 
     std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;
     SetUp(bcode, bcode_size, boardId, &stringResolverMock, &messageHandlerMock,
@@ -58,5 +57,4 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_put_pushFail) {
     EXPECT_EQ(ret, BBVMRet::OutMsgErr);
     EXPECT_EQ(vm->state, BBZVM_STATE_READY);
     EXPECT_EQ(vm->error, BBZVM_ERROR_NONE);
-    EXPECT_EQ(bbzoutmsg_queue_size(), 1);
 }

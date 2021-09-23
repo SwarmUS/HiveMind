@@ -30,6 +30,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_invalidArgs) {
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(0);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(0);
+    EXPECT_CALL(messageServiceMock, queueBuzzMessages).Times(0);
     EXPECT_CALL(closureRegisterMock,
                 registerClosure(testing::_, testing::_, testing::_, testing::_))
         .Times(0);

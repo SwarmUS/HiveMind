@@ -465,7 +465,10 @@ TEST_F(MessageDispatcherFixture,
 
 TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_BuzzMessage_valid) {
     // Given
-    m_message = MessageDTO(m_srcUuid, m_uuid, BuzzMessageDTO(NULL, 0));
+    BuzzMessageDTO bbzMessage(NULL, 0);
+    BuzzMessagesDTO bbzMessages(&bbzMessage, 1);
+    VmMessageDTO vmMessage(bbzMessages);
+    m_message = MessageDTO(m_srcUuid, m_uuid, vmMessage);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));
@@ -480,7 +483,10 @@ TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_BuzzMe
 
 TEST_F(MessageDispatcherFixture, MessageDispatcher_deserializeAndDispatch_BuzzMessage_invalid) {
     // Given
-    m_message = MessageDTO(m_srcUuid, m_uuid, BuzzMessageDTO(NULL, 0));
+    BuzzMessageDTO bbzMessage(NULL, 0);
+    BuzzMessagesDTO bbzMessages(&bbzMessage, 1);
+    VmMessageDTO vmMessage(bbzMessages);
+    m_message = MessageDTO(m_srcUuid, m_uuid, vmMessage);
     EXPECT_CALL(m_deserializerMock, deserializeFromStream(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SetArgReferee<0>(m_message), testing::Return(true)));

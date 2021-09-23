@@ -188,7 +188,7 @@ bool BittyBuzzMessageHandler::handleVmMessage(const VmMessageDTO& vmMsg) {
     const std::variant<std::monostate, BuzzMessagesDTO>& msg = vmMsg.getMessage();
 
     if (const auto* buzzMsg = std::get_if<BuzzMessagesDTO>(&msg)) {
-        handleBuzzMessages(*buzzMsg);
+        return handleBuzzMessages(*buzzMsg);
     }
 
     return false;

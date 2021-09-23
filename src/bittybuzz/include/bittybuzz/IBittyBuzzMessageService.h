@@ -22,11 +22,10 @@ class IBittyBuzzMessageService {
                                   const FunctionCallArgumentDTO* args,
                                   uint16_t argsLength) = 0;
     /**
-     *@brief send a buzz message, broadcasted to other buzz vm, sends it to the remote queue
-     *@param [in] msg the buzz message to send
+     *@brief queues the buzz messages
      *@return true if the operation was successfull, false if not (length too big or queue is
      *full)*/
-    virtual bool sendBuzzMessage(const BuzzMessageDTO& msg) = 0;
+    virtual bool queueBuzzMessages() = 0;
 };
 
 #endif // __IBITTYBUZZMESSAGESERVICE_H_
