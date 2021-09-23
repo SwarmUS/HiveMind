@@ -18,7 +18,8 @@ set(LIB_HEADERS
     include/bsp/SettingsContainer.h
     include/bsp/IInterlocManager.h
 
-    include/bsp/InterlocUpdate.h)
+    include/bsp/InterlocUpdate.h
+        include/bsp/BspInterlocAngleRawData.h)
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})

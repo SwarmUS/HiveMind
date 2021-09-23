@@ -11,33 +11,36 @@ void SyncState::process(InterlocStateHandler& context) {
     // keep around for speed debug
     //    m_logger.log(LogLevel::Warn, "+1");
 
-    uint64_t syncStartTs = m_decawaves[DecawavePort::A].getSysTime();
-    uint32_t initialRxTimeoutUs = context.getTimeManager().getSyncTimeoutUs();
-    uint32_t rxTimeoutUs = initialRxTimeoutUs;
+    if (auto deca = m_decawaves.getMasterAntenna()) {
+        uint64_t syncStartTs = deca->get().getSysTime();
+        uint32_t initialRxTimeoutUs = context.getTimeManager().getSyncTimeoutUs();
+        uint32_t rxTimeoutUs = initialRxTimeoutUs;
 
-    while (rxTimeoutUs > RX_RELOAD_OVERHEAD_US) {
-        m_decawaves[DecawavePort::A].receive(m_rxFrame, rxTimeoutUs);
+        while (rxTimeoutUs > RX_RELOAD_OVERHEAD_US) {
+            deca->get().receive(m_rxFrame, rxTimeoutUs);
 
-        if (m_rxFrame.m_status == UWBRxStatus::TIMEOUT) {
-            context.setState(InterlocStates::SEND_POLL_FROM_SYNC, InterlocEvent::TIMEOUT);
-            return;
+            if (m_rxFrame.m_status == UWBRxStatus::TIMEOUT) {
+                context.setState(InterlocStates::SEND_POLL_FROM_SYNC, InterlocEvent::TIMEOUT);
+                return;
+            }
+
+            if (DecawaveUtils::isFramePoll(m_rxFrame)) {
+                return handlePollReceived(context);
+            }
+
+            // If an unsupported message is received, restart RX for the remainder of the timeout
+            rxTimeoutUs = initialRxTimeoutUs - (deca->get().getSysTime() - syncStartTs);
+
+            // Because of the subtraction, there could be an underflow.
+            if (rxTimeoutUs > initialRxTimeoutUs) {
+                rxTimeoutUs = 0;
+            }
         }
 
-        if (DecawaveUtils::isFramePoll(m_rxFrame)) {
-            return handlePollReceived(context);
-        }
-
-        // If an unsupported message is received, restart RX for the remainder of the timeout
-        rxTimeoutUs =
-            initialRxTimeoutUs - (m_decawaves[DecawavePort::A].getSysTime() - syncStartTs);
-
-        // Because of the subtraction, there could be an underflow.
-        if (rxTimeoutUs > initialRxTimeoutUs) {
-            rxTimeoutUs = 0;
-        }
+        context.setState(InterlocStates::SYNC, InterlocEvent::RX_ERROR);
+    } else {
+        context.setState(InterlocStates::IDLE, InterlocEvent::DECA_INIT_ERROR);
     }
-
-    context.setState(InterlocStates::SYNC, InterlocEvent::RX_ERROR);
 }
 
 void SyncState::handlePollReceived(InterlocStateHandler& context) {

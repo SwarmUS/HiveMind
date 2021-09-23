@@ -1,10 +1,13 @@
 #include "interloc/InterlocBSPContainer.h"
+#include "interloc/InterlocManager.h"
+#include <application-interface/ApplicationInterfaceContainer.h>
 #include <bsp/BSPContainer.h>
 #include <logger/LoggerContainer.h>
 
 InterlocManager& InterlocBSPContainer::getInterlocManager() {
     static InterlocManager s_manager(LoggerContainer::getLogger(), getStateHandler(),
-                                     getDecawaves());
+                                     getDecawaves(),
+                                     ApplicationInterfaceContainer::getButton0CallbackRegister());
 
     return s_manager;
 }
