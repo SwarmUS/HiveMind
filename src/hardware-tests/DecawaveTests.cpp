@@ -10,7 +10,7 @@
 
 DecawaveArray& g_decaArray = InterlocBSPContainer::getDecawaves();
 
-class TxTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
+class TxTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     TxTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority),
@@ -45,7 +45,7 @@ class TxTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class RxTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
+class RxTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     RxTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}
@@ -85,7 +85,7 @@ class RxTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class SpiTest : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
+class SpiTest : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     SpiTest(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()), m_numWrites(0) {}
@@ -131,7 +131,7 @@ class SpiTest : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class LedTest : public AbstractTask<30 * configMINIMAL_STACK_SIZE> {
+class LedTest : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     LedTest(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_logger(LoggerContainer::getLogger()) {}

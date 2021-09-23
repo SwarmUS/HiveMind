@@ -241,7 +241,7 @@ class Decawave {
     TaskHandle_t m_trxTaskHandle;
     dwt_cb_data_t m_callbackData;
 
-    BaseTask<configMINIMAL_STACK_SIZE * 3> m_rxAsyncTask;
+    BaseTask<configMINIMAL_STACK_SIZE> m_rxAsyncTask;
     UWBRxFrame* m_rxFrame;
 
     std::array<uint8_t, UWB_MAX_LENGTH> m_txBuffer;
