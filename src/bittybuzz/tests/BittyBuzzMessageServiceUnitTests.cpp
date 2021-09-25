@@ -2,6 +2,7 @@
 #include "mocks/CircularQueueInterfaceMock.h"
 #include "mocks/LoggerInterfaceMock.h"
 #include <array>
+#include <bbzvm.h>
 #include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzMessageService.h>
 #include <gtest/gtest.h>
@@ -25,6 +26,7 @@ class BittyBuzzMessageServiceTestFixture : public testing::Test {
     std::array<FunctionCallArgumentDTO, 1> m_arguments = {{m_argVal}};
 
     void SetUp() override {
+        bbzvm_construct(1);
         m_loggerMock = new LoggerInterfaceMock(m_logCounter, m_logLastFormat);
         m_bspMock = new BSPInterfaceMock(m_bspUUID);
         m_messageService = new BittyBuzzMessageService(
@@ -230,8 +232,10 @@ TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_sendBuzzMessa
     EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).WillOnce(testing::Return(true));
     EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
 
+    bbzoutmsg_queue_append_broadcast(1, 1);
+
     // Then
-    bool ret = m_messageService->sendBuzzMessage(buzzMsg);
+    bool ret = m_messageService->queueBuzzMessages();
 
     // Expect
     EXPECT_TRUE(ret);
@@ -243,8 +247,10 @@ TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_sendBuzzMessa
     EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).WillOnce(testing::Return(false));
     EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
 
+    bbzoutmsg_queue_append_broadcast(1, 1);
+
     // Then
-    bool ret = m_messageService->sendBuzzMessage(buzzMsg);
+    bool ret = m_messageService->queueBuzzMessages();
 
     // Expect
     EXPECT_FALSE(ret);

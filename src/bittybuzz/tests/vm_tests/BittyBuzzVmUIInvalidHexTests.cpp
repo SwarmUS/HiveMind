@@ -20,6 +20,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_UserInterface_invalidHex) {
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
+    EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
     EXPECT_CALL(stringResolverMock, getString).WillRepeatedly(testing::Return(""));
 
     std::array<BittyBuzzLibMemberRegister, 1> uiLibRegisters = {

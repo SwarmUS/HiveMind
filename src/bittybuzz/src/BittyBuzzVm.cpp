@@ -103,24 +103,8 @@ BBVMRet BittyBuzzVm::step() {
         BittyBuzzSystem::functionCall(__BBZSTRID_step);
         bbzvm_process_outmsgs();
 
-        uint16_t queueSize = bbzoutmsg_queue_size();
-        for (uint16_t i = 0; i < queueSize; i++) {
-
-            BuzzMessageDTO msg(NULL, 0);
-            bbzmsg_payload_t outPayload;
-
-            bbzringbuf_clear(&outPayload);
-            bbzringbuf_construct(&outPayload, msg.getRawPayload().data(), 1,
-                                 BuzzMessageDTO::PAYLOAD_MAX_SIZE);
-            bbzoutmsg_queue_first(&outPayload);
-
-            msg.setRawPayloadLength(bbzringbuf_size(&outPayload));
-
-            if (!m_messageService.sendBuzzMessage(msg)) {
-                return BBVMRet::OutMsgErr;
-            }
-
-            bbzoutmsg_queue_next();
+        if (!m_messageService.queueBuzzMessages()) {
+            return BBVMRet::OutMsgErr;
         }
 
         return vm->state == BBZVM_STATE_READY ? BBVMRet::Ok : BBVMRet::VmErr;

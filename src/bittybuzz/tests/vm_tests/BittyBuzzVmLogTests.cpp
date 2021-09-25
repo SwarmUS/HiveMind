@@ -20,6 +20,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_log_FunctionCalled) {
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
+    EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
 
     std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_log, BittyBuzzUserFunctions::log}}};

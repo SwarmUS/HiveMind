@@ -18,6 +18,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_UndefinedFunction_LogCalledOnError) {
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).WillOnce(testing::Return(0));
+    EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
     EXPECT_CALL(stringResolverMock, getString).WillRepeatedly(testing::Return("Irrelevant"));
 
     std::vector<std::reference_wrapper<IBittyBuzzLib>> libraries;

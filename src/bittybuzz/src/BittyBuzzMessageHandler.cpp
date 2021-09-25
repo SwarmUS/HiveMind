@@ -183,15 +183,34 @@ bool BittyBuzzMessageHandler::handleGenericResponse(const GenericResponseDTO& re
     return true;
 }
 
-bool BittyBuzzMessageHandler::handleBuzzMessage(const BuzzMessageDTO& msg) {
-    bbzmsg_payload_t payload;
-    payload.buffer = const_cast<uint8_t*>(msg.getPayload().data());
-    payload.datastart = 0;
-    payload.elsize = 1;
-    payload.dataend = msg.getPayloadLength();
-    payload.capacity = msg.getPayloadLength();
+bool BittyBuzzMessageHandler::handleVmMessage(const VmMessageDTO& vmMsg) {
 
-    bbzinmsg_queue_append(&payload);
+    const std::variant<std::monostate, BuzzMessagesDTO>& msg = vmMsg.getMessage();
+
+    if (const auto* buzzMsg = std::get_if<BuzzMessagesDTO>(&msg)) {
+        return handleBuzzMessages(*buzzMsg);
+    }
+
+    return false;
+}
+
+bool BittyBuzzMessageHandler::handleBuzzMessages(const BuzzMessagesDTO& msg) {
+
+    auto msgArray = msg.getMessages();
+    for (uint8_t i = 0; i < msg.getMessagesLength(); i++) {
+        bbzmsg_payload_t payload;
+        payload.buffer = const_cast<uint8_t*>(msgArray[i].getPayload().data());
+        payload.datastart = 0;
+        payload.elsize = 1;
+        payload.dataend = msgArray[i].getPayloadLength();
+        payload.capacity = msgArray[i].getPayloadLength();
+
+        if (bbzinmsg_queue_size() > BBZINMSG_QUEUE_CAP) {
+            m_logger.log(LogLevel::Warn, "Overwriting buzz message");
+        }
+
+        bbzinmsg_queue_append(&payload);
+    }
     return true;
 }
 
@@ -214,7 +233,7 @@ bool BittyBuzzMessageHandler::handleResponse(const ResponseDTO& response) {
 }
 
 bool BittyBuzzMessageHandler::handleMessage(const MessageDTO& message) {
-    const std::variant<std::monostate, RequestDTO, ResponseDTO, GreetingDTO, BuzzMessageDTO,
+    const std::variant<std::monostate, RequestDTO, ResponseDTO, GreetingDTO, VmMessageDTO,
                        NetworkApiDTO, InterlocAPIDTO, HiveConnectHiveMindApiDTO>& variantMsg =
         message.getMessage();
 
@@ -240,8 +259,8 @@ bool BittyBuzzMessageHandler::handleMessage(const MessageDTO& message) {
     }
 
     // Handle response
-    if (const auto* buzzMsg = std::get_if<BuzzMessageDTO>(&variantMsg)) {
-        return handleBuzzMessage(*buzzMsg);
+    if (const auto* vmMsg = std::get_if<VmMessageDTO>(&variantMsg)) {
+        return handleVmMessage(*vmMsg);
     }
 
     m_logger.log(LogLevel::Warn, "Recieved unkown message in buzz queue, idx: %d",
