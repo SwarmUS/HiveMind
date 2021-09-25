@@ -1,0 +1,54 @@
+include "utils/types.bzz"
+include "utils/executor.bzz"
+
+# Functions to register
+function move_by_host(arg_float1, arg_float2){
+  log("Move by host called");
+  call_host_function(id, "moveBy", {.0 = arg_float1, .1 = arg_float2});
+}
+
+function move_by_remote(robot_id, arg_float1, arg_float2){
+  log("Move by remote called");
+  call_host_function(robot_id, "moveBy", {.0 = arg_float1, .1 = arg_float2});
+}
+
+ 
+# Flashing an LED so we know the VM is running properly
+function tick(ctx){
+    log("Led set to : ", ctx.led);
+    ui.set_led(ctx.led);
+    # led = !led
+    if(ctx.led){
+        ctx.led = nil;
+    } else{
+        ctx.led = 1;
+    }
+}
+
+function create_exec(step_count) {
+
+    # Context
+    var context = {
+        .led = 0
+    };
+
+    # Function description
+    var move_by_host_description = {
+        .0 = {.arg_float1=0.0},
+        .1 = {.arg_float2=0.0}
+    };
+
+    var move_by_remote_description = {
+        .0 = {.robot_id=types.INT},
+        .1 = {.arg_float1=types.FLOAT},
+        .2 = {.arg_float2=types.FLOAT}
+    };
+
+
+    # Registering the function
+    register_closure("moveByHost", move_by_host, move_by_host_description, nil);
+    register_closure("moveByRemote", move_by_remote, move_by_remote_description, nil);
+
+    exec = executor.new(step_count, tick, context);
+    return exec;
+}
