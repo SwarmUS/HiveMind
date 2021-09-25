@@ -7,6 +7,9 @@ bool Flash_program(uint32_t address, uint8_t* data, uint32_t bytesLength) {
 
     HAL_FLASH_Unlock();
 
+    // Round up to the nearest multiple of 8 bytes as the write works on 64 bit words.
+    // If we are saving less than 64 bits, we will write garbage to the Flash, but it doesn't really
+    // matter. The readback is done with a memcpy and won't read the garbage.
     uint32_t flashWordLength = (bytesLength + (sizeof(uint64_t) - 1)) / sizeof(uint64_t);
 
     for (unsigned int i = 0; i < flashWordLength; i++) {
