@@ -19,10 +19,10 @@ bool Flash_eraseSector(uint8_t sector);
  * @brief Saves data to previously erased flash
  * @param address Address at which to begin writing
  * @param data Pointer to the data to write
- * @param size Size of the data (in bytes)
+ * @param bytesLength Size of the data (in bytes)
  * @return True if successful, false otherwise
  */
-bool Flash_program(uint32_t address, uint8_t* data, uint32_t size);
+bool Flash_program(uint32_t address, uint8_t* data, uint32_t bytesLength);
 
 #ifdef __cplusplus
 }
