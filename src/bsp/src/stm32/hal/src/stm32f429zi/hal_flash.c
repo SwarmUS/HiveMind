@@ -1,8 +1,6 @@
 #include "hal/hal_flash.h"
-#include <core_cm7.h>
 
 bool Flash_program(uint32_t address, uint8_t* data, uint32_t bytesLength) {
-    SCB_InvalidateDCache();
     if (data == NULL) {
         return false;
     }
@@ -21,6 +19,5 @@ bool Flash_program(uint32_t address, uint8_t* data, uint32_t bytesLength) {
 
     HAL_FLASH_Lock();
 
-    SCB_InvalidateDCache();
     return true;
 }
