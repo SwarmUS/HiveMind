@@ -82,8 +82,9 @@ static void Hal_initCache() {
     /* Enable I-Cache */
     SCB_EnableICache();
 
-    /* Do not enable D-Cache as it causes a hardfault when trying to read or write to flash */
-    // SCB_DisableDCache();
+    /* Enable D-Cache */
+    SCB_EnableDCache();
+    SCB_InvalidateDCache();
 }
 
 bool Hal_wroomPowerEnabled() {
