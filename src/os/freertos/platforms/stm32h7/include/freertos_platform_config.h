@@ -13,6 +13,7 @@ extern uint32_t SystemCoreClock;
 /* Clock config that is platform dependent */
 #define configCPU_CLOCK_HZ (SystemCoreClock)
 #define configTICK_RATE_HZ ((TickType_t)1000)
+#define configRUN_TIME_COUNTER_TYPE uint64_t
 
 /* Definitions that map the FreeRTOS port interrupt handlers to their CMSIS
 standard names. */

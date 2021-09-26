@@ -38,7 +38,7 @@ void MX_TIM13_Init(void) {
 
     /* USER CODE END TIM13_Init 1 */
     htim13.Instance = TIM13;
-    htim13.Init.Prescaler = 25500;
+    htim13.Init.Prescaler = 12750;
     htim13.Init.CounterMode = TIM_COUNTERMODE_UP;
     htim13.Init.Period = 10000;
     htim13.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -61,9 +61,9 @@ void MX_TIM14_Init(void) {
 
     /* USER CODE END TIM14_Init 1 */
     htim14.Instance = TIM14;
-    htim14.Init.Prescaler = 255;
+    htim14.Init.Prescaler = 12750;
     htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim14.Init.Period = 1000;
+    htim14.Init.Period = 0xffff;
     htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
     htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
     if (HAL_TIM_Base_Init(&htim14) != HAL_OK) {

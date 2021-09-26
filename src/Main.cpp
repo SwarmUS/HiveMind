@@ -384,8 +384,8 @@ void usageFct(void* ctx) {
 
     while (1) {
         vTaskGetRunTimeStats(buffer);
-        logger.log(LogLevel::Info, buffer);
-        Task::delay(5000);
+        logger.log(LogLevel::Info, "\n%s", buffer);
+        Task::delay(10000);
     }
 }
 
