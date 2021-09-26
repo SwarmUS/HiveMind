@@ -39,6 +39,8 @@ target_link_libraries(${LIB_NAME}
     PUBLIC
         SwarmUS::HiveMind::FreeRTOS::Platform::Config
         SwarmUS::Propolis::OS::Common
+        SwarmUS::HiveMind::HAL
+        SwarmUS::HiveMind::HAL::STM32
 
     PRIVATE    
         SwarmUS::HiveMind::FreeRTOS::Platform
@@ -60,11 +62,15 @@ endif()
 
 # Wraps the interface library in a static library
 get_target_property(PROPOLIS_OS_INCLUDES SwarmUS::Propolis::OS::FreeRTOS INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(HAL_INCLUDES SwarmUS::HiveMind::HAL::STM32 INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(HAL_STM32_INCLUDE SwarmUS::HiveMind::HAL INTERFACE_INCLUDE_DIRECTORIES)
 add_library(${LIB_NAME_OS} STATIC ${LIB_HEADERS})
 add_library(${LIB_ALIAS_OS} ALIAS ${LIB_NAME_OS})
 target_include_directories(${LIB_NAME_OS}
     PUBLIC
         ${PROPOLIS_OS_INCLUDES}
+        ${HAL_INCLUDES}
+        ${HAL_STM32_INCLUDE}
     )
 
 target_link_libraries(${LIB_NAME_OS}
