@@ -39,8 +39,6 @@ target_link_libraries(${LIB_NAME}
     PUBLIC
         SwarmUS::HiveMind::FreeRTOS::Platform::Config
         SwarmUS::Propolis::OS::Common
-        SwarmUS::HiveMind::HAL
-        SwarmUS::HiveMind::HAL::STM32
 
     PRIVATE    
         SwarmUS::HiveMind::FreeRTOS::Platform
