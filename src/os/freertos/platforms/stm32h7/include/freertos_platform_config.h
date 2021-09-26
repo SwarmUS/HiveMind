@@ -13,13 +13,17 @@ extern uint32_t SystemCoreClock;
 /* Clock config that is platform dependent */
 #define configCPU_CLOCK_HZ (SystemCoreClock)
 #define configTICK_RATE_HZ ((TickType_t)1000)
-#define configRUN_TIME_COUNTER_TYPE uint64_t
 
 /* Definitions that map the FreeRTOS port interrupt handlers to their CMSIS
 standard names. */
 #define vPortSVCHandler SVC_Handler
 #define xPortPendSVHandler PendSV_Handler
 #define xPortSysTickHandler SysTick_Handler
+
+/* Runtime stats */
+#define configUSE_STATS_FORMATTING_FUNCTIONS 1
+#define configGENERATE_RUN_TIME_STATS 1
+#define configRUN_TIME_COUNTER_TYPE uint64_t
 
 /* Port macro for run time stats*/
 #include "hivemind_hal.h"
