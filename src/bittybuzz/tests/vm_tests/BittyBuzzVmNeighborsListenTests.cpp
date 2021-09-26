@@ -22,6 +22,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsListen) {
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
+    EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
 
     uint8_t strId = BBZSTRID_key;
     std::array<uint8_t, 8> payload = {0, 1, 0, strId, 0, 41, 42, 0};

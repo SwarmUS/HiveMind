@@ -1046,7 +1046,9 @@ TEST_F(BittyBuzzMessageHandlerFixture, BittyBuzzMessageHandler_processMessage_bu
     // A valid buzz message, a stigmergy put, with id 57 as key and 42 as value
     uint8_t payload[9] = {1, 1, 0, 1, 0, 57, 42, 0, 1};
     BuzzMessageDTO buzzMessage(payload, 9);
-    MessageDTO message = MessageDTO(m_uuid, m_uuid, buzzMessage);
+    BuzzMessagesDTO buzzMessages(&buzzMessage, 1);
+    VmMessageDTO vmMessage(buzzMessages);
+    MessageDTO message = MessageDTO(m_uuid, m_uuid, vmMessage);
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
 
     EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));

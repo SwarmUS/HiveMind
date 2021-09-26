@@ -18,8 +18,8 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_Stigmergy_get) {
     BittyBuzzNeighborsManagerInterfaceMock neighborsManagerMock;
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
-    EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
-    EXPECT_CALL(messageServiceMock, sendBuzzMessage).Times(2).WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(messageHandlerMock, messageQueueLength).WillOnce(testing::Return(0));
+    EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
 
     std::array<BittyBuzzLibMemberRegister, 1> functionRegisters = {
         {{BBZSTRID_assert_true, buzzAssertTrue}}};

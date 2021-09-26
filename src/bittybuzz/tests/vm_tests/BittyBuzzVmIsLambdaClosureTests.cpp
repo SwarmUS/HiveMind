@@ -22,6 +22,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isLambdaClosure) {
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
+    EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
 
     std::array<BittyBuzzLibMemberRegister, 3> functionRegisters = {
         {{BBZSTRID_is_lambda_closure, BittyBuzzUserFunctions::isLambdaClosure},
