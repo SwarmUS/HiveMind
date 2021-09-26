@@ -9,41 +9,20 @@ void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
     memcpy(&(static_cast<Decawave*>(context)->m_callbackData), callbackData, sizeof(dwt_cb_data_t));
     BaseType_t taskWoken = pdFALSE;
 
-    auto* frame = static_cast<Decawave*>(context)->m_rxFrame;
-    bool ok = true;
-
     // Frame was not received, parse status reg to find the error type
     if ((callbackData->status & SYS_STATUS_ALL_RX_TO) != 0U) {
-        frame->m_status = UWBRxStatus::TIMEOUT;
-        ok = false;
+        static_cast<Decawave*>(context)->m_rxStatus = UWBRxStatus::TIMEOUT;
+    } else if ((callbackData->status & SYS_STATUS_ALL_RX_ERR) != 0U) {
+        static_cast<Decawave*>(context)->m_rxStatus = UWBRxStatus::ERROR;
+    } else {
+        static_cast<Decawave*>(context)->m_rxStatus = UWBRxStatus::FINISHED;
     }
 
-    if ((callbackData->status & SYS_STATUS_ALL_RX_ERR) != 0U) {
-        frame->m_status = UWBRxStatus::ERROR;
-        ok = false;
-    }
-
-    if (ok) {
-        frame->m_statusReg = callbackData->status;
-        frame->m_length = callbackData->datalength;
-        frame->m_status = UWBRxStatus::FINISHED;
-
-        // Read the frame into memory without the CRC16 located at the end of the frame
-        dwt_readrxdata(frame->m_rxBuffer.data(), callbackData->datalength - UWB_CRC_LENGTH, 0);
-        static_cast<Decawave*>(context)->getRxTimestamp(&frame->m_rxTimestamp);
-
-        dwt_readfromdevice(RX_TTCKO_ID, 4, 1, &(frame->m_sfdAngleRegister));
-        // Read information needed for phase calculation
-        uint16_t firstPathIdx = dwt_read16bitoffsetreg(RX_TIME_ID, RX_TIME_FP_INDEX_OFFSET);
-        // Read one extra byte as readaccdata() returns a dummy byte
-        dwt_readaccdata(frame->m_firstPathAccumulator, 5, firstPathIdx);
-    }
-
-    if (static_cast<Decawave*>(context)->m_trxTaskHandle != NULL) {
+    if (static_cast<Decawave*>(context)->m_trxTaskHandle != nullptr) {
         vTaskNotifyGiveFromISR(static_cast<Decawave*>(context)->m_trxTaskHandle, &taskWoken);
     }
 
-    static_cast<Decawave*>(context)->m_trxTaskHandle = NULL;
+    static_cast<Decawave*>(context)->m_trxTaskHandle = nullptr;
     portYIELD_FROM_ISR(taskWoken);
 }
 
@@ -65,19 +44,11 @@ void Decawave::isrCallback(void* context) {
     dwt_isr();
 }
 
-void Decawave::rxAsyncTask(void* context) {
-    while (true) {
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-        static_cast<Decawave*>(context)->retrieveRxFrame(
-            static_cast<Decawave*>(context)->m_rxFrame);
-    }
-}
-
 Decawave::Decawave(decaDevice_t spiDevice) :
     m_spiDevice(spiDevice),
     m_channel(UWBChannel::DW_CHANNEL),
     m_speed(UWBSpeed::DW_SPEED),
-    m_rxAsyncTask("dw_rx_task", tskIDLE_PRIORITY + 10, rxAsyncTask, this),
+    m_rxStatus(UWBRxStatus::FINISHED),
     m_isReady(false) {}
 
 bool Decawave::init() {
@@ -132,8 +103,6 @@ bool Decawave::init() {
     uint32_t sysCfgReg = dwt_read32bitoffsetreg(SYS_CFG_ID, 0);
     dwt_write32bitoffsetreg(SYS_CFG_ID, 0, sysCfgReg | SYS_CFG_RXAUTR);
 
-    m_rxAsyncTask.start();
-
     m_isReady = true;
     return true;
 }
@@ -160,15 +129,10 @@ void Decawave::setLed(DW_LED led, bool enabled) {
     }
 }
 
-void Decawave::receiveInternal(UWBRxFrame& frame,
-                               uint16_t timeoutUs,
-                               uint8_t flags,
-                               bool rxStarted) {
+UWBRxStatus Decawave::receiveInternal(uint16_t timeoutUs, uint8_t flags, bool rxStarted) {
     deca_selectDevice(m_spiDevice);
     m_trxTaskHandle = xTaskGetCurrentTaskHandle();
-    m_rxFrame = &frame;
-
-    frame.m_status = UWBRxStatus::ONGOING;
+    m_rxStatus = UWBRxStatus::ONGOING;
 
     if (!rxStarted) {
         dwt_setrxtimeout(timeoutUs);
@@ -177,19 +141,14 @@ void Decawave::receiveInternal(UWBRxFrame& frame,
 
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-    retrieveRxFrame(&frame);
+    return m_rxStatus;
 }
 
-void Decawave::receiveAsyncInternal(UWBRxFrame& frame,
-                                    uint16_t timeoutUs,
-                                    uint8_t flags,
-                                    bool rxStarted) {
-    m_rxFrame = &frame;
-    m_trxTaskHandle = m_rxAsyncTask.getTaskHandle();
+void Decawave::receiveAsyncInternal(uint16_t timeoutUs, uint8_t flags, bool rxStarted) {
+    m_trxTaskHandle = nullptr;
+    m_rxStatus = UWBRxStatus::ONGOING;
 
     deca_selectDevice(m_spiDevice);
-
-    frame.m_status = UWBRxStatus::ONGOING;
 
     if (!rxStarted) {
         dwt_setrxtimeout(timeoutUs);
@@ -197,26 +156,26 @@ void Decawave::receiveAsyncInternal(UWBRxFrame& frame,
     }
 }
 
-void Decawave::receive(UWBRxFrame& frame, uint16_t timeoutUs) {
-    receiveInternal(frame, timeoutUs, DWT_START_RX_IMMEDIATE);
+UWBRxStatus Decawave::receive(uint16_t timeoutUs) {
+    return receiveInternal(timeoutUs, DWT_START_RX_IMMEDIATE);
 }
 
-void Decawave::receiveDelayed(UWBRxFrame& frame, uint16_t timeoutUs, uint64_t rxStartTime) {
+UWBRxStatus Decawave::receiveDelayed(uint16_t timeoutUs, uint64_t rxStartTime) {
     deca_selectDevice(m_spiDevice);
     dwt_setdelayedtrxtime(rxStartTime >> 8);
 
-    receiveInternal(frame, timeoutUs, DWT_START_RX_DELAYED);
+    return receiveInternal(timeoutUs, DWT_START_RX_DELAYED);
 }
 
-void Decawave::receiveAsync(UWBRxFrame& frame, uint16_t timeoutUs) {
-    receiveAsyncInternal(frame, timeoutUs, DWT_START_RX_IMMEDIATE);
+void Decawave::receiveAsync(uint16_t timeoutUs) {
+    receiveAsyncInternal(timeoutUs, DWT_START_RX_IMMEDIATE);
 }
 
-void Decawave::receiveAsyncDelayed(UWBRxFrame& frame, uint16_t timeoutUs, uint64_t rxStartTime) {
+void Decawave::receiveAsyncDelayed(uint16_t timeoutUs, uint64_t rxStartTime) {
     deca_selectDevice(m_spiDevice);
     dwt_setdelayedtrxtime(rxStartTime >> 8);
 
-    receiveAsyncInternal(frame, timeoutUs, rxStartTime);
+    receiveAsyncInternal(timeoutUs, rxStartTime);
 }
 
 bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
@@ -260,55 +219,51 @@ bool Decawave::transmitDelayed(uint8_t* buf, uint16_t length, uint64_t txTimesta
     return transmitInternal(buf, length, DWT_START_TX_DELAYED);
 }
 
-bool Decawave::transmitAndReceive(uint8_t* buf,
-                                  uint16_t length,
-                                  uint32_t rxAfterTxTimeUs,
-                                  UWBRxFrame& frame,
-                                  uint16_t rxTimeoutUs) {
+std::optional<UWBRxStatus> Decawave::transmitAndReceive(uint8_t* buf,
+                                                        uint16_t length,
+                                                        uint32_t rxAfterTxTimeUs,
+                                                        uint16_t rxTimeoutUs) {
     deca_selectDevice(m_spiDevice);
     dwt_setrxaftertxdelay(rxAfterTxTimeUs);
     dwt_setrxtimeout(rxTimeoutUs);
 
     if (!transmitInternal(buf, length, DWT_START_TX_IMMEDIATE | DWT_RESPONSE_EXPECTED)) {
-        return false;
+        return {};
     }
 
-    receiveInternal(frame, 0, 0, true);
-    return true;
+    return receiveInternal(0, 0, true);
 }
 
-bool Decawave::transmitDelayedAndReceive(uint8_t* buf,
-                                         uint16_t length,
-                                         uint64_t txTimestamp,
-                                         uint32_t rxAfterTxTimeUs,
-                                         UWBRxFrame& frame,
-                                         uint16_t rxTimeoutUs) {
+std::optional<UWBRxStatus> Decawave::transmitDelayedAndReceive(uint8_t* buf,
+                                                               uint16_t length,
+                                                               uint64_t txTimestamp,
+                                                               uint32_t rxAfterTxTimeUs,
+                                                               uint16_t rxTimeoutUs) {
     deca_selectDevice(m_spiDevice);
     dwt_setrxaftertxdelay(rxAfterTxTimeUs);
     dwt_setdelayedtrxtime(txTimestamp >> 8);
     dwt_setrxtimeout(rxTimeoutUs);
 
     if (!transmitInternal(buf, length, DWT_START_TX_DELAYED | DWT_RESPONSE_EXPECTED)) {
-        return false;
+        return {};
     }
 
-    receiveInternal(frame, 0, 0, true);
-    return true;
+    return receiveInternal(0, 0, true);
 }
-bool Decawave::transmitAndReceiveDelayed(uint8_t* buf,
-                                         uint16_t length,
-                                         uint32_t rxStartDelayUS,
-                                         UWBRxFrame& frame,
-                                         uint16_t rxTimeoutUs) {
+
+std::optional<UWBRxStatus> Decawave::transmitAndReceiveDelayed(uint8_t* buf,
+                                                               uint16_t length,
+                                                               uint32_t rxStartDelayUS,
+                                                               uint16_t rxTimeoutUs) {
     deca_selectDevice(m_spiDevice);
     dwt_setrxaftertxdelay(rxStartDelayUS);
     dwt_setrxtimeout(rxTimeoutUs);
 
     if (!transmitInternal(buf, length, DWT_START_TX_IMMEDIATE | DWT_RESPONSE_EXPECTED)) {
-        return false;
+        return {};
     }
-    receiveInternal(frame, 0, 0, true);
-    return true;
+
+    return receiveInternal(0, 0, true);
 }
 
 void Decawave::configureDW() {
@@ -329,39 +284,6 @@ void Decawave::configureDW() {
 
     deca_selectDevice(m_spiDevice);
     dwt_configure(&m_dwConfig);
-}
-
-void Decawave::retrieveRxFrame(UWBRxFrame* frame) {
-    if (frame == nullptr) {
-        return;
-    }
-
-    //    deca_selectDevice(m_spiDevice);
-    //
-    //    // Frame was not received, parse status reg to find the error type
-    //    if ((m_callbackData.status & SYS_STATUS_ALL_RX_TO) != 0U) {
-    //        frame->m_status = UWBRxStatus::TIMEOUT;
-    //        return;
-    //    }
-    //
-    //    if ((m_callbackData.status & SYS_STATUS_ALL_RX_ERR) != 0U) {
-    //        frame->m_status = UWBRxStatus::ERROR;
-    //        return;
-    //    }
-    //
-    //    frame->m_statusReg = m_callbackData.status;
-    //    frame->m_length = m_callbackData.datalength;
-    //    frame->m_status = UWBRxStatus::FINISHED;
-    //
-    //    // Read the frame into memory without the CRC16 located at the end of the frame
-    //    dwt_readrxdata(frame->m_rxBuffer.data(), m_callbackData.datalength - UWB_CRC_LENGTH, 0);
-    //    getRxTimestamp(&frame->m_rxTimestamp);
-    //
-    //    dwt_readfromdevice(RX_TTCKO_ID, 4, 1, &(frame->m_sfdAngleRegister));
-    //    // Read information needed for phase calculation
-    //    uint16_t firstPathIdx = dwt_read16bitoffsetreg(RX_TIME_ID, RX_TIME_FP_INDEX_OFFSET);
-    //    // Read one extra byte as readaccdata() returns a dummy byte
-    //    dwt_readaccdata(frame->m_firstPathAccumulator, 5, firstPathIdx);
 }
 
 void Decawave::setSyncMode(DW_SYNC_MODE syncMode) {
@@ -410,7 +332,7 @@ void Decawave::getTxTimestamp(uint64_t* txTimestamp) {
     dwt_readtxtimestamp((uint8_t*)txTimestamp);
 }
 
-void Decawave::getRxTimestamp(uint64_t* rxTimestamp) {
+void Decawave::getRxTimestamp(uint64_t* rxTimestamp) const {
     deca_selectDevice(m_spiDevice);
     dwt_readrxtimestamp((uint8_t*)rxTimestamp);
 }
@@ -440,3 +362,24 @@ DW_STATE Decawave::getState() { return m_state; }
 void Decawave::setState(DW_STATE state) { m_state = state; }
 
 bool Decawave::isReady() const { return m_isReady; }
+
+UWBRxFrame Decawave::retrieveRxFrame() const {
+    UWBRxFrame frame;
+
+    frame.m_statusReg = m_callbackData.status;
+    frame.m_length = m_callbackData.datalength;
+
+    // Read the frame into memory without the CRC16 located at the end of the frame
+    dwt_readrxdata(frame.m_rxBuffer.data(), m_callbackData.datalength - UWB_CRC_LENGTH, 0);
+    getRxTimestamp(&frame.m_rxTimestamp);
+
+    dwt_readfromdevice(RX_TTCKO_ID, 4, 1, &(frame.m_sfdAngleRegister));
+    // Read information needed for phase calculation
+    uint16_t firstPathIdx = dwt_read16bitoffsetreg(RX_TIME_ID, RX_TIME_FP_INDEX_OFFSET);
+    // Read one extra byte as readaccdata() returns a dummy byte
+    dwt_readaccdata(frame.m_firstPathAccumulator, 5, firstPathIdx);
+
+    return frame;
+}
+
+UWBRxStatus Decawave::getRxStatus() const { return m_rxStatus; }
