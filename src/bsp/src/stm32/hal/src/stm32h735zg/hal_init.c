@@ -39,6 +39,10 @@ void PHal_initMcu() {
     HAL_Delay(500);
 }
 
+uint32_t Hal_getCPUCounter(){
+    return RUNTIME_STATS_TIMER->Instance->CNT;
+}
+
 static void Hal_initMPU() {
     // Taken from the STM32H735G-DK lwIP example
     MPU_Region_InitTypeDef MPU_InitStruct;

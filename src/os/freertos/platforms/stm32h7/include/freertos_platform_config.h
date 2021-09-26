@@ -26,12 +26,11 @@ standard names. */
 #define configRUN_TIME_COUNTER_TYPE uint64_t
 
 /* Port macro for run time stats*/
-#include "hivemind_hal.h"
-#include <hal/hal_timer.h>
+extern uint32_t Hal_getCPUCounter();
 #define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()                                                   \
     do {                                                                                           \
     } while (0) // Already set via hal init
 
-#define portGET_RUN_TIME_COUNTER_VALUE() RUNTIME_STATS_TIMER->Instance->CNT;
+#define portGET_RUN_TIME_COUNTER_VALUE() Hal_getCPUCounter()
 
 #endif // __FREERTOS_PLATFORM_CONFIG_H_
