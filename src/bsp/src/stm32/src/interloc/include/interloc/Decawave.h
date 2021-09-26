@@ -225,9 +225,9 @@ class Decawave {
 
     /**
      * @brief Retrieves RX frame information from the Decawave's internal registers
-     * @return The retrieved frame
+     * @param frame A reference to the frame in which to save the information
      */
-    UWBRxFrame retrieveRxFrame() const;
+    void retrieveRxFrame(UWBRxFrame& frame) const;
 
     /**
      * @brief Returns the status of the last RX operation

@@ -363,7 +363,7 @@ void Decawave::setState(DW_STATE state) { m_state = state; }
 
 bool Decawave::isReady() const { return m_isReady; }
 
-UWBRxFrame Decawave::retrieveRxFrame() const {
+void Decawave::retrieveRxFrame(UWBRxFrame& frame) const {
     UWBRxFrame frame;
 
     frame.m_statusReg = m_callbackData.status;
