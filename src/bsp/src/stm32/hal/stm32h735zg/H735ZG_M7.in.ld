@@ -1,7 +1,7 @@
 ENTRY(Reset_Handler)
 
 _estack = 0x24000000 + 320k;
-_Min_Heap_Size = 0x200;
+_Min_Heap_Size = 0x500;
 _Min_Stack_Size = 0x400;
 
 MEMORY
@@ -108,7 +108,7 @@ SECTIONS
     . = . + _Min_Heap_Size;
     . = . + _Min_Stack_Size;
     . = ALIGN(8);
-  } >RAM_D1
+  } >DTCMRAM
 
   .lwip_sec (NOLOAD) : {
     . = ABSOLUTE(0x30000000);

@@ -379,10 +379,10 @@ std::optional<std::reference_wrapper<ICommInterface>> hostInterfaceGetter() {
 #include "task.h"
 void usageFct(void* ctx) {
     (void)ctx;
-    char buffer[400];
-    while (1) {
-        ILogger& logger = LoggerContainer::getLogger();
+    char buffer[1000];
+    ILogger& logger = LoggerContainer::getLogger();
 
+    while (1) {
         vTaskGetRunTimeStats(buffer);
         logger.log(LogLevel::Info, buffer);
         Task::delay(5000);
