@@ -39,6 +39,7 @@ target_link_libraries(${LIB_NAME}
     PUBLIC
         SwarmUS::HiveMind::FreeRTOS::Platform::Config
         SwarmUS::Propolis::OS::Common
+        SwarmUS::HiveMind::BSP # Makes sur the external symbols are present
 
     PRIVATE    
         SwarmUS::HiveMind::FreeRTOS::Platform

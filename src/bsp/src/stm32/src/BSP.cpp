@@ -4,6 +4,21 @@
 #include <hal/hal.h>
 #include <logger/LoggerContainer.h>
 
+#ifdef RUNTIME_STATS
+#include "task.h"
+void usageFunctionCallback(void* ctx) {
+    (void)ctx;
+    char buffer[1000];
+    ILogger& logger = LoggerContainer::getLogger();
+
+    while (1) {
+        vTaskGetRunTimeStats(buffer);
+        logger.log(LogLevel::Info, "\n%s", buffer);
+        vTaskDelay(10000);
+    }
+}
+#endif // RUNTIME_STATS
+
 BSP::BSP() : m_storage(LoggerContainer::getLogger()) {}
 BSP::~BSP() = default;
 
@@ -28,6 +43,12 @@ void BSP::initChip(void* args) {
         .setButtonCallback(Button::BUTTON_0, buttonCallback, this);
     reinterpret_cast<UserInterface&>(BSPContainer::getUserInterface())
         .setRGBLed(static_cast<RgbColor>(m_currentRGBState));
+
+
+#ifdef RUNTIME_STATS
+    TaskHandle_t xHandle = NULL;
+    xTaskCreate(usageFunctionCallback, "cpu-usage", 2048, NULL, tskIDLE_PRIORITY + 1, &xHandle);
+#endif // RUNTIME_STATS
 }
 
 uint16_t BSP::getUUId() const { return m_storage.getUUID(); }

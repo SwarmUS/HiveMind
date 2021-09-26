@@ -20,6 +20,7 @@ standard names. */
 #define xPortPendSVHandler PendSV_Handler
 #define xPortSysTickHandler SysTick_Handler
 
+#ifdef RUNTIME_STATS
 /* Runtime stats */
 #define configUSE_STATS_FORMATTING_FUNCTIONS 1
 #define configGENERATE_RUN_TIME_STATS 1
@@ -31,6 +32,7 @@ extern uint32_t Hal_getCPUCounter();
     do {                                                                                           \
     } while (0) // Already set via hal init
 
-#define portGET_RUN_TIME_COUNTER_VALUE() Hal_getCPUCounter()
+#define portGET_RUN_TIME_COUNTER_VALUE() BSP_getCPUCounter()
+#endif // RUNTIME_STATS
 
 #endif // __FREERTOS_PLATFORM_CONFIG_H_

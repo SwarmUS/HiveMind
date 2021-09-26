@@ -221,6 +221,8 @@ For the H7/HiveBoard:
 openocd -f ./tools/openocd/stm32_h7/hiveboard.cfg -c init -c \"reset init\"
 ```
 
+You can use the `ENABLE_TARGET_RUNTIME_STATS` CMake option on the H7 to get a periodic log of the task usage.
+
 ### External connections
 
 #### Ethernet port

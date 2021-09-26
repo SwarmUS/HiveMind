@@ -22,10 +22,6 @@ void PHal_initMcu() {
     // Heartbeat timer
     MX_TIM13_Init();
 
-    // Runtime stats timer
-    MX_TIM14_Init();
-    HAL_TIM_Base_Start(&htim14);
-
     // IO Expander
     MX_I2C1_Init();
 
@@ -36,11 +32,14 @@ void PHal_initMcu() {
     Hal_initMPU();
     Hal_initCache();
 
-    HAL_Delay(500);
-}
+    #ifdef RUNTIME_STATS
+        // Runtime stats timer
+        // Uses heap
+        MX_TIM14_Init();
+        HAL_TIM_Base_Start(&htim14);
+    #endif // RUNTIME_STATS
 
-uint32_t Hal_getCPUCounter(){
-    return RUNTIME_STATS_TIMER->Instance->CNT;
+    HAL_Delay(500);
 }
 
 static void Hal_initMPU() {

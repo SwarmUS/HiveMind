@@ -376,19 +376,6 @@ std::optional<std::reference_wrapper<ICommInterface>> hostInterfaceGetter() {
     return commInterface;
 }
 
-#include "task.h"
-void usageFct(void* ctx) {
-    (void)ctx;
-    char buffer[1000];
-    ILogger& logger = LoggerContainer::getLogger();
-
-    while (1) {
-        vTaskGetRunTimeStats(buffer);
-        logger.log(LogLevel::Info, "\n%s", buffer);
-        Task::delay(10000);
-    }
-}
-
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
@@ -397,9 +384,6 @@ int main(int argc, char** argv) {
 
     ApplicationInterfaceContainer::getConnectionStateUI().setConnectionState(
         ConnectionState::Booting);
-
-    static BaseTask<50 * configMINIMAL_STACK_SIZE> s_usageTask("cpu-usage", gc_taskNormalPriority,
-                                                               usageFct, NULL);
 
     static BittyBuzzTask s_bittybuzzTask(
         "bittybuzz", gc_taskNormalPriority, ApplicationInterfaceContainer::getDeviceStateUI(),
@@ -429,7 +413,6 @@ int main(int argc, char** argv) {
         ApplicationInterfaceContainer::getRemoteHandshakeUI(),
         BSPContainer::getRemoteCommInterface);
 
-    s_usageTask.start();
     s_bittybuzzTask.start();
     s_hardwareInterlocTask.start();
     s_softwareInterlocTask.start();
