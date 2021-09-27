@@ -131,7 +131,6 @@ void Decawave::setLed(DW_LED led, bool enabled) {
 
 UWBRxStatus Decawave::receiveInternal(uint16_t timeoutUs, uint8_t flags, bool rxStarted) {
     deca_selectDevice(m_spiDevice);
-    m_trxTaskHandle = xTaskGetCurrentTaskHandle();
     m_rxStatus = UWBRxStatus::ONGOING;
 
     if (!rxStarted) {
@@ -139,9 +138,7 @@ UWBRxStatus Decawave::receiveInternal(uint16_t timeoutUs, uint8_t flags, bool rx
         dwt_rxenable(flags);
     }
 
-    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-
-    return m_rxStatus;
+    return awaitRx();
 }
 
 void Decawave::receiveAsyncInternal(uint16_t timeoutUs, uint8_t flags, bool rxStarted) {
@@ -364,9 +361,6 @@ void Decawave::setState(DW_STATE state) { m_state = state; }
 bool Decawave::isReady() const { return m_isReady; }
 
 void Decawave::retrieveRxFrame(UWBRxFrame& frame) const {
-    UWBRxFrame frame;
-
-    frame.m_statusReg = m_callbackData.status;
     frame.m_length = m_callbackData.datalength;
 
     // Read the frame into memory without the CRC16 located at the end of the frame
@@ -378,8 +372,16 @@ void Decawave::retrieveRxFrame(UWBRxFrame& frame) const {
     uint16_t firstPathIdx = dwt_read16bitoffsetreg(RX_TIME_ID, RX_TIME_FP_INDEX_OFFSET);
     // Read one extra byte as readaccdata() returns a dummy byte
     dwt_readaccdata(frame.m_firstPathAccumulator, 5, firstPathIdx);
-
-    return frame;
 }
 
 UWBRxStatus Decawave::getRxStatus() const { return m_rxStatus; }
+
+UWBRxStatus Decawave::awaitRx() {
+    m_trxTaskHandle = xTaskGetCurrentTaskHandle();
+
+    if (m_rxStatus == UWBRxStatus::ONGOING) {
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    }
+
+    return m_rxStatus;
+}

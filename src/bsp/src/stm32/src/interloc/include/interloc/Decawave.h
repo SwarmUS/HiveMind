@@ -235,6 +235,12 @@ class Decawave {
      */
     UWBRxStatus getRxStatus() const;
 
+    /**
+     * @brief Blocks until the ongoing RX operation is finished, returning the RxStatus
+     * @return Status of the finished RX operation
+     */
+    UWBRxStatus awaitRx();
+
   private:
     decaDevice_t m_spiDevice;
     dwt_config_t m_dwConfig;
