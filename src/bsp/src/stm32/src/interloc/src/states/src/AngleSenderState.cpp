@@ -25,7 +25,7 @@ void AngleSenderState::process(InterlocStateHandler& context) {
 void AngleSenderState::sendAngleFrames(const InterlocStateHandler& context) {
     for (uint32_t i = 0; i < context.getAngleNumberOfFrames() * m_transmissionContingencyFactor;
          i++) {
-        m_msg.m_frameId = i;
+        m_msg.m_messageId = i;
         uint64_t sysTime = m_decawaves.getMasterAntenna()->get().getSysTime();
         m_decawaves.getMasterAntenna()->get().transmitDelayed((uint8_t*)&m_msg, sizeof(m_msg),
                                                               sysTime + (100 * UUS_TO_DWT_TIME));

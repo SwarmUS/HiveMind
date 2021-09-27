@@ -51,6 +51,7 @@ class InterlocMessageHandlerFixture : public testing::Test {
                 rawAngleData.m_frames[i].m_frameInfos[j].m_accumulatorAngle = i + j + 1;
                 rawAngleData.m_frames[i].m_frameInfos[j].m_sfdAngle = i + j + 2;
                 rawAngleData.m_frames[i].m_frameInfos[j].m_rxTimestamp = i + j + 3;
+                rawAngleData.m_frames[i].m_frameInfos[j].m_messageId = i + j + 4;
             }
         }
 
@@ -75,6 +76,8 @@ class InterlocMessageHandlerFixture : public testing::Test {
                           frames[i].m_frameInfos[j].m_rxTimestamp);
                 EXPECT_EQ(dto->getFrames()[i].getFrameInfos()[j].getSfdAngle(),
                           frames[i].m_frameInfos[j].m_sfdAngle);
+                EXPECT_EQ(dto->getFrames()[i].getFrameInfos()[j].getMessageId(),
+                          frames[i].m_frameInfos[j].m_messageId);
             }
         }
     }
@@ -121,62 +124,6 @@ TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_wrongType) 
 
     EXPECT_FALSE(ret);
 }
-
-// TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_startCalibRespond) {
-//    uint16_t sourceId = 1;
-//    auto message = MessageDTO(
-//        sourceId, gc_boardId,
-//        InterlocAPIDTO(CalibrationMessageDTO(StartCalibrationDTO(CalibrationModeDTO::RESPONDER))));
-//
-//    uint16_t sourceIdArg;
-//    calibrationEndedCallbackFunction_t callbackArg;
-//    void* contextArg;
-//
-//    std::optional<std::reference_wrapper<MessageDTO>> queueValue = message;
-//    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(queueValue));
-//
-//    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
-//    EXPECT_CALL(m_interlocManagerMock,
-//                startCalibSingleResponder(testing::_, testing::_, testing::_))
-//        .Times(1)
-//        .WillOnce(testing::DoAll(testing::SaveArg<0>(&sourceIdArg),
-//                                 testing::SaveArg<1>(&callbackArg),
-//                                 testing::SaveArg<2>(&contextArg)));
-//    bool ret = m_messageHandler->processMessage();
-//
-//    EXPECT_TRUE(ret);
-//    EXPECT_EQ(sourceIdArg, sourceId);
-//    EXPECT_TRUE(contextArg != NULL);
-//}
-
-// TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_startCalibInitiator) {
-//    uint16_t sourceId = 1;
-//    auto message = MessageDTO(
-//        sourceId, gc_boardId,
-//        InterlocAPIDTO(CalibrationMessageDTO(StartCalibrationDTO(CalibrationModeDTO::INITIATOR))));
-//
-//    std::optional<std::reference_wrapper<MessageDTO>> queueValue = message;
-//    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(queueValue));
-//
-//    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
-//    EXPECT_CALL(m_interlocManagerMock, startCalibSingleInitiator()).Times(1);
-//    bool ret = m_messageHandler->processMessage();
-//
-//    EXPECT_TRUE(ret);
-//}
-
-// TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_stopCalib) {
-//    auto message =
-//        MessageDTO(1, gc_boardId, InterlocAPIDTO(CalibrationMessageDTO(StopCalibrationDTO())));
-//    std::optional<std::reference_wrapper<MessageDTO>> queueValue = message;
-//    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(queueValue));
-//
-//    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
-//    EXPECT_CALL(m_interlocManagerMock, stopCalibration).Times(1);
-//    bool ret = m_messageHandler->processMessage();
-//
-//    EXPECT_TRUE(ret);
-//}
 
 TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_configureTWRDistance) {
     float distance = 42.42;
