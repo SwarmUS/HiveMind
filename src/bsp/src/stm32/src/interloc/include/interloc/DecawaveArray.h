@@ -10,7 +10,7 @@
  */
 class DecawaveArray {
   public:
-    constexpr static uint8_t angleAntennaArraySize = (3 < DWT_NUM_DW_DEV) ? 0 : 3; // MAXIMUM 3
+    constexpr static uint8_t angleAntennaArraySize = (DWT_NUM_DW_DEV < 3) ? 0 : 3; // MAXIMUM 3
 
     DecawaveArray() = default;
     virtual ~DecawaveArray() = default;
@@ -28,7 +28,8 @@ class DecawaveArray {
     std::optional<std::reference_wrapper<Decawave>> getMasterAntenna();
     std::optional<std::reference_wrapper<Decawave>> getLeftAntenna();
     std::optional<std::reference_wrapper<Decawave>> getRightAntenna();
-    std::array<std::reference_wrapper<Decawave>, angleAntennaArraySize>& getAngleAntennaArray();
+    std::array<std::optional<std::reference_wrapper<Decawave>>, angleAntennaArraySize>&
+    getAngleAntennaArray();
 
   private:
     uint8_t m_workingDecasLength = 0;
@@ -45,7 +46,8 @@ class DecawaveArray {
                                                         Decawave(DW_B0), Decawave(DW_B1),
                                                         Decawave(DW_C0), Decawave(DW_C1)};
 
-    std::array<std::reference_wrapper<Decawave>, angleAntennaArraySize> m_angleAntennaArray;
+    std::array<std::optional<std::reference_wrapper<Decawave>>, angleAntennaArraySize>
+        m_angleAntennaArray;
 #endif
 };
 

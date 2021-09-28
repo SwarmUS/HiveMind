@@ -30,7 +30,7 @@ void AngleReceiverState::readAngleFrame() {
     bool allDataReceived;
     do {
         for (auto deca : m_decawaves.getAngleAntennaArray()) {
-            deca.get().receiveAsync(0);
+            deca->get().receiveAsync(0);
         }
 
         m_decawaves.getMasterAntenna()->get().awaitRx();
@@ -38,7 +38,7 @@ void AngleReceiverState::readAngleFrame() {
 
         // Verify all decawaves received a message
         for (auto deca : m_decawaves.getAngleAntennaArray()) {
-            if (deca.get().getRxStatus() != UWBRxStatus::FINISHED) {
+            if (deca->get().getRxStatus() != UWBRxStatus::FINISHED) {
                 allDataReceived = false;
             }
         }
@@ -47,7 +47,7 @@ void AngleReceiverState::readAngleFrame() {
         // the received messages was not angle message, abort)
         if (allDataReceived) {
             for (uint8_t i = 0; i < m_decawaves.getAngleAntennaArray().size(); i++) {
-                m_decawaves.getAngleAntennaArray()[i].get().retrieveRxFrame(m_rxFrames[i]);
+                m_decawaves.getAngleAntennaArray()[i]->get().retrieveRxFrame(m_rxFrames[i]);
                 if (reinterpret_cast<UWBMessages::AngleMsg*>(m_rxFrames[i].m_rxBuffer.data())
                         ->m_headerFrame.m_functionCode != UWBMessages::ANGLE) {
                     allDataReceived = false;
