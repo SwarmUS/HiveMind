@@ -6,20 +6,6 @@
 
 #define NB_CALIB_MEASUREMENTS 10
 
-bool InterlocManager::isFrameOk(UWBRxFrame frame) {
-
-    if (frame.m_status == UWBRxStatus::FINISHED) {
-        // logger.log(LogLevel::Warn,"InterlocManager: UWB good message");
-    } else if (frame.m_status == UWBRxStatus::ERROR) {
-        m_logger.log(LogLevel::Warn, "InterlocManager: UWB message in error");
-        return false;
-    } else {
-        m_logger.log(LogLevel::Warn, "InterlocManager: UWB message Timeout");
-        return false;
-    }
-    return true;
-}
-
 InterlocManager::InterlocManager(ILogger& logger,
                                  InterlocStateHandler& stateHandler,
                                  DecawaveArray& decawaves,

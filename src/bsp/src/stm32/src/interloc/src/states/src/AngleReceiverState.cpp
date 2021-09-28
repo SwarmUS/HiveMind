@@ -62,7 +62,7 @@ void AngleReceiverState::saveAngleData(BspInterlocRawAngleData& data, uint32_t f
     data.m_frames[frameIndex].m_frameInfosLength = m_rxFrames.size();
 
     for (uint8_t i = 0; i < m_rxFrames.size(); i++) {
-        data.m_frames[frameIndex].m_frameInfos[i].m_beeboardPort = j;
+        data.m_frames[frameIndex].m_frameInfos[i].m_beeboardPort = i;
         data.m_frames[frameIndex].m_frameInfos[i].m_rxTimestamp = m_rxFrames[i].m_rxTimestamp;
         data.m_frames[frameIndex].m_frameInfos[i].m_sfdAngle = m_rxFrames[i].getSFDAngle();
         data.m_frames[frameIndex].m_frameInfos[i].m_accumulatorAngle =
