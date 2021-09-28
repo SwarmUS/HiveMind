@@ -84,6 +84,7 @@ static void Hal_initCache() {
 
     /* Enable D-Cache */
     SCB_EnableDCache();
+    SCB_InvalidateDCache();
 }
 
 bool Hal_wroomPowerEnabled() {

@@ -6,6 +6,7 @@ set(LIB_SOURCES
         tca9539.c
         tca9539.h
         hal_init.c
+        hal_flash.c
     )
 
 add_library(${LIB_NAME} INTERFACE)

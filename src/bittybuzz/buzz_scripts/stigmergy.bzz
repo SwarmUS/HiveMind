@@ -1,0 +1,20 @@
+include "utils/executor.bzz"
+
+
+function tick(context) {
+    context.counter = context.counter + 1;
+    if(id == 1){
+      stig.put("key", context.counter);
+    }
+    log("Key value: ", stig.get("key"));
+}
+
+function create_exec() {
+    context = {
+        .counter = 0
+    };
+
+    stig = stigmergy.create(1);
+    exec = executor.new(40, tick, context);
+    return exec;
+}

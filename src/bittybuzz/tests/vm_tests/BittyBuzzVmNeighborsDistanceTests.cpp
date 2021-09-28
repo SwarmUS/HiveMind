@@ -34,6 +34,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsDistance) {
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
 
     EXPECT_CALL(queueMock, getLength).Times(1).WillOnce(testing::Return(1));
+    EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
     EXPECT_CALL(queueMock, peek).Times(1).WillOnce(testing::Return(robotId));
     EXPECT_CALL(queueMock, pop).Times(1);
     EXPECT_CALL(interlocMock, getRobotPosition).Times(1).WillOnce(testing::Return(pos));
@@ -85,6 +86,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_neighborsDistance_twiceData) {
     pos2.m_relativeOrientation = 355;
 
     EXPECT_CALL(messageHandlerMock, messageQueueLength).Times(1).WillOnce(testing::Return(0));
+    EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
 
     EXPECT_CALL(queueMock, getLength).WillOnce(testing::Return(2));
     EXPECT_CALL(queueMock, pop).Times(2);

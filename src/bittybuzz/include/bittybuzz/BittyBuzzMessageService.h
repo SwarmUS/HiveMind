@@ -21,11 +21,15 @@ class BittyBuzzMessageService : public IBittyBuzzMessageService {
                           const FunctionCallArgumentDTO* args,
                           uint16_t argsLength) override;
 
-    bool sendBuzzMessage(const BuzzMessageDTO& msg) override;
+    bool queueBuzzMessages() override;
 
   private:
+    std::optional<std::reference_wrapper<BuzzMessageDTO>> getNextMessage();
+    bool flush();
+
     ICircularQueue<MessageDTO>& m_hostQueue;
     ICircularQueue<MessageDTO>& m_remoteQueue;
+    BuzzMessagesDTO m_messages;
     IBSP& m_bsp;
     ILogger& m_logger;
 };

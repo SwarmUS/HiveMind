@@ -23,6 +23,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_callHostFunction_sendToHost_invalidAr
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandlerMock, messageQueueLength).WillOnce(testing::Return(0));
+    EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
     EXPECT_CALL(stringResolverMock, getString(BBZSTRID_hostFunction))
         .WillRepeatedly(testing::Return(strFunctionName.c_str()));
 

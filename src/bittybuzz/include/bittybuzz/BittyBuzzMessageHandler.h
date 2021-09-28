@@ -45,7 +45,8 @@ class BittyBuzzMessageHandler : public IBittyBuzzMessageHandler {
 
     static bool handleUserCallResponse(const UserCallResponseDTO& response);
     static bool handleGenericResponse(const GenericResponseDTO& response);
-    static bool handleBuzzMessage(const BuzzMessageDTO& msg);
+    bool handleVmMessage(const VmMessageDTO& vmMsg);
+    bool handleBuzzMessages(const BuzzMessagesDTO& msg);
     bool handleResponse(const ResponseDTO& response);
 
     bool handleMessage(const MessageDTO& message);

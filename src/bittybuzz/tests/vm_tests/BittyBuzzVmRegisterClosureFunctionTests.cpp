@@ -32,6 +32,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_registerFunction) {
 
     EXPECT_CALL(neighborsManagerMock, updateNeighbors).Times(1);
     EXPECT_CALL(messageHandler, messageQueueLength).Times(1).WillOnce(testing::Return(0));
+    EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
     EXPECT_CALL(closureRegister,
                 registerClosure(functionName.c_str(), testing::_, testing::_, testing::_))
         .Times(1)
@@ -106,6 +107,7 @@ TEST_F(BittyBuzzVmTestFixture,
     EXPECT_CALL(inputQueueMock, pop).Times(1);
     EXPECT_CALL(inputQueueMock, getLength).Times(1).WillOnce(testing::Return(1));
     EXPECT_CALL(hostOutputQueueMock, push(testing::_)).Times(1);
+    EXPECT_CALL(messageServiceMock, queueBuzzMessages).Times(1);
 
     SetUp(bcode, bcode_size, boardId, &stringResolver, &messageHandler, &closureRegister,
           &messageServiceMock, &neighborsManagerMock, libraries);
