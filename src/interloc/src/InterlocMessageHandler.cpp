@@ -157,6 +157,7 @@ InterlocRawAngleDataDTO InterlocMessageHandler::constructRawDataMessage(
             frameInfos[k].setSfdAngle(data.m_frames[frameId].m_frameInfos[k].m_sfdAngle);
             frameInfos[k].setAccumulatorAngle(
                 data.m_frames[frameId].m_frameInfos[k].m_accumulatorAngle);
+            frameInfos[k].setMessageId(data.m_frames[frameId].m_frameInfos[k].m_messageId);
         }
 
         frames[j].setFrameInfos(frameInfos, data.m_frames[frameId].m_frameInfosLength);

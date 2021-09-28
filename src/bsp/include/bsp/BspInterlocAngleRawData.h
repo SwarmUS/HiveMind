@@ -12,6 +12,7 @@ struct BspInterlocFrameInfo {
     uint64_t m_rxTimestamp;
     float m_sfdAngle;
     float m_accumulatorAngle;
+    uint32_t m_messageId;
 };
 
 struct BspInterlocFrameAngleRawData {

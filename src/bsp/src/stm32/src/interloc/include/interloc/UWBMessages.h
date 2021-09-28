@@ -64,7 +64,7 @@ namespace UWBMessages {
 
     struct __attribute__((__packed__)) AngleMsg {
         DWFrame m_headerFrame;
-        uint32_t m_frameId;
+        uint32_t m_messageId;
     };
 
 } // namespace UWBMessages

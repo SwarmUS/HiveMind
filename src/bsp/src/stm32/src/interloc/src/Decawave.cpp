@@ -35,6 +35,8 @@ void Decawave::rxCallback(const dwt_cb_data_t* callbackData, void* context) {
         dwt_readfromdevice(RX_TTCKO_ID, 4, 1, &(frame->m_sfdAngleRegister));
         // Read information needed for phase calculation
         uint16_t firstPathIdx = dwt_read16bitoffsetreg(RX_TIME_ID, RX_TIME_FP_INDEX_OFFSET);
+        firstPathIdx = ((int)(((float)firstPathIdx) * (1.0F / 64.0F) + 0.5F)) * 4.0F;
+
         // Read one extra byte as readaccdata() returns a dummy byte
         dwt_readaccdata(frame->m_firstPathAccumulator, 5, firstPathIdx);
     }

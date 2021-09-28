@@ -38,12 +38,11 @@ void AngleReceiverState::readAngleFrame(std::array<UWBRxFrame, numDecas>& rxFram
 
         allDataReceived = true;
         for (auto& frame : rxFrames) {
-            if (frame.m_status != UWBRxStatus::FINISHED) {
+            if (frame.m_status != UWBRxStatus::FINISHED ||
+                reinterpret_cast<UWBMessages::AngleMsg*>(frame.m_rxBuffer.data())
+                        ->m_headerFrame.m_functionCode != UWBMessages::ANGLE) {
                 allDataReceived = false;
             }
-
-            auto* x = reinterpret_cast<UWBMessages::AngleMsg*>(frame.m_rxBuffer.data());
-            x->m_headerFrame.m_functionCode = UWBMessages::ANGLE;
         }
 
     } while (!allDataReceived);
@@ -61,5 +60,7 @@ void AngleReceiverState::saveAngleData(BspInterlocRawAngleData& data,
         data.m_frames[frameIndex].m_frameInfos[j].m_sfdAngle = frame.getSFDAngle();
         data.m_frames[frameIndex].m_frameInfos[j].m_accumulatorAngle = frame.getAccumulatorAngle();
         j++;
+        data.m_frames[frameIndex].m_frameInfos[j].m_messageId =
+            reinterpret_cast<UWBMessages::AngleMsg*>(frame.m_rxBuffer.data())->m_messageId;
     }
 }
