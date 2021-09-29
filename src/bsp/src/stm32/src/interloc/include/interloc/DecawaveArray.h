@@ -40,15 +40,14 @@ class DecawaveArray {
     // have to assign the arrays here
 #ifdef STM32F4
     std::array<Decawave, DWT_NUM_DW_DEV> m_decawaves = {Decawave(DW_A0), Decawave(DW_B0)};
-    std::array<std::reference_wrapper<Decawave>, angleAntennaArraySize> m_angleAntennaArray;
 #elif STM32H7
     std::array<Decawave, DWT_NUM_DW_DEV> m_decawaves = {Decawave(DW_A0), Decawave(DW_A1),
                                                         Decawave(DW_B0), Decawave(DW_B1),
                                                         Decawave(DW_C0), Decawave(DW_C1)};
+#endif
 
     std::array<std::optional<std::reference_wrapper<Decawave>>, angleAntennaArraySize>
         m_angleAntennaArray;
-#endif
 };
 
 #endif //__DECAWAVEARRAY_H__
