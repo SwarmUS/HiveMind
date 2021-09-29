@@ -38,7 +38,13 @@ void AngleReceiverState::readAngleFrame() {
 
         // Verify all decawaves received a message
         for (auto deca : m_decawaves.getAngleAntennaArray()) {
-            if (deca->get().getRxStatus() != UWBRxStatus::FINISHED) {
+            UWBRxStatus status = deca->get().getRxStatus();
+
+            if (status == UWBRxStatus::ONGOING) {
+                status = deca->get().awaitRx();
+            }
+
+            if (status != UWBRxStatus::FINISHED) {
                 allDataReceived = false;
             }
         }
