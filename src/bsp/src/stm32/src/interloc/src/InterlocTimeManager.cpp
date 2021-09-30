@@ -73,6 +73,7 @@ void InterlocTimeManager::updateTimings() {
     m_finalAirTimeWithPreambleUs = computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRFinal) << 3);
     m_pollToFirstResponseGuardUs = getReadWriteSPITimeUs(sizeof(UWBMessages::TWRPoll)) +
                                    POLL_PROCESSING_GUARD + getPreambleAirTimeUs();
+    m_angleAirTimeWithPreambleUs = computeAirTimeWithPreambleUs(sizeof(UWBMessages::AngleMsg) << 3);
 }
 
 float getShrSymbolDurationUs() {
@@ -230,7 +231,26 @@ uint16_t InterlocTimeManager::getSyncTimeoutUs() const {
     return slotToSlotOffsetUs + (m_bsp.generateRandomNumber() % 25) * 150;
 }
 
+uint64_t InterlocTimeManager::getAngleTxStartTs(uint64_t startOfFrameTs, uint32_t angleId) const {
+    return (getFinalTxTs(startOfFrameTs) +
+            UUS_TO_DWT_TIME *
+                (FINAL_TO_ANGLE_GUARD + getReadWriteSPITimeUs(sizeof(UWBMessages::AngleMsg)) +
+                 angleId * getAngleToAngleOffsetUs())) %
+           UINT40_MAX;
+}
+
+uint64_t InterlocTimeManager::getAngleRxStartTs(uint64_t startOfFrameTs, uint32_t angleId) const {
+    return (getAngleTxStartTs(startOfFrameTs, angleId) - RX_BEFORE_TX_GUARD_US * UUS_TO_DWT_TIME) %
+           UINT40_MAX;
+}
+
 uint16_t InterlocTimeManager::getFrameLengthUs() const {
-    return (getFinalRxTs(0) / UUS_TO_DWT_TIME + m_finalAirTimeWithPreambleUs +
-            getReadWriteSPITimeUs(sizeof(UWBMessages::TWRFinal)) + FINAL_PROCESSING_GUARD);
+    return (getAngleTxStartTs(0, NUM_ANGLE_MSG - 1) / UUS_TO_DWT_TIME +
+            m_angleAirTimeWithPreambleUs + getReadWriteSPITimeUs(sizeof(UWBMessages::AngleMsg)) +
+            FINAL_PROCESSING_GUARD);
+}
+
+uint64_t InterlocTimeManager::getAngleToAngleOffsetUs() const {
+    return m_angleAirTimeWithPreambleUs + ANGLE_TO_ANGLE_GUARD +
+           NUM_ANGLE_ANTENNAS * getReadWriteSPITimeUs(sizeof(UWBMessages::AngleMsg) << 3);
 }
