@@ -32,7 +32,7 @@ extern uint32_t Hal_getCPUCounter();
     do {                                                                                           \
     } while (0) // Already set via hal init
 
-#define portGET_RUN_TIME_COUNTER_VALUE() HAL_getCPUCounter()
+#define portGET_RUN_TIME_COUNTER_VALUE() Hal_getCPUCounter()
 #endif // RUNTIME_STATS
 
 #endif // __FREERTOS_PLATFORM_CONFIG_H_

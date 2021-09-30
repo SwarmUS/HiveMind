@@ -7,6 +7,10 @@
 static void Hal_initMPU();
 static void Hal_initCache();
 
+#ifdef RUNTIME_STATS
+uint32_t Hal_getCPUCounter() { return RUNTIME_STATS_TIMER->Instance->CNT; }
+#endif // RUNTIME_STATS
+
 void PHal_initMcu() {
     // UART Print
     MX_USART3_UART_Init();

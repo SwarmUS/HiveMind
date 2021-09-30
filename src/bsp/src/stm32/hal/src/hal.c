@@ -14,10 +14,6 @@
 #include <lwip/apps/lwiperf.h>
 #endif
 
-#ifdef RUNTIME_STATS
-uint32_t HAL_getCPUCounter() { return RUNTIME_STATS_TIMER->Instance->CNT; }
-#endif // RUNTIME_STATS
-
 void Hal_initMcu() {
 
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
