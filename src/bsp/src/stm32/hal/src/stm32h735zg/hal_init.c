@@ -32,12 +32,12 @@ void PHal_initMcu() {
     Hal_initMPU();
     Hal_initCache();
 
-    #ifdef RUNTIME_STATS
-        // Runtime stats timer
-        // Uses heap
-        MX_TIM14_Init();
-        HAL_TIM_Base_Start(&htim14);
-    #endif // RUNTIME_STATS
+#ifdef RUNTIME_STATS
+    // Runtime stats timer
+    // Uses heap
+    MX_TIM14_Init();
+    HAL_TIM_Base_Start(&htim14);
+#endif // RUNTIME_STATS
 
     HAL_Delay(500);
 }

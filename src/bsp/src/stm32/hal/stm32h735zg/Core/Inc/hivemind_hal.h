@@ -18,7 +18,6 @@ extern "C" {
 #include "stm32h7xx_hal_flash_ex.h"
 #include "usart.h"
 
-
 #define HUART_PRINT (&huart3)
 #define HRNG (&hrng)
 #define HEARTBEAT_TIMER (&htim13)

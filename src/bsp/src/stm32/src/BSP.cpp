@@ -3,6 +3,7 @@
 #include "bsp/BSPContainer.h"
 #include <hal/hal.h>
 #include <logger/LoggerContainer.h>
+#include <Task.h>
 
 #ifdef RUNTIME_STATS
 #include "task.h"
@@ -14,7 +15,7 @@ void usageFunctionCallback(void* ctx) {
     while (1) {
         vTaskGetRunTimeStats(buffer);
         logger.log(LogLevel::Info, "\n%s", buffer);
-        vTaskDelay(10000);
+        Task::delay(10000); //10 sec
     }
 }
 #endif // RUNTIME_STATS
@@ -43,7 +44,6 @@ void BSP::initChip(void* args) {
         .setButtonCallback(Button::BUTTON_0, buttonCallback, this);
     reinterpret_cast<UserInterface&>(BSPContainer::getUserInterface())
         .setRGBLed(static_cast<RgbColor>(m_currentRGBState));
-
 
 #ifdef RUNTIME_STATS
     TaskHandle_t xHandle = NULL;

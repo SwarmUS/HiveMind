@@ -12,7 +12,7 @@ extern uint32_t SystemCoreClock;
 
 /* Clock config that is platform dependent */
 #define configCPU_CLOCK_HZ (SystemCoreClock)
-#define configTICK_RATE_HZ ((TickType_t)1000)
+#define configTICK_RATE_HZ ((TickType_t)100)
 
 /* Definitions that map the FreeRTOS port interrupt handlers to their CMSIS
 standard names. */
@@ -20,8 +20,8 @@ standard names. */
 #define xPortPendSVHandler PendSV_Handler
 #define xPortSysTickHandler SysTick_Handler
 
-#ifdef RUNTIME_STATS
 /* Runtime stats */
+#ifdef RUNTIME_STATS
 #define configUSE_STATS_FORMATTING_FUNCTIONS 1
 #define configGENERATE_RUN_TIME_STATS 1
 #define configRUN_TIME_COUNTER_TYPE uint64_t
@@ -32,7 +32,7 @@ extern uint32_t Hal_getCPUCounter();
     do {                                                                                           \
     } while (0) // Already set via hal init
 
-#define portGET_RUN_TIME_COUNTER_VALUE() BSP_getCPUCounter()
+#define portGET_RUN_TIME_COUNTER_VALUE() HAL_getCPUCounter()
 #endif // RUNTIME_STATS
 
 #endif // __FREERTOS_PLATFORM_CONFIG_H_

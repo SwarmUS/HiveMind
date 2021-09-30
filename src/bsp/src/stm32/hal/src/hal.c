@@ -15,9 +15,7 @@
 #endif
 
 #ifdef RUNTIME_STATS
-uint32_t BSP_getCPUCounter(){
-    return RUNTIME_STATS_TIMER->Instance->CNT;
-}
+uint32_t HAL_getCPUCounter() { return RUNTIME_STATS_TIMER->Instance->CNT; }
 #endif // RUNTIME_STATS
 
 void Hal_initMcu() {
