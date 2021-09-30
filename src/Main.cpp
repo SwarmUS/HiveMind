@@ -391,7 +391,7 @@ int main(int argc, char** argv) {
 
     static HardwareInterlocTask s_hardwareInterlocTask("hardware_interloc", gc_taskHighPriority);
     static SoftwareInterlocTask s_softwareInterlocTask("software_interloc", gc_taskNormalPriority);
-    static LogInterlocTask s_logInterlocTask("software_interloc", gc_taskNormalPriority);
+    static LogInterlocTask s_logInterlocTask("software_interloc_log", gc_taskNormalPriority);
 
     static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskNormalPriority, NULL,
                                                     MessageHandlerContainer::getHostMsgQueue());
