@@ -15,7 +15,12 @@ class AngleReceiverState : public AbstractInterlocState {
     std::array<UWBRxFrame, DecawaveArray::angleAntennaArraySize> m_rxFrames;
 
     void saveAngleData(BspInterlocRawAngleData& data, uint32_t frameIndex);
-    void readAngleFrame();
+    bool readAngleFrameContinuousMode();
+    bool readAngleFrameNormalMode(const InterlocStateHandler& context,
+                                  uint32_t angleId,
+                                  uint16_t timeoutUs);
+    bool waitReceptionOrTimeout();
+    bool verifyDataValid();
 };
 
 #endif //__ANGLERECEIVERSTATE_H__

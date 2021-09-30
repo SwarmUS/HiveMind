@@ -86,7 +86,7 @@ AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
     case InterlocStates::SEND_POLL_FROM_SYNC:
         return s_pollFromSyncState;
 
-    case InterlocStates::SET_DISTANCE:
+    case InterlocStates::CALCULATE_INTERLOC:
         return s_setDistanceState;
 
     case InterlocStates::ANGLE_SENDER:
