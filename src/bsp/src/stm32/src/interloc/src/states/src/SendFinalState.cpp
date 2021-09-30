@@ -24,7 +24,7 @@ void SendFinalState::process(InterlocStateHandler& context) {
 
         deca->get().transmitDelayed((uint8_t*)(&m_finalMsg), sizeof(UWBMessages::TWRFinal),
                                     finalTxTime);
-        context.setState(InterlocStates::IDLE, InterlocEvent::NO_EVENT);
+        context.setState(InterlocStates::ANGLE_SENDER, InterlocEvent::NO_EVENT);
     } else {
         context.setState(InterlocStates::IDLE, InterlocEvent::DECA_INIT_ERROR);
     }

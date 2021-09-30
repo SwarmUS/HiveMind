@@ -25,6 +25,10 @@ void TwoWayRanging::constructFinal(UWBMessages::TWRFinal* finalMessage, uint64_t
 }
 
 std::optional<double> TwoWayRanging::calculateDistance(uint16_t slotId) const {
+    if (!m_allDataReceived) {
+        return {};
+    }
+
     uint64_t tRound1 = m_responseRxTs[slotId - 1] - m_pollTxTs;
     uint32_t tRound2 = (uint32_t)m_finalRxTs - (uint32_t)m_responseTxTs;
     uint32_t tReply1 = (uint32_t)m_responseTxTs - (uint32_t)m_pollRxTs;

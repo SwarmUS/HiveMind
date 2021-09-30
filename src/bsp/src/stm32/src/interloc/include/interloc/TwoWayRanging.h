@@ -40,6 +40,8 @@ class TwoWayRanging {
 
     uint64_t m_finalTxTs;
     uint64_t m_finalRxTs;
+
+    bool m_allDataReceived;
 };
 
 #endif // HIVE_MIND_TWOWAYRANGING_H
