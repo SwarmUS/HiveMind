@@ -225,7 +225,7 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
 };
 
 template <typename SerializerType = HiveMindHostSerializer>
-class CommMonitoringTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class CommMonitoringTask : public AbstractTask<100 * configMINIMAL_STACK_SIZE> {
   public:
     CommMonitoringTask<SerializerType>(const char* taskName,
                                        UBaseType_t priority,
@@ -375,7 +375,6 @@ std::optional<std::reference_wrapper<ICommInterface>> hostInterfaceGetter() {
     }
     return commInterface;
 }
-
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
