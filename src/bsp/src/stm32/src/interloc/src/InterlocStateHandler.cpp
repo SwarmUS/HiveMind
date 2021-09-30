@@ -65,7 +65,7 @@ void InterlocStateHandler::incrementCurrentFrameId() {
     }
 }
 
-InterlocTimeManager& InterlocStateHandler::getTimeManager() { return m_timeManager; }
+InterlocTimeManager& InterlocStateHandler::getTimeManager() const { return m_timeManager; }
 
 uint8_t InterlocStateHandler::getSlotId() const { return m_slotId; }
 uint8_t InterlocStateHandler::getSuperFrameInitiator() const { return m_superFrameInitiator; }

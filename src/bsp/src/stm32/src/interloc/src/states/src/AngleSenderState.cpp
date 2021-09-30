@@ -13,21 +13,38 @@ void AngleSenderState::process(InterlocStateHandler& context) {
     m_decawaves.getMasterAntenna()->get().setLed(DW_LED::LED_3, true);
 
     // If we are in ANGLE_CALIB_SENDER mode, don't stop sending. Otherwise only send once
-    do {
-        sendAngleFrames(context);
-    } while (InterlocBSPContainer::getInterlocManager().getState() ==
-             InterlocStateDTO::ANGLE_CALIB_SENDER);
+    while (InterlocBSPContainer::getInterlocManager().getState() ==
+           InterlocStateDTO::ANGLE_CALIB_SENDER) {
+        sendAngleFramesContinuousMode(context);
+    }
+
+    if (InterlocBSPContainer::getInterlocManager().getState() == InterlocStateDTO::OPERATING) {
+        sendAngleFramesNormalMode(context);
+    }
 
     m_decawaves.getMasterAntenna()->get().setLed(DW_LED::LED_3, false);
     context.setState(InterlocStates::IDLE, InterlocEvent::ANGLES_SENT);
 }
 
-void AngleSenderState::sendAngleFrames(const InterlocStateHandler& context) {
-    for (uint32_t i = 0; i < context.getAngleNumberOfFrames() * m_transmissionContingencyFactor;
-         i++) {
+void AngleSenderState::sendAngleFramesContinuousMode(const InterlocStateHandler& context) {
+    uint64_t lastAngleTime = m_decawaves.getMasterAntenna()->get().getSysTime();
+
+    for (uint32_t i = 0; i < NUM_ANGLE_MSG; i++) {
         m_msg.m_messageId = i;
-        uint64_t sysTime = m_decawaves.getMasterAntenna()->get().getSysTime();
+        lastAngleTime =
+            (lastAngleTime + context.getTimeManager().getAngleToAngleOffsetUs() * UUS_TO_DWT_TIME) %
+            UINT40_MAX;
         m_decawaves.getMasterAntenna()->get().transmitDelayed((uint8_t*)&m_msg, sizeof(m_msg),
-                                                              sysTime + (100 * UUS_TO_DWT_TIME));
+                                                              lastAngleTime);
+    }
+}
+
+void AngleSenderState::sendAngleFramesNormalMode(const InterlocStateHandler& context) {
+    for (uint32_t i = 0; i < NUM_ANGLE_MSG; i++) {
+        m_msg.m_messageId = i;
+        uint64_t angleTxTime =
+            context.getTimeManager().getAngleTxStartTs(context.getPreviousFrameStartTs(), i);
+        m_decawaves.getMasterAntenna()->get().transmitDelayed((uint8_t*)&m_msg, sizeof(m_msg),
+                                                              angleTxTime);
     }
 }

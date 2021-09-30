@@ -30,7 +30,7 @@ class InterlocStateHandler {
 
     TwoWayRanging& getTWR();
     BspInterlocRawAngleData& getRawAngleData();
-    InterlocTimeManager& getTimeManager();
+    InterlocTimeManager& getTimeManager() const;
 
     void incrementCurrentFrameId();
 
