@@ -9,7 +9,10 @@ function set_hex(hex_val){
  
 # Flashing an LED so we know the VM is running properly
 function tick(ctx){
-    log("stuff");
+    if(id == 6){
+        log("Called host function to 6, should send bytes to 4");
+        call_host_function(id, "sendByteTo", {.0 = 4, .1 = 9});
+    }
 }
 
 function create_exec(step_count) {
@@ -24,3 +27,4 @@ function create_exec(step_count) {
     exec = executor.new(step_count, tick, context);
     return exec;
 }
+
