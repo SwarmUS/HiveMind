@@ -1,0 +1,26 @@
+include "utils/types.bzz"
+include "utils/executor.bzz"
+
+# Functions to register
+function set_hex(hex_val){
+  log("Setting hex to: ", hex_val);
+  ui.set_hex(hex_val);
+}
+ 
+# Flashing an LED so we know the VM is running properly
+function tick(ctx){
+    log("stuff");
+}
+
+function create_exec(step_count) {
+    # Function description
+    var set_hex_host_description = {
+        .0 = {.hex_val=types.INT}
+    };
+
+    # Registering the function
+    register_closure("setHex", set_hex, set_hex_host_description, nil);
+
+    exec = executor.new(step_count, tick, context);
+    return exec;
+}
