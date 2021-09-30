@@ -1,4 +1,5 @@
 #include <AbstractTask.h>
+#include <BaseTask.h>
 #include <Task.h>
 #include <application-interface/ApplicationInterfaceContainer.h>
 #include <atomic>

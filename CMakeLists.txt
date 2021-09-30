@@ -12,6 +12,7 @@ option(ENABLE_ERROR_ON_MISSING_TOOL "If a tools (clang-tidy, clang-format, doxyg
 option(DISABLE_EXTERNAL_WARNINGS "Disables warnings from exernal libs (gtest, freertos, etc)" ON)
 
 option(ENABLE_TARGET_IPERF_SERVER "Starts an iperf server on the target device for network monitoring" OFF)
+option(ENABLE_TARGET_RUNTIME_STATS "Starts an task logging the run time stats of each tasks. (Only supported for h7 for now)" OFF)
 
 option(ENABLE_HARDWARE_TESTS "Compiles a second executable to do various hardware tests (only works for STM32H7)" OFF)
 
@@ -54,6 +55,11 @@ endif()
 if(ENABLE_TARGET_IPERF_SERVER)
     # Must be set before including any source files
     add_definitions(-DIPERF_SERVER)
+endif()
+
+if(ENABLE_TARGET_RUNTIME_STATS)
+    # Must be set before including any source files
+    add_definitions(-DRUNTIME_STATS)
 endif()
 
 # Includes
