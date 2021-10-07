@@ -138,7 +138,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class MessageDispatcherTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class MessageDispatcherTask : public AbstractTask<12 * configMINIMAL_STACK_SIZE> {
   public:
     MessageDispatcherTask(const char* taskName,
                           UBaseType_t priority,
