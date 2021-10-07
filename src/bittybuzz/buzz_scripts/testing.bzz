@@ -10,7 +10,7 @@ function set_hex(hex_val){
 # Flashing an LED so we know the VM is running properly
 function tick(ctx){
     if(id == 6){
-        log("Called host function to 6, should send bytes to 4");
+        log("Called host function on 6, should send bytes to 4");
         call_host_function(id, "sendByteTo", {.0 = 4, .1 = 9});
     }
 }
