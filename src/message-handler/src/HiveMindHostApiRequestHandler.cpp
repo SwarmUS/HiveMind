@@ -41,7 +41,7 @@ bool HiveMindHostApiRequestHandler::handleHiveMindHostApiRequest(
         if (posOpt) {
 
             const RelativePosition& pos = posOpt.value();
-            posOptDTO = NeighborPositionDTO(pos.m_distance, pos.m_relativeOrientation,
+            posOptDTO = NeighborPositionDTO(pos.m_distance, pos.m_angle,
                                             pos.m_isInLineOfSight);
         }
 

@@ -12,11 +12,6 @@ struct RelativePosition {
     float m_distance;
 
     /**
-     * @brief Relative orientation in degrees
-     */
-    float m_relativeOrientation;
-
-    /**
      * @brief Angle of other agent in current agent frame (in degrees)
      */
     float m_angle;
