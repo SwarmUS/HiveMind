@@ -44,7 +44,7 @@ TEST_F(InterlocFixture, Interloc_getPosition_pushData_robotInList) {
     position.m_robotId = robotId;
     position.m_isInLineOfSight = true;
     position.m_distance = 42;
-    position.m_relativeOrientation = 0;
+    position.m_angleOfArrival = 0;
 
     uint16_t queuePushValue;
     EXPECT_CALL(m_posUpdateQueue, push(testing::_))
@@ -72,7 +72,7 @@ TEST_F(InterlocFixture, Interloc_getPosition_validData) {
     position.m_robotId = robotId;
     position.m_isInLineOfSight = isInLineOfSight;
     position.m_distance = distance;
-    position.m_relativeOrientation = angle;
+    position.m_angleOfArrival = angle;
 
     uint16_t queuePushValue;
     EXPECT_CALL(m_posUpdateQueue, push(testing::_))
@@ -86,7 +86,7 @@ TEST_F(InterlocFixture, Interloc_getPosition_validData) {
 
     // Expect
     EXPECT_EQ(ret->m_distance, distance);
-    EXPECT_EQ(ret->m_relativeOrientation, angle);
+    EXPECT_EQ(ret->m_angle, angle);
     EXPECT_EQ(ret->m_isInLineOfSight, isInLineOfSight);
     EXPECT_EQ(queuePushValue, robotId);
 }
@@ -102,7 +102,7 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateDistance_validData) {
     position1.m_robotId = robotId;
     position1.m_isInLineOfSight = isInLineOfSight;
     position1.m_distance = distance;
-    position1.m_relativeOrientation = angle;
+    position1.m_angleOfArrival = angle;
 
     float updatedDistance = 43;
     InterlocUpdate position2;
@@ -140,12 +140,12 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateOrientation_validData) {
     position1.m_robotId = robotId;
     position1.m_isInLineOfSight = isInLineOfSight;
     position1.m_distance = distance;
-    position1.m_relativeOrientation = angle;
+    position1.m_angleOfArrival = angle;
 
     float updatedAngle = 43;
     InterlocUpdate position2;
     position2.m_robotId = robotId;
-    position2.m_relativeOrientation = updatedAngle;
+    position2.m_angleOfArrival = updatedAngle;
 
     uint16_t queuePushValue1;
     uint16_t queuePushValue2;
@@ -162,7 +162,7 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateOrientation_validData) {
     auto ret = m_interloc->getRobotPosition(robotId);
 
     // Expect
-    EXPECT_EQ(ret->m_relativeOrientation, updatedAngle);
+    EXPECT_EQ(ret->m_angle, updatedAngle);
     EXPECT_EQ(queuePushValue1, robotId);
     EXPECT_EQ(queuePushValue2, robotId);
 }
@@ -216,7 +216,7 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateLineOfSight_validData) {
     position1.m_robotId = robotId;
     position1.m_isInLineOfSight = isInLineOfSight;
     position1.m_distance = distance;
-    position1.m_relativeOrientation = angle;
+    position1.m_angleOfArrival = angle;
 
     bool updatedLOS = false;
     InterlocUpdate position2;

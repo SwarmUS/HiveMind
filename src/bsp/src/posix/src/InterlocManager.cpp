@@ -128,8 +128,8 @@ void InterlocManager::gazeboUpdateCallback(const gazebo_msgs::ModelStates& msg) 
             m_positionUpdateCallback(m_positionUpdateContext, update);
 
             m_logger.log(LogLevel::Debug,
-                         "Updating position of agent %d. Dist: %f, Orientation %f, Angle %f",
-                         agentId, distance, orientation, angle);
+                         "Updating position of agent %d. Dist: %f, Angle %f",
+                         agentId, distance, angle);
         }
     }
 
