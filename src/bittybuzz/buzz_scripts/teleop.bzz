@@ -1,0 +1,24 @@
+include "utils/executor.bzz"
+
+ctx = {
+    .led = 0
+}
+
+function tick(context){
+    log("Calling host function...");
+    call_host_function(id, "moveBy", {.0 = 1.0, .1 = 1.0});
+
+    ui.set_led(context.led);
+    # led = !led
+    if(context.led){
+        context.led = nil;
+    } else{
+        context.led = 1;
+    }
+
+}
+
+function create_exec(){
+    exec = executor.new(500, tick, ctx);
+    return exec;
+}
