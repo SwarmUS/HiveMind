@@ -7,12 +7,12 @@ extern "C" {
 
 #include "tim.h"
 
-typedef void (*timerCallbackFct_t)();
+typedef void (*timerCallbackFct_t)(void*);
 
 /**
  * @brief Starts the heartbeat timer interrupt
  */
-void Timer_startHeartbeat();
+void Timer_startAll();
 
 /**
  * @brief Stops the heartbeat timer interrupt
@@ -24,6 +24,8 @@ void Timer_stopHeartbeat();
  * @param callback Function to call
  */
 void Timer_setHeartbeatCallback(timerCallbackFct_t callback);
+
+void Timer_setHundredMicrosCallback(timerCallbackFct_t callback, void* context);
 
 #ifdef __cplusplus
 }

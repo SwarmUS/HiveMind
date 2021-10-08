@@ -1,6 +1,20 @@
+#include <hal/hal_timer.h>
 #include <interloc/InterlocBSPContainer.h>
 #include <interloc/InterlocStateHandler.h>
 #include <states/AngleReceiverState.h>
+
+void AngleReceiverState::staticTimerCallback(void* context) {
+    static_cast<AngleReceiverState*>(context)->timerCallback();
+}
+
+void AngleReceiverState::timerCallback() {
+    if (m_timeoutHundredMicros > 0) {
+        m_timeoutHundredMicros--;
+    } else {
+        abortRx();
+        Timer_setHundredMicrosCallback(nullptr, nullptr);
+    }
+}
 
 AngleReceiverState::AngleReceiverState(ILogger& logger, DecawaveArray& decawaves) :
     AbstractInterlocState(logger, decawaves) {}
@@ -14,28 +28,28 @@ void AngleReceiverState::process(InterlocStateHandler& context) {
 
     uint32_t receivedFrames = 0;
     uint32_t iterations = 0;
-    uint32_t maxIterations =
-        managerState == InterlocStateDTO::ANGLE_CALIB_RECEIVER ? 500 : NUM_ANGLE_MSG / 2;
-    uint16_t timeout =
-        InterlocTimeManager::getTimeoutUs(context.getTimeManager().m_angleAirTimeWithPreambleUs);
+    uint32_t maxIterations = managerState == InterlocStateDTO::ANGLE_CALIB_RECEIVER
+                                 ? context.getAngleCalibNumberOfFrames()
+                                 : NUM_ANGLE_MSG / 2;
+    uint64_t rxStopTime =
+        context.getTimeManager().getAngleRxStopTs(context.getPreviousFrameStartTs());
+    uint64_t currentTs = m_decawaves.getMasterAntenna()->get().getSysTime();
+    m_timeoutHundredMicros = ((rxStopTime - currentTs) % UINT40_MAX) / UUS_TO_DWT_TIME / 100;
+    m_aborted = false;
+    Timer_setHundredMicrosCallback(staticTimerCallback, this);
 
-    while (iterations < maxIterations && receivedFrames < context.getAngleNumberOfFrames()) {
+    while (receivedFrames < maxIterations && !m_aborted) {
         bool allDataReceived = false;
 
-        if (managerState == InterlocStateDTO::ANGLE_CALIB_RECEIVER) {
-            allDataReceived = readAngleFrameContinuousMode();
-        } else {
-            allDataReceived = readAngleFrameNormalMode(context, iterations, timeout);
-        }
+        allDataReceived = readAngleFrameContinuousMode();
 
         if (allDataReceived) {
             saveAngleData(context.getRawAngleData(), receivedFrames);
             receivedFrames++;
         }
-        iterations++;
     }
 
-    context.getRawAngleData().m_framesLength = context.getAngleNumberOfFrames();
+    context.getRawAngleData().m_framesLength = context.getAngleCalibNumberOfFrames();
 
     if (InterlocBSPContainer::getInterlocManager().getState() ==
         InterlocStateDTO::ANGLE_CALIB_RECEIVER) {
@@ -49,24 +63,6 @@ void AngleReceiverState::process(InterlocStateHandler& context) {
 bool AngleReceiverState::readAngleFrameContinuousMode() {
     for (auto deca : m_decawaves.getAngleAntennaArray()) {
         deca->get().receiveAsync(0);
-    }
-
-    if (waitReceptionOrTimeout()) {
-        return verifyDataValid();
-    }
-
-    return false;
-}
-
-bool AngleReceiverState::readAngleFrameNormalMode(const InterlocStateHandler& context,
-                                                  uint32_t angleId,
-                                                  uint16_t timeoutUs) {
-    uint64_t rxStartTime =
-        context.getTimeManager().getAngleRxStartTs(context.getPreviousFrameStartTs(), angleId);
-    volatile uint64_t currentTs = m_decawaves.getMasterAntenna()->get().getSysTime();
-
-    for (auto deca : m_decawaves.getAngleAntennaArray()) {
-        deca->get().receiveAsyncDelayed(timeoutUs, rxStartTime);
     }
 
     if (waitReceptionOrTimeout()) {
@@ -98,6 +94,7 @@ bool AngleReceiverState::waitReceptionOrTimeout() {
         UWBRxStatus status = deca->get().getRxStatus();
 
         if (status == UWBRxStatus::ONGOING) {
+            m_logger.log(LogLevel::Error, "Awaiting RX");
             status = deca->get().awaitRx();
         }
 
@@ -120,5 +117,12 @@ void AngleReceiverState::saveAngleData(BspInterlocRawAngleData& data, uint32_t f
             m_rxFrames[i].getAccumulatorAngle();
         data.m_frames[frameIndex].m_frameInfos[i].m_messageId =
             reinterpret_cast<UWBMessages::AngleMsg*>(m_rxFrames[i].m_rxBuffer.data())->m_messageId;
+    }
+}
+
+void AngleReceiverState::abortRx() {
+    m_aborted = true;
+    for (auto deca : m_decawaves.getAngleAntennaArray()) {
+        deca->get().abortTRXFromISR();
     }
 }

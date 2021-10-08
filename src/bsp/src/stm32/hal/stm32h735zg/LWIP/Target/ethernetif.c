@@ -473,7 +473,7 @@ static struct pbuf* low_level_input(struct netif* netif) {
 
 #if !defined(DUAL_CORE) || defined(CORE_CM7)
         /* Invalidate data cache for ETH Rx Buffers */
-
+        SCB_InvalidateDCache_by_Addr((uint32_t*)RxBuff->buffer, framelength);
 #endif
 
         custom_pbuf = (struct pbuf_custom*)LWIP_MEMPOOL_ALLOC(RX_POOL);

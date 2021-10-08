@@ -386,3 +386,19 @@ UWBRxStatus Decawave::awaitRx() {
 
     return m_rxStatus;
 }
+
+void Decawave::abortTRXFromISR() {
+    deca_selectDevice(m_spiDevice);
+    dwt_forcetrxoff();
+
+    m_rxStatus = UWBRxStatus::ERROR;
+
+    BaseType_t taskWoken = pdFALSE;
+
+    if (m_trxTaskHandle != nullptr) {
+        vTaskNotifyGiveFromISR(m_trxTaskHandle, &taskWoken);
+    }
+
+    m_trxTaskHandle = nullptr;
+    portYIELD_FROM_ISR(taskWoken);
+}

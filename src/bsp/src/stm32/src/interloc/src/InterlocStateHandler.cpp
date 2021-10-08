@@ -88,5 +88,7 @@ void InterlocStateHandler::setAngleCalibNumberOfFrames(uint32_t numberOfFrames) 
     m_angleCalibNumberOfFrames = numberOfFrames;
 }
 
-uint32_t InterlocStateHandler::getAngleNumberOfFrames() const { return m_angleCalibNumberOfFrames; }
+uint32_t InterlocStateHandler::getAngleCalibNumberOfFrames() const {
+    return m_angleCalibNumberOfFrames;
+}
 BspInterlocRawAngleData& InterlocStateHandler::getRawAngleData() { return m_angleRawData; }

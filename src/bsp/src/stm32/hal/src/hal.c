@@ -38,7 +38,7 @@ void Hal_initBoard() {
     deca_init();
 
     UI_initialize();
-    Timer_startHeartbeat();
+    Timer_startAll();
 
     if (Hal_wroomPowerEnabled()) {
         Hal_enableWroom();

@@ -26,6 +26,8 @@ void PHal_initMcu() {
     // Heartbeat timer
     MX_TIM13_Init();
 
+    MX_TIM7_Init();
+
     // IO Expander
     MX_I2C1_Init();
 

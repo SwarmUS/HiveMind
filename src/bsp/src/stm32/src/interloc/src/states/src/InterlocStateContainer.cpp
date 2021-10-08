@@ -47,7 +47,7 @@ AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
                                                      InterlocBSPContainer::getDecawaves());
 
     static UpdateInterloc s_setDistanceState(LoggerContainer::getLogger(),
-                                               InterlocBSPContainer::getDecawaves());
+                                             InterlocBSPContainer::getDecawaves());
 
     static AngleSenderState s_angleSender(LoggerContainer::getLogger(),
                                           InterlocBSPContainer::getDecawaves());

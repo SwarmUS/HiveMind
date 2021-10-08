@@ -228,25 +228,34 @@ uint64_t InterlocTimeManager::getPollTxStartTs(uint64_t startOfFrameTs) const {
 
 uint16_t InterlocTimeManager::getSyncTimeoutUs() const {
     uint32_t slotToSlotOffsetUs = getFrameLengthUs();
-    return slotToSlotOffsetUs + (m_bsp.generateRandomNumber() % 25) * 10000;
+    return slotToSlotOffsetUs + (m_bsp.generateRandomNumber() % 25) * 50000;
 }
 
 uint64_t InterlocTimeManager::getAngleTxStartTs(uint64_t startOfFrameTs, uint32_t angleId) const {
     return (getFinalTxTs(startOfFrameTs) +
             UUS_TO_DWT_TIME *
-                (m_finalAirTimeWithPreambleUs +
-                 getReadWriteSPITimeUs(sizeof(UWBMessages::TWRFinal)) + FINAL_TO_ANGLE_GUARD +
-                 getReadWriteSPITimeUs(sizeof(UWBMessages::AngleMsg)) +
-                 angleId * getAngleToAngleOffsetUs())) %
+                ((uint64_t)getReadWriteSPITimeUs(sizeof(UWBMessages::TWRFinal)) +
+                 (uint64_t)m_finalAirTimeWithPreambleUs + (uint64_t)FINAL_TO_ANGLE_GUARD +
+                 (uint64_t)getReadWriteSPITimeUs(sizeof(UWBMessages::AngleMsg)) +
+                 (uint64_t)(angleId * getAngleToAngleOffsetUs()))) %
            UINT40_MAX;
 }
 
 uint64_t InterlocTimeManager::getAngleRxStartTs(uint64_t startOfFrameTs, uint32_t angleId) const {
-    return (getAngleTxStartTs(startOfFrameTs, angleId) - RX_BEFORE_TX_GUARD_US * UUS_TO_DWT_TIME) %
+    return (getFinalRxTs(startOfFrameTs) +
+            UUS_TO_DWT_TIME * (getReadWriteSPITimeUs(sizeof(UWBMessages::TWRFinal) +
+                                                     m_finalAirTimeWithPreambleUs))) %
+           UINT40_MAX;
+}
+
+uint64_t InterlocTimeManager::getAngleRxStopTs(uint64_t startOfFrameTs) const {
+    return (getSupposedNextFrameStart(startOfFrameTs) -
+            (FINAL_PROCESSING_GUARD - getAngleToAngleOffsetUs()) * UUS_TO_DWT_TIME) %
            UINT40_MAX;
 }
 
 uint16_t InterlocTimeManager::getFrameLengthUs() const {
+    volatile uint16_t x = getAngleTxStartTs(0, NUM_ANGLE_MSG - 1) / UUS_TO_DWT_TIME;
     return (getAngleTxStartTs(0, NUM_ANGLE_MSG - 1) / UUS_TO_DWT_TIME +
             m_angleAirTimeWithPreambleUs + getReadWriteSPITimeUs(sizeof(UWBMessages::AngleMsg)) +
             FINAL_PROCESSING_GUARD);

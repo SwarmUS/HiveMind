@@ -33,7 +33,7 @@ void TestClock::startSquareWave() {
         }
     }
 
-    Timer_startHeartbeat();
+    Timer_startAll();
 }
 
 void TestClock::button0Callback(void* context) { static_cast<TestClock*>(context)->cycleMode(); }

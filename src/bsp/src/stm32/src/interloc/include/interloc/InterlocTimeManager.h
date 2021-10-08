@@ -14,8 +14,8 @@
 #define RX_BEFORE_TX_GUARD_US 10U
 #define TIMEOUT_GUARD_US 100U
 #define DEAD_TIME 200U
-#define ANGLE_TO_ANGLE_GUARD 2000U
-#define FINAL_TO_ANGLE_GUARD 2000U
+#define ANGLE_TO_ANGLE_GUARD 1000U
+#define FINAL_TO_ANGLE_GUARD 1000U
 
 #define NUM_ANGLE_MSG 75
 #define NUM_ANGLE_ANTENNAS 3
@@ -41,6 +41,7 @@ class InterlocTimeManager {
 
     uint64_t getAngleTxStartTs(uint64_t startOfFrameTs, uint32_t angleId) const;
     uint64_t getAngleRxStartTs(uint64_t startOfFrameTs, uint32_t angleId) const;
+    uint64_t getAngleRxStopTs(uint64_t startOfFrameTs) const;
     uint64_t getAngleToAngleOffsetUs() const;
 
     uint16_t getFrameLengthUs() const;
