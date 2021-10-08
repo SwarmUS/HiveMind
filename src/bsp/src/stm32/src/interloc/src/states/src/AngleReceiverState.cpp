@@ -15,7 +15,7 @@ void AngleReceiverState::process(InterlocStateHandler& context) {
     uint32_t receivedFrames = 0;
     uint32_t iterations = 0;
     uint32_t maxIterations =
-        managerState == InterlocStateDTO::ANGLE_CALIB_RECEIVER ? 500 : NUM_ANGLE_MSG;
+        managerState == InterlocStateDTO::ANGLE_CALIB_RECEIVER ? 500 : NUM_ANGLE_MSG / 2;
     uint16_t timeout =
         InterlocTimeManager::getTimeoutUs(context.getTimeManager().m_angleAirTimeWithPreambleUs);
 
@@ -63,6 +63,7 @@ bool AngleReceiverState::readAngleFrameNormalMode(const InterlocStateHandler& co
                                                   uint16_t timeoutUs) {
     uint64_t rxStartTime =
         context.getTimeManager().getAngleRxStartTs(context.getPreviousFrameStartTs(), angleId);
+    volatile uint64_t currentTs = m_decawaves.getMasterAntenna()->get().getSysTime();
 
     for (auto deca : m_decawaves.getAngleAntennaArray()) {
         deca->get().receiveAsyncDelayed(timeoutUs, rxStartTime);

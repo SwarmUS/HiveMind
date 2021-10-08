@@ -172,7 +172,7 @@ void Decawave::receiveAsyncDelayed(uint16_t timeoutUs, uint64_t rxStartTime) {
     deca_selectDevice(m_spiDevice);
     dwt_setdelayedtrxtime(rxStartTime >> 8);
 
-    receiveAsyncInternal(timeoutUs, rxStartTime);
+    receiveAsyncInternal(timeoutUs, DWT_START_RX_DELAYED);
 }
 
 bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {

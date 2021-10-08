@@ -228,13 +228,15 @@ uint64_t InterlocTimeManager::getPollTxStartTs(uint64_t startOfFrameTs) const {
 
 uint16_t InterlocTimeManager::getSyncTimeoutUs() const {
     uint32_t slotToSlotOffsetUs = getFrameLengthUs();
-    return slotToSlotOffsetUs + (m_bsp.generateRandomNumber() % 25) * 150;
+    return slotToSlotOffsetUs + (m_bsp.generateRandomNumber() % 25) * 10000;
 }
 
 uint64_t InterlocTimeManager::getAngleTxStartTs(uint64_t startOfFrameTs, uint32_t angleId) const {
     return (getFinalTxTs(startOfFrameTs) +
             UUS_TO_DWT_TIME *
-                (FINAL_TO_ANGLE_GUARD + getReadWriteSPITimeUs(sizeof(UWBMessages::AngleMsg)) +
+                (m_finalAirTimeWithPreambleUs +
+                 getReadWriteSPITimeUs(sizeof(UWBMessages::TWRFinal)) + FINAL_TO_ANGLE_GUARD +
+                 getReadWriteSPITimeUs(sizeof(UWBMessages::AngleMsg)) +
                  angleId * getAngleToAngleOffsetUs())) %
            UINT40_MAX;
 }
