@@ -1,7 +1,7 @@
 ENTRY(Reset_Handler)
 
-_estack = 0x24000000 + 320k;
-_Min_Heap_Size = 0x200;
+_estack = ORIGIN(DTCMRAM) + LENGTH(DTCMRAM); /* end of "RAM" Ram type memory */
+_Min_Heap_Size = 0x600;
 _Min_Stack_Size = 0x400;
 
 MEMORY
@@ -100,6 +100,19 @@ SECTIONS
     __bss_end__ = _ebss;
   } >RAM_D1
 
+  /* stack/heap may change section so we keep the user tcm in it's own section*/
+  .user_tcm :{
+    . = ALIGN(4);
+    KEEP(*(.user_tcm))
+    . = ALIGN(4);
+  } >DTCMRAM
+
+  .user_tcm_data :{
+    . = ALIGN(4);
+    KEEP(*(.user_tcm_data))
+    . = ALIGN(4);
+  } >DTCMRAM AT> FLASH
+
   ._user_heap_stack :
   {
     . = ALIGN(8);
@@ -108,7 +121,7 @@ SECTIONS
     . = . + _Min_Heap_Size;
     . = . + _Min_Stack_Size;
     . = ALIGN(8);
-  } >RAM_D1
+  } >DTCMRAM
 
   .lwip_sec (NOLOAD) : {
     . = ABSOLUTE(0x30000000);

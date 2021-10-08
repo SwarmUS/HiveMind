@@ -46,15 +46,6 @@ double InterlocManager::getDistance(const tf2::Transform& transform) {
                 pow(transform.getOrigin().z(), 2));
 }
 
-double InterlocManager::getRelativeOrientation(const tf2::Transform& transform) {
-    double roll;
-    double pitch;
-    double yaw;
-    tf2::Matrix3x3(transform.getRotation()).getRPY(roll, pitch, yaw);
-
-    return yaw;
-}
-
 double InterlocManager::getAngleOfArrival(const tf2::Transform& agentToAgentTransform) {
     return atan2(agentToAgentTransform.getOrigin().y(), agentToAgentTransform.getOrigin().x());
 }
@@ -125,22 +116,19 @@ void InterlocManager::gazeboUpdateCallback(const gazebo_msgs::ModelStates& msg) 
         tf2::Transform relTransform = currentAgentTf.inverseTimes(distantAgentTf);
 
         double distance = getDistance(relTransform);
-        double orientation = getRelativeOrientation(relTransform) * 180 / M_PI;
         double angle = getAngleOfArrival(relTransform) * 180 / M_PI;
 
         if (m_positionUpdateCallback != nullptr) {
             InterlocUpdate update;
             update.m_robotId = agentId;
             update.m_distance = distance;
-            update.m_relativeOrientation = orientation;
             update.m_angleOfArrival = angle;
             update.m_isInLineOfSight = true; // TODO: maybe add a way to get LOS
 
             m_positionUpdateCallback(m_positionUpdateContext, update);
 
-            m_logger.log(LogLevel::Debug,
-                         "Updating position of agent %d. Dist: %f, Orientation %f, Angle %f",
-                         agentId, distance, orientation, angle);
+            m_logger.log(LogLevel::Debug, "Updating position of agent %d. Dist: %f, Angle %f",
+                         agentId, distance, angle);
         }
     }
 

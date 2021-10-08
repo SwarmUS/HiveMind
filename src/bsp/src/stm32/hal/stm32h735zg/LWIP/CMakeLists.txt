@@ -1,6 +1,27 @@
 set(LIB_NAME "swarmus-hivemind-lwip")
 set(LIB_ALIAS "SwarmUS::HiveMind::LWIP")
 
+# https://stackoverflow.com/questions/59494184/how-to-remove-a-line-of-text-in-a-string-in-cmake-working-around-cmakes-lack-o
+function(deleteinplace IN_FILE pattern)
+    # create list of lines form the contens of a file
+    file (STRINGS ${IN_FILE} LINES)
+
+    # overwrite the file....
+    file(WRITE ${IN_FILE} "")
+
+    # loop through the lines,
+    # remove unwanted parts
+    # and write the (changed) line ...
+    foreach(LINE IN LISTS LINES)
+        string(REGEX REPLACE ${pattern} "" STRIPPED "${LINE}")
+        file(APPEND ${IN_FILE} "${STRIPPED}\n")
+    endforeach()
+endfunction()
+
+# D-Cache was not activated as it causes problems when saving data to cache
+# This line deletes any references to SCB_InvalidateDCache_by_Addr() as it can cause hardfaults at runtime if D-Cache is not activated.
+deleteinplace(Target/ethernetif.c "SCB_InvalidateDCache_by_Addr.*")
+
 find_package(CMSIS_RTOS COMPONENTS
         STM32H735ZG_M7
         REQUIRED)

@@ -28,6 +28,8 @@ set(LIB_HEADERS
     Core/Inc/tim.h
 )
 
+file(REMOVE Core/Inc/FreeRTOSConfig.h) #Need to remove since we already provide it in the OS, but can't disable it in cubemx since lwip config depends on it
+
 # Sources that needs to be global on the project
 # Ex: interrupts, syscalls, callbacks
 set(GLOBAL_SOURCES

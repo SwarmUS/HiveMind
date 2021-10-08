@@ -34,7 +34,7 @@ TEST_F(BittyBuzzNeighborsManagerTestFixture, BittyBuzzNeighborsManager_updateNei
     pos.m_robotId = m_robotId;
     pos.m_distance = 0;
     pos.m_isInLineOfSight = true;
-    pos.m_relativeOrientation = 0;
+    pos.m_angle = 0;
 
     const std::optional<std::reference_wrapper<const uint16_t>> robotId = m_robotId;
     const std::optional<RelativePosition> posOpt = pos;

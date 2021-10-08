@@ -20,7 +20,7 @@ MATCHER_P(MessageGetNeighborResponseDTOMatcher,
     bool match = getNeighbor.getNeighborId() == pos.m_robotId;
     auto posOpt = getNeighbor.getNeighborPosition();
     match = match && pos.m_distance == posOpt.value().getDistance();
-    match = match && pos.m_relativeOrientation == posOpt.value().getRelativeOrientation();
+    match = match && pos.m_angle == posOpt.value().getAzimuth();
     match = match && pos.m_isInLineOfSight == posOpt.value().inLOS();
     return match;
 }

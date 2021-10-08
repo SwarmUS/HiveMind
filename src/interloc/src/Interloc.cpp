@@ -67,10 +67,6 @@ void Interloc::updateRobotPosition(RelativePosition& positionToUpdate, InterlocU
         positionToUpdate.m_distance = update.m_distance.value();
     }
 
-    if (update.m_relativeOrientation) {
-        positionToUpdate.m_relativeOrientation = update.m_relativeOrientation.value();
-    }
-
     if (update.m_angleOfArrival) {
         positionToUpdate.m_angle = update.m_angleOfArrival.value();
     }

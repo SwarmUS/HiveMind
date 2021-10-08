@@ -60,7 +60,7 @@ TEST_F(HiveMindHostApiRequestHandlerFixture,
     // Given
     RelativePosition pos;
     pos.m_distance = 1;
-    pos.m_relativeOrientation = 1;
+    pos.m_angle = 1;
     pos.m_robotId = 42;
     pos.m_isInLineOfSight = true;
 
@@ -109,7 +109,7 @@ TEST_F(HiveMindHostApiRequestHandlerFixture,
     PositionsTable posTable;
     posTable.m_positionsLength = 1;
     posTable.m_positions[0].m_distance = 42;
-    posTable.m_positions[0].m_relativeOrientation = 24;
+    posTable.m_positions[0].m_angle = 24;
     posTable.m_positions[0].m_robotId = 8;
     posTable.m_positions[0].m_isInLineOfSight = true;
 

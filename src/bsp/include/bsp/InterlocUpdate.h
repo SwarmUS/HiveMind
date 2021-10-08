@@ -13,11 +13,6 @@ struct InterlocUpdate {
     std::optional<float> m_distance;
 
     /**
-     * @brief Relative orientation in degrees
-     */
-    std::optional<float> m_relativeOrientation;
-
-    /**
      * @brief Angle of the distant agent in the frame of the current agent (in degrees)
      */
     std::optional<float> m_angleOfArrival;
