@@ -12,47 +12,53 @@ InterlocTimeManager::InterlocTimeManager(IBSP& bsp) :
     m_slotId(2)
 
 {
-
+    updateTimings();
     // keep these around for debug purposes.
     // could be deleted once integrated and tested with the HBx6
-    /*
-        m_pollAirTimeWithPreambleUs = computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRPoll) <<
-       3); m_responseAirTimeWithPreambleUs =
-            computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRResponse) << 3);
-        m_finalAirTimeWithPreambleUs = computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRFinal) <<
-       3); m_pollToFirstResponseGuardUs = getReadWriteSPITimeUs(sizeof(UWBMessages::TWRPoll)) +
-                                       POLL_PROCESSING_GUARD + getPreambleAirTimeUs();
 
-        uint64_t startOfFrameTs = 0; // Absolute reference in all timings
+    /*m_pollAirTimeWithPreambleUs = computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRPoll) << 3);
+    m_responseAirTimeWithPreambleUs =
+        computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRResponse) << 3);
+    m_finalAirTimeWithPreambleUs = computeAirTimeWithPreambleUs(sizeof(UWBMessages::TWRFinal) << 3);
+    m_pollToFirstResponseGuardUs = getReadWriteSPITimeUs(sizeof(UWBMessages::TWRPoll)) +
+                                   POLL_PROCESSING_GUARD + getPreambleAirTimeUs();
 
-        computeResponseRxTs(startOfFrameTs);
+    uint64_t startOfFrameTs = 0; // Absolute reference in all timings
 
-        volatile uint64_t responseTxTs[MAX_INTERLOC_SUBFRAMES];
-        for (unsigned int i = 1; i < 6; i++) {
-            m_slotId = i;
-            responseTxTs[i - 1] = getResponseTxTs(startOfFrameTs);
-        }
-        m_slotId = 2;
-        volatile uint64_t finalRxTs = getFinalRxTs(startOfFrameTs);
-        volatile uint64_t finalTxTs = getFinalTxTs(startOfFrameTs);
-        volatile uint16_t pollTO = getTimeoutUs(m_pollAirTimeWithPreambleUs);
-        volatile uint16_t responseTO = getTimeoutUs(m_responseAirTimeWithPreambleUs);
-        volatile uint16_t finalTO = getTimeoutUs(m_finalAirTimeWithPreambleUs);
-        volatile uint64_t newPollRxTs = getPollRxStartTs(startOfFrameTs);
-        volatile uint64_t newPollTxTs = getPollTxStartTs(startOfFrameTs);
+    computeResponseRxTs(startOfFrameTs);
 
-        responseTxTs[0]++;
-        finalRxTs++;
-        finalTxTs++;
-        m_responseRxTs[9] = 0;
-        pollTO++;
-        responseTO++;
-        finalTO++;
-        newPollRxTs++;
-        newPollTxTs++;
-        */
+    volatile uint64_t responseTxTs[MAX_INTERLOC_SUBFRAMES];
+    for (unsigned int i = 1; i < 6; i++) {
+        m_slotId = i;
+        responseTxTs[i - 1] = getResponseTxTs(startOfFrameTs);
+    }
+    m_slotId = 2;
+    volatile uint64_t finalRxTs = getFinalRxTs(startOfFrameTs);
+    volatile uint64_t finalTxTs = getFinalTxTs(startOfFrameTs);
+    volatile uint16_t pollTO = getTimeoutUs(m_pollAirTimeWithPreambleUs);
+    volatile uint16_t responseTO = getTimeoutUs(m_responseAirTimeWithPreambleUs);
+    volatile uint16_t finalTO = getTimeoutUs(m_finalAirTimeWithPreambleUs);
+    volatile uint64_t newPollRxTs = getPollRxStartTs(startOfFrameTs);
+    volatile uint64_t newPollTxTs = getPollTxStartTs(startOfFrameTs);
 
-    updateTimings();
+    volatile uint64_t angleStartTs[NUM_ANGLE_MSG];
+    for (unsigned int i = 0; i < NUM_ANGLE_MSG; i++) {
+        angleStartTs[i] = getAngleTxStartTs(startOfFrameTs, i);
+    }
+    volatile uint64_t supposedNextFrameStart = getSupposedNextFrameStart(startOfFrameTs);
+    volatile uint32_t frameLength = getFrameLengthUs();
+    volatile uint16_t angleLength = getAngleToAngleOffsetUs();
+
+    finalRxTs++;
+    finalTxTs++;
+    pollTO++;
+    responseTO++;
+    finalTO++;
+    newPollRxTs++;
+    newPollTxTs++;
+    supposedNextFrameStart++;
+    frameLength++;
+    angleLength++;*/
 }
 
 void InterlocTimeManager::setNumSlots(uint16_t numSlots) {
@@ -233,15 +239,14 @@ uint16_t InterlocTimeManager::getSyncTimeoutUs() const {
 
 uint64_t InterlocTimeManager::getAngleTxStartTs(uint64_t startOfFrameTs, uint32_t angleId) const {
     return (getFinalTxTs(startOfFrameTs) +
-            UUS_TO_DWT_TIME *
-                ((uint64_t)getReadWriteSPITimeUs(sizeof(UWBMessages::TWRFinal)) +
-                 (uint64_t)m_finalAirTimeWithPreambleUs + (uint64_t)FINAL_TO_ANGLE_GUARD +
-                 (uint64_t)getReadWriteSPITimeUs(sizeof(UWBMessages::AngleMsg)) +
-                 (uint64_t)(angleId * getAngleToAngleOffsetUs()))) %
+            UUS_TO_DWT_TIME * (getReadWriteSPITimeUs(sizeof(UWBMessages::TWRFinal)) +
+                               m_finalAirTimeWithPreambleUs + (uint64_t)FINAL_TO_ANGLE_GUARD +
+                               getReadWriteSPITimeUs(sizeof(UWBMessages::AngleMsg)) +
+                               (angleId * getAngleToAngleOffsetUs()))) %
            UINT40_MAX;
 }
 
-uint64_t InterlocTimeManager::getAngleRxStartTs(uint64_t startOfFrameTs, uint32_t angleId) const {
+uint64_t InterlocTimeManager::getAngleRxStartTs(uint64_t startOfFrameTs) const {
     return (getFinalRxTs(startOfFrameTs) +
             UUS_TO_DWT_TIME * (getReadWriteSPITimeUs(sizeof(UWBMessages::TWRFinal) +
                                                      m_finalAirTimeWithPreambleUs))) %
@@ -254,8 +259,7 @@ uint64_t InterlocTimeManager::getAngleRxStopTs(uint64_t startOfFrameTs) const {
            UINT40_MAX;
 }
 
-uint16_t InterlocTimeManager::getFrameLengthUs() const {
-    volatile uint16_t x = getAngleTxStartTs(0, NUM_ANGLE_MSG - 1) / UUS_TO_DWT_TIME;
+uint32_t InterlocTimeManager::getFrameLengthUs() const {
     return (getAngleTxStartTs(0, NUM_ANGLE_MSG - 1) / UUS_TO_DWT_TIME +
             m_angleAirTimeWithPreambleUs + getReadWriteSPITimeUs(sizeof(UWBMessages::AngleMsg)) +
             FINAL_PROCESSING_GUARD);
