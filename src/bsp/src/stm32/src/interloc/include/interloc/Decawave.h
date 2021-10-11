@@ -61,36 +61,36 @@ class Decawave {
     void setSpeed(UWBSpeed speed);
 
     /**
-     * @brief Starts listening for a packet and blocks until received
-     * @param frame [out] Variable in which all frame data will be put once packet is received
+     * @brief Starts listening for a packet and blocks until received. Once received, the packet
+     * data can be retrieved with retrieveRxFrame().
      * @param timeoutUs Timeout in microseconds. 0 to block indefinitely
+     * @return The status of the reception.
      */
-    void receive(UWBRxFrame& frame, uint16_t timeoutUs);
+    UWBRxStatus receive(uint16_t timeoutUs);
 
     /**
-     * @brief Starts listening for a packet at a given timestamp and blocks until received
-     * @param frame [out] Variable in which all frame data will be put once packet is received
+     * @brief Starts listening for a packet at a given timestamp and blocks until received. Once
+     * received, the packet data can be retrieved with retrieveRxFrame().
      * @param timeoutUs Timeout in microseconds. 0 to block indefinitely
      * @param rxStartTime DW timestamp at which to start the RX
+     * @return The status of the reception.
      */
-    void receiveDelayed(UWBRxFrame& frame, uint16_t timeoutUs, uint64_t rxStartTime);
+    UWBRxStatus receiveDelayed(uint16_t timeoutUs, uint64_t rxStartTime);
 
     /**
-     * @brief Starts listening for a packet without blocking. The user should poll the frame.status
+     * @brief Starts listening for a packet without blocking. The user should poll getRxStatus()
      * to see if transmission has been received.
-     * @param frame [out] Variable in which all frame data will be put once packet is received
      * @param timeoutUs Timeout in microseconds. 0 to block indefinitely
      */
-    void receiveAsync(UWBRxFrame& frame, uint16_t timeoutUs);
+    void receiveAsync(uint16_t timeoutUs);
 
     /**
      * @brief Starts listening for a packet at a given timestamp without blocking. The user should
-     * poll the frame.status to see if transmission has been received.
-     * @param frame [out] Variable in which all frame data will be put once packet is received
+     * poll getRxStatus() to see if transmission has been received.
      * @param timeoutUs Timeout in microseconds. 0 to block indefinitely
      * @param rxStartTime DW timestamp at which to start the RX
      */
-    void receiveAsyncDelayed(UWBRxFrame& frame, uint16_t timeoutUs, uint64_t rxStartTime);
+    void receiveAsyncDelayed(uint16_t timeoutUs, uint64_t rxStartTime);
 
     /**
      * @brief Transmits data over UWB
@@ -114,15 +114,13 @@ class Decawave {
      * @param buf Buffer to transmit
      * @param length Length of the data
      * @param rxAfterTxTimeUs Number of microseconds between the TX and the start of the RX
-     * @param frame [out] Variable in which all frame data will be put once packet is received
      * @param rxTimeoutUs Timeout in microseconds. 0 to block indefinitely
-     * @return True if successful, false otherwise.
+     * @return An UWBRxStatus if successful, false otherwise.
      */
-    bool transmitAndReceive(uint8_t* buf,
-                            uint16_t length,
-                            uint32_t rxAfterTxTimeUs,
-                            UWBRxFrame& frame,
-                            uint16_t rxTimeoutUs);
+    std::optional<UWBRxStatus> transmitAndReceive(uint8_t* buf,
+                                                  uint16_t length,
+                                                  uint32_t rxAfterTxTimeUs,
+                                                  uint16_t rxTimeoutUs);
 
     /**
      * @brief Transmits data over UWB and blocks until response is received
@@ -130,30 +128,26 @@ class Decawave {
      * @param length Length of the data
      * @param txTimestamp DW timestamp at which to start the transmission
      * @param rxAfterTxTimeUs Number of microseconds between the TX and the start of the RX
-     * @param frame [out] Variable in which all frame data will be put once packet is received
      * @param rxTimeoutUs Timeout in microseconds. 0 to block indefinitely
-     * @return True if successful, false otherwise.
+     * @return An UWBRxStatus if successful, false otherwise.
      */
-    bool transmitDelayedAndReceive(uint8_t* buf,
-                                   uint16_t length,
-                                   uint64_t txTimestamp,
-                                   uint32_t rxAfterTxTimeUs,
-                                   UWBRxFrame& frame,
-                                   uint16_t rxTimeoutUs);
+    std::optional<UWBRxStatus> transmitDelayedAndReceive(uint8_t* buf,
+                                                         uint16_t length,
+                                                         uint64_t txTimestamp,
+                                                         uint32_t rxAfterTxTimeUs,
+                                                         uint16_t rxTimeoutUs);
     /**
      * @brief Transmits data over UWB and blocks until response is received
      * @param buf Buffer to transmit
      * @param length Length of the data
      * @param rxStartDelayUS Number of microseconds between the TX and the start of the RX
-     * @param frame [out] Variable in which all frame data will be put once packet is received
      * @param rxTimeoutUs Timeout in microseconds. 0 to block indefinitely
-     * @return True if successful, false otherwise.
+     * @return An UWBRxStatus if successful, false otherwise.
      */
-    bool transmitAndReceiveDelayed(uint8_t* buf,
-                                   uint16_t length,
-                                   uint32_t rxStartDelayUS,
-                                   UWBRxFrame& frame,
-                                   uint16_t rxTimeoutUs);
+    std::optional<UWBRxStatus> transmitAndReceiveDelayed(uint8_t* buf,
+                                                         uint16_t length,
+                                                         uint32_t rxStartDelayUS,
+                                                         uint16_t rxTimeoutUs);
 
     /**
      * Prepares the DW1000 for a clock sync
@@ -195,7 +189,7 @@ class Decawave {
      * @brief Retrieves reception timestamp in DecawaveTimeUnits
      * @param rxTimestamp Reception timestamp in DecawaveTimeUnits
      */
-    void getRxTimestamp(uint64_t* rxTimestamp);
+    void getRxTimestamp(uint64_t* rxTimestamp) const;
 
     /**
      * @brief Retrieves present time DecawaveTimeUnits
@@ -229,6 +223,24 @@ class Decawave {
      */
     bool isReady() const;
 
+    /**
+     * @brief Retrieves RX frame information from the Decawave's internal registers
+     * @param frame A reference to the frame in which to save the information
+     */
+    void retrieveRxFrame(UWBRxFrame& frame) const;
+
+    /**
+     * @brief Returns the status of the last RX operation
+     * @return Status
+     */
+    UWBRxStatus getRxStatus() const;
+
+    /**
+     * @brief Blocks until the ongoing RX operation is finished, returning the RxStatus
+     * @return Status of the finished RX operation
+     */
+    UWBRxStatus awaitRx();
+
   private:
     decaDevice_t m_spiDevice;
     dwt_config_t m_dwConfig;
@@ -241,33 +253,25 @@ class Decawave {
     TaskHandle_t m_trxTaskHandle;
     dwt_cb_data_t m_callbackData;
 
-    BaseTask<configMINIMAL_STACK_SIZE> m_rxAsyncTask;
     UWBRxFrame* m_rxFrame;
 
     std::array<uint8_t, UWB_MAX_LENGTH> m_txBuffer;
 
     DW_STATE m_state;
 
+    UWBRxStatus m_rxStatus;
+
     bool m_isReady;
 
     void configureDW();
     bool transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags);
 
-    void receiveInternal(UWBRxFrame& frame,
-                         uint16_t timeoutUs,
-                         uint8_t flags,
-                         bool rxStarted = false);
-    void receiveAsyncInternal(UWBRxFrame& frame,
-                              uint16_t timeoutUs,
-                              uint8_t flags,
-                              bool rxStarted = false);
-
-    void retrieveRxFrame(UWBRxFrame* frame);
+    UWBRxStatus receiveInternal(uint16_t timeoutUs, uint8_t flags, bool rxStarted = false);
+    void receiveAsyncInternal(uint16_t timeoutUs, uint8_t flags, bool rxStarted = false);
 
     static void rxCallback(const dwt_cb_data_t* callbackData, void* context);
     static void txCallback(const dwt_cb_data_t* callbackData, void* context);
     static void isrCallback(void* context);
-    static void rxAsyncTask(void* context);
 };
 // user manual : https://www.decawave.com/sites/default/files/resources/dw1000_user_manual_2.11.pdf
 // datasheet : https://www.decawave.com/sites/default/files/resources/dw1000-datasheet-v2.09.pdf

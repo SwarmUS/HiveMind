@@ -70,15 +70,16 @@ class RxTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
         uint8_t receivedMsgs = 0;
 
         while (true) {
-            deca.receive(m_rxFrame, 2000);
+            UWBRxStatus status = deca.receive(2000);
 
-            if (m_rxFrame.m_status == UWBRxStatus::FINISHED) {
+            if (status == UWBRxStatus::FINISHED) {
+                deca.retrieveRxFrame(m_rxFrame);
                 m_logger.log(LogLevel::Info, "Received UWB message: %s",
                              m_rxFrame.m_rxBuffer.data());
                 receivedMsgs++;
 
                 UI_setHexOutput(receivedMsgs % 0x0F);
-            } else if (m_rxFrame.m_status == UWBRxStatus::ERROR) {
+            } else if (status == UWBRxStatus::ERROR) {
                 m_logger.log(LogLevel::Error, "Error while receiving UWB message");
             }
         }

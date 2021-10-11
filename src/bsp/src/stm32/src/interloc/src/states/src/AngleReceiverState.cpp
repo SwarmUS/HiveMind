@@ -11,12 +11,10 @@ void AngleReceiverState::process(InterlocStateHandler& context) {
         return;
     }
 
-    std::array<UWBRxFrame, numDecas> rxFrames;
-
     // TODO: Add some kind of timeout
     for (uint32_t i = 0; i < context.getAngleNumberOfFrames(); i++) {
-        readAngleFrame(rxFrames);
-        saveAngleData(context.getRawAngleData(), rxFrames, i);
+        readAngleFrame();
+        saveAngleData(context.getRawAngleData(), i);
     }
     context.getRawAngleData().m_framesLength = context.getAngleNumberOfFrames();
 
@@ -28,39 +26,54 @@ void AngleReceiverState::process(InterlocStateHandler& context) {
     context.setState(InterlocStates::IDLE, InterlocEvent::ANGLE_RECEIVED);
 }
 
-void AngleReceiverState::readAngleFrame(std::array<UWBRxFrame, numDecas>& rxFrames) {
-    bool allDataReceived = true;
+void AngleReceiverState::readAngleFrame() {
+    bool allDataReceived;
     do {
-        // TODO: Map dynamically
-        m_decawaves.getLeftAntenna()->get().receiveAsync(rxFrames[0], 0);
-        m_decawaves.getRightAntenna()->get().receiveAsync(rxFrames[2], 0);
-        m_decawaves.getMasterAntenna()->get().receive(rxFrames[1], 0);
+        for (auto deca : m_decawaves.getAngleAntennaArray()) {
+            deca->get().receiveAsync(0);
+        }
 
+        m_decawaves.getMasterAntenna()->get().awaitRx();
         allDataReceived = true;
-        for (auto& frame : rxFrames) {
-            if (frame.m_status != UWBRxStatus::FINISHED ||
-                reinterpret_cast<UWBMessages::AngleMsg*>(frame.m_rxBuffer.data())
-                        ->m_headerFrame.m_functionCode != UWBMessages::ANGLE) {
+
+        // Verify all decawaves received a message
+        for (auto deca : m_decawaves.getAngleAntennaArray()) {
+            UWBRxStatus status = deca->get().getRxStatus();
+
+            if (status == UWBRxStatus::ONGOING) {
+                status = deca->get().awaitRx();
+            }
+
+            if (status != UWBRxStatus::FINISHED) {
                 allDataReceived = false;
             }
         }
 
+        // If all decawaves received a frame, extract data from the internal registers (if one of
+        // the received messages was not angle message, abort)
+        if (allDataReceived) {
+            for (uint8_t i = 0; i < m_decawaves.getAngleAntennaArray().size(); i++) {
+                m_decawaves.getAngleAntennaArray()[i]->get().retrieveRxFrame(m_rxFrames[i]);
+                if (reinterpret_cast<UWBMessages::AngleMsg*>(m_rxFrames[i].m_rxBuffer.data())
+                        ->m_headerFrame.m_functionCode != UWBMessages::ANGLE) {
+                    allDataReceived = false;
+                    break;
+                }
+            }
+        }
     } while (!allDataReceived);
 }
 
-void AngleReceiverState::saveAngleData(BspInterlocRawAngleData& data,
-                                       std::array<UWBRxFrame, numDecas>& rxFrames,
-                                       uint32_t frameIndex) {
-    data.m_frames[frameIndex].m_frameInfosLength = rxFrames.size();
+void AngleReceiverState::saveAngleData(BspInterlocRawAngleData& data, uint32_t frameIndex) {
+    data.m_frames[frameIndex].m_frameInfosLength = m_rxFrames.size();
 
-    uint8_t j = 0;
-    for (auto& frame : rxFrames) {
-        data.m_frames[frameIndex].m_frameInfos[j].m_beeboardPort = j;
-        data.m_frames[frameIndex].m_frameInfos[j].m_rxTimestamp = frame.m_rxTimestamp;
-        data.m_frames[frameIndex].m_frameInfos[j].m_sfdAngle = frame.getSFDAngle();
-        data.m_frames[frameIndex].m_frameInfos[j].m_accumulatorAngle = frame.getAccumulatorAngle();
-        j++;
-        data.m_frames[frameIndex].m_frameInfos[j].m_messageId =
-            reinterpret_cast<UWBMessages::AngleMsg*>(frame.m_rxBuffer.data())->m_messageId;
+    for (uint8_t i = 0; i < m_rxFrames.size(); i++) {
+        data.m_frames[frameIndex].m_frameInfos[i].m_beeboardPort = i;
+        data.m_frames[frameIndex].m_frameInfos[i].m_rxTimestamp = m_rxFrames[i].m_rxTimestamp;
+        data.m_frames[frameIndex].m_frameInfos[i].m_sfdAngle = m_rxFrames[i].getSFDAngle();
+        data.m_frames[frameIndex].m_frameInfos[i].m_accumulatorAngle =
+            m_rxFrames[i].getAccumulatorAngle();
+        data.m_frames[frameIndex].m_frameInfos[i].m_messageId =
+            reinterpret_cast<UWBMessages::AngleMsg*>(m_rxFrames[i].m_rxBuffer.data())->m_messageId;
     }
 }

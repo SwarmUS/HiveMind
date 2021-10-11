@@ -17,3 +17,5 @@ std::optional<std::reference_wrapper<Decawave>> DecawaveArray::getMasterAntenna(
 std::optional<std::reference_wrapper<Decawave>> DecawaveArray::getLeftAntenna() { return {}; }
 
 std::optional<std::reference_wrapper<Decawave>> DecawaveArray::getRightAntenna() { return {}; }
+
+void DecawaveArray::initializeAngleAntennaArray() {}

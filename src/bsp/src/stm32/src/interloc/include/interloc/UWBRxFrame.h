@@ -13,8 +13,6 @@ enum class UWBRxStatus { ONGOING, FINISHED, TIMEOUT, ERROR };
 struct UWBRxFrame {
     uint16_t m_length = 0;
     uint64_t m_rxTimestamp = 0;
-    UWBRxStatus m_status = UWBRxStatus::ONGOING;
-    uint32_t m_statusReg = 0;
     uint8_t m_sfdAngleRegister = 0;
     uint8_t m_firstPathAccumulator[ACCUMULATOR_DATA_SIZE]{};
 

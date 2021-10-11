@@ -66,7 +66,6 @@ class InterlocManager : public IInterlocManager {
 
     InterlocStateDTO m_state;
 
-    bool isFrameOk(UWBRxFrame frame);
     static uint8_t powerCorrection(double twrDistance);
 };
 

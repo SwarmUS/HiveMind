@@ -17,13 +17,14 @@ void SyncState::process(InterlocStateHandler& context) {
         uint32_t rxTimeoutUs = initialRxTimeoutUs;
 
         while (rxTimeoutUs > RX_RELOAD_OVERHEAD_US) {
-            deca->get().receive(m_rxFrame, rxTimeoutUs);
+            UWBRxStatus status = deca->get().receive(rxTimeoutUs);
 
-            if (m_rxFrame.m_status == UWBRxStatus::TIMEOUT) {
+            if (status == UWBRxStatus::TIMEOUT) {
                 context.setState(InterlocStates::SEND_POLL_FROM_SYNC, InterlocEvent::TIMEOUT);
                 return;
             }
 
+            deca->get().retrieveRxFrame(m_rxFrame);
             if (DecawaveUtils::isFramePoll(m_rxFrame)) {
                 return handlePollReceived(context);
             }

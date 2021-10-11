@@ -55,3 +55,9 @@ std::optional<std::reference_wrapper<Decawave>> DecawaveArray::getRightAntenna()
 
     return {};
 }
+
+void DecawaveArray::initializeAngleAntennaArray() {
+    m_angleAntennaArray[0] = getLeftAntenna();
+    m_angleAntennaArray[1] = getMasterAntenna();
+    m_angleAntennaArray[2] = getRightAntenna();
+}
