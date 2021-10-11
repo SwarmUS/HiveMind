@@ -11,8 +11,8 @@ void AngleReceiverState::timerCallback() {
     if (m_timeoutHundredMicros > 0) {
         m_timeoutHundredMicros--;
     } else {
-        abortRx();
         Timer_setHundredMicrosCallback(nullptr, nullptr);
+        abortRx();
     }
 }
 
@@ -27,21 +27,23 @@ void AngleReceiverState::process(InterlocStateHandler& context) {
     InterlocStateDTO managerState = InterlocBSPContainer::getInterlocManager().getState();
 
     uint32_t receivedFrames = 0;
-    uint32_t iterations = 0;
     uint32_t maxIterations = managerState == InterlocStateDTO::ANGLE_CALIB_RECEIVER
                                  ? context.getAngleCalibNumberOfFrames()
-                                 : NUM_ANGLE_MSG / 2;
-    uint64_t rxStopTime =
-        context.getTimeManager().getAngleRxStopTs(context.getPreviousFrameStartTs());
-    uint64_t currentTs = m_decawaves.getMasterAntenna()->get().getSysTime();
-    m_timeoutHundredMicros = ((rxStopTime - currentTs) % UINT40_MAX) / UUS_TO_DWT_TIME / 100;
-    m_aborted = false;
-    Timer_setHundredMicrosCallback(staticTimerCallback, this);
+                                 : NUM_ANGLE_MSG_RECEIVER;
+
+    if (managerState != InterlocStateDTO::ANGLE_CALIB_RECEIVER) {
+        uint64_t rxStopTime =
+            context.getTimeManager().getAngleRxStopTs(context.getPreviousFrameStartTs());
+        uint64_t currentTs = m_decawaves.getMasterAntenna()->get().getSysTime();
+        m_timeoutHundredMicros = ((rxStopTime - currentTs) % UINT40_MAX) / UUS_TO_DWT_TIME / 100;
+        m_aborted = false;
+        Timer_setHundredMicrosCallback(staticTimerCallback, this);
+    }
 
     while (receivedFrames < maxIterations && !m_aborted) {
         bool allDataReceived = false;
 
-        allDataReceived = readAngleFrameContinuousMode();
+        allDataReceived = readAngleFrame();
 
         if (allDataReceived) {
             saveAngleData(context.getRawAngleData(), receivedFrames);
@@ -60,7 +62,7 @@ void AngleReceiverState::process(InterlocStateHandler& context) {
     context.setState(InterlocStates::CALCULATE_INTERLOC, InterlocEvent::ANGLE_RECEIVED);
 }
 
-bool AngleReceiverState::readAngleFrameContinuousMode() {
+bool AngleReceiverState::readAngleFrame() {
     for (auto deca : m_decawaves.getAngleAntennaArray()) {
         deca->get().receiveAsync(0);
     }

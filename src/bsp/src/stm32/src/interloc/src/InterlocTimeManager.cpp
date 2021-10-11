@@ -41,8 +41,8 @@ InterlocTimeManager::InterlocTimeManager(IBSP& bsp) :
     volatile uint64_t newPollRxTs = getPollRxStartTs(startOfFrameTs);
     volatile uint64_t newPollTxTs = getPollTxStartTs(startOfFrameTs);
 
-    volatile uint64_t angleStartTs[NUM_ANGLE_MSG];
-    for (unsigned int i = 0; i < NUM_ANGLE_MSG; i++) {
+    volatile uint64_t angleStartTs[NUM_ANGLE_MSG_SENDER];
+    for (unsigned int i = 0; i < NUM_ANGLE_MSG_SENDER; i++) {
         angleStartTs[i] = getAngleTxStartTs(startOfFrameTs, i);
     }
     volatile uint64_t supposedNextFrameStart = getSupposedNextFrameStart(startOfFrameTs);
@@ -260,7 +260,7 @@ uint64_t InterlocTimeManager::getAngleRxStopTs(uint64_t startOfFrameTs) const {
 }
 
 uint32_t InterlocTimeManager::getFrameLengthUs() const {
-    return (getAngleTxStartTs(0, NUM_ANGLE_MSG - 1) / UUS_TO_DWT_TIME +
+    return (getAngleTxStartTs(0, NUM_ANGLE_MSG_SENDER - 1) / UUS_TO_DWT_TIME +
             m_angleAirTimeWithPreambleUs + getReadWriteSPITimeUs(sizeof(UWBMessages::AngleMsg)) +
             FINAL_PROCESSING_GUARD);
 }

@@ -29,7 +29,7 @@ void AngleSenderState::process(InterlocStateHandler& context) {
 void AngleSenderState::sendAngleFramesContinuousMode(const InterlocStateHandler& context) {
     uint64_t lastAngleTime = m_decawaves.getMasterAntenna()->get().getSysTime();
 
-    for (uint32_t i = 0; i < NUM_ANGLE_MSG; i++) {
+    for (uint32_t i = 0; i < NUM_ANGLE_MSG_SENDER; i++) {
         m_msg.m_messageId = i;
         lastAngleTime =
             (lastAngleTime + context.getTimeManager().getAngleToAngleOffsetUs() * UUS_TO_DWT_TIME) %
@@ -40,7 +40,7 @@ void AngleSenderState::sendAngleFramesContinuousMode(const InterlocStateHandler&
 }
 
 void AngleSenderState::sendAngleFramesNormalMode(const InterlocStateHandler& context) {
-    for (uint32_t i = 0; i < NUM_ANGLE_MSG; i++) {
+    for (uint32_t i = 0; i < NUM_ANGLE_MSG_SENDER; i++) {
         m_msg.m_messageId = i;
         uint64_t angleTxTime =
             context.getTimeManager().getAngleTxStartTs(context.getPreviousFrameStartTs(), i);

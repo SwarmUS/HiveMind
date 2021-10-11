@@ -17,7 +17,7 @@ class AngleReceiverState : public AbstractInterlocState {
     volatile bool m_aborted = false;
 
     void saveAngleData(BspInterlocRawAngleData& data, uint32_t frameIndex);
-    bool readAngleFrameContinuousMode();
+    bool readAngleFrame();
     bool readAngleFrameNormalMode(const InterlocStateHandler& context,
                                   uint32_t angleId,
                                   uint16_t timeoutUs);

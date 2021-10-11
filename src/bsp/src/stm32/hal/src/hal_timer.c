@@ -14,6 +14,7 @@ void Timer_startAll() {
 void Timer_stopHeartbeat() { HAL_TIM_Base_Stop_IT(HEARTBEAT_TIMER); }
 
 void Timer_setHeartbeatCallback(timerCallbackFct_t callback) { g_heartbeatCallback = callback; }
+
 void Timer_setHundredMicrosCallback(timerCallbackFct_t callback, void* context) {
     g_hundredMicrosCallback = callback;
     g_hundredMicrosContext = context;

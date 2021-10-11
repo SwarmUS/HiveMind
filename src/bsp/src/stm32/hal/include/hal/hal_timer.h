@@ -10,7 +10,7 @@ extern "C" {
 typedef void (*timerCallbackFct_t)(void*);
 
 /**
- * @brief Starts the heartbeat timer interrupt
+ * @brief Starts all hardware timers used by the system
  */
 void Timer_startAll();
 
@@ -25,6 +25,11 @@ void Timer_stopHeartbeat();
  */
 void Timer_setHeartbeatCallback(timerCallbackFct_t callback);
 
+/**
+ * @brief Sets a callback called every hundred microseconds
+ * @param callback Function to call
+ * @param context Context to pass to the callback
+ */
 void Timer_setHundredMicrosCallback(timerCallbackFct_t callback, void* context);
 
 #ifdef __cplusplus
