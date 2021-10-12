@@ -192,7 +192,8 @@ bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
     if (txStatus == 0) {
         // wait for the end of the transmission
         m_trxTaskHandle = xTaskGetCurrentTaskHandle();
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        ulTaskNotifyTake(pdTRUE, 100); // Avoid blocking here if something goes wrong
+        m_trxTaskHandle = nullptr;
     } else {
         //        volatile uint64_t currentTime = getSysTime();
         //        (void)currentTime;

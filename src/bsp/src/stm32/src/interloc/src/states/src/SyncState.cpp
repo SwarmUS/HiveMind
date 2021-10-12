@@ -14,27 +14,55 @@ void SyncState::process(InterlocStateHandler& context) {
     if (auto deca = m_decawaves.getMasterAntenna()) {
         uint64_t syncStartTs = deca->get().getSysTime();
         uint32_t initialRxTimeoutUs = context.getTimeManager().getSyncTimeoutUs();
-        uint32_t rxTimeoutUs = initialRxTimeoutUs;
+
+        uint16_t rxTimeoutUs = 0;
+        uint32_t remainingRxTimeoutUs = 0;
+
+        if (initialRxTimeoutUs > UINT16_MAX) {
+            rxTimeoutUs = UINT16_MAX;
+            remainingRxTimeoutUs = initialRxTimeoutUs - UINT16_MAX;
+        } else {
+            rxTimeoutUs = initialRxTimeoutUs;
+        }
 
         while (rxTimeoutUs > RX_RELOAD_OVERHEAD_US) {
             UWBRxStatus status = deca->get().receive(rxTimeoutUs);
 
-            if (status == UWBRxStatus::TIMEOUT) {
-                context.setState(InterlocStates::SEND_POLL_FROM_SYNC, InterlocEvent::TIMEOUT);
-                return;
-            }
+            if (status == UWBRxStatus::TIMEOUT && remainingRxTimeoutUs > 0) {
+                if (remainingRxTimeoutUs > UINT16_MAX) {
+                    rxTimeoutUs = UINT16_MAX;
+                    remainingRxTimeoutUs -= UINT16_MAX;
+                } else {
+                    rxTimeoutUs = remainingRxTimeoutUs;
+                    remainingRxTimeoutUs = 0;
+                }
+            } else {
+                if (status == UWBRxStatus::TIMEOUT) {
+                    context.setState(InterlocStates::SEND_POLL_FROM_SYNC, InterlocEvent::TIMEOUT);
+                    return;
+                }
 
-            deca->get().retrieveRxFrame(m_rxFrame);
-            if (DecawaveUtils::isFramePoll(m_rxFrame)) {
-                return handlePollReceived(context);
-            }
+                deca->get().retrieveRxFrame(m_rxFrame);
+                if (DecawaveUtils::isFramePoll(m_rxFrame)) {
+                    return handlePollReceived(context);
+                }
 
-            // If an unsupported message is received, restart RX for the remainder of the timeout
-            rxTimeoutUs = initialRxTimeoutUs - (deca->get().getSysTime() - syncStartTs);
+                // If an unsupported message is received, restart RX for the remainder of the
+                // timeout
+                remainingRxTimeoutUs =
+                    initialRxTimeoutUs - (deca->get().getSysTime() - syncStartTs);
+                if (remainingRxTimeoutUs > UINT16_MAX) {
+                    rxTimeoutUs = UINT16_MAX;
+                    remainingRxTimeoutUs -= UINT16_MAX;
+                } else {
+                    rxTimeoutUs = remainingRxTimeoutUs;
+                    remainingRxTimeoutUs = 0;
+                }
 
-            // Because of the subtraction, there could be an underflow.
-            if (rxTimeoutUs > initialRxTimeoutUs) {
-                rxTimeoutUs = 0;
+                // Because of the subtraction, there could be an underflow.
+                if (rxTimeoutUs > initialRxTimeoutUs) {
+                    rxTimeoutUs = 0;
+                }
             }
         }
 

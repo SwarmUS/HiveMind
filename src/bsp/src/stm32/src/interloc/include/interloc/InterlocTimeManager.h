@@ -18,7 +18,7 @@
 #define FINAL_TO_ANGLE_GUARD 1000U
 
 #define NUM_ANGLE_MSG_RECEIVER (30)
-#define NUM_ANGLE_MSG_SENDER (NUM_ANGLE_MSG_RECEIVER * 2)
+#define NUM_ANGLE_MSG_SENDER (NUM_ANGLE_MSG_RECEIVER + 10)
 
 #define NUM_ANGLE_ANTENNAS 3
 
@@ -48,7 +48,7 @@ class InterlocTimeManager {
 
     uint32_t getFrameLengthUs() const;
 
-    uint16_t getSyncTimeoutUs() const;
+    uint32_t getSyncTimeoutUs() const;
     static uint16_t getTimeoutUs(uint16_t msgAirTimeWithPreambleUs);
 
     // fixed length constants to be accessed by states

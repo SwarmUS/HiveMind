@@ -61,7 +61,13 @@ uint32_t Hal_calculateCRC32(const uint8_t* buffer, uint32_t length) {
 
 uint32_t Hal_generateRandomNumber() {
     uint32_t random = 0;
-    // TODO: Error handling if the generation fails
-    HAL_RNG_GenerateRandomNumber(HRNG, &random);
+    HAL_StatusTypeDef ret = HAL_OK;
+    do {
+        ret = HAL_RNG_GenerateRandomNumber(HRNG, &random);
+        if (ret == HAL_ERROR) {
+            HAL_RNG_DeInit(HRNG);
+            HAL_RNG_Init(HRNG);
+        }
+    } while (ret == HAL_ERROR);
     return random;
 }

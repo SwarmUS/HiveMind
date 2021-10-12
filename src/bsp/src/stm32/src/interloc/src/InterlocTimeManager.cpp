@@ -232,9 +232,9 @@ uint64_t InterlocTimeManager::getPollTxStartTs(uint64_t startOfFrameTs) const {
            UINT40_MAX;
 }
 
-uint16_t InterlocTimeManager::getSyncTimeoutUs() const {
+uint32_t InterlocTimeManager::getSyncTimeoutUs() const {
     uint32_t slotToSlotOffsetUs = getFrameLengthUs();
-    return slotToSlotOffsetUs + (m_bsp.generateRandomNumber() % 25) * 50000;
+    return slotToSlotOffsetUs * MAX_INTERLOC_SUBFRAMES + (m_bsp.generateRandomNumber() % 25) * 150;
 }
 
 uint64_t InterlocTimeManager::getAngleTxStartTs(uint64_t startOfFrameTs, uint32_t angleId) const {

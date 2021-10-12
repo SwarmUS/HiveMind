@@ -27,6 +27,8 @@ void AngleReceiverState::process(InterlocStateHandler& context) {
     InterlocStateDTO managerState = InterlocBSPContainer::getInterlocManager().getState();
 
     uint32_t receivedFrames = 0;
+    // Here for characterization and tuning
+    volatile uint32_t lostFrames = 0;
     uint32_t maxIterations = managerState == InterlocStateDTO::ANGLE_CALIB_RECEIVER
                                  ? context.getAngleCalibNumberOfFrames()
                                  : NUM_ANGLE_MSG_RECEIVER;
@@ -48,6 +50,8 @@ void AngleReceiverState::process(InterlocStateHandler& context) {
         if (allDataReceived) {
             saveAngleData(context.getRawAngleData(), receivedFrames);
             receivedFrames++;
+        } else {
+            lostFrames++;
         }
     }
 
@@ -96,7 +100,6 @@ bool AngleReceiverState::waitReceptionOrTimeout() {
         UWBRxStatus status = deca->get().getRxStatus();
 
         if (status == UWBRxStatus::ONGOING) {
-            m_logger.log(LogLevel::Error, "Awaiting RX");
             status = deca->get().awaitRx();
         }
 
