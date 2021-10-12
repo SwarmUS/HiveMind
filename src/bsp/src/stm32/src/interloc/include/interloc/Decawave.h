@@ -241,6 +241,9 @@ class Decawave {
      */
     UWBRxStatus awaitRx();
 
+    /**
+     * Aborts any ongoing RX or TX operation (to be called from ISR)
+     */
     void abortTRXFromISR();
 
   private:
