@@ -1,7 +1,7 @@
-include "testing.bzz"
+include "blinky.bzz"
 
 function init() {
-  exec = create_exec(200);
+  exec = create_exec(20);
 }
 
 function step() {
