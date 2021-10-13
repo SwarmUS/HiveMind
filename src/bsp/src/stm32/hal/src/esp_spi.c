@@ -43,15 +43,8 @@ bool EspSpi_TransmitReceiveDma(const uint8_t* txBuffer,
     if (HAL_SPI_GetState(ESP_SPI) != HAL_SPI_STATE_BUSY_TX_RX) {
         txrxCpltCallbackFct = cpltCallback;
         txrxCallbackContext = context;
-
-#ifdef SYSTEM_STM32H7XX_H
-        HAL_StatusTypeDef status =
-            HAL_SPI_TransmitReceive_IT(ESP_SPI, (uint8_t*)txBuffer, rxBuffer, lengthBytes);
-#else
         HAL_StatusTypeDef status =
             HAL_SPI_TransmitReceive_DMA(ESP_SPI, (uint8_t*)txBuffer, rxBuffer, lengthBytes);
-#endif
-
         if (status == HAL_OK) {
             return true;
         }
