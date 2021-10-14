@@ -10,11 +10,9 @@
 #define ROBOT_CENTER_SUFFIX "/base_link"
 #define HIVEBOARD_SUFFIX "/hiveboard"
 
-InterlocManager::InterlocManager(ILogger& logger) :
-    m_logger(logger),
-    m_tfListener(m_tfBuffer),
-    m_positionUpdateCallback(nullptr),
-    m_positionUpdateContext(nullptr) {}
+InterlocManager::InterlocManager(ILogger& logger,
+                                 NotificationQueue<InterlocUpdate>& interlocUpdateQueue) :
+    m_logger(logger), m_tfListener(m_tfBuffer), m_interlocUpdateQueue(interlocUpdateQueue) {}
 
 geometry_msgs::TransformStamped convertPoseToTransformStamped(const geometry_msgs::Pose& pose) {
     geometry_msgs::TransformStamped transformStamped;
@@ -125,7 +123,12 @@ void InterlocManager::gazeboUpdateCallback(const gazebo_msgs::ModelStates& msg) 
             update.m_angleOfArrival = angle;
             update.m_isInLineOfSight = true; // TODO: maybe add a way to get LOS
 
-            m_positionUpdateCallback(m_positionUpdateContext, update);
+            if (!m_interlocUpdateQueue.isFull()) {
+                m_interlocUpdateQueue.push(update);
+            } else {
+                m_logger.log(LogLevel::Warn,
+                             "Could not push interloc update to queue because it is full");
+            }
 
             m_logger.log(LogLevel::Debug, "Updating position of agent %d. Dist: %f, Angle %f",
                          agentId, distance, angle);

@@ -9,18 +9,14 @@
 InterlocManager::InterlocManager(ILogger& logger,
                                  InterlocStateHandler& stateHandler,
                                  DecawaveArray& decawaves,
+                                 NotificationQueue<InterlocUpdate>& interlocUpdateQueue,
                                  IButtonCallbackRegister& buttonCallbackRegister) :
     m_logger(logger),
     m_stateHandler(stateHandler),
     m_buttonCallbackRegister(buttonCallbackRegister),
-    m_decawaves(decawaves) {
+    m_decawaves(decawaves),
+    m_interlocUpdateQueue(interlocUpdateQueue) {
     m_buttonCallbackRegister.setCallback(staticButtonCallback, this);
-}
-
-void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
-                                                void* context) {
-    m_positionUpdateCallback = callback;
-    m_positionUpdateCallbackContext = context;
 }
 
 void InterlocManager::setInterlocManagerStateChangeCallback(
@@ -85,11 +81,14 @@ uint8_t InterlocManager::powerCorrection(double twrDistance) {
 }
 
 void InterlocManager::updateDistance(uint16_t robotId, float distance) {
-    if (m_positionUpdateCallback != nullptr) {
+    if (!m_interlocUpdateQueue.isFull()) {
         InterlocUpdate update;
         update.m_robotId = robotId;
         update.m_distance = distance;
-        m_positionUpdateCallback(m_positionUpdateCallbackContext, update);
+
+        m_interlocUpdateQueue.push(update);
+    } else {
+        m_logger.log(LogLevel::Warn, "Could not push interloc update to queue because it is full");
     }
 }
 

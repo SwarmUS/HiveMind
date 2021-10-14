@@ -6,7 +6,6 @@
 #include <functional>
 #include <pheromones/interloc/InterlocStateDTO.h>
 
-typedef void (*positionUpdateCallbackFunction_t)(void* instance, InterlocUpdate update);
 typedef void (*interlocManagerStateChangeCallbackFunction_t)(void* instance,
                                                              InterlocStateDTO previousState,
                                                              InterlocStateDTO newState);
@@ -37,14 +36,6 @@ class IInterlocManager {
 
     virtual void setInterlocManagerRawAngleDataCallback(
         interlocRawAngleDataCallbackFunction_t callback, void* context) = 0;
-
-    /**
-     * @brief Sets the callback to be called when new interloc data is available
-     * @param callback Callback to call
-     * @param context The context to pass to the callback
-     */
-    virtual void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
-                                           void* context) = 0;
 };
 
 #endif //__IINTERLOCMANAGER_H__
