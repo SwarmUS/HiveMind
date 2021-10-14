@@ -5,11 +5,16 @@
 
 BittyBuzzMessageService::BittyBuzzMessageService(ICircularQueue<MessageDTO>& hostQueue,
                                                  ICircularQueue<MessageDTO>& remoteQueue,
+                                                 ICircularQueue<MessageDTO>& buzzQueue,
                                                  IBSP& bsp,
                                                  ILogger& logger) :
-    m_hostQueue(hostQueue), m_remoteQueue(remoteQueue), m_bsp(bsp), m_logger(logger) {}
+    m_hostQueue(hostQueue),
+    m_remoteQueue(remoteQueue),
+    m_buzzQueue(buzzQueue),
+    m_bsp(bsp),
+    m_logger(logger) {}
 
-bool BittyBuzzMessageService::callHostFunction(uint16_t hostId,
+bool BittyBuzzMessageService::callHostFunction(uint16_t agentId,
                                                const char* functionName,
                                                const FunctionCallArgumentDTO* args,
                                                uint16_t argsLength) {
@@ -19,15 +24,39 @@ bool BittyBuzzMessageService::callHostFunction(uint16_t hostId,
 
     uint16_t uuid = m_bsp.getUUId();
     RequestDTO req(m_bsp.generateRandomNumber(), uReq);
-    MessageDTO message(uuid, hostId, req);
+    MessageDTO message(uuid, agentId, req);
     // Broadcast
-    if (hostId == 0) {
+    if (agentId == 0) {
         return m_hostQueue.push(message) && m_remoteQueue.push(message);
     }
 
     // Host
-    if (hostId == uuid) {
+    if (agentId == uuid) {
         return m_hostQueue.push(message);
+    }
+
+    // Remote
+    return m_remoteQueue.push(message);
+}
+
+bool BittyBuzzMessageService::callBuzzFunction(uint16_t agentId,
+                                               const char* functionName,
+                                               const FunctionCallArgumentDTO* args,
+                                               uint16_t argsLength) {
+    FunctionCallRequestDTO fReq(functionName, args, argsLength);
+    UserCallRequestDTO uReq(UserCallTargetDTO::BUZZ, UserCallTargetDTO::BUZZ, fReq);
+
+    uint16_t uuid = m_bsp.getUUId();
+    RequestDTO req(m_bsp.generateRandomNumber(), uReq);
+    MessageDTO message(uuid, agentId, req);
+    // Broadcast
+    if (agentId == 0) {
+        return m_remoteQueue.push(message) && m_buzzQueue.push(message);
+    }
+
+    // Local buzz
+    if (agentId == uuid) {
+        return m_buzzQueue.push(message);
     }
 
     // Remote

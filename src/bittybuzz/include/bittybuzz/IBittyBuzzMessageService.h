@@ -12,12 +12,24 @@ class IBittyBuzzMessageService {
 
     /**
      *@brief call a function to a host
-     *@param [in] hostId the id of the host, use 0 for broadcast
+     *@param [in] agentId the id of the agent, use 0 for broadcast
      *@param [in] functionName the name of the function to call
      *@param [in] args a list of arguments to pass to the function
      *@param [in] argsLength the number of arguments to pass, the max is
      *FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH*/
-    virtual bool callHostFunction(uint16_t hostId,
+    virtual bool callHostFunction(uint16_t agentId,
+                                  const char* functionName,
+                                  const FunctionCallArgumentDTO* args,
+                                  uint16_t argsLength) = 0;
+
+    /**
+     *@brief call a function to a buzz
+     *@param [in] agentId the id of the agent, use 0 for broadcast
+     *@param [in] functionName the name of the function to call
+     *@param [in] args a list of arguments to pass to the function
+     *@param [in] argsLength the number of arguments to pass, the max is
+     *FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH*/
+    virtual bool callBuzzFunction(uint16_t agentId,
                                   const char* functionName,
                                   const FunctionCallArgumentDTO* args,
                                   uint16_t argsLength) = 0;
