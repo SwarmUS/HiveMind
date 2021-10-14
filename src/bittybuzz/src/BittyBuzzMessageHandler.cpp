@@ -84,9 +84,13 @@ FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
         const auto& storedArgs = registeredClosure.m_description.getArguments();
         GenericResponseDTO invalidRequestResponse(GenericResponseStatusDTO::BadRequest, "");
 
-        if (registeredClosure.m_description.getArgumentsLength() !=
-            functionRequest.getArgumentsLength()) {
-            m_logger.log(LogLevel::Warn, "BBZ: function call request args length don't match");
+        uint16_t expectedLength = registeredClosure.m_description.getArgumentsLength();
+        uint16_t requiredLength = functionRequest.getArgumentsLength();
+        if (expectedLength != requiredLength) {
+            m_logger.log(
+                LogLevel::Warn,
+                "BBZ: function call request args length don't match. Expect :%d, received %d",
+                expectedLength, requiredLength);
 
             invalidRequestResponse.setDetails("arg length don't match");
             return invalidRequestResponse;

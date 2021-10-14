@@ -225,7 +225,7 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
 };
 
 template <typename SerializerType = HiveMindHostSerializer>
-class CommMonitoringTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class CommMonitoringTask : public AbstractTask<12 * configMINIMAL_STACK_SIZE> {
   public:
     CommMonitoringTask<SerializerType>(const char* taskName,
                                        UBaseType_t priority,
@@ -375,7 +375,6 @@ std::optional<std::reference_wrapper<ICommInterface>> hostInterfaceGetter() {
     }
     return commInterface;
 }
-
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
@@ -391,7 +390,7 @@ int main(int argc, char** argv) {
 
     static HardwareInterlocTask s_hardwareInterlocTask("hardware_interloc", gc_taskHighPriority);
     static SoftwareInterlocTask s_softwareInterlocTask("software_interloc", gc_taskNormalPriority);
-    static LogInterlocTask s_logInterlocTask("software_interloc", gc_taskNormalPriority);
+    static LogInterlocTask s_logInterlocTask("software_interloc_log", gc_taskNormalPriority);
 
     static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskNormalPriority, NULL,
                                                     MessageHandlerContainer::getHostMsgQueue());
