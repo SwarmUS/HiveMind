@@ -240,7 +240,7 @@ uint32_t InterlocTimeManager::getSyncTimeoutUs() const {
 uint64_t InterlocTimeManager::getAngleTxStartTs(uint64_t startOfFrameTs, uint32_t angleId) const {
     return (getFinalTxTs(startOfFrameTs) +
             UUS_TO_DWT_TIME * (getReadWriteSPITimeUs(sizeof(UWBMessages::TWRFinal)) +
-                               m_finalAirTimeWithPreambleUs + (uint64_t)FINAL_TO_ANGLE_GUARD +
+                               (uint64_t)m_finalAirTimeWithPreambleUs + FINAL_TO_ANGLE_GUARD +
                                getReadWriteSPITimeUs(sizeof(UWBMessages::AngleMsg)) +
                                (angleId * getAngleToAngleOffsetUs()))) %
            UINT40_MAX;
