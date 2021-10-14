@@ -15,7 +15,8 @@ InterlocMessageHandler::InterlocMessageHandler(ILogger& logger,
     m_inputQueue(inputQueue),
     m_hostQueue(hostQueue),
     m_remoteQueue(remoteQueue),
-    m_messageSourceId(0) {
+    m_messageSourceId(0),
+    m_dumpsEnabled(false) {
     m_interlocManager.setInterlocManagerRawAngleDataCallback(rawAngleDataCallbackStatic, this);
     m_interlocManager.setInterlocManagerStateChangeCallback(stateChangeCallbackStatic, this);
 }
@@ -71,7 +72,7 @@ bool InterlocMessageHandler::handleStateChangeMessage(const SetInterlocStateDTO 
     return true;
 }
 
-bool InterlocMessageHandler::handleConfigurationMessage(const InterlocConfigurationDTO& dto) const {
+bool InterlocMessageHandler::handleConfigurationMessage(const InterlocConfigurationDTO& dto) {
     auto messageVariant = dto.getConfigurationMessage();
 
     if (const auto* angleConfig = std::get_if<ConfigureAngleCalibrationDTO>(&messageVariant)) {
@@ -80,7 +81,12 @@ bool InterlocMessageHandler::handleConfigurationMessage(const InterlocConfigurat
     }
 
     if (const auto* twrConfig = std::get_if<ConfigureTWRCalibrationDTO>(&messageVariant)) {
-        m_interlocManager.configureTWRCalibration(twrConfig->getDistance() * 100);
+        m_interlocManager.configureTWRCalibration((uint16_t)(twrConfig->getDistance() * 100));
+        return true;
+    }
+
+    if (const auto* dumpConfig = std::get_if<ConfigureInterlocDumpsDTO>(&messageVariant)) {
+        m_dumpsEnabled = dumpConfig->getEnabled();
         return true;
     }
 
@@ -178,3 +184,4 @@ void InterlocMessageHandler::stateChangeCallbackStatic(void* context,
                                                        InterlocStateDTO newState) {
     static_cast<InterlocMessageHandler*>(context)->stateChangeCallback(previousState, newState);
 }
+bool InterlocMessageHandler::getDumpEnabled() const { return m_dumpsEnabled; }

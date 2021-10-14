@@ -163,6 +163,34 @@ TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_configureAn
     EXPECT_EQ(callArg, numberOfFrames);
 }
 
+TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_enableDumps) {
+    auto message = MessageDTO(
+        1, gc_boardId, InterlocAPIDTO(InterlocConfigurationDTO(ConfigureInterlocDumpsDTO(true))));
+
+    std::optional<std::reference_wrapper<MessageDTO>> queueValue = message;
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(queueValue));
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+
+    bool ret = m_messageHandler->processMessage();
+
+    EXPECT_TRUE(ret);
+    EXPECT_TRUE(m_messageHandler->getDumpEnabled());
+}
+
+TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_disableDumps) {
+    auto message = MessageDTO(
+        1, gc_boardId, InterlocAPIDTO(InterlocConfigurationDTO(ConfigureInterlocDumpsDTO(false))));
+
+    std::optional<std::reference_wrapper<MessageDTO>> queueValue = message;
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(queueValue));
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+
+    bool ret = m_messageHandler->processMessage();
+
+    EXPECT_TRUE(ret);
+    EXPECT_FALSE(m_messageHandler->getDumpEnabled());
+}
+
 TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_setState) {
     InterlocStateDTO state = InterlocStateDTO::STANDBY;
     InterlocStateDTO callArg;
