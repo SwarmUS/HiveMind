@@ -98,6 +98,8 @@ void Interloc::process() {
         m_updatesHistory[m_updateHistoryIdx] = update->get();
         m_updateHistoryIdx++;
 
+        m_positionUpdateInputQueue.pop();
+
         if (m_updateHistoryIdx == InterlocDumpDTO::MAX_UPDATES_SIZE - 1) {
             dumpUpdatesHistory();
         }
@@ -106,7 +108,10 @@ void Interloc::process() {
 
 void Interloc::dumpUpdatesHistory() {
     if (m_messageHandler.getDumpEnabled()) {
-        // SEND DATA
+        if (!m_messageHandler.sendInterlocDump(m_updatesHistory.data(), m_updateHistoryIdx + 1)) {
+            m_logger.log(LogLevel::Warn, "Could not send interloc updates dump back to host");
+        }
     }
+
     m_updateHistoryIdx = 0;
 }

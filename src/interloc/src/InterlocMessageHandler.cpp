@@ -3,6 +3,8 @@
 #include <cpp-common/ICircularQueue.h>
 #include <interloc/InterlocMessageHandler.h>
 
+#define INVALID_INTERLOC_FLOAT (float)9999.99
+
 InterlocMessageHandler::InterlocMessageHandler(ILogger& logger,
                                                IInterlocManager& interlocManager,
                                                IBSP& bsp,
@@ -185,3 +187,34 @@ void InterlocMessageHandler::stateChangeCallbackStatic(void* context,
     static_cast<InterlocMessageHandler*>(context)->stateChangeCallback(previousState, newState);
 }
 bool InterlocMessageHandler::getDumpEnabled() const { return m_dumpsEnabled; }
+
+bool InterlocMessageHandler::sendInterlocDump(InterlocUpdate* updatesHistory,
+                                              uint8_t updatesLength) {
+    if (!m_dumpsEnabled) {
+        return false;
+    }
+
+    if (updatesLength > InterlocDumpDTO::MAX_UPDATES_SIZE) {
+        updatesLength = InterlocDumpDTO::MAX_UPDATES_SIZE;
+        m_logger.log(LogLevel::Error, "sendInterlocDump() called with array bigger than supported");
+    }
+
+    for (uint8_t i = 0; i < updatesLength; i++) {
+        float distance = updatesHistory[i].m_distance ? updatesHistory[i].m_distance.value()
+                                                      : INVALID_INTERLOC_FLOAT;
+        float angle = updatesHistory[i].m_angleOfArrival
+                          ? updatesHistory[i].m_angleOfArrival.value()
+                          : INVALID_INTERLOC_FLOAT;
+        bool los =
+            updatesHistory[i].m_isInLineOfSight && updatesHistory[i].m_isInLineOfSight.value();
+
+        m_updateDtoArray[i] = GetNeighborResponseDTO(updatesHistory[i].m_robotId,
+                                                     NeighborPositionDTO(distance, angle, los));
+    }
+
+    MessageDTO msg = MessageDTO(m_bsp.getUUId(), m_messageSourceId,
+                                InterlocAPIDTO(InterlocOutputMessageDTO(
+                                    InterlocDumpDTO(m_updateDtoArray.data(), updatesLength))));
+
+    return getQueueForDestination(m_messageSourceId).push(msg);
+}
