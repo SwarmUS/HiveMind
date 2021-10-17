@@ -1,7 +1,7 @@
 #ifndef __INTERLOCMANAGER_H__
 #define __INTERLOCMANAGER_H__
 
-#include <NotificationQueue.h>
+#include <INotificationQueue.h>
 #include <bsp/IInterlocManager.h>
 #include <gazebo_msgs/ModelStates.h>
 #include <logger/ILogger.h>
@@ -11,7 +11,7 @@
 
 class InterlocManager : public IInterlocManager {
   public:
-    InterlocManager(ILogger& logger, NotificationQueue<InterlocUpdate>& interlocUpdateQueue);
+    InterlocManager(ILogger& logger, INotificationQueue<InterlocUpdate>& interlocUpdateQueue);
     ~InterlocManager() override = default;
 
     void startInterloc() override;
@@ -38,7 +38,7 @@ class InterlocManager : public IInterlocManager {
     tf2_ros::Buffer m_tfBuffer;
     tf2_ros::TransformListener m_tfListener;
 
-    NotificationQueue<InterlocUpdate>& m_interlocUpdateQueue;
+    INotificationQueue<InterlocUpdate>& m_interlocUpdateQueue;
 
     static tf2::Stamped<tf2::Transform> getHiveboardTf(
         const geometry_msgs::Pose& poseWorldFrame,

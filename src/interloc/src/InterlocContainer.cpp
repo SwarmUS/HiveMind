@@ -34,7 +34,7 @@ ThreadSafeQueue<uint16_t>& InterlocContainer::getInterlocUpdateOutputQueue() {
     return s_interlocPosUpdateThreadQueue;
 }
 
-NotificationQueue<InterlocUpdate>& InterlocContainer::getInterlocUpdateInputQueue() {
+INotificationQueue<InterlocUpdate>& InterlocContainer::getInterlocUpdateInputQueue() {
     static Mutex s_mutex(10);
     static CircularQueueStack<InterlocUpdate, gc_interlocPosUpdateMaxSize> s_interlocUpdateQueue;
     static ThreadSafeQueue<InterlocUpdate> s_interlocUpdateThreadQueue(s_interlocUpdateQueue,

@@ -21,7 +21,7 @@ namespace InterlocContainer {
      * @brief Gets a queue in which to insert raw position updates from the BSP layer
      * @return A reference to the queue in which to push the updates
      */
-    NotificationQueue<InterlocUpdate>& getInterlocUpdateInputQueue();
+    INotificationQueue<InterlocUpdate>& getInterlocUpdateInputQueue();
 } // namespace InterlocContainer
 
 #endif //__INTERLOCCONTAINER_H__

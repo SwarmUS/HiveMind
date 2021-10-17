@@ -10,7 +10,9 @@ set(TEST_HEADERS
     mocks/InterlocManagerInterfaceMock.h
     mocks/CircularQueueInterfaceMock.h
     mocks/BSPInterfaceMock.h
-        )
+    mocks/NotificationQueueInterfaceMock.h
+    mocks/InterlocMessageHandlerMock.h
+    )
 
 add_executable(${TEST_NAME} ${TEST_SOURCES} ${TEST_HEADERS})
 

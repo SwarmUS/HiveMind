@@ -8,12 +8,6 @@ class InterlocManagerInterfaceMock : public IInterlocManager {
   public:
     void startInterloc() override{};
 
-    void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
-                                   void* context) override {
-        m_positionUpdateCallback = callback;
-        m_positionUpdateContext = context;
-    }
-
     void setInterlocManagerStateChangeCallback(
         interlocManagerStateChangeCallbackFunction_t callback, void* context) override {
         m_stateChangeCallback = callback;
@@ -29,9 +23,6 @@ class InterlocManagerInterfaceMock : public IInterlocManager {
     MOCK_METHOD(void, setInterlocManagerState, (InterlocStateDTO state), (override));
     MOCK_METHOD(void, configureTWRCalibration, (uint16_t distanceCalibCm), (override));
     MOCK_METHOD(void, configureAngleCalibration, (uint32_t numberOfFrames), (override));
-
-    positionUpdateCallbackFunction_t m_positionUpdateCallback;
-    void* m_positionUpdateContext;
 
     interlocManagerStateChangeCallbackFunction_t m_stateChangeCallback;
     void* m_stateChangeContext;

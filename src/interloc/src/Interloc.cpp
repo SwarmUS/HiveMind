@@ -1,26 +1,17 @@
 #include "interloc/Interloc.h"
 
-void Interloc::task(void* context) {
-    while (true) {
-        static_cast<Interloc*>(context)->process();
-    }
-}
-
 Interloc::Interloc(ILogger& logger,
                    IInterlocManager& interlocManager,
                    IInterlocMessageHandler& messageHandler,
                    ICircularQueue<uint16_t>& positionUpdateQueue,
-                   NotificationQueue<InterlocUpdate>& positionUpdateInputQueue) :
+                   INotificationQueue<InterlocUpdate>& positionUpdateInputQueue) :
     m_logger(logger),
     m_interlocManager(interlocManager),
     m_messageHandler(messageHandler),
     m_positionsTable(),
     m_positionUpdateOutputQueue(positionUpdateQueue),
     m_positionUpdateInputQueue(positionUpdateInputQueue),
-    m_updateHistoryIdx(0),
-    m_processTask("interloc_update_handler", tskIDLE_PRIORITY + 1, task, this) {
-    m_processTask.start();
-}
+    m_updateHistoryIdx(0) {}
 
 std::optional<RelativePosition> Interloc::getRobotPosition(uint16_t robotId) const {
     std::optional<uint8_t> idx = getRobotArrayIndex(robotId);
@@ -100,7 +91,7 @@ void Interloc::process() {
 
         m_positionUpdateInputQueue.pop();
 
-        if (m_updateHistoryIdx == InterlocDumpDTO::MAX_UPDATES_SIZE - 1) {
+        if (m_updateHistoryIdx == InterlocDumpDTO::MAX_UPDATES_SIZE) {
             dumpUpdatesHistory();
         }
     }
@@ -108,7 +99,7 @@ void Interloc::process() {
 
 void Interloc::dumpUpdatesHistory() {
     if (m_messageHandler.getDumpEnabled()) {
-        if (!m_messageHandler.sendInterlocDump(m_updatesHistory.data(), m_updateHistoryIdx + 1)) {
+        if (!m_messageHandler.sendInterlocDump(m_updatesHistory.data(), m_updateHistoryIdx)) {
             m_logger.log(LogLevel::Warn, "Could not send interloc updates dump back to host");
         }
     }

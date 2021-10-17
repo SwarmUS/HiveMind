@@ -1,14 +1,13 @@
-#ifndef __CIRCULARQUEUEINTERFACEMOCK_H_
-#define __CIRCULARQUEUEINTERFACEMOCK_H_
+#ifndef __NOTIFICATIONQUEUEINTERFACEMOCK_H_
+#define __NOTIFICATIONQUEUEINTERFACEMOCK_H_
 
-#include <cpp-common/ICircularQueue.h>
+#include <INotificationQueue.h>
 #include <gmock/gmock.h>
 
 template <typename T>
-class CircularQueueInterfaceMock : public ICircularQueue<T> {
+class NotificationQueueInterfaceMock : public INotificationQueue<T> {
   public:
-    CircularQueueInterfaceMock() { ON_CALL(*this, isFull).WillByDefault(testing::Return(false)); }
-    ~CircularQueueInterfaceMock() = default;
+    ~NotificationQueueInterfaceMock() = default;
 
     MOCK_METHOD(std::optional<const char*>, getString, (uint16_t stringId), (const override));
 
@@ -31,6 +30,8 @@ class CircularQueueInterfaceMock : public ICircularQueue<T> {
     MOCK_METHOD(std::optional<std::reference_wrapper<T>>, getNextAllocation, (), (override));
 
     MOCK_METHOD(bool, advance, (), (override));
+
+    MOCK_METHOD(bool, wait, (uint32_t waitTime), (override));
 };
 
-#endif // __CIRCULARQUEUEINTERFACEMOCK_H_
+#endif //__NOTIFICATIONQUEUEINTERFACEMOCK_H_

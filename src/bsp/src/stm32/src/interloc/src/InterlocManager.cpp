@@ -9,7 +9,7 @@
 InterlocManager::InterlocManager(ILogger& logger,
                                  InterlocStateHandler& stateHandler,
                                  DecawaveArray& decawaves,
-                                 NotificationQueue<InterlocUpdate>& interlocUpdateQueue,
+                                 INotificationQueue<InterlocUpdate>& interlocUpdateQueue,
                                  IButtonCallbackRegister& buttonCallbackRegister) :
     m_logger(logger),
     m_stateHandler(stateHandler),

@@ -11,7 +11,7 @@
 #define HIVEBOARD_SUFFIX "/hiveboard"
 
 InterlocManager::InterlocManager(ILogger& logger,
-                                 NotificationQueue<InterlocUpdate>& interlocUpdateQueue) :
+                                 INotificationQueue<InterlocUpdate>& interlocUpdateQueue) :
     m_logger(logger), m_tfListener(m_tfBuffer), m_interlocUpdateQueue(interlocUpdateQueue) {}
 
 geometry_msgs::TransformStamped convertPoseToTransformStamped(const geometry_msgs::Pose& pose) {
@@ -116,23 +116,21 @@ void InterlocManager::gazeboUpdateCallback(const gazebo_msgs::ModelStates& msg) 
         double distance = getDistance(relTransform);
         double angle = getAngleOfArrival(relTransform) * 180 / M_PI;
 
-        if (m_positionUpdateCallback != nullptr) {
-            InterlocUpdate update;
-            update.m_robotId = agentId;
-            update.m_distance = distance;
-            update.m_angleOfArrival = angle;
-            update.m_isInLineOfSight = true; // TODO: maybe add a way to get LOS
+        InterlocUpdate update;
+        update.m_robotId = agentId;
+        update.m_distance = distance;
+        update.m_angleOfArrival = angle;
+        update.m_isInLineOfSight = true; // TODO: maybe add a way to get LOS
 
-            if (!m_interlocUpdateQueue.isFull()) {
-                m_interlocUpdateQueue.push(update);
-            } else {
-                m_logger.log(LogLevel::Warn,
-                             "Could not push interloc update to queue because it is full");
-            }
-
-            m_logger.log(LogLevel::Debug, "Updating position of agent %d. Dist: %f, Angle %f",
-                         agentId, distance, angle);
+        if (!m_interlocUpdateQueue.isFull()) {
+            m_interlocUpdateQueue.push(update);
+        } else {
+            m_logger.log(LogLevel::Warn,
+                         "Could not push interloc update to queue because it is full");
         }
+
+        m_logger.log(LogLevel::Debug, "Updating position of agent %d. Dist: %f, Angle %f", agentId,
+                     distance, angle);
     }
 
     Task::delay(m_interlocRefreshDelayMs);
@@ -146,12 +144,6 @@ void InterlocManager::startInterloc() {
 
     m_logger.log(LogLevel::Info, "Starting interloc with a refresh rate of %.2f Hz",
                  interlocRefreshRate);
-}
-
-void InterlocManager::setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
-                                                void* context) {
-    m_positionUpdateCallback = callback;
-    m_positionUpdateContext = context;
 }
 
 // Calib API is not needed in simulation. Can just ignore any calls to these functions
