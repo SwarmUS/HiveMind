@@ -196,7 +196,7 @@ bool InterlocMessageHandler::sendInterlocDump(InterlocUpdate* updatesHistory,
 
     if (updatesLength > InterlocDumpDTO::MAX_UPDATES_SIZE) {
         updatesLength = InterlocDumpDTO::MAX_UPDATES_SIZE;
-        m_logger.log(LogLevel::Error, "sendInterlocDump() called with array bigger than supported");
+        m_logger.log(LogLevel::Warn, "sendInterlocDump() called with array bigger than supported");
     }
 
     for (uint8_t i = 0; i < updatesLength; i++) {
