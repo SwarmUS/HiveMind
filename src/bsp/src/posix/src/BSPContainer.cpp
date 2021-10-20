@@ -7,6 +7,7 @@
 #include "UserInterface.h"
 #include "bsp/SettingsContainer.h"
 #include "logger/LoggerContainer.h"
+#include <interloc/InterlocContainer.h>
 #include <mutex>
 
 IBSP& BSPContainer::getBSP() {
@@ -21,7 +22,8 @@ IUserInterface& BSPContainer::getUserInterface() {
 }
 
 IInterlocManager& BSPContainer::getInterlocManager() {
-    static InterlocManager s_interlocManager(LoggerContainer::getLogger());
+    static InterlocManager s_interlocManager(LoggerContainer::getLogger(),
+                                             InterlocContainer::getInterlocUpdateInputQueue());
     return s_interlocManager;
 }
 

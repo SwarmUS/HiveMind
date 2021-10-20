@@ -3,6 +3,8 @@
 #include <cpp-common/ICircularQueue.h>
 #include <interloc/InterlocMessageHandler.h>
 
+#define INVALID_INTERLOC_FLOAT (float)9999.99
+
 InterlocMessageHandler::InterlocMessageHandler(ILogger& logger,
                                                IInterlocManager& interlocManager,
                                                IBSP& bsp,
@@ -15,7 +17,8 @@ InterlocMessageHandler::InterlocMessageHandler(ILogger& logger,
     m_inputQueue(inputQueue),
     m_hostQueue(hostQueue),
     m_remoteQueue(remoteQueue),
-    m_messageSourceId(0) {
+    m_messageSourceId(0),
+    m_dumpsEnabled(false) {
     m_interlocManager.setInterlocManagerRawAngleDataCallback(rawAngleDataCallbackStatic, this);
     m_interlocManager.setInterlocManagerStateChangeCallback(stateChangeCallbackStatic, this);
 }
@@ -71,7 +74,7 @@ bool InterlocMessageHandler::handleStateChangeMessage(const SetInterlocStateDTO 
     return true;
 }
 
-bool InterlocMessageHandler::handleConfigurationMessage(const InterlocConfigurationDTO& dto) const {
+bool InterlocMessageHandler::handleConfigurationMessage(const InterlocConfigurationDTO& dto) {
     auto messageVariant = dto.getConfigurationMessage();
 
     if (const auto* angleConfig = std::get_if<ConfigureAngleCalibrationDTO>(&messageVariant)) {
@@ -80,7 +83,12 @@ bool InterlocMessageHandler::handleConfigurationMessage(const InterlocConfigurat
     }
 
     if (const auto* twrConfig = std::get_if<ConfigureTWRCalibrationDTO>(&messageVariant)) {
-        m_interlocManager.configureTWRCalibration(twrConfig->getDistance() * 100);
+        m_interlocManager.configureTWRCalibration((uint16_t)(twrConfig->getDistance() * 100));
+        return true;
+    }
+
+    if (const auto* dumpConfig = std::get_if<ConfigureInterlocDumpsDTO>(&messageVariant)) {
+        m_dumpsEnabled = dumpConfig->getEnabled();
         return true;
     }
 
@@ -177,4 +185,36 @@ void InterlocMessageHandler::stateChangeCallbackStatic(void* context,
                                                        InterlocStateDTO previousState,
                                                        InterlocStateDTO newState) {
     static_cast<InterlocMessageHandler*>(context)->stateChangeCallback(previousState, newState);
+}
+bool InterlocMessageHandler::getDumpEnabled() const { return m_dumpsEnabled; }
+
+bool InterlocMessageHandler::sendInterlocDump(InterlocUpdate* updatesHistory,
+                                              uint8_t updatesLength) {
+    if (!m_dumpsEnabled) {
+        return false;
+    }
+
+    if (updatesLength > InterlocDumpDTO::MAX_UPDATES_SIZE) {
+        updatesLength = InterlocDumpDTO::MAX_UPDATES_SIZE;
+        m_logger.log(LogLevel::Warn, "sendInterlocDump() called with array bigger than supported");
+    }
+
+    for (uint8_t i = 0; i < updatesLength; i++) {
+        float distance = updatesHistory[i].m_distance ? updatesHistory[i].m_distance.value()
+                                                      : INVALID_INTERLOC_FLOAT;
+        float angle = updatesHistory[i].m_angleOfArrival
+                          ? updatesHistory[i].m_angleOfArrival.value()
+                          : INVALID_INTERLOC_FLOAT;
+        bool los =
+            updatesHistory[i].m_isInLineOfSight && updatesHistory[i].m_isInLineOfSight.value();
+
+        m_updateDtoArray[i] = GetNeighborResponseDTO(updatesHistory[i].m_robotId,
+                                                     NeighborPositionDTO(distance, angle, los));
+    }
+
+    MessageDTO msg = MessageDTO(m_bsp.getUUId(), m_messageSourceId,
+                                InterlocAPIDTO(InterlocOutputMessageDTO(
+                                    InterlocDumpDTO(m_updateDtoArray.data(), updatesLength))));
+
+    return getQueueForDestination(m_messageSourceId).push(msg);
 }

@@ -28,6 +28,6 @@ BittyBuzzMessageService& BittyBuzzContainer::getBBZMessageService() {
 
 BittyBuzzNeighborsManager& BittyBuzzContainer::getBBZNeighborsManager() {
     static BittyBuzzNeighborsManager s_bbzNeighborsManager(
-        InterlocContainer::getInterloc(), InterlocContainer::getInterlocPosUpdateQueue());
+        InterlocContainer::getInterloc(), InterlocContainer::getInterlocUpdateOutputQueue());
     return s_bbzNeighborsManager;
 }

@@ -300,20 +300,16 @@ class HardwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> 
     void task() override { BSPContainer::getInterlocManager().startInterloc(); }
 };
 
-class SoftwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class InterlocMessageHandlerTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
-    SoftwareInterlocTask(const char* taskName, UBaseType_t priority) :
+    InterlocMessageHandlerTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority),
-        m_interloc(InterlocContainer::getInterloc()),
         m_interlocMessageQueue(MessageHandlerContainer::getInterlocMsgQueue()),
         m_interlocMessageHandler(InterlocContainer::getInterlocMessageHandler()) {}
 
-    ~SoftwareInterlocTask() override = default;
+    ~InterlocMessageHandlerTask() override = default;
 
   private:
-    // Create the object so it can register it's callbacks
-    // TODO: remove once it is used somewhere else
-    IInterloc& m_interloc;
     NotificationQueue<MessageDTO>& m_interlocMessageQueue;
     IInterlocMessageHandler& m_interlocMessageHandler;
 
@@ -328,7 +324,24 @@ class SoftwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> 
     }
 };
 
-class LogInterlocTask : public AbstractTask<8 * configMINIMAL_STACK_SIZE> {
+class InterlocDataHandlerTask : public AbstractTask<8 * configMINIMAL_STACK_SIZE> {
+  public:
+    InterlocDataHandlerTask(const char* taskName, UBaseType_t priority) :
+        AbstractTask(taskName, priority), m_interloc(InterlocContainer::getInterloc()) {}
+
+    ~InterlocDataHandlerTask() override = default;
+
+  private:
+    IInterloc& m_interloc;
+
+    void task() override {
+        while (true) {
+            m_interloc.process();
+        }
+    }
+};
+
+class LogInterlocTask : public AbstractTask<4 * configMINIMAL_STACK_SIZE> {
   public:
     LogInterlocTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority),
@@ -389,7 +402,10 @@ int main(int argc, char** argv) {
         ApplicationInterfaceContainer::getButton1CallbackRegister());
 
     static HardwareInterlocTask s_hardwareInterlocTask("hardware_interloc", gc_taskHighPriority);
-    static SoftwareInterlocTask s_softwareInterlocTask("software_interloc", gc_taskNormalPriority);
+    static InterlocMessageHandlerTask s_interlocMessageTask("interloc_message_handler",
+                                                            gc_taskNormalPriority);
+    static InterlocDataHandlerTask s_interlocDataTask("interloc_data_handler",
+                                                      gc_taskNormalPriority);
     static LogInterlocTask s_logInterlocTask("software_interloc_log", gc_taskNormalPriority);
 
     static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskNormalPriority, NULL,
@@ -414,7 +430,8 @@ int main(int argc, char** argv) {
 
     s_bittybuzzTask.start();
     s_hardwareInterlocTask.start();
-    s_softwareInterlocTask.start();
+    s_interlocDataTask.start();
+    s_interlocMessageTask.start();
     s_logInterlocTask.start();
     s_hostMonitorTask.start();
     s_remoteMonitorTask.start();

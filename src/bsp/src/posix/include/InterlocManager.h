@@ -1,6 +1,7 @@
 #ifndef __INTERLOCMANAGER_H__
 #define __INTERLOCMANAGER_H__
 
+#include <INotificationQueue.h>
 #include <bsp/IInterlocManager.h>
 #include <gazebo_msgs/ModelStates.h>
 #include <logger/ILogger.h>
@@ -10,13 +11,10 @@
 
 class InterlocManager : public IInterlocManager {
   public:
-    InterlocManager(ILogger& logger);
+    InterlocManager(ILogger& logger, INotificationQueue<InterlocUpdate>& interlocUpdateQueue);
     ~InterlocManager() override = default;
 
     void startInterloc() override;
-
-    void setPositionUpdateCallback(positionUpdateCallbackFunction_t callback,
-                                   void* context) override;
 
     // Calib API is not needed in simulation. Can just ignore any calls to these functions
     void setInterlocManagerState(InterlocStateDTO state) override;
@@ -40,8 +38,7 @@ class InterlocManager : public IInterlocManager {
     tf2_ros::Buffer m_tfBuffer;
     tf2_ros::TransformListener m_tfListener;
 
-    positionUpdateCallbackFunction_t m_positionUpdateCallback;
-    void* m_positionUpdateContext;
+    INotificationQueue<InterlocUpdate>& m_interlocUpdateQueue;
 
     static tf2::Stamped<tf2::Transform> getHiveboardTf(
         const geometry_msgs::Pose& poseWorldFrame,

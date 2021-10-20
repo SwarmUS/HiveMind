@@ -21,7 +21,7 @@ AngleReceiverState::AngleReceiverState(ILogger& logger, DecawaveArray& decawaves
 
 void AngleReceiverState::process(InterlocStateHandler& context) {
     if (!m_decawaves.canCalculateAngles()) {
-        context.setState(InterlocStates::IDLE, InterlocEvent::DECA_INIT_ERROR);
+        context.setState(InterlocStates::CALCULATE_INTERLOC, InterlocEvent::DECA_INIT_ERROR);
         return;
     }
     InterlocStateDTO managerState = InterlocBSPContainer::getInterlocManager().getState();

@@ -2,13 +2,16 @@
 
 Interloc::Interloc(ILogger& logger,
                    IInterlocManager& interlocManager,
-                   ICircularQueue<uint16_t>& positionUpdateQueue) :
+                   IInterlocMessageHandler& messageHandler,
+                   ICircularQueue<uint16_t>& positionUpdateOutputQueue,
+                   INotificationQueue<InterlocUpdate>& positionUpdateInputQueue) :
     m_logger(logger),
     m_interlocManager(interlocManager),
+    m_messageHandler(messageHandler),
     m_positionsTable(),
-    m_positionUpdateQueue(positionUpdateQueue) {
-    m_interlocManager.setPositionUpdateCallback(onPositionUpdateStaticCallback, this);
-}
+    m_positionUpdateOutputQueue(positionUpdateOutputQueue),
+    m_positionUpdateInputQueue(positionUpdateInputQueue),
+    m_updateHistoryIdx(0) {}
 
 std::optional<RelativePosition> Interloc::getRobotPosition(uint16_t robotId) const {
     std::optional<uint8_t> idx = getRobotArrayIndex(robotId);
@@ -30,9 +33,7 @@ bool Interloc::isLineOfSight(uint16_t robotId) const {
     return {};
 }
 
-void Interloc::onPositionUpdateCallback(InterlocUpdate positionUpdate) {
-    // TODO: If we implement some long running operations here (eg filtering), should change this
-    // for a queue of updates, that is processed by another thread
+void Interloc::processPositionUpdate(const InterlocUpdate& positionUpdate) {
     std::optional<uint8_t> idx = getRobotArrayIndex(positionUpdate.m_robotId);
 
     if (idx) {
@@ -46,7 +47,7 @@ void Interloc::onPositionUpdateCallback(InterlocUpdate positionUpdate) {
                             positionUpdate);
     }
 
-    m_positionUpdateQueue.push(positionUpdate.m_robotId);
+    m_positionUpdateOutputQueue.push(positionUpdate.m_robotId);
 }
 
 std::optional<uint8_t> Interloc::getRobotArrayIndex(uint16_t robotId) const {
@@ -78,6 +79,30 @@ void Interloc::updateRobotPosition(RelativePosition& positionToUpdate, InterlocU
 
 const PositionsTable& Interloc::getPositionsTable() const { return m_positionsTable; }
 
-void Interloc::onPositionUpdateStaticCallback(void* context, InterlocUpdate update) {
-    static_cast<Interloc*>(context)->onPositionUpdateCallback(update);
+void Interloc::process() {
+    if (m_positionUpdateInputQueue.isEmpty()) {
+        m_positionUpdateInputQueue.wait(500);
+    }
+
+    if (auto update = m_positionUpdateInputQueue.peek()) {
+        processPositionUpdate(update->get());
+        m_updatesHistory[m_updateHistoryIdx] = update->get();
+        m_updateHistoryIdx++;
+
+        m_positionUpdateInputQueue.pop();
+
+        if (m_updateHistoryIdx == InterlocDumpDTO::MAX_UPDATES_SIZE) {
+            dumpUpdatesHistory();
+        }
+    }
+}
+
+void Interloc::dumpUpdatesHistory() {
+    if (m_messageHandler.getDumpEnabled()) {
+        if (!m_messageHandler.sendInterlocDump(m_updatesHistory.data(), m_updateHistoryIdx)) {
+            m_logger.log(LogLevel::Warn, "Could not send interloc updates dump back to host");
+        }
+    }
+
+    m_updateHistoryIdx = 0;
 }

@@ -45,6 +45,7 @@ target_link_libraries(${LIB_NAME}
         ${catkin_LIBRARIES}
     PRIVATE
         SwarmUS::Propolis::Pheromones
+        SwarmUS::HiveMind::Interloc
 )
 
 # Mock linker library

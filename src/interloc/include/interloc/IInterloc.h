@@ -33,6 +33,12 @@ class IInterloc {
      * @return The position table
      */
     virtual const PositionsTable& getPositionsTable() const = 0;
+
+    /**
+     * @brief Spins the interloc task checking if any updates happened. Processing them and pushing
+     * update values to the output queue.
+     */
+    virtual void process() = 0;
 };
 
 #endif //__IINTERLOC_H__

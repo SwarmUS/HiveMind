@@ -22,6 +22,10 @@ class InterlocMessageHandler : public IInterlocMessageHandler {
 
     bool processMessage() override;
 
+    bool getDumpEnabled() const override;
+
+    bool sendInterlocDump(InterlocUpdate* updatesHistory, uint8_t updatesLength) override;
+
   private:
     ILogger& m_logger;
     IInterlocManager& m_interlocManager;
@@ -30,11 +34,14 @@ class InterlocMessageHandler : public IInterlocMessageHandler {
     ICircularQueue<MessageDTO>& m_hostQueue;
     ICircularQueue<MessageDTO>& m_remoteQueue;
 
+    std::array<GetNeighborResponseDTO, InterlocDumpDTO::MAX_UPDATES_SIZE> m_updateDtoArray;
+
     uint16_t m_messageSourceId;
+    bool m_dumpsEnabled;
 
     bool handleMessage(const MessageDTO& dto);
     bool handleStateChangeMessage(const SetInterlocStateDTO dto) const;
-    bool handleConfigurationMessage(const InterlocConfigurationDTO& dto) const;
+    bool handleConfigurationMessage(const InterlocConfigurationDTO& dto);
 
     // bool handleCalibrationMessage(const CalibrationMessageDTO& dto, uint16_t sourceId) const;
     ICircularQueue<MessageDTO>& getQueueForDestination(uint16_t destinationId) const;
