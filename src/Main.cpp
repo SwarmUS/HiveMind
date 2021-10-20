@@ -324,7 +324,7 @@ class InterlocMessageHandlerTask : public AbstractTask<10 * configMINIMAL_STACK_
     }
 };
 
-class InterlocDataHandlerTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE> {
+class InterlocDataHandlerTask : public AbstractTask<8 * configMINIMAL_STACK_SIZE> {
   public:
     InterlocDataHandlerTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_interloc(InterlocContainer::getInterloc()) {}
@@ -341,7 +341,7 @@ class InterlocDataHandlerTask : public AbstractTask<6 * configMINIMAL_STACK_SIZE
     }
 };
 
-class LogInterlocTask : public AbstractTask<2 * configMINIMAL_STACK_SIZE> {
+class LogInterlocTask : public AbstractTask<4 * configMINIMAL_STACK_SIZE> {
   public:
     LogInterlocTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority),
