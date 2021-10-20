@@ -16,6 +16,7 @@ void PHal_initMcu() {
 
     // Heartbeat timer
     MX_TIM6_Init();
+    MX_TIM7_Init();
 
     MX_USB_DEVICE_Init();
     usb_init();

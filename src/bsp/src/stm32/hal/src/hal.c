@@ -9,10 +9,15 @@
 #include "hivemind_hal.h"
 #include "lwip.h"
 #include "usb_device.h"
+#include <stdlib.h>
 
 #ifdef IPERF_SERVER
 #include <lwip/apps/lwiperf.h>
 #endif
+
+#define RNG_MAX_TRIES (10)
+
+static uint32_t g_randSeed = 0;
 
 void Hal_initMcu() {
 
@@ -38,7 +43,7 @@ void Hal_initBoard() {
     deca_init();
 
     UI_initialize();
-    Timer_startHeartbeat();
+    Timer_startAll();
 
     if (Hal_wroomPowerEnabled()) {
         Hal_enableWroom();
@@ -60,8 +65,25 @@ uint32_t Hal_calculateCRC32(const uint8_t* buffer, uint32_t length) {
 }
 
 uint32_t Hal_generateRandomNumber() {
+    uint8_t i = 0;
     uint32_t random = 0;
-    // TODO: Error handling if the generation fails
-    HAL_RNG_GenerateRandomNumber(HRNG, &random);
+    HAL_StatusTypeDef ret = HAL_OK;
+
+    do {
+        ret = HAL_RNG_GenerateRandomNumber(HRNG, &random);
+        if (ret == HAL_ERROR) {
+            HAL_RNG_DeInit(HRNG);
+            HAL_RNG_Init(HRNG);
+
+            i++;
+        }
+    } while (ret == HAL_ERROR && i < RNG_MAX_TRIES);
+
+    if (i >= RNG_MAX_TRIES) {
+        srand(g_randSeed);
+        return (uint32_t)rand();
+    }
+
+    g_randSeed = random;
     return random;
 }

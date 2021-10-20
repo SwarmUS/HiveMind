@@ -15,7 +15,7 @@ void TestUI::runTests() {
 void TestUI::setup() { UI_initialize(); }
 
 void TestUI::test01_Heartbeat() {
-    Timer_startHeartbeat();
+    Timer_startAll();
     HAL_Delay(10000);
 }
 

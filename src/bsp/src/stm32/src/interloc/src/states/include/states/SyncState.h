@@ -12,6 +12,7 @@ class SyncState : public AbstractInterlocState {
     UWBRxFrame m_rxFrame;
 
     void handlePollReceived(InterlocStateHandler& context);
+    void capTimeoutUint16(uint32_t& remainingRxTimeoutUs, uint16_t& rxTimeoutUs) const;
 };
 
 #endif // HIVE_MIND_SYNCSTATE_H

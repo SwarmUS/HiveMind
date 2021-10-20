@@ -14,7 +14,7 @@ set(LIB_SOURCES
         src/IdleState.cpp
         src/SyncState.cpp
         src/SendPollFromSyncState.cpp
-        src/SetDistanceState.cpp
+        src/UpdateInterloc.cpp
         src/AngleReceiverState.cpp
         src/AngleSenderState.cpp
         )
@@ -33,7 +33,7 @@ set(LIB_HEADERS
         include/states/IdleState.h
         include/states/SyncState.h
         include/states/SendPollFromSyncState.h
-        include/states/SetDistanceState.h
+        include/states/UpdateInterloc.h
         include/states/AngleSenderState.h
         include/states/AngleReceiverState.h
         )
