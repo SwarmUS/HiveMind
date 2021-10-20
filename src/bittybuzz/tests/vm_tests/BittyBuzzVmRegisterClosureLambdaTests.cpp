@@ -20,9 +20,6 @@
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_registerClosure_registerLambda) {
     // Given
     uint16_t boardId = 42;
-    std::string functionName = "registeredFunction";
-    std::string argIntName = "arg_int";
-    std::string argFloatName = "arg_float";
 
     BittyBuzzClosureRegisterInterfaceMock closureRegister;
     BittyBuzzStringResolverInterfaceMock stringResolver;
