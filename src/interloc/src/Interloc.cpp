@@ -3,13 +3,13 @@
 Interloc::Interloc(ILogger& logger,
                    IInterlocManager& interlocManager,
                    IInterlocMessageHandler& messageHandler,
-                   ICircularQueue<uint16_t>& positionUpdateQueue,
+                   ICircularQueue<uint16_t>& positionUpdateOutputQueue,
                    INotificationQueue<InterlocUpdate>& positionUpdateInputQueue) :
     m_logger(logger),
     m_interlocManager(interlocManager),
     m_messageHandler(messageHandler),
     m_positionsTable(),
-    m_positionUpdateOutputQueue(positionUpdateQueue),
+    m_positionUpdateOutputQueue(positionUpdateOutputQueue),
     m_positionUpdateInputQueue(positionUpdateInputQueue),
     m_updateHistoryIdx(0) {}
 
