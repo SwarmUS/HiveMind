@@ -5,15 +5,15 @@
 #include <LockGuard.h>
 #include <Task.h>
 
-struct ForeachHostFContext {
+struct ForeachFunctionContext {
     bool m_err = false;
     std::array<FunctionCallArgumentDTO, FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>
         m_arguments = {};
     uint16_t m_length = 0;
 };
 
-void foreachHostFCallback(bbzheap_idx_t key, bbzheap_idx_t value, void* params) {
-    ForeachHostFContext* context = (ForeachHostFContext*)params;
+void foreachFunctionCallback(bbzheap_idx_t key, bbzheap_idx_t value, void* params) {
+    ForeachFunctionContext* context = (ForeachFunctionContext*)params;
     bbzobj_t* keyObj = bbzheap_obj_at(key); // NOLINT
     bbzobj_t* valueObj = bbzheap_obj_at(value); // NOLINT
 
@@ -181,11 +181,11 @@ void BittyBuzzUserFunctions::callHostFunction() {
     bbzobj_t* bbzFunctionName = bbzheap_obj_at(bbzvm_locals_at(2)); // NOLINT
     bbzheap_idx_t bbzArgsTableHeapIdx = bbzvm_locals_at(3); // NOLINT
 
-    ForeachHostFContext context;
+    ForeachFunctionContext context;
     std::optional<const char*> functionName =
         BittyBuzzSystem::g_stringResolver->getString(bbzFunctionName->s.value);
 
-    bbztable_foreach(bbzArgsTableHeapIdx, foreachHostFCallback, &context);
+    bbztable_foreach(bbzArgsTableHeapIdx, foreachFunctionCallback, &context);
 
     if (context.m_err) {
         BittyBuzzSystem::g_logger->log(LogLevel::Error,
@@ -199,6 +199,34 @@ void BittyBuzzUserFunctions::callHostFunction() {
         context.m_length);
     if (!ret) {
         BittyBuzzSystem::g_logger->log(LogLevel::Warn, "BBZ: could not call host FCall");
+    }
+    bbzvm_ret0();
+}
+
+void BittyBuzzUserFunctions::callBuzzFunction() {
+    bbzvm_assert_lnum(3); // NOLINT
+    bbzobj_t* bbzId = bbzheap_obj_at(bbzvm_locals_at(1)); // NOLINT
+    bbzobj_t* bbzFunctionName = bbzheap_obj_at(bbzvm_locals_at(2)); // NOLINT
+    bbzheap_idx_t bbzArgsTableHeapIdx = bbzvm_locals_at(3); // NOLINT
+
+    ForeachFunctionContext context;
+    std::optional<const char*> functionName =
+        BittyBuzzSystem::g_stringResolver->getString(bbzFunctionName->s.value);
+
+    bbztable_foreach(bbzArgsTableHeapIdx, foreachFunctionCallback, &context);
+
+    if (context.m_err) {
+        BittyBuzzSystem::g_logger->log(LogLevel::Error,
+                                       "BBZ: Error parsing argument list, buzz FCall");
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
+        return;
+    }
+
+    bool ret = BittyBuzzSystem::g_messageService->callBuzzFunction(
+        (uint16_t)bbzId->i.value, functionName.value(), context.m_arguments.data(),
+        context.m_length);
+    if (!ret) {
+        BittyBuzzSystem::g_logger->log(LogLevel::Warn, "BBZ: could not call buzz FCall");
     }
     bbzvm_ret0();
 }

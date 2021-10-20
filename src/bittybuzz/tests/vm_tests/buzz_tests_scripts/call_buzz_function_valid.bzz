@@ -1,0 +1,6 @@
+function init() {
+}
+
+function step() {
+    call_buzz_function(id, "buzzFunction", {.0 = 42, .1 = 42.24});
+}

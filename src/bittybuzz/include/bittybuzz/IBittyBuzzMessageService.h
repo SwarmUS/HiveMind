@@ -23,7 +23,7 @@ class IBittyBuzzMessageService {
                                   uint16_t argsLength) = 0;
 
     /**
-     *@brief call a function to a buzz
+     *@brief call a function to a buzz vm
      *@param [in] agentId the id of the agent, use 0 for broadcast
      *@param [in] functionName the name of the function to call
      *@param [in] args a list of arguments to pass to the function

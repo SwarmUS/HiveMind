@@ -32,6 +32,12 @@ set(TEST_SOURCES
     vm_tests/BittyBuzzVmRegisterClosureFunctionSelfTests.cpp
     vm_tests/BittyBuzzVmRegisterClosureInvalidArgsTests.cpp
     vm_tests/BittyBuzzVmRegisterClosureLambdaTests.cpp
+
+
+    vm_tests/BittyBuzzVmCallBuzzFunctionValidTests.cpp
+    vm_tests/BittyBuzzVmCallBuzzFunctionInvalidArgsTests.cpp
+    vm_tests/BittyBuzzVmCallBuzzFunctionInvalidKeysTests.cpp
+
     vm_tests/BittyBuzzVmCallHostFunctionValidTests.cpp
     vm_tests/BittyBuzzVmCallHostFunctionInvalidArgsTests.cpp
     vm_tests/BittyBuzzVmCallHostFunctionInvalidKeysTests.cpp
@@ -164,6 +170,21 @@ bittybuzz_generate_bytecode(cast-int
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
+bittybuzz_generate_bytecode(call-buzz-function-valid
+    ${BZZ_TEST_SCRIPTS_LOCATION}/call_buzz_function_valid.bzz
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
+bittybuzz_generate_bytecode(call-buzz-function-invalid-args
+    ${BZZ_TEST_SCRIPTS_LOCATION}/call_buzz_function_invalidArgs.bzz
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
+bittybuzz_generate_bytecode(call-buzz-function-invalid-keys
+    ${BZZ_TEST_SCRIPTS_LOCATION}/call_buzz_function_invalidKeys.bzz
+    "${BZZ_TEST_SCRIPTS_LOCATION}"
+    "${BITTYBUZZ_HIVEMIND_BST}")
+
 bittybuzz_generate_bytecode(call-host-function-valid
     ${BZZ_TEST_SCRIPTS_LOCATION}/call_host_function_valid.bzz
     "${BZZ_TEST_SCRIPTS_LOCATION}"
@@ -252,7 +273,9 @@ target_link_libraries(${TEST_NAME}
         register-closure_function_self
         register-closure_invalid_args
         register-closure_lambda
-        call-host-function-valid
+        call-buzz-function-valid
+        call-buzz-function-invalid-args
+        call-buzz-function-invalid-keys
         call-host-function-valid
         call-host-function-invalid-args
         call-host-function-invalid-keys

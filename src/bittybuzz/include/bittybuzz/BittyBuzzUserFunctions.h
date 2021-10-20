@@ -49,18 +49,34 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief calls a function to a host
-     *@b Signature call_host_function(host_id, fname, params)
+     *@b Signature call_host_function(agent_id, fname, params)
      *@details This closure expects three parameters.
-     * -# the id of the host to call (0 for broadcast, id for local host)
+     * -# the id of the agent to call (0 for broadcast, id for local)
      * -# the name of the function
      * -# a table with the list of arguments
      *
      * The table argument's must be by index from 0 to N-1 args.
      *
      *@code
-     * call_host_function(id, "print", {.0 = 42, .1 = 43});
+     * call_host_function(id, "functionName", {.0 = 42, .1 = 43});
      *@endcode */
     void callHostFunction();
+
+    /**
+     *@brief calls a function to a buzz
+     *@b Signature call_buzz_function(agent_id, fname, params)
+     *@details This closure expects three parameters.
+     * -# the id of the agent to call (0 for broadcast, using your own id is just a complicated a
+     *long way to call a function)
+     * -# the name of the function
+     * -# a table with the list of arguments
+     *
+     * The table argument's must be by index from 0 to N-1 args.
+     *
+     *@code
+     * call_buzz_function(id, "functionName", {.0 = 42, .1 = 43});
+     *@endcode */
+    void callBuzzFunction();
 
     /**
      *@brief Checks if a variable is nil
