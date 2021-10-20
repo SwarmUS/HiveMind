@@ -20,13 +20,16 @@ void WaitFinalState::process(InterlocStateHandler& context) {
                 context.getTWR().deserializeFinal(
                     reinterpret_cast<UWBMessages::TWRFinal*>(m_rxFrame.m_rxBuffer.data()));
                 context.getTWR().m_finalRxTs = m_rxFrame.m_rxTimestamp;
+                context.getTWR().m_allDataReceived = true;
 
-                context.setState(InterlocStates::SET_DISTANCE, InterlocEvent::FINAL_RECVD);
+                context.setState(InterlocStates::ANGLE_RECEIVER, InterlocEvent::FINAL_RECVD);
             }
         } else if (status == UWBRxStatus::TIMEOUT) {
-            context.setState(InterlocStates::IDLE, InterlocEvent::TIMEOUT);
+            context.getTWR().m_allDataReceived = false;
+            context.setState(InterlocStates::ANGLE_RECEIVER, InterlocEvent::TIMEOUT);
         } else {
-            context.setState(InterlocStates::IDLE, InterlocEvent::RX_ERROR);
+            context.getTWR().m_allDataReceived = false;
+            context.setState(InterlocStates::ANGLE_RECEIVER, InterlocEvent::RX_ERROR);
         }
     } else {
         context.setState(InterlocStates::IDLE, InterlocEvent::DECA_INIT_ERROR);

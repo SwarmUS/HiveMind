@@ -9,8 +9,8 @@
 #include <states/SendPollFromSyncState.h>
 #include <states/SendPollState.h>
 #include <states/SendResponseState.h>
-#include <states/SetDistanceState.h>
 #include <states/SyncState.h>
+#include <states/UpdateInterloc.h>
 #include <states/WaitFinalState.h>
 #include <states/WaitPollState.h>
 #include <states/WaitResponseState.h>
@@ -46,8 +46,8 @@ AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
     static SendPollFromSyncState s_pollFromSyncState(LoggerContainer::getLogger(),
                                                      InterlocBSPContainer::getDecawaves());
 
-    static SetDistanceState s_setDistanceState(LoggerContainer::getLogger(),
-                                               InterlocBSPContainer::getDecawaves());
+    static UpdateInterloc s_setDistanceState(LoggerContainer::getLogger(),
+                                             InterlocBSPContainer::getDecawaves());
 
     static AngleSenderState s_angleSender(LoggerContainer::getLogger(),
                                           InterlocBSPContainer::getDecawaves());
@@ -86,7 +86,7 @@ AbstractInterlocState& InterlocStateContainer::getState(InterlocStates state) {
     case InterlocStates::SEND_POLL_FROM_SYNC:
         return s_pollFromSyncState;
 
-    case InterlocStates::SET_DISTANCE:
+    case InterlocStates::CALCULATE_INTERLOC:
         return s_setDistanceState;
 
     case InterlocStates::ANGLE_SENDER:

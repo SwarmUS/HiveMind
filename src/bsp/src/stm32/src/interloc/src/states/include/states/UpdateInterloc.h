@@ -3,9 +3,9 @@
 
 #include "AbstractInterlocState.h"
 
-class SetDistanceState : public AbstractInterlocState {
+class UpdateInterloc : public AbstractInterlocState {
   public:
-    SetDistanceState(ILogger& logger, DecawaveArray& decawaves);
+    UpdateInterloc(ILogger& logger, DecawaveArray& decawaves);
 
     void process(InterlocStateHandler& context) override;
 };

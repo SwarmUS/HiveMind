@@ -21,6 +21,7 @@ extern "C" {
 #define HUART_PRINT (&huart3)
 #define HRNG (&hrng)
 #define HEARTBEAT_TIMER (&htim6)
+#define HUNDREDMICROSECONDS_TIMER (&htim7)
 
 #define UI_INTERRUPT_Pin USER_Btn_Pin
 #define UI_INTERRUPT_Port USER_Btn_Port

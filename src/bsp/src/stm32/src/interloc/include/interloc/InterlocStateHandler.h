@@ -30,7 +30,7 @@ class InterlocStateHandler {
 
     TwoWayRanging& getTWR();
     BspInterlocRawAngleData& getRawAngleData();
-    InterlocTimeManager& getTimeManager();
+    InterlocTimeManager& getTimeManager() const;
 
     void incrementCurrentFrameId();
 
@@ -44,7 +44,7 @@ class InterlocStateHandler {
     void setPreviousFrameStartTs(uint64_t timestamp);
 
     void setAngleCalibNumberOfFrames(uint32_t numberOfFrames);
-    uint32_t getAngleNumberOfFrames() const;
+    uint32_t getAngleCalibNumberOfFrames() const;
 
     static uint16_t getSlotIdFromBoardId(uint16_t boardId);
     static uint16_t getBoardIdFromSlotId(uint16_t slotId);

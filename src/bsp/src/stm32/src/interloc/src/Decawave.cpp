@@ -172,7 +172,7 @@ void Decawave::receiveAsyncDelayed(uint16_t timeoutUs, uint64_t rxStartTime) {
     deca_selectDevice(m_spiDevice);
     dwt_setdelayedtrxtime(rxStartTime >> 8);
 
-    receiveAsyncInternal(timeoutUs, rxStartTime);
+    receiveAsyncInternal(timeoutUs, DWT_START_RX_DELAYED);
 }
 
 bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
@@ -192,7 +192,8 @@ bool Decawave::transmitInternal(uint8_t* buf, uint16_t length, uint8_t flags) {
     if (txStatus == 0) {
         // wait for the end of the transmission
         m_trxTaskHandle = xTaskGetCurrentTaskHandle();
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        ulTaskNotifyTake(pdTRUE, 100); // Avoid blocking here if something goes wrong
+        m_trxTaskHandle = nullptr;
     } else {
         //        volatile uint64_t currentTime = getSysTime();
         //        (void)currentTime;
@@ -385,4 +386,20 @@ UWBRxStatus Decawave::awaitRx() {
     }
 
     return m_rxStatus;
+}
+
+void Decawave::abortTRXFromISR() {
+    deca_selectDevice(m_spiDevice);
+    dwt_forcetrxoff();
+
+    m_rxStatus = UWBRxStatus::ERROR;
+
+    BaseType_t taskWoken = pdFALSE;
+
+    if (m_trxTaskHandle != nullptr) {
+        vTaskNotifyGiveFromISR(m_trxTaskHandle, &taskWoken);
+    }
+
+    m_trxTaskHandle = nullptr;
+    portYIELD_FROM_ISR(taskWoken);
 }

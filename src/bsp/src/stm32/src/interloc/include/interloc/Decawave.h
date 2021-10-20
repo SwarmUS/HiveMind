@@ -241,6 +241,11 @@ class Decawave {
      */
     UWBRxStatus awaitRx();
 
+    /**
+     * Aborts any ongoing RX or TX operation (to be called from ISR)
+     */
+    void abortTRXFromISR();
+
   private:
     decaDevice_t m_spiDevice;
     dwt_config_t m_dwConfig;

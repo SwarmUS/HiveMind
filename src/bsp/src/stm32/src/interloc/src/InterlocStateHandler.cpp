@@ -65,7 +65,7 @@ void InterlocStateHandler::incrementCurrentFrameId() {
     }
 }
 
-InterlocTimeManager& InterlocStateHandler::getTimeManager() { return m_timeManager; }
+InterlocTimeManager& InterlocStateHandler::getTimeManager() const { return m_timeManager; }
 
 uint8_t InterlocStateHandler::getSlotId() const { return m_slotId; }
 uint8_t InterlocStateHandler::getSuperFrameInitiator() const { return m_superFrameInitiator; }
@@ -88,5 +88,7 @@ void InterlocStateHandler::setAngleCalibNumberOfFrames(uint32_t numberOfFrames) 
     m_angleCalibNumberOfFrames = numberOfFrames;
 }
 
-uint32_t InterlocStateHandler::getAngleNumberOfFrames() const { return m_angleCalibNumberOfFrames; }
+uint32_t InterlocStateHandler::getAngleCalibNumberOfFrames() const {
+    return m_angleCalibNumberOfFrames;
+}
 BspInterlocRawAngleData& InterlocStateHandler::getRawAngleData() { return m_angleRawData; }

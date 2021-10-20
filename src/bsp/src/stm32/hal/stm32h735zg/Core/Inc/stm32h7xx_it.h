@@ -63,6 +63,7 @@ void TIM1_UP_IRQHandler(void);
 void USART3_IRQHandler(void);
 void EXTI15_10_IRQHandler(void);
 void TIM8_UP_TIM13_IRQHandler(void);
+void TIM7_IRQHandler(void);
 void ETH_IRQHandler(void);
 void OTG_HS_IRQHandler(void);
 void SPI5_IRQHandler(void);
