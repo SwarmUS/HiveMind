@@ -11,12 +11,18 @@ class BittyBuzzMessageService : public IBittyBuzzMessageService {
   public:
     BittyBuzzMessageService(ICircularQueue<MessageDTO>& hostQueue,
                             ICircularQueue<MessageDTO>& remoteQueue,
+                            ICircularQueue<MessageDTO>& buzzQueue,
                             IBSP& bsp,
                             ILogger& logger);
 
     ~BittyBuzzMessageService() override = default;
 
-    bool callHostFunction(uint16_t hostId,
+    bool callHostFunction(uint16_t agentId,
+                          const char* functionName,
+                          const FunctionCallArgumentDTO* args,
+                          uint16_t argsLength) override;
+
+    bool callBuzzFunction(uint16_t agentId,
                           const char* functionName,
                           const FunctionCallArgumentDTO* args,
                           uint16_t argsLength) override;
@@ -29,6 +35,7 @@ class BittyBuzzMessageService : public IBittyBuzzMessageService {
 
     ICircularQueue<MessageDTO>& m_hostQueue;
     ICircularQueue<MessageDTO>& m_remoteQueue;
+    ICircularQueue<MessageDTO>& m_buzzQueue;
     BuzzMessagesDTO m_messages;
     IBSP& m_bsp;
     ILogger& m_logger;

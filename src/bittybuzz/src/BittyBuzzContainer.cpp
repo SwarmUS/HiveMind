@@ -21,7 +21,8 @@ BittyBuzzClosureRegister& BittyBuzzContainer::getBBZClosureRegister() {
 BittyBuzzMessageService& BittyBuzzContainer::getBBZMessageService() {
     static BittyBuzzMessageService s_bbzMessageService(
         MessageHandlerContainer::getHostMsgQueue(), MessageHandlerContainer::getRemoteMsgQueue(),
-        BSPContainer::getBSP(), LoggerContainer::getLogger());
+        MessageHandlerContainer::getBuzzMsgQueue(), BSPContainer::getBSP(),
+        LoggerContainer::getLogger());
     return s_bbzMessageService;
 }
 

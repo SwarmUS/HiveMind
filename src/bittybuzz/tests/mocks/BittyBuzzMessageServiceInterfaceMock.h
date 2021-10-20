@@ -16,6 +16,14 @@ class BittyBuyzzMessageServiceInterfaceMock : public IBittyBuzzMessageService {
                  uint16_t argsLength),
                 (override));
 
+    MOCK_METHOD(bool,
+                callBuzzFunction,
+                (uint16_t hostId,
+                 const char* functionName,
+                 const FunctionCallArgumentDTO* args,
+                 uint16_t argsLength),
+                (override));
+
     MOCK_METHOD(bool, queueBuzzMessages, (), (override));
 };
 

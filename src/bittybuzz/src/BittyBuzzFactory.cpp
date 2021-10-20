@@ -18,9 +18,9 @@ BittyBuzzStringResolver BittyBuzzFactory::createBittyBuzzStringResolver(ILogger&
                                    BBZSTRING_OFFSET, logger);
 }
 
-BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 13>> BittyBuzzFactory::
+BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 14>> BittyBuzzFactory::
     createBittyBuzzGlobalLib() {
-    std::array<BittyBuzzLibMemberRegister, 13> globalMember = {{
+    std::array<BittyBuzzLibMemberRegister, 14> globalMember = {{
         {BBZSTRID_log, BittyBuzzUserFunctions::log},
         {BBZSTRID_int, BittyBuzzUserFunctions::toInt},
         {BBZSTRID_float, BittyBuzzUserFunctions::toFloat},
@@ -33,10 +33,11 @@ BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 13>> BittyBuzzFactory::
         {BBZSTRID_is_lambda_closure, BittyBuzzUserFunctions::isLambdaClosure},
         {BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure},
         {BBZSTRID_call_host_function, BittyBuzzUserFunctions::callHostFunction},
+        {BBZSTRID_call_host_function, BittyBuzzUserFunctions::callBuzzFunction},
         {BBZSTRID_delay, BittyBuzzUserFunctions::delay},
     }};
 
-    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 13>>(globalMember);
+    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 14>>(globalMember);
 }
 
 BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 23>> BittyBuzzFactory::

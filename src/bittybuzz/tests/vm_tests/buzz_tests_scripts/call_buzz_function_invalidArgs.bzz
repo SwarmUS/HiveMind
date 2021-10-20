@@ -1,0 +1,7 @@
+function init() {
+}
+
+function step() {
+  # Sub tables are not supported yet
+  call_buzz_function(id, "buzzFunction", {.0 = 42, .1 = {}});
+}

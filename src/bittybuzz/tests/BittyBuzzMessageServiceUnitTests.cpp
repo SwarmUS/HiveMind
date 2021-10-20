@@ -11,8 +11,9 @@ class BittyBuzzMessageServiceTestFixture : public testing::Test {
   protected:
     BittyBuzzMessageService* m_messageService;
 
-    CircularQueueInterfaceMock<MessageDTO> m_hostOutputQueueMock;
-    CircularQueueInterfaceMock<MessageDTO> m_remoteOutputQueueMock;
+    testing::StrictMock<CircularQueueInterfaceMock<MessageDTO>> m_hostOutputQueueMock;
+    testing::StrictMock<CircularQueueInterfaceMock<MessageDTO>> m_remoteOutputQueueMock;
+    testing::StrictMock<CircularQueueInterfaceMock<MessageDTO>> m_buzzOutputQueueMock;
     LoggerInterfaceMock* m_loggerMock;
     BSPInterfaceMock* m_bspMock;
     int m_logCounter = 0;
@@ -29,8 +30,9 @@ class BittyBuzzMessageServiceTestFixture : public testing::Test {
         bbzvm_construct(1);
         m_loggerMock = new LoggerInterfaceMock(m_logCounter, m_logLastFormat);
         m_bspMock = new BSPInterfaceMock(m_bspUUID);
-        m_messageService = new BittyBuzzMessageService(
-            m_hostOutputQueueMock, m_remoteOutputQueueMock, *m_bspMock, *m_loggerMock);
+        m_messageService =
+            new BittyBuzzMessageService(m_hostOutputQueueMock, m_remoteOutputQueueMock,
+                                        m_buzzOutputQueueMock, *m_bspMock, *m_loggerMock);
     }
 
     void TearDown() override {
@@ -43,7 +45,6 @@ class BittyBuzzMessageServiceTestFixture : public testing::Test {
 TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callHostFunction_remote_valid) {
     // Given
     MessageDTO messageSent;
-    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
@@ -67,7 +68,6 @@ TEST_F(BittyBuzzMessageServiceTestFixture,
        BittyBuzzMessageService_callHostFunction_remote_failToPush) {
     // Given
     MessageDTO messageSent;
-    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
     EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(false)));
@@ -90,7 +90,6 @@ TEST_F(BittyBuzzMessageServiceTestFixture,
 TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callHostFunction_host_valid) {
     // Given
     MessageDTO messageSent;
-    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostOutputQueueMock, push(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
@@ -114,7 +113,6 @@ TEST_F(BittyBuzzMessageServiceTestFixture,
        BittyBuzzMessageService_callHostFunction_host_failToPush) {
     // Given
     MessageDTO messageSent;
-    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).Times(0);
     EXPECT_CALL(m_hostOutputQueueMock, push(testing::_))
         .Times(1)
         .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(false)));
@@ -215,11 +213,203 @@ TEST_F(BittyBuzzMessageServiceTestFixture,
        BittyBuzzMessageService_callHostFunction_broadcast_bothPushFail) {
     // Given
     MessageDTO messageSentHost;
-    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).WillOnce(testing::Return(false));
-    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).WillOnce(testing::Return(true));
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).WillRepeatedly(testing::Return(false));
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).WillRepeatedly(testing::Return(false));
 
     // Then
     bool ret = m_messageService->callHostFunction(0, m_functionName.c_str(), m_arguments.data(),
+                                                  m_arguments.size());
+
+    // Expect
+    EXPECT_FALSE(ret);
+}
+
+TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callBuzzFunction_remote_valid) {
+    // Given
+    MessageDTO messageSent;
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
+
+    // Then
+    bool ret = m_messageService->callBuzzFunction(m_remoteUUID, m_functionName.c_str(),
+                                                  m_arguments.data(), m_arguments.size());
+
+    // Expect
+    auto req = std::get<RequestDTO>(messageSent.getMessage());
+    auto ureq = std::get<UserCallRequestDTO>(req.getRequest());
+    auto freq = std::get<FunctionCallRequestDTO>(ureq.getRequest());
+    auto arg = std::get<int64_t>(freq.getArguments()[0].getArgument());
+
+    EXPECT_TRUE(ret);
+    EXPECT_EQ(ureq.getDestination(), UserCallTargetDTO::BUZZ);
+    EXPECT_EQ(freq.getArgumentsLength(), m_arguments.size());
+    EXPECT_EQ(arg, m_argVal);
+    EXPECT_STREQ(freq.getFunctionName(), m_functionName.c_str());
+}
+
+TEST_F(BittyBuzzMessageServiceTestFixture,
+       BittyBuzzMessageService_callBuzzFunction_remote_failToPush) {
+    // Given
+    MessageDTO messageSent;
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(false)));
+
+    // Then
+    bool ret = m_messageService->callBuzzFunction(m_remoteUUID, m_functionName.c_str(),
+                                                  m_arguments.data(), m_arguments.size());
+
+    // Expect
+    auto req = std::get<RequestDTO>(messageSent.getMessage());
+    auto ureq = std::get<UserCallRequestDTO>(req.getRequest());
+    auto freq = std::get<FunctionCallRequestDTO>(ureq.getRequest());
+    auto arg = std::get<int64_t>(freq.getArguments()[0].getArgument());
+
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(ureq.getDestination(), UserCallTargetDTO::BUZZ);
+    EXPECT_EQ(freq.getArgumentsLength(), m_arguments.size());
+    EXPECT_EQ(arg, m_argVal);
+    EXPECT_STREQ(freq.getFunctionName(), m_functionName.c_str());
+}
+
+TEST_F(BittyBuzzMessageServiceTestFixture, BittyBuzzMessageService_callBuzzFunction_local_valid) {
+    // Given
+    MessageDTO messageSent;
+    EXPECT_CALL(m_buzzOutputQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
+
+    // Then
+    bool ret = m_messageService->callBuzzFunction(m_bspUUID, m_functionName.c_str(),
+                                                  m_arguments.data(), m_arguments.size());
+
+    // Expect
+    auto req = std::get<RequestDTO>(messageSent.getMessage());
+    auto ureq = std::get<UserCallRequestDTO>(req.getRequest());
+    auto freq = std::get<FunctionCallRequestDTO>(ureq.getRequest());
+    auto arg = std::get<int64_t>(freq.getArguments()[0].getArgument());
+
+    EXPECT_TRUE(ret);
+    EXPECT_EQ(ureq.getDestination(), UserCallTargetDTO::BUZZ);
+    EXPECT_EQ(freq.getArgumentsLength(), m_arguments.size());
+    EXPECT_EQ(arg, m_argVal);
+    EXPECT_STREQ(freq.getFunctionName(), m_functionName.c_str());
+}
+
+TEST_F(BittyBuzzMessageServiceTestFixture,
+       BittyBuzzMessageService_callBuzzFunction_local_failToPush) {
+    // Given
+    MessageDTO messageSent;
+    EXPECT_CALL(m_buzzOutputQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(false)));
+
+    // Then
+    bool ret = m_messageService->callBuzzFunction(m_bspUUID, m_functionName.c_str(),
+                                                  m_arguments.data(), m_arguments.size());
+
+    // Expect
+    auto req = std::get<RequestDTO>(messageSent.getMessage());
+    auto ureq = std::get<UserCallRequestDTO>(req.getRequest());
+    auto freq = std::get<FunctionCallRequestDTO>(ureq.getRequest());
+    auto arg = std::get<int64_t>(freq.getArguments()[0].getArgument());
+
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(ureq.getDestination(), UserCallTargetDTO::BUZZ);
+    EXPECT_EQ(freq.getArgumentsLength(), m_arguments.size());
+    EXPECT_EQ(arg, m_argVal);
+    EXPECT_STREQ(freq.getFunctionName(), m_functionName.c_str());
+}
+
+TEST_F(BittyBuzzMessageServiceTestFixture,
+       BittyBuzzMessageService_callBuzzFunction_broadcast_valid) {
+    // Given
+    MessageDTO messageSentLocal;
+    MessageDTO messageSentRemote;
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSentRemote), testing::Return(true)));
+    EXPECT_CALL(m_buzzOutputQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSentLocal), testing::Return(true)));
+
+    // Then
+    bool ret = m_messageService->callBuzzFunction(0, m_functionName.c_str(), m_arguments.data(),
+                                                  m_arguments.size());
+
+    // Expect
+
+    // Remote
+    auto reqRemote = std::get<RequestDTO>(messageSentRemote.getMessage());
+    auto ureqRemote = std::get<UserCallRequestDTO>(reqRemote.getRequest());
+    auto freqRemote = std::get<FunctionCallRequestDTO>(ureqRemote.getRequest());
+    auto argRemote = std::get<int64_t>(freqRemote.getArguments()[0].getArgument());
+
+    // Host
+    auto reqLocal = std::get<RequestDTO>(messageSentLocal.getMessage());
+    auto ureqLocal = std::get<UserCallRequestDTO>(reqLocal.getRequest());
+    auto freqLocal = std::get<FunctionCallRequestDTO>(ureqLocal.getRequest());
+    auto argLocal = std::get<int64_t>(freqLocal.getArguments()[0].getArgument());
+
+    EXPECT_TRUE(ret);
+    // Remote
+    EXPECT_EQ(ureqRemote.getDestination(), UserCallTargetDTO::BUZZ);
+    EXPECT_EQ(freqRemote.getArgumentsLength(), m_arguments.size());
+    EXPECT_EQ(argRemote, m_argVal);
+    EXPECT_STREQ(freqRemote.getFunctionName(), m_functionName.c_str());
+    // Local
+    EXPECT_EQ(ureqLocal.getDestination(), UserCallTargetDTO::BUZZ);
+    EXPECT_EQ(freqLocal.getArgumentsLength(), m_arguments.size());
+    EXPECT_EQ(argLocal, m_argVal);
+    EXPECT_STREQ(freqLocal.getFunctionName(), m_functionName.c_str());
+}
+
+TEST_F(BittyBuzzMessageServiceTestFixture,
+       BittyBuzzMessageService_callBuzzFunction_broadcast_localPushFail) {
+    // Given
+    MessageDTO messageSentHost;
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_))
+        .Times(testing::AtMost(1))
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(m_buzzOutputQueueMock, push(testing::_)).Times(1).WillOnce(testing::Return(false));
+
+    // Then
+    bool ret = m_messageService->callBuzzFunction(0, m_functionName.c_str(), m_arguments.data(),
+                                                  m_arguments.size());
+
+    // Expect
+    EXPECT_FALSE(ret);
+}
+
+TEST_F(BittyBuzzMessageServiceTestFixture,
+       BittyBuzzMessageService_callBuzzFunction_broadcast_remotePushFail) {
+    // Given
+    MessageDTO messageSentHost;
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_))
+        .Times(1)
+        .WillOnce(testing::Return(false));
+    EXPECT_CALL(m_buzzOutputQueueMock, push(testing::_))
+        .Times(testing::AtMost(1))
+        .WillOnce(testing::Return(true));
+
+    // Then
+    bool ret = m_messageService->callBuzzFunction(0, m_functionName.c_str(), m_arguments.data(),
+                                                  m_arguments.size());
+
+    // Expect
+    EXPECT_FALSE(ret);
+}
+
+TEST_F(BittyBuzzMessageServiceTestFixture,
+       BittyBuzzMessageService_callBuzzFunction_broadcast_bothPushFail) {
+    // Given
+    MessageDTO messageSentHost;
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).WillRepeatedly(testing::Return(false));
+    EXPECT_CALL(m_buzzOutputQueueMock, push(testing::_)).WillRepeatedly(testing::Return(false));
+
+    // Then
+    bool ret = m_messageService->callBuzzFunction(0, m_functionName.c_str(), m_arguments.data(),
                                                   m_arguments.size());
 
     // Expect
