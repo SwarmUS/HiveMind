@@ -77,6 +77,10 @@ TEST_F(BittyBuzzVmTestFixture,
     CircularQueueInterfaceMock<MessageDTO> hostOutputQueueMock;
     CircularQueueInterfaceMock<MessageDTO> remoteOutputQueueMock;
 
+    std::string functionName = "registeredFunction";
+    std::string argIntName = "arg_int";
+    std::string argFloatName = "arg_float";
+
     BittyBuzzClosureRegister closureRegister;
     BittyBuzzStringResolver stringResolver(g_bbzStringResolverArray.data(),
                                            g_bbzStringResolverArray.size(), BBZSTRING_OFFSET,

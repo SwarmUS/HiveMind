@@ -1,5 +1,4 @@
 function init() {
-  test = {};
   var args_description = {
     .0 ={.arg_int=0},
     .1 ={.arg_float=0.0}
