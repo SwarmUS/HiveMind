@@ -69,7 +69,7 @@ void BittyBuzzUserFunctions::log() {
 
     LockGuard lock(BittyBuzzSystem::g_ui->getPrintMutex());
 
-    constexpr uint16_t objStrSize = 32;
+    constexpr uint16_t objStrSize = 256;
     char objStr[objStrSize];
     // Iterate through args, we start a arg 1 up to the nb of
     BittyBuzzSystem::g_ui->print("BBZ USER: ");
