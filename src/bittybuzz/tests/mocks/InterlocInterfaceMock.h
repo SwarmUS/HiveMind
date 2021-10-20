@@ -16,7 +16,7 @@ class InterlocInterfaceMock : public IInterloc {
 
     MOCK_METHOD((const PositionsTable&), getPositionsTable, (), (const override));
 
-    MOCK_METHOD(void, process, (), (override))
+    MOCK_METHOD(void, process, (), (override));
 };
 
 #endif // __INTERLOCKINTERFACEMOCK_H_
