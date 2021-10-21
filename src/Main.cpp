@@ -188,12 +188,15 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     MessageSenderTask(const char* taskName,
                       UBaseType_t priority,
                       ICommInterface* stream,
-                      INotificationQueue<MessageDTO>& streamQueue) :
+                      INotificationQueue<MessageDTO>& streamQueue,
+                      bool keepRunning=false) :
         AbstractTask(taskName, priority),
         m_taskName(taskName),
         m_stream(stream),
         m_streamQueue(streamQueue),
-        m_logger(LoggerContainer::getLogger()) {}
+        m_logger(LoggerContainer::getLogger()),
+        m_keepRunning(keepRunning) {}
+
 
     ~MessageSenderTask() override = default;
 
@@ -206,13 +209,14 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     INotificationQueue<MessageDTO>& m_streamQueue;
     ILogger& m_logger;
     IHiveMindHostSerializer* m_serializer = NULL;
+    bool m_keepRunning;
 
     void task() override {
         if (m_stream != NULL && m_serializer != NULL) {
             MessageSender messageSender(m_streamQueue, *m_serializer, BSPContainer::getBSP(),
                                         m_logger);
-            while (true) {
-                while (m_stream->isConnected()) {
+            while (m_stream->isConnected() || m_keepRunning) {
+                if (m_stream->isConnected()) {
                     // Verify that we have a message to process
                     if (m_streamQueue.isEmpty()) {
                         m_streamQueue.wait(500);
@@ -221,8 +225,8 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
                         m_logger.log(LogLevel::Warn, "Fail to process/serialize in %s", m_taskName);
                     }
                 }
-            }
 
+            }
         }
     }
 };
@@ -421,7 +425,7 @@ int main(int argc, char** argv) {
                                                       NULL,
                                                       MessageHandlerContainer::getRemoteMsgQueue());
     static MessageSenderTask s_remoteMessageSender("remote_send", gc_taskNormalPriority, NULL,
-                                                   MessageHandlerContainer::getRemoteMsgQueue());
+                                                   MessageHandlerContainer::getRemoteMsgQueue(), true);
 
     static CommMonitoringTask s_hostMonitorTask(
         "host_monitor", gc_taskNormalPriority, s_hostDispatchTask, s_hostMessageSender,
