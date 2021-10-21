@@ -46,11 +46,36 @@ inline char perm(bbzobj_t* obj) {
     }
     return '-';
 }
+
+inline void logObj(ILogger& logger, LogLevel logLevel, bbzheap_idx_t heapIdx) {
+    constexpr uint16_t objStrSize = 32;
+    char objStr[objStrSize];
+
+    bbzobj_t* obj = bbzheap_obj_at(heapIdx); // NOLINT
+    if (bbzheap_obj_isvalid(*obj)) {
+        if (BittyBuzzUtils::logObj(obj, objStr, objStrSize) >= 0) {
+            logger.log(logLevel, "\t#%d: %s %c", heapIdx, objStr, perm(obj));
+        } else {
+            logger.log(logLevel, "\t#%d: Failed to log obj %c", heapIdx, perm(obj));
+        }
+        Task::delay(VM_DUMP_LOG_WAIT_TIME_MS);
+    }
+}
+
 void BittyBuzzSystem::logVmDump(LogLevel logLevel) {
     if (g_logger != NULL) {
         g_logger->log(logLevel, "----- START VM DUMP -----");
 
-        g_logger->log(logLevel, "--- HEAP STATUS ---");
+        g_logger->log(logLevel, "----- STACK DUMP -----");
+
+        int16_t stackSize = bbzvm_stack_size();
+
+        for (int16_t i = 0; i < stackSize; i++) {
+            bbzheap_idx_t heapId = bbzvm_stack_at(i);
+            logObj(*g_logger, logLevel, heapId);
+        }
+
+        g_logger->log(logLevel, "--- HEAP DUMP ---");
         /* Object-related stuff */
         uint16_t objimax = (uint16_t)(vm->heap.rtobj - vm->heap.data) / sizeof(bbzobj_t);
         g_logger->log(logLevel, "Max object index: %d", objimax - 1);
@@ -64,18 +89,8 @@ void BittyBuzzSystem::logVmDump(LogLevel logLevel) {
         g_logger->log(logLevel, "Valid objects: %d", objnum);
         g_logger->log(logLevel, "Size per object: %d", sizeof(bbzobj_t));
 
-        constexpr uint16_t objStrSize = 32;
-        char objStr[objStrSize];
         for (uint16_t i = 0; i < objimax; ++i) {
-            bbzobj_t* obj = bbzheap_obj_at(i); // NOLINT
-            if (bbzheap_obj_isvalid(*obj)) {
-                if (BittyBuzzUtils::logObj(obj, objStr, objStrSize) >= 0) {
-                    g_logger->log(logLevel, "\t#%d: %s %c", i, objStr, perm(obj));
-                } else {
-                    g_logger->log(logLevel, "\t#%d: Failed to log obj %c", i, perm(obj));
-                }
-                Task::delay(VM_DUMP_LOG_WAIT_TIME_MS);
-            }
+            logObj(*g_logger, logLevel, i);
         }
 
         /* Table Segment related stuff */
