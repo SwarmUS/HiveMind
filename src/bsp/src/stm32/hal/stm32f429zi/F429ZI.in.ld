@@ -1,15 +1,15 @@
 ENTRY(Reset_Handler)
 
-_estack = ORIGIN(DTCMRAM) + LENGTH(DTCMRAM); /* end of "RAM" Ram type memory */
-_Min_Heap_Size = 0x600;
+_estack = ORIGIN(RAM) + LENGTH(RAM);
+_Min_Heap_Size = 0x200;
 _Min_Stack_Size = 0x400;
 
 MEMORY
 {
     FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 1024K-${USER_DATA_FLASH_SIZE}
-    DTCMRAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 128K
-    RAM_D1 (xrw)       : ORIGIN = 0x24000000, LENGTH = 320k  
-    RAM_D2 (xrw)    : ORIGIN = 0x30000000, LENGTH = 288K
+    RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 192K
+    CCMRAM (rw) : ORIGIN = 0x10000000, LENGTH = 64K
+
 }
 
 SECTIONS
@@ -75,16 +75,16 @@ SECTIONS
 
   _sidata = LOADADDR(.data);
 
-  .data : 
+  .data :
   {
     . = ALIGN(4);
-    _sdata = .; 
+    _sdata = .;
     *(.data)
     *(.data*)
 
     . = ALIGN(4);
     _edata = .;
-  } >RAM_D1 AT> FLASH
+  } >RAM AT> FLASH
 
   . = ALIGN(4);
   .bss :
@@ -98,20 +98,30 @@ SECTIONS
     . = ALIGN(4);
     _ebss = .;
     __bss_end__ = _ebss;
-  } >RAM_D1
+  } >RAM
 
-  /* stack/heap may change section so we keep the user cm in it's own section*/
+  /* TODO: CHECK IF INITALIZATION IS WORKING */
+  .ccmram :
+  {
+    . = ALIGN(4);
+    _sccmram = .;
+    *(.ccmram)
+    *(.ccmram*)
+    . = ALIGN(4);
+    _eccmram = .;
+  } >CCMRAM AT> FLASH
+
   .user_cm :{
     . = ALIGN(4);
     KEEP(*(.user_cm))
     . = ALIGN(4);
-  } >DTCMRAM
+  } >CCMRAM
 
   .user_cm_data :{
     . = ALIGN(4);
     KEEP(*(.user_cm_data))
     . = ALIGN(4);
-  } >DTCMRAM AT> FLASH
+  } >CCMRAM AT> FLASH
 
   ._user_heap_stack :
   {
@@ -121,19 +131,7 @@ SECTIONS
     . = . + _Min_Heap_Size;
     . = . + _Min_Stack_Size;
     . = ALIGN(8);
-  } >DTCMRAM
-
-  .lwip_sec (NOLOAD) : {
-    . = ABSOLUTE(0x30000000);
-    *(.RxDecripSection)
-    
-    . = ABSOLUTE(0x30000060);
-    *(.TxDecripSection)
-
-    . = ABSOLUTE(0x30000200);
-    *(.RxArraySection)
-  } >RAM_D2 AT> FLASH
-  
+  } >RAM
 
   /DISCARD/ :
   {
