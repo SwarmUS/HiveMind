@@ -1,6 +1,7 @@
 # We need this for 2D vectors
-# Make sure you pass the correct include path to "bzzc -I <path1:path2> ..."
-include "inclue/vec2.bzz"
+
+# This file is from the buzz "standard library". It's included with the compiler
+include "vec2.bzz"
  
 # Lennard-Jones parameters
 TARGET_KIN     = 283.0
@@ -49,7 +50,8 @@ function init() {
     # Divide the swarm in two sub-swarms
     s1 = swarm.create(1)
     s1.select(id % 2 == 0)
-    s2 = s1.others(2)
+    s2 = swarm.create(2)
+    s2.select(id % 2 == 1)
 }
  
 # Executed every time step

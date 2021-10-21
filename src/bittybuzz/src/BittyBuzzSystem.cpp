@@ -34,7 +34,7 @@ void BittyBuzzSystem::errorReceiver(bbzvm_error errcode) {
                       "state: %s,  error code: %s, instruction: %s \n",
                       vm->pc, vm->stackptr, getStateString(vm->state), getErrorString(errcode),
                       getInstructionString(instr));
-        logVmHeap(LogLevel::Error);
+        logVmDump(LogLevel::Error);
     }
 }
 
@@ -46,9 +46,10 @@ inline char perm(bbzobj_t* obj) {
     }
     return '-';
 }
-void BittyBuzzSystem::logVmHeap(LogLevel logLevel) {
+void BittyBuzzSystem::logVmDump(LogLevel logLevel) {
     if (g_logger != NULL) {
         g_logger->log(logLevel, "----- START VM DUMP -----");
+
         g_logger->log(logLevel, "--- HEAP STATUS ---");
         /* Object-related stuff */
         uint16_t objimax = (uint16_t)(vm->heap.rtobj - vm->heap.data) / sizeof(bbzobj_t);

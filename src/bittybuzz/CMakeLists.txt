@@ -11,17 +11,17 @@ configure_file(include/bittybuzz/BittyBuzzSettings.in.h include/bittybuzz/BittyB
 # Deps
 bittybuzz_fetch()
 find_package(BittyBuzz)
-
 # System bst file
 set(BITTYBUZZ_HIVEMIND_BST ${CMAKE_CURRENT_SOURCE_DIR}/bittybuzz.bst)
 
 # Concat with user bst file
-set(BITTYBUZZ_BST_FILES ${USER_BST_FILES} ${BITTYBUZZ_HIVEMIND_BST})
+set(BITTYBUZZ_BST_FILES ${USER_BUZZ_BST_FILES} ${BITTYBUZZ_HIVEMIND_BST})
+set(BITTYBUZZ_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts:${USER_BUZZ_INCLUDE_DIRS})
 
 # BittyBuzz script bytecode generation
 bittybuzz_generate_bytecode(bittybuzz-target
         ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts/main.bzz
-        ${CMAKE_CURRENT_SOURCE_DIR}/buzz_scripts
+        "${BITTYBUZZ_INCLUDE_DIRS}"
         "${BITTYBUZZ_BST_FILES}")
 
 set(LIB_HEADERS

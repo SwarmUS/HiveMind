@@ -67,10 +67,10 @@ namespace BittyBuzzSystem {
     void errorReceiver(bbzvm_error errcode);
 
     /**
-     *@brief Logs the current heap status
+     *@brief Logs the vm dump which contains information about the vm state, heap, stack, etc.
      *
      *@param [in] logLevel the log level */
-    void logVmHeap(LogLevel logLevel);
+    void logVmDump(LogLevel logLevel);
 
     const char* getStateString(bbzvm_state state);
 
