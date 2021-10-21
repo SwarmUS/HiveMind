@@ -34,7 +34,6 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
 
     get_filename_component(BZZ_BASENAME ${bzz_source} NAME_WE)
     set(BUZZ_INCLUDE_PATH "$ENV{BUZZ_INCLUDE_PATH}:${BUZZ_BZZ_INCLUDE_DIR}:${bzz_include_list}")
-    message("TEST: " ${BUZZ_INCLUDE_PATH})
 
     # Settings vars
     set(BO_FILE   ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}.bo)

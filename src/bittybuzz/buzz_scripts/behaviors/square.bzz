@@ -1,26 +1,24 @@
-# We need this for 2D vectors
+include "vec2.bzz" # This file is from the buzz "standard library". It's included with the compiler
+include "utils/executor.bzz"
 
-# This file is from the buzz "standard library". It's included with the compiler
-include "vec2.bzz"
- 
 # Lennard-Jones parameters
-TARGET_KIN     = 283.0
-EPSILON_KIN    = 150.0
-TARGET_NONKIN  = 200.0
-EPSILON_NONKIN = 100.0
+TARGET_KIN     = 2.83
+EPSILON_KIN    = 1.50
+TARGET_NONKIN  = 2.0
+EPSILON_NONKIN = 1.0
  
 # Lennard-Jones interaction magnitude
 function lj_magnitude(dist, target, epsilon) {
-    return -(epsilon / dist) * ((target / dist)^4 - (target / dist)^2)
+    return -(epsilon / dist) * ((target / dist)^4 - (target / dist)^2) #Need pow with float as base in the bbvm for this
 }
  
-# Neighbor data to LJ interaction vector
-function lj_vector_kin(rid, data) {
+# Neighbor data to LJ interaction vecor
+function lj_vecor_kin(rid, data) {
     return math.vec2.newp(lj_magnitude(data.distance, TARGET_KIN, EPSILON_KIN), data.azimuth)
 }
  
-# Neighbor data to LJ interaction vector
-function lj_vector_nonkin(rid, data) {
+# Neighbor data to LJ interaction vecor
+function lj_vecor_nonkin(rid, data) {
     return math.vec2.newp(lj_magnitude(data.distance, TARGET_NONKIN, EPSILON_NONKIN), data.azimuth)
 }
  
@@ -32,30 +30,71 @@ function lj_sum(rid, data, accum) {
 function goto(x, y) {
     call_host_function(id, "moveBy", {.0 = x, .1 = y});
 }
- 
+
+function is_kin(robot_id){
+    if((robot_id % 2) == (id % 2)){
+        return 1;
+    }
+    return nil
+}
+
 # Calculates and actuates the flocking interaction
 function square() {
     # Calculate accumulator
-    var accum = neighbors.kin().map(lj_vector_kin).reduce(lj_sum, math.vec2.new(0.0, 0.0))
-    accum = neighbors.nonkin().map(lj_vector_nonkin).reduce(lj_sum, accum)
-    if(neighbors.count() > 0)
-        math.vec2.scale(accum, 1.0 / neighbors.count())
 
-    # Move according to vector
-    goto(accum.x, accum.y)
+    var accum_vec = math.vec2.new(0.0, 0.0);
+    if(neighbors.count() == 4){
+        log("Getting neighbors");
+        for (i = 1, i<5, i = i+1){
+            if (i != id) {
+                var neighbor_data = neighbors.get(i)
+                if(is_table(neighbor_data)){
+                    if(is_kin(i)){
+                        neighbor_vec = lj_vecor_kin(i, neighbor_data);
+                    }
+                    else {
+                        log("3: nonkin");
+                        neighbor_vec = lj_vecor_nonkin(i, neighbor_data);
+                    }
+                    accum_vec = math.vec2.add(neighbor_vec, accum_vec)
+                    log("Vect incremented");
+                }
+                else {
+                    log("neighbor: ", i, " is nil")
+                }
+            }
+        }
+    }
+
+    var ncount = neighbors.count();
+    log("Cheking number of neighbors: ", ncount);
+    if(ncount > 0){
+        log("Scaling");
+        math.vec2.scale(accum_vec, 1.0 / ncount)
+    }
+
+    # Move according to vecor
+    log("Moving to: ", accum_vec.x, accum_vec.y);
+    goto(accum_vec.x, accum_vec.y)
+}
+
+# Executed every time step
+function tick(ctx) {
+    swarm1.exec(square)
+    swarm2.exec(square)
 }
  
 # Executed at init time
-function init() {
+function create_exec() {
     # Divide the swarm in two sub-swarms
-    s1 = swarm.create(1)
-    s1.select(id % 2 == 0)
-    s2 = swarm.create(2)
-    s2.select(id % 2 == 1)
-}
- 
-# Executed every time step
-function step() {
-    s1.exec(square)
-    s2.exec(square)
+    swarm1 = swarm.create(1)
+    swarm1.select(id % 2 == 0)
+
+    swarm2 = swarm.create(2)
+    swarm2.select(id % 2 == 1)
+
+    exec = executor.new(10, tick, nil);
+    log("Created exec");
+    return exec;
+
 }

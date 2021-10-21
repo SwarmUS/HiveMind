@@ -33,7 +33,7 @@ BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 14>> BittyBuzzFactory::
         {BBZSTRID_is_lambda_closure, BittyBuzzUserFunctions::isLambdaClosure},
         {BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure},
         {BBZSTRID_call_host_function, BittyBuzzUserFunctions::callHostFunction},
-        {BBZSTRID_call_host_function, BittyBuzzUserFunctions::callBuzzFunction},
+        {BBZSTRID_call_buzz_function, BittyBuzzUserFunctions::callBuzzFunction},
         {BBZSTRID_delay, BittyBuzzUserFunctions::delay},
     }};
 

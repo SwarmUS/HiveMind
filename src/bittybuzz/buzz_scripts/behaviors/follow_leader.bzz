@@ -4,13 +4,14 @@ function tick(context){
     var leader = stig.get("leader");
 
     if(leader != id and leader != nil){
+        log("Trying to get leader: ", leader)
         var neighbor = neighbors.get(leader);
 
         if(is_table(neighbor)){
             var angle = neighbor.azimuth;
             var x = math.cos(angle);
             var y = math.sin(angle);
-            log("Angle: ", angle, ". Moving to leader", leader, " at x:", x, " y:", y);
+            log("Angle: ", angle, ". Moving to leader: ", leader, " at x:", x, " y:", y);
             call_host_function(id, "moveBy", {.0 = x, .1 = y});
         }
         else{
@@ -23,7 +24,7 @@ function create_exec(step_count) {
   counter = 0;
   stig = stigmergy.create(1);
 
-  stig.put("leader", 1);
+  stig.put("leader", 2);
 
   exec = executor.new(step_count, tick, nil);
   return exec;
