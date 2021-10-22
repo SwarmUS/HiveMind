@@ -59,13 +59,13 @@ add_library(stm32f429zi-linker INTERFACE)
 add_library(${LIB_HAL_LINKER_ALIAS} ALIAS stm32f429zi-linker) # Provide alias for linker options
 
 # Defining entry point
-set(LIB_SOURCES
+set(STARTUP_SOURCES
     startup_stm32f429xx.s
-    Core/Src/system_stm32f4xx.c
 )
-add_library(Swarmus::CMSIS::Startup INTERFACE IMPORTED)
+add_library(swarmus-cmsis-startup INTERFACE)
+add_library(Swarmus::CMSIS::Startup ALIAS swarmus-cmsis-startup)
 target_link_libraries(Swarmus::CMSIS::Startup INTERFACE CMSIS::STM32::F4 STM32::F429xx)
-target_sources(Swarmus::CMSIS::Startup INTERFACE ${LIB_SOURCES})
+target_sources(Swarmus::CMSIS::Startup INTERFACE ${STARTUP_SOURCES})
 
 target_sources(stm32f429zi-linker
     INTERFACE
@@ -89,6 +89,11 @@ target_link_libraries(stm32f429zi-linker
         SwarmUS::HiveMind::LWIP
         CMSIS::STM32::F4::RTOS_V2
     )
+# linker file
+configure_file(F429ZI.in.ld F429ZI.ld)
+set_default(USER_DATA_FLASH_SIZE "0K")
+stm32_add_linker_script(stm32f429zi-linker INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/F429ZI.ld)
+
 
 # Actual bsp library
 add_library(${LIB_NAME} 

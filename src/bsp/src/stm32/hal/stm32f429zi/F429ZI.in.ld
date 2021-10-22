@@ -86,9 +86,9 @@ SECTIONS
     _edata = .;
   } >RAM AT> FLASH
 
-  . = ALIGN(4);
   .bss :
   {
+    . = ALIGN(4);
     _sbss = .;
     __bss_start__ = _sbss;
     *(.bss)
@@ -100,7 +100,7 @@ SECTIONS
     __bss_end__ = _ebss;
   } >RAM
 
-  .ccmbss:
+  .ccmbss :
   {
     . = ALIGN(4);
     _sccmbss = .;

@@ -86,9 +86,9 @@ SECTIONS
     _edata = .;
   } >RAM_D1 AT> FLASH
 
-  . = ALIGN(4);
   .bss :
   {
+    . = ALIGN(4);
     _sbss = .;
     __bss_start__ = _sbss;
     *(.bss)
@@ -100,7 +100,7 @@ SECTIONS
     __bss_end__ = _ebss;
   } >RAM_D1
 
-  .tcmbss:
+  .tcmbss :
   {
     . = ALIGN(4);
     _stcmbss = .;
@@ -111,7 +111,7 @@ SECTIONS
     *(.user_cm*)
     . = ALIGN(4);
     _etcmbss = .;
-  } >CCMRAM
+  } >DTCMRAM
 
   .tcmdata :
   {
@@ -120,11 +120,11 @@ SECTIONS
     *(.tcmdata)
     *(.tcmdata*)
     . = ALIGN(4);
-    *(.user_cm_data)
-    *(.user_cm_data*)
+    *(.user_cmd_data)
+    *(.user_cmd_data*)
     . = ALIGN(4);
     _etcmdata = .;
-  } >CCMRAM AT> FLASH
+  } >DTCMRAM AT> FLASH
 
   _sitcmdata = LOADADDR(.tcmdata);
 

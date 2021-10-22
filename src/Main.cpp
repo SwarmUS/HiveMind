@@ -27,6 +27,9 @@
 constexpr uint16_t gc_taskNormalPriority = tskIDLE_PRIORITY + 1;
 constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 30; // Higher priority then LwIP
 
+__attribute__((section(".user_cmd_data")))
+volatile int32_t bigass_array[9000] = {1, 3, 4,5,6,6,7,7,87};
+
 // Need to return the proper comm interface
 typedef std::optional<std::reference_wrapper<ICommInterface>> (*commInterfaceGetter)();
 
@@ -390,6 +393,7 @@ std::optional<std::reference_wrapper<ICommInterface>> hostInterfaceGetter() {
 }
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
+    printf("%ld", bigass_array[800]);
 
     IBSP& bsp = BSPContainer::getBSP();
     bsp.initChip((void*)&cmdLineArgs);
