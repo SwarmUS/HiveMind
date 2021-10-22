@@ -49,10 +49,10 @@
 .global  g_pfnVectors
 .global  Default_Handler
 
-/* start address for the initialization values of the .data section. 
+/* start address for the initialization values of the .data section.
 defined in linker script */
 .word  _sidata
-/* start address for the .data section. defined in linker script */  
+/* start address for the .data section. defined in linker script */
 .word  _sdata
 /* end address for the .data section. defined in linker script */
 .word  _edata
@@ -60,13 +60,24 @@ defined in linker script */
 .word  _sbss
 /* end address for the .bss section. defined in linker script */
 .word  _ebss
+/* start address for the initialization values of the .ccmdata section.
+defined in linker script */
+.word  _siccmdata
+/* start address for the .ccmdata section. defined in linker script */
+.word  _sccmdata
+/* end address for the .ccmdata section. defined in linker script */
+.word  _eccmdata
+/* start address for the .ccmbss section. defined in linker script */
+.word  _sccmbss
+/* end address for the .ccmbss section. defined in linker script */
+.word  _eccbss
 /* stack used for SystemInit_ExtMemCtl; always internal RAM used */
 
 /**
  * @brief  This is the code that gets called when the processor first
  *          starts execution following a reset event. Only the absolutely
  *          necessary set is performed, after which the application
- *          supplied main() routine is called. 
+ *          supplied main() routine is called.
  * @param  None
  * @retval : None
 */
@@ -74,10 +85,10 @@ defined in linker script */
     .section  .text.Reset_Handler
   .weak  Reset_Handler
   .type  Reset_Handler, %function
-Reset_Handler: 
+Reset_Handler:
   ldr   sp, =_estack       /* set stack pointer */
- 
-/* Copy the data segment initializers from flash to SRAM */  
+
+/* Copy the data segment initializers from flash to SRAM */
   movs  r1, #0
   b  LoopCopyDataInit
 
@@ -86,7 +97,7 @@ CopyDataInit:
   ldr  r3, [r3, r1]
   str  r3, [r0, r1]
   adds  r1, r1, #4
-    
+
 LoopCopyDataInit:
   ldr  r0, =_sdata
   ldr  r3, =_edata
@@ -95,15 +106,45 @@ LoopCopyDataInit:
   bcc  CopyDataInit
   ldr  r2, =_sbss
   b  LoopFillZerobss
-/* Zero fill the bss segment. */  
+/* Zero fill the bss segment. */
 FillZerobss:
   movs  r3, #0
   str  r3, [r2], #4
-    
+
 LoopFillZerobss:
   ldr  r3, = _ebss
   cmp  r2, r3
   bcc  FillZerobss
+
+
+/* Copy the ccm segment initializers from flash to SRAM */
+  movs	r1, #0
+  b	LoopCopyCcmInit
+
+CopyCcmInit:
+	ldr	r3, =_siccmdata
+	ldr	r3, [r3, r1]
+	str	r3, [r0, r1]
+	adds	r1, r1, #4
+
+LoopCopyCcmInit:
+	ldr	r0, =_sccmdata
+	ldr	r3, =_eccmdata
+	adds	r2, r0, r1
+	cmp	r2, r3
+	bcc	CopyCcmInit
+  ldr	r2, =_sccmbss
+	b	 LoopFillZeroCcm
+/* Zero fill the ccmbss segment. */
+FillZeroCcm:
+	movs r3, #0
+ 	str  r3, [r2]
+	adds r2, r2, #4
+
+LoopFillZeroCcm:
+	ldr	r3, = _eccmbss
+	cmp	r2, r3
+	bcc	FillZeroCcm
 
 /* Call the clock system intitialization function.*/
   bl  SystemInit   
