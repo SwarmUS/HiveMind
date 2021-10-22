@@ -1,7 +1,7 @@
-include "move_by.bzz"
+include "blinky.bzz"
 
 function init() {
-  exec = create_exec(100);
+  exec = create_exec(20);
 }
 
 function step() {
