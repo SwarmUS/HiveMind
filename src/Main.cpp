@@ -324,7 +324,7 @@ class InterlocMessageHandlerTask : public AbstractTask<10 * configMINIMAL_STACK_
     }
 };
 
-class LogInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class InterlocDataHandlerTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     InterlocDataHandlerTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_interloc(InterlocContainer::getInterloc()) {}

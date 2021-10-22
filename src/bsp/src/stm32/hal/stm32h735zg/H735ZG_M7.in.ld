@@ -100,18 +100,33 @@ SECTIONS
     __bss_end__ = _ebss;
   } >RAM_D1
 
-  /* stack/heap may change section so we keep the user cm in it's own section*/
-  .user_cm :{
+  .tcmbss:
+  {
     . = ALIGN(4);
-    KEEP(*(.user_cm))
+    _stcmbss = .;
+    *(.tcmbss)
+    *(.tcmbss*)
     . = ALIGN(4);
-  } >DTCMRAM
+    *(.user_cm)
+    *(.user_cm*)
+    . = ALIGN(4);
+    _etcmbss = .;
+  } >CCMRAM
 
-  .user_cm_data :{
+  .tcmdata :
+  {
     . = ALIGN(4);
-    KEEP(*(.user_cm_data))
+    _stcmdata = .;
+    *(.tcmdata)
+    *(.tcmdata*)
     . = ALIGN(4);
-  } >DTCMRAM AT> FLASH
+    *(.user_cm_data)
+    *(.user_cm_data*)
+    . = ALIGN(4);
+    _etcmdata = .;
+  } >CCMRAM AT> FLASH
+
+  _sitcmdata = LOADADDR(.tcmdata);
 
   ._user_heap_stack :
   {

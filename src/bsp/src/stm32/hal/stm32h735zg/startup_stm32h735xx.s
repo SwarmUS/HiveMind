@@ -44,6 +44,17 @@ defined in linker script */
 .word  _sbss
 /* end address for the .bss section. defined in linker script */
 .word  _ebss
+/* start address for the initialization values of the .tcmdata section.
+defined in linker script */
+.word  _sitcmdata
+/* start address for the .tcmdata section. defined in linker script */
+.word  _stcmdata
+/* end address for the .tcmdata section. defined in linker script */
+.word  _etcmdata
+/* start address for the .tcmbss section. defined in linker script */
+.word  _stcmbss
+/* end address for the .tcmbss section. defined in linker script */
+.word  _eccbss
 /* stack used for SystemInit_ExtMemCtl; always internal RAM used */
 
 /**
@@ -91,6 +102,36 @@ LoopFillZerobss:
   ldr  r3, = _ebss
   cmp  r2, r3
   bcc  FillZerobss
+
+
+/* Copy the tcm segment initializers from flash to SRAM */
+  movs	r1, #0
+  b	LoopCopyTcmInit
+
+CopyTcmInit:
+	ldr	r3, =_sitcmdata
+	ldr	r3, [r3, r1]
+	str	r3, [r0, r1]
+	adds	r1, r1, #4
+
+LoopCopyTcmInit:
+	ldr	r0, =_stcmdata
+	ldr	r3, =_etcmdata
+	adds	r2, r0, r1
+	cmp	r2, r3
+	bcc	CopyTcmInit
+  ldr	r2, =_stcmbss
+	b	 LoopFillZeroTcm
+/* Zero fill the tcmbss segment. */
+FillZeroTcm:
+	movs r3, #0
+ 	str  r3, [r2]
+	adds r2, r2, #4
+
+LoopFillZeroTcm:
+	ldr	r3, = _etcmbss
+	cmp	r2, r3
+	bcc	FillZeroTcm
   
 /* Call static constructors */
     bl __libc_init_array

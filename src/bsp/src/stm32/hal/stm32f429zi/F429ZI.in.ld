@@ -100,28 +100,33 @@ SECTIONS
     __bss_end__ = _ebss;
   } >RAM
 
-  /* TODO: CHECK IF INITALIZATION IS WORKING */
-  .ccmram :
+  .ccmbss:
   {
     . = ALIGN(4);
-    _sccmram = .;
-    *(.ccmram)
-    *(.ccmram*)
+    _sccmbss = .;
+    *(.ccmbss)
+    *(.ccmbss*)
     . = ALIGN(4);
-    _eccmram = .;
-  } >CCMRAM AT> FLASH
-
-  .user_cm :{
+    *(.user_cm)
+    *(.user_cm*)
     . = ALIGN(4);
-    KEEP(*(.user_cm))
-    . = ALIGN(4);
+    _eccmbss = .;
   } >CCMRAM
 
-  .user_cm_data :{
+  .ccmdata :
+  {
     . = ALIGN(4);
-    KEEP(*(.user_cm_data))
+    _sccmdata = .;
+    *(.ccmdata)
+    *(.ccmdata*)
     . = ALIGN(4);
+    *(.user_cm_data)
+    *(.user_cm_data*)
+    . = ALIGN(4);
+    _eccmdata = .;
   } >CCMRAM AT> FLASH
+
+  _siccmdata = LOADADDR(.ccmdata);
 
   ._user_heap_stack :
   {
