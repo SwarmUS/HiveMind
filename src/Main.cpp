@@ -30,7 +30,7 @@ constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 30; // Higher priori
 // Need to return the proper comm interface
 typedef std::optional<std::reference_wrapper<ICommInterface>> (*commInterfaceGetter)();
 
-class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class BittyBuzzTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
     BittyBuzzTask(const char* taskName,
                   UBaseType_t priority,
@@ -138,7 +138,7 @@ class BittyBuzzTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class MessageDispatcherTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
+class MessageDispatcherTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
     MessageDispatcherTask(const char* taskName,
                           UBaseType_t priority,
@@ -183,7 +183,7 @@ class MessageDispatcherTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE>
     }
 };
 
-class MessageSenderTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
+class MessageSenderTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
     MessageSenderTask(const char* taskName,
                       UBaseType_t priority,
@@ -225,7 +225,7 @@ class MessageSenderTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
 };
 
 template <typename SerializerType = HiveMindHostSerializer>
-class CommMonitoringTask : public AbstractTask<12 * configMINIMAL_STACK_SIZE> {
+class CommMonitoringTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
     CommMonitoringTask<SerializerType>(const char* taskName,
                                        UBaseType_t priority,
@@ -324,7 +324,7 @@ class InterlocMessageHandlerTask : public AbstractTask<10 * configMINIMAL_STACK_
     }
 };
 
-class InterlocDataHandlerTask : public AbstractTask<8 * configMINIMAL_STACK_SIZE> {
+class LogInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
   public:
     InterlocDataHandlerTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority), m_interloc(InterlocContainer::getInterloc()) {}
