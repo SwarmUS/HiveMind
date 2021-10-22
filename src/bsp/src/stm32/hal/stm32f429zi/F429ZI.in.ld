@@ -100,33 +100,27 @@ SECTIONS
     __bss_end__ = _ebss;
   } >RAM
 
-  .ccmbss :
+  .cmbss :
   {
     . = ALIGN(4);
     _sccmbss = .;
-    *(.ccmbss)
-    *(.ccmbss*)
-    . = ALIGN(4);
-    *(.user_cm)
-    *(.user_cm*)
+    *(.cmbss)
+    *(.cmbss*)
     . = ALIGN(4);
     _eccmbss = .;
   } >CCMRAM
 
-  .ccmdata :
+  .cmdata :
   {
     . = ALIGN(4);
     _sccmdata = .;
-    *(.ccmdata)
-    *(.ccmdata*)
-    . = ALIGN(4);
-    *(.user_cm_data)
-    *(.user_cm_data*)
+    *(.cmdata)
+    *(.cmdata*)
     . = ALIGN(4);
     _eccmdata = .;
   } >CCMRAM AT> FLASH
 
-  _siccmdata = LOADADDR(.ccmdata);
+  _siccmdata = LOADADDR(.cmdata);
 
   ._user_heap_stack :
   {

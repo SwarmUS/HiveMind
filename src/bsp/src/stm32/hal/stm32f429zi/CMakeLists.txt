@@ -64,8 +64,8 @@ set(STARTUP_SOURCES
 )
 add_library(swarmus-cmsis-startup INTERFACE)
 add_library(Swarmus::CMSIS::Startup ALIAS swarmus-cmsis-startup)
-target_link_libraries(Swarmus::CMSIS::Startup INTERFACE CMSIS::STM32::F4 STM32::F429xx)
-target_sources(Swarmus::CMSIS::Startup INTERFACE ${STARTUP_SOURCES})
+target_link_libraries(swarmus-cmsis-startup INTERFACE CMSIS::STM32::F4 STM32::F429xx)
+target_sources(swarmus-cmsis-startup INTERFACE ${STARTUP_SOURCES})
 
 target_sources(stm32f429zi-linker
     INTERFACE
