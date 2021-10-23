@@ -13,7 +13,7 @@ class AngleReceiverState : public AbstractInterlocState {
 
   private:
     std::array<UWBRxFrame, DecawaveArray::angleAntennaArraySize> m_rxFrames;
-    uint16_t m_timeoutHundredMicros = 0;
+    uint32_t m_timeoutHundredMicros = 0;
     volatile bool m_aborted = false;
 
     void saveAngleData(BspInterlocRawAngleData& data, uint32_t frameIndex);
