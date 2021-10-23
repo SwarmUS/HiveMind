@@ -289,7 +289,7 @@ class CommMonitoringTask : public AbstractTask<12 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class HardwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class HardwareInterlocTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
     HardwareInterlocTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority) {}
