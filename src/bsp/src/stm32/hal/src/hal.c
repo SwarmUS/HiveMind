@@ -40,9 +40,11 @@ void Hal_initMcu() {
 }
 
 void Hal_initBoard() {
-    deca_init();
 
     UI_initialize();
+
+    deca_init();
+
     Timer_startAll();
 
     if (Hal_wroomPowerEnabled()) {
