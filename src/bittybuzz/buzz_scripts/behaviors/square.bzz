@@ -3,13 +3,14 @@ include "utils/executor.bzz"
 include "utils/types.bzz"
 
 # Lennard-Jones parameters
-TARGET_KIN     = 2.83
-EPSILON_KIN    = 1.50
-TARGET_NONKIN  = 2.0
-EPSILON_NONKIN = 1.0
+TARGET_KIN     = 283.0
+EPSILON_KIN    = 150.0
+TARGET_NONKIN  = 200.0
+EPSILON_NONKIN = 100.0
 
 # Lennard-Jones interaction magnitude
 function lj_magnitude(dist, target, epsilon) {
+    dist = dist * 100; # Meters to cm
     var td_ratio = target/dist;
     return -(epsilon / dist) * (math.pow(td_ratio, 4) - math.pow(td_ratio, 2))
 }
@@ -65,9 +66,9 @@ function square() {
     }
 
     if(math.vec2.length(accum_vec) > 0){
-        var ncount = neighbors.count();
+        var ncount = neighbors.count() - 1;
         if(ncount > 0){
-            accum_vec = math.vec2.scale(accum_vec, 1.0 / ncount)
+            accum_vec = math.vec2.scale(accum_vec, 1.0 / ncount);
 
             # Move according to vecor
             log("Moving to X: ", accum_vec.x, " Y: ", accum_vec.y);
@@ -84,7 +85,6 @@ function tick(ctx) {
 # Executed at init time
 function create_exec(step_count) {
     exec = executor.new(step_count, tick, nil);
-    log("Created exec");
     return exec;
 
 }
