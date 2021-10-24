@@ -1,7 +1,7 @@
-include "behaviors/square.bzz"
+include "behaviors/hexagon.bzz"
 
 function init() {
-  exec = create_exec(500);
+  exec = create_exec(50);
 }
 
 function step() {

@@ -126,6 +126,21 @@ void BittyBuzzMathFunctions::log10() {
     bbzvm_pushf(bbzfloat_fromfloat(Math::log10(arg.value())));
     bbzvm_ret1();
 }
+
+void BittyBuzzMathFunctions::pow() {
+    bbzvm_assert_lnum(2); // NOLINT
+
+    std::optional<float> base = getFloatArg(1);
+    std::optional<float> exp = getFloatArg(2);
+    if (!base || !exp) {
+        bbzvm_seterror(BBZVM_ERROR_TYPE);
+        return;
+    }
+
+    bbzvm_pushf(bbzfloat_fromfloat(Math::pow(base.value(), exp.value())));
+    bbzvm_ret1();
+}
+
 void BittyBuzzMathFunctions::exp() {
     bbzvm_assert_lnum(1); // NOLINT
 

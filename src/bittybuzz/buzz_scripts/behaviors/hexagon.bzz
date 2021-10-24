@@ -2,28 +2,20 @@ include "vec2.bzz" # This file is from the buzz "standard library". It's include
 include "utils/executor.bzz"
 include "utils/types.bzz"
 
-# Lennard-Jones parameters
-TARGET_KIN     = 2.83
-EPSILON_KIN    = 1.50
-TARGET_NONKIN  = 2.0
-EPSILON_NONKIN = 1.0
+TARGET     = 2.83
+EPSILON    = 1.5
 
 # Lennard-Jones interaction magnitude
 function lj_magnitude(dist, target, epsilon) {
     var td_ratio = target/dist;
     return -(epsilon / dist) * (math.pow(td_ratio, 4) - math.pow(td_ratio, 2))
 }
- 
+
 # Neighbor data to LJ interaction vecor
-function lj_vecor_kin(rid, data) {
-    return math.vec2.newp(lj_magnitude(data.distance, TARGET_KIN, EPSILON_KIN), data.azimuth)
+function lj_vecor(rid, data) {
+    return math.vec2.newp(lj_magnitude(data.distance, TARGET, EPSILON), data.azimuth)
 }
- 
-# Neighbor data to LJ interaction vecor
-function lj_vecor_nonkin(rid, data) {
-    return math.vec2.newp(lj_magnitude(data.distance, TARGET_NONKIN, EPSILON_NONKIN), data.azimuth)
-}
- 
+
 # Accumulator of neighbor LJ interactions
 function lj_sum(rid, data, accum) {
     return math.vec2.add(data, accum)
@@ -33,28 +25,16 @@ function goto(x, y) {
     call_host_function(id, "moveBy", {.0 = x, .1 = y});
 }
 
-function is_kin(robot_id){
-    if((robot_id % 2) == (id % 2)){
-        return true;
-    }
-    return false;
-}
-
 # Calculates and actuates the flocking interaction
-function square() {
+function hexagon() {
     # Calculate accumulator
     var accum_vec = math.vec2.new(0.0, 0.0);
-    if(neighbors.count() == 4){
-        for (i = 1, i<5, i = i+1){
+    if(neighbors.count() == 6){
+        for (i = 1, i<7, i = i+1){
             if (i != id) {
                 var neighbor_data = neighbors.get(i)
                 if(is_table(neighbor_data)){
-                    if(is_kin(i)){
-                        neighbor_vec = lj_vecor_kin(i, neighbor_data);
-                    }
-                    else {
-                        neighbor_vec = lj_vecor_nonkin(i, neighbor_data);
-                    }
+                    neighbor_vec = lj_vecor(i, neighbor_data);
                     accum_vec = math.vec2.add(neighbor_vec, accum_vec)
                 }
                 else {
@@ -78,7 +58,7 @@ function square() {
 
 # Executed every time step
 function tick(ctx) {
-    square();
+    hexagon();
 }
 
 # Executed at init time
