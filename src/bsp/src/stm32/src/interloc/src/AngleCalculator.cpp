@@ -77,7 +77,7 @@ float AngleCalculator::getRawTdoa(BspInterlocRawAngleData& rawData,
                                   uint8_t antennaPair,
                                   int32_t meanLength) {
     float angleAccumulator = 0;
-    uint32_t length = (meanLength <= 0) ? rawData.m_framesLength : meanLength;
+    uint32_t length = (meanLength <= 0) ? rawData.m_framesLength : (uint32_t)meanLength;
 
     const auto& antennaIds = m_calculatorParameters.m_antennaPairs[antennaPair];
     for (uint32_t i = 0; i < length; i++) {
@@ -144,7 +144,7 @@ float AngleCalculator::getRawPdoa(BspInterlocRawAngleData& rawData,
                                   uint8_t antennaPair,
                                   int32_t meanLength) {
     float angleAccumulator = 0;
-    uint32_t length = (meanLength <= 0) ? rawData.m_framesLength : meanLength;
+    uint32_t length = (meanLength <= 0) ? rawData.m_framesLength : (uint32_t)meanLength;
 
     const auto& antennaIds = m_calculatorParameters.m_antennaPairs[antennaPair];
     for (uint32_t i = 0; i < length; i++) {
