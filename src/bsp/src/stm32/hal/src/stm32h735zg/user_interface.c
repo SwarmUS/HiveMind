@@ -9,7 +9,11 @@ static gpioCallbackFct_t g_buttonCallbacks[2] = {NULL, NULL};
 static void* g_buttonCallbackContexts[2] = {NULL, NULL};
 static bool g_buttonStates[2] = {true, true};
 
-void UI_initialize() { tca9539_configure(0x00, 0xC0); }
+void UI_initialize() {
+    tca9539_configure(0x00, 0xC0);
+    UI_setHexOutput(0x00);
+    UI_setRGB(true, true, true);
+}
 
 void UI_setHexOutput(uint8_t hexValue) {
     uint8_t hexDigit0 = hexValue & 0x0F;
