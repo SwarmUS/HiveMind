@@ -33,7 +33,7 @@ InterlocTimeManager& InterlocBSPContainer::getTimeManager() {
 }
 
 AngleCalculator& InterlocBSPContainer::getAngleCalculator() {
-    static AngleCalculator s_angleCalculator;
+    static AngleCalculator s_angleCalculator(LoggerContainer::getLogger());
 
     return s_angleCalculator;
 }

@@ -1,6 +1,5 @@
 #include <interloc/Decawave.h>
 #include <interloc/InterlocBSPContainer.h>
-#include <math.h>
 #include <states/InterlocStateContainer.h>
 #include <states/UpdateInterloc.h>
 

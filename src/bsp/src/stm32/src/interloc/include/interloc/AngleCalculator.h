@@ -3,6 +3,7 @@
 
 #include <array>
 #include <bsp/BspInterlocAngleRawData.h>
+#include <logger/ILogger.h>
 #include <optional>
 #include <tuple>
 
@@ -12,6 +13,10 @@
 #define CONFUSION_LINE_DEGREES (30.0)
 #define MINIMUM_ANGLE_MEAN (30)
 
+/**
+ * Structure containing all parameters used to calculate an angle. These parameters are calculated
+ * using the Python tooling during calibration and then transferred to the board.
+ */
 struct AngleCalculatorParameters {
     std::array<float, NUM_ANTENNA_PAIRS> m_tdoaNormalizationFactors{};
     std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS> m_tdoaSlopes{};
@@ -28,11 +33,14 @@ struct AngleCalculatorParameters {
 
 class AngleCalculator {
   public:
+    AngleCalculator(ILogger& logger);
+
     void setCalculatorParameters(const AngleCalculatorParameters& parameters);
     std::optional<float> calculateAngle(BspInterlocRawAngleData& rawData);
 
   private:
     AngleCalculatorParameters m_calculatorParameters;
+    ILogger& m_logger;
 
     uint32_t m_allBetweenConfusionLinesErrors = 0;
     uint32_t m_conflictingSlopeDecisionsErrors = 0;
