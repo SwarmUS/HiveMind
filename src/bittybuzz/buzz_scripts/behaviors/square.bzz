@@ -45,22 +45,20 @@ function is_kin(robot_id){
 function square() {
     # Calculate accumulator
     var accum_vec = math.vec2.new(0.0, 0.0);
-    if(neighbors.count() == 4){
-        for (i = 1, i<5, i = i+1){
-            if (i != id) {
-                var neighbor_data = neighbors.get(i)
-                if(is_table(neighbor_data)){
-                    if(is_kin(i)){
-                        neighbor_vec = lj_vecor_kin(i, neighbor_data);
-                    }
-                    else {
-                        neighbor_vec = lj_vecor_nonkin(i, neighbor_data);
-                    }
-                    accum_vec = math.vec2.add(neighbor_vec, accum_vec)
+    for (i = 1, i<5, i = i+1){
+        if (i != id) {
+            var neighbor_data = neighbors.get(i)
+            if(is_table(neighbor_data)){
+                if(is_kin(i)){
+                    neighbor_vec = lj_vecor_kin(i, neighbor_data);
                 }
                 else {
-                    log("neighbor: ", i, " is nil")
+                    neighbor_vec = lj_vecor_nonkin(i, neighbor_data);
                 }
+                accum_vec = math.vec2.add(neighbor_vec, accum_vec)
+            }
+            else {
+                log("neighbor: ", i, " is nil")
             }
         }
     }

@@ -6,8 +6,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} PARENT_SCOPE)
 function(bittybuzz_fetch)
     FetchContent_Declare(
         bittybuzz
-        GIT_REPOSITORY https://github.com/buzz-lang/BittyBuzz
-        GIT_TAG        0015fa92468533dddb178e6ba14c7b850ad0cc0e
+        GIT_REPOSITORY https://github.com/xgroleau/BittyBuzz
+        GIT_TAG        ffead6ccdb5e13fce7e4fbd93b8561fdeace04a1
         GIT_PROGRESS   TRUE
     ) 
 
