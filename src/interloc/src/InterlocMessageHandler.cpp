@@ -92,6 +92,11 @@ bool InterlocMessageHandler::handleConfigurationMessage(const InterlocConfigurat
         return true;
     }
 
+    if (const auto* angleParams = std::get_if<ConfigureAngleParametersDTO>(&messageVariant)) {
+        m_interlocManager.updateAngleCalculatorParameters(*angleParams);
+        return true;
+    }
+
     return false;
 }
 
