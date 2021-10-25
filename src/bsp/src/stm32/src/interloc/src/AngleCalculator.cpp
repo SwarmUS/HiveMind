@@ -10,6 +10,35 @@ void AngleCalculator::setCalculatorParameters(const AngleCalculatorParameters& p
     // *****************************
     // TEMPORARY, DEFAULT PARAMS
     // *****************************
+    m_calculatorParameters.m_antennaPairs[0] = {0, 1};
+    m_calculatorParameters.m_slopeDecisionMatrix[0] = {0, 1, 1};
+    m_calculatorParameters.m_tdoaNormalizationFactors[0] = 1;
+    m_calculatorParameters.m_tdoaSlopes[0] = {1, -1};
+    m_calculatorParameters.m_tdoaIntercepts[0] = {0, 1};
+    m_calculatorParameters.m_pdoaNormalizationFactors[0] = 1 / 0.75;
+    m_calculatorParameters.m_pdoaSlopes[0] = 1;
+    m_calculatorParameters.m_pdoaIntercepts[0] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    m_calculatorParameters.m_pdoaOrigins[0] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+
+    m_calculatorParameters.m_antennaPairs[1] = {0, 2};
+    m_calculatorParameters.m_slopeDecisionMatrix[1] = {0, 1, 1};
+    m_calculatorParameters.m_tdoaNormalizationFactors[1] = 1;
+    m_calculatorParameters.m_tdoaSlopes[1] = {1, -1};
+    m_calculatorParameters.m_tdoaIntercepts[1] = {0, 1};
+    m_calculatorParameters.m_pdoaNormalizationFactors[1] = 1 / 0.75;
+    m_calculatorParameters.m_pdoaSlopes[1] = 1;
+    m_calculatorParameters.m_pdoaIntercepts[1] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    m_calculatorParameters.m_pdoaOrigins[1] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+
+    m_calculatorParameters.m_antennaPairs[2] = {1, 2};
+    m_calculatorParameters.m_slopeDecisionMatrix[2] = {0, 1, 1};
+    m_calculatorParameters.m_tdoaNormalizationFactors[2] = 1;
+    m_calculatorParameters.m_tdoaSlopes[2] = {1, -1};
+    m_calculatorParameters.m_tdoaIntercepts[2] = {0, 1};
+    m_calculatorParameters.m_pdoaNormalizationFactors[2] = 1 / 0.75;
+    m_calculatorParameters.m_pdoaSlopes[2] = 1;
+    m_calculatorParameters.m_pdoaIntercepts[2] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    m_calculatorParameters.m_pdoaOrigins[2] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 }
 
 std::optional<float> AngleCalculator::calculateAngle(BspInterlocRawAngleData& rawData) {
