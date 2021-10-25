@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <cstring>
 #include <hal/hal_flash.h>
+#include <interloc/InterlocBSPContainer.h>
 
 #define DEFAULT_UUID 1
 
@@ -21,6 +22,9 @@ void PersistantStorageManager::loadFromFlash() {
         m_logger.log(LogLevel::Error, "UUID is not set in FLASH. Use -D UUID_OVERRIDE to set it.");
         setUUID(DEFAULT_UUID);
     }
+
+    InterlocBSPContainer::getAngleCalculator().setCalculatorParameters(
+        m_storage.m_angleCalculatorParameters);
 }
 
 uint16_t PersistantStorageManager::getUUID() const { return m_storage.m_uuid; }
@@ -44,4 +48,16 @@ bool PersistantStorageManager::saveToFlash() {
     // The size is given in words
     return Flash_program(USER_DATA_FLASH_START_ADDRESS, reinterpret_cast<uint8_t*>(&m_storage),
                          PersistedStorage::getSize());
+}
+
+void PersistantStorageManager::setAngleCalculatorParameters(
+    const AngleCalculatorParameters& parameters) {
+    m_storage.m_angleCalculatorParameters = parameters;
+    InterlocBSPContainer::getAngleCalculator().setCalculatorParameters(parameters);
+
+    bool ret = saveToFlash();
+
+    if (!ret) {
+        m_logger.log(LogLevel::Error, "Error while saving updating flash");
+    }
 }

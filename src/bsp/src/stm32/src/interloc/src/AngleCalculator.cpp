@@ -4,9 +4,17 @@
 
 void AngleCalculator::setCalculatorParameters(const AngleCalculatorParameters& parameters) {
     m_calculatorParameters = parameters;
+
+    // *****************************
+    // TEMPORARY, DEFAULT PARAMS
+    // *****************************
 }
 
 std::optional<float> AngleCalculator::calculateAngle(BspInterlocRawAngleData& rawData) {
+    if (rawData.m_framesLength < MINIMUM_ANGLE_MEAN) {
+        return {};
+    }
+
     std::array<float, NUM_ANTENNA_PAIRS> tdoas{};
     std::array<uint8_t, NUM_ANTENNA_PAIRS> tdoaSlopes{};
     std::array<float, NUM_ANTENNA_PAIRS> pdoas{};
