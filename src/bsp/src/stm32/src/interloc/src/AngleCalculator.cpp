@@ -2,6 +2,8 @@
 #include "interloc/Decawave.h"
 #include <cmath>
 
+AngleCalculator::AngleCalculator(ILogger& logger) : m_logger(logger) {}
+
 void AngleCalculator::setCalculatorParameters(const AngleCalculatorParameters& parameters) {
     m_calculatorParameters = parameters;
 

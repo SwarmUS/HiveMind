@@ -9,9 +9,6 @@ class UpdateInterloc : public AbstractInterlocState {
     UpdateInterloc(ILogger& logger, DecawaveArray& decawaves);
 
     void process(InterlocStateHandler& context) override;
-
-  private:
-    float calculateAngle(InterlocStateHandler& context);
 };
 
 #endif // HIVE_MIND_SETDISTANCESTATE_H
