@@ -67,6 +67,11 @@ function square() {
         var ncount = neighbors.count() - 1;
         if(ncount > 0){
             accum_vec = math.vec2.scale(accum_vec, 1.0 / ncount);
+            # Cap vectors
+            accum_vec.x = math.min(accum_vec.x, 5.0);
+            accum_vec.x = math.max(accum_vec.x, -5.0);
+            accum_vec.y = math.min(accum_vec.y, 5.0);
+            accum_vec.y = math.max(accum_vec.y, -5.0);
 
             # Move according to vecor
             log("Moving to X: ", accum_vec.x, " Y: ", accum_vec.y);
