@@ -32,7 +32,8 @@ void InterlocManager::setInterlocManagerRawAngleDataCallback(
     m_rawAngleDataCallbackContext = context;
 }
 
-void InterlocManager::updateAngleCalculatorParameters(ConfigureAngleParametersDTO newParams) {
+void InterlocManager::updateAngleCalculatorParameters(
+    const ConfigureAngleParametersDTO& newParams) {
     AngleCalculatorParameters& oldParams =
         ((BSP&)BSPContainer::getBSP()).getStorage().getAngleCaculatorParameters();
 

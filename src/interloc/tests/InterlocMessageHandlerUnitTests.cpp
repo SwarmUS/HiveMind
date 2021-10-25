@@ -177,6 +177,22 @@ TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_enableDumps
     EXPECT_TRUE(m_messageHandler->getDumpEnabled());
 }
 
+TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_updateAngleParams) {
+    ConfigureAngleParameters innerMsg;
+    auto message =
+        MessageDTO(1, gc_boardId,
+                   InterlocAPIDTO(InterlocConfigurationDTO(ConfigureAngleParametersDTO(innerMsg))));
+
+    std::optional<std::reference_wrapper<MessageDTO>> queueValue = message;
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(queueValue));
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+
+    EXPECT_CALL(m_interlocManagerMock, updateAngleCalculatorParameters(testing::_)).Times(1);
+    bool ret = m_messageHandler->processMessage();
+
+    EXPECT_TRUE(ret);
+}
+
 TEST_F(InterlocMessageHandlerFixture, InterlocMessageHandler_process_disableDumps) {
     auto message = MessageDTO(
         1, gc_boardId, InterlocAPIDTO(InterlocConfigurationDTO(ConfigureInterlocDumpsDTO(false))));

@@ -56,7 +56,7 @@ class IInterlocManager {
      * Updates the parameters used to calculate an angle
      * @param newParams DTO to save as new parameters
      */
-    virtual void updateAngleCalculatorParameters(ConfigureAngleParametersDTO newParams) = 0;
+    virtual void updateAngleCalculatorParameters(const ConfigureAngleParametersDTO& newParams) = 0;
 };
 
 #endif //__IINTERLOCMANAGER_H__
