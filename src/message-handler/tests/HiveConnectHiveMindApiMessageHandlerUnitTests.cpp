@@ -21,8 +21,8 @@ class HiveConnectHiveMindApiMessageHandlerFixture : public testing::Test {
 
     void SetUp() override {
         m_loggerInterfaceMock = new LoggerInterfaceMock();
-        m_hivemindApiReqHandler =
-            new HiveConnectHiveMindApiMessageHandler(m_hostQueueMock, m_remoteQueueMock, *m_loggerInterfaceMock);
+        m_hivemindApiReqHandler = new HiveConnectHiveMindApiMessageHandler(
+            m_hostQueueMock, m_remoteQueueMock, *m_loggerInterfaceMock);
     }
     void TearDown() override {
         delete m_hivemindApiReqHandler;
