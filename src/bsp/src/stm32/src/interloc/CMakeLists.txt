@@ -10,7 +10,8 @@ set(LIB_SOURCES
         src/InterlocBSPContainer.cpp
         src/TwoWayRanging.cpp
         src/InterlocTimeManager.cpp
-        src/DecawaveArray.cpp)
+        src/DecawaveArray.cpp
+        src/AngleCalculator.cpp)
 
 set(LIB_HEADERS
         include/interloc/Decawave.h
@@ -22,7 +23,8 @@ set(LIB_HEADERS
         include/interloc/InterlocBSPContainer.h
         include/interloc/TwoWayRanging.h
         include/interloc/DecawaveArray.h
-        include/interloc/InterlocTimeManager.h)
+        include/interloc/InterlocTimeManager.h
+        include/interloc/AngleCalculator.h)
 
 if (${COMPILE_STM32_F429ZI})
         list(APPEND LIB_SOURCES src/DecawaveArray_HiveSight.cpp)
