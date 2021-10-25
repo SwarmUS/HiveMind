@@ -436,7 +436,7 @@ int main(int argc, char** argv) {
         ApplicationInterfaceContainer::getRemoteHandshakeUI(),
         BSPContainer::getRemoteCommInterface);
 
-    //s_bittybuzzTask.start();
+    s_bittybuzzTask.start();
     s_hardwareInterlocTask.start();
     s_interlocDataTask.start();
     s_interlocMessageTask.start();
