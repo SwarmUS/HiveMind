@@ -1,7 +1,9 @@
 #include "HiveConnectHiveMindApiMessageHandler.h"
 
 HiveConnectHiveMindApiMessageHandler::HiveConnectHiveMindApiMessageHandler(
-    ICircularQueue<MessageDTO>& hostQueue, ICircularQueue<MessageDTO>& remoteQueue,ILogger& logger) :
+    ICircularQueue<MessageDTO>& hostQueue,
+    ICircularQueue<MessageDTO>& remoteQueue,
+    ILogger& logger) :
     m_hostQueue(hostQueue), m_remoteQueue(remoteQueue), m_logger(logger) {}
 
 bool HiveConnectHiveMindApiMessageHandler::handleMessage(uint16_t sourceId,

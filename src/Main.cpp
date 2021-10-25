@@ -189,14 +189,13 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
                       UBaseType_t priority,
                       ICommInterface* stream,
                       INotificationQueue<MessageDTO>& streamQueue,
-                      bool keepRunning=false) :
+                      bool keepRunning = false) :
         AbstractTask(taskName, priority),
         m_taskName(taskName),
         m_stream(stream),
         m_streamQueue(streamQueue),
         m_logger(LoggerContainer::getLogger()),
         m_keepRunning(keepRunning) {}
-
 
     ~MessageSenderTask() override = default;
 
@@ -225,7 +224,6 @@ class MessageSenderTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
                         m_logger.log(LogLevel::Warn, "Fail to process/serialize in %s", m_taskName);
                     }
                 }
-
             }
         }
     }
@@ -287,7 +285,8 @@ class CommMonitoringTask : public AbstractTask<12 * configMINIMAL_STACK_SIZE> {
                             while (m_dispatcherTask.isRunning() && m_senderTask.isRunning()) {
                                 Task::delay(1000);
                             }
-                            m_logger.log(LogLevel::Warn ,"Restarting greet process for %s", m_taskName);
+                            m_logger.log(LogLevel::Warn, "Restarting greet process for %s",
+                                         m_taskName);
                         }
                     }
                 }
@@ -425,7 +424,8 @@ int main(int argc, char** argv) {
                                                       NULL,
                                                       MessageHandlerContainer::getRemoteMsgQueue());
     static MessageSenderTask s_remoteMessageSender("remote_send", gc_taskNormalPriority, NULL,
-                                                   MessageHandlerContainer::getRemoteMsgQueue(), true);
+                                                   MessageHandlerContainer::getRemoteMsgQueue(),
+                                                   true);
 
     static CommMonitoringTask s_hostMonitorTask(
         "host_monitor", gc_taskNormalPriority, s_hostDispatchTask, s_hostMessageSender,
