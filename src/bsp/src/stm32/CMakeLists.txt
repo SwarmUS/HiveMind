@@ -1,6 +1,8 @@
 set(LIB_NAME "swarmus-hivemind-bsp-stm32")
 set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform")
 
+get_filename_component(BSP_PLATFORM_CMAKE_DIR ${CMAKE_CURRENT_LIST_FILE} DIRECTORY)
+
 set(LIB_SOURCES
     src/BSP.cpp
     src/BSPContainer.cpp

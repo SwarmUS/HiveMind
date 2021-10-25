@@ -1,5 +1,6 @@
 #include "interloc/InterlocManager.h"
 #include "bsp/BSPContainer.h"
+#include <BSP.h>
 #include <Task.h>
 #include <interloc/InterlocBSPContainer.h>
 #include <states/InterlocStateContainer.h>
@@ -29,6 +30,72 @@ void InterlocManager::setInterlocManagerRawAngleDataCallback(
     interlocRawAngleDataCallbackFunction_t callback, void* context) {
     m_rawAngleDataCallback = callback;
     m_rawAngleDataCallbackContext = context;
+}
+
+void InterlocManager::updateAngleCalculatorParameters(ConfigureAngleParametersDTO newParams) {
+    AngleCalculatorParameters& oldParams =
+        ((BSP&)BSPContainer::getBSP()).getStorage().getAngleCaculatorParameters();
+
+    if (newParams.getAntennasLength() != 2) {
+        m_logger.log(LogLevel::Error, "Angle Params Update: Pair does not have 2 antennas");
+        return;
+    }
+
+    if (newParams.getPairId() >= NUM_ANTENNA_PAIRS) {
+        m_logger.log(LogLevel::Error, "Angle Params Update: Pair ID >= than # of pairs");
+        return;
+    }
+
+    if (newParams.getSlopeDecisionLength() != NUM_ANTENNA_PAIRS) {
+        m_logger.log(LogLevel::Error,
+                     "Angle Params Update: Slope decision not length of # of pairs");
+        return;
+    }
+
+    if (newParams.getTdoaSlopesLength() != NUM_TDOA_SLOPES ||
+        newParams.getTdoaInterceptsLength() != NUM_TDOA_SLOPES) {
+        m_logger.log(LogLevel::Error, "Angle Params Update: TDOA params not correct length");
+        return;
+    }
+
+    if (newParams.getPdoaInterceptsLength() != NUM_PDOA_SLOPES ||
+        newParams.getPdoaOriginsLength() != NUM_PDOA_SLOPES) {
+        m_logger.log(LogLevel::Error, "Angle Params Update: PDOA params not correct length");
+        return;
+    }
+
+    oldParams.m_antennaPairs[newParams.getPairId()][0] = newParams.getAntennas()[0];
+    oldParams.m_antennaPairs[newParams.getPairId()][1] = newParams.getAntennas()[1];
+    for (unsigned int i = 0; i < newParams.getSlopeDecisionLength(); i++) {
+        oldParams.m_slopeDecisionMatrix[newParams.getPairId()][i] = newParams.getSlopeDecision()[i];
+    }
+
+    oldParams.m_tdoaNormalizationFactors[newParams.getPairId()] =
+        newParams.getTdoaNormalizationFactor();
+
+    for (unsigned int i = 0; i < newParams.getTdoaInterceptsLength(); i++) {
+        oldParams.m_tdoaSlopes[newParams.getPairId()][i] = newParams.getTdoaSlopes()[i];
+        oldParams.m_tdoaIntercepts[newParams.getPairId()][i] = newParams.getTdoaIntercepts()[i];
+    }
+
+    oldParams.m_pdoaNormalizationFactors[newParams.getPairId()] =
+        newParams.getPdoaNormalizationFactor();
+    oldParams.m_pdoaSlopes[newParams.getPairId()] = newParams.getPdoaSlope();
+
+    for (unsigned int i = 0; i < newParams.getPdoaOriginsLength(); i++) {
+        oldParams.m_pdoaIntercepts[newParams.getPairId()][i] = newParams.getPdoaIntercepts()[i];
+        oldParams.m_pdoaOrigins[newParams.getPairId()][i] = newParams.getPdoaOrigins()[i];
+    }
+
+    oldParams.m_parametersValidSecretNumbers[newParams.getPairId()] =
+        ANGLE_PARAMETERS_VALID_SECRET_NUMBER;
+
+    bool ret = ((BSP&)BSPContainer::getBSP()).getStorage().saveToFlash();
+    InterlocBSPContainer::getAngleCalculator().setCalculatorParameters(oldParams);
+
+    if (!ret) {
+        m_logger.log(LogLevel::Error, "Angle Params Update: Error while saving to flash");
+    }
 }
 
 void InterlocManager::startInterloc() {

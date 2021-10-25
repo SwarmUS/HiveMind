@@ -19,7 +19,8 @@ set(LIB_HEADERS
     include/bsp/IInterlocManager.h
 
     include/bsp/InterlocUpdate.h
-        include/bsp/BspInterlocAngleRawData.h)
+    include/bsp/BspInterlocAngleRawData.h
+    include/bsp/AngleCalculatorParameters.h)
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})

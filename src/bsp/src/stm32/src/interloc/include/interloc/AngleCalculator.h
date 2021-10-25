@@ -1,77 +1,13 @@
 #ifndef HIVE_MIND_ANGLECALCULATOR_H
 #define HIVE_MIND_ANGLECALCULATOR_H
 
-#include <array>
+#include <bsp/AngleCalculatorParameters.h>
 #include <bsp/BspInterlocAngleRawData.h>
 #include <logger/ILogger.h>
 #include <optional>
-#include <tuple>
 
-#define NUM_ANTENNA_PAIRS (3)
-#define NUM_TDOA_SLOPES (2)
-#define NUM_PDOA_SLOPES (12)
 #define CONFUSION_LINE_DEGREES (30.0)
 #define MINIMUM_ANGLE_MEAN (30)
-
-/**
- * Structure containing all parameters used to calculate an angle. These parameters are calculated
- * using the Python tooling during calibration and then transferred to the board.
- */
-struct AngleCalculatorParameters {
-    /**
-     * Normalization factors used to stretch TDOA angles between -90 and +90 degrees. (Applied by
-     * dividing by the normalization before applying the asin() on the TDOA)
-     */
-    std::array<float, NUM_ANTENNA_PAIRS> m_tdoaNormalizationFactors{};
-    /**
-     * Slopes (a in y=ax+b) of the non-reciprocated TDOA functions (calculatedAngle = a*realAngle+b)
-     */
-    std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS> m_tdoaSlopes{};
-    /**
-     * Intercepts (b in y=ax+b) of the non-reciprocated TDOA functions
-     * (calculatedAngle = a*realAngle+b)
-     */
-    std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS> m_tdoaIntercepts{};
-
-    /**
-     * Normalization factors used to stretch PDOA angles between -90 and +90 degrees. (Applied by
-     * dividing by the normalization after applying the asin() on the PDOA)
-     */
-    std::array<float, NUM_ANTENNA_PAIRS> m_pdoaNormalizationFactors{};
-    /**
-     * Slopes (a in y=ax+b) of the non-reciprocated PDOA functions (calculatedAngle = a*realAngle+b)
-     * A single (positive) slope is used for all PDOA curves. The sign of the slope is applied at
-     * runtime.
-     */
-    std::array<float, NUM_ANTENNA_PAIRS> m_pdoaSlopes{};
-    /**
-     * Intercepts (b in y=ax+b) of the non-reciprocated PDOA functions for every curve
-     * (calculatedAngle = a*realAngle+b)
-     */
-    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS> m_pdoaIntercepts{};
-    /**
-     * Origins (value for angle=-90 degrees) for every PDOA curve. Used to decide which curve to use
-     */
-    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS> m_pdoaOrigins{};
-
-    /**
-     * Lookup table used to know which antenna IDs are used in each pair ID
-     */
-    std::array<std::array<uint8_t, 2>, NUM_ANTENNA_PAIRS> m_antennaPairs{};
-
-    /**
-     * Decision matrix used to choose between two slopes for the TDOA.
-     *
-     * The first index represents the pair ID for which we are choosing the slope while the second
-     * index represents the slope ID (0 or 1) that should be used if the TDOA of the current index
-     * pair is OVER the confusion line (+30 degrees). The opposite of this value is used when UNDER
-     * the line.
-     *
-     * In summary, decisionMatrix[i][j] tells which slope index to use for antenna pair i when the
-     * TDOA of antenna pair j is over 30 degrees.
-     */
-    std::array<std::array<uint8_t, NUM_ANTENNA_PAIRS>, NUM_ANTENNA_PAIRS> m_slopeDecisionMatrix{};
-};
 
 /**
  * Helper class used to compute an angle from raw phase and timestamp values.
@@ -102,6 +38,8 @@ class AngleCalculator {
 
     uint32_t m_allBetweenConfusionLinesErrors = 0;
     uint32_t m_conflictingSlopeDecisionsErrors = 0;
+
+    bool m_parametersValid = false;
 
     /**
      * Computes a TDOA angle (without applying the linear fit) using raw timestamps
