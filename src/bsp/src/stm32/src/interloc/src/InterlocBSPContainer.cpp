@@ -31,3 +31,9 @@ InterlocTimeManager& InterlocBSPContainer::getTimeManager() {
 
     return s_timeManager;
 }
+
+AngleCalculator& InterlocBSPContainer::getAngleCalculator() {
+    static AngleCalculator s_angleCalculator;
+
+    return s_angleCalculator;
+}

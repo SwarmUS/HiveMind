@@ -10,6 +10,7 @@
 #define NUM_TDOA_SLOPES (2)
 #define NUM_PDOA_SLOPES (10)
 #define CONFUSION_LINE_DEGREES (30.0)
+#define MINIMUM_ANGLE_MEAN (30)
 
 struct AngleCalculatorParameters {
     std::array<float, NUM_ANTENNA_PAIRS> m_tdoaNormalizationFactors{};

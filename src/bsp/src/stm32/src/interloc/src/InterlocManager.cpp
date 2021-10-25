@@ -80,11 +80,14 @@ uint8_t InterlocManager::powerCorrection(double twrDistance) {
     // refer to https://confluence.swarmus.jajservers.duckdns.org/display/LOG/DECA+-++Calibration
 }
 
-void InterlocManager::updateDistance(uint16_t robotId, float distance) {
+void InterlocManager::updateInterloc(uint16_t robotId,
+                                     std::optional<float> distance,
+                                     std::optional<float> angle) {
     if (!m_interlocUpdateQueue.isFull()) {
         InterlocUpdate update;
         update.m_robotId = robotId;
         update.m_distance = distance;
+        update.m_angleOfArrival = angle;
 
         m_interlocUpdateQueue.push(update);
     } else {
