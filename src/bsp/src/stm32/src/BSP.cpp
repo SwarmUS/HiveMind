@@ -49,3 +49,5 @@ void BSP::initChip(void* args) {
 uint16_t BSP::getUUId() const { return m_storage.getUUID(); }
 
 uint32_t BSP::generateRandomNumber() { return Hal_generateRandomNumber(); }
+
+PersistantStorageManager& BSP::getStorage() { return m_storage; }

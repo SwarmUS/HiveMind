@@ -7,42 +7,17 @@ AngleCalculator::AngleCalculator(ILogger& logger) : m_logger(logger) {}
 void AngleCalculator::setCalculatorParameters(const AngleCalculatorParameters& parameters) {
     m_calculatorParameters = parameters;
 
-    // *****************************
-    // TEMPORARY, DEFAULT PARAMS
-    // *****************************
-    m_calculatorParameters.m_antennaPairs[0] = {0, 1};
-    m_calculatorParameters.m_slopeDecisionMatrix[0] = {0, 1, 1};
-    m_calculatorParameters.m_tdoaNormalizationFactors[0] = 1;
-    m_calculatorParameters.m_tdoaSlopes[0] = {1, -1};
-    m_calculatorParameters.m_tdoaIntercepts[0] = {0, 1};
-    m_calculatorParameters.m_pdoaNormalizationFactors[0] = 1 / 0.75;
-    m_calculatorParameters.m_pdoaSlopes[0] = 1;
-    m_calculatorParameters.m_pdoaIntercepts[0] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-    m_calculatorParameters.m_pdoaOrigins[0] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-
-    m_calculatorParameters.m_antennaPairs[1] = {0, 2};
-    m_calculatorParameters.m_slopeDecisionMatrix[1] = {0, 1, 1};
-    m_calculatorParameters.m_tdoaNormalizationFactors[1] = 1;
-    m_calculatorParameters.m_tdoaSlopes[1] = {1, -1};
-    m_calculatorParameters.m_tdoaIntercepts[1] = {0, 1};
-    m_calculatorParameters.m_pdoaNormalizationFactors[1] = 1 / 0.75;
-    m_calculatorParameters.m_pdoaSlopes[1] = 1;
-    m_calculatorParameters.m_pdoaIntercepts[1] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-    m_calculatorParameters.m_pdoaOrigins[1] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-
-    m_calculatorParameters.m_antennaPairs[2] = {1, 2};
-    m_calculatorParameters.m_slopeDecisionMatrix[2] = {0, 1, 1};
-    m_calculatorParameters.m_tdoaNormalizationFactors[2] = 1;
-    m_calculatorParameters.m_tdoaSlopes[2] = {1, -1};
-    m_calculatorParameters.m_tdoaIntercepts[2] = {0, 1};
-    m_calculatorParameters.m_pdoaNormalizationFactors[2] = 1 / 0.75;
-    m_calculatorParameters.m_pdoaSlopes[2] = 1;
-    m_calculatorParameters.m_pdoaIntercepts[2] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-    m_calculatorParameters.m_pdoaOrigins[2] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    m_parametersValid = true;
+    for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
+        if (m_calculatorParameters.m_parametersValidSecretNumbers[i] !=
+            ANGLE_PARAMETERS_VALID_SECRET_NUMBER) {
+            m_parametersValid = false;
+        }
+    }
 }
 
 std::optional<float> AngleCalculator::calculateAngle(BspInterlocRawAngleData& rawData) {
-    if (rawData.m_framesLength < MINIMUM_ANGLE_MEAN) {
+    if (rawData.m_framesLength < MINIMUM_ANGLE_MEAN || !m_parametersValid) {
         return {};
     }
 

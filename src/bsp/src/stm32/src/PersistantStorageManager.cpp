@@ -50,14 +50,6 @@ bool PersistantStorageManager::saveToFlash() {
                          PersistedStorage::getSize());
 }
 
-void PersistantStorageManager::setAngleCalculatorParameters(
-    const AngleCalculatorParameters& parameters) {
-    m_storage.m_angleCalculatorParameters = parameters;
-    InterlocBSPContainer::getAngleCalculator().setCalculatorParameters(parameters);
-
-    bool ret = saveToFlash();
-
-    if (!ret) {
-        m_logger.log(LogLevel::Error, "Error while saving updating flash");
-    }
+AngleCalculatorParameters& PersistantStorageManager::getAngleCaculatorParameters() {
+    return m_storage.m_angleCalculatorParameters;
 }

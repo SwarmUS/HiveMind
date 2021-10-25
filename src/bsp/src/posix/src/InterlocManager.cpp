@@ -164,3 +164,7 @@ void InterlocManager::setInterlocManagerRawAngleDataCallback(
     (void)callback;
     (void)context;
 }
+
+void InterlocManager::updateAngleCalculatorParameters(ConfigureAngleParametersDTO newParams) {
+    (void)newParams;
+}
