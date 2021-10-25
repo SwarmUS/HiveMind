@@ -38,6 +38,7 @@ bool MessageDispatcher::deserializeAndDispatch() {
 
         // Handle and Broadcast message
         if (destinationId == 0 && sourceId == m_bsp.getUUId()) {
+            m_logger.log(LogLevel::Debug, "Broadcasting message");
             return m_remoteOutputQueue.push(message) && dispatchMessage(message);
         }
 
@@ -66,6 +67,7 @@ bool MessageDispatcher::dispatchUserCall(const MessageDTO& message, const UserCa
         m_logger.log(LogLevel::Debug, "Message sent to host queue");
         // The message comes from the host, no need to resend it
         if (message.getDestinationId() == 0 && message.getSourceId() == m_bsp.getUUId()) {
+            m_logger.log(LogLevel::Warn, "Message from host destined to host.");
             return true;
         }
 
@@ -105,6 +107,7 @@ bool MessageDispatcher::dispatchRequest(const MessageDTO& message, const Request
         if (message.getDestinationId() == 0 && message.getSourceId() == m_bsp.getUUId()) {
             return true;
         }
+        m_logger.log(LogLevel::Debug, "Handle HMApi message");
         return m_hivemindApiReqHandler.handleRequest(message);
     }
 
@@ -121,6 +124,7 @@ bool MessageDispatcher::dispatchResponse(const MessageDTO& message, const Respon
     }
 
     // Either a HiveMindAPI or a unknown response, pipe it either way
+    m_logger.log(LogLevel::Debug, "Message sent to host");
     return m_hostOutputQueue.push(message);
 }
 
@@ -135,12 +139,15 @@ bool MessageDispatcher::dispatchMessage(const MessageDTO& message) {
         return dispatchResponse(message, *response);
     }
     if (std::holds_alternative<VmMessageDTO>(variantMsg)) {
+        m_logger.log(LogLevel::Debug, "Handle VM message");
         return m_buzzOutputQueue.push(message);
     }
     if (std::holds_alternative<InterlocAPIDTO>(variantMsg)) {
+        m_logger.log(LogLevel::Debug, "Handle Interloc message");
         return m_interlocQueue.push(message);
     }
     if (const auto* msg = std::get_if<HiveConnectHiveMindApiDTO>(&variantMsg)) {
+        m_logger.log(LogLevel::Debug, "Handle HC API message");
         return m_hiveconnectApiMessageHandler.handleMessage(message.getSourceId(),
                                                             message.getDestinationId(), *msg);
     }

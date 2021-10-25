@@ -24,7 +24,7 @@ function tick(context){
     }
 }
 
-function create_exec(){
-    exec = executor.new(10, tick, ctx);
+function create_exec(step_count){
+    exec = executor.new(step_count, tick, ctx);
     return exec;
 }

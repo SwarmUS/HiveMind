@@ -3,7 +3,6 @@ set(LIB_ALIAS "SwarmUS::HiveMind::HAL::STM32")
 
 
 set(LIB_SOURCES
-    # Core/Src/system_stm32f4xx.c Already provided by CMSIS, no need for it
     Core/Src/usart.c
     Core/Src/main.c
     Core/Src/gpio.c
@@ -58,7 +57,15 @@ find_package(HAL COMPONENTS
 # Creating the interface library
 add_library(stm32f429zi-linker INTERFACE)
 add_library(${LIB_HAL_LINKER_ALIAS} ALIAS stm32f429zi-linker) # Provide alias for linker options
-set_target_properties(CMSIS::STM32::F429ZI PROPERTIES IMPORTED_GLOBAL TRUE)
+
+# Defining entry point
+set(STARTUP_SOURCES
+    startup_stm32f429xx.s
+)
+add_library(swarmus-cmsis-startup INTERFACE)
+add_library(Swarmus::CMSIS::Startup ALIAS swarmus-cmsis-startup)
+target_link_libraries(swarmus-cmsis-startup INTERFACE CMSIS::STM32::F4 STM32::F429xx)
+target_sources(swarmus-cmsis-startup INTERFACE ${STARTUP_SOURCES})
 
 target_sources(stm32f429zi-linker
     INTERFACE
@@ -76,12 +83,17 @@ target_include_directories(stm32f429zi-linker
 target_link_libraries(stm32f429zi-linker
     INTERFACE
         STM32::F4
-        CMSIS::STM32::F429ZI
+        Swarmus::CMSIS::Startup
         HAL::STM32::F4
         STM32::NoSys
         SwarmUS::HiveMind::LWIP
         CMSIS::STM32::F4::RTOS_V2
     )
+# linker file
+configure_file(F429ZI.in.ld F429ZI.ld)
+set_default(USER_DATA_FLASH_SIZE "0K")
+stm32_add_linker_script(stm32f429zi-linker INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/F429ZI.ld)
+
 
 # Actual bsp library
 add_library(${LIB_NAME} 
@@ -106,7 +118,7 @@ target_include_directories(${LIB_NAME}
 
 target_link_libraries(${LIB_NAME}
     PUBLIC 
-        CMSIS::STM32::F429ZI
+        Swarmus::CMSIS::Startup
         HAL::STM32::F4::CORTEX
         STM32::NoSys
         SwarmUS::Propolis::C::Common

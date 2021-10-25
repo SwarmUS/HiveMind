@@ -32,16 +32,19 @@ MessageDispatcher MessageHandlerContainer::createMessageDispatcher(
 }
 
 ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getBuzzMsgQueue() {
-    static Mutex s_mutex(10);
-    static CircularQueueStack<MessageDTO, gc_queueMaxSize> s_buzzMsgQueue;
+    __attribute__((section(".cmbss"))) static Mutex s_mutex(10);
+    __attribute__((section(".cmbss"))) static CircularQueueStack<MessageDTO, gc_queueMaxSize>
+        s_buzzMsgQueue;
     static ThreadSafeQueue<MessageDTO> s_buzzMsgThreadQueue(s_buzzMsgQueue, s_mutex);
 
     return s_buzzMsgThreadQueue;
 }
 
 NotificationQueue<MessageDTO>& MessageHandlerContainer::getHostMsgQueue() {
-    static Mutex s_mutex(10);
-    static CircularQueueStack<MessageDTO, gc_queueMaxSize> s_hostMsgQueue;
+    __attribute__((section(".cmbss"))) static Mutex s_mutex(10);
+    __attribute__((section(".cmbss"))) static CircularQueueStack<MessageDTO, gc_queueMaxSize>
+        s_hostMsgQueue;
+
     static ThreadSafeQueue<MessageDTO> s_hostMsgThreadQueue(s_hostMsgQueue, s_mutex);
     static ConditionVariable s_hostMsgConditionVariable;
     static NotificationQueue<MessageDTO> s_hostMsgNotificationQueue(s_hostMsgThreadQueue,
@@ -51,8 +54,10 @@ NotificationQueue<MessageDTO>& MessageHandlerContainer::getHostMsgQueue() {
 }
 
 NotificationQueue<MessageDTO>& MessageHandlerContainer::getRemoteMsgQueue() {
-    static Mutex s_mutex(10);
-    static CircularQueueStack<MessageDTO, gc_queueMaxSize> s_remoteMsgQueue;
+    __attribute__((section(".cmbss"))) static Mutex s_mutex(10);
+    __attribute__((section(".cmbss"))) static CircularQueueStack<MessageDTO, gc_queueMaxSize>
+        s_remoteMsgQueue;
+
     static ThreadSafeQueue<MessageDTO> s_remoteMsgThreadQueue(s_remoteMsgQueue, s_mutex);
     static ConditionVariable s_remoteMsgConditionVariable;
     static NotificationQueue<MessageDTO> s_remoteMsgNotificationQueue(s_remoteMsgThreadQueue,
@@ -62,8 +67,10 @@ NotificationQueue<MessageDTO>& MessageHandlerContainer::getRemoteMsgQueue() {
 }
 
 NotificationQueue<MessageDTO>& MessageHandlerContainer::getInterlocMsgQueue() {
-    static Mutex s_mutex(10);
-    static CircularQueueStack<MessageDTO, gc_queueMaxSize> s_interlocMsgQueue;
+    __attribute__((section(".cmbss"))) static Mutex s_mutex(10);
+    __attribute__((section(".cmbss"))) static CircularQueueStack<MessageDTO, gc_queueMaxSize>
+        s_interlocMsgQueue;
+
     static ThreadSafeQueue<MessageDTO> s_interlocMsgThreadQueue(s_interlocMsgQueue, s_mutex);
     static ConditionVariable s_interlocMsgConditionVariable;
     static NotificationQueue<MessageDTO> s_interlocMsgNotificationQueue(

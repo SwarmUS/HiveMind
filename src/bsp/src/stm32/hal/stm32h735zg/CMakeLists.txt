@@ -54,6 +54,15 @@ find_package(HAL COMPONENTS
 add_library(stm32h735zg-linker INTERFACE)
 add_library(${LIB_HAL_LINKER_ALIAS} ALIAS stm32h735zg-linker) # Provide alias for linker options
 
+# Defining entry point
+set(STARTUP_SOURCES
+    startup_stm32h735xx.s
+)
+add_library(swarmus-cmsis-startup INTERFACE)
+add_library(Swarmus::CMSIS::Startup ALIAS swarmus-cmsis-startup)
+target_link_libraries(swarmus-cmsis-startup INTERFACE CMSIS::STM32::H7::M7 STM32::H735xx::M7)
+target_sources(swarmus-cmsis-startup INTERFACE ${STARTUP_SOURCES})
+
 
 target_sources(stm32h735zg-linker
     INTERFACE
@@ -72,7 +81,7 @@ target_include_directories(stm32h735zg-linker
 target_link_libraries(stm32h735zg-linker
     INTERFACE
         STM32::H7::M7
-        CMSIS::STM32::H735xx::M7
+        Swarmus::CMSIS::Startup
         HAL::STM32::H7::M7
         STM32::NoSys
         SwarmUS::HiveMind::LWIP
@@ -106,7 +115,7 @@ target_include_directories(${LIB_NAME}
 
 target_link_libraries(${LIB_NAME}
     PUBLIC 
-        CMSIS::STM32::H735xx::M7
+        Swarmus::CMSIS::Startup
         HAL::STM32::H7::M7::CORTEX
         STM32::NoSys
         SwarmUS::Propolis::C::Common

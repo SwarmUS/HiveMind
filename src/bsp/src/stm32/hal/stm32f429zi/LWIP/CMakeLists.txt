@@ -26,7 +26,7 @@ target_include_directories(${LIB_NAME}
 
 target_link_libraries(${LIB_NAME}
     PRIVATE
-        CMSIS::STM32::F429ZI
+        Swarmus::CMSIS::Startup
         HAL::STM32::F4
         HAL::STM32::F4::ETH
 

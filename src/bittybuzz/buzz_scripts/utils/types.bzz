@@ -9,4 +9,4 @@
 types = {
   .INT = 0,
   .FLOAT = 0.0
-}
+};
