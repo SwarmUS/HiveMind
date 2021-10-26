@@ -173,6 +173,7 @@ void SpiEsp::execute() {
         break;
     case receiveState::ERROR:
         rxLengthBytes = EspHeader::sizeBytes;
+        m_inboundMessage.m_sizeBytes = 0;
         m_rxState = receiveState::RECEIVING_HEADER;
         CircularBuff_clear(&m_circularBuf);
         if (m_receivingTaskHandle != nullptr) {
@@ -256,7 +257,7 @@ void SpiEsp::espTxRxCallback(void* context) {
     }
 
     if (instance->m_txState == transmitState::SENDING_PAYLOAD) {
-        instance->m_txState = transmitState::IDLE;
+        instance->m_txState = transmitState::SENDING_HEADER;
         instance->m_outboundMessage.m_sizeBytes = 0;
         instance->m_outboundMessage.m_payloadSize = 0;
         instance->m_hasSentPayload = true;
