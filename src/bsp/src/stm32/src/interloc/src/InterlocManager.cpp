@@ -53,14 +53,14 @@ void InterlocManager::updateAngleCalculatorParameters(
         return;
     }
 
-    if (newParams.getTdoaSlopesLength() != NUM_TDOA_SLOPES ||
-        newParams.getTdoaInterceptsLength() != NUM_TDOA_SLOPES) {
+    if (newParams.getTdoaSlopesLength() > NUM_TDOA_SLOPES ||
+        newParams.getTdoaInterceptsLength() > NUM_TDOA_SLOPES) {
         m_logger.log(LogLevel::Error, "Angle Params Update: TDOA params not correct length");
         return;
     }
 
-    if (newParams.getPdoaInterceptsLength() != NUM_PDOA_SLOPES ||
-        newParams.getPdoaOriginsLength() != NUM_PDOA_SLOPES) {
+    if (newParams.getPdoaInterceptsLength() > NUM_PDOA_SLOPES ||
+        newParams.getPdoaOriginsLength() > NUM_PDOA_SLOPES) {
         m_logger.log(LogLevel::Error, "Angle Params Update: PDOA params not correct length");
         return;
     }
@@ -91,12 +91,14 @@ void InterlocManager::updateAngleCalculatorParameters(
     oldParams.m_parametersValidSecretNumbers[newParams.getPairId()] =
         ANGLE_PARAMETERS_VALID_SECRET_NUMBER;
 
+    /*taskENTER_CRITICAL();
     bool ret = ((BSP&)BSPContainer::getBSP()).getStorage().saveToFlash();
+    taskEXIT_CRITICAL();*/
     InterlocBSPContainer::getAngleCalculator().setCalculatorParameters(oldParams);
 
-    if (!ret) {
+    /*if (!ret) {
         m_logger.log(LogLevel::Error, "Angle Params Update: Error while saving to flash");
-    }
+    }*/
 }
 
 void InterlocManager::startInterloc() {
