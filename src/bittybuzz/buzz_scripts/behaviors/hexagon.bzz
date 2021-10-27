@@ -12,13 +12,8 @@ function lj_magnitude(dist, target, epsilon) {
 }
 
 # Neighbor data to LJ interaction vecor
-function lj_vecor(rid, data) {
+function lj_vector(rid, data) {
     return math.vec2.newp(lj_magnitude(data.distance, TARGET, EPSILON), data.azimuth)
-}
-
-# Accumulator of neighbor LJ interactions
-function lj_sum(rid, data, accum) {
-    return math.vec2.add(data, accum)
 }
 
 function goto(x, y) {
@@ -28,32 +23,21 @@ function goto(x, y) {
 # Calculates and actuates the flocking interaction
 function hexagon() {
     # Calculate accumulator
-    var accum_vec = math.vec2.new(0.0, 0.0);
-    if(neighbors.count() == 6){
-        for (i = 1, i<7, i = i+1){
-            if (i != id) {
-                var neighbor_data = neighbors.get(i)
-                if(is_table(neighbor_data)){
-                    neighbor_vec = lj_vecor(i, neighbor_data);
-                    accum_vec = math.vec2.add(neighbor_vec, accum_vec)
-                }
-                else {
-                    log("neighbor: ", i, " is nil")
-                }
-            }
-        }
+    accum = math.vec2.new(0.0, 0.0); # Declaring global so it's accessible in the foreach
+    log("Acumulating");
+    neighbors.foreach(function(rid, data){
+            var vect = lj_vector(rid, data);
+            accum = math.vec2.add(vect, accum);
+        })
+
+    # Scaling vector
+    log("Scaling");
+    if (neighbors.count() > 0) {
+        math.vec2.scale(accum, 1.0 / neighbors.count())
     }
 
-    if(math.vec2.length(accum_vec) > 0){
-        var ncount = neighbors.count();
-        if(ncount > 0){
-            accum_vec = math.vec2.scale(accum_vec, 1.0 / ncount)
-
-            # Move according to vecor
-            log("Moving to X: ", accum_vec.x, " Y: ", accum_vec.y);
-            goto(accum_vec.x, accum_vec.y)
-        }
-    }
+    log("Moving to X: ", accum.x, " Y: ", accum.y);
+    goto(accum.x, accum.y)
 }
 
 # Executed every time step
