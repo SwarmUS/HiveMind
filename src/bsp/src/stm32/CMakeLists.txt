@@ -69,10 +69,10 @@ add_custom_target(
 )
 
 if (${COMPILE_STM32_H735ZG})
-add_custom_target(
-        mass_erase
-        COMMAND openocd -f ${OPENOCD_CFG_PATH} -c 'init' -c 'halt' -c 'stm32h7x mass_erase 0' -c 'reset run' -c 'shutdown'
-)
+    add_custom_target(
+            mass_erase
+            COMMAND openocd -f ${OPENOCD_CFG_PATH} -c 'init' -c 'halt' -c 'stm32h7x mass_erase 0' -c 'reset run' -c 'shutdown'
+    )
 endif()
 
 add_subdirectory(hal)
