@@ -152,6 +152,13 @@ For the H7
 openocd -f ./tools/openocd/stm32_h7/hiveboard.cfg -c "program build/src/hive-mind.elf verify reset exit"
 ```
 
+### Mass Erase
+A mass erase of the flash on the H7 target can be done via the `make mass_erase` command or via
+openocd:
+```sh
+openocd -f ./tools/openocd/stm32_h7/hiveboard.cfg -c 'init' -c 'halt' -c 'stm32h7x mass_erase 0' -c 'reset run' -c 'shutdown'
+```
+
 ## Running tests
 
 ### Software Tests
