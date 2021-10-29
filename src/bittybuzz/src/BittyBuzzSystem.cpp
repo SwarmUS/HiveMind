@@ -68,10 +68,10 @@ void BittyBuzzSystem::logVmDump(LogLevel logLevel) {
 
         g_logger->log(logLevel, "----- STACK DUMP -----");
 
-        int16_t stackSize = bbzvm_stack_size();
+        uint16_t stackSize = bbzvm_stack_size();
 
-        for (int16_t i = 0; i < stackSize; i++) {
-            bbzheap_idx_t heapId = bbzvm_stack_at(i);
+        for (uint16_t i = 0; i < stackSize; i++) {
+            bbzheap_idx_t heapId = bbzvm_stack_at((int16_t)i);
             logObj(*g_logger, logLevel, heapId);
         }
 
