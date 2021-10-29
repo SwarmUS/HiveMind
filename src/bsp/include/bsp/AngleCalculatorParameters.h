@@ -14,7 +14,7 @@
  * Structure containing all parameters used to calculate an angle. These parameters are calculated
  * using the Python tooling during calibration and then transferred to the board.
  */
-struct __attribute__((packed, aligned(4))) AngleCalculatorParameters {
+struct __attribute__((packed, aligned(8))) AngleCalculatorParameters {
     /**
      * Normalization factors used to stretch TDOA angles between -90 and +90 degrees. (Applied by
      * dividing by the normalization before applying the asin() on the TDOA)

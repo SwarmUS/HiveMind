@@ -33,7 +33,7 @@ class PersistantStorageManager {
     bool saveToFlash();
 
   private:
-    __attribute__((packed, aligned(4)))
+    __attribute__((packed, aligned(8)))
     PersistedStorage m_storage {};
 
     ILogger& m_logger;
