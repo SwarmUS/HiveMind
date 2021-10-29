@@ -365,9 +365,10 @@ class LogInterlocTask : public AbstractTask<4 * configMINIMAL_STACK_SIZE> {
         while (true) {
             PositionsTable interlocData = m_interloc.getPositionsTable();
             for (unsigned int i = 0; i < interlocData.m_positionsLength; i++) {
-                m_logger.log(LogLevel::Info, "*****Distance from %d : %3.3f m",
+                m_logger.log(LogLevel::Info, "*****Distance from %d : %3.3f m, angle: %3.3f",
                              interlocData.m_positions[i].m_robotId,
-                             interlocData.m_positions[i].m_distance);
+                             interlocData.m_positions[i].m_distance,
+                             interlocData.m_positions[i].m_angle);
             }
             Task::delay(1000);
         }

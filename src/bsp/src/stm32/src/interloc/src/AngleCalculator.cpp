@@ -46,9 +46,9 @@ std::optional<float> AngleCalculator::calculateAngle(BspInterlocRawAngleData& ra
     }
 
     m_logger.log(LogLevel::Debug, "X");
-    fittedpdoas[0]++;
+
     // TODO: Implement logic to decide which value to use
-    return 0;
+    return fittedpdoas[0];
 }
 
 float AngleCalculator::getRawTdoa(BspInterlocRawAngleData& rawData,

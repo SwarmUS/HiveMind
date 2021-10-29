@@ -25,7 +25,7 @@ void UpdateInterloc::process(InterlocStateHandler& context) {
 
     if (angle) {
         m_logger.log(LogLevel::Warn, "angle from : %d = %3.3f", context.getCurrentFrameId(),
-                     distance.value());
+                     angle.value());
     } else {
         m_logger.log(LogLevel::Warn, "angle from : %d = Err", context.getCurrentFrameId());
     }
