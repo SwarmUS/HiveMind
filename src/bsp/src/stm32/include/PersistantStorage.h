@@ -5,11 +5,10 @@
 #include <interloc/AngleCalculator.h>
 
 // This struct should be world alligned on instantiation. Use __attribute__ ((aligned (4))).
-struct PersistedStorage {
-    // The size should be a multiple of words for flash operations
-    static uint16_t getSize() { return sizeof(PersistedStorage); }
-
+struct __attribute__((packed, aligned(4))) PersistedStorage {
     uint16_t m_uuid;
+
+    __attribute__((packed, aligned(4)))
     AngleCalculatorParameters m_angleCalculatorParameters;
 };
 

@@ -2,6 +2,7 @@
 
 bool Flash_eraseSector(uint8_t sector) {
     FLASH_EraseInitTypeDef eraseConfig = {.TypeErase = FLASH_TYPEERASE_SECTORS,
+                                          .Banks = FLASH_BANK_1,
                                           .Sector = sector,
                                           .NbSectors = 1,
                                           .VoltageRange = FLASH_VOLTAGE_RANGE_3};

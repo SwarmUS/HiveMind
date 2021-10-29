@@ -33,7 +33,9 @@ class PersistantStorageManager {
     bool saveToFlash();
 
   private:
-    PersistedStorage m_storage __attribute__((aligned(4))){};
+    __attribute__((packed, aligned(4)))
+    PersistedStorage m_storage {};
+
     ILogger& m_logger;
 
     bool setUUID(uint16_t uuid);
