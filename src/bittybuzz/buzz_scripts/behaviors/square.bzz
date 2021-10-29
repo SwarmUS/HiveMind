@@ -8,10 +8,6 @@ EPSILON_KIN    = 150.0
 TARGET_NONKIN  = 200.0
 EPSILON_NONKIN = 100.0
 
-function log_vect(vect){
-    log("X:", vect.x, " Y: ", vect.y);
-}
-
 # Lennard-Jones interaction magnitude
 function lj_magnitude(dist, target, epsilon) {
     dist = dist * 100; # Meters to cm
@@ -43,7 +39,7 @@ function is_kin_lj_vector(robot_id, data){
 # Calculates and actuates the flocking interaction
 function square() {
     # Calculate accumulator
-    accum = math.vec2.new(0.0, 0.0);
+    accum = math.vec2.new(0.0, 0.0); # Declaring global so it's accessible in the foreach
     neighbors.foreach(function(rid, data){
             var vect = is_kin_lj_vector(rid, data);
             accum = math.vec2.add(vect, accum);
@@ -52,6 +48,10 @@ function square() {
     # Scaling vector
     if (neighbors.count() > 0) {
         math.vec2.scale(accum, 1.0 / neighbors.count())
+    }
+    # Prevents going out of the world in simulation
+    if(math.vec2.length(accum) > 5){
+        accum = math.vec2.norm(accum);
     }
 
     log("Moving to X: ", accum.x, " Y: ", accum.y);

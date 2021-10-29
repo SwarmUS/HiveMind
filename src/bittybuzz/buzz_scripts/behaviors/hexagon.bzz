@@ -24,16 +24,18 @@ function goto(x, y) {
 function hexagon() {
     # Calculate accumulator
     accum = math.vec2.new(0.0, 0.0); # Declaring global so it's accessible in the foreach
-    log("Acumulating");
     neighbors.foreach(function(rid, data){
             var vect = lj_vector(rid, data);
             accum = math.vec2.add(vect, accum);
         })
 
     # Scaling vector
-    log("Scaling");
     if (neighbors.count() > 0) {
         math.vec2.scale(accum, 1.0 / neighbors.count())
+    }
+    # Prevents going out of the world in simulation
+    if(math.vec2.length(accum) > 5){
+        accum = math.vec2.norm(accum);
     }
 
     log("Moving to X: ", accum.x, " Y: ", accum.y);
@@ -48,7 +50,6 @@ function tick(ctx) {
 # Executed at init time
 function create_exec(step_count) {
     exec = executor.new(step_count, tick, nil);
-    log("Created exec");
     return exec;
 
 }
