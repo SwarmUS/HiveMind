@@ -40,6 +40,11 @@ void AngleReceiverState::process(InterlocStateHandler& context) {
         m_timeoutHundredMicros = ((rxStopTime - currentTs) % UINT40_MAX) / UUS_TO_DWT_TIME / 100;
         m_aborted = false;
         Timer_setHundredMicrosCallback(staticTimerCallback, this);
+    } else {
+        m_timeoutHundredMicros =
+            context.getTimeManager().getAngleToAngleOffsetUs() * maxIterations * 2;
+        m_aborted = false;
+        Timer_setHundredMicrosCallback(staticTimerCallback, this);
     }
 
     while (receivedFrames < maxIterations && !m_aborted) {
@@ -55,7 +60,7 @@ void AngleReceiverState::process(InterlocStateHandler& context) {
         }
     }
 
-    context.getRawAngleData().m_framesLength = context.getAngleCalibNumberOfFrames();
+    context.getRawAngleData().m_framesLength = receivedFrames;
 
     if (InterlocBSPContainer::getInterlocManager().getState() ==
         InterlocStateDTO::ANGLE_CALIB_RECEIVER) {
