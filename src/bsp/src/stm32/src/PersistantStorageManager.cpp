@@ -24,7 +24,7 @@ void PersistantStorageManager::loadFromFlash() {
 
     if (m_storage.m_uuid == UINT16_MAX) {
         m_logger.log(LogLevel::Error, "UUID is not set in FLASH. Use -D UUID_OVERRIDE to set it.");
-        setUUID(2);
+        setUUID(DEFAULT_UUID);
     }
 
     InterlocBSPContainer::getAngleCalculator().setCalculatorParameters(
