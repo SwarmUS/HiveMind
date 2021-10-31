@@ -91,16 +91,14 @@ void InterlocManager::updateAngleCalculatorParameters(
     oldParams.m_parametersValidSecretNumbers[newParams.getPairId()] =
         ANGLE_PARAMETERS_VALID_SECRET_NUMBER;
 
-    taskENTER_CRITICAL();
+    /*taskENTER_CRITICAL();
     bool ret = ((BSP&)BSPContainer::getBSP()).getStorage().saveToFlash();
-    taskEXIT_CRITICAL();
+    taskEXIT_CRITICAL();*/
     InterlocBSPContainer::getAngleCalculator().setCalculatorParameters(oldParams);
 
-    if (!ret) {
+    /*if (!ret) {
         m_logger.log(LogLevel::Error, "Angle Params Update: Error while saving to flash");
-    } else {
-        m_logger.log(LogLevel::Info, "Updated angle params for pair %d", newParams.getPairId());
-    }
+    }*/
 }
 
 void InterlocManager::startInterloc() {

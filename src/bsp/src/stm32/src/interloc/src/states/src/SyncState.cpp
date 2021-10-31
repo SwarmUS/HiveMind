@@ -37,8 +37,8 @@ void SyncState::process(InterlocStateHandler& context) {
 
                 // If an unsupported message is received, restart RX for the remainder of the
                 // timeout
-                remainingRxTimeoutUs =
-                    initialRxTimeoutUs - (deca->get().getSysTime() - syncStartTs);
+                remainingRxTimeoutUs = initialRxTimeoutUs -
+                                       ((deca->get().getSysTime() - syncStartTs) / UUS_TO_DWT_TIME);
                 capTimeoutUint16(remainingRxTimeoutUs, rxTimeoutUs);
 
                 // Because of the subtraction, there could be an underflow.
