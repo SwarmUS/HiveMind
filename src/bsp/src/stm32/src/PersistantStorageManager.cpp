@@ -8,15 +8,14 @@
 
 #define DEFAULT_UUID 1
 
-
 // The size should be a multiple of words for flash operations
 constexpr uint16_t s_persistedStorageSize = sizeof(PersistedStorage);
 
 PersistantStorageManager::PersistantStorageManager(ILogger& logger) : m_logger(logger) {}
 
 void PersistantStorageManager::loadFromFlash() {
-    std::memcpy(&m_storage, reinterpret_cast<const void*>(USER_DATA_FLASH_START_ADDRESS), s_persistedStorageSize);
-
+    std::memcpy(&m_storage, reinterpret_cast<const void*>(USER_DATA_FLASH_START_ADDRESS),
+                s_persistedStorageSize);
 
     if (UUID_OVERRIDE != 0) {
         setUUID(UUID_OVERRIDE);

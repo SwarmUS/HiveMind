@@ -33,7 +33,7 @@ class PersistantStorageManager {
     bool saveToFlash();
 
   private:
-    PersistedStorage m_storage {};
+    PersistedStorage m_storage{};
 
     ILogger& m_logger;
 
