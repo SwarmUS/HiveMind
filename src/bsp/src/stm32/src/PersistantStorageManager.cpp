@@ -52,7 +52,6 @@ bool PersistantStorageManager::saveToFlash() {
     // The size is given in words
     bool ret = Flash_program(USER_DATA_FLASH_START_ADDRESS, reinterpret_cast<uint8_t*>(&m_storage),
                              s_persistedStorageSize);
-    loadFromFlash(); // TODO: REMOVE
     return ret;
 }
 

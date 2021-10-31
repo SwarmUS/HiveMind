@@ -1,5 +1,7 @@
 #include "hal/hal_flash.h"
 
+
+static const uint16_t gs_nbBytesFlashProgram = (4*FLASH_NB_32BITWORD_IN_FLASHWORD);
 bool Flash_program(uint32_t address, uint8_t* data, uint32_t bytesLength) {
     if (data == NULL) {
         return false;
@@ -15,9 +17,9 @@ bool Flash_program(uint32_t address, uint8_t* data, uint32_t bytesLength) {
             return false;
         }
         
-        address += (8*FLASH_NB_32BITWORD_IN_FLASHWORD);
-        data += FLASH_NB_32BITWORD_IN_FLASHWORD;
-        bytesLeft -= ((uint16_t)FLASH_NB_32BITWORD_IN_FLASHWORD);
+        address += gs_nbBytesFlashProgram;
+        data += gs_nbBytesFlashProgram;
+        bytesLeft -= gs_nbBytesFlashProgram;
 
         while(__HAL_FLASH_GET_FLAG(FLASH_FLAG_QW_BANK1)){}
     }
