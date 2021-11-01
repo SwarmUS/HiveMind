@@ -416,7 +416,7 @@ int main(int argc, char** argv) {
                                                       gc_taskNormalPriority);
     static LogInterlocTask s_logInterlocTask("software_interloc_log", gc_taskNormalPriority);
 
-    static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskNormalPriority, NULL,
+    static MessageDispatcherTask s_hostDispatchTask("host_dispatch", gc_taskNormalPriority, NULL,
                                                     MessageHandlerContainer::getHostMsgQueue());
     static MessageSenderTask s_hostMessageSender("host_send", gc_taskNormalPriority, NULL,
                                                  MessageHandlerContainer::getHostMsgQueue());

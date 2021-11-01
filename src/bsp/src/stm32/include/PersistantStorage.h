@@ -6,9 +6,6 @@
 
 // This struct should be world alligned on instantiation. Use __attribute__ ((aligned (4))).
 struct PersistedStorage {
-    // The size should be a multiple of words for flash operations
-    static uint16_t getSize() { return 384; }
-
     uint16_t m_uuid;
     AngleCalculatorParameters m_angleCalculatorParameters;
 };
