@@ -236,9 +236,9 @@ bool BittyBuzzMessageHandler::handleResponse(const ResponseDTO& response) {
     return false;
 }
 
-bool isBuzzUserCallRequest(const RequestDTO& request){
+bool isBuzzToBuzzUserCallRequest(const RequestDTO& request){
     if (const auto* uReq = std::get_if<UserCallRequestDTO>(&request.getRequest())) {
-        return uReq->getSource() == UserCallTargetDTO::BUZZ;
+        return uReq->getDestination() == UserCallTargetDTO::BUZZ && uReq->getSource() == UserCallTargetDTO::BUZZ;
     }
     return false;
 }
@@ -255,7 +255,7 @@ bool BittyBuzzMessageHandler::handleMessage(const MessageDTO& message) {
         uint16_t uuid = m_bsp.getUUId();
         MessageDTO responseMessage(uuid, message.getSourceId(), response);
 
-        if(responseMessage.getDestinationId() == uuid && isBuzzUserCallRequest(*request)) { // Check it's from the bbvm hosted on this device
+        if(responseMessage.getDestinationId() == uuid && isBuzzToBuzzUserCallRequest(*request)) { // Check it's from the bbvm hosted on this device
             return m_inputQueue.push(responseMessage); // handle it on the next loop
         }
         if (responseMessage.getDestinationId() == uuid) {
