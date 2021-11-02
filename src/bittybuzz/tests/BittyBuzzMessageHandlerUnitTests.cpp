@@ -154,6 +154,7 @@ TEST_F(BittyBuzzMessageHandlerFixture, BittyBuzzMessageHandler_messageQueueLengt
 TEST_F(BittyBuzzMessageHandlerFixture,
        BittyBuzzMessageHandler_processMessage_validFunctionCall_host_pushSuccessful) {
     // Given
+
     MessageDTO message = MessageDTO(m_uuid, m_uuid, *m_request);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
@@ -455,6 +456,9 @@ TEST_F(BittyBuzzMessageHandlerFixture,
 TEST_F(BittyBuzzMessageHandlerFixture,
        BittyBuzzMessageHandler_processMessage_validFunctionCall_self) {
     // Given
+    m_uRequest->setSource(UserCallTargetDTO::BUZZ);
+    m_uRequest->setDestination(UserCallTargetDTO::BUZZ);
+    m_request->setRequest(*m_uRequest);
     MessageDTO message = MessageDTO(m_uuid, m_uuid, *m_request);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
