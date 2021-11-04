@@ -1,0 +1,27 @@
+include "utils/executor.bzz"
+
+ctx = {
+    .hex = 0
+}
+
+function tick(context){
+    if(id == 1){
+        log("Led set to : ", context.led, " and hex set to :", context.hex)
+        ui.set_hex(context.hex)
+        neighbors.broadcast("hex", context.hex)
+        if(context.hex > 15){
+            context.hex = 0
+        } else {
+            context.hex = context.hex + 1
+        }
+    }
+}
+
+function create_exec(step_count){
+    log("ID: ", id)
+    neighbors.listen("hex", function(vid, value, rid){
+        ui.set_hex(value)
+    })
+    exec = executor.new(step_count, tick, ctx)
+    return exec
+}

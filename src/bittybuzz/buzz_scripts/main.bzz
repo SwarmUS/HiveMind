@@ -1,7 +1,7 @@
-include "behaviors/hexagon.bzz"
+include "behaviors/hex_leader.bzz"
 
 function init() {
-  exec = create_exec(10);
+  exec = create_exec(50);
 }
 
 function step() {
