@@ -373,6 +373,8 @@ void Decawave::setState(DW_STATE state) { m_state = state; }
 bool Decawave::isReady() const { return m_isReady; }
 
 void Decawave::retrieveRxFrame(UWBRxFrame& frame) const {
+    deca_selectDevice(m_spiDevice);
+
     frame.m_length = m_callbackData.datalength;
     constexpr uint8_t registerDataSize = 26;
     uint8_t registerData[registerDataSize];
