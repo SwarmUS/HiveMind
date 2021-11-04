@@ -1,4 +1,4 @@
-include "behaviors/blinky.bzz"
+include "behaviors/hex_leader.bzz"
 
 function init() {
   exec = create_exec(50);
