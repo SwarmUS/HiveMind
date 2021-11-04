@@ -11,6 +11,7 @@ class BittyBuzzClosureRegisterTestFixture : public testing::Test {
 
     void SetUp() override {
         vm = &m_bbzvm;
+        bbzvm_construct(42);
         m_description = new BittyBuzzFunctionDescription(m_functionName);
         m_closureRegister = new BittyBuzzClosureRegister();
     }

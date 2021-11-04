@@ -1,0 +1,71 @@
+include "vec2.bzz" # This file is from the buzz "standard library". It's included with the compiler
+include "utils/executor.bzz"
+include "utils/types.bzz"
+
+# Lennard-Jones parameters
+TARGET_KIN     = 283.0
+EPSILON_KIN    = 150.0
+TARGET_NONKIN  = 200.0
+EPSILON_NONKIN = 100.0
+
+# Lennard-Jones interaction magnitude
+function lj_magnitude(dist, target, epsilon) {
+    dist = dist * 100; # Meters to cm
+    var td_ratio = target/dist;
+    return -(epsilon / dist) * (math.pow(td_ratio, 4) - math.pow(td_ratio, 2))
+}
+ 
+# Neighbor data to LJ interaction vector
+function lj_vector_kin(rid, data) {
+    return math.vec2.newp(lj_magnitude(data.distance, TARGET_KIN, EPSILON_KIN), data.azimuth)
+}
+ 
+# Neighbor data to LJ interaction vector
+function lj_vector_nonkin(rid, data) {
+    return math.vec2.newp(lj_magnitude(data.distance, TARGET_NONKIN, EPSILON_NONKIN), data.azimuth)
+}
+ 
+function goto(x, y) {
+    call_host_function(id, "moveBy", {.0 = x, .1 = y});
+}
+
+function is_kin_lj_vector(robot_id, data){
+    if((robot_id % 2) == (id % 2)){
+        return lj_vector_kin(robot_id, data)
+    }
+    return lj_vector_nonkin(robot_id, data);
+}
+
+# Calculates and actuates the flocking interaction
+function square() {
+    # Calculate accumulator
+    accum = math.vec2.new(0.0, 0.0); # Declaring global so it's accessible in the foreach
+    neighbors.foreach(function(rid, data){
+            var vect = is_kin_lj_vector(rid, data);
+            accum = math.vec2.add(vect, accum);
+        })
+
+    # Scaling vector
+    if (neighbors.count() > 0) {
+        math.vec2.scale(accum, 1.0 / neighbors.count())
+    }
+    # Prevents going out of the world in simulation
+    if(math.vec2.length(accum) > 5){
+        accum = math.vec2.norm(accum);
+    }
+
+    log("Moving to X: ", accum.x, " Y: ", accum.y);
+    goto(accum.x, accum.y)
+}
+
+# Executed every time step
+function tick(ctx) {
+    square();
+}
+
+# Executed at init time
+function create_exec(step_count) {
+    exec = executor.new(step_count, tick, nil);
+    return exec;
+
+}

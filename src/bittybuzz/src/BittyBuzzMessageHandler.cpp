@@ -129,7 +129,7 @@ FunctionCallResponseDTO BittyBuzzMessageHandler::handleFunctionCallRequest(
         // response
         return FunctionCallResponseDTO(GenericResponseStatusDTO::Ok, "");
     }
-    return FunctionCallResponseDTO(GenericResponseStatusDTO::BadRequest, "Not registred");
+    return FunctionCallResponseDTO(GenericResponseStatusDTO::BadRequest, "Not registered");
 }
 
 UserCallResponseDTO BittyBuzzMessageHandler::handleUserCallRequest(

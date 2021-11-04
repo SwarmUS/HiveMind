@@ -5,8 +5,12 @@
 #    .1 = {.arg_float=types.FLOAT} // Same here
 # };
 # register_closure("someFunction", someClojure, args_description, nil);
-
 types = {
   .INT = 0,
   .FLOAT = 0.0
 };
+
+
+# True and false global variable to make code more readable
+true = 1;
+false = nil;
