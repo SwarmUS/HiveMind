@@ -1,4 +1,5 @@
 #include "interloc/AngleCalculator.h"
+#include "interloc/CertitudeCalculator.h"
 #include "interloc/Decawave.h"
 #include <cmath>
 
@@ -22,28 +23,49 @@ std::optional<float> AngleCalculator::calculateAngle(BspInterlocRawAngleData& ra
     }
 
     std::array<float, NUM_ANTENNA_PAIRS> rawTdoas{};
+    std::array<float, NUM_ANTENNA_PAIRS> rawTdoasCertitude{};
     std::array<float, NUM_ANTENNA_PAIRS> fittedTdoas{};
     std::array<int8_t, NUM_ANTENNA_PAIRS> tdoaSlopes{};
     std::array<float, NUM_ANTENNA_PAIRS> rawPdoas{};
     std::array<float, NUM_ANTENNA_PAIRS> fittedpdoas{};
 
+    (void)fittedTdoas;
+    (void)fittedpdoas;
+    (void)tdoaSlopes;
+
+    std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS> tdoaProducedValue;
+    std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS> fallingSlopeCertitude;
+    std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS> risingSlopeCertitude;
+
+    std::array<std::array<float, NUM_PDOA_SLOPES << NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>
+        pdoaProducedValue;
+    std::array<std::array<float, NUM_PDOA_SLOPES << NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>
+        pdoaCertitude;
+
     for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
         rawTdoas[i] = getRawTdoa(rawData, i, -1);
+        rawTdoasCertitude[i] = getTdoaValueCertitude(rawTdoas[i]);
+        rawPdoas[i] = getRawPdoa(rawData, i, 1); // TODO: Decide if we want the mean of
+        getPdoaValueCertiture(m_calculatorParameters, rawTdoas[i], rawPdoas[i], i,
+                              tdoaProducedValue, pdoaProducedValue, pdoaCertitude);
     }
+    getDecisionCertitude(
+        rawTdoas, reinterpret_cast<std::array<std::array<float, 2>, 3>&>(fallingSlopeCertitude),
+        risingSlopeCertitude, m_calculatorParameters);
 
-    for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
-        int8_t slopeIdx = getTdoaSlopeIndex(rawTdoas, i);
+    //    for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
+    //                int8_t slopeIdx = getTdoaSlopeIndex(rawTdoas, i);
+    //                tdoaSlopes[i] = slopeIdx;
+    //    }
 
-        tdoaSlopes[i] = slopeIdx;
-    }
-
-    for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
-        if (tdoaSlopes[i] >= 0) {
-            fittedTdoas[i] = getFittedTdoa(rawTdoas[i], (uint8_t)tdoaSlopes[i], i);
-            rawPdoas[i] = getRawPdoa(rawData, i, 1); // TODO: Decide if we want the mean of PDOAs
-            fittedpdoas[i] = getFittedPdoa(rawPdoas[i], fittedTdoas[i], (uint8_t)tdoaSlopes[i], i);
-        }
-    }
+    //    for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
+    //        if (tdoaSlopes[i] >= 0) {
+    //            fittedTdoas[i] = getFittedTdoa(rawTdoas[i], (uint8_t)tdoaSlopes[i], i);
+    //            rawPdoas[i] = getRawPdoa(rawData, i, 1); // TODO: Decide if we want the mean of
+    //            PDOAs fittedpdoas[i] = getFittedPdoa(rawPdoas[i], fittedTdoas[i],
+    //            (uint8_t)tdoaSlopes[i], i);
+    //        }
+    //    }
 
     m_logger.log(LogLevel::Debug, "X");
 
