@@ -11,6 +11,11 @@ void UpdateInterloc::process(InterlocStateHandler& context) {
     std::optional<float> angle =
         InterlocBSPContainer::getAngleCalculator().calculateAngle(context.getRawAngleData());
 
+    if (context.getRawAngleData().m_framesLength > 0) {
+        m_logger.log(LogLevel::Warn, "LOS from : %d = %3.3f", context.getCurrentFrameId(),
+                     context.getRawAngleData().m_frames[10].m_frameInfos[2].m_losConfidence);
+    }
+
     // Reset data for next run
     context.getTWR().m_allDataReceived = false;
     context.getRawAngleData().m_framesLength = 0;
