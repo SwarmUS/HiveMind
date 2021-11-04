@@ -2,6 +2,7 @@
 #include <bbzvm.h>
 #include <cstring>
 #include <string_view>
+#include <bbztype.h>
 
 BittyBuzzRegisteredClosure::BittyBuzzRegisteredClosure(uint16_t closureId,
                                                        BittyBuzzFunctionDescription description,

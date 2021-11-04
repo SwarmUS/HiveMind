@@ -1,0 +1,41 @@
+include "utils/types.bzz"
+include "utils/executor.bzz"
+
+# Functions to register
+function time_loop_buzz(remote_id){
+    log("calling timeEnd to: ", remote_id);
+    call_host_function(remote_id, "timeEnd", {});
+}
+
+# Flashing an LED so we know the VM is running properly
+function tick(ctx){
+    log(id, " Led set to : ", ctx.led);
+    ui.set_led(ctx.led);
+    # led = !led
+    if(ctx.led){
+        ctx.led = nil;
+    } else{
+        ctx.led = 1;
+    }
+    if (id == 1){
+        log("Time start");
+        call_host_function(6, "timeStart", {});
+    }
+}
+
+function create_exec(step_count) {
+
+    # Context
+    var context = {
+        .led = 0
+    };
+
+    # Registering the function
+    var time_loop_buzz_description = {
+        .0 = {.remote_id=types.INT}
+    };
+    register_closure("timeLoopBuzz", time_loop_buzz, time_loop_buzz_description, nil);
+
+    exec = executor.new(step_count, tick, context);
+    return exec;
+}

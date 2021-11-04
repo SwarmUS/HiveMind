@@ -1,7 +1,7 @@
-include "behaviors/hex_leader.bzz"
+include "behaviors/time_loop.bzz"
 
 function init() {
-  exec = create_exec(50);
+  exec = create_exec(200);
 }
 
 function step() {
