@@ -24,7 +24,7 @@ function create_exec(step_count) {
   counter = 0;
   stig = stigmergy.create(1);
 
-  stig.put("leader", 2);
+  stig.put("leader", 1);
 
   exec = executor.new(step_count, tick, nil);
   return exec;
