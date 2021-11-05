@@ -1,0 +1,41 @@
+include "utils/executor.bzz"
+
+ctx = {
+    .hex = 0
+}
+
+function tick(context){
+    var leader = stig.get("leader");
+    log("My id : ", id);
+
+    if(leader == id){
+        call_buzz_function(4, "blinky_set_hex", {.0 = context.hex});
+        ui.set_hex(context.hex);
+        log("Leader asking for hex : ", context.hex);
+
+        if(context.hex > 15){
+            context.hex = 0;
+        } else {
+            context.hex = context.hex + 1;
+        }
+    }
+}
+
+function blinky_set_hex(arg_int) {
+    log("Slave setting hex : ", arg_int);
+    ui.set_hex(arg_int);
+}
+
+var args_description = {
+    .0 = {.arg_int=0}
+}
+
+function create_exec() {
+  stig = stigmergy.create(1);
+  stig.put("leader", 2);
+
+  register_closure("blinky_set_hex", blinky_set_hex, args_description, nil)
+
+  exec = executor.new(20, tick, ctx);
+  return exec;
+}

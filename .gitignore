@@ -9,7 +9,7 @@ cmake-build-local/
 
 .builds/
 build/
-build
+build*
 
 .cache/
 .ccls-cache/
