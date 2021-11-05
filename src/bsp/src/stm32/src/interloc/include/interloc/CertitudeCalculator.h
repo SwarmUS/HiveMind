@@ -2,6 +2,7 @@
 #define HIVE_MIND_CERTITUDECALCULATOR_H
 
 #include <bsp/AngleCalculatorParameters.h>
+#include <logger/ILogger.h>
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -13,10 +14,8 @@ void getPdoaValueCertiture(
     const float pdValue,
     uint8_t antennaPair,
     std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>& tdoaProducedValue,
-    std::array<std::array<float, NUM_PDOA_SLOPES << NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>&
-        pdoaProducedValue,
-    std::array<std::array<float, NUM_PDOA_SLOPES << NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>&
-        pdoaCertitude);
+    std::array<std::array<float, 12 << 1>, 3>& pdoaProducedValue,
+    std::array<std::array<float, 12 << 1>, 3>& pdoaCertitude);
 
 void getTdoaSelectionCertitude(
     const float tdValue,

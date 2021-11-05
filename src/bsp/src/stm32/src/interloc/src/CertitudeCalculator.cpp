@@ -3,9 +3,9 @@
 float getTdoaValueCertitude(float tdValue) {
     // TDOA certitude is function of the absolute of the TDOA value.The closer it is to ±90 the
     // worst the certitude is
-    uint8_t cuttingVal = 10;
+    float cuttingVal = 10;
 
-    if (abs(tdValue) > cuttingVal) {
+    if (abs(tdValue) < cuttingVal) {
         return 1;
     }
 
@@ -16,9 +16,10 @@ float getTdoaValueCertitude(float tdValue) {
 float producePdoa(float pdValue,
                   const AngleCalculatorParameters& parameters,
                   const uint8_t pdSlopeId,
+                  const uint8_t tdSlopeId,
                   const uint8_t antennaPair) {
-    return (pdValue - parameters.m_pdoaIntercepts[pdSlopeId][antennaPair]) /
-           parameters.m_pdoaSlopes[antennaPair] * ((-1) ^ (int)(pdSlopeId + 1));
+    return (pdValue - parameters.m_pdoaIntercepts[antennaPair][pdSlopeId]) /
+           parameters.m_pdoaSlopes[antennaPair] * (pow((float)(-1), (float)(tdSlopeId + 1)));
 }
 void getPdoaValueCertiture(
     const AngleCalculatorParameters& parameters,
@@ -26,34 +27,37 @@ void getPdoaValueCertiture(
     const float pdValue,
     uint8_t antennaPair,
     std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>& tdoaProducedValue,
-    std::array<std::array<float, NUM_PDOA_SLOPES << NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>&
-        pdoaProducedValue,
-    std::array<std::array<float, NUM_PDOA_SLOPES << NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>&
-        pdoaCertitude) {
+    std::array<std::array<float, NUM_PDOA_SLOPES << 1>, NUM_ANTENNA_PAIRS>& pdoaProducedValue,
+    std::array<std::array<float, NUM_PDOA_SLOPES << 1>, NUM_ANTENNA_PAIRS>& pdoaCertitude) {
 
     for (unsigned int tdSlopeId = 0; tdSlopeId < NUM_TDOA_SLOPES; tdSlopeId++) {
-        tdoaProducedValue[tdSlopeId][antennaPair] =
-            ((tdValue - parameters.m_tdoaIntercepts[tdSlopeId][antennaPair]) /
-             parameters.m_tdoaSlopes[tdSlopeId][antennaPair]);
+        tdoaProducedValue[antennaPair][tdSlopeId] =
+            ((tdValue - parameters.m_tdoaIntercepts[antennaPair][tdSlopeId]) /
+             parameters.m_tdoaSlopes[antennaPair][tdSlopeId]);
 
-        while (tdoaProducedValue[tdSlopeId][antennaPair] > 360) {
-            tdoaProducedValue[tdSlopeId][antennaPair] -= 360;
+        while (tdoaProducedValue[antennaPair][tdSlopeId] > (float)360) {
+            tdoaProducedValue[antennaPair][tdSlopeId] -= (float)360;
         }
 
-        for (unsigned int pdSlopeId = 0; pdSlopeId < NUM_PDOA_SLOPES; pdSlopeId++) {
-            pdoaProducedValue[pdSlopeId][antennaPair] =
-                producePdoa(pdValue, parameters, pdSlopeId, antennaPair);
+        for (unsigned int pdSlopeId = 0 + NUM_PDOA_SLOPES * tdSlopeId;
+             pdSlopeId < NUM_PDOA_SLOPES * (tdSlopeId + 1); pdSlopeId++) {
+            pdoaProducedValue[antennaPair][pdSlopeId] =
+                producePdoa(pdValue, parameters, pdSlopeId, tdSlopeId, antennaPair);
+        }
+    }
+    for (unsigned int tdSlopeId = 0; tdSlopeId < NUM_TDOA_SLOPES; tdSlopeId++) {
 
-            float compareVal = abs(pdoaProducedValue[pdSlopeId][antennaPair] -
-                                   tdoaProducedValue[tdSlopeId][antennaPair]);
-
+        for (unsigned int pdSlopeId = 0 + NUM_PDOA_SLOPES * tdSlopeId;
+             pdSlopeId < NUM_PDOA_SLOPES * (tdSlopeId + 1); pdSlopeId++) {
+            float compareVal = abs(pdoaProducedValue[antennaPair][pdSlopeId] -
+                                   tdoaProducedValue[antennaPair][tdSlopeId]);
             if (compareVal < 5) {
-                pdoaCertitude[pdSlopeId][antennaPair] = 1;
+                pdoaCertitude[antennaPair][pdSlopeId] = 1;
             } else if (compareVal > 30) {
-                pdoaCertitude[pdSlopeId][antennaPair] = 0;
+                pdoaCertitude[antennaPair][pdSlopeId] = 0;
             } else {
                 // 5 / x^1.5
-                pdoaCertitude[pdSlopeId][antennaPair] = 5 / powf(compareVal, 1.5);
+                pdoaCertitude[antennaPair][pdSlopeId] = 5 / powf(compareVal, 1.5);
             }
         }
     }
