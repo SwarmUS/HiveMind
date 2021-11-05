@@ -1,0 +1,63 @@
+include "utils/executor.bzz"
+
+# Calculates the next flash time based on the offset received
+function receiveOffset() {
+    neighbors.listen("offset", function(vid, value, rid){
+        t = iteration + value
+        c = next_flash + FLASH_PERIOD/2
+        d = t + FLASH_PERIOD/2
+
+        if((next_flash < t) and c > t) {
+            next_flash = next_flash + 1
+        }
+        else if((next_flash > t) and (next_flash < d)) {
+            next_flash = next_flash - 1
+        }
+    })
+}
+
+# Send own offset to neighbors
+function sendOffset() {
+    if(next_flash >= iteration) {
+        offset = next_flash - iteration
+    } else {
+        offset = 0
+    }
+    neighbors.broadcast("offset", offset)
+}
+
+function tick(context){
+    log("Nex flash in: ", next_flash)
+    iteration = iteration + 1
+    if(iteration > next_flash) {
+        next_flash = iteration + FLASH_PERIOD
+    }
+
+    a = iteration + FLASH_PERIOD
+    b = next_flash + FLASH_LENGTH
+
+    if(a < b) {
+        log("LED ON")
+        ui.set_led(1)
+        ui.set_hex(1)
+    } else {
+        log("LED OFF")
+        ui.set_led(0)
+        ui.set_hex(0)
+    }
+
+    if(iteration > 50 and iteration % 10 == 0) {
+        sendOffset()
+    }
+}
+
+function create_exec(step_count){
+    iteration = 0
+    FLASH_PERIOD = 20
+    FLASH_LENGTH = 3
+    next_flash = math.rng_uniform() % 30
+     # random number generator goes here instead of ID
+    receiveOffset()
+    exec = executor.new(step_count, tick, ctx)
+    return exec
+}
