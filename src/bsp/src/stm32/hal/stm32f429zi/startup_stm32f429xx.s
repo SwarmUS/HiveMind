@@ -70,7 +70,7 @@ defined in linker script */
 /* start address for the .ccmbss section. defined in linker script */
 .word  _sccmbss
 /* end address for the .ccmbss section. defined in linker script */
-.word  _eccbss
+.word  _eccmbss
 /* stack used for SystemInit_ExtMemCtl; always internal RAM used */
 
 /**
