@@ -7,7 +7,7 @@ function(bittybuzz_fetch)
     FetchContent_Declare(
         bittybuzz
         GIT_REPOSITORY https://github.com/xgroleau/BittyBuzz
-        GIT_TAG        a20095e
+        GIT_TAG        71dd142
         GIT_PROGRESS   TRUE
     ) 
 
