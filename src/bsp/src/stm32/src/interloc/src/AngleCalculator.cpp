@@ -62,7 +62,7 @@ std::optional<float> weightedAverage(std::array<std::array<float, 2>, 3>& table,
     if (pondSum == 0) {
         return {};
     }
-    
+
     float angle = angleSum / pondSum;
     while (angle > (float)360) {
         angle -= (float)360;
