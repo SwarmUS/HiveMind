@@ -73,8 +73,28 @@ SECTIONS
     PROVIDE_HIDDEN (__fini_array_end = .);
   } >FLASH
 
-  _sidata = LOADADDR(.data);
+  _siccmdata = LOADADDR(.cmdata);
+  .cmdata :
+  {
+    . = ALIGN(4);
+    _sccmdata = .;
+    *(.cmdata)
+    *(.cmdata*)
+    . = ALIGN(4);
+    _eccmdata = .;
+  } >CCMRAM AT> FLASH
 
+  .cmbss :
+  {
+    . = ALIGN(4);
+    _sccmbss = .;
+    *(.cmbss)
+    *(.cmbss*)
+    . = ALIGN(4);
+    _eccmbss = .;
+  } >CCMRAM
+
+  _sidata = LOADADDR(.data);
   .data :
   {
     . = ALIGN(4);
@@ -99,28 +119,6 @@ SECTIONS
     _ebss = .;
     __bss_end__ = _ebss;
   } >RAM
-
-  .cmbss :
-  {
-    . = ALIGN(4);
-    _sccmbss = .;
-    *(.cmbss)
-    *(.cmbss*)
-    . = ALIGN(4);
-    _eccmbss = .;
-  } >CCMRAM
-
-  .cmdata :
-  {
-    . = ALIGN(4);
-    _sccmdata = .;
-    *(.cmdata)
-    *(.cmdata*)
-    . = ALIGN(4);
-    _eccmdata = .;
-  } >CCMRAM AT> FLASH
-
-  _siccmdata = LOADADDR(.cmdata);
 
   ._user_heap_stack :
   {
