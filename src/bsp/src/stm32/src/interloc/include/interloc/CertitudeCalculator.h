@@ -21,10 +21,9 @@ void getTdoaSelectionCertitude(
     const float tdValue,
     std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>& certitude,
     uint8_t antennaPair);
-void getDecisionCertitude(
-    std::array<float, NUM_ANTENNA_PAIRS>& tdValue,
-    std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>& fallingSlopeCertitude,
-    std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>& risingSlopeCertitude,
-    const AngleCalculatorParameters& parameters);
+void getDecisionCertitude(std::array<float, NUM_ANTENNA_PAIRS>& tdValue,
+                          std::array<float, NUM_ANTENNA_PAIRS>& fallingSlopeCertitude,
+                          std::array<float, NUM_ANTENNA_PAIRS>& risingSlopeCertitude,
+                          const AngleCalculatorParameters& parameters);
 
 #endif // HIVE_MIND_CERTITUDECALCULATOR_H

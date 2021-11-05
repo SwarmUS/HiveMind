@@ -65,9 +65,9 @@ void getPdoaValueCertiture(
 
 void reverse(std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>& table,
              uint8_t antennaPair) {
-    float temp = table[0][antennaPair];
-    table[0][antennaPair] = table[1][antennaPair];
-    table[1][antennaPair] = temp;
+    float temp = table[antennaPair][0];
+    table[antennaPair][0] = table[antennaPair][1];
+    table[antennaPair][1] = temp;
 }
 
 void getTdoaSelectionCertitude(
@@ -75,30 +75,29 @@ void getTdoaSelectionCertitude(
     std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>& certitude,
     uint8_t antennaPair) {
     float val = abs(tdValue);
-    uint8_t cuttingVal = 45;
-    uint8_t deadZone = 10;
+    float cuttingVal = 45;
+    float deadZone = 10;
     float m = (0 - 1) / (deadZone - cuttingVal);
     float b = 1 - m * cuttingVal;
     if (val > cuttingVal) {
-        certitude[0][antennaPair] = 1;
-        certitude[1][antennaPair] = 0;
+        certitude[antennaPair][0] = 1;
+        certitude[antennaPair][1] = 0;
     } else if (val < deadZone) {
-        certitude[0][antennaPair] = 0;
-        certitude[1][antennaPair] = 0;
+        certitude[antennaPair][0] = 0;
+        certitude[antennaPair][1] = 0;
     } else {
-        certitude[0][antennaPair] = val * m + b;
-        certitude[1][antennaPair] = 0;
+        certitude[antennaPair][0] = val * m + b;
+        certitude[antennaPair][1] = 0;
     }
     if (tdValue < 0) {
         reverse(certitude, antennaPair);
     }
 }
 
-void getDecisionCertitude(
-    std::array<float, NUM_ANTENNA_PAIRS>& tdValue,
-    std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>& fallingSlopeCertitude,
-    std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>& risingSlopeCertitude,
-    const AngleCalculatorParameters& parameters) {
+void getDecisionCertitude(std::array<float, NUM_ANTENNA_PAIRS>& tdValue,
+                          std::array<float, NUM_ANTENNA_PAIRS>& fallingSlopeCertitude,
+                          std::array<float, NUM_ANTENNA_PAIRS>& risingSlopeCertitude,
+                          const AngleCalculatorParameters& parameters) {
 
     std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS> certitude1;
     std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS> certitude2;
@@ -117,9 +116,15 @@ void getDecisionCertitude(
             reverse(certitude2, antennaPair);
         }
 
-        fallingSlopeCertitude[0][antennaPair] = certitude1[0][antennaPair];
-        fallingSlopeCertitude[1][antennaPair] = certitude2[0][antennaPair];
-        risingSlopeCertitude[0][antennaPair] = certitude1[1][antennaPair];
-        risingSlopeCertitude[1][antennaPair] = certitude2[1][antennaPair];
+        if (certitude1[antennaPair][0] > certitude2[antennaPair][0]) {
+            fallingSlopeCertitude[antennaPair] = certitude1[antennaPair][0];
+        } else {
+            fallingSlopeCertitude[antennaPair] = certitude2[antennaPair][0];
+        }
+        if (certitude1[antennaPair][1] > certitude2[antennaPair][1]) {
+            risingSlopeCertitude[antennaPair] = certitude1[antennaPair][1];
+        } else {
+            risingSlopeCertitude[antennaPair] = certitude2[antennaPair][1];
+        }
     }
 }
