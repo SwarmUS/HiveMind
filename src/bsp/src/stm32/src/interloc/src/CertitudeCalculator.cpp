@@ -18,8 +18,17 @@ float producePdoa(float pdValue,
                   const uint8_t pdSlopeId,
                   const uint8_t tdSlopeId,
                   const uint8_t antennaPair) {
-    return (pdValue - parameters.m_pdoaIntercepts[antennaPair][pdSlopeId]) /
-           parameters.m_pdoaSlopes[antennaPair] * (pow((float)(-1), (float)(tdSlopeId + 1)));
+    float angle = (pdValue - parameters.m_pdoaIntercepts[antennaPair][pdSlopeId]) /
+                  parameters.m_pdoaSlopes[antennaPair] * (pow((float)(-1), (float)(tdSlopeId + 1)));
+
+    while (angle > (float)360) {
+        angle -= (float)360;
+    }
+    while (angle < -(float)360) {
+        angle += (float)360;
+    };
+
+    return angle;
 }
 void getPdoaValueCertiture(
     const AngleCalculatorParameters& parameters,
@@ -37,6 +46,10 @@ void getPdoaValueCertiture(
 
         while (tdoaProducedValue[antennaPair][tdSlopeId] > (float)360) {
             tdoaProducedValue[antennaPair][tdSlopeId] -= (float)360;
+        }
+
+        while (tdoaProducedValue[antennaPair][tdSlopeId] < -(float)360) {
+            tdoaProducedValue[antennaPair][tdSlopeId] += (float)360;
         }
 
         for (unsigned int pdSlopeId = 0 + NUM_PDOA_SLOPES * tdSlopeId;
