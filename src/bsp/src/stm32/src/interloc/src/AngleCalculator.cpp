@@ -77,11 +77,13 @@ std::optional<float> getFinalAngle(
     std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS>& pairResult) {
     uint8_t hasNoNan = 0;
     std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS> goodVals;
+    uint8_t itemCnt = 0;
     for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
         if (!isnan(pairResult[i][0]) && !isnan(pairResult[i][1])) {
             hasNoNan++;
-            goodVals[i][0] = pairResult[i][0];
-            goodVals[i][1] = pairResult[i][1];
+            goodVals[itemCnt][0] = pairResult[i][0];
+            goodVals[itemCnt][1] = pairResult[i][1];
+            itemCnt++;
         }
     }
     if (hasNoNan == 2) {
