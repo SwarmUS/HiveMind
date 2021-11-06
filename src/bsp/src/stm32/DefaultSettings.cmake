@@ -1,5 +1,5 @@
 set_default(UUID_OVERRIDE 0)
-set_default(HOST_PORT 55551)
+set_default(HOST_PORT 7001)
 set_default(HOST_IP "192.168.1.101")
 set_default(LOG_LEVEL "Info")
 set_default(BBZVM_STEP_DELAY_MS 50)

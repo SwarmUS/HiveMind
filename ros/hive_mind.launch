@@ -7,7 +7,7 @@
             <param name="board_uuid" value="1" />
 
             <param name="host_tcp_address" value="127.0.0.1" />
-            <param name="host_tcp_port" value="5555" />
+            <param name="host_tcp_port" value="7001" />
 
             <!-- Set port to 0 to disable server -->
             <param name="remote_mock_port" value="9001" />
