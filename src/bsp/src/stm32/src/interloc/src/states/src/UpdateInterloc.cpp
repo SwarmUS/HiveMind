@@ -8,13 +8,9 @@ UpdateInterloc::UpdateInterloc(ILogger& logger, DecawaveArray& decawaves) :
 
 void UpdateInterloc::process(InterlocStateHandler& context) {
     std::optional<double> distance = context.getTWR().calculateDistance(context.getSlotId());
-    std::optional<float> angle =
+    auto [angle, losConfidence] =
         InterlocBSPContainer::getAngleCalculator().calculateAngle(context.getRawAngleData());
-
-    if (context.getRawAngleData().m_framesLength > 0) {
-        m_logger.log(LogLevel::Warn, "LOS from : %d = %3.3f", context.getCurrentFrameId(),
-                     context.getRawAngleData().m_frames[10].m_frameInfos[2].m_losConfidence);
-    }
+    std::optional<bool> los = {};
 
     // Reset data for next run
     context.getTWR().m_allDataReceived = false;
@@ -35,10 +31,19 @@ void UpdateInterloc::process(InterlocStateHandler& context) {
         m_logger.log(LogLevel::Warn, "angle from : %d = Err", context.getCurrentFrameId());
     }
 
+    if (losConfidence) {
+        if (losConfidence > 0.5) {
+            los = true;
+        } else {
+            los = false;
+        }
+    }
+
     // Update using the optionals. The higher levels take care of updating only if a value is
     // present.
     InterlocBSPContainer::getInterlocManager().updateInterloc(
-        InterlocStateHandler::getBoardIdFromSlotId(context.getCurrentFrameId()), distance, angle);
+        InterlocStateHandler::getBoardIdFromSlotId(context.getCurrentFrameId()), distance, angle,
+        los);
 
     context.setState(InterlocStates::IDLE, InterlocEvent::NO_EVENT);
 }

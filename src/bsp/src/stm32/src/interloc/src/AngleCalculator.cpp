@@ -22,7 +22,8 @@ void getPairAngle(
     std::array<std::array<float, NUM_PDOA_SLOPES << 1>, NUM_ANTENNA_PAIRS>& pdoaProducedValue,
     std::array<std::array<float, NUM_PDOA_SLOPES << 1>, NUM_ANTENNA_PAIRS>& pdoaCertitude,
     std::array<float, NUM_ANTENNA_PAIRS>& fallingSlopeCertitude,
-    std::array<float, NUM_ANTENNA_PAIRS>& risingSlopeCertitude) {
+    std::array<float, NUM_ANTENNA_PAIRS>& risingSlopeCertitude,
+    std::array<float, NUM_ANTENNA_PAIRS>& meanLosConfidence) {
     for (unsigned int antennaPair = 0; antennaPair < NUM_ANTENNA_PAIRS; antennaPair++) {
         float angleSum = 0;
         float pondSum = 0;
@@ -43,7 +44,7 @@ void getPairAngle(
         }
         if (!isnan(pondSum)) {
             pairResult[antennaPair][0] = angleSum / pondSum;
-            pairResult[antennaPair][1] = pondSum;
+            pairResult[antennaPair][1] = pondSum * meanLosConfidence[antennaPair];
         } else {
             pairResult[antennaPair][0] = 0;
             pairResult[antennaPair][1] = 0;
@@ -98,9 +99,10 @@ std::optional<float> getFinalAngle(
     }
 }
 
-std::optional<float> AngleCalculator::calculateAngle(BspInterlocRawAngleData& rawData) {
+std::tuple<std::optional<float>, std::optional<float>> AngleCalculator::calculateAngle(
+    BspInterlocRawAngleData& rawData) {
     if (rawData.m_framesLength < MINIMUM_ANGLE_MEAN || !m_parametersValid) {
-        return {};
+        return {{}, {}};
     }
 
     std::array<float, NUM_ANTENNA_PAIRS> rawTdoas{};
@@ -114,11 +116,28 @@ std::optional<float> AngleCalculator::calculateAngle(BspInterlocRawAngleData& ra
     std::array<std::array<float, NUM_PDOA_SLOPES << 1>, NUM_ANTENNA_PAIRS> pdoaProducedValue;
     std::array<std::array<float, NUM_PDOA_SLOPES << 1>, NUM_ANTENNA_PAIRS> pdoaCertitude;
     std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS> pairResult;
+    std::array<std::array<float, NUM_ANTENNA_PAIRS>, MAX_ANGLE_FRAMES> frameLosConfidence;
+    std::array<float, NUM_ANTENNA_PAIRS> meanLosConfidence;
+
+    for (unsigned int i = 0; i < rawData.m_framesLength; i++) {
+        for (unsigned int j = 0; j < NUM_ANTENNA_PAIRS; j++) {
+            uint8_t ant1 = m_calculatorParameters.m_antennaPairs[j][0];
+            uint8_t ant2 = m_calculatorParameters.m_antennaPairs[j][1];
+            frameLosConfidence[i][j] =
+                std::min(rawData.m_frames[i].m_frameInfos[ant1].m_losConfidence,
+                         rawData.m_frames[i].m_frameInfos[ant2].m_losConfidence);
+
+            meanLosConfidence[j] += frameLosConfidence[i][j];
+        }
+    }
 
     for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
-        rawTdoas[i] = getRawTdoa(rawData, i, -1);
+        meanLosConfidence[i] /= rawData.m_framesLength;
+
+        rawTdoas[i] = getRawTdoa(rawData, frameLosConfidence, i, 5);
         rawTdoasCertitude[i] = getTdoaValueCertitude(rawTdoas[i]);
-        rawPdoas[i] = getRawPdoa(rawData, i, 1); // TODO: Decide if we want the mean of
+        rawPdoas[i] =
+            getRawPdoa(rawData, frameLosConfidence, i, 1); // TODO: Decide if we want the mean of
         getPdoaValueCertiture(m_calculatorParameters, rawTdoas[i], rawPdoas[i], i,
                               tdoaProducedValue, pdoaProducedValue, pdoaCertitude);
     }
@@ -127,14 +146,19 @@ std::optional<float> AngleCalculator::calculateAngle(BspInterlocRawAngleData& ra
                          m_calculatorParameters);
 
     getPairAngle(pairResult, rawTdoasCertitude, pdoaProducedValue, pdoaCertitude,
-                 fallingSlopeCertitude, risingSlopeCertitude);
-    return getFinalAngle(pairResult);
+                 fallingSlopeCertitude, risingSlopeCertitude, meanLosConfidence);
+
+    float maxLos = *std::max_element(meanLosConfidence.begin(), meanLosConfidence.end());
+    return {getFinalAngle(pairResult), maxLos};
 }
 
-float AngleCalculator::getRawTdoa(BspInterlocRawAngleData& rawData,
-                                  uint8_t antennaPair,
-                                  int32_t meanLength) {
+float AngleCalculator::getRawTdoa(
+    BspInterlocRawAngleData& rawData,
+    std::array<std::array<float, NUM_ANTENNA_PAIRS>, MAX_ANGLE_FRAMES>& losConfidence,
+    uint8_t antennaPair,
+    int32_t meanLength) {
     volatile float angleAccumulator = 0;
+    volatile float confidenceAccumulator = 0;
     uint32_t length = (meanLength <= 0) ? rawData.m_framesLength : (uint32_t)meanLength;
 
     const auto& antennaIds = m_calculatorParameters.m_antennaPairs[antennaPair];
@@ -153,22 +177,29 @@ float AngleCalculator::getRawTdoa(BspInterlocRawAngleData& rawData,
             tdoaDist = -1;
         }
 
-        angleAccumulator += asin(tdoaDist) * 180 / M_PI;
+        float tdoaAngle = asin(tdoaDist) * 180 / M_PI;
+        angleAccumulator += tdoaAngle * losConfidence[i][antennaPair];
+        confidenceAccumulator += losConfidence[i][antennaPair];
     }
-    float angle = angleAccumulator / length;
+    float angle = angleAccumulator / confidenceAccumulator;
+
     while (angle > (float)360) {
         angle -= (float)360;
     }
     while (angle < -(float)360) {
         angle += (float)360;
     }
+
     return angle;
 }
 
-float AngleCalculator::getRawPdoa(BspInterlocRawAngleData& rawData,
-                                  uint8_t antennaPair,
-                                  int32_t meanLength) {
+float AngleCalculator::getRawPdoa(
+    BspInterlocRawAngleData& rawData,
+    std::array<std::array<float, NUM_ANTENNA_PAIRS>, MAX_ANGLE_FRAMES>& losConfidence,
+    uint8_t antennaPair,
+    int32_t meanLength) {
     float angleAccumulator = 0;
+    float confidenceAccumulator = 0;
     uint32_t length = (meanLength <= 0) ? rawData.m_framesLength : (uint32_t)meanLength;
 
     const auto& antennaIds = m_calculatorParameters.m_antennaPairs[antennaPair];
@@ -187,11 +218,11 @@ float AngleCalculator::getRawPdoa(BspInterlocRawAngleData& rawData,
         }
 
         phaseDiff -= M_PI;
-
-        angleAccumulator += asin(phaseDiff / M_PI) *
-                            m_calculatorParameters.m_pdoaNormalizationFactors[antennaPair] * 180 /
-                            M_PI;
+        float angle = asin(phaseDiff / M_PI) *
+                      m_calculatorParameters.m_pdoaNormalizationFactors[antennaPair] * 180 / M_PI;
+        angleAccumulator += angle * losConfidence[i][antennaPair];
+        confidenceAccumulator += losConfidence[i][antennaPair];
     }
 
-    return angleAccumulator / length;
+    return angleAccumulator / confidenceAccumulator;
 }

@@ -152,12 +152,14 @@ uint8_t InterlocManager::powerCorrection(double twrDistance) {
 
 void InterlocManager::updateInterloc(uint16_t robotId,
                                      std::optional<float> distance,
-                                     std::optional<float> angle) {
+                                     std::optional<float> angle,
+                                     std::optional<bool> los) {
     if (!m_interlocUpdateQueue.isFull()) {
         InterlocUpdate update;
         update.m_robotId = robotId;
         update.m_distance = distance;
         update.m_angleOfArrival = angle;
+        update.m_isInLineOfSight = los;
 
         m_interlocUpdateQueue.push(update);
     } else {

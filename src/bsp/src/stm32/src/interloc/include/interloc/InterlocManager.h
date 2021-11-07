@@ -37,7 +37,8 @@ class InterlocManager : public IInterlocManager {
 
     void updateInterloc(uint16_t robotId,
                         std::optional<float> distance,
-                        std::optional<float> angle);
+                        std::optional<float> angle,
+                        std::optional<bool> los);
 
     void sendRawAngleData(BspInterlocRawAngleData& data);
 

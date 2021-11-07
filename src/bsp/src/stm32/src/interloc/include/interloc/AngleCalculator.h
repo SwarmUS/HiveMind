@@ -7,7 +7,7 @@
 #include <optional>
 
 #define CONFUSION_LINE_DEGREES (30.0)
-#define MINIMUM_ANGLE_MEAN (30)
+#define MINIMUM_ANGLE_MEAN (1)
 
 /**
  * Helper class used to compute an angle from raw phase and timestamp values.
@@ -30,7 +30,8 @@ class AngleCalculator {
      * @param rawData Array of raw data to use for calculation
      * @return The angle if it could be computed, false otherwise
      */
-    std::optional<float> calculateAngle(BspInterlocRawAngleData& rawData);
+    std::tuple<std::optional<float>, std::optional<float>> calculateAngle(
+        BspInterlocRawAngleData& rawData);
 
   private:
     AngleCalculatorParameters m_calculatorParameters;
@@ -48,7 +49,11 @@ class AngleCalculator {
      * @param meanLength Number of samples to use for the mean (-1 to use them all)
      * @return The mean angle value normalized between -90 and +90 degrees
      */
-    float getRawTdoa(BspInterlocRawAngleData& rawData, uint8_t antennaPair, int32_t meanLength);
+    float getRawTdoa(
+        BspInterlocRawAngleData& rawData,
+        std::array<std::array<float, NUM_ANTENNA_PAIRS>, MAX_ANGLE_FRAMES>& losConfidence,
+        uint8_t antennaPair,
+        int32_t meanLength);
 
     /**
      * Retrieves the index of the slope that should be used for a given antenna pair considering
@@ -75,7 +80,11 @@ class AngleCalculator {
      * @param meanLength Number of samples to use for the mean (-1 to use them all)
      * @return The mean PDOA value
      */
-    float getRawPdoa(BspInterlocRawAngleData& rawData, uint8_t antennaPair, int32_t meanLength);
+    float getRawPdoa(
+        BspInterlocRawAngleData& rawData,
+        std::array<std::array<float, NUM_ANTENNA_PAIRS>, MAX_ANGLE_FRAMES>& losConfidence,
+        uint8_t antennaPair,
+        int32_t meanLength);
 
     /**
      * Applies the linear fit on a raw PDOA value using the associated TDOA fitted value
