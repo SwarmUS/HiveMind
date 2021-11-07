@@ -32,3 +32,6 @@ tools/openocd/stm32_f4/nucleo_c.cfg
 
 build-h7/
 build-f4/
+cmake-build-f4/
+
+cmake-build-h7/
