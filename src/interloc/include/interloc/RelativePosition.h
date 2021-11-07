@@ -16,6 +16,9 @@ struct RelativePosition {
      */
     float m_angle;
 
+    float m_angleRealMean;
+    float m_angleImaginaryMean;
+
     bool m_isInLineOfSight;
 };
 

@@ -49,6 +49,7 @@ class Interloc : public IInterloc {
 
     void processPositionUpdate(const InterlocUpdate& positionUpdate);
     void dumpUpdatesHistory();
+    static float filterValue(float oldValue, float newValue, float alpha);
 };
 
 #endif //__INTERLOC_H__
