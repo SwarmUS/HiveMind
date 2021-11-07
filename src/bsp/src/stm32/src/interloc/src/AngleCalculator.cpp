@@ -134,7 +134,7 @@ std::tuple<std::optional<float>, std::optional<float>> AngleCalculator::calculat
     for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
         meanLosConfidence[i] /= rawData.m_framesLength;
 
-        rawTdoas[i] = getRawTdoa(rawData, frameLosConfidence, i, 5);
+        rawTdoas[i] = getRawTdoa(rawData, frameLosConfidence, i, -1);
         rawTdoasCertitude[i] = getTdoaValueCertitude(rawTdoas[i]);
         rawPdoas[i] =
             getRawPdoa(rawData, frameLosConfidence, i, 1); // TODO: Decide if we want the mean of
