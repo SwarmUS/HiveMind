@@ -277,6 +277,7 @@ class Decawave {
     static void rxCallback(const dwt_cb_data_t* callbackData, void* context);
     static void txCallback(const dwt_cb_data_t* callbackData, void* context);
     static void isrCallback(void* context);
+    void enableAccumulatorClock() const;
 };
 // user manual : https://www.decawave.com/sites/default/files/resources/dw1000_user_manual_2.11.pdf
 // datasheet : https://www.decawave.com/sites/default/files/resources/dw1000-datasheet-v2.09.pdf
