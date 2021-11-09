@@ -30,9 +30,8 @@ std::tuple<std::optional<float>, std::optional<float>> AngleCalculator::calculat
     std::array<float, NUM_ANTENNA_PAIRS> risingSlopeCertitude;
 
     std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS> pdoaProducedValue;
-    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS> pdoaCertitude;
 
-    std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS> pairResult;
+    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS> pairResult;
 
     std::array<std::array<float, NUM_ANTENNA_PAIRS>, MAX_ANGLE_FRAMES> frameLosConfidence;
     std::array<float, NUM_ANTENNA_PAIRS> meanLosConfidence;
@@ -42,24 +41,29 @@ std::tuple<std::optional<float>, std::optional<float>> AngleCalculator::calculat
     for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
         rawPdoas[i] = getRawPdoa(rawData, frameLosConfidence, i, 1);
         rawPdoasCertitude[i] =
-            getPdoaValueCertitude(rawPdoas[i]); // TODO: Decide if we want the mean of
+            getPdoaValueCertitude(rawPdoas[i]); // TODO: Decide if we want the mean of PDOAs
+    }
+
+    for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
+        for (unsigned int j = 0; j < NUM_PDOA_SLOPES; j++) {
+            pdoaProducedValue[i][j] = producePdoa(rawPdoas[i], j, i);
+        }
     }
 
     getDecisionCertitude(rawPdoas, fallingSlopeCertitude, risingSlopeCertitude,
                          m_calculatorParameters);
 
-    getPairAngle(pairResult, rawTdoasCertitude, pdoaProducedValue, pdoaCertitude,
-                 fallingSlopeCertitude, risingSlopeCertitude, meanLosConfidence);
+    getPairAngle(pairResult, pdoaProducedValue, rawPdoasCertitude, fallingSlopeCertitude,
+                 risingSlopeCertitude, meanLosConfidence);
 
     float maxLos = *std::max_element(meanLosConfidence.begin(), meanLosConfidence.end());
     return {getFinalAngle(pairResult), maxLos};
 }
 
-void getPairAngle(
-    std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS>& pairResult,
-    std::array<float, NUM_ANTENNA_PAIRS>& rawTdoasCertitude,
-    std::array<std::array<float, NUM_PDOA_SLOPES << 1>, NUM_ANTENNA_PAIRS>& pdoaProducedValue,
-    std::array<std::array<float, NUM_PDOA_SLOPES << 1>, NUM_ANTENNA_PAIRS>& pdoaCertitude,
+void AngleCalculator::getPairAngle(
+    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS>& pairResult,
+    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS>& pdoaProducedValue,
+    std::array<float, NUM_ANTENNA_PAIRS>& rawPdoaCertitude,
     std::array<float, NUM_ANTENNA_PAIRS>& fallingSlopeCertitude,
     std::array<float, NUM_ANTENNA_PAIRS>& risingSlopeCertitude,
     std::array<float, NUM_ANTENNA_PAIRS>& meanLosConfidence) {
@@ -67,20 +71,18 @@ void getPairAngle(
         float angleSum = 0;
         float pondSum = 0;
 
-        for (unsigned int tdSlopeId = 0; tdSlopeId < NUM_TDOA_SLOPES; tdSlopeId++) {
-            for (unsigned int pdSlopeId = 0 + NUM_PDOA_SLOPES * tdSlopeId;
-                 pdSlopeId < NUM_PDOA_SLOPES * (tdSlopeId + 1); pdSlopeId++) {
+        for (unsigned int slopeId = 0; slopeId < NUM_PDOA_SLOPES; slopeId++) {
 
-                float slopeConfiance = tdSlopeId < 1 ? fallingSlopeCertitude[antennaPair]
-                                                     : risingSlopeCertitude[antennaPair];
-                float pond = pdoaCertitude[antennaPair][pdSlopeId] *
-                             rawTdoasCertitude[antennaPair] * slopeConfiance;
-                if (!isnan(pdoaProducedValue[antennaPair][pdSlopeId]) && !isnan(pond)) {
-                    angleSum += pdoaProducedValue[antennaPair][pdSlopeId] * pond;
-                    pondSum += pond;
-                }
+            float slopeConfidence = slopeId < 1 ? fallingSlopeCertitude[antennaPair]
+                                                : risingSlopeCertitude[antennaPair];
+
+            float pond = rawPdoaCertitude[antennaPair] * slopeConfidence;
+            if (!isnan(pdoaProducedValue[antennaPair][slopeId]) && !isnan(pond)) {
+                angleSum += pdoaProducedValue[antennaPair][slopeId] * pond;
+                pondSum += pond;
             }
         }
+
         if (!isnan(pondSum)) {
             pairResult[antennaPair][0] = angleSum / pondSum;
             pairResult[antennaPair][1] = pondSum * meanLosConfidence[antennaPair];
@@ -113,7 +115,7 @@ std::optional<float> weightedAverage(std::array<std::array<float, 2>, 3>& table,
     return angle;
 }
 
-std::optional<float> getFinalAngle(
+std::optional<float> AngleCalculator::getFinalAngle(
     std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS>& pairResult) {
     uint8_t hasNoNan = 0;
     std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS> goodVals;

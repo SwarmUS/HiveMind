@@ -104,7 +104,18 @@ class AngleCalculator {
         std::array<std::array<float, NUM_ANTENNA_PAIRS>, MAX_ANGLE_FRAMES>& frameLosConfidence,
         std::array<float, NUM_ANTENNA_PAIRS>& meanLosConfidence);
 
-    float producePdoa(float pdValue, const uint8_t pdSlopeId, const uint8_t antennaPair)
+    float producePdoa(float pdValue, const uint8_t pdSlopeId, const uint8_t antennaPair);
+
+    static void getPairAngle(
+        std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS>& pairResult,
+        std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS>& pdoaProducedValue,
+        std::array<float, NUM_ANTENNA_PAIRS>& rawPdoaCertitude,
+        std::array<float, NUM_ANTENNA_PAIRS>& fallingSlopeCertitude,
+        std::array<float, NUM_ANTENNA_PAIRS>& risingSlopeCertitude,
+        std::array<float, NUM_ANTENNA_PAIRS>& meanLosConfidence);
+
+    static std::optional<float> getFinalAngle(
+        std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS>& pairResult);
 };
 
 #endif // HIVE_MIND_ANGLECALCULATOR_H
