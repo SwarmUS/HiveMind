@@ -53,14 +53,8 @@ void InterlocManager::updateAngleCalculatorParameters(
         return;
     }
 
-    if (newParams.getTdoaSlopesLength() > NUM_TDOA_SLOPES ||
-        newParams.getTdoaInterceptsLength() > NUM_TDOA_SLOPES) {
-        m_logger.log(LogLevel::Error, "Angle Params Update: TDOA params not correct length");
-        return;
-    }
-
-    if (newParams.getPdoaInterceptsLength() > NUM_PDOA_SLOPES ||
-        newParams.getPdoaOriginsLength() > NUM_PDOA_SLOPES) {
+    if (newParams.getPdoaSlopesLength() > NUM_PDOA_SLOPES ||
+        newParams.getPdoaInterceptsLength() > NUM_PDOA_SLOPES) {
         m_logger.log(LogLevel::Error, "Angle Params Update: PDOA params not correct length");
         return;
     }
@@ -71,21 +65,12 @@ void InterlocManager::updateAngleCalculatorParameters(
         oldParams.m_slopeDecisionMatrix[newParams.getPairId()][i] = newParams.getSlopeDecision()[i];
     }
 
-    oldParams.m_tdoaNormalizationFactors[newParams.getPairId()] =
-        newParams.getTdoaNormalizationFactor();
-
-    for (unsigned int i = 0; i < newParams.getTdoaInterceptsLength(); i++) {
-        oldParams.m_tdoaSlopes[newParams.getPairId()][i] = newParams.getTdoaSlopes()[i];
-        oldParams.m_tdoaIntercepts[newParams.getPairId()][i] = newParams.getTdoaIntercepts()[i];
-    }
-
     oldParams.m_pdoaNormalizationFactors[newParams.getPairId()] =
         newParams.getPdoaNormalizationFactor();
-    oldParams.m_pdoaSlopes[newParams.getPairId()] = newParams.getPdoaSlope();
 
-    for (unsigned int i = 0; i < newParams.getPdoaOriginsLength(); i++) {
+    for (unsigned int i = 0; i < newParams.getPdoaSlopesLength(); i++) {
+        oldParams.m_pdoaSlopes[newParams.getPairId()][i] = newParams.getPdoaSlopes()[i];
         oldParams.m_pdoaIntercepts[newParams.getPairId()][i] = newParams.getPdoaIntercepts()[i];
-        oldParams.m_pdoaOrigins[newParams.getPairId()][i] = newParams.getPdoaOrigins()[i];
     }
 
     oldParams.m_parametersValidSecretNumbers[newParams.getPairId()] =

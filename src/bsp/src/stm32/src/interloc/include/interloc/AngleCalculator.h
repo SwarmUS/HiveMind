@@ -98,6 +98,13 @@ class AngleCalculator {
                         float fittedTdoa,
                         uint8_t tdoaSlopeIndex,
                         uint8_t antennaPair);
+
+    void computeLineOfSight(
+        BspInterlocRawAngleData& rawData,
+        std::array<std::array<float, NUM_ANTENNA_PAIRS>, MAX_ANGLE_FRAMES>& frameLosConfidence,
+        std::array<float, NUM_ANTENNA_PAIRS>& meanLosConfidence);
+
+    float producePdoa(float pdValue, const uint8_t pdSlopeId, const uint8_t antennaPair)
 };
 
 #endif // HIVE_MIND_ANGLECALCULATOR_H

@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-float getTdoaValueCertitude(float tdValue);
+float getPdoaValueCertitude(float tdValue);
 void getPdoaValueCertiture(
     const AngleCalculatorParameters& parameters,
     const float tdValue,

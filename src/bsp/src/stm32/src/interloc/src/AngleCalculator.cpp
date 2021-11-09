@@ -16,6 +16,45 @@ void AngleCalculator::setCalculatorParameters(const AngleCalculatorParameters& p
         }
     }
 }
+
+std::tuple<std::optional<float>, std::optional<float>> AngleCalculator::calculateAngle(
+    BspInterlocRawAngleData& rawData) {
+    if (rawData.m_framesLength < MINIMUM_ANGLE_MEAN || !m_parametersValid) {
+        return {{}, {}};
+    }
+
+    std::array<float, NUM_ANTENNA_PAIRS> rawPdoas{};
+    std::array<float, NUM_ANTENNA_PAIRS> rawPdoasCertitude{};
+
+    std::array<float, NUM_ANTENNA_PAIRS> fallingSlopeCertitude;
+    std::array<float, NUM_ANTENNA_PAIRS> risingSlopeCertitude;
+
+    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS> pdoaProducedValue;
+    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS> pdoaCertitude;
+
+    std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS> pairResult;
+
+    std::array<std::array<float, NUM_ANTENNA_PAIRS>, MAX_ANGLE_FRAMES> frameLosConfidence;
+    std::array<float, NUM_ANTENNA_PAIRS> meanLosConfidence;
+
+    computeLineOfSight(rawData, frameLosConfidence, meanLosConfidence);
+
+    for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
+        rawPdoas[i] = getRawPdoa(rawData, frameLosConfidence, i, 1);
+        rawPdoasCertitude[i] =
+            getPdoaValueCertitude(rawPdoas[i]); // TODO: Decide if we want the mean of
+    }
+
+    getDecisionCertitude(rawPdoas, fallingSlopeCertitude, risingSlopeCertitude,
+                         m_calculatorParameters);
+
+    getPairAngle(pairResult, rawTdoasCertitude, pdoaProducedValue, pdoaCertitude,
+                 fallingSlopeCertitude, risingSlopeCertitude, meanLosConfidence);
+
+    float maxLos = *std::max_element(meanLosConfidence.begin(), meanLosConfidence.end());
+    return {getFinalAngle(pairResult), maxLos};
+}
+
 void getPairAngle(
     std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS>& pairResult,
     std::array<float, NUM_ANTENNA_PAIRS>& rawTdoasCertitude,
@@ -99,26 +138,10 @@ std::optional<float> getFinalAngle(
     }
 }
 
-std::tuple<std::optional<float>, std::optional<float>> AngleCalculator::calculateAngle(
-    BspInterlocRawAngleData& rawData) {
-    if (rawData.m_framesLength < MINIMUM_ANGLE_MEAN || !m_parametersValid) {
-        return {{}, {}};
-    }
-
-    std::array<float, NUM_ANTENNA_PAIRS> rawTdoas{};
-    std::array<float, NUM_ANTENNA_PAIRS> rawTdoasCertitude{};
-    std::array<float, NUM_ANTENNA_PAIRS> rawPdoas{};
-
-    std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS> tdoaProducedValue;
-    std::array<float, NUM_ANTENNA_PAIRS> fallingSlopeCertitude;
-    std::array<float, NUM_ANTENNA_PAIRS> risingSlopeCertitude;
-
-    std::array<std::array<float, NUM_PDOA_SLOPES << 1>, NUM_ANTENNA_PAIRS> pdoaProducedValue;
-    std::array<std::array<float, NUM_PDOA_SLOPES << 1>, NUM_ANTENNA_PAIRS> pdoaCertitude;
-    std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS> pairResult;
-    std::array<std::array<float, NUM_ANTENNA_PAIRS>, MAX_ANGLE_FRAMES> frameLosConfidence;
-    std::array<float, NUM_ANTENNA_PAIRS> meanLosConfidence;
-
+void AngleCalculator::computeLineOfSight(
+    BspInterlocRawAngleData& rawData,
+    std::array<std::array<float, NUM_ANTENNA_PAIRS>, MAX_ANGLE_FRAMES>& frameLosConfidence,
+    std::array<float, NUM_ANTENNA_PAIRS>& meanLosConfidence) {
     for (unsigned int i = 0; i < rawData.m_framesLength; i++) {
         for (unsigned int j = 0; j < NUM_ANTENNA_PAIRS; j++) {
             uint8_t ant1 = m_calculatorParameters.m_antennaPairs[j][0];
@@ -133,64 +156,7 @@ std::tuple<std::optional<float>, std::optional<float>> AngleCalculator::calculat
 
     for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
         meanLosConfidence[i] /= rawData.m_framesLength;
-
-        rawTdoas[i] = getRawTdoa(rawData, frameLosConfidence, i, -1);
-        rawTdoasCertitude[i] = getTdoaValueCertitude(rawTdoas[i]);
-        rawPdoas[i] =
-            getRawPdoa(rawData, frameLosConfidence, i, 1); // TODO: Decide if we want the mean of
-        getPdoaValueCertiture(m_calculatorParameters, rawTdoas[i], rawPdoas[i], i,
-                              tdoaProducedValue, pdoaProducedValue, pdoaCertitude);
     }
-
-    getDecisionCertitude(rawTdoas, fallingSlopeCertitude, risingSlopeCertitude,
-                         m_calculatorParameters);
-
-    getPairAngle(pairResult, rawTdoasCertitude, pdoaProducedValue, pdoaCertitude,
-                 fallingSlopeCertitude, risingSlopeCertitude, meanLosConfidence);
-
-    float maxLos = *std::max_element(meanLosConfidence.begin(), meanLosConfidence.end());
-    return {getFinalAngle(pairResult), maxLos};
-}
-
-float AngleCalculator::getRawTdoa(
-    BspInterlocRawAngleData& rawData,
-    std::array<std::array<float, NUM_ANTENNA_PAIRS>, MAX_ANGLE_FRAMES>& losConfidence,
-    uint8_t antennaPair,
-    int32_t meanLength) {
-    volatile float angleAccumulator = 0;
-    volatile float confidenceAccumulator = 0;
-    uint32_t length = (meanLength <= 0) ? rawData.m_framesLength : (uint32_t)meanLength;
-
-    const auto& antennaIds = m_calculatorParameters.m_antennaPairs[antennaPair];
-    for (uint32_t i = 0; i < length; i++) {
-        volatile int64_t timeDiff =
-            (int64_t)(rawData.m_frames[i].m_frameInfos[antennaIds[0]].m_rxTimestamp -
-
-                      rawData.m_frames[i].m_frameInfos[antennaIds[1]].m_rxTimestamp);
-
-        volatile float tdoaDist = (float)timeDiff / UUS_TO_DWT_TIME * 299.792458;
-        tdoaDist /= m_calculatorParameters.m_tdoaNormalizationFactors[antennaPair];
-
-        if (tdoaDist > 1) {
-            tdoaDist = 1;
-        } else if (tdoaDist < -1) {
-            tdoaDist = -1;
-        }
-
-        float tdoaAngle = asin(tdoaDist) * 180 / M_PI;
-        angleAccumulator += tdoaAngle * losConfidence[i][antennaPair];
-        confidenceAccumulator += losConfidence[i][antennaPair];
-    }
-    float angle = angleAccumulator / confidenceAccumulator;
-
-    while (angle > (float)360) {
-        angle -= (float)360;
-    }
-    while (angle < -(float)360) {
-        angle += (float)360;
-    }
-
-    return angle;
 }
 
 float AngleCalculator::getRawPdoa(
@@ -225,4 +191,20 @@ float AngleCalculator::getRawPdoa(
     }
 
     return angleAccumulator / confidenceAccumulator;
+}
+
+float AngleCalculator::producePdoa(float pdValue,
+                                   const uint8_t pdSlopeId,
+                                   const uint8_t antennaPair) {
+    float angle = (pdValue - m_calculatorParameters.m_pdoaIntercepts[antennaPair][pdSlopeId]) /
+                  m_calculatorParameters.m_pdoaSlopes[antennaPair][pdSlopeId];
+
+    while (angle > (float)360) {
+        angle -= (float)360;
+    }
+    while (angle < -(float)360) {
+        angle += (float)360;
+    };
+
+    return angle;
 }
