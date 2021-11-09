@@ -13,13 +13,13 @@ void getPdoaValueCertiture(
     const float tdValue,
     const float pdValue,
     uint8_t antennaPair,
-    std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>& tdoaProducedValue,
-    std::array<std::array<float, NUM_PDOA_SLOPES << 1>, NUM_ANTENNA_PAIRS>& pdoaProducedValue,
-    std::array<std::array<float, NUM_PDOA_SLOPES << 1>, NUM_ANTENNA_PAIRS>& pdoaCertitude);
+    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS>& tdoaProducedValue,
+    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS>& pdoaProducedValue,
+    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS>& pdoaCertitude);
 
 void getTdoaSelectionCertitude(
     const float tdValue,
-    std::array<std::array<float, NUM_TDOA_SLOPES>, NUM_ANTENNA_PAIRS>& certitude,
+    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS>& certitude,
     uint8_t antennaPair);
 void getDecisionCertitude(std::array<float, NUM_ANTENNA_PAIRS>& tdValue,
                           std::array<float, NUM_ANTENNA_PAIRS>& fallingSlopeCertitude,
