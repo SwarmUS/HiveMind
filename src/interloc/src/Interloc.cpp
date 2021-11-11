@@ -1,5 +1,5 @@
 #include "interloc/Interloc.h"
-#include <cmath>
+#include <math.h>
 
 #define ALPHA 0.25F
 
@@ -78,13 +78,17 @@ void Interloc::updateRobotPosition(RelativePosition& positionToUpdate, InterlocU
         // https://en.wikipedia.org/wiki/Circular_mean
         float newAngle = update.m_angleOfArrival.value() / 180.0F * (float)M_PI;
 
-        float newAngleRealPart =
+        positionToUpdate.m_angleRealMean =
             filterValue(positionToUpdate.m_angleRealMean, std::cos(newAngle), ALPHA);
-        float newAngleImaginaryPart =
+        positionToUpdate.m_angleImaginaryMean =
             filterValue(positionToUpdate.m_angleImaginaryMean, std::sin(newAngle), ALPHA);
 
         positionToUpdate.m_angle =
-            std::atan2(newAngleImaginaryPart, newAngleRealPart) / (float)M_PI * 180.0F;
+            std::atan2(positionToUpdate.m_angleImaginaryMean, positionToUpdate.m_angleRealMean) *
+            180 / (float)M_PI;
+        if (isnan(positionToUpdate.m_angle)) {
+            m_logger.log(LogLevel::Debug, "c");
+        }
     }
 
     if (update.m_isInLineOfSight) {
