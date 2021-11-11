@@ -124,14 +124,14 @@ std::optional<float> AngleCalculator::getFinalAngle(
         uint8_t otherPair1 = (i + 1) % 3;
         uint8_t otherPair2 = (i + 2) % 3;
         if (i < otherPair1) {
-            if (abs(pairResult[i][0] - pairResult[otherPair1][0]) > 5) {
+            if (abs(pairResult[i][0] - pairResult[otherPair1][0]) > 25) {
                 error[i]++;
                 error[otherPair1]++;
                 strayCount++;
             }
         }
         if (i < otherPair2) {
-            if (abs(pairResult[i][0] - pairResult[otherPair2][0]) > 5) {
+            if (abs(pairResult[i][0] - pairResult[otherPair2][0]) > 25) {
                 error[i]++;
                 error[otherPair2]++;
                 strayCount++;
@@ -213,7 +213,7 @@ void AngleCalculator::computeLineOfSight(
     }
 
     for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
-        meanLosConfidence[i] /= rawData.m_framesLength;
+        meanLosConfidence[i] /= (float)rawData.m_framesLength;
     }
 }
 
@@ -250,7 +250,8 @@ float AngleCalculator::getRawPdoa(
     angleAccumulatorImaginary /= confidenceAccumulator;
 
     volatile float angle = std::atan2(angleAccumulatorImaginary, angleAccumulatorReal);
-    angle = angle * 90 / M_PI;
+    angle = asin(angle / M_PI);
+    angle = angle * 180.0F / M_PI;
     return angle;
 }
 
