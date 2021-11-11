@@ -3,7 +3,7 @@
 float getPdoaValueCertitude(float tdValue) {
     // PDOA certitude is function of the absolute of the PDOA value.The closer it is to ±90 the
     // worst the certitude is
-    float cuttingVal = 10;
+    constexpr float cuttingVal = 10;
 
     if (abs(tdValue) < cuttingVal) {
         return 1;
@@ -12,7 +12,7 @@ float getPdoaValueCertitude(float tdValue) {
     //    float m = (1 - 0) / (cuttingVal - 90);
     //    float b = 1 - m * cuttingVal;
     // c = 0.1/(x+(x+0.5)^10)
-    return 0.1 / (abs(tdValue) * 0.01 + pow((abs(tdValue) * 0.01 + 0.3F), 10.0F));
+    return 0.1F / (abs(tdValue) * 0.01F + pow((abs(tdValue) * 0.01F + 0.3F), 10.0F));
 }
 
 void reverse(std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS>& table,
@@ -26,11 +26,13 @@ void getPdoaSelectionCertitude(
     const float tdValue,
     std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS>& certitude,
     uint8_t antennaPair) {
+    constexpr float cuttingVal = 45.0;
+    constexpr float deadZone = 10.0;
+    constexpr float m = (0 - 1) / (deadZone - cuttingVal);
+    constexpr float b = 1 - m * cuttingVal;
+
     float val = abs(tdValue);
-    float cuttingVal = 45;
-    float deadZone = 10;
-    float m = (0 - 1) / (deadZone - cuttingVal);
-    float b = 1 - m * cuttingVal;
+
     if (val > cuttingVal) {
         certitude[antennaPair][0] = 1;
         certitude[antennaPair][1] = 0;
@@ -52,8 +54,8 @@ void getDecisionCertitude(std::array<float, NUM_ANTENNA_PAIRS>& pdValue,
                           std::array<float, NUM_ANTENNA_PAIRS>& risingSlopeCertitude,
                           const AngleCalculatorParameters& parameters) {
 
-    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS> certitude1;
-    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS> certitude2;
+    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS> certitude1{};
+    std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS> certitude2{};
 
     for (uint8_t antennaPair = 0; antennaPair < NUM_ANTENNA_PAIRS; antennaPair++) {
         uint8_t otherPair1 = (antennaPair + 1) % NUM_ANTENNA_PAIRS;
