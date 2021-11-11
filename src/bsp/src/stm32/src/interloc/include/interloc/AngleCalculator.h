@@ -42,7 +42,7 @@ class AngleCalculator {
         std::array<std::array<float, NUM_ANTENNA_PAIRS>, MAX_ANGLE_FRAMES>& frameLosConfidence,
         std::array<float, NUM_ANTENNA_PAIRS>& meanLosConfidence);
 
-    float fitPdoa(float pdValue, const uint8_t pdSlopeId, const uint8_t antennaPair);
+    float fitPdoa(float pdValue, uint8_t pdSlopeId, uint8_t antennaPair);
 
     static void getPairAngle(
         std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS>& pairResult,
