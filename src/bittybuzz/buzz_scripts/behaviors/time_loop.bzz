@@ -17,13 +17,12 @@ function tick(ctx){
     } else{
         ctx.led = 1;
     }
-    if (id == 1){
-        log("Time start");
-        call_host_function(6, "timeStart", {});
-    }
+    log("Time start");
+    call_host_function(2, "timeStart", {});
 }
 
 function create_exec(step_count) {
+    log("id: ", id)
 
     # Context
     var context = {
