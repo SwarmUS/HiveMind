@@ -1,9 +1,53 @@
-include "behaviors/blinky.bzz"
+include "utils/types.bzz"
+
+forward = {.0 = 1.0, .1 = 0.0};
+backward = {.0 = -1.0, .1 = 0.0};
+
+enable_walk = 0;
+wait_time = 500;
+led_val = 1;
+
+function enable_walk_fun(enable){
+    enable_walk = enable
+}
+
+function set_hex_remote(enable){
+    ui.set_hex(enable)
+}
+
+function set_wait(time){
+    wait_time = time
+}
+
 
 function init() {
-  exec = create_exec(50);
+    var enable_description = {
+        .0 = {.enable=types.INT}
+    };
+    var wait_time_description = {
+        .0 = {.time=types.INT}
+    };
+
+    register_closure("enableWalk", enable_walk_fun, enable_description, nil);
+    register_closure("setHex", set_hex_remote, enable_description, nil);
+    register_closure("setWaitTime", set_wait, wait_time_description, nil);
+}
+
+function invert_val(val){
+    if (val){
+        return 0
+    }
+    return 1;
 }
 
 function step() {
-    exec.step();
+    if (enable_walk){
+        led_val = invert_val(led_val)
+        ui.set_led(led_val)
+
+        call_host_function(id, "moveBy", forward);
+        delay(wait_time);
+        call_host_function(id, "moveBy", backward);
+        delay(wait_time);
+    }
 }
