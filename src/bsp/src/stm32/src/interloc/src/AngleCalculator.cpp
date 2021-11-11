@@ -5,6 +5,16 @@
 
 AngleCalculator::AngleCalculator(ILogger& logger) : m_logger(logger) {}
 
+float mod(float val, float div) {
+    while (val > div) {
+        val -= div;
+    }
+    while (val < 0) {
+        val += div;
+    }
+    return val;
+}
+
 void AngleCalculator::setCalculatorParameters(const AngleCalculatorParameters& parameters) {
     m_calculatorParameters = parameters;
 
@@ -39,7 +49,7 @@ std::tuple<std::optional<float>, std::optional<float>> AngleCalculator::calculat
     computeLineOfSight(rawData, frameLosConfidence, meanLosConfidence);
 
     for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
-        rawPdoas[i] = getRawPdoa(rawData, frameLosConfidence, i, 1);
+        rawPdoas[i] = getRawPdoa(rawData, frameLosConfidence, i, -1);
         rawPdoasCertitude[i] =
             getPdoaValueCertitude(rawPdoas[i]); // TODO: Decide if we want the mean of PDOAs
     }
@@ -50,13 +60,17 @@ std::tuple<std::optional<float>, std::optional<float>> AngleCalculator::calculat
         }
     }
 
-    getDecisionCertitude(rawPdoas, fallingSlopeCertitude, risingSlopeCertitude,
+    getDecisionCertitude(rawPdoas, rawPdoasCertitude, fallingSlopeCertitude, risingSlopeCertitude,
                          m_calculatorParameters);
 
     getPairAngle(pairResult, pdoaProducedValue, rawPdoasCertitude, fallingSlopeCertitude,
                  risingSlopeCertitude, meanLosConfidence);
 
     float maxLos = *std::max_element(meanLosConfidence.begin(), meanLosConfidence.end());
+    std::optional val = getFinalAngle(pairResult);
+    if (val && isnan(val.value())) {
+        return {{}, {}};
+    }
     return {getFinalAngle(pairResult), maxLos};
 }
 
@@ -68,27 +82,16 @@ void AngleCalculator::getPairAngle(
     std::array<float, NUM_ANTENNA_PAIRS>& risingSlopeCertitude,
     std::array<float, NUM_ANTENNA_PAIRS>& meanLosConfidence) {
     for (unsigned int antennaPair = 0; antennaPair < NUM_ANTENNA_PAIRS; antennaPair++) {
-        float angleSum = 0;
-        float pondSum = 0;
-
-        for (unsigned int slopeId = 0; slopeId < NUM_PDOA_SLOPES; slopeId++) {
-
-            float slopeConfidence = slopeId < 1 ? fallingSlopeCertitude[antennaPair]
-                                                : risingSlopeCertitude[antennaPair];
-
-            float pond = rawPdoaCertitude[antennaPair] * slopeConfidence;
-            if (!isnan(pdoaProducedValue[antennaPair][slopeId]) && !isnan(pond)) {
-                angleSum += pdoaProducedValue[antennaPair][slopeId] * pond;
-                pondSum += pond;
-            }
-        }
-
-        if (!isnan(pondSum)) {
-            pairResult[antennaPair][0] = angleSum / pondSum;
-            pairResult[antennaPair][1] = pondSum * meanLosConfidence[antennaPair];
+        if (fallingSlopeCertitude[antennaPair] > risingSlopeCertitude[antennaPair]) {
+            pairResult[antennaPair][0] = pdoaProducedValue[antennaPair][0];
+            pairResult[antennaPair][1] = fallingSlopeCertitude[antennaPair] *
+                                         rawPdoaCertitude[antennaPair] *
+                                         meanLosConfidence[antennaPair];
         } else {
-            pairResult[antennaPair][0] = 0;
-            pairResult[antennaPair][1] = 0;
+            pairResult[antennaPair][0] = pdoaProducedValue[antennaPair][1];
+            pairResult[antennaPair][1] = risingSlopeCertitude[antennaPair] *
+                                         rawPdoaCertitude[antennaPair] *
+                                         meanLosConfidence[antennaPair];
         }
     }
 }
@@ -101,44 +104,97 @@ std::optional<float> weightedAverage(std::array<std::array<float, 2>, 3>& table,
         angleSum += table[i][0] * table[i][1];
         pondSum += table[i][1];
     }
-    if (pondSum == 0) {
+
+    if (pondSum <= 0.001) {
         return {};
     }
 
     float angle = angleSum / pondSum;
-    while (angle > (float)360) {
-        angle -= (float)360;
-    }
-    while (angle < -(float)360) {
-        angle += (float)360;
-    };
-    return angle;
+
+    return mod(angle, 360.0F);
 }
 
 std::optional<float> AngleCalculator::getFinalAngle(
     std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS>& pairResult) {
-    uint8_t hasNoNan = 0;
-    std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS> goodVals;
-    uint8_t itemCnt = 0;
-    for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
-        if (!isnan(pairResult[i][0]) && !isnan(pairResult[i][1])) {
-            hasNoNan++;
-            goodVals[itemCnt][0] = pairResult[i][0];
-            goodVals[itemCnt][1] = pairResult[i][1];
-            itemCnt++;
+    std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS> angles = pairResult;
+    std::array<uint8_t, 3> error = {};
+    uint8_t strayCount = 0;
+
+    for (uint8_t i = 0; i < 3; i++) {
+        uint8_t otherPair1 = (i + 1) % 3;
+        uint8_t otherPair2 = (i + 2) % 3;
+        if (i < otherPair1) {
+            if (abs(pairResult[i][0] - pairResult[otherPair1][0]) > 5) {
+                error[i]++;
+                error[otherPair1]++;
+                strayCount++;
+            }
+        }
+        if (i < otherPair2) {
+            if (abs(pairResult[i][0] - pairResult[otherPair2][0]) > 5) {
+                error[i]++;
+                error[otherPair2]++;
+                strayCount++;
+            }
         }
     }
-    if (hasNoNan == 2) {
-        return weightedAverage(goodVals, 2);
-    } else if (hasNoNan == 3 or hasNoNan == 0) {
-        return weightedAverage(goodVals, 3);
-    } else { // hasNoNan == 1
-        if (goodVals[0][1] == 0) {
-            return {};
+    bool skip = false;
+    uint8_t skipIdx = 0;
+    if (strayCount == 2) {
+        skip = true;
+        uint8_t maxVal = 0;
+
+        for (uint8_t i = 0; i < 3; i++) {
+            if (error[i] > maxVal) {
+                maxVal = error[i];
+                skipIdx = i;
+            }
         }
-        return goodVals[0][0];
     }
+
+    float angleSum = 0;
+    float pondSum = 0;
+
+    for (unsigned int i = 0; i < 3; i++) {
+        if (!skip || i != skipIdx) {
+            angleSum += pairResult[i][0] * pairResult[i][1];
+            pondSum += pairResult[i][1];
+        }
+    }
+
+    if (pondSum <= 0.001) {
+        return {};
+    }
+
+    float angle = angleSum / pondSum;
+
+    return mod(angle, 360.0F);
 }
+
+// std::optional<float> AngleCalculator::getFinalAngle(
+//     std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS>& pairResult) {
+//     uint8_t hasNoNan = 0;
+//     std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS> goodVals;
+//     uint8_t itemCnt = 0;
+//     for (unsigned int i = 0; i < NUM_ANTENNA_PAIRS; i++) {
+//         if (!isnan(pairResult[i][0]) && !isnan(pairResult[i][1])) {
+//             hasNoNan++;
+//             goodVals[itemCnt][0] = pairResult[i][0];
+//             goodVals[itemCnt][1] = pairResult[i][1];
+//             itemCnt++;
+//         }
+//     }
+//     if (hasNoNan == 2) {
+//         return weightedAverage(goodVals, 2);
+//     } else if (hasNoNan == 3 or hasNoNan == 0) {
+//         return weightedAverage(goodVals, 3);
+//     } else { // hasNoNan == 1
+//         if (goodVals[0][1] == 0) {
+//             return {};
+//         }
+//         return goodVals[0][0];
+//     }
+// }
 
 void AngleCalculator::computeLineOfSight(
     BspInterlocRawAngleData& rawData,
@@ -166,33 +222,36 @@ float AngleCalculator::getRawPdoa(
     std::array<std::array<float, NUM_ANTENNA_PAIRS>, MAX_ANGLE_FRAMES>& losConfidence,
     uint8_t antennaPair,
     int32_t meanLength) {
-    float angleAccumulator = 0;
+    float angleAccumulatorReal = 0;
+    float angleAccumulatorImaginary = 0;
     float confidenceAccumulator = 0;
     uint32_t length = (meanLength <= 0) ? rawData.m_framesLength : (uint32_t)meanLength;
 
     const auto& antennaIds = m_calculatorParameters.m_antennaPairs[antennaPair];
     for (uint32_t i = 0; i < length; i++) {
-        float phaseDiff = rawData.m_frames[i].m_frameInfos[antennaIds[0]].m_accumulatorAngle -
-                          rawData.m_frames[i].m_frameInfos[antennaIds[0]].m_sfdAngle -
-                          rawData.m_frames[i].m_frameInfos[antennaIds[1]].m_accumulatorAngle +
-                          rawData.m_frames[i].m_frameInfos[antennaIds[1]].m_sfdAngle + M_PI;
-
-        while (phaseDiff > (2 * M_PI)) {
-            phaseDiff -= (2 * M_PI);
-        }
-
-        while (phaseDiff < 0) {
-            phaseDiff += (2 * M_PI);
-        }
-
+        volatile float phaseDiff =
+            rawData.m_frames[i].m_frameInfos[antennaIds[0]].m_accumulatorAngle -
+            rawData.m_frames[i].m_frameInfos[antennaIds[0]].m_sfdAngle -
+            rawData.m_frames[i].m_frameInfos[antennaIds[1]].m_accumulatorAngle +
+            rawData.m_frames[i].m_frameInfos[antennaIds[1]].m_sfdAngle - M_PI_2;
+        float div2pi = (float)(2 * M_PI);
+        phaseDiff = mod(phaseDiff, div2pi);
+        phaseDiff += m_calculatorParameters.m_pdoaNormalizationFactors[antennaPair];
+        phaseDiff = mod(phaseDiff, div2pi);
         phaseDiff -= M_PI;
-        float angle = asin(phaseDiff / M_PI) *
-                      m_calculatorParameters.m_pdoaNormalizationFactors[antennaPair] * 180 / M_PI;
-        angleAccumulator += angle * losConfidence[i][antennaPair];
+        volatile float x = phaseDiff * 90 / M_PI;
+
+        angleAccumulatorReal += std::cos(phaseDiff) * losConfidence[i][antennaPair];
+        angleAccumulatorImaginary += std::sin(phaseDiff) * losConfidence[i][antennaPair];
         confidenceAccumulator += losConfidence[i][antennaPair];
     }
 
-    return angleAccumulator / confidenceAccumulator;
+    angleAccumulatorReal /= confidenceAccumulator;
+    angleAccumulatorImaginary /= confidenceAccumulator;
+
+    volatile float angle = std::atan2(angleAccumulatorImaginary, angleAccumulatorReal);
+    angle = angle * 90 / M_PI;
+    return angle;
 }
 
 float AngleCalculator::producePdoa(float pdValue,
@@ -201,12 +260,7 @@ float AngleCalculator::producePdoa(float pdValue,
     float angle = (pdValue - m_calculatorParameters.m_pdoaIntercepts[antennaPair][pdSlopeId]) /
                   m_calculatorParameters.m_pdoaSlopes[antennaPair][pdSlopeId];
 
-    while (angle > (float)360) {
-        angle -= (float)360;
-    }
-    while (angle < -(float)360) {
-        angle += (float)360;
-    };
+    angle = mod(angle, 360.0F);
 
     return angle;
 }

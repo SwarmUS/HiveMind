@@ -21,7 +21,8 @@ void getTdoaSelectionCertitude(
     const float tdValue,
     std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS>& certitude,
     uint8_t antennaPair);
-void getDecisionCertitude(std::array<float, NUM_ANTENNA_PAIRS>& tdValue,
+void getDecisionCertitude(std::array<float, NUM_ANTENNA_PAIRS>& pdValue,
+                          std::array<float, NUM_ANTENNA_PAIRS>& rawPdoasCertitude,
                           std::array<float, NUM_ANTENNA_PAIRS>& fallingSlopeCertitude,
                           std::array<float, NUM_ANTENNA_PAIRS>& risingSlopeCertitude,
                           const AngleCalculatorParameters& parameters);

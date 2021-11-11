@@ -9,9 +9,10 @@ float getPdoaValueCertitude(float tdValue) {
         return 1;
     }
 
-    float m = (1 - 0) / (cuttingVal - 90);
-    float b = 1 - m * cuttingVal;
-    return abs(tdValue) * m + b;
+    //    float m = (1 - 0) / (cuttingVal - 90);
+    //    float b = 1 - m * cuttingVal;
+    // c = 0.1/(x+(x+0.5)^10)
+    return 0.1 / (abs(tdValue) * 0.01 + pow((abs(tdValue) * 0.01 + 0.3F), 10.0F));
 }
 
 void reverse(std::array<std::array<float, NUM_PDOA_SLOPES>, NUM_ANTENNA_PAIRS>& table,
@@ -46,6 +47,7 @@ void getPdoaSelectionCertitude(
 }
 
 void getDecisionCertitude(std::array<float, NUM_ANTENNA_PAIRS>& pdValue,
+                          std::array<float, NUM_ANTENNA_PAIRS>& rawPdoasCertitude,
                           std::array<float, NUM_ANTENNA_PAIRS>& fallingSlopeCertitude,
                           std::array<float, NUM_ANTENNA_PAIRS>& risingSlopeCertitude,
                           const AngleCalculatorParameters& parameters) {
@@ -58,11 +60,16 @@ void getDecisionCertitude(std::array<float, NUM_ANTENNA_PAIRS>& pdValue,
         uint8_t otherPair2 = (antennaPair + 2) % NUM_ANTENNA_PAIRS;
 
         getPdoaSelectionCertitude(pdValue[otherPair1], certitude1, antennaPair);
+        certitude1[antennaPair][0] *= rawPdoasCertitude[otherPair1];
+        certitude1[antennaPair][1] *= rawPdoasCertitude[otherPair1];
         if (parameters.m_slopeDecisionMatrix[antennaPair][otherPair1] == 1) {
             reverse(certitude1, antennaPair);
         }
 
         getPdoaSelectionCertitude(pdValue[otherPair2], certitude2, antennaPair);
+
+        certitude2[antennaPair][0] *= rawPdoasCertitude[otherPair2];
+        certitude2[antennaPair][1] *= rawPdoasCertitude[otherPair2];
         if (parameters.m_slopeDecisionMatrix[antennaPair][otherPair2] == 1) {
             reverse(certitude2, antennaPair);
         }
