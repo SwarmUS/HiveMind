@@ -33,16 +33,16 @@ BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 14>> BittyBuzzFactory::
         {BBZSTRID_is_lambda_closure, BittyBuzzUserFunctions::isLambdaClosure},
         {BBZSTRID_register_closure, BittyBuzzUserFunctions::registerClosure},
         {BBZSTRID_call_host_function, BittyBuzzUserFunctions::callHostFunction},
-        {BBZSTRID_call_host_function, BittyBuzzUserFunctions::callBuzzFunction},
+        {BBZSTRID_call_buzz_function, BittyBuzzUserFunctions::callBuzzFunction},
         {BBZSTRID_delay, BittyBuzzUserFunctions::delay},
     }};
 
     return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 14>>(globalMember);
 }
 
-BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 23>> BittyBuzzFactory::
+BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 24>> BittyBuzzFactory::
     createBittyBuzzMathLib() {
-    std::array<BittyBuzzLibMemberRegister, 23> libMember{{
+    std::array<BittyBuzzLibMemberRegister, 24> libMember{{
         {BBZSTRID_E, BittyBuzzMathFunctions::E},
         {BBZSTRID_PI, BittyBuzzMathFunctions::PI},
         {BBZSTRID_abs, BittyBuzzMathFunctions::abs},
@@ -55,6 +55,7 @@ BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 23>> BittyBuzzFactory::
         {BBZSTRID_log, BittyBuzzMathFunctions::log},
         {BBZSTRID_log2, BittyBuzzMathFunctions::log2},
         {BBZSTRID_log10, BittyBuzzMathFunctions::log10},
+        {BBZSTRID_pow, BittyBuzzMathFunctions::pow},
         {BBZSTRID_exp, BittyBuzzMathFunctions::exp},
         {BBZSTRID_sqrt, BittyBuzzMathFunctions::sqrt},
         {BBZSTRID_sin, BittyBuzzMathFunctions::sin},
@@ -67,7 +68,7 @@ BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 23>> BittyBuzzFactory::
         {BBZSTRID_max, BittyBuzzMathFunctions::max},
         {BBZSTRID_rng_uniform, BittyBuzzMathFunctions::rng_uniform},
     }};
-    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 23>>(BBZSTRID_math, libMember);
+    return BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 24>>(BBZSTRID_math, libMember);
 }
 
 BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 2>> BittyBuzzFactory::createBittyBuzzUILib() {

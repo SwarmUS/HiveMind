@@ -54,7 +54,7 @@ defined in linker script */
 /* start address for the .tcmbss section. defined in linker script */
 .word  _stcmbss
 /* end address for the .tcmbss section. defined in linker script */
-.word  _eccbss
+.word  _etcmbss
 /* stack used for SystemInit_ExtMemCtl; always internal RAM used */
 
 /**

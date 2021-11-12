@@ -1,5 +1,6 @@
 #include "BittyBuzzNeighborsManager.h"
 #include "bbzvm.h"
+#include <cstdio>
 
 BittyBuzzNeighborsManager::BittyBuzzNeighborsManager(const IInterloc& interloc,
                                                      ICircularQueue<uint16_t>& posUpdateQueue) :
@@ -13,7 +14,6 @@ void BittyBuzzNeighborsManager::updateNeighbors() {
         if (robotId) {
             m_posUpdateQueue.pop();
             std::optional<RelativePosition> posOpt = m_interloc.getRobotPosition(robotId.value());
-
             if (posOpt) {
                 RelativePosition& pos = posOpt.value();
                 bbzneighbors_elem_t neighbor;

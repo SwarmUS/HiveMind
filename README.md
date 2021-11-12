@@ -261,7 +261,7 @@ It's possible to change the log level, check how to configure the build dependin
 CMake variables can be used to override certain default firmware settings.
 | Variable | Default value |
 | --- | --- |
-| HOST_PORT | 55551 |
+| HOST_PORT | 7001 |
 | HOST_IP | 192.168.1.101 |
 | LOG_LEVEL | Info |
 | MAX_ROBOTS_IN_SWARM | 10 |
@@ -276,7 +276,7 @@ ROS launch parameters are used to configure variables.
 | Variable | Default value |
 |---------------------|---------------------------------|
 | board_uuid | 1 (0 is reserved for broadcast) |
-| host_tcp_port | 55551 |
+| host_tcp_port | 7001 |
 | host_tcp_address | 127.0.0.1 |
 | remote_mock_port | 12346 |
 | log_level | Info |

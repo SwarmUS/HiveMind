@@ -33,15 +33,15 @@ class BittyBuzzMessageHandlerFixture : public testing::Test {
 
     LoggerInterfaceMock* m_loggerMock;
     UserInterfaceMock m_uiMock;
-    BittyBuzzClosureRegisterInterfaceMock m_closureRegisterMock;
-    BittyBuzzMessageHandlerInterfaceMock m_messageHandlerMock;
-    BittyBuyzzMessageServiceInterfaceMock m_messageServiceMock;
-    BittyBuzzNeighborsManagerInterfaceMock m_neighborsManagerMock;
+    testing::StrictMock<BittyBuzzClosureRegisterInterfaceMock> m_closureRegisterMock;
+    testing::StrictMock<BittyBuzzMessageHandlerInterfaceMock> m_messageHandlerMock;
+    testing::StrictMock<BittyBuyzzMessageServiceInterfaceMock> m_messageServiceMock;
+    testing::StrictMock<BittyBuzzNeighborsManagerInterfaceMock> m_neighborsManagerMock;
     testing::StrictMock<UserUIInterfaceMock> m_userUIMock;
 
-    CircularQueueInterfaceMock<MessageDTO> m_inputQueueMock;
-    CircularQueueInterfaceMock<MessageDTO> m_hostOutputQueueMock;
-    CircularQueueInterfaceMock<MessageDTO> m_remoteOutputQueueMock;
+    testing::StrictMock<CircularQueueInterfaceMock<MessageDTO>> m_inputQueueMock;
+    testing::StrictMock<CircularQueueInterfaceMock<MessageDTO>> m_hostOutputQueueMock;
+    testing::StrictMock<CircularQueueInterfaceMock<MessageDTO>> m_remoteOutputQueueMock;
 
     BittyBuzzVm* m_bbzVM;
     BittyBuzzMessageHandler* m_bbzMessageHandler;
@@ -154,6 +154,7 @@ TEST_F(BittyBuzzMessageHandlerFixture, BittyBuzzMessageHandler_messageQueueLengt
 TEST_F(BittyBuzzMessageHandlerFixture,
        BittyBuzzMessageHandler_processMessage_validFunctionCall_host_pushSuccessful) {
     // Given
+
     MessageDTO message = MessageDTO(m_uuid, m_uuid, *m_request);
     MessageDTO messageSent;
     std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
@@ -451,6 +452,43 @@ TEST_F(BittyBuzzMessageHandlerFixture,
 /*
 ** Requests, send to remote
 */
+
+TEST_F(BittyBuzzMessageHandlerFixture,
+       BittyBuzzMessageHandler_processMessage_validFunctionCall_self) {
+    // Given
+    m_uRequest->setSource(UserCallTargetDTO::BUZZ);
+    m_uRequest->setDestination(UserCallTargetDTO::BUZZ);
+    m_request->setRequest(*m_uRequest);
+    MessageDTO message = MessageDTO(m_uuid, m_uuid, *m_request);
+    MessageDTO messageSent;
+    std::optional<std::reference_wrapper<const MessageDTO>> retValue = message;
+    BittyBuzzRegisteredClosure registeredClosure(1, "", 1, 1);
+    std::optional<std::reference_wrapper<const BittyBuzzRegisteredClosure>> bbzRetValue =
+        registeredClosure;
+
+    EXPECT_CALL(m_inputQueueMock, peek).Times(1).WillOnce(testing::Return(retValue));
+    EXPECT_CALL(m_bittyBuzzStringResolverMock, getString)
+        .WillRepeatedly(testing::Return("Irrelevant"));
+    EXPECT_CALL(m_closureRegisterMock, getRegisteredClosure(testing::An<const char*>()))
+        .WillOnce(testing::Return(bbzRetValue));
+
+    EXPECT_CALL(m_inputQueueMock, pop).Times(1);
+    EXPECT_CALL(m_inputQueueMock, push(testing::_))
+        .WillOnce(testing::DoAll(testing::SaveArg<0>(&messageSent), testing::Return(true)));
+    EXPECT_CALL(m_hostOutputQueueMock, push(testing::_)).Times(0);
+    EXPECT_CALL(m_remoteOutputQueueMock, push(testing::_)).Times(0);
+
+    // Then
+    bool ret = m_bbzMessageHandler->processMessage();
+
+    // Expect
+    auto resp = std::get<ResponseDTO>(messageSent.getMessage());
+    auto uresp = std::get<UserCallResponseDTO>(resp.getResponse());
+    auto fresp = std::get<FunctionCallResponseDTO>(uresp.getResponse());
+    EXPECT_TRUE(ret);
+    EXPECT_EQ(fresp.getResponse().getStatus(), GenericResponseStatusDTO::Ok);
+}
+
 TEST_F(BittyBuzzMessageHandlerFixture,
        BittyBuzzMessageHandler_processMessage_validFunctionCall_remote_pushSuccessful) {
     // Given

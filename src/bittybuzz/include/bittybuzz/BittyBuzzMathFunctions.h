@@ -123,12 +123,24 @@ namespace BittyBuzzMathFunctions {
      *@endcode */
     void log10();
 
-    /**@brief Calculates the exponent
+    /**@brief Calculates the base raised to the power of the exponent.
+     *@b Signature pow(base, exponent)
+     *@details expect two argument
+     * -# the base
+     * -# the exponent
+     * returns the value of the power as a @b float even if the two numbers are ints
+     *@code
+     *var pow = math.pow(2, 8); #256
+     *@endcode */
+    void pow();
+
+    /**@brief Calculates e^x
+     *@b Signature exp(x)
      *@details expect one argument
      * -# the value of the exponent
      * returns the value of the exponent
      *@code
-     *var exp_3 = math.exp(3);
+     *var exp_3 = math.exp(3); # e³
      *@endcode */
     void exp();
 

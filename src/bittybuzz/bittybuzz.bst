@@ -25,6 +25,7 @@ roundf
 log
 log2
 log10
+pow
 exp
 sqrt
 sin

@@ -6,8 +6,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} PARENT_SCOPE)
 function(bittybuzz_fetch)
     FetchContent_Declare(
         bittybuzz
-        GIT_REPOSITORY https://github.com/buzz-lang/BittyBuzz
-        GIT_TAG        0015fa92468533dddb178e6ba14c7b850ad0cc0e
+        GIT_REPOSITORY https://github.com/xgroleau/BittyBuzz
+        GIT_TAG        71dd142
         GIT_PROGRESS   TRUE
     ) 
 
@@ -27,8 +27,13 @@ endfunction()
 # A list of included directories
 # A list of bst files 
 function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst_list)
+    find_package(Buzz)
+    if(NOT BUZZ_FOUND)
+        message(FATAL_ERROR "Buzz was not found")
+    endif()
+
     get_filename_component(BZZ_BASENAME ${bzz_source} NAME_WE)
-    set(ENV{BUZZ_INCLUDE_PATH} "$ENV{BUZZ_INCLUDE_PATH}:${bzz_include_list}")
+    set(BUZZ_INCLUDE_PATH "$ENV{BUZZ_INCLUDE_PATH}:${BUZZ_BZZ_INCLUDE_DIR}:${bzz_include_list}")
 
     # Settings vars
     set(BO_FILE   ${CMAKE_CURRENT_BINARY_DIR}/${BZZ_BASENAME}.bo)
@@ -53,12 +58,12 @@ function(bittybuzz_generate_bytecode _TARGET bzz_source bzz_include_list bzz_bst
     # TODO: bzzparse return 0 if a file is not found during parsing, but the build still passes, this should be fixed in the buzz compiler
     # Parsing buzz file
     add_custom_target(${_TARGET}_bzz_parse
-        COMMAND export BUZZ_INCLUDE_PATH=$ENV{BUZZ_INCLUDE_PATH} && ${BZZPAR} ${bzz_source} ${BASM_FILE} ${BST_FILE}
+        COMMAND export BUZZ_INCLUDE_PATH=${BUZZ_INCLUDE_PATH} && ${BUZZ_PARSER} ${bzz_source} ${BASM_FILE} ${BST_FILE}
         DEPENDS ${BST_FILE})
 
     # Compiling buzz file
     add_custom_target(${_TARGET}_bzz_compile
-        COMMAND export BUZZ_INCLUDE_PATH=$ENV{BUZZ_INCLUDE_PATH} && ${BZZASM} ${BASM_FILE} ${BO_FILE} ${BDB_FILE}
+        COMMAND ${BUZZ_ASSEMBLER} ${BASM_FILE} ${BO_FILE} ${BDB_FILE}
         DEPENDS ${_TARGET}_bzz_parse)
 
 

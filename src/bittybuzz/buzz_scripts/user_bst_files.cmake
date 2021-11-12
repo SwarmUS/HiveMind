@@ -4,7 +4,11 @@
 
 
 # Don't change this variable name it's used
-set(USER_BST_FILES
+set(USER_BUZZ_BST_FILES
         ${CMAKE_CURRENT_LIST_DIR}/utils/executor.bst
         ${CMAKE_CURRENT_LIST_DIR}/utils/types.bst
-        )
+)
+
+# Add your included directories
+set(USER_BUZZ_INCLUDE_DIRS
+)
