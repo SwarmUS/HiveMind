@@ -189,7 +189,7 @@ float AngleCalculator::getRawPdoa(
     angleAccumulatorImaginary /= confidenceAccumulator;
 
     volatile float angle = std::atan2(angleAccumulatorImaginary, angleAccumulatorReal);
-    angle = asin(angle / (float)M_PI);
+    angle = asin(angle / (float)M_PI) / 0.98;
     angle = angle * 180.0F / (float)M_PI;
 
     return angle;
