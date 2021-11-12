@@ -1,14 +1,20 @@
 #ifndef __BITTYBUZZUSERFUNCTIONS_H_
 #define __BITTYBUZZUSERFUNCTIONS_H_
 
-// TODO: Change to a class once bittybuzz support passing context to function, and inject string
-// resolver here instead of the BittyBuzzSystem
+#include <cstdint>
 
 /**
  *@brief Namespace to regroup the user functions, ie: custom functions that will be available in the
  *buzz script. The functions needs to be registered using bbzvm_function_register
  **/
 namespace BittyBuzzUserFunctions {
+
+    /**
+     *@brief The delay between each call of the step function in buzz
+     *@code
+     * log("Refresh rate: ", 1000/VM_STEP_DELAY);
+     *@endcode */
+    extern int16_t g_vmStepDelay;
 
     /**
      *@brief Logs to the default output

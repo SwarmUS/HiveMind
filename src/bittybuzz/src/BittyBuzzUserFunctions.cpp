@@ -5,6 +5,8 @@
 #include <LockGuard.h>
 #include <Task.h>
 
+int16_t BittyBuzzUserFunctions::g_vmStepDelay = 0;
+
 struct ForeachFunctionContext {
     bool m_err = false;
     std::array<FunctionCallArgumentDTO, FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>
