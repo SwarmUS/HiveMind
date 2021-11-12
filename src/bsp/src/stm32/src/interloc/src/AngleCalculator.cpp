@@ -100,8 +100,6 @@ void AngleCalculator::getPairAngle(
 std::optional<float> AngleCalculator::getFinalAngle(
     std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS>& pairResult) {
     constexpr float similarCutoff = 25.0F;
-
-    std::array<std::array<float, 2>, NUM_ANTENNA_PAIRS> angles = pairResult;
     std::array<uint8_t, 3> error = {};
     uint8_t strayCount = 0;
 
