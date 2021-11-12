@@ -25,7 +25,8 @@
 #include <pheromones/HiveMindHostSerializer.h>
 
 constexpr uint16_t gc_taskNormalPriority = tskIDLE_PRIORITY + 1;
-constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 30; // Higher priority then LwIP
+constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 10;
+constexpr uint16_t gc_taskVeryHighPriority = tskIDLE_PRIORITY + 30; // Higher priority then LwIP
 
 // Need to return the proper comm interface
 typedef std::optional<std::reference_wrapper<ICommInterface>> (*commInterfaceGetter)();
@@ -408,29 +409,33 @@ int main(int argc, char** argv) {
         "bittybuzz", gc_taskNormalPriority, ApplicationInterfaceContainer::getDeviceStateUI(),
         ApplicationInterfaceContainer::getButton1CallbackRegister());
 
-    static HardwareInterlocTask s_hardwareInterlocTask("hardware_interloc", gc_taskHighPriority);
+    static HardwareInterlocTask s_hardwareInterlocTask("hardware_interloc", gc_taskVeryHighPriority);
     static InterlocMessageHandlerTask s_interlocMessageTask("interloc_message_handler",
                                                             gc_taskNormalPriority);
     static InterlocDataHandlerTask s_interlocDataTask("interloc_data_handler",
                                                       gc_taskNormalPriority);
     static LogInterlocTask s_logInterlocTask("software_interloc_log", gc_taskNormalPriority);
 
-    static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskNormalPriority, NULL,
+    __attribute__((section(".cmbss")))
+    static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskHighPriority, NULL,
                                                     MessageHandlerContainer::getHostMsgQueue());
-    static MessageSenderTask s_hostMessageSender("host_send", gc_taskNormalPriority, NULL,
+    __attribute__((section(".cmbss")))
+    static MessageSenderTask s_hostMessageSender("host_send", gc_taskHighPriority, NULL,
                                                  MessageHandlerContainer::getHostMsgQueue());
-
-    static MessageDispatcherTask s_remoteDispatchTask("remote_dispatch", gc_taskNormalPriority,
+    __attribute__((section(".cmbss")))
+    static MessageDispatcherTask s_remoteDispatchTask("remote_dispatch", gc_taskHighPriority,
                                                       NULL,
-                                                      MessageHandlerContainer::getRemoteMsgQueue());
-    static MessageSenderTask s_remoteMessageSender("remote_send", gc_taskNormalPriority, NULL,
+                                                    MessageHandlerContainer::getRemoteMsgQueue());
+    __attribute__((section(".cmbss")))
+    static MessageSenderTask s_remoteMessageSender("remote_send", gc_taskHighPriority, NULL,
                                                    MessageHandlerContainer::getRemoteMsgQueue(),
                                                    true);
-
+    __attribute__((section(".cmbss")))
     static CommMonitoringTask s_hostMonitorTask(
         "host_monitor", gc_taskNormalPriority, s_hostDispatchTask, s_hostMessageSender,
         ApplicationInterfaceContainer::getHostHandshakeUI(), hostInterfaceGetter);
 
+    __attribute__((section(".cmbss")))
     static CommMonitoringTask<HiveMindHostAccumulatorSerializer> s_remoteMonitorTask(
         "remote_monitor", gc_taskNormalPriority, s_remoteDispatchTask, s_remoteMessageSender,
         ApplicationInterfaceContainer::getRemoteHandshakeUI(),
