@@ -1,5 +1,5 @@
 #include "interloc/Interloc.h"
-#include <math.h>
+#include <cmath>
 
 #define ALPHA 0.85F
 
@@ -86,9 +86,6 @@ void Interloc::updateRobotPosition(RelativePosition& positionToUpdate, InterlocU
         positionToUpdate.m_angle =
             std::atan2(positionToUpdate.m_angleImaginaryMean, positionToUpdate.m_angleRealMean) *
             180 / (float)M_PI;
-        if (isnan(positionToUpdate.m_angle)) {
-            m_logger.log(LogLevel::Debug, "c");
-        }
     }
 
     if (update.m_isInLineOfSight) {
