@@ -30,7 +30,7 @@ constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 30; // Higher priori
 // Need to return the proper comm interface
 typedef std::optional<std::reference_wrapper<ICommInterface>> (*commInterfaceGetter)();
 
-class BittyBuzzTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
+class BittyBuzzTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
     BittyBuzzTask(const char* taskName,
                   UBaseType_t priority,
