@@ -34,7 +34,7 @@ class Interloc : public IInterloc {
 
   private:
     std::optional<uint8_t> getRobotArrayIndex(uint16_t robotId) const;
-    void updateRobotPosition(RelativePosition& positionToUpdate, InterlocUpdate update);
+    static void updateRobotPosition(RelativePosition& positionToUpdate, InterlocUpdate update);
 
     ILogger& m_logger;
     IInterlocManager& m_interlocManager;
