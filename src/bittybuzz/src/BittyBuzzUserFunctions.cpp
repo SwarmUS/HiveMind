@@ -5,7 +5,7 @@
 #include <LockGuard.h>
 #include <Task.h>
 
-int16_t BittyBuzzUserFunctions::g_vmStepDelay = 0;
+int16_t BittyBuzzUserFunctions::g_vmStepDelayMs = 0;
 
 struct ForeachFunctionContext {
     bool m_err = false;

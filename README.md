@@ -115,13 +115,13 @@ or using catkin
 
 ```sh
 cd catkin_ws
-catkin_make -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_CLANG_TIDY_CHECK=ON -DENABLE_TESTS=ON -DCMAKE_BUILD_TYPE=Debug ..
+catkin_make -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_CLANG_TIDY_CHECK=ON -DENABLE_TESTS=ON -DCMAKE_BUILD_TYPE=Debug
 ```
 
 Just add the required toolchain to build for the embedded targets.
 
 ```sh
-cmake -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_CLANG_TIDY_CHECK=ON -DENABLE_TESTS=ON -DCMAKE_BUILD_TYPE=Debug CMAKE_TOOLCHAIN_FILE=../cmake/TOOLCHAINFILE.cmake ..
+cmake -DENABLE_ERROR_ON_MISSING_TOOL=ON -DENABLE_WARNINGS_AS_ERROR=ON -DENABLE_WARNINGS=ON -DENABLE_CLANG_TIDY_CHECK=ON -DENABLE_TESTS=ON -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=../cmake/TOOLCHAINFILE.cmake ..
 ```
 
 Note that as of now, the tests can only be built on the native target.
@@ -153,8 +153,10 @@ openocd -f ./tools/openocd/stm32_h7/hiveboard.cfg -c "program build/src/hive-min
 ```
 
 ### Mass Erase
+
 A mass erase of the flash on the H7 target can be done via the `make mass_erase` command or via
 openocd:
+
 ```sh
 openocd -f ./tools/openocd/stm32_h7/hiveboard.cfg -c 'init' -c 'halt' -c 'stm32h7x mass_erase 0' -c 'reset run' -c 'shutdown'
 ```

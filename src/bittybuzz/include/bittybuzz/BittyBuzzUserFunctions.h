@@ -12,9 +12,9 @@ namespace BittyBuzzUserFunctions {
     /**
      *@brief The delay between each call of the step function in buzz
      *@code
-     * log("Refresh rate: ", 1000/VM_STEP_DELAY);
+     * log("VM refresh rate: ", 1000/VM_STEP_DELAY_MS);
      *@endcode */
-    extern int16_t g_vmStepDelay;
+    extern int16_t g_vmStepDelayMs;
 
     /**
      *@brief Logs to the default output

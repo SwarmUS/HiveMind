@@ -20,9 +20,9 @@ BittyBuzzStringResolver BittyBuzzFactory::createBittyBuzzStringResolver(ILogger&
 
 BittyBuzzLib<std::array<BittyBuzzLibMemberRegister, 15>> BittyBuzzFactory::createBittyBuzzGlobalLib(
     int16_t vmStepDelay) {
-    BittyBuzzUserFunctions::g_vmStepDelay = vmStepDelay;
+    BittyBuzzUserFunctions::g_vmStepDelayMs = vmStepDelay;
     std::array<BittyBuzzLibMemberRegister, 15> globalMember = {{
-        {BBZSTRID_VM_STEP_DELAY, BittyBuzzUserFunctions::g_vmStepDelay},
+        {BBZSTRID_VM_STEP_DELAY_MS, BittyBuzzUserFunctions::g_vmStepDelayMs},
         {BBZSTRID_log, BittyBuzzUserFunctions::log},
         {BBZSTRID_int, BittyBuzzUserFunctions::toInt},
         {BBZSTRID_float, BittyBuzzUserFunctions::toFloat},

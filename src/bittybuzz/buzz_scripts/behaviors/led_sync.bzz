@@ -51,13 +51,13 @@ function tick(context){
     }
 }
 
-function create_exec(step_count){
+function create_exec(delay_ms){
     iteration = 0
     FLASH_PERIOD = 20
     FLASH_LENGTH = 3
     next_flash = math.rng_uniform() % 30
      # random number generator goes here instead of ID
     receiveOffset()
-    exec = executor.new(step_count, tick, ctx)
+    exec = executor.new(delay_ms, tick, ctx)
     return exec
 }

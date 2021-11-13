@@ -17,11 +17,11 @@ function tick(context){
     }
 }
 
-function create_exec(step_count){
+function create_exec(delay_ms){
     log("ID: ", id)
     neighbors.listen("hex", function(vid, value, rid){
         ui.set_hex(value)
     })
-    exec = executor.new(step_count, tick, ctx)
+    exec = executor.new(delay_ms, tick, ctx)
     return exec
 }

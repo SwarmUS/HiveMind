@@ -13,9 +13,9 @@ function tick(context) {
     stig.put("key", counter);
 }
 
-function create_exec(step_count) {
+function create_exec(delay_ms) {
     stig = stigmergy.create(1);
-    exec = executor.new(step_count, tick, nil);
+    exec = executor.new(delay_ms, tick, nil);
 
     stig.put("key", counter);
     stig.onconflict(greater_conflict_resolver);
