@@ -71,7 +71,11 @@ std::tuple<std::optional<float>, std::optional<float>> AngleCalculator::calculat
     if (val && isnan(val.value())) {
         return {{}, {}};
     }
+    m_logger.log(LogLevel::Debug, "X");
 
+    if (val) {
+        val = mod(val.value() + m_calculatorParameters.m_boardOrientationOffset, 360.0F);
+    }
     return {val, maxLos};
 }
 

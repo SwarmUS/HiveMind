@@ -76,6 +76,8 @@ void InterlocManager::updateAngleCalculatorParameters(
     oldParams.m_parametersValidSecretNumbers[newParams.getPairId()] =
         ANGLE_PARAMETERS_VALID_SECRET_NUMBER;
 
+    oldParams.m_boardOrientationOffset = newParams.getBoardOrientationOffset();
+
     taskENTER_CRITICAL();
     bool ret = ((BSP&)BSPContainer::getBSP()).getStorage().saveToFlash();
     taskEXIT_CRITICAL();

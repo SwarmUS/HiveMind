@@ -8,28 +8,37 @@ UpdateInterloc::UpdateInterloc(ILogger& logger, DecawaveArray& decawaves) :
 
 void UpdateInterloc::process(InterlocStateHandler& context) {
     std::optional<double> distance = context.getTWR().calculateDistance(context.getSlotId());
-    auto [angle, losConfidence] =
-        InterlocBSPContainer::getAngleCalculator().calculateAngle(context.getRawAngleData());
+    std::optional<float> angle = {};
+    std::optional<float> losConfidence = {};
     std::optional<bool> los = {};
+
+    if (m_decawaves.canCalculateAngles()) {
+        auto ret =
+            InterlocBSPContainer::getAngleCalculator().calculateAngle(context.getRawAngleData());
+
+        angle = std::get<0>(ret);
+        losConfidence = std::get<1>(ret);
+    }
 
     // Reset data for next run
     context.getTWR().m_allDataReceived = false;
     context.getRawAngleData().m_framesLength = 0;
 
     // TODO: DEBUGGING:
-    if (distance) {
-        m_logger.log(LogLevel::Warn, "distance from : %d = %3.3f", context.getCurrentFrameId(),
-                     distance.value());
-    } else {
-        m_logger.log(LogLevel::Warn, "distance from : %d = Err", context.getCurrentFrameId());
-    }
-
-    if (angle) {
-        m_logger.log(LogLevel::Warn, "angle from : %d = %3.3f", context.getCurrentFrameId(),
-                     angle.value());
-    } else {
-        m_logger.log(LogLevel::Warn, "angle from : %d = Err", context.getCurrentFrameId());
-    }
+    //    if (distance) {
+    //        m_logger.log(LogLevel::Warn, "distance from : %d = %3.3f",
+    //        context.getCurrentFrameId(),
+    //                     distance.value());
+    //    } else {
+    //        m_logger.log(LogLevel::Warn, "distance from : %d = Err", context.getCurrentFrameId());
+    //    }
+    //
+    //    if (angle) {
+    //        m_logger.log(LogLevel::Warn, "angle from : %d = %3.3f", context.getCurrentFrameId(),
+    //                     angle.value());
+    //    } else {
+    //        m_logger.log(LogLevel::Warn, "angle from : %d = Err", context.getCurrentFrameId());
+    //    }
 
     if (losConfidence) {
         if (losConfidence > 0.5) {

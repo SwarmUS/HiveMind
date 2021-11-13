@@ -52,6 +52,12 @@ struct AngleCalculatorParameters {
      * equals the constant, we can consider everything is OK for a given pair.
      */
     std::array<uint8_t, NUM_ANTENNA_PAIRS> m_parametersValidSecretNumbers;
+
+    /**
+     * Offset (in degrees) of the BeeBoard assembly on the robot to allow placing it at any
+     * orientation. Applied after interloc is calculated
+     */
+    float m_boardOrientationOffset;
 };
 
 #endif // HIVE_MIND_ANGLECALCULATORPARAMETERS_H

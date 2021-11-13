@@ -1,7 +1,7 @@
 #include "interloc/Interloc.h"
 #include <math.h>
 
-#define ALPHA 0.25F
+#define ALPHA 0.85F
 
 Interloc::Interloc(ILogger& logger,
                    IInterlocManager& interlocManager,
