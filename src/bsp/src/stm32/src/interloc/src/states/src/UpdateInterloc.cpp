@@ -24,21 +24,16 @@ void UpdateInterloc::process(InterlocStateHandler& context) {
     context.getTWR().m_allDataReceived = false;
     context.getRawAngleData().m_framesLength = 0;
 
-    // TODO: DEBUGGING:
-    //    if (distance) {
-    //        m_logger.log(LogLevel::Warn, "distance from : %d = %3.3f",
-    //        context.getCurrentFrameId(),
-    //                     distance.value());
-    //    } else {
-    //        m_logger.log(LogLevel::Warn, "distance from : %d = Err", context.getCurrentFrameId());
-    //    }
-    //
-    //    if (angle) {
-    //        m_logger.log(LogLevel::Warn, "angle from : %d = %3.3f", context.getCurrentFrameId(),
-    //                     angle.value());
-    //    } else {
-    //        m_logger.log(LogLevel::Warn, "angle from : %d = Err", context.getCurrentFrameId());
-    //    }
+    if (distance && angle) {
+        m_logger.log(LogLevel::Debug, "Interloc Calculated with #%d. Dist: %3.3f, Angle: %3.3f",
+                     context.getCurrentFrameId(), distance.value(), angle.value());
+    } else if (distance) {
+        m_logger.log(LogLevel::Debug, "Interloc Calculated with #%d. Dist: %3.3f, Angle: err",
+                     context.getCurrentFrameId(), distance.value());
+    } else if (angle) {
+        m_logger.log(LogLevel::Debug, "Interloc Calculated with #%d. Dist: err, Angle: %3.3f",
+                     context.getCurrentFrameId(), angle.value());
+    }
 
     if (losConfidence) {
         if (losConfidence > 0.5) {
