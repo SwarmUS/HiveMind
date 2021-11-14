@@ -5,23 +5,23 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH})
 
 function(propolis_fetch_populate)
-    if (PROPOLIS_PATH)
+    if(PROPOLIS_PATH)
         message(INFO "PROPOLIS_PATH specified, skipping fetch")
-    endif ()
+    endif()
 
     FetchContent_Declare(
             ${PROJECT_NAME}_propolis
 
-            GIT_REPOSITORY https://github.com/SwarmUS/Propolis
-            GIT_TAG      04dc7456d379e55e1dba00c8ef466fd36c10770f
-            GIT_PROGRESS TRUE
+            GIT_REPOSITORY  https://github.com/SwarmUS/Propolis
+            GIT_TAG         04dc7456d379e55e1dba00c8ef466fd36c10770f
+            GIT_PROGRESS    TRUE
     )
 
     set(PROPOLIS ${PROJECT_NAME}_propolis)
     string(TOLOWER ${PROPOLIS} PROPOLIS_L)
 
     FetchContent_GetProperties(${PROPOLIS} POPULATED PROPOLIS_POPULATED)
-    if (NOT PROPOLIS_POPULATED)
+    if(NOT PROPOLIS_POPULATED)
         message("Cloning propolis library")
         set(FETCHCONTENT_QUIET FALSE) # To see progress
 
@@ -34,9 +34,9 @@ function(propolis_fetch_populate)
         # Removing warnings from freertos compilation on executable target
         if (DISABLE_EXTERNAL_WARNINGS)
             target_compile_options(swarmus-propolis-pheromones PRIVATE -w)
-            set_target_properties(swarmus-propolis-pheromones PROPERTIES CXX_CLANG_TIDY "")
-        endif ()
+            set_target_properties(swarmus-propolis-pheromones PROPERTIES CXX_CLANG_TIDY "" )
+        endif()
 
-    endif ()
+    endif()
 
 endfunction()
