@@ -9,9 +9,6 @@ float getPdoaValueCertitude(float tdValue) {
         return 1;
     }
 
-    //    float m = (1 - 0) / (cuttingVal - 90);
-    //    float b = 1 - m * cuttingVal;
-    // c = 0.1/(x+(x+0.5)^10)
     return 0.1F / (abs(tdValue) * 0.01F + pow((abs(tdValue) * 0.01F + 0.3F), 10.0F));
 }
 

@@ -123,7 +123,7 @@ void Interloc::dumpUpdatesHistory() {
     m_updateHistoryIdx = 0;
 }
 
-float Interloc::filterValue(float oldValue, float newValue, float alpha) {
+constexpr float Interloc::filterValue(float oldValue, float newValue, float alpha) {
     // Apply an exponential moving average filter so we don't have to accumulate old samples
     // https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average
     return (alpha * newValue) + (1 - alpha) * oldValue;

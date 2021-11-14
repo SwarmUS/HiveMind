@@ -26,8 +26,8 @@ float UWBRxFrame::getLOSConfidence() const {
     float f3_2 = (float)m_fpAmpl3 * (float)m_fpAmpl3;
     float n_2 = (float)m_rxPreambleCount * (float)m_rxPreambleCount;
 
-    volatile float firstPathPower = 10 * log10f((f1_2 + f2_2 + f3_2) / n_2) - A;
-    volatile float receivePower = 10 * log10f(((float)m_cirPwr * Z) / n_2) - A;
+    float firstPathPower = 10 * log10f((f1_2 + f2_2 + f3_2) / n_2) - A;
+    float receivePower = 10 * log10f(((float)m_cirPwr * Z) / n_2) - A;
 
     float powerDiff = receivePower - firstPathPower;
 
@@ -40,6 +40,6 @@ float UWBRxFrame::getLOSConfidence() const {
     }
 
     // Linear interpolation between (6, 1.0) and (10, 0.0)
-    volatile float x = -0.25F * powerDiff + 2.5F;
+    float x = -0.25F * powerDiff + 2.5F;
     return x;
 }
