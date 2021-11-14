@@ -127,6 +127,8 @@ void AngleReceiverState::saveAngleData(BspInterlocRawAngleData& data, uint32_t f
             m_rxFrames[i].getAccumulatorAngle();
         data.m_frames[frameIndex].m_frameInfos[i].m_messageId =
             reinterpret_cast<UWBMessages::AngleMsg*>(m_rxFrames[i].m_rxBuffer.data())->m_messageId;
+        data.m_frames[frameIndex].m_frameInfos[i].m_losConfidence =
+            m_rxFrames[i].getLOSConfidence();
     }
 }
 

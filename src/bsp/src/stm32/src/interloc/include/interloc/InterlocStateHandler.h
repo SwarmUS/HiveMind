@@ -17,7 +17,7 @@
 
 class InterlocStateHandler {
   public:
-    InterlocStateHandler(InterlocTimeManager& timeManager);
+    InterlocStateHandler(InterlocTimeManager& timeManager, BspInterlocRawAngleData& angleRawData);
 
     void setState(InterlocStates state, InterlocEvent event);
     void process();
@@ -55,7 +55,7 @@ class InterlocStateHandler {
     InterlocStates m_currentStateName;
     AbstractInterlocState* m_currentState;
     TwoWayRanging m_twr{};
-    BspInterlocRawAngleData m_angleRawData{};
+    BspInterlocRawAngleData& m_angleRawData;
 
     std::array<StateTransition, MAX_TRACER_TRANSITIONS> m_stateTracerData;
     CircularQueue<StateTransition> m_stateTracer;

@@ -17,6 +17,8 @@ class BSP : public IBSP {
 
     uint32_t generateRandomNumber() override;
 
+    PersistantStorageManager& getStorage();
+
   private:
     PersistantStorageManager m_storage;
 

@@ -33,7 +33,12 @@ class InterlocManager : public IInterlocManager {
     void setInterlocManagerRawAngleDataCallback(interlocRawAngleDataCallbackFunction_t callback,
                                                 void* context) override;
 
-    void updateDistance(uint16_t robotId, float distance);
+    void updateAngleCalculatorParameters(const ConfigureAngleParametersDTO& newParams) override;
+
+    void updateInterloc(uint16_t robotId,
+                        std::optional<float> distance,
+                        std::optional<float> angle,
+                        std::optional<bool> los);
 
     void sendRawAngleData(BspInterlocRawAngleData& data);
 

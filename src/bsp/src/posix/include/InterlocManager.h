@@ -28,6 +28,7 @@ class InterlocManager : public IInterlocManager {
 
     void setInterlocManagerRawAngleDataCallback(interlocRawAngleDataCallbackFunction_t callback,
                                                 void* context) override;
+    void updateAngleCalculatorParameters(const ConfigureAngleParametersDTO& newParams) override;
 
   private:
     ILogger& m_logger;

@@ -10,7 +10,9 @@ set(LIB_SOURCES
         src/InterlocBSPContainer.cpp
         src/TwoWayRanging.cpp
         src/InterlocTimeManager.cpp
-        src/DecawaveArray.cpp)
+        src/DecawaveArray.cpp
+        src/AngleCalculator.cpp
+        src/CertitudeCalculator.cpp)
 
 set(LIB_HEADERS
         include/interloc/Decawave.h
@@ -22,15 +24,17 @@ set(LIB_HEADERS
         include/interloc/InterlocBSPContainer.h
         include/interloc/TwoWayRanging.h
         include/interloc/DecawaveArray.h
-        include/interloc/InterlocTimeManager.h)
+        include/interloc/InterlocTimeManager.h
+        include/interloc/AngleCalculator.h
+        include/interloc/CertitudeCalculator.h)
 
 if (${COMPILE_STM32_F429ZI})
-        list(APPEND LIB_SOURCES src/DecawaveArray_HiveSight.cpp)
+    list(APPEND LIB_SOURCES src/DecawaveArray_HiveSight.cpp)
 elseif (${COMPILE_STM32_H735ZG})
-        list(APPEND LIB_SOURCES src/DecawaveArray_HiveBoard.cpp)
-else()
-        message(FATAL_ERROR "BSP Interloc: The current board is not supported" )
-endif()
+    list(APPEND LIB_SOURCES src/DecawaveArray_HiveBoard.cpp)
+else ()
+    message(FATAL_ERROR "BSP Interloc: The current board is not supported")
+endif ()
 
 add_library(${LIB_NAME}
         ${LIB_SOURCES}
@@ -44,6 +48,7 @@ target_include_directories(${LIB_NAME}
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
         ${BSP_CMAKE_DIR}/include
+        ${BSP_PLATFORM_CMAKE_DIR}/include
         )
 
 target_link_libraries(${LIB_NAME}
@@ -60,7 +65,7 @@ target_link_libraries(${LIB_NAME}
 
 add_subdirectory(src/states)
 
-if (DISABLE_EXTERNAL_WARNINGS) 
-        set_target_properties(${LIB_NAME} PROPERTIES CXX_CLANG_TIDY "" )
-        set_target_properties(${LIB_NAME} PROPERTIES C_CLANG_TIDY "" )
-endif()
+if (DISABLE_EXTERNAL_WARNINGS)
+    set_target_properties(${LIB_NAME} PROPERTIES CXX_CLANG_TIDY "")
+    set_target_properties(${LIB_NAME} PROPERTIES C_CLANG_TIDY "")
+endif ()

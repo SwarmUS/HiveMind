@@ -6,7 +6,7 @@
 #define UWB_BROADCAST_ADDRESS 0xFF
 
 // TODO: Make configurable and merge with define in interloc lib
-#define MAX_INTERLOC_SUBFRAMES 5
+#define MAX_INTERLOC_SUBFRAMES 6
 
 namespace UWBMessages {
     enum FrameType { BEACON = 0x0, DATA = 0x2, ACK = 0x3, MAC_COMMAND = 0x4 };

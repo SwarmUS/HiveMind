@@ -92,6 +92,9 @@ bool Decawave::init() {
     setState(DW_STATE::CONFIGURED);
 
     dwt_enablegpioclocks();
+
+    enableAccumulatorClock();
+
     dwt_setgpiodirection(DWT_GxM0 | DWT_GxM1 | DWT_GxM2 | DWT_GxM3, 0);
 
     dwt_setinterrupt(DWT_INT_RFCG | DWT_INT_RFTO | DWT_INT_RXPTO | DWT_INT_RPHE | DWT_INT_RFCE |
@@ -105,6 +108,14 @@ bool Decawave::init() {
 
     m_isReady = true;
     return true;
+}
+void Decawave::enableAccumulatorClock() const {
+    uint8 reg[2];
+    dwt_readfromdevice(PMSC_ID, PMSC_CTRL0_OFFSET, 2, reg);
+    reg[0] = 0x48 | (reg[0] & 0xb3);
+    reg[1] = 0x80 | reg[1];
+    dwt_writetodevice(PMSC_ID, PMSC_CTRL0_OFFSET, 1, &reg[0]);
+    dwt_writetodevice(PMSC_ID, 0x1, 1, &reg[1]);
 }
 
 bool Decawave::setChannel(UWBChannel channel) {
@@ -362,18 +373,49 @@ void Decawave::setState(DW_STATE state) { m_state = state; }
 bool Decawave::isReady() const { return m_isReady; }
 
 void Decawave::retrieveRxFrame(UWBRxFrame& frame) const {
+    deca_selectDevice(m_spiDevice);
+
     frame.m_length = m_callbackData.datalength;
+    constexpr uint8_t registerDataSize = 26;
+    uint8_t registerData[registerDataSize];
+
+    // 0x10
+    frame.m_rxPreambleCount =
+        (dwt_read32bitreg(RX_FINFO_ID) & RX_FINFO_RXPACC_MASK) >> RX_FINFO_RXPACC_SHIFT;
 
     // Read the frame into memory without the CRC16 located at the end of the frame
+    // 0x11
     dwt_readrxdata(frame.m_rxBuffer.data(), m_callbackData.datalength - UWB_CRC_LENGTH, 0);
-    getRxTimestamp(&frame.m_rxTimestamp);
 
-    dwt_readfromdevice(RX_TTCKO_ID, 4, 1, &(frame.m_sfdAngleRegister));
-    // Read information needed for phase calculation
-    uint16_t firstPathIdx = dwt_read16bitoffsetreg(RX_TIME_ID, RX_TIME_FP_INDEX_OFFSET);
-    firstPathIdx = ((int)(((float)firstPathIdx) * (1.0f / 64.0f) + 0.5f)) * 4.0f;
+    /*
+     * Read all necessary registers in one shot
+     * 0:7 -> Register 0x12 Rx Frame Quality Information
+     * 8:11 -> Register 0x13 Receiver Time Tracking Interval
+     * 12:16 -> Register 0x14 Receive Time Tracking Offset
+     * 17:25 -> Register 0x15 Receive Time Stamp
+     */
+    dwt_readfromdevice(0x12, 0, registerDataSize, registerData);
+
+    // 0x12
+    frame.m_stdNoise = ((uint16_t)registerData[1] << 8) + registerData[0];
+    frame.m_fpAmpl2 = ((uint16_t)registerData[3] << 8) + registerData[2];
+    frame.m_fpAmpl3 = ((uint16_t)registerData[5] << 8) + registerData[4];
+    frame.m_cirPwr = ((uint16_t)registerData[7] << 8) + registerData[6];
+
+    // 0x14
+    frame.m_sfdAngleRegister = registerData[16];
+
+    // 0x15
+    memcpy(&frame.m_rxTimestamp, &(registerData[17]), sizeof(uint64_t));
+    frame.m_rxTimestamp &= 0x000000FFFFFFFFFF; // Mask of garbage data at start of TS
+
+    uint16_t firstPathIdx = ((uint16_t)registerData[23] << 8) + registerData[22];
+    frame.m_fpAmpl1 = ((uint16_t)registerData[25] << 8) + registerData[24];
+
+    // Compute first path register index and read from accumulator
+    firstPathIdx = ((int)(((float)firstPathIdx) * (1.0F / 64.0F) + 0.5F)) * 4.0F;
     // Read one extra byte as readaccdata() returns a dummy byte
-    dwt_readaccdata(frame.m_firstPathAccumulator, 5, firstPathIdx);
+    dwt_readfromdevice(ACC_MEM_ID, firstPathIdx, 5, frame.m_firstPathAccumulator);
 }
 
 UWBRxStatus Decawave::getRxStatus() const { return m_rxStatus; }

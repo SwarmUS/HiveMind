@@ -15,7 +15,13 @@ InterlocManager& InterlocBSPContainer::getInterlocManager() {
 }
 
 InterlocStateHandler& InterlocBSPContainer::getStateHandler() {
-    static InterlocStateHandler s_stateHandler(getTimeManager());
+#ifdef STM32F4
+    static BspInterlocRawAngleData s_rawAngleData;
+#elif STM32H7
+    __attribute__((section(".cmbss"))) static BspInterlocRawAngleData s_rawAngleData;
+#endif
+
+    static InterlocStateHandler s_stateHandler(getTimeManager(), s_rawAngleData);
 
     return s_stateHandler;
 }
@@ -30,4 +36,11 @@ InterlocTimeManager& InterlocBSPContainer::getTimeManager() {
     static InterlocTimeManager s_timeManager(BSPContainer::getBSP());
 
     return s_timeManager;
+}
+
+AngleCalculator& InterlocBSPContainer::getAngleCalculator() {
+    __attribute__((section(".cmbss"))) static AngleCalculator s_angleCalculator(
+        LoggerContainer::getLogger());
+
+    return s_angleCalculator;
 }

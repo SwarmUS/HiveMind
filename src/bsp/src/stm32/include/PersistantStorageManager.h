@@ -20,12 +20,24 @@ class PersistantStorageManager {
      */
     uint16_t getUUID() const;
 
+    /**
+     * Returns a reference to the angle calculator parameters
+     * @return Reference
+     */
+    AngleCalculatorParameters& getAngleCaculatorParameters();
+
+    /**
+     * Saves the storage back to flash
+     * @return True if successfull, false otherwise.
+     */
+    bool saveToFlash();
+
   private:
-    PersistedStorage m_storage __attribute__((aligned(4))){};
+    PersistedStorage m_storage{};
+
     ILogger& m_logger;
 
     bool setUUID(uint16_t uuid);
-    bool saveToFlash();
 };
 
 #endif //__PERSISTEDSTORAGEMANAGER_H__

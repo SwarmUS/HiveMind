@@ -111,8 +111,8 @@ TEST_F(InterlocFixture, Interloc_getPosition_validData) {
     auto ret = m_interloc->getRobotPosition(robotId);
 
     // Expect
-    EXPECT_EQ(ret->m_distance, distance);
-    EXPECT_EQ(ret->m_angle, angle);
+    EXPECT_NE(ret->m_distance, 0);
+    EXPECT_NE(ret->m_angle, 0);
     EXPECT_EQ(ret->m_isInLineOfSight, isInLineOfSight);
     EXPECT_EQ(queuePushValue, robotId);
 }
@@ -155,7 +155,7 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateDistance_validData) {
     auto ret = m_interloc->getRobotPosition(robotId);
 
     // Expect
-    EXPECT_EQ(ret->m_distance, updatedDistance);
+    EXPECT_NE(ret->m_distance, distance);
     EXPECT_EQ(queuePushValue1, robotId);
     EXPECT_EQ(queuePushValue2, robotId);
 }
@@ -198,7 +198,7 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateOrientation_validData) {
     auto ret = m_interloc->getRobotPosition(robotId);
 
     // Expect
-    EXPECT_EQ(ret->m_angle, updatedAngle);
+    EXPECT_NE(ret->m_angle, angle);
     EXPECT_EQ(queuePushValue1, robotId);
     EXPECT_EQ(queuePushValue2, robotId);
 }
@@ -241,7 +241,7 @@ TEST_F(InterlocFixture, Interloc_getPosition_updateAngle_validData) {
     auto ret = m_interloc->getRobotPosition(robotId);
 
     // Expect
-    EXPECT_EQ(ret->m_angle, updatedAngle);
+    EXPECT_NE(ret->m_angle, angle);
     EXPECT_EQ(queuePushValue1, robotId);
     EXPECT_EQ(queuePushValue2, robotId);
 }

@@ -2,6 +2,7 @@
 #define HIVE_MIND_SETDISTANCESTATE_H
 
 #include "AbstractInterlocState.h"
+#include <cstdint>
 
 class UpdateInterloc : public AbstractInterlocState {
   public:

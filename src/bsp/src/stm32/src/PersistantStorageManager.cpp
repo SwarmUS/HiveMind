@@ -4,14 +4,18 @@
 #include <cstdio>
 #include <cstring>
 #include <hal/hal_flash.h>
+#include <interloc/InterlocBSPContainer.h>
 
 #define DEFAULT_UUID 1
+
+// The size should be a multiple of words for flash operations
+constexpr uint16_t s_persistedStorageSize = sizeof(PersistedStorage);
 
 PersistantStorageManager::PersistantStorageManager(ILogger& logger) : m_logger(logger) {}
 
 void PersistantStorageManager::loadFromFlash() {
     std::memcpy(&m_storage, reinterpret_cast<const void*>(USER_DATA_FLASH_START_ADDRESS),
-                PersistedStorage::getSize());
+                s_persistedStorageSize);
 
     if (UUID_OVERRIDE != 0) {
         setUUID(UUID_OVERRIDE);
@@ -21,6 +25,9 @@ void PersistantStorageManager::loadFromFlash() {
         m_logger.log(LogLevel::Error, "UUID is not set in FLASH. Use -D UUID_OVERRIDE to set it.");
         setUUID(DEFAULT_UUID);
     }
+
+    InterlocBSPContainer::getAngleCalculator().setCalculatorParameters(
+        m_storage.m_angleCalculatorParameters);
 }
 
 uint16_t PersistantStorageManager::getUUID() const { return m_storage.m_uuid; }
@@ -42,6 +49,11 @@ bool PersistantStorageManager::saveToFlash() {
     }
 
     // The size is given in words
-    return Flash_program(USER_DATA_FLASH_START_ADDRESS, reinterpret_cast<uint8_t*>(&m_storage),
-                         PersistedStorage::getSize());
+    bool ret = Flash_program(USER_DATA_FLASH_START_ADDRESS, reinterpret_cast<uint8_t*>(&m_storage),
+                             s_persistedStorageSize);
+    return ret;
+}
+
+AngleCalculatorParameters& PersistantStorageManager::getAngleCaculatorParameters() {
+    return m_storage.m_angleCalculatorParameters;
 }

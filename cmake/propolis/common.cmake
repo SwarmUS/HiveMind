@@ -10,11 +10,11 @@ function(propolis_fetch_populate)
     endif()
 
     FetchContent_Declare(
-        ${PROJECT_NAME}_propolis
+            ${PROJECT_NAME}_propolis
 
-        GIT_REPOSITORY  https://github.com/SwarmUS/Propolis
-        GIT_TAG         0d23dd8
-        GIT_PROGRESS    TRUE
+            GIT_REPOSITORY  https://github.com/SwarmUS/Propolis
+            GIT_TAG         026accdd3595eefb58e60d2f945ab8c21aeea115
+            GIT_PROGRESS    TRUE
     )
 
     set(PROPOLIS ${PROJECT_NAME}_propolis)
@@ -32,7 +32,7 @@ function(propolis_fetch_populate)
         add_subdirectory(${${PROPOLIS_L}_SOURCE_DIR}/src ${${PROPOLIS_L}_BINARY_DIR})
 
         # Removing warnings from freertos compilation on executable target
-        if (DISABLE_EXTERNAL_WARNINGS) 
+        if (DISABLE_EXTERNAL_WARNINGS)
             target_compile_options(swarmus-propolis-pheromones PRIVATE -w)
             set_target_properties(swarmus-propolis-pheromones PROPERTIES CXX_CLANG_TIDY "" )
         endif()

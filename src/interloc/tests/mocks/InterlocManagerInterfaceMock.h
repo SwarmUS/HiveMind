@@ -23,6 +23,10 @@ class InterlocManagerInterfaceMock : public IInterlocManager {
     MOCK_METHOD(void, setInterlocManagerState, (InterlocStateDTO state), (override));
     MOCK_METHOD(void, configureTWRCalibration, (uint16_t distanceCalibCm), (override));
     MOCK_METHOD(void, configureAngleCalibration, (uint32_t numberOfFrames), (override));
+    MOCK_METHOD(void,
+                updateAngleCalculatorParameters,
+                (const ConfigureAngleParametersDTO& newParams),
+                (override));
 
     interlocManagerStateChangeCallbackFunction_t m_stateChangeCallback;
     void* m_stateChangeContext;

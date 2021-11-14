@@ -14,3 +14,32 @@ float UWBRxFrame::getAccumulatorAngle() const {
     // TODO: Maybe change for LUT
     return atan2f((float)accumulatorI, (float(accumulatorQ)));
 }
+
+float UWBRxFrame::getLOSConfidence() const {
+    // See DW1000 user manual p.45-46
+    // https://www.decawave.com/sites/default/files/resources/dw1000_user_manual_2.11.pdf
+    constexpr float A = 121.74; // We are using a 64Mhz PRF
+    constexpr float Z = 131072; // 2^17
+
+    float f1_2 = (float)m_fpAmpl1 * (float)m_fpAmpl1;
+    float f2_2 = (float)m_fpAmpl2 * (float)m_fpAmpl2;
+    float f3_2 = (float)m_fpAmpl3 * (float)m_fpAmpl3;
+    float n_2 = (float)m_rxPreambleCount * (float)m_rxPreambleCount;
+
+    float firstPathPower = 10 * log10f((f1_2 + f2_2 + f3_2) / n_2) - A;
+    float receivePower = 10 * log10f(((float)m_cirPwr * Z) / n_2) - A;
+
+    float powerDiff = receivePower - firstPathPower;
+
+    if (powerDiff < 6) {
+        return 1.0;
+    }
+
+    if (powerDiff > 10) {
+        return 0.0;
+    }
+
+    // Linear interpolation between (6, 1.0) and (10, 0.0)
+    float x = -0.25F * powerDiff + 2.5F;
+    return x;
+}

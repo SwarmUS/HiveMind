@@ -30,7 +30,7 @@ constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 30; // Higher priori
 // Need to return the proper comm interface
 typedef std::optional<std::reference_wrapper<ICommInterface>> (*commInterfaceGetter)();
 
-class BittyBuzzTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
+class BittyBuzzTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
     BittyBuzzTask(const char* taskName,
                   UBaseType_t priority,
@@ -296,7 +296,7 @@ class CommMonitoringTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
     }
 };
 
-class HardwareInterlocTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+class HardwareInterlocTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
     HardwareInterlocTask(const char* taskName, UBaseType_t priority) :
         AbstractTask(taskName, priority) {}
@@ -365,9 +365,10 @@ class LogInterlocTask : public AbstractTask<4 * configMINIMAL_STACK_SIZE> {
         while (true) {
             PositionsTable interlocData = m_interloc.getPositionsTable();
             for (unsigned int i = 0; i < interlocData.m_positionsLength; i++) {
-                m_logger.log(LogLevel::Info, "*****Distance from %d : %3.3f m",
+                m_logger.log(LogLevel::Info, "*****Distance from %d : %3.3f m, angle: %3.3f",
                              interlocData.m_positions[i].m_robotId,
-                             interlocData.m_positions[i].m_distance);
+                             interlocData.m_positions[i].m_distance,
+                             interlocData.m_positions[i].m_angle);
             }
             Task::delay(1000);
         }
@@ -415,7 +416,7 @@ int main(int argc, char** argv) {
                                                       gc_taskNormalPriority);
     static LogInterlocTask s_logInterlocTask("software_interloc_log", gc_taskNormalPriority);
 
-    static MessageDispatcherTask s_hostDispatchTask("tcp_dispatch", gc_taskNormalPriority, NULL,
+    static MessageDispatcherTask s_hostDispatchTask("host_dispatch", gc_taskNormalPriority, NULL,
                                                     MessageHandlerContainer::getHostMsgQueue());
     static MessageSenderTask s_hostMessageSender("host_send", gc_taskNormalPriority, NULL,
                                                  MessageHandlerContainer::getHostMsgQueue());

@@ -1,10 +1,12 @@
 #include "interloc/InterlocStateHandler.h"
 #include <bsp/BSPContainer.h>
 
-InterlocStateHandler::InterlocStateHandler(InterlocTimeManager& timeManager) :
+InterlocStateHandler::InterlocStateHandler(InterlocTimeManager& timeManager,
+                                           BspInterlocRawAngleData& angleRawData) :
     m_timeManager(timeManager),
     m_currentStateName(InterlocStates::DEFAULT),
     m_currentState(&InterlocStateContainer::getState(InterlocStates::DEFAULT)),
+    m_angleRawData(angleRawData),
     m_stateTracer(m_stateTracerData.data(), MAX_TRACER_TRANSITIONS) {
 
     m_slotId = getSlotIdFromBoardId(BSPContainer::getBSP().getUUId());

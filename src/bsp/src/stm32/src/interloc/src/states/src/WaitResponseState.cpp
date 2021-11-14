@@ -48,7 +48,8 @@ void WaitResponseState::process(InterlocStateHandler& context) {
                 }
                 nbTries = 0;
                 context.setState(InterlocStates::SEND_FINAL, InterlocEvent::RX_NO_RESP);
-                m_logger.log(LogLevel::Warn, "no resp : %d", context.getCurrentFrameId());
+                m_logger.log(LogLevel::Debug, "No responses received in interloc",
+                             context.getCurrentFrameId());
                 return;
             }
 
