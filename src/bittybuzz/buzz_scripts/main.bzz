@@ -1,7 +1,7 @@
 include "behaviors/follow_leader.bzz"
 
 function init() {
-  exec = create_exec(10);
+  exec = create_exec(20);
 }
 
 function step() {
