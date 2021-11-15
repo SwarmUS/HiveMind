@@ -1,8 +1,9 @@
 include "utils/executor.bzz"
+include "utils/types.bzz"
 include "vec2.bzz"
 
-function tick(context){
-    var leader = 1;
+function tick(stig){
+    var leader = stig.get("leader");
 
     if(leader != id and leader != nil){
         log("Trying to get leader: ", leader)
@@ -20,11 +21,12 @@ function tick(context){
 }
 
 function create_exec(step_count) {
-  counter = 0;
-  stig = stigmergy.create(1);
+    stig = stigmergy.create(1);
 
-  stig.put("leader", 1);
+    var set_leader_id_description = {.0 = {.leader_id=types.INT}}
+    var set_leader_id = function(stig){stig.put("leader", leader_id)}
+    register_closure("setLeader", set_leader_id_description, stig)
 
-  exec = executor.new(step_count, tick, nil);
-  return exec;
+    exec = executor.new(step_count, tick, stig);
+    return exec;
 }
