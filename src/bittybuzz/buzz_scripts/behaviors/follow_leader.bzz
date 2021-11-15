@@ -21,8 +21,11 @@ function tick(stig){
     update_leader_exec.step()
 }
 
-function update_leader(ctx){
+function update_leader(stig){
     leader = stig.get("leader")
+    if (leader){
+        ui.set_hex(leader)
+    }
 }
 
 function create_exec(step_count) {
@@ -35,7 +38,7 @@ function create_exec(step_count) {
     }
     register_closure("setLeader", set_leader_id, set_leader_id_description, {.stig = stig})
 
-    update_leader_exec = executor.new(10, update_leader, nil)
+    update_leader_exec = executor.new(4, update_leader, stig)
 
     exec = executor.new(step_count, tick, stig)
     return exec
