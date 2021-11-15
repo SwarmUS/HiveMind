@@ -2,34 +2,41 @@ include "utils/executor.bzz"
 include "utils/types.bzz"
 include "vec2.bzz"
 
-function tick(stig){
-    var leader = stig.get("leader");
+leader = nil
 
+function tick(stig){
     if(leader != id and leader != nil){
         log("Trying to get leader: ", leader)
-        var neighbor = neighbors.get(leader);
+        var neighbor = neighbors.get(leader)
 
         if(is_table(neighbor)){
-            var goal = math.vec2.newp(neighbor.distance - 1, neighbor.azimuth);
-            log("Moving to leader: ", leader, " at x:", goal.x, " y:", goal.y);
-            call_host_function(id, "moveBy", {.0 = goal.x, .1 = goal.y});
+            var goal = math.vec2.newp(neighbor.distance - 1, neighbor.azimuth)
+            log("Moving to leader: ", leader, " at x:", goal.x, " y:", goal.y)
+            call_host_function(id, "moveBy", {.0 = goal.x, .1 = goal.y})
         }
         else{
-            log("Neighbor not found!");
+            log("Neighbor not found!")
         }
     }
+    update_leader_exec.step()
+}
+
+function update_leader(ctx){
+    leader = stig.get("leader")
 }
 
 function create_exec(step_count) {
-    var stig = stigmergy.create(1);
+    var stig = stigmergy.create(1)
 
     var set_leader_id_description = {.0 = {.leader_id=types.INT}}
     var set_leader_id = function(leader_id){
-        log("Setting stig");
+        log("Setting stig")
         self.stig.put("leader", leader_id)
     }
     register_closure("setLeader", set_leader_id, set_leader_id_description, {.stig = stig})
 
-    exec = executor.new(step_count, tick, stig);
-    return exec;
+    update_leader_exec = executor.new(10, update_leader, nil)
+
+    exec = executor.new(step_count, tick, stig)
+    return exec
 }
