@@ -7,10 +7,23 @@ leader = nil
 function tick(stig){
     if(leader != id and leader != nil){
         log("Trying to get leader: ", leader)
-        var neighbor = neighbors.get(leader)
+        var leaderObj = neighbors.get(leader)
+        var validMove = 1;
 
-        if(is_table(neighbor)){
-            var goal = math.vec2.newp(neighbor.distance - 1, neighbor.azimuth)
+        neighbors.foreach(function (robotId, data) {
+            if (robotId != leader) {
+                var x = leaderObj.azimuth - data.azimuth
+
+                if (math.abs(x) <= 10 and data.distance < 1.5)
+                {
+                    log("Invalid move. ", robotId, " in the way at dist: ", data.distance, " angle: ", data.azimuth)
+                    validMove = nil
+                }
+            }
+        })
+
+        if(is_table(neighbor) and validMove){
+            var goal = math.vec2.newp(leaderObj.distance - 1, leaderObj.azimuth)
             log("Moving to leader: ", leader, " at x:", goal.x, " y:", goal.y)
             call_host_function(id, "moveBy", {.0 = goal.x, .1 = goal.y})
         }
@@ -38,7 +51,7 @@ function create_exec(step_count) {
     }
     register_closure("setLeader", set_leader_id, set_leader_id_description, {.stig = stig})
 
-    update_leader_exec = executor.new(4, update_leader, stig)
+    update_leader_exec = executor.new(20, update_leader, stig)
 
     exec = executor.new(step_count, tick, stig)
     return exec
