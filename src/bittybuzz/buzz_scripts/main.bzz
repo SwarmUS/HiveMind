@@ -1,7 +1,7 @@
-include "behaviors/time_loop.bzz"
+include "behaviors/led_sync.bzz"
 
 function init() {
-  exec = create_exec(200);
+  exec = create_exec(1);
 }
 
 function step() {

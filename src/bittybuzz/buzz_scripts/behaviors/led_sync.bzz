@@ -53,8 +53,8 @@ function tick(context){
 
 function create_exec(step_count){
     iteration = 0
-    FLASH_PERIOD = 20
-    FLASH_LENGTH = 3
+    FLASH_PERIOD = 100
+    FLASH_LENGTH = 15
     next_flash = math.rng_uniform() % 30
      # random number generator goes here instead of ID
     receiveOffset()

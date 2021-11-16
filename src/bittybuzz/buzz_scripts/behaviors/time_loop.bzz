@@ -18,7 +18,7 @@ function tick(ctx){
         ctx.led = 1;
     }
     log("Time start");
-    call_host_function(2, "timeStart", {});
+    call_host_function(5, "timeStart", {});
 }
 
 function create_exec(step_count) {
