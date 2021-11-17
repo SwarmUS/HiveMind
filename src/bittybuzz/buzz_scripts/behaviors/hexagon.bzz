@@ -49,7 +49,7 @@ function tick(ctx) {
 
 # Executed at init time
 function create_exec(delay_ms) {
-    exec = executor.new(delay_ms, tick, nil);
+    exec = executor.new_ms(delay_ms, tick, nil);
     return exec;
 
 }

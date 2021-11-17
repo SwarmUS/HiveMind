@@ -58,6 +58,6 @@ function create_exec(delay_ms){
     next_flash = math.rng_uniform() % 30
      # random number generator goes here instead of ID
     receiveOffset()
-    exec = executor.new(delay_ms, tick, ctx)
+    exec = executor.new_ms(delay_ms, tick, ctx)
     return exec
 }

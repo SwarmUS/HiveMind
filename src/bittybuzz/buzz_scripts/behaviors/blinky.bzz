@@ -25,6 +25,6 @@ function tick(context){
 }
 
 function create_exec(delay_ms){
-    exec = executor.new(delay_ms, tick, ctx);
+    exec = executor.new_ms(delay_ms, tick, ctx);
     return exec;
 }

@@ -49,6 +49,6 @@ function create_exec(delay_ms) {
     register_closure("moveByHost", move_by_host, move_by_host_description, nil);
     register_closure("moveByRemote", move_by_remote, move_by_remote_description, nil);
 
-    exec = executor.new(delay_ms, tick, context);
+    exec = executor.new_ms(delay_ms, tick, context);
     return exec;
 }
