@@ -21,7 +21,7 @@ IInterlocMessageHandler& InterlocContainer::getInterlocMessageHandler() {
     static InterlocMessageHandler s_messageHandler = InterlocMessageHandler(
         LoggerContainer::getLogger(), BSPContainer::getInterlocManager(), BSPContainer::getBSP(),
         MessageHandlerContainer::getInterlocMsgQueue(), MessageHandlerContainer::getHostMsgQueue(),
-        MessageHandlerContainer::getRemoteMsgQueue());
+        MessageHandlerContainer::getRemoteMsgQueue(), getInterlocUpdateInputQueue());
 
     return s_messageHandler;
 }

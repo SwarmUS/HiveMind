@@ -18,6 +18,8 @@ struct InterlocUpdate {
     std::optional<float> m_angleOfArrival;
 
     std::optional<bool> m_isInLineOfSight;
+
+    bool m_resetDumps = false;
 };
 
 #endif //__INTERLOCUPDATE_H__

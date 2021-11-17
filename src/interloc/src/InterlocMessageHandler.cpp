@@ -5,18 +5,21 @@
 
 #define INVALID_INTERLOC_FLOAT (float)9999.99
 
-InterlocMessageHandler::InterlocMessageHandler(ILogger& logger,
-                                               IInterlocManager& interlocManager,
-                                               IBSP& bsp,
-                                               ICircularQueue<MessageDTO>& inputQueue,
-                                               ICircularQueue<MessageDTO>& hostQueue,
-                                               ICircularQueue<MessageDTO>& remoteQueue) :
+InterlocMessageHandler::InterlocMessageHandler(
+    ILogger& logger,
+    IInterlocManager& interlocManager,
+    IBSP& bsp,
+    ICircularQueue<MessageDTO>& inputQueue,
+    ICircularQueue<MessageDTO>& hostQueue,
+    ICircularQueue<MessageDTO>& remoteQueue,
+    INotificationQueue<InterlocUpdate>& interlocPositionUpdateQueue) :
     m_logger(logger),
     m_interlocManager(interlocManager),
     m_bsp(bsp),
     m_inputQueue(inputQueue),
     m_hostQueue(hostQueue),
     m_remoteQueue(remoteQueue),
+    m_interlocPositionUpdateQueue(interlocPositionUpdateQueue),
     m_messageSourceId(0),
     m_dumpsEnabled(false) {
     m_interlocManager.setInterlocManagerRawAngleDataCallback(rawAngleDataCallbackStatic, this);
@@ -70,6 +73,11 @@ ICircularQueue<MessageDTO>& InterlocMessageHandler::getQueueForDestination(
     return m_remoteQueue;
 }
 bool InterlocMessageHandler::handleStateChangeMessage(const SetInterlocStateDTO dto) const {
+    // Purge accumulated dumps
+    InterlocUpdate update;
+    update.m_resetDumps = true;
+    m_interlocPositionUpdateQueue.push(update);
+
     m_interlocManager.setInterlocManagerState(dto.getState());
     return true;
 }
