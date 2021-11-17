@@ -17,7 +17,7 @@ function tick(context){
         context.led = 1;
     }
 
-    if(context.hex > 15){
+    if(context.hex >= 15){
         context.hex = 0;
     } else {
         context.hex = context.hex + 1;
