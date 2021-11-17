@@ -1,30 +1,74 @@
 include "utils/executor.bzz"
+include "utils/types.bzz"
 include "vec2.bzz"
 
-function tick(context){
-    var leader = 1;
+leader = nil
 
+MAX_OK_ANGLE = 90.0
+MAX_OK_DISTANCE = 1.5
+
+function tick(stig){
     if(leader != id and leader != nil){
         log("Trying to get leader: ", leader)
-        var neighbor = neighbors.get(leader);
+        var leaderObj = neighbors.get(leader)
+        if (is_table(leaderObj)){
+            validMove = 1;
+            avoidanceAngle = 0;
 
-        if(is_table(neighbor)){
-            var goal = math.vec2.newp(neighbor.distance - 0.5, neighbor.azimuth);
-            log("Moving to leader: ", leader, " at x:", goal.x, " y:", goal.y);
-            call_host_function(id, "moveBy", {.0 = goal.x, .1 = goal.y});
+            neighbors.foreach(function (robotId, data) {
+                if (robotId != leader) {
+                    var degreeOffset = leaderObj.azimuth - data.azimuth
+                    var offsetSign = 1.0
+
+                    if (degreeOffset < 0.0) {
+                        offsetSign = -1.0
+                    }
+
+                    log("Other: ", robotId, " angle diff: ", degreeOffset)
+
+                    if (math.abs(degreeOffset) < MAX_OK_ANGLE)
+                    {
+                        if (data.distance < MAX_OK_DISTANCE) {
+                            log("Invalid move. ", robotId, " in the way at dist: ", data.distance, " angle: ", data.azimuth)
+                            validMove = 0
+                            avoidanceAngle = -1.0 * offsetSign * MAX_OK_ANGLE
+                        }
+                    }
+                }
+            })
+
+            var goal = math.vec2.newp(leaderObj.distance, leaderObj.azimuth + avoidanceAngle)
+            log("Avoidance angle: ", avoidanceAngle)
+            log("Moving to leader: ", leader, " at x:", goal.x, " y:", goal.y)
+            call_host_function(id, "moveBy", {.0 = goal.x, .1 = goal.y})
+
         }
         else{
-            log("Neighbor not found!");
+            log("Neighbor not found!")
         }
+    }
+    update_leader_exec.step()
+}
+
+function update_leader(stig){
+    leader = 1
+    if (leader){
+        ui.set_hex(leader)
     }
 }
 
 function create_exec(step_count) {
-  counter = 0;
-  stig = stigmergy.create(1);
+    var stig = stigmergy.create(1)
 
-  stig.put("leader", 1);
+    var set_leader_id_description = {.0 = {.leader_id=types.INT}}
+    var set_leader_id = function(leader_id){
+        log("Setting stig")
+        self.stig.put("leader", leader_id)
+    }
+    register_closure("setLeader", set_leader_id, set_leader_id_description, {.stig = stig})
 
-  exec = executor.new(step_count, tick, nil);
-  return exec;
+    update_leader_exec = executor.new(20, update_leader, stig)
+
+    exec = executor.new(step_count, tick, stig)
+    return exec
 }

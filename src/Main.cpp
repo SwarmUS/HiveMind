@@ -108,6 +108,7 @@ class BittyBuzzTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
                     BBVMRet statusCode = m_bittybuzzVm.step();
                     switch (statusCode) {
                     case BBVMRet::Ok:
+                        m_deviceStateUI.setDeviceState(DeviceState::Ok);
                         break;
                     case BBVMRet::Stopped: {
                         m_logger.log(LogLevel::Warn, "BBZVM is stopped, cannot step");

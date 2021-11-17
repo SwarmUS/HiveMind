@@ -119,9 +119,12 @@ void SpiEsp::execute() {
             m_outboundMessage.m_sizeBytes != 0) {
             m_logger.log(LogLevel::Debug, "Received valid header. Can now send payload");
             m_txState = transmitState::SENDING_PAYLOAD;
-        } else {
+        } else if (m_outboundMessage.m_sizeBytes != 0) {
             m_txState = transmitState::SENDING_HEADER;
-            m_logger.log(LogLevel::Debug, "Received valid header but cannot send payload");
+            m_logger.log(
+                LogLevel::Debug,
+                "Received valid header but cannot send payload of size %d while header is %d",
+                m_inboundHeader->rxSizeBytes, m_outboundMessage.m_sizeBytes);
         }
         // This will be sent on next header. Payload has priority over headers.
         m_inboundMessage.m_sizeBytes = m_inboundHeader->txSizeBytes;
@@ -257,7 +260,7 @@ void SpiEsp::espTxRxCallback(void* context) {
     }
 
     if (instance->m_txState == transmitState::SENDING_PAYLOAD) {
-        instance->m_txState = transmitState::SENDING_HEADER;
+        instance->m_txState = transmitState::IDLE;
         instance->m_outboundMessage.m_sizeBytes = 0;
         instance->m_outboundMessage.m_payloadSize = 0;
         instance->m_hasSentPayload = true;
