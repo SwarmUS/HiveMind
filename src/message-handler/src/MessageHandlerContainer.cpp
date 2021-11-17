@@ -34,7 +34,7 @@ MessageDispatcher MessageHandlerContainer::createMessageDispatcher(
 
 ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getBuzzMsgQueue() {
     __attribute__((section(".cmbss"))) static Mutex s_mutex(10);
-    __attribute__((section(".cmbss"))) static CircularQueueStack<MessageDTO, 4 * gc_queueMaxSize>
+    __attribute__((section(".cmbss"))) static CircularQueueStack<MessageDTO, gc_queueMaxSize>
         s_buzzMsgQueue;
     static ThreadSafeQueue<MessageDTO> s_buzzMsgThreadQueue(s_buzzMsgQueue, s_mutex);
 
