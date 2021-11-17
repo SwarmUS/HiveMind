@@ -4,8 +4,8 @@ include "vec2.bzz"
 
 leader = nil
 
-MAX_OK_ANGLE = 80.0
-MAX_OK_DISTANCE = 1.0
+MAX_OK_ANGLE = 90.0
+MAX_OK_DISTANCE = 1.5
 
 function tick(stig){
     if(leader != id and leader != nil){
@@ -37,7 +37,7 @@ function tick(stig){
                 }
             })
 
-            var goal = math.vec2.newp(leaderObj.distance - 1, leaderObj.azimuth + avoidanceAngle)
+            var goal = math.vec2.newp(leaderObj.distance, leaderObj.azimuth + avoidanceAngle)
             log("Avoidance angle: ", avoidanceAngle)
             log("Moving to leader: ", leader, " at x:", goal.x, " y:", goal.y)
             call_host_function(id, "moveBy", {.0 = goal.x, .1 = goal.y})
