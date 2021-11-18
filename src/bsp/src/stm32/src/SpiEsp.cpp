@@ -5,7 +5,7 @@
 #include <cstring>
 
 void task(void* context) {
-    constexpr uint16_t loopRate = 20;
+    constexpr uint16_t loopRate = 1;
     while (true) {
         static_cast<SpiEsp*>(context)->execute();
         Task::delay(loopRate);
@@ -84,6 +84,9 @@ void SpiEsp::execute() {
     uint32_t txLengthBytes = 0;
     uint32_t rxLengthBytes = 0;
     auto* txBuffer = (uint8_t*)&m_outboundHeader; // Send header by default;
+    if (m_driverTaskHandle == nullptr) {
+        m_driverTaskHandle = xTaskGetCurrentTaskHandle();
+    }
 
     switch (m_rxState) {
     case receiveState::IDLE:
@@ -223,6 +226,7 @@ void SpiEsp::execute() {
         m_inboundMessage.m_data.fill(0);
         EspSpi_TransmitReceiveDma(txBuffer, m_inboundMessage.m_data.data(), finalSize,
                                   SpiEsp::espTxRxCallback, this);
+        ulTaskNotifyTake(pdTRUE, 20);
     }
 }
 
@@ -265,6 +269,9 @@ void SpiEsp::espTxRxCallback(void* context) {
         instance->m_outboundMessage.m_payloadSize = 0;
         instance->m_hasSentPayload = true;
     }
+    BaseType_t yield;
+    vTaskNotifyGiveFromISR(instance->m_driverTaskHandle, &yield);
+    portYIELD_FROM_ISR(yield);
 }
 
 ConnectionType SpiEsp::getType() const { return ConnectionType::SPI; }
