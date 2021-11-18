@@ -14,11 +14,11 @@ function step() {
     var native_closure_val = function_type;
     var lambda_closure_val = function(){};
 
-    assert_true(is_nil(nil_val));
-    assert_false(is_nil(int_val));
-    assert_false(is_nil(float_val));
-    assert_false(is_nil(string_val));
-    assert_false(is_nil(table_val));
-    assert_false(is_nil(native_closure_val));
-    assert_false(is_nil(lambda_closure_val));
+    assert_true(isnil(nil_val));
+    assert_false(isnil(int_val));
+    assert_false(isnil(float_val));
+    assert_false(isnil(string_val));
+    assert_false(isnil(table_val));
+    assert_false(isnil(native_closure_val));
+    assert_false(isnil(lambda_closure_val));
 }

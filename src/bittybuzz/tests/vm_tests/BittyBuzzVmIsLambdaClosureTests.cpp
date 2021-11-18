@@ -8,7 +8,7 @@
 #include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
-#include <is_lambda_closure_bytecode.h>
+#include <islambda_closure_bytecode.h>
 
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isLambdaClosure) {
     // Given
@@ -25,7 +25,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isLambdaClosure) {
     EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
 
     std::array<BittyBuzzLibMemberRegister, 3> functionRegisters = {
-        {{BBZSTRID_is_lambda_closure, BittyBuzzUserFunctions::isLambdaClosure},
+        {{BBZSTRID_islambda_closure, BittyBuzzUserFunctions::isLambdaClosure},
          {BBZSTRID_assert_true, buzzAssertTrue},
          {BBZSTRID_assert_false, buzzAssertFalse}}};
     BittyBuzzLib globalLib(functionRegisters);

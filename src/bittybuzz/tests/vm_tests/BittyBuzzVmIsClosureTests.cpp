@@ -8,7 +8,7 @@
 #include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
-#include <is_closure_bytecode.h>
+#include <isclosure_bytecode.h>
 
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isClosure) {
     // Given
@@ -25,7 +25,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isClosure) {
     EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
 
     std::array<BittyBuzzLibMemberRegister, 3> functionRegisters = {
-        {{BBZSTRID_is_closure, BittyBuzzUserFunctions::isClosure},
+        {{BBZSTRID_isclosure, BittyBuzzUserFunctions::isClosure},
          {BBZSTRID_assert_true, buzzAssertTrue},
          {BBZSTRID_assert_false, buzzAssertFalse}}};
     BittyBuzzLib globalLib(functionRegisters);

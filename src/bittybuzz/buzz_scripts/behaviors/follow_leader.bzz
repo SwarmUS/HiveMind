@@ -11,7 +11,7 @@ function tick(stig){
     if(leader != id and leader != nil){
         log("Trying to get leader: ", leader)
         var leaderObj = neighbors.get(leader)
-        if (is_table(leaderObj)){
+        if (istable(leaderObj)){
             validMove = 1;
             avoidanceAngle = 0;
 

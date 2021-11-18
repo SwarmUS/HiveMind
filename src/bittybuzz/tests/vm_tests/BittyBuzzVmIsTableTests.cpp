@@ -8,7 +8,7 @@
 #include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
-#include <is_table_bytecode.h>
+#include <istable_bytecode.h>
 
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isTable) {
     // Given
@@ -24,7 +24,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isTable) {
     EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
 
     std::array<BittyBuzzLibMemberRegister, 3> functionRegisters = {
-        {{BBZSTRID_is_table, BittyBuzzUserFunctions::isTable},
+        {{BBZSTRID_istable, BittyBuzzUserFunctions::isTable},
          {BBZSTRID_assert_true, buzzAssertTrue},
          {BBZSTRID_assert_false, buzzAssertFalse}}};
     BittyBuzzLib globalLib(functionRegisters);

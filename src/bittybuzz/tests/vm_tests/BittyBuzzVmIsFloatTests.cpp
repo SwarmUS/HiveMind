@@ -8,7 +8,7 @@
 #include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
-#include <is_float_bytecode.h>
+#include <isfloat_bytecode.h>
 
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isFloat) {
     // Given
@@ -24,7 +24,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isFloat) {
     EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
 
     std::array<BittyBuzzLibMemberRegister, 3> functionRegisters = {
-        {{BBZSTRID_is_float, BittyBuzzUserFunctions::isFloat},
+        {{BBZSTRID_isfloat, BittyBuzzUserFunctions::isFloat},
          {BBZSTRID_assert_true, buzzAssertTrue},
          {BBZSTRID_assert_false, buzzAssertFalse}}};
     BittyBuzzLib globalLib(functionRegisters);

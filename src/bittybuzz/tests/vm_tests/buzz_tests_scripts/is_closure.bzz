@@ -13,11 +13,11 @@ function step() {
     var native_closure_val = function_type;
     var lambda_closure_val = function(){};
 
-    assert_false(is_closure(nil_val));
-    assert_false(is_closure(int_val));
-    assert_false(is_closure(float_val));
-    assert_false(is_closure(string_val));
-    assert_false(is_closure(table_val));
-    assert_true(is_closure(native_closure_val));
-    assert_true(is_closure(lambda_closure_val));
+    assert_false(isclosure(nil_val));
+    assert_false(isclosure(int_val));
+    assert_false(isclosure(float_val));
+    assert_false(isclosure(string_val));
+    assert_false(isclosure(table_val));
+    assert_true(isclosure(native_closure_val));
+    assert_true(isclosure(lambda_closure_val));
 }
