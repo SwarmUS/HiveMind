@@ -8,7 +8,7 @@
 #include <bittybuzz/BittyBuzzLib.h>
 #include <bittybuzz/BittyBuzzUserFunctions.h>
 #include <gmock/gmock.h>
-#include <is_nil_bytecode.h>
+#include <isnil_bytecode.h>
 
 TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isNil) {
     // Given
@@ -24,7 +24,7 @@ TEST_F(BittyBuzzVmTestFixture, BittyBuzzVm_isNil) {
     EXPECT_CALL(messageServiceMock, queueBuzzMessages).WillOnce(testing::Return(true));
 
     std::array<BittyBuzzLibMemberRegister, 3> functionRegisters = {
-        {{BBZSTRID_is_nil, BittyBuzzUserFunctions::isNil},
+        {{BBZSTRID_isnil, BittyBuzzUserFunctions::isNil},
          {BBZSTRID_assert_true, buzzAssertTrue},
          {BBZSTRID_assert_false, buzzAssertFalse}}};
     BittyBuzzLib globalLib(functionRegisters);

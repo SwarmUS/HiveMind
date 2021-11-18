@@ -80,12 +80,12 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief Checks if a variable is nil
-     *@b Signature is_nil(arg1)
+     *@b Signature isnil(arg1)
      *@details This closure expects one parameter
      * -# the variable to verify the type
      * returns 1 on true, 0 on false
      *@code
-     * if(is_nil(some_val)){
+     * if(isnil(some_val)){
      *   do_stuff();
      * }
      *@endcode */
@@ -93,12 +93,12 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief Checks if a variable is an int
-     *@b Signature is_int(arg1)
+     *@b Signature isint(arg1)
      *@details This closure expects one parameter
      * -# the variable to verify the type
      * returns 1 on true, 0 on false
      *@code
-     * if(is_int(some_val)){
+     * if(isint(some_val)){
      *   do_stuff(
      * }
      *@endcode */
@@ -110,7 +110,7 @@ namespace BittyBuzzUserFunctions {
      * -# the variable to verify the type
      * returns 1 on true, 0 on false
      *@code
-     * if(is_float(some_val)){
+     * if(isfloat(some_val)){
      *   do_stuff();
      * }
      *@endcode */
@@ -118,12 +118,12 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief Checks if a variable is a float
-     *@b Signature is_table(arg1)
+     *@b Signature istable(arg1)
      *@details This closure expects one parameter
      * -# the variable to verify the type
      * returns 1 on true, 0 on false
      *@code
-     * if(is_string(some_val)){
+     * if(isstring(some_val)){
      *   do_stuff();
      * }
      *@endcode */
@@ -131,12 +131,12 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief Checks if a variable is a table
-     *@b Signature is_table(arg1)
+     *@b Signature istable(arg1)
      *@details This closure expects one parameter
      * -# the variable to verify the type
      * returns 1 on true, 0 on false
      *@code
-     * if(is_table(some_val)){
+     * if(istable(some_val)){
      *   do_stuff();
      * }
      *@endcode */
@@ -144,12 +144,12 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief Checks if a variable is a function closure
-     *@b Signature is_closure(arg1)
+     *@b Signature isclosure(arg1)
      *@details This closure expects one parameter
      * -# the variable to verify the type
      * returns 1 on true, 0 on false
      *@code
-     * if(is_closure(some_val)){
+     * if(isclosure(some_val)){
      *   do_stuff();
      * }
      *@endcode */
@@ -157,12 +157,12 @@ namespace BittyBuzzUserFunctions {
 
     /**
      *@brief Checks if a variable is a lambda, unamed closure
-     *@b Signature is_lambda_closure(arg1)
+     *@b Signature islambda_closure(arg1)
      *@details This closure expects one parameter
      * -# the variable to verify the type
      * returns 1 on true, 0 on false
      *@code
-     * if(is_lambda_closure(some_val)){
+     * if(islambda_closure(some_val)){
      *   do_stuff();
      * }
      *@endcode */
