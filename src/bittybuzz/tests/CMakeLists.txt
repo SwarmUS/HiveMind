@@ -104,38 +104,38 @@ bittybuzz_generate_bytecode(global-init
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${SWARM_BST}")
 
-bittybuzz_generate_bytecode(is-nil 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/is_nil.bzz 
+bittybuzz_generate_bytecode(isnil 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/isnil.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(is-int 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/is_int.bzz 
+bittybuzz_generate_bytecode(isint 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/isint.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(is-float 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/is_float.bzz 
+bittybuzz_generate_bytecode(isfloat 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/isfloat.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(is-string 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/is_string.bzz 
+bittybuzz_generate_bytecode(isstring 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/isstring.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(is-table 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/is_table.bzz 
+bittybuzz_generate_bytecode(istable 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/istable.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(is-closure 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/is_closure.bzz 
+bittybuzz_generate_bytecode(isclosure 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/isclosure.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
-bittybuzz_generate_bytecode(is-lambda-closure 
-    ${BZZ_TEST_SCRIPTS_LOCATION}/is_lambda_closure.bzz 
+bittybuzz_generate_bytecode(islambda-closure 
+    ${BZZ_TEST_SCRIPTS_LOCATION}/islambda_closure.bzz 
     "${BZZ_TEST_SCRIPTS_LOCATION}"
     "${BITTYBUZZ_HIVEMIND_BST}")
 
@@ -262,13 +262,13 @@ target_link_libraries(${TEST_NAME}
         undefined-function 
         swarm
         global-init
-        is-nil
-        is-int
-        is-float
-        is-string
-        is-table
-        is-closure
-        is-lambda-closure
+        isnil
+        isint
+        isfloat
+        isstring
+        istable
+        isclosure
+        islambda-closure
         register-closure_function
         register-closure_function_self
         register-closure_invalid_args
