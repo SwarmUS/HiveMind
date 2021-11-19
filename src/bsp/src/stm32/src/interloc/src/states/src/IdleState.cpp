@@ -35,7 +35,7 @@ void IdleState::processOperatingMode(InterlocStateHandler& context) {
         return;
     }
 
-    context.incrementCurrentFrameId();
+    context.incrementCurrentTwrFrame();
     uint8_t currentFrameId = context.getCurrentFrameId();
 
     if (currentFrameId == (context.getSuperFrameInitiator())) {
