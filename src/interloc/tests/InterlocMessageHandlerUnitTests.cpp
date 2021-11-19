@@ -4,6 +4,7 @@
 #include <mocks/CircularQueueInterfaceMock.h>
 #include <mocks/InterlocManagerInterfaceMock.h>
 #include <mocks/LoggerInterfaceMock.h>
+#include <mocks/NotificationQueueInterfaceMock.h>
 #include <pheromones/MessageDTO.h>
 
 class InterlocMessageHandlerFixture : public testing::Test {
@@ -16,12 +17,13 @@ class InterlocMessageHandlerFixture : public testing::Test {
     CircularQueueInterfaceMock<MessageDTO> m_inputQueueMock;
     CircularQueueInterfaceMock<MessageDTO> m_hostQueueMock;
     CircularQueueInterfaceMock<MessageDTO> m_remoteQueueMock;
+    NotificationQueueInterfaceMock<InterlocUpdate> m_updateQueueMock;
     BSPInterfaceMock m_bspMock = BSPInterfaceMock(gc_boardId);
 
     void SetUp() override {
-        m_messageHandler =
-            new InterlocMessageHandler(m_loggerMock, m_interlocManagerMock, m_bspMock,
-                                       m_inputQueueMock, m_hostQueueMock, m_remoteQueueMock);
+        m_messageHandler = new InterlocMessageHandler(m_loggerMock, m_interlocManagerMock,
+                                                      m_bspMock, m_inputQueueMock, m_hostQueueMock,
+                                                      m_remoteQueueMock, m_updateQueueMock);
     }
 
     void TearDown() override { delete m_messageHandler; }
