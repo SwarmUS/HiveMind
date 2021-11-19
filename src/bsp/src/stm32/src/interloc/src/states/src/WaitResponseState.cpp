@@ -26,7 +26,7 @@ void WaitResponseState::process(InterlocStateHandler& context) {
                     1;
                 context.getTWR().m_responseRxTs[index] = m_rxFrame.m_rxTimestamp;
                 nbRespReceived++;
-                if (index == MAX_INTERLOC_SUBFRAMES - 1) {
+                if (index == NUM_TWR_FRAMES - 1) {
                     // Last Response, send Final to all
                     nbRespReceived = 0;
                     nbTries = 0;
@@ -38,7 +38,7 @@ void WaitResponseState::process(InterlocStateHandler& context) {
             }
         } else if (status == UWBRxStatus::TIMEOUT) {
             // a timeout takes about 205us to return
-            if (nbTries >= MAX_INTERLOC_SUBFRAMES - 1) {
+            if (nbTries >= NUM_TWR_FRAMES - 1) {
                 if (nbRespReceived > 0) {
                     // final Rx timeout
                     nbRespReceived = 0;

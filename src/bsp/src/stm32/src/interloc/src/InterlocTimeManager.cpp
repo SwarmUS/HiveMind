@@ -8,7 +8,7 @@ InterlocTimeManager::InterlocTimeManager(IBSP& bsp) :
     m_finalAirTimeWithPreambleUs(0U),
     m_pollToFirstResponseGuardUs(0U),
     m_bsp(bsp),
-    m_numSlots(MAX_INTERLOC_SUBFRAMES),
+    m_numSlots(NUM_TWR_FRAMES),
     m_slotId(2)
 
 {
@@ -234,7 +234,7 @@ uint64_t InterlocTimeManager::getPollTxStartTs(uint64_t startOfFrameTs) const {
 
 uint32_t InterlocTimeManager::getSyncTimeoutUs() const {
     uint32_t slotToSlotOffsetUs = getFrameLengthUs();
-    return slotToSlotOffsetUs * MAX_INTERLOC_SUBFRAMES + (m_bsp.generateRandomNumber() % 25) * 150;
+    return slotToSlotOffsetUs * NUM_TWR_FRAMES + (m_bsp.generateRandomNumber() % 25) * 150;
 }
 
 uint64_t InterlocTimeManager::getAngleTxStartTs(uint64_t startOfFrameTs, uint32_t angleId) const {

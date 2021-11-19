@@ -10,7 +10,6 @@
 #include <states/InterlocStateContainer.h>
 #include <states/StateTransition.h>
 
-// TODO: Add to settings
 #define PAN_ID 0x01
 #define MAX_TRACER_TRANSITIONS 500
 #define ANGLE_NUMBER_OF_FRAMES 50
@@ -32,7 +31,7 @@ class InterlocStateHandler {
     BspInterlocRawAngleData& getRawAngleData();
     InterlocTimeManager& getTimeManager() const;
 
-    void incrementCurrentFrameId();
+    void incrementCurrentTwrFrame();
 
     uint8_t getSlotId() const;
     uint8_t getNumFrames() const;
@@ -60,12 +59,12 @@ class InterlocStateHandler {
     std::array<StateTransition, MAX_TRACER_TRANSITIONS> m_stateTracerData;
     CircularQueue<StateTransition> m_stateTracer;
 
-    uint8_t m_sequenceID = 0;
+    uint8_t m_sequenceID = 0; // Unique ID of UWB messages
     uint16_t m_slotId;
 
-    uint8_t m_numFrames = MAX_INTERLOC_SUBFRAMES;
+    uint8_t m_numFrames = NUM_TWR_FRAMES;
     uint8_t m_superFrameInitiator = 0;
-    uint8_t m_currentFrameId = 0;
+    uint8_t m_currentTwrFrame = 0;
     uint64_t m_previousFrameStartTs = 0;
 
     uint32_t m_angleCalibNumberOfFrames = ANGLE_NUMBER_OF_FRAMES;

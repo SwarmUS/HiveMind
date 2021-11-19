@@ -1,6 +1,8 @@
 set(LIB_NAME "swarmus-hivemind-bsp-stm32-interloc")
 set(LIB_ALIAS "SwarmUS::HiveMind::BSP::Platform::Interloc")
 
+configure_file(include/interloc/InterlocBSPSettings.in.h include/interloc/InterlocBSPSettings.h)
+
 set(LIB_SOURCES
         src/Decawave.cpp
         src/DecawaveUtils.cpp
@@ -26,7 +28,8 @@ set(LIB_HEADERS
         include/interloc/DecawaveArray.h
         include/interloc/InterlocTimeManager.h
         include/interloc/AngleCalculator.h
-        include/interloc/CertitudeCalculator.h)
+        include/interloc/CertitudeCalculator.h
+        include/interloc/InterlocBSPSettings.h)
 
 if (${COMPILE_STM32_F429ZI})
     list(APPEND LIB_SOURCES src/DecawaveArray_HiveSight.cpp)
@@ -49,6 +52,9 @@ target_include_directories(${LIB_NAME}
         $<INSTALL_INTERFACE:include>
         ${BSP_CMAKE_DIR}/include
         ${BSP_PLATFORM_CMAKE_DIR}/include
+
+        #Include the generated Settings.h
+        ${CMAKE_CURRENT_BINARY_DIR}/include/interloc
         )
 
 target_link_libraries(${LIB_NAME}

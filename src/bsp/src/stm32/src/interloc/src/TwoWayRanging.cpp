@@ -8,7 +8,7 @@
 void TwoWayRanging::deserializeFinal(UWBMessages::TWRFinal* finalMessage) {
     // Need to do memcpys instead of assignments as the values aren't 64bit aligned
     memcpy(&m_pollTxTs, &(finalMessage->m_pollTxTs), sizeof(m_pollTxTs));
-    for (unsigned int i = 0; i < MAX_INTERLOC_SUBFRAMES; i++) {
+    for (unsigned int i = 0; i < NUM_TWR_FRAMES; i++) {
         memcpy(&m_responseRxTs[i], &(finalMessage->m_responseRxTs[i]), sizeof(m_responseRxTs));
     }
     memcpy(&m_finalTxTs, &(finalMessage->m_finalTxTs), sizeof(m_finalTxTs));
@@ -18,7 +18,7 @@ void TwoWayRanging::constructFinal(UWBMessages::TWRFinal* finalMessage, uint64_t
     m_finalTxTs = finalTxTs;
 
     DecawaveUtils::tsToBytes((uint8_t*)(&finalMessage->m_pollTxTs), m_pollTxTs);
-    for (unsigned int i = 0; i < MAX_INTERLOC_SUBFRAMES; i++) {
+    for (unsigned int i = 0; i < NUM_TWR_FRAMES; i++) {
         DecawaveUtils::tsToBytes((uint8_t*)(&finalMessage->m_responseRxTs[i]), m_responseRxTs[i]);
     }
     DecawaveUtils::tsToBytes((uint8_t*)(&finalMessage->m_finalTxTs), m_finalTxTs);

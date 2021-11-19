@@ -84,11 +84,22 @@ bool AngleReceiverState::readAngleFrame() {
 }
 
 bool AngleReceiverState::verifyDataValid() {
+    int32_t messageId = -1;
+
     for (uint8_t i = 0; i < m_decawaves.getAngleAntennaArray().size(); i++) {
         m_decawaves.getAngleAntennaArray()[i]->get().retrieveRxFrame(m_rxFrames[i]);
         if (reinterpret_cast<UWBMessages::AngleMsg*>(m_rxFrames[i].m_rxBuffer.data())
                 ->m_headerFrame.m_functionCode != UWBMessages::ANGLE) {
             return false;
+        }
+
+        // Verify all decas received the same message
+        int32_t currentDecaMessageId = static_cast<int32_t>(
+            reinterpret_cast<UWBMessages::AngleMsg*>(m_rxFrames[i].m_rxBuffer.data())->m_messageId);
+        if (messageId != -1 && currentDecaMessageId != messageId) {
+            return false;
+        } else {
+            messageId = currentDecaMessageId;
         }
     }
 

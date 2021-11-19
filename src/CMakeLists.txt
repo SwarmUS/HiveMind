@@ -26,6 +26,8 @@ if (${CMAKE_CROSSCOMPILING} AND (ENABLE_HARDWARE_TESTS OR DECAWAVE_TESTS))
     add_subdirectory(hardware-tests)
 endif()
 
+set_default(MAX_AGENTS_IN_SWARM 6)
+
 add_subdirectory(bittybuzz)
 add_subdirectory(bsp)
 add_subdirectory(os)

@@ -20,7 +20,7 @@ void InterlocStateHandler::setState(InterlocStates state, InterlocEvent event) {
         m_stateTracer.pop();
     }
 
-    StateTransition stateTransition{m_currentStateName, state, event, m_currentFrameId};
+    StateTransition stateTransition{m_currentStateName, state, event, m_currentTwrFrame};
     m_stateTracer.push(stateTransition);
 
     m_currentStateName = state;
@@ -59,11 +59,11 @@ bool InterlocStateHandler::constructUWBHeader(uint16_t destinationId,
     return true;
 }
 
-void InterlocStateHandler::incrementCurrentFrameId() {
-    m_currentFrameId++;
+void InterlocStateHandler::incrementCurrentTwrFrame() {
+    m_currentTwrFrame++;
 
-    if (m_currentFrameId > m_numFrames) {
-        m_currentFrameId = 1;
+    if (m_currentTwrFrame > m_numFrames) {
+        m_currentTwrFrame = 1;
     }
 }
 
@@ -72,12 +72,12 @@ InterlocTimeManager& InterlocStateHandler::getTimeManager() const { return m_tim
 uint8_t InterlocStateHandler::getSlotId() const { return m_slotId; }
 uint8_t InterlocStateHandler::getSuperFrameInitiator() const { return m_superFrameInitiator; }
 uint8_t InterlocStateHandler::getNumFrames() const { return m_numFrames; }
-uint8_t InterlocStateHandler::getCurrentFrameId() const { return m_currentFrameId; }
+uint8_t InterlocStateHandler::getCurrentFrameId() const { return m_currentTwrFrame; }
 
 void InterlocStateHandler::setSuperFrameInitiator(uint8_t initiatorId) {
     m_superFrameInitiator = initiatorId;
 }
-void InterlocStateHandler::setCurrentFrameId(uint8_t frameId) { m_currentFrameId = frameId; }
+void InterlocStateHandler::setCurrentFrameId(uint8_t frameId) { m_currentTwrFrame = frameId; }
 uint64_t InterlocStateHandler::getPreviousFrameStartTs() const { return m_previousFrameStartTs; }
 void InterlocStateHandler::setPreviousFrameStartTs(uint64_t timestamp) {
     m_previousFrameStartTs = timestamp;
