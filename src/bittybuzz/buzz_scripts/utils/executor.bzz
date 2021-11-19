@@ -1,7 +1,7 @@
 # Class to allow a number of step before executing a closure
 executor = {
-    # Class constructor
-    # step_count: number of step until execution
+    # Class constructor in step count
+    # steP_count: number of step count before the call of the exec
     # closure: the closure to execute after x step_count, takes one argument, the context
     # context: context to pass to the closure
     .new = function(step_count, closure, context) {
@@ -12,6 +12,15 @@ executor = {
             .m_context = context,
             .step = executor.step
         }
+    },
+
+    # Class constructor in ms
+    # delay: delay in ms between each call of the exec
+    # closure: the closure to execute after x step_count, takes one argument, the context
+    # context: context to pass to the closure
+    .new_ms = function(delay, closure, context) {
+        var step_count = math.roundi(delay/VM_STEP_DELAY_MS)
+        return executor.new(step_count, closure, context)
     },
 
     # Step the executor once

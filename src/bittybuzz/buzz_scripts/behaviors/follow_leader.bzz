@@ -57,7 +57,7 @@ function update_leader(stig){
     }
 }
 
-function create_exec(step_count) {
+function create_exec(delay_ms) {
     var stig = stigmergy.create(1)
 
     var set_leader_id_description = {.0 = {.leader_id=types.INT}}
@@ -69,6 +69,6 @@ function create_exec(step_count) {
 
     update_leader_exec = executor.new(20, update_leader, stig)
 
-    exec = executor.new(step_count, tick, stig)
+    exec = executor.new_ms(delay_ms, tick, stig)
     return exec
 }

@@ -77,13 +77,13 @@ class BittyBuzzTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
     }
 
     void task() override {
-        const uint16_t stepDelay = SettingsContainer::getBBZVMStepDelayMs();
-        auto bbzFunctions = BittyBuzzFactory::createBittyBuzzGlobalLib();
+        const int16_t stepDelay = (int16_t)SettingsContainer::getBBZVMStepDelayMs();
+        auto globalLib = BittyBuzzFactory::createBittyBuzzGlobalLib(stepDelay);
         auto mathLib = BittyBuzzFactory::createBittyBuzzMathLib();
         auto uiLib = BittyBuzzFactory::createBittyBuzzUILib();
 
         std::array<std::reference_wrapper<IBittyBuzzLib>, 3> buzzLibraries{
-            {bbzFunctions, mathLib, uiLib}};
+            {globalLib, mathLib, uiLib}};
 
         // register btn function
         m_buttonCallbackRegister.setCallback(resetVmButtonCallback, this);
@@ -130,7 +130,7 @@ class BittyBuzzTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
                     }
                     }
                 }
-                Task::delayUntil(prevWake, stepDelay);
+                Task::delayUntil(prevWake, (uint16_t)stepDelay);
             }
             // VM needs to be resetted so we terminate it and init it again
             m_resetVm = false;

@@ -25,7 +25,7 @@ function tick(ctx){
     }
 }
 
-function create_exec(step_count) {
+function create_exec(delay_ms) {
 
     # Context
     var context = {
@@ -49,6 +49,6 @@ function create_exec(step_count) {
     register_closure("moveByHost", move_by_host, move_by_host_description, nil);
     register_closure("moveByRemote", move_by_remote, move_by_remote_description, nil);
 
-    exec = executor.new(step_count, tick, context);
+    exec = executor.new_ms(delay_ms, tick, context);
     return exec;
 }
