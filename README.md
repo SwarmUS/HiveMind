@@ -264,8 +264,11 @@ CMake variables can be used to override certain default firmware settings.
 | HOST_PORT | 7001 |
 | HOST_IP | 192.168.1.101 |
 | LOG_LEVEL | Info |
-| MAX_ROBOTS_IN_SWARM | 10 |
+| MAX_AGENTS_IN_SWARM | 6 |
 | BBZVM_STEP_DELAY_MS | 50 |
+
+The variable `MAX_AGENTS_IN_SWARM` is used to define how many timeslots to create in the interlocalisation
+state machine. Make sure this number is at least equal to the highest agent ID present in the swarm.
 
 The CMake variable `UUID_OVERRIDE` may also be used to change the UUID value currently saved in the
 non-volatile memory. Make sure each UUID in your swarm is unique.

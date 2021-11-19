@@ -1,5 +1,5 @@
-#ifndef HIVE_MIND_INTERLOCSETTINGS_IN_H
-#define HIVE_MIND_INTERLOCSETTINGS_IN_H
+#ifndef __INTERLOCBSPSETTINGS_H__
+#define __INTERLOCBSPSETTINGS_H__
 
 // clang-format off
 
@@ -11,4 +11,4 @@
 
 // clang-format on
 
-#endif // HIVE_MIND_INTERLOCSETTINGS_IN_H
+#endif //__INTERLOCBSPSETTINGS_H__

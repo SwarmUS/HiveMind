@@ -1,1 +1,0 @@
-set_default(MAX_ROBOTS_IN_SWARM 10)

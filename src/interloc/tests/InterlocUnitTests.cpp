@@ -378,32 +378,32 @@ TEST_F(InterlocFixture, Interloc_getPositionsTable_elementInTable) {
 }
 
 TEST_F(InterlocFixture, Interloc_getPositionsTable_addMoreRobotsThanAllowed) {
-    EXPECT_CALL(m_updateOutputQueue, push(testing::_)).Times(MAX_ROBOTS_IN_SWARM);
+    EXPECT_CALL(m_updateOutputQueue, push(testing::_)).Times(MAX_AGENTS_IN_SWARM);
 
     InterlocUpdate positionUpdate;
     positionUpdate.m_isInLineOfSight = true;
     int timesCalled = 0;
 
     EXPECT_CALL(m_updateInputQueue, isEmpty)
-        .Times(MAX_ROBOTS_IN_SWARM + 1)
+        .Times(MAX_AGENTS_IN_SWARM + 1)
         .WillRepeatedly(testing::Return(false));
     EXPECT_CALL(m_updateInputQueue, peek)
-        .Times(MAX_ROBOTS_IN_SWARM + 1)
+        .Times(MAX_AGENTS_IN_SWARM + 1)
         .WillRepeatedly(testing::DoAll(testing::Invoke([&timesCalled, &positionUpdate]() {
                                            timesCalled++;
                                            positionUpdate.m_robotId = timesCalled;
                                        }),
                                        testing::ReturnPointee(&positionUpdate)));
-    EXPECT_CALL(m_updateInputQueue, pop).Times(MAX_ROBOTS_IN_SWARM + 1);
+    EXPECT_CALL(m_updateInputQueue, pop).Times(MAX_AGENTS_IN_SWARM + 1);
 
-    for (int i = 0; i < MAX_ROBOTS_IN_SWARM + 1; i++) {
+    for (int i = 0; i < MAX_AGENTS_IN_SWARM + 1; i++) {
         m_interloc->process();
     }
 
     auto ret = m_interloc->getPositionsTable();
 
     // Expect
-    EXPECT_EQ(ret.m_positionsLength, MAX_ROBOTS_IN_SWARM);
+    EXPECT_EQ(ret.m_positionsLength, MAX_AGENTS_IN_SWARM);
 }
 
 TEST_F(InterlocFixture, Interloc_addUpdate_dumpToHost) {

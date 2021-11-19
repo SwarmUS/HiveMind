@@ -1,12 +1,12 @@
 #ifndef HIVE_MIND_UWBMESSAGES_H
 #define HIVE_MIND_UWBMESSAGES_H
 
+#include "InterlocBSPSettings.h"
 #include <cstdint>
 
 #define UWB_BROADCAST_ADDRESS 0xFF
 
-// TODO: Make configurable and merge with define in interloc lib
-#define MAX_INTERLOC_SUBFRAMES 6
+#define NUM_TWR_FRAMES (MAX_AGENTS_IN_SWARM)
 
 namespace UWBMessages {
     enum FrameType { BEACON = 0x0, DATA = 0x2, ACK = 0x3, MAC_COMMAND = 0x4 };
@@ -58,7 +58,7 @@ namespace UWBMessages {
     struct __attribute__((__packed__)) TWRFinal {
         DWFrame m_headerFrame;
         uint64_t m_pollTxTs;
-        uint64_t m_responseRxTs[MAX_INTERLOC_SUBFRAMES];
+        uint64_t m_responseRxTs[NUM_TWR_FRAMES];
         uint64_t m_finalTxTs;
     };
 

@@ -36,7 +36,7 @@ class TwoWayRanging {
     uint64_t m_pollRxTs;
 
     uint64_t m_responseTxTs;
-    uint64_t m_responseRxTs[MAX_INTERLOC_SUBFRAMES];
+    uint64_t m_responseRxTs[NUM_TWR_FRAMES];
 
     uint64_t m_finalTxTs;
     uint64_t m_finalRxTs;

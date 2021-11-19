@@ -63,7 +63,7 @@ class InterlocStateHandler {
     uint8_t m_sequenceID = 0;
     uint16_t m_slotId;
 
-    uint8_t m_numFrames = MAX_INTERLOC_SUBFRAMES;
+    uint8_t m_numFrames = NUM_TWR_FRAMES;
     uint8_t m_superFrameInitiator = 0;
     uint8_t m_currentFrameId = 0;
     uint64_t m_previousFrameStartTs = 0;

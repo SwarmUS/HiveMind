@@ -8,7 +8,7 @@
 #include <optional>
 
 struct PositionsTable {
-    std::array<RelativePosition, MAX_ROBOTS_IN_SWARM> m_positions;
+    std::array<RelativePosition, MAX_AGENTS_IN_SWARM> m_positions;
     uint16_t m_positionsLength;
 };
 

@@ -7,7 +7,7 @@
 #include <logger/LoggerContainer.h>
 #include <message-handler/MessageHandlerContainer.h>
 
-constexpr uint16_t gc_interlocPosUpdateMaxSize = 4 * MAX_ROBOTS_IN_SWARM;
+constexpr uint16_t gc_interlocPosUpdateMaxSize = 4 * MAX_AGENTS_IN_SWARM;
 
 IInterloc& InterlocContainer::getInterloc() {
     static Interloc s_interloc = Interloc(

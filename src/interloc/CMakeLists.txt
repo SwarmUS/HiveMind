@@ -1,7 +1,6 @@
 set(LIB_NAME "swarmus-hivemind-interloc")
 set(LIB_ALIAS "SwarmUS::HiveMind::Interloc")
 
-include(DefaultSettings.cmake)
 configure_file(include/interloc/InterlocSettings.in.h include/interloc/InterlocSettings.h)
 
 set(LIB_SOURCES
