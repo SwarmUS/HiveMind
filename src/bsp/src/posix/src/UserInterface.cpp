@@ -98,7 +98,7 @@ void UserInterface::setButtonCallback(Button button,
     uint buttonId = static_cast<uint>(button);
 
     std::string buttonTopic =
-        nodeHandle.param("buttonTopic", std::string("/agent_1/user_interface/button"));
+        nodeHandle.param("button_topic", std::string("/agent_1/user_interface/button"));
     buttonTopic += "/";
     buttonTopic += std::to_string(buttonId);
 

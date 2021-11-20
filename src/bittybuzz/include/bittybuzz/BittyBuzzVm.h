@@ -52,6 +52,8 @@ class BittyBuzzVm : public IBittyBuzzVm {
 
     void terminate() override;
 
+    void logDump(LogLevel logLevel) override;
+
     bbzvm_state getState() const override;
 
     bbzvm_error getError() const override;
