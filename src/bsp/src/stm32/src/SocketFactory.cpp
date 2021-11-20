@@ -15,9 +15,10 @@ std::optional<TCPClient> SocketFactory::createTCPClient(const char* address,
         return {};
     }
 
-    if(receiveTimout > 0){
+    if (receiveTimout > 0) {
         struct timeval tv = {receiveTimout, 0};
-        if(lwip_setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&tv, sizeof(struct timeval)) < 0){
+        if (lwip_setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (struct timeval*)&tv,
+                            sizeof(struct timeval)) < 0) {
             logger.log(LogLevel::Error, "Could not set timout on socket");
             lwip_close(sockfd);
             return {};

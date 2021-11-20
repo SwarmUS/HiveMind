@@ -412,12 +412,12 @@ std::optional<std::reference_wrapper<ICommInterface>> hostInterfaceGetter() {
     return commInterface;
 }
 
-void setHostConnectionState(ConnectionState state){
+void setHostConnectionState(ConnectionState state) {
     auto connectionStateUI = ApplicationInterfaceContainer::getConnectionStateUI();
     connectionStateUI.setConnectionState(state);
 }
 
-void setRemoteConnectionState(ConnectionState state){
+void setRemoteConnectionState(ConnectionState state) {
     LoggerContainer::getLogger().log(LogLevel::Info, "Remote connection state set to %d", state);
 }
 
@@ -453,14 +453,14 @@ int main(int argc, char** argv) {
                                                    MessageHandlerContainer::getRemoteMsgQueue(),
                                                    true);
 
-    static CommMonitoringTask s_hostMonitorTask(
-        "host_monitor", gc_taskNormalPriority, s_hostDispatchTask, s_hostMessageSender,
-        ApplicationInterfaceContainer::getHostHandshakeUI(), hostInterfaceGetter, setHostConnectionState);
+    static CommMonitoringTask s_hostMonitorTask("host_monitor", gc_taskNormalPriority,
+                                                s_hostDispatchTask, s_hostMessageSender,
+                                                ApplicationInterfaceContainer::getHostHandshakeUI(),
+                                                hostInterfaceGetter, setHostConnectionState);
 
     static CommMonitoringTask<HiveMindHostAccumulatorSerializer> s_remoteMonitorTask(
         "remote_monitor", gc_taskNormalPriority, s_remoteDispatchTask, s_remoteMessageSender,
-        ApplicationInterfaceContainer::getRemoteHandshakeUI(),
-        BSPContainer::getRemoteCommInterface,
+        ApplicationInterfaceContainer::getRemoteHandshakeUI(), BSPContainer::getRemoteCommInterface,
         setRemoteConnectionState);
 
     s_bittybuzzTask.start();
