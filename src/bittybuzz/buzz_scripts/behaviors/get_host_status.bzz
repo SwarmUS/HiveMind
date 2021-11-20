@@ -12,8 +12,8 @@ function tick(context){
     call_host_function(id, "getStatus", {});
 }
 
-function create_exec(step_count){
-    exec = executor.new(step_count, tick, ctx);
+function create_exec(delay_ms){
+    exec = executor.new_ms(delay_ms, tick, ctx);
 
     var get_status_return_description = {
         .0 = {.status=types.INT}
