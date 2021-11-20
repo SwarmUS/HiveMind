@@ -28,10 +28,10 @@ constexpr uint16_t gc_taskNormalPriority = tskIDLE_PRIORITY + 1;
 constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 30; // Higher priority then LwIP
 
 // Need to return the proper comm interface
-typedef std::optional<std::reference_wrapper<ICommInterface>> (*commInterfaceGetter)();
+using commInterfaceGetter = std::optional<std::reference_wrapper<ICommInterface>> (*)();
 
 // Set connection state
-typedef void (*connectionStateSetter)(ConnectionState state);
+using connectionStateSetter = void (*)(ConnectionState state);
 
 class BittyBuzzTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
@@ -415,11 +415,11 @@ std::optional<std::reference_wrapper<ICommInterface>> hostInterfaceGetter() {
 void setHostConnectionState(ConnectionState state){
     auto connectionStateUI = ApplicationInterfaceContainer::getConnectionStateUI();
     connectionStateUI.setConnectionState(state);
-};
+}
 
 void setRemoteConnectionState(ConnectionState state){
     LoggerContainer::getLogger().log(LogLevel::Info, "Remote connection state set to %d", state);
-};
+}
 
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
