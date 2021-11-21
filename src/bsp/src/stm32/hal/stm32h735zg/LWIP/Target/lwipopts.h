@@ -123,6 +123,8 @@ extern "C" {
 // exist
 #include <limits.h>
 #define SSIZE_MAX INT_MAX
+// Option to enable timout
+#define LWIP_SO_RCVTIMEO (1)
 /* USER CODE END 1 */
 
 #ifdef __cplusplus

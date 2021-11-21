@@ -28,7 +28,10 @@ constexpr uint16_t gc_taskNormalPriority = tskIDLE_PRIORITY + 1;
 constexpr uint16_t gc_taskHighPriority = tskIDLE_PRIORITY + 30; // Higher priority then LwIP
 
 // Need to return the proper comm interface
-typedef std::optional<std::reference_wrapper<ICommInterface>> (*commInterfaceGetter)();
+using commInterfaceGetter = std::optional<std::reference_wrapper<ICommInterface>> (*)();
+
+// Set connection state
+using connectionStateSetter = void (*)(ConnectionState state);
 
 class BittyBuzzTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
   public:
@@ -146,7 +149,6 @@ class MessageDispatcherTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE>
                           ICommInterface* stream,
                           ICircularQueue<MessageDTO>& streamQueue) :
         AbstractTask(taskName, priority),
-        m_taskName(taskName),
         m_stream(stream),
         m_streamQueue(streamQueue),
         m_logger(LoggerContainer::getLogger()) {}
@@ -156,7 +158,6 @@ class MessageDispatcherTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE>
     void setStream(ICommInterface* stream) { m_stream = stream; }
 
   private:
-    const char* m_taskName;
     ICommInterface* m_stream;
     ICircularQueue<MessageDTO>& m_streamQueue;
     ILogger& m_logger;
@@ -181,6 +182,7 @@ class MessageDispatcherTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE>
                 }
             }
         }
+        m_logger.log(LogLevel::Warn, "Exiting %s task", m_taskName);
     }
 };
 
@@ -192,7 +194,6 @@ class MessageSenderTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
                       INotificationQueue<MessageDTO>& streamQueue,
                       bool keepRunning = false) :
         AbstractTask(taskName, priority),
-        m_taskName(taskName),
         m_stream(stream),
         m_streamQueue(streamQueue),
         m_logger(LoggerContainer::getLogger()),
@@ -204,7 +205,6 @@ class MessageSenderTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
     void setSerializer(IHiveMindHostSerializer* serializer) { m_serializer = serializer; }
 
   private:
-    const char* m_taskName;
     ICommInterface* m_stream;
     INotificationQueue<MessageDTO>& m_streamQueue;
     ILogger& m_logger;
@@ -227,6 +227,7 @@ class MessageSenderTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
                 }
             }
         }
+        m_logger.log(LogLevel::Warn, "Exiting %s task", m_taskName);
     }
 };
 
@@ -238,21 +239,22 @@ class CommMonitoringTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
                                        MessageDispatcherTask& dispatcherTask,
                                        MessageSenderTask& senderTask,
                                        IHandshakeUI& handshakeUI,
-                                       commInterfaceGetter commInterfaceGetter) :
+                                       commInterfaceGetter commInterfaceGetter,
+                                       connectionStateSetter connectionStateSetter) :
         AbstractTask(taskName, priority),
-        m_taskName(taskName),
         m_dispatcherTask(dispatcherTask),
         m_senderTask(senderTask),
         m_handshakeUI(handshakeUI),
         m_commInterfaceGetter(commInterfaceGetter),
+        m_connectionStateSetter(connectionStateSetter),
         m_logger(LoggerContainer::getLogger()) {}
 
   private:
-    const char* m_taskName;
     MessageDispatcherTask& m_dispatcherTask;
     MessageSenderTask& m_senderTask;
     IHandshakeUI& m_handshakeUI;
     commInterfaceGetter m_commInterfaceGetter;
+    connectionStateSetter m_connectionStateSetter;
     ILogger& m_logger;
 
     void task() override {
@@ -283,11 +285,23 @@ class CommMonitoringTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
                             m_dispatcherTask.start();
                             m_senderTask.start();
 
-                            while (m_dispatcherTask.isRunning() && m_senderTask.isRunning()) {
+                            while (m_dispatcherTask.isRunning() || m_senderTask.isRunning()) {
                                 Task::delay(1000);
+                                if (m_dispatcherTask.isRunning() != m_senderTask.isRunning()) {
+                                    const char* taskStuckRuning =
+                                        m_dispatcherTask.isRunning()
+                                            ? m_dispatcherTask.getTaskName()
+                                            : m_senderTask.getTaskName();
+                                    const char* taskEndedRuning =
+                                        !m_dispatcherTask.isRunning()
+                                            ? m_dispatcherTask.getTaskName()
+                                            : m_senderTask.getTaskName();
+                                    m_logger.log(LogLevel::Warn,
+                                                 "%s: Task %s is running while %s is not",
+                                                 m_taskName, taskStuckRuning, taskEndedRuning);
+                                    m_connectionStateSetter(ConnectionState::Error);
+                                }
                             }
-                            m_logger.log(LogLevel::Warn, "Restarting greet process for %s",
-                                         m_taskName);
                         }
                     }
                 }
@@ -397,6 +411,16 @@ std::optional<std::reference_wrapper<ICommInterface>> hostInterfaceGetter() {
     }
     return commInterface;
 }
+
+void setHostConnectionState(ConnectionState state) {
+    auto connectionStateUI = ApplicationInterfaceContainer::getConnectionStateUI();
+    connectionStateUI.setConnectionState(state);
+}
+
+void setRemoteConnectionState(ConnectionState state) {
+    LoggerContainer::getLogger().log(LogLevel::Info, "Remote connection state set to %d", state);
+}
+
 int main(int argc, char** argv) {
     CmdLineArgs cmdLineArgs = {argc, argv};
 
@@ -429,14 +453,15 @@ int main(int argc, char** argv) {
                                                    MessageHandlerContainer::getRemoteMsgQueue(),
                                                    true);
 
-    static CommMonitoringTask s_hostMonitorTask(
-        "host_monitor", gc_taskNormalPriority, s_hostDispatchTask, s_hostMessageSender,
-        ApplicationInterfaceContainer::getHostHandshakeUI(), hostInterfaceGetter);
+    static CommMonitoringTask s_hostMonitorTask("host_monitor", gc_taskNormalPriority,
+                                                s_hostDispatchTask, s_hostMessageSender,
+                                                ApplicationInterfaceContainer::getHostHandshakeUI(),
+                                                hostInterfaceGetter, setHostConnectionState);
 
     static CommMonitoringTask<HiveMindHostAccumulatorSerializer> s_remoteMonitorTask(
         "remote_monitor", gc_taskNormalPriority, s_remoteDispatchTask, s_remoteMessageSender,
-        ApplicationInterfaceContainer::getRemoteHandshakeUI(),
-        BSPContainer::getRemoteCommInterface);
+        ApplicationInterfaceContainer::getRemoteHandshakeUI(), BSPContainer::getRemoteCommInterface,
+        setRemoteConnectionState);
 
     s_bittybuzzTask.start();
     s_hardwareInterlocTask.start();

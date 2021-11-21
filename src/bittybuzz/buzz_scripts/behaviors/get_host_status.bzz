@@ -1,0 +1,24 @@
+include "utils/executor.bzz"
+include "utils/types.bzz"
+
+
+# Functions to register
+function get_status_return(status){
+  log("Host status: ", status);
+  ui.set_hex(status);
+}
+
+function tick(context){
+    call_host_function(id, "getStatus", {});
+}
+
+function create_exec(delay_ms){
+    exec = executor.new_ms(delay_ms, tick, ctx);
+
+    var get_status_return_description = {
+        .0 = {.status=types.INT}
+    };
+    register_closure("getStatusReturn", get_status_return, get_status_return_description, nil);
+    
+    return exec;
+}

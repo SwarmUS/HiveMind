@@ -57,7 +57,7 @@ std::optional<std::reference_wrapper<ICommInterface>> BSPContainer::getHostCommI
         }
 
         // Create new socket
-        std::optional<TCPClient> socket = SocketFactory::createTCPClient(address, port, logger);
+        std::optional<TCPClient> socket = SocketFactory::createTCPClient(address, port, logger, 5);
         if (socket) {
             s_clientSocket.emplace(socket.value());
         }
