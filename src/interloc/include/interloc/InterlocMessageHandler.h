@@ -2,6 +2,7 @@
 #define __INTERLOCMESSAGEHANDLER_H__
 
 #include "IInterlocMessageHandler.h"
+#include <INotificationQueue.h>
 #include <bsp/IBSP.h>
 #include <bsp/IInterlocManager.h>
 #include <cpp-common/ICircularQueue.h>
@@ -16,7 +17,8 @@ class InterlocMessageHandler : public IInterlocMessageHandler {
                            IBSP& bsp,
                            ICircularQueue<MessageDTO>& inputQueue,
                            ICircularQueue<MessageDTO>& hostQueue,
-                           ICircularQueue<MessageDTO>& remoteQueue);
+                           ICircularQueue<MessageDTO>& remoteQueue,
+                           INotificationQueue<InterlocUpdate>& interlocPositionUpdateQueue);
 
     virtual ~InterlocMessageHandler() = default;
 
@@ -33,6 +35,7 @@ class InterlocMessageHandler : public IInterlocMessageHandler {
     ICircularQueue<MessageDTO>& m_inputQueue;
     ICircularQueue<MessageDTO>& m_hostQueue;
     ICircularQueue<MessageDTO>& m_remoteQueue;
+    INotificationQueue<InterlocUpdate>& m_interlocPositionUpdateQueue;
 
     std::array<GetNeighborResponseDTO, InterlocDumpDTO::MAX_UPDATES_SIZE> m_updateDtoArray;
 

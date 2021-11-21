@@ -101,15 +101,19 @@ void Interloc::process() {
     }
 
     if (auto update = m_positionUpdateInputQueue.peek()) {
-        processPositionUpdate(update->get());
-        m_updatesHistory[m_updateHistoryIdx] = update->get();
-        m_updateHistoryIdx++;
+        if (update->get().m_resetDumps) {
+            m_updateHistoryIdx = 0;
+        } else {
+            processPositionUpdate(update->get());
+            m_updatesHistory[m_updateHistoryIdx] = update->get();
+            m_updateHistoryIdx++;
+
+            if (m_updateHistoryIdx == InterlocDumpDTO::MAX_UPDATES_SIZE) {
+                dumpUpdatesHistory();
+            }
+        }
 
         m_positionUpdateInputQueue.pop();
-
-        if (m_updateHistoryIdx == InterlocDumpDTO::MAX_UPDATES_SIZE) {
-            dumpUpdatesHistory();
-        }
     }
 }
 
