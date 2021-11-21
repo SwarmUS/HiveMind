@@ -14,7 +14,12 @@ function lj_magnitude(dist, target, epsilon) {
     var td_ratio = target/dist;
     return -(epsilon / dist) * (math.pow(td_ratio, 4) - math.pow(td_ratio, 2))
 }
- 
+
+# Accumulator function
+function lj_vector_accum(rid, vect, accum) {
+    return math.vec2.add(vect, accum);
+}
+
 # Neighbor data to LJ interaction vector
 function lj_vector_kin(rid, data) {
     return math.vec2.newp(lj_magnitude(data.distance, TARGET_KIN, EPSILON_KIN), data.azimuth)
@@ -38,12 +43,8 @@ function is_kin_lj_vector(robot_id, data){
 
 # Calculates and actuates the flocking interaction
 function square() {
-    # Calculate accumulator
-    accum = math.vec2.new(0.0, 0.0); # Declaring global so it's accessible in the foreach
-    neighbors.foreach(function(rid, data){
-            var vect = is_kin_lj_vector(rid, data);
-            accum = math.vec2.add(vect, accum);
-        })
+    # Calculate the vector
+    var accum = neighbors.map(is_kin_lj_vector).reduce(lj_vector_accum, math.vec2.new(0.0, 0.0))
 
     # Scaling vector
     if (neighbors.count() > 0) {

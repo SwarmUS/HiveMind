@@ -1,4 +1,4 @@
-include "behaviors/blinky.bzz"
+include "behaviors/hexagon.bzz"
 
 function init() {
   exec = create_exec(1000);

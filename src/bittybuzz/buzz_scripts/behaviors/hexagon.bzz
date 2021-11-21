@@ -2,13 +2,25 @@ include "vec2.bzz" # This file is from the buzz "standard library". It's include
 include "utils/executor.bzz"
 include "utils/types.bzz"
 
-TARGET     = 2.83
-EPSILON    = 1.5
+TARGET = 2.830
+EPSILON = 1.500
 
 # Lennard-Jones interaction magnitude
 function lj_magnitude(dist, target, epsilon) {
     var td_ratio = target/dist;
-    return -(epsilon / dist) * (math.pow(td_ratio, 4) - math.pow(td_ratio, 2))
+    var ratio = -(epsilon / dist) * (math.pow(td_ratio, 12) - math.pow(td_ratio, 6))
+    log("Ratio: ", ratio)
+    if(ratio > 0 and ratio < 0.5){
+        log("Retun ", 1/ratio)
+        return 1/ratio
+    }
+    log("Retun ", ratio)
+    return ratio
+}
+
+# Accumulator function
+function lj_vector_accum(rid, vect, accum) {
+    return math.vec2.add(vect, accum);
 }
 
 # Neighbor data to LJ interaction vecor
@@ -22,12 +34,9 @@ function goto(x, y) {
 
 # Calculates and actuates the flocking interaction
 function hexagon() {
-    # Calculate accumulator
-    accum = math.vec2.new(0.0, 0.0); # Declaring global so it's accessible in the foreach
-    neighbors.foreach(function(rid, data){
-            var vect = lj_vector(rid, data);
-            accum = math.vec2.add(vect, accum);
-        })
+
+    # Calculate the vector
+    var accum = neighbors.map(lj_vector).reduce(lj_vector_accum, math.vec2.new(0.0, 0.0))
 
     # Scaling vector
     if (neighbors.count() > 0) {
@@ -36,6 +45,7 @@ function hexagon() {
     # Prevents going out of the world in simulation
     if(math.vec2.length(accum) > 5){
         accum = math.vec2.norm(accum);
+        math.vec2.scale(accum, 5.0)
     }
 
     log("Moving to X: ", accum.x, " Y: ", accum.y);
