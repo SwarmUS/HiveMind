@@ -8,14 +8,14 @@ EPSILON = 1.500
 # Lennard-Jones interaction magnitude
 function lj_magnitude(dist, target, epsilon) {
     var td_ratio = target/dist;
-    var ratio = -(epsilon / dist) * (math.pow(td_ratio, 12) - math.pow(td_ratio, 6))
+    var ratio = -(epsilon / dist) * (math.pow(td_ratio, 4) - math.pow(td_ratio, 2))
     log("Ratio: ", ratio)
-    if(ratio > 0 and ratio < 0.05){
+    if(ratio > 0){ # If too far, return 1/ratio. So the farther they are, the higher the force will be
         log("Retun ", 1/ratio)
         return 1/ratio
     }
     log("Retun ", ratio)
-    return ratio
+    return ratio # If too close, return ratio
 }
 
 # Accumulator function
@@ -42,14 +42,21 @@ function hexagon() {
     if (neighbors.count() > 0) {
         math.vec2.scale(accum, 1.0 / neighbors.count())
     }
+
     # Prevents going out of the world in simulation
     if(math.vec2.length(accum) > 5){
         accum = math.vec2.norm(accum);
         math.vec2.scale(accum, 5.0)
     }
 
-    log("Moving to X: ", accum.x, " Y: ", accum.y);
-    goto(accum.x, accum.y)
+    # Add a tolerence to prevent perpetual moving
+    if(math.vec2.length(accum) > 0.5){
+        log("Moving to X: ", accum.x, " Y: ", accum.y);
+        goto(accum.x, accum.y)
+    } else {
+        log("Moving to X: ", 0, " Y: ", 0);
+        goto(0.0, 0.0)
+    }
 }
 
 # Executed every time step
