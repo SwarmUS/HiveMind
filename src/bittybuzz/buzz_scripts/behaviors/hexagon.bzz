@@ -43,7 +43,6 @@ function hexagon() {
     # Prevents going out of the world in simulation
     if(math.vec2.length(accum) > 5){
         accum = math.vec2.norm(accum);
-        math.vec2.scale(accum, 5.0)
     }
 
     # Add a tolerence to prevent perpetual moving
