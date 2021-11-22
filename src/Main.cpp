@@ -303,6 +303,7 @@ class CommMonitoringTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
                                 }
                             }
                         }
+                        m_handshakeUI.handshake(false);
                     }
                 }
             }
