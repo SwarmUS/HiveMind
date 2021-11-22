@@ -137,6 +137,9 @@ class BittyBuzzTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
             }
             // VM needs to be resetted so we terminate it and init it again
             m_resetVm = false;
+            m_logger.log(LogLevel::Warn, "VM State before reset:");
+            m_bittybuzzVm.logDump(LogLevel::Warn);
+            m_logger.log(LogLevel::Warn, "Resetting VM");
             m_bittybuzzVm.terminate();
         }
     }

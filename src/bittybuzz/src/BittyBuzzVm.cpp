@@ -75,6 +75,8 @@ void BittyBuzzVm::stop() {
     vm->state = BBZVM_STATE_STOPPED;
 }
 
+void BittyBuzzVm::logDump(LogLevel logLevel) { BittyBuzzSystem::logVmDump(logLevel); }
+
 void BittyBuzzVm::terminate() {
     // Destroy the vm
     m_bbzVm.state = BBZVM_STATE_STOPPED;

@@ -4,6 +4,7 @@
 #include "IBittyBuzzLib.h"
 #include <bbzvm.h>
 #include <functional>
+#include <logger/ILogger.h>
 
 /*@brief Return codes of the VM when executing*/
 enum class BBVMRet { Ok = 0, Stopped, VmErr, OutMsgErr };
@@ -33,6 +34,10 @@ class IBittyBuzzVm {
     /**@brief Terminate the virtual machine and removes all messages that were supposed to be
      * processed */
     virtual void terminate() = 0;
+
+    /**@brief Logs the virtual machine state, stack, heap and table segments
+     *@param logLevel: The desired log level for the dumped information */
+    virtual void logDump(LogLevel logLevel) = 0;
 
     /** @brief Get the state of the vm */
     virtual bbzvm_state getState() const = 0;
