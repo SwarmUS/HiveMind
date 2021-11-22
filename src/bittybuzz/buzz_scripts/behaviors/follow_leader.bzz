@@ -70,7 +70,7 @@ function create_exec(delay_ms) {
 
     # Creating exec
     var follow_leader_exec = executor.new_ms(delay_ms, tick_follow_leader, stig)
-    var update_leader_exec = executor.new_ms(4*delay_ms, tick_update_leader, stig)
+    var update_leader_exec = executor.new_ms(4*delay_ms, tick_update_leader, stig) # Refresh leader slower than following it
 
     # Merging in a collection
     var exec_collection = executor_collection.new()
