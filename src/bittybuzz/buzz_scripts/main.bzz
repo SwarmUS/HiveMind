@@ -1,4 +1,4 @@
-include "behaviors/hexagon.bzz"
+include "behaviors/follow_leader.bzz"
 
 function init() {
   exec = create_exec(500);

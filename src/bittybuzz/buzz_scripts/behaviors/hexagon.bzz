@@ -9,18 +9,15 @@ EPSILON = 1.500
 function lj_magnitude(dist, target, epsilon) {
     var td_ratio = target/dist;
     var ratio = -(epsilon / dist) * (math.pow(td_ratio, 4) - math.pow(td_ratio, 2))
-    log("Ratio: ", ratio)
     if(ratio > 0){ # If too far, return 1/ratio. So the farther they are, the higher the force will be
-        log("Retun ", 1/ratio)
-        return 1/ratio
+        return 0.01/ratio # so the pull force doesn't overwhelmed the push and avoid oscillations
     }
-    log("Retun ", ratio)
     return ratio # If too close, return ratio
 }
 
 # Accumulator function
-function lj_vector_accum(rid, vect, accum) {
-    return math.vec2.add(vect, accum);
+function lj_vector_accum(rid, vec, accum) {
+    return math.vec2.add(vec, accum);
 }
 
 # Neighbor data to LJ interaction vecor
@@ -50,11 +47,12 @@ function hexagon() {
     }
 
     # Add a tolerence to prevent perpetual moving
+    log("Vector length: ", math.vec2.length(accum));
     if(math.vec2.length(accum) > 0.5){
         log("Moving to X: ", accum.x, " Y: ", accum.y);
         goto(accum.x, accum.y)
     } else {
-        log("Moving to X: ", 0, " Y: ", 0);
+        log("Stopping");
         goto(0.0, 0.0)
     }
 }

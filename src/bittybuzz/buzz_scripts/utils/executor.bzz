@@ -26,9 +26,34 @@ executor = {
     # Step the executor once
     .step = function() {
         if (self.m_current_step >= self.m_step_count) {
-            self.m_current_step = 0;
-            self.m_closure(self.m_context);
+            self.m_current_step = 0
+            self.m_closure(self.m_context)
         }
-        self.m_current_step = self.m_current_step + 1;
+        self.m_current_step = self.m_current_step + 1
+    }
+}
+
+# Allows to step multiple executor
+executor_collection = {
+
+    .m_step_callback = function(exec_collection){
+        foreach(exec_collection, function(key, value){
+                value.step()
+            })
+    },
+
+    # Creates a new collection of executor
+    .new = function(){
+        var collection = {}
+        var exec = executor.new(1, executor_collection.m_step_callback, collection)
+        exec.append = executor_collection.append # Add the append function
+        return exec
+    },
+
+    # Appends an executor to the collection
+    # executor: the executor to append
+    .append = function(executor){
+        var collection_size = size(self.m_context)
+        self.m_context[collection_size] = executor
     }
 }
