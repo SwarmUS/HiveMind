@@ -1,0 +1,13 @@
+<map id="CommMonitoringTask::task" name="CommMonitoringTask::task">
+<area shape="rect" id="node1" title=" " alt="" coords="5,216,169,257"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzUserFunctions.html#a3e415f31c00eb6becdf86104f101a812" title="wait for a certain delay Signature delay(arg1) Warning this function make the whole VM sleep which ca..." alt="" coords="237,5,413,47"/>
+<area shape="rect" id="node3" href="$namespaceBSPContainer.html#af0d55176bf6bb6f6c628b60b391f49f6" title="Returns an instance of the platform dependent BSP." alt="" coords="243,71,407,98"/>
+<area shape="rect" id="node4" href="$classGreetHandler.html#ac449a667eef85836c00d9261852c6887" title="wait for a greet and then send the greet response. Serializes directly to the stream and not the the ..." alt="" coords="249,122,400,149"/>
+<area shape="rect" id="node6" href="$classIHandshakeUI.html#a8626c382523268895b311f2c8b93323a" title="Sets the handshake status of the device." alt="" coords="229,173,420,199"/>
+<area shape="rect" id="node7" href="$classICommInterface.html#a1a7fc1a0aaab097e499e1c022838d1cb" title="Tells if interface is connected and functionning." alt="" coords="217,223,432,250"/>
+<area shape="rect" id="node8" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="275,274,374,301"/>
+<area shape="rect" id="node9" href="$classMessageSenderTask.html#a6fd4cc0e1d1f49cb2e5cd3056afe234f" title=" " alt="" coords="243,325,406,367"/>
+<area shape="rect" id="node10" href="$classMessageDispatcherTask.html#a687682368846da6b39ca251babcc669b" title=" " alt="" coords="235,391,414,432"/>
+<area shape="rect" id="node11" href="$classMessageSenderTask.html#a22cbc35ed64657fbc93a8309de37c487" title=" " alt="" coords="243,456,406,497"/>
+<area shape="rect" id="node5" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="480,122,592,149"/>
+</map>

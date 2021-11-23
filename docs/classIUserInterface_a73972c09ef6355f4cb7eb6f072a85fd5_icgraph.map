@@ -1,0 +1,4 @@
+<map id="IUserInterface::getPrintMutex" name="IUserInterface::getPrintMutex">
+<area shape="rect" id="node1" title="get the mutex for printing. Note that the mutex is not used in any functions, the user needs to lock ..." alt="" coords="148,5,321,47"/>
+<area shape="rect" id="node2" href="$classLogger.html#a303d501c9251ab7173b8afc1436647d3" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="5,13,100,39"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="BittyBuzzVm::step" name="BittyBuzzVm::step">
+<area shape="rect" id="node1" title="Does one execution step in the virtual machine. Thus execute the buzz code in the step function." alt="" coords="203,5,345,32"/>
+<area shape="rect" id="node2" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,5,155,32"/>
+</map>

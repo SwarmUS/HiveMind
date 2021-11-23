@@ -1,0 +1,6 @@
+<map id="ICommInterface" name="ICommInterface">
+<area shape="rect" id="node1" title=" " alt="" coords="67,131,230,237"/>
+<area shape="rect" id="node3" href="$classTCPClient.html" title=" " alt="" coords="5,337,132,546"/>
+<area shape="rect" id="node4" href="$classTCPServer.html" title=" " alt="" coords="157,285,303,597"/>
+<area shape="rect" id="node2" href="$classIProtobufStream.html" title=" " alt="" coords="85,5,213,83"/>
+</map>

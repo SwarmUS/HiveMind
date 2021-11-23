@@ -1,0 +1,6 @@
+<map id="colorToChar" name="colorToChar">
+<area shape="rect" id="node1" title=" " alt="" coords="652,13,751,39"/>
+<area shape="rect" id="node2" href="$classUserInterface.html#abedaacea8a858cac8da5f154e3d50540" title=" " alt="" coords="425,5,604,47"/>
+<area shape="rect" id="node3" href="$classUserInterface.html#ab477773a0cc206ded9285b299c8da835" title="Adds a newline and flushes the input to the serial port." alt="" coords="228,13,377,39"/>
+<area shape="rect" id="node4" href="$classUserInterface.html#ad4aa9b1824949b2bc5343c777144525f" title="Provides an interface to print to the console or serial port using an initialized va_list...." alt="" coords="5,13,180,39"/>
+</map>

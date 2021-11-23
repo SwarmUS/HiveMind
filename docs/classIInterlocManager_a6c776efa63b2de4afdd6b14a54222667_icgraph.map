@@ -1,0 +1,6 @@
+<map id="IInterlocManager::configureAngleCalibration" name="IInterlocManager::configureAngleCalibration">
+<area shape="rect" id="node1" title="Sets the number of frames to accumulate when in angle calibration mode." alt="" coords="728,5,928,47"/>
+<area shape="rect" id="node2" href="$classInterlocMessageHandler.html#af1171c089d2326e6657da960dc18f4d3" title=" " alt="" coords="461,5,680,47"/>
+<area shape="rect" id="node3" href="$classInterlocMessageHandler.html#aa7eb909ded15b50682b3e6663b5aea20" title=" " alt="" coords="233,5,413,47"/>
+<area shape="rect" id="node4" href="$classInterlocMessageHandler.html#af5a8ab12f5ed43343335b2ac630e6884" title="Processes the next message in the queue." alt="" coords="5,5,185,47"/>
+</map>

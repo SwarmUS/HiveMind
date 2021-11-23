@@ -1,0 +1,4 @@
+<map id="ApplicationInterface::setSystemConnectionState" name="ApplicationInterface::setSystemConnectionState">
+<area shape="rect" id="node1" title="set the system Connection state and light the necessary LED the right color" alt="" coords="5,5,212,47"/>
+<area shape="rect" id="node2" href="$classIUserInterface.html#a13d5cd145acd58c10012dd02bf8f331b" title="Sets the RGB LED to a given color." alt="" coords="260,13,453,39"/>
+</map>

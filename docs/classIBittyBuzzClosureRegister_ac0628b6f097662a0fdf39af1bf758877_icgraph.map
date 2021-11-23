@@ -1,0 +1,5 @@
+<map id="IBittyBuzzClosureRegister::clearClosures" name="IBittyBuzzClosureRegister::clearClosures">
+<area shape="rect" id="node1" title="Clears all the registered closures." alt="" coords="429,5,620,47"/>
+<area shape="rect" id="node2" href="$classBittyBuzzVm.html#a63ac208c64e2b8ce7976f90ec07dc4e7" title="Terminate the virtual machine and removes all messages that were supposed to be processed." alt="" coords="203,13,381,39"/>
+<area shape="rect" id="node3" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,13,155,39"/>
+</map>

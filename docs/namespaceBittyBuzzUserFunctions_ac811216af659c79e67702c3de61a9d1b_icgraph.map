@@ -1,0 +1,5 @@
+<map id="BittyBuzzUserFunctions::registerClosure" name="BittyBuzzUserFunctions::registerClosure">
+<area shape="rect" id="node1" title="register a new function, exposing it to the remote composant of the swarm Signature register_closure(..." alt="" coords="429,5,605,47"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzFactory.html#a364e6243f1119a53110679f9af79e818" title="Creates an array of FunctionRegister associated with the code from main.bzz." alt="" coords="203,5,381,47"/>
+<area shape="rect" id="node3" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,13,155,39"/>
+</map>

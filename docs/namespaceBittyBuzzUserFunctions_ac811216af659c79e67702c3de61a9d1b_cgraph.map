@@ -1,0 +1,9 @@
+<map id="BittyBuzzUserFunctions::registerClosure" name="BittyBuzzUserFunctions::registerClosure">
+<area shape="rect" id="node1" title="register a new function, exposing it to the remote composant of the swarm Signature register_closure(..." alt="" coords="5,144,181,185"/>
+<area shape="rect" id="node2" href="$classBittyBuzzFunctionDescription.html#a277509fa9c0de16643927aedf5bd9124" title="add an argument to the list of the description" alt="" coords="229,5,443,47"/>
+<area shape="rect" id="node3" href="$BittyBuzzUserFunctions_8cpp.html#abc03dd076b0ab0367754a18a1889a268" title=" " alt="" coords="253,71,419,98"/>
+<area shape="rect" id="node4" href="$BittyBuzzUserFunctions_8cpp.html#a6d857b43342e43446f64abadc67b7fcf" title=" " alt="" coords="277,122,395,149"/>
+<area shape="rect" id="node5" href="$classIBittyBuzzStringResolver.html#ac3355fa9dbc7241e57c7984608879360" title="Get the string from the stringId." alt="" coords="245,173,427,215"/>
+<area shape="rect" id="node6" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="287,239,385,266"/>
+<area shape="rect" id="node7" href="$classIBittyBuzzClosureRegister.html#a3176a82a0b43f8273ad6c9ae635532c9" title="register a closure to the list" alt="" coords="241,291,431,332"/>
+</map>

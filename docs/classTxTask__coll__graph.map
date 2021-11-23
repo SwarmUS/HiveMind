@@ -1,0 +1,7 @@
+<map id="TxTask" name="TxTask">
+<area shape="rect" id="node1" title=" " alt="" coords="239,175,342,281"/>
+<area shape="rect" id="node2" href="$classAbstractTask.html" title=" " alt="" coords="5,13,192,105"/>
+<area shape="rect" id="node3" title=" " alt="" coords="216,20,267,97"/>
+<area shape="rect" id="node4" title=" " alt="" coords="321,20,359,97"/>
+<area shape="rect" id="node5" href="$classILogger.html" title="A logger class with basic logging capabilities." alt="" coords="439,5,545,112"/>
+</map>

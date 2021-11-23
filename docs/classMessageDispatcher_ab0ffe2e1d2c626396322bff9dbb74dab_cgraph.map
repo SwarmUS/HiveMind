@@ -1,0 +1,12 @@
+<map id="MessageDispatcher::dispatchMessage" name="MessageDispatcher::dispatchMessage">
+<area shape="rect" id="node1" title=" " alt="" coords="5,320,164,361"/>
+<area shape="rect" id="node2" href="$classMessageDispatcher.html#a0533de485bd66d33661350eabab5c5a4" title=" " alt="" coords="258,123,417,164"/>
+<area shape="rect" id="node6" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="1015,247,1113,274"/>
+<area shape="rect" id="node8" href="$classMessageDispatcher.html#acbedb854b1258cdb7ae5f5256b3e3086" title=" " alt="" coords="258,291,417,332"/>
+<area shape="rect" id="node10" href="$classIHiveConnectHiveMindApiMessageHandler.html#a6dc199f22ebd86f896987943be0505e4" title="handles HiveConnectHiveMindApi" alt="" coords="212,408,463,449"/>
+<area shape="rect" id="node3" href="$classMessageDispatcher.html#a09fb336f87222df932a55d3422e948dc" title=" " alt="" coords="539,123,725,164"/>
+<area shape="rect" id="node5" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="1008,101,1120,127"/>
+<area shape="rect" id="node7" href="$classIHiveMindHostApiRequestHandler.html#adaa82fad56360b11ecb085fccde35600" title="handles HiveMindHostAPI request and sends a response to the approriate target" alt="" coords="511,5,753,47"/>
+<area shape="rect" id="node4" href="$classMessageDispatcher.html#ada0ccf9c2ef2f3c33fd5aa004dd554d0" title=" " alt="" coords="801,123,960,164"/>
+<area shape="rect" id="node9" href="$classMessageDispatcher.html#a222833370822947fe1d0673f99a94dde" title=" " alt="" coords="535,240,729,281"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="IUserInterface::printLine" name="IUserInterface::printLine">
+<area shape="rect" id="node1" title="Provides an interface to print a line to the console or serial port. Flushes the input and adds a new..." alt="" coords="148,5,327,32"/>
+<area shape="rect" id="node2" href="$classLogger.html#a303d501c9251ab7173b8afc1436647d3" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="5,5,100,32"/>
+</map>

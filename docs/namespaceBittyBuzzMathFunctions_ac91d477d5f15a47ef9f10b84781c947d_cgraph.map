@@ -1,0 +1,4 @@
+<map id="BittyBuzzMathFunctions::rng_uniform" name="BittyBuzzMathFunctions::rng_uniform">
+<area shape="rect" id="node1" title="Return a number with a uniform distribution Signature rng_uniform()" alt="" coords="5,5,184,47"/>
+<area shape="rect" id="node2" href="$classIBSP.html#a2e30c2a65673c2818c0451cb0a9e8cd9" title="Returns a positive random number, uses an hardware RNG if available." alt="" coords="232,13,455,39"/>
+</map>

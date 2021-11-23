@@ -1,0 +1,6 @@
+<map id="BittyBuzzMessageService::queueBuzzMessages" name="BittyBuzzMessageService::queueBuzzMessages">
+<area shape="rect" id="node1" title="queues the buzz messages" alt="" coords="5,5,196,47"/>
+<area shape="rect" id="node2" href="$classBittyBuzzMessageService.html#a75af3c670ff2c2954fce6d301deba03f" title=" " alt="" coords="483,5,673,47"/>
+<area shape="rect" id="node4" href="$classBittyBuzzMessageService.html#a2c4ce9605b7f658b19c6ca5a65086aa8" title=" " alt="" coords="244,35,435,76"/>
+<area shape="rect" id="node3" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="721,13,833,39"/>
+</map>

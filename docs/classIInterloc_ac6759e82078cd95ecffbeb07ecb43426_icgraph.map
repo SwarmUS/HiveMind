@@ -1,0 +1,6 @@
+<map id="IInterloc::getRobotPosition" name="IInterloc::getRobotPosition">
+<area shape="rect" id="node1" title="Returns the last known relative position of a given robot." alt="" coords="580,46,775,73"/>
+<area shape="rect" id="node2" href="$classHiveMindHostApiRequestHandler.html#a26680797c57e4eca01138a5170ae6c5f" title=" " alt="" coords="292,5,532,47"/>
+<area shape="rect" id="node4" href="$classBittyBuzzNeighborsManager.html#a21f52bf07758542058a5fd2e5134f5c3" title=" " alt="" coords="309,71,515,112"/>
+<area shape="rect" id="node3" href="$classHiveMindHostApiRequestHandler.html#a2eead1a151c022a8c2a84cef209b4597" title="handles HiveMindHostAPI request and sends a response to the approriate target" alt="" coords="5,5,244,47"/>
+</map>

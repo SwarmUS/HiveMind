@@ -1,0 +1,7 @@
+<map id="Math::floor" name="Math::floor">
+<area shape="rect" id="node1" title="Floor x downward." alt="" coords="656,46,748,73"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzMathFunctions.html#a7591a4368a7d88396822080ae39e8052" title="Floor a value Signature floorf(arg1)" alt="" coords="429,5,608,47"/>
+<area shape="rect" id="node5" href="$namespaceBittyBuzzMathFunctions.html#a026bc7156213d969ac7f7aa7cb1ec598" title="Floor a value Signature floori(arg1)" alt="" coords="429,71,608,112"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzFactory.html#a32af3eb6114aee64cb41cdda600b71b6" title="Creates a the math table library for the bvm." alt="" coords="203,39,381,80"/>
+<area shape="rect" id="node4" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,46,155,73"/>
+</map>

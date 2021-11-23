@@ -1,0 +1,4 @@
+<map id="SettingsContainer::getUUID" name="SettingsContainer::getUUID">
+<area shape="rect" id="node1" title="Returns the UUID of the board." alt="" coords="161,5,308,47"/>
+<area shape="rect" id="node2" href="$classBSP.html#ae40cb51918bb31c0f5ef3e7b5d32492e" title="Returns the unique id associated with the board." alt="" coords="5,13,113,39"/>
+</map>

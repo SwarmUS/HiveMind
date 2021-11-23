@@ -1,0 +1,4 @@
+<map id="HostHandshakeUI::handshake" name="HostHandshakeUI::handshake">
+<area shape="rect" id="node1" title="Sets the handshake status of the device." alt="" coords="5,13,221,39"/>
+<area shape="rect" id="node2" href="$classIApplicationInterface.html#a814dd56b2e39896f58963952fcc42fd6" title="set the system Host handshake and light the necessary LED" alt="" coords="269,5,479,47"/>
+</map>

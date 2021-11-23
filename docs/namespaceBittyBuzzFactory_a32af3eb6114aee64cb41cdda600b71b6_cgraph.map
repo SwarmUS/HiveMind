@@ -1,0 +1,45 @@
+<map id="BittyBuzzFactory::createBittyBuzzMathLib" name="BittyBuzzFactory::createBittyBuzzMathLib">
+<area shape="rect" id="node1" title="Creates a the math table library for the bvm." alt="" coords="5,746,184,787"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzMathFunctions.html#a28e002f66c918486ec763ea18364f94e" title="Calculates the absolute value Signature abs(arg1)" alt="" coords="235,44,445,71"/>
+<area shape="rect" id="node5" href="$namespaceBittyBuzzMathFunctions.html#a5597a29b7feb5aa2300c2e3ee38840ce" title="Calculates the arc cosine Signature acos(arg1)" alt="" coords="251,113,429,154"/>
+<area shape="rect" id="node8" href="$namespaceBittyBuzzMathFunctions.html#a7e0cd9e66bd39900b8579ab05a54223e" title="Calculates the arc sine Signature asin(arg1)" alt="" coords="251,334,429,375"/>
+<area shape="rect" id="node10" href="$namespaceBittyBuzzMathFunctions.html#a39fc17968ecfe8e578d76d49241aef4f" title="Calculates the arc cosine Signature atan(arg1)" alt="" coords="251,843,429,885"/>
+<area shape="rect" id="node12" href="$namespaceBittyBuzzMathFunctions.html#aeb9a0c744d2f28ab9a9f290ee854c565" title="Ceil a value Signature ceilf(arg1)" alt="" coords="251,582,429,623"/>
+<area shape="rect" id="node15" href="$namespaceBittyBuzzMathFunctions.html#af6f6adecce4053cad358953df160562e" title="Ceil a value Signature ceili(arg1)" alt="" coords="251,647,429,689"/>
+<area shape="rect" id="node16" href="$namespaceBittyBuzzMathFunctions.html#a3f6b9222289db01611cc4db357e98aa0" title="Calculates the cosine Signature cos(arg1)" alt="" coords="235,909,445,936"/>
+<area shape="rect" id="node18" href="$namespaceBittyBuzzMathFunctions.html#ae328912590bf3cdbfaf52552c4c51feb" title="Calculates e^x Signature exp(x)" alt="" coords="502,208,713,235"/>
+<area shape="rect" id="node20" href="$namespaceBittyBuzzMathFunctions.html#a7591a4368a7d88396822080ae39e8052" title="Floor a value Signature floorf(arg1)" alt="" coords="251,778,429,819"/>
+<area shape="rect" id="node22" href="$namespaceBittyBuzzMathFunctions.html#a026bc7156213d969ac7f7aa7cb1ec598" title="Floor a value Signature floori(arg1)" alt="" coords="251,713,429,754"/>
+<area shape="rect" id="node23" href="$namespaceBittyBuzzMathFunctions.html#a926b5b4ca3d05263824e1c1088328dc8" title="Calculates the natural logarithm (ln) Signature log(arg1)" alt="" coords="237,400,443,427"/>
+<area shape="rect" id="node25" href="$namespaceBittyBuzzMathFunctions.html#a4384a2d412502626484c40cf827e68a1" title="Calculates the logarithm base 10 Signature log10(arg1)" alt="" coords="251,1026,429,1067"/>
+<area shape="rect" id="node27" href="$namespaceBittyBuzzMathFunctions.html#abf19e71518c0dd01042a6b343f56aa1a" title="Calculates the logarithm base 2 Signature log2(arg1)" alt="" coords="251,1134,429,1175"/>
+<area shape="rect" id="node29" href="$namespaceBittyBuzzMathFunctions.html#a55de07e6cee5e879730488b1bf6915a6" title="Return the max Signature max(arg1, arg2)" alt="" coords="232,1323,448,1349"/>
+<area shape="rect" id="node31" href="$namespaceBittyBuzzMathFunctions.html#a8fa8a2520c8ae2d5c9d70cb2c4865187" title="Return the min Signature min(arg1, arg2)" alt="" coords="234,1272,446,1299"/>
+<area shape="rect" id="node32" href="$namespaceBittyBuzzMathFunctions.html#ae972145cb9224dd93949b1e0d78e85d1" title="Calculates the base raised to the power of the exponent. Signature pow(base, exponent)" alt="" coords="233,259,447,285"/>
+<area shape="rect" id="node34" href="$namespaceBittyBuzzMathFunctions.html#ac91d477d5f15a47ef9f10b84781c947d" title="Return a number with a uniform distribution Signature rng_uniform()" alt="" coords="251,1457,429,1498"/>
+<area shape="rect" id="node36" href="$namespaceBittyBuzzMathFunctions.html#a8833fb000baa1fd8005c661e7a20da86" title="Rounds a value Signature roundf(arg1)" alt="" coords="251,451,429,493"/>
+<area shape="rect" id="node37" href="$namespaceBittyBuzzMathFunctions.html#a1324f1d3ea6fb5425a601a1f9150bda3" title="Rounds a value Signature roundi(arg1)" alt="" coords="251,517,429,558"/>
+<area shape="rect" id="node38" href="$namespaceBittyBuzzMathFunctions.html#a9def25805cbecb1df1fabbee64b14f39" title="Calculates the sine Signature sin(arg1)" alt="" coords="237,1221,443,1248"/>
+<area shape="rect" id="node40" href="$namespaceBittyBuzzMathFunctions.html#af23a6be168deb9e4c7ac745d3936d21b" title="Calculates the square root Signature sqrt(arg1)" alt="" coords="251,961,429,1002"/>
+<area shape="rect" id="node42" href="$namespaceBittyBuzzMathFunctions.html#a7049310e77005226b863d27a25fae72a" title="Calculates the tengent Signature tan(arg1)" alt="" coords="236,1384,444,1411"/>
+<area shape="rect" id="node3" href="$namespaceMath.html#a44e89e8d6a7e3c24685a1a50dac1c492" title="Return the absolute value." alt="" coords="564,5,651,32"/>
+<area shape="rect" id="node4" href="$namespaceMath.html#a9f2e2a533761a681565c458c5cb0d09b" title="Return the absolute value." alt="" coords="562,56,653,83"/>
+<area shape="rect" id="node6" href="$namespaceMath.html#a5f29c5070b9836eb16599f9c2667cadd" title="calculate the arc cosine" alt="" coords="561,107,654,133"/>
+<area shape="rect" id="node7" href="$BittyBuzzMathFunctions_8cpp.html#a4bfd55f852fffcd9b9c7abfa61c3f9e9" title=" " alt="" coords="767,715,865,741"/>
+<area shape="rect" id="node9" href="$namespaceMath.html#a37f8fe84dda1507be6fe109a6c35a6ab" title="calculate the arc sine" alt="" coords="562,411,653,437"/>
+<area shape="rect" id="node11" href="$namespaceMath.html#ac118e51b307f872013e7f9ec54d866c7" title="calculate the arc of x/y" alt="" coords="557,765,657,792"/>
+<area shape="rect" id="node13" href="$BittyBuzzMathFunctions_8cpp.html#a64eac1f66dcf3024a593fa8ecb04a64c" title=" " alt="" coords="554,613,661,640"/>
+<area shape="rect" id="node14" href="$namespaceMath.html#aa3fa8bd8467553135077d99a57f70a3a" title="Round x upward." alt="" coords="564,563,651,589"/>
+<area shape="rect" id="node17" href="$namespaceMath.html#a5c9c4e393236268caa618fb339ee6862" title="calculate the cosine" alt="" coords="565,816,650,843"/>
+<area shape="rect" id="node19" href="$namespaceMath.html#ad2201d4d97197f21e48461b453c25185" title="Calculates the exponent." alt="" coords="773,208,859,235"/>
+<area shape="rect" id="node21" href="$namespaceMath.html#a376d960381e81cd239e9ab1e49394863" title="Floor x downward." alt="" coords="561,664,653,691"/>
+<area shape="rect" id="node24" href="$namespaceMath.html#a86ec285e634de7d17e508d47d0b14e26" title="Calculates the natural logarithm." alt="" coords="570,512,645,539"/>
+<area shape="rect" id="node26" href="$namespaceMath.html#ac28746ab7c3c3b1f2b57408bfd2b38fd" title="Calculates the logarithm base 10." alt="" coords="558,1019,657,1045"/>
+<area shape="rect" id="node28" href="$namespaceMath.html#a1f4e6ba9e584d187c9760964d99a1f5e" title="Calculates the logarithm base 2." alt="" coords="562,1171,653,1197"/>
+<area shape="rect" id="node30" href="$BittyBuzzMathFunctions_8cpp.html#a6bcaafeb0e31d9a70c481660a16e712f" title=" " alt="" coords="565,1323,650,1349"/>
+<area shape="rect" id="node33" href="$namespaceMath.html#aaf757fa637c83c0a1fd15e49b4b7ff71" title="Calculates the base raised to the power of the exponent." alt="" coords="562,259,653,285"/>
+<area shape="rect" id="node35" href="$classIBSP.html#a2e30c2a65673c2818c0451cb0a9e8cd9" title="Returns a positive random number, uses an hardware RNG if available." alt="" coords="496,1475,719,1501"/>
+<area shape="rect" id="node39" href="$namespaceMath.html#a032efabc85988e4a8d278333fa42df4b" title="calculate the sine" alt="" coords="566,1221,649,1248"/>
+<area shape="rect" id="node41" href="$namespaceMath.html#ad382526f9a70ad1fcda022aa887ee0f5" title="Calculates the square root." alt="" coords="563,968,651,995"/>
+<area shape="rect" id="node43" href="$namespaceMath.html#aec4ad03e17bb52a89b26cd268d9fd231" title="calculate the tangent" alt="" coords="565,1424,649,1451"/>
+</map>

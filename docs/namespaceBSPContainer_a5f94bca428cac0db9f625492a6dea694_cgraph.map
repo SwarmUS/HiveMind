@@ -1,0 +1,10 @@
+<map id="BSPContainer::getInterlocManager" name="BSPContainer::getInterlocManager">
+<area shape="rect" id="node1" title="Returns an instance of the interloc manager." alt="" coords="5,35,193,76"/>
+<area shape="rect" id="node2" href="$namespaceInterlocContainer.html#a468870fc2a4ac40393b1e5a0f4cbbf0d" title="Gets a queue in which to insert raw position updates from the BSP layer." alt="" coords="241,5,456,47"/>
+<area shape="rect" id="node3" href="$namespaceLoggerContainer.html#a565f20495305a829becfc81ebe58957e" title="Return a reference to the global logger." alt="" coords="247,71,450,98"/>
+<area shape="rect" id="node4" href="$namespaceSettingsContainer.html#ab4185c5b2119ac81daf50e334a1d928c" title="Get the log level of the application." alt="" coords="504,35,651,76"/>
+<area shape="rect" id="node8" href="$namespaceBSPContainer.html#ab21aa4c040bcb98d5bbc83488c008fdd" title="Returns an instance of the platform dependent UserInterface." alt="" coords="699,97,925,123"/>
+<area shape="rect" id="node5" href="$SettingsContainer_8cpp.html#aa63a236fe3a758cf751aa3785be2699d" title=" " alt="" coords="739,45,885,71"/>
+<area shape="rect" id="node6" href="$namespaceBSPContainer.html#af0d55176bf6bb6f6c628b60b391f49f6" title="Returns an instance of the platform dependent BSP." alt="" coords="981,95,1145,122"/>
+<area shape="rect" id="node7" href="$classBSP.html#a7d2c52887b2902ceeed7b98f02dd0a14" title=" " alt="" coords="973,45,1153,71"/>
+</map>

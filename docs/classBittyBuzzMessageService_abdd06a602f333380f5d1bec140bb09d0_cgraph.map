@@ -1,0 +1,5 @@
+<map id="BittyBuzzMessageService::callBuzzFunction" name="BittyBuzzMessageService::callBuzzFunction">
+<area shape="rect" id="node1" title="call a function to a buzz vm" alt="" coords="5,23,196,65"/>
+<area shape="rect" id="node2" href="$classIBSP.html#a2e30c2a65673c2818c0451cb0a9e8cd9" title="Returns a positive random number, uses an hardware RNG if available." alt="" coords="244,5,467,32"/>
+<area shape="rect" id="node3" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="299,56,411,83"/>
+</map>

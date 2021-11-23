@@ -1,0 +1,5 @@
+<map id="SpiTest::task" name="SpiTest::task">
+<area shape="rect" id="node1" title=" " alt="" coords="5,42,109,69"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzUserFunctions.html#a3e415f31c00eb6becdf86104f101a812" title="wait for a certain delay Signature delay(arg1) Warning this function make the whole VM sleep which ca..." alt="" coords="157,5,333,47"/>
+<area shape="rect" id="node3" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="196,71,295,98"/>
+</map>

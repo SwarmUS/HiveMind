@@ -1,0 +1,3 @@
+<map id="IHandshakeUI" name="IHandshakeUI">
+<area shape="rect" id="node1" title="Manages the interface if a device was handshaked (greeted) with or not. Lights the appropriate LED to..." alt="" coords="5,5,153,97"/>
+</map>

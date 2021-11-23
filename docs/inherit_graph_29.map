@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classIHandshakeUI.html" title="Manages the interface if a device was handshaked (greeted) with or not. Lights the appropriate LED to..." alt="" coords="5,31,117,57"/>
+<area shape="rect" id="node2" href="$classHostHandshakeUI.html" title=" " alt="" coords="175,5,314,32"/>
+<area shape="rect" id="node3" href="$classRemoteHandshakeUI.html" title=" " alt="" coords="165,56,324,83"/>
+</map>

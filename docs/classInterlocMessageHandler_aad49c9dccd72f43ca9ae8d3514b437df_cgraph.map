@@ -1,0 +1,10 @@
+<map id="InterlocMessageHandler::rawAngleDataCallbackStatic" name="InterlocMessageHandler::rawAngleDataCallbackStatic">
+<area shape="rect" id="node1" title=" " alt="" coords="5,100,220,141"/>
+<area shape="rect" id="node2" href="$classInterlocMessageHandler.html#a74b40fe61cee22189a6c202c1d5d0620" title=" " alt="" coords="268,100,448,141"/>
+<area shape="rect" id="node3" href="$classInterlocMessageHandler.html#adb233b75ada3382c810ae675a3560189" title=" " alt="" coords="496,5,703,47"/>
+<area shape="rect" id="node4" href="$classInterlocMessageHandler.html#a49595c956e14e2b903ffab8da0b120e8" title=" " alt="" coords="509,71,689,112"/>
+<area shape="rect" id="node7" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="987,107,1099,134"/>
+<area shape="rect" id="node8" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="550,187,649,214"/>
+<area shape="rect" id="node5" href="$namespaceBittyBuzzUserFunctions.html#a3e415f31c00eb6becdf86104f101a812" title="wait for a certain delay Signature delay(arg1) Warning this function make the whole VM sleep which ca..." alt="" coords="757,5,933,47"/>
+<area shape="rect" id="node6" href="$classInterlocMessageHandler.html#a1a050085ff68140313e3a814f0eb3ff0" title=" " alt="" coords="751,71,939,112"/>
+</map>

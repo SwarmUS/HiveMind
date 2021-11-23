@@ -1,0 +1,4 @@
+<map id="ConnectionStateUI::setConnectionState" name="ConnectionStateUI::setConnectionState">
+<area shape="rect" id="node1" title="Sets the state of the connection." alt="" coords="5,5,156,47"/>
+<area shape="rect" id="node2" href="$classIApplicationInterface.html#a699c07f6bbe17c3723ac4983953a34c2" title="set the system Connection state and light the necessary LED the right color" alt="" coords="204,5,411,47"/>
+</map>

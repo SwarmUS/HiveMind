@@ -1,0 +1,5 @@
+<map id="BittyBuzzVm::stop" name="BittyBuzzVm::stop">
+<area shape="rect" id="node1" title="Stops the vm, can be called in another thread or in an interrupt." alt="" coords="469,13,612,39"/>
+<area shape="rect" id="node2" href="$classBittyBuzzTask.html#af8b41f82cf3125dcac6c89787ee09d49" title=" " alt="" coords="203,5,421,47"/>
+<area shape="rect" id="node3" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,13,155,39"/>
+</map>

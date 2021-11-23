@@ -1,0 +1,10 @@
+<map id="InterlocMessageHandler::handleMessage" name="InterlocMessageHandler::handleMessage">
+<area shape="rect" id="node1" title=" " alt="" coords="5,185,185,227"/>
+<area shape="rect" id="node2" href="$classInterlocMessageHandler.html#af1171c089d2326e6657da960dc18f4d3" title=" " alt="" coords="233,88,452,129"/>
+<area shape="rect" id="node6" href="$classInterlocMessageHandler.html#a0d473a900ff5fa462896acb470667b19" title=" " alt="" coords="235,185,450,227"/>
+<area shape="rect" id="node8" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="293,251,392,278"/>
+<area shape="rect" id="node3" href="$classIInterlocManager.html#a6c776efa63b2de4afdd6b14a54222667" title="Sets the number of frames to accumulate when in angle calibration mode." alt="" coords="505,5,705,47"/>
+<area shape="rect" id="node4" href="$classIInterlocManager.html#ab04447b209e1ce505e433a524348af0d" title="Sets the targeted distance for calibration." alt="" coords="505,71,705,112"/>
+<area shape="rect" id="node5" href="$classIInterlocManager.html#a355cd1ca631928c60cebe5d7226821c8" title=" " alt="" coords="505,136,704,177"/>
+<area shape="rect" id="node7" href="$classIInterlocManager.html#af2a7b19717d70e35c27068a352696a93" title=" " alt="" coords="500,201,709,243"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="MessageDispatcher" name="MessageDispatcher">
+<area shape="rect" id="node1" title=" " alt="" coords="5,145,265,487"/>
+<area shape="rect" id="node2" href="$classIMessageDispatcher.html" title="A class to manage message dispatching to queues, sending messages at the right place." alt="" coords="35,5,235,97"/>
+</map>

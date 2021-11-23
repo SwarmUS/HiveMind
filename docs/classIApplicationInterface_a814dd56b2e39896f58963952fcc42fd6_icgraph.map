@@ -1,0 +1,4 @@
+<map id="IApplicationInterface::setSystemHostHandshaked" name="IApplicationInterface::setSystemHostHandshaked">
+<area shape="rect" id="node1" title="set the system Host handshake and light the necessary LED" alt="" coords="269,5,479,47"/>
+<area shape="rect" id="node2" href="$classHostHandshakeUI.html#a4f92a80705e5a5fac48c38dbffb77ec8" title="Sets the handshake status of the device." alt="" coords="5,13,221,39"/>
+</map>

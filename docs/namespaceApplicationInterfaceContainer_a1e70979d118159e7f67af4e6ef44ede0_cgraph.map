@@ -1,0 +1,6 @@
+<map id="ApplicationInterfaceContainer::getRemoteHandshakeUI" name="ApplicationInterfaceContainer::getRemoteHandshakeUI">
+<area shape="rect" id="node1" title="get the remote handshake UI" alt="" coords="5,5,221,47"/>
+<area shape="rect" id="node2" href="$ApplicationInterfaceContainer_8cpp.html#a13ad42c3c50d4f1f87f07b5ca4cadb2d" title=" " alt="" coords="269,13,444,39"/>
+<area shape="rect" id="node3" href="$namespaceBSPContainer.html#ab21aa4c040bcb98d5bbc83488c008fdd" title="Returns an instance of the platform dependent UserInterface." alt="" coords="492,13,719,39"/>
+<area shape="rect" id="node4" href="$namespaceBSPContainer.html#af0d55176bf6bb6f6c628b60b391f49f6" title="Returns an instance of the platform dependent BSP." alt="" coords="767,13,931,39"/>
+</map>

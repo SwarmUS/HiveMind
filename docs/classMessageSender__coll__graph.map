@@ -1,0 +1,8 @@
+<map id="MessageSender" name="MessageSender">
+<area shape="rect" id="node1" title=" " alt="" coords="451,189,629,296"/>
+<area shape="rect" id="node2" href="$classIMessageSender.html" title="A class to pipe messages to a stream and serialize them." alt="" coords="5,20,184,112"/>
+<area shape="rect" id="node3" href="$classIBSP.html" title=" " alt="" coords="208,5,419,127"/>
+<area shape="rect" id="node4" title=" " alt="" coords="443,27,637,105"/>
+<area shape="rect" id="node5" href="$classILogger.html" title="A logger class with basic logging capabilities." alt="" coords="661,13,768,119"/>
+<area shape="rect" id="node6" title=" " alt="" coords="792,27,1040,105"/>
+</map>

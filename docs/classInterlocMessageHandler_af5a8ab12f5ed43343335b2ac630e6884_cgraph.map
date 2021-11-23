@@ -1,0 +1,12 @@
+<map id="InterlocMessageHandler::processMessage" name="InterlocMessageHandler::processMessage">
+<area shape="rect" id="node1" title="Processes the next message in the queue." alt="" coords="5,184,185,225"/>
+<area shape="rect" id="node2" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="267,133,379,159"/>
+<area shape="rect" id="node3" href="$classInterlocMessageHandler.html#aa7eb909ded15b50682b3e6663b5aea20" title=" " alt="" coords="233,184,413,225"/>
+<area shape="rect" id="node10" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="521,250,620,277"/>
+<area shape="rect" id="node4" href="$classInterlocMessageHandler.html#af1171c089d2326e6657da960dc18f4d3" title=" " alt="" coords="461,87,680,128"/>
+<area shape="rect" id="node8" href="$classInterlocMessageHandler.html#a0d473a900ff5fa462896acb470667b19" title=" " alt="" coords="463,184,678,225"/>
+<area shape="rect" id="node5" href="$classIInterlocManager.html#a6c776efa63b2de4afdd6b14a54222667" title="Sets the number of frames to accumulate when in angle calibration mode." alt="" coords="733,5,933,47"/>
+<area shape="rect" id="node6" href="$classIInterlocManager.html#ab04447b209e1ce505e433a524348af0d" title="Sets the targeted distance for calibration." alt="" coords="733,71,933,112"/>
+<area shape="rect" id="node7" href="$classIInterlocManager.html#a355cd1ca631928c60cebe5d7226821c8" title=" " alt="" coords="733,136,932,177"/>
+<area shape="rect" id="node9" href="$classIInterlocManager.html#af2a7b19717d70e35c27068a352696a93" title=" " alt="" coords="728,201,937,243"/>
+</map>

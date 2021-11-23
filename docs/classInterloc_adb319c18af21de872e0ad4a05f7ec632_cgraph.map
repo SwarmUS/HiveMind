@@ -1,0 +1,6 @@
+<map id="Interloc::dumpUpdatesHistory" name="Interloc::dumpUpdatesHistory">
+<area shape="rect" id="node1" title=" " alt="" coords="5,71,223,98"/>
+<area shape="rect" id="node2" href="$classIInterlocMessageHandler.html#afd4d46fa488a06e9ee64d92677a271aa" title="Retrieves a flag to know if data dumps to the host should be done or not." alt="" coords="271,5,455,47"/>
+<area shape="rect" id="node3" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="313,71,412,98"/>
+<area shape="rect" id="node4" href="$classIInterlocMessageHandler.html#abdcdf8c96e3a1b3ae5cb7cccb8401500" title="Sends a history of interloc updates back to the host." alt="" coords="271,123,455,164"/>
+</map>

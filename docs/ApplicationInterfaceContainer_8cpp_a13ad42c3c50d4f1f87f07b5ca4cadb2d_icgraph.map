@@ -1,0 +1,13 @@
+<map id="getApplicationInterface" name="getApplicationInterface">
+<area shape="rect" id="node1" title=" " alt="" coords="636,231,811,258"/>
+<area shape="rect" id="node2" href="$namespaceApplicationInterfaceContainer.html#a498f0a30e428c1a4357418dd8902340c" title="get the button 0 callback register" alt="" coords="372,48,588,89"/>
+<area shape="rect" id="node3" href="$namespaceApplicationInterfaceContainer.html#a02f477d54672fbcc3421bc48fb8594a1" title="get the button 1 callback register" alt="" coords="108,5,324,47"/>
+<area shape="rect" id="node5" href="$namespaceApplicationInterfaceContainer.html#a3c55516b6be0efa94b45ed6f2395654a" title="get the connection state UI" alt="" coords="372,165,588,207"/>
+<area shape="rect" id="node8" href="$namespaceApplicationInterfaceContainer.html#a3fc30a771807d7053fa25d78b9d53e0b" title="get the device state UI" alt="" coords="108,224,324,265"/>
+<area shape="rect" id="node9" href="$namespaceApplicationInterfaceContainer.html#a822e272e2abc1e40ca998f2e167dec4c" title="get the host handshake UI" alt="" coords="108,289,324,331"/>
+<area shape="rect" id="node10" href="$namespaceApplicationInterfaceContainer.html#a1e70979d118159e7f67af4e6ef44ede0" title="get the remote handshake UI" alt="" coords="372,333,588,375"/>
+<area shape="rect" id="node11" href="$namespaceApplicationInterfaceContainer.html#a682c29e5e74ddf447128e0dc882e3710" title="get the UI available to the user" alt="" coords="372,399,588,440"/>
+<area shape="rect" id="node4" href="$Main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="5,173,60,199"/>
+<area shape="rect" id="node6" href="$Main_8cpp.html#a52c988232a679057aec34265cd3ddfe6" title=" " alt="" coords="141,122,291,149"/>
+<area shape="rect" id="node7" href="$Main_8cpp.html#a1070dd54c7e0fd186de18169a2965e19" title=" " alt="" coords="127,173,305,199"/>
+</map>

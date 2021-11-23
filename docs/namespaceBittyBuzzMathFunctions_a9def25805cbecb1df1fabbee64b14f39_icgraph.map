@@ -1,0 +1,9 @@
+<map id="BittyBuzzMathFunctions::sin" name="BittyBuzzMathFunctions::sin">
+<area shape="rect" id="node1" title="Calculates the sine Signature sin(arg1)" alt="" coords="675,71,881,98"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzFactory.html#a32af3eb6114aee64cb41cdda600b71b6" title="Creates a the math table library for the bvm." alt="" coords="430,5,609,47"/>
+<area shape="rect" id="node4" href="$namespaceMath.html#a032efabc85988e4a8d278333fa42df4b" title="calculate the sine" alt="" coords="478,71,561,98"/>
+<area shape="rect" id="node5" href="$classInterloc.html#a44a7c992eef3807b11dd54e62f060060" title=" " alt="" coords="412,122,627,149"/>
+<area shape="rect" id="node3" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="199,13,348,39"/>
+<area shape="rect" id="node6" href="$classInterloc.html#ad9e0b163a0ccda8aebe18e5ce1403730" title=" " alt="" coords="183,115,364,156"/>
+<area shape="rect" id="node7" href="$classInterloc.html#a59644849ac6aa61403f85ebae1e4bfa4" title="Spins the interloc task checking if any updates happened. Processing them and pushing update values t..." alt="" coords="5,122,135,149"/>
+</map>

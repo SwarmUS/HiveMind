@@ -1,0 +1,4 @@
+<map id="IApplicationInterface::setUserLed" name="IApplicationInterface::setUserLed">
+<area shape="rect" id="node1" title="set the user LED" alt="" coords="171,5,328,47"/>
+<area shape="rect" id="node2" href="$classUserUI.html#a2b4a0d279a0a7a9e44cd2048afedd9d3" title="Set the led on or off." alt="" coords="5,13,123,39"/>
+</map>

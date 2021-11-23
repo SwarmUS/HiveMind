@@ -1,0 +1,8 @@
+<map id="UserInterface::printLine" name="UserInterface::printLine">
+<area shape="rect" id="node1" title="Provides an interface to print to the console or serial port using an initialized va_list...." alt="" coords="5,60,180,87"/>
+<area shape="rect" id="node2" href="$classUserInterface.html#ab477773a0cc206ded9285b299c8da835" title="Adds a newline and flushes the input to the serial port." alt="" coords="228,35,377,61"/>
+<area shape="rect" id="node6" href="$classUserInterface.html#a1d00f2a7b35d8dde0ecb0ad245ba8b51" title="Provides an interface to print to the console or serial port. The arguments and return values match t..." alt="" coords="229,85,377,112"/>
+<area shape="rect" id="node3" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="459,5,571,32"/>
+<area shape="rect" id="node4" href="$classUserInterface.html#abedaacea8a858cac8da5f154e3d50540" title=" " alt="" coords="425,57,604,98"/>
+<area shape="rect" id="node5" href="$UserInterface_8cpp.html#a3030b2b20149f130b9d44348782175e2" title=" " alt="" coords="652,64,751,91"/>
+</map>

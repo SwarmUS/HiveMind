@@ -1,0 +1,14 @@
+<map id="InterlocContainer::getInterlocMessageHandler" name="InterlocContainer::getInterlocMessageHandler">
+<area shape="rect" id="node1" title=" " alt="" coords="5,173,207,214"/>
+<area shape="rect" id="node2" href="$namespaceBSPContainer.html#af0d55176bf6bb6f6c628b60b391f49f6" title="Returns an instance of the platform dependent BSP." alt="" coords="1237,122,1401,148"/>
+<area shape="rect" id="node3" href="$namespaceMessageHandlerContainer.html#ab8fa31b7a3f2934e7f2caf4b4c7301c7" title="get the host message queue" alt="" coords="255,56,449,97"/>
+<area shape="rect" id="node4" href="$namespaceBSPContainer.html#a5f94bca428cac0db9f625492a6dea694" title="Returns an instance of the interloc manager." alt="" coords="258,173,446,214"/>
+<area shape="rect" id="node5" href="$namespaceInterlocContainer.html#a468870fc2a4ac40393b1e5a0f4cbbf0d" title="Gets a queue in which to insert raw position updates from the BSP layer." alt="" coords="497,114,712,156"/>
+<area shape="rect" id="node6" href="$namespaceLoggerContainer.html#a565f20495305a829becfc81ebe58957e" title="Return a reference to the global logger." alt="" coords="503,180,706,207"/>
+<area shape="rect" id="node11" href="$namespaceMessageHandlerContainer.html#a4a0abeb4f314766df7e549dca6f78cc7" title="get the interloc message queue" alt="" coords="255,290,449,332"/>
+<area shape="rect" id="node12" href="$namespaceMessageHandlerContainer.html#ab2e1517e77a5f37bc3ff2690945dcf7c" title="get the remote message queue" alt="" coords="255,356,449,397"/>
+<area shape="rect" id="node7" href="$namespaceSettingsContainer.html#ab4185c5b2119ac81daf50e334a1d928c" title="Get the log level of the application." alt="" coords="760,173,907,214"/>
+<area shape="rect" id="node10" href="$namespaceBSPContainer.html#ab21aa4c040bcb98d5bbc83488c008fdd" title="Returns an instance of the platform dependent UserInterface." alt="" coords="955,122,1181,148"/>
+<area shape="rect" id="node8" href="$SettingsContainer_8cpp.html#aa63a236fe3a758cf751aa3785be2699d" title=" " alt="" coords="995,176,1141,203"/>
+<area shape="rect" id="node9" href="$classBSP.html#a7d2c52887b2902ceeed7b98f02dd0a14" title=" " alt="" coords="1229,176,1409,203"/>
+</map>

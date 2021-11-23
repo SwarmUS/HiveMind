@@ -1,0 +1,6 @@
+<map id="IUserInterface::setLed" name="IUserInterface::setLed">
+<area shape="rect" id="node1" title="Sets an LED on or off." alt="" coords="284,78,449,105"/>
+<area shape="rect" id="node2" href="$classApplicationInterface.html#ac215315ff2a84eedf7d72507527fb2aa" title="set the system Host handshake and light the necessary LED" alt="" coords="16,5,225,47"/>
+<area shape="rect" id="node3" href="$classApplicationInterface.html#a9a716f9a1ae375faf83af4b007393c7e" title="set the system Remote handshake and light the necessary LED" alt="" coords="5,71,236,112"/>
+<area shape="rect" id="node4" href="$classApplicationInterface.html#ab05921d623cffb88ec0318be395336d0" title="set the user LED" alt="" coords="44,136,197,177"/>
+</map>

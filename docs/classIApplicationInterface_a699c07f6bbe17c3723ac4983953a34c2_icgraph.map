@@ -1,0 +1,5 @@
+<map id="IApplicationInterface::setSystemConnectionState" name="IApplicationInterface::setSystemConnectionState">
+<area shape="rect" id="node1" title="set the system Connection state and light the necessary LED the right color" alt="" coords="307,5,513,47"/>
+<area shape="rect" id="node2" href="$classConnectionStateUI.html#afc241154ed4cbca3dc37d706e6b94a65" title="Sets the state of the connection." alt="" coords="108,5,259,47"/>
+<area shape="rect" id="node3" href="$Main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="5,13,60,39"/>
+</map>

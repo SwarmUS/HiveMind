@@ -1,0 +1,4 @@
+<map id="DeviceStateUI::setDeviceState" name="DeviceStateUI::setDeviceState">
+<area shape="rect" id="node1" title="Sets the state of the device." alt="" coords="5,5,193,47"/>
+<area shape="rect" id="node2" href="$classIApplicationInterface.html#ad509dfc958456b67a25c5c9bd434249c" title="set the system Connection state and set the seven segment accordingly" alt="" coords="241,5,420,47"/>
+</map>

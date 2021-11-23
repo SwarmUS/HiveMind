@@ -1,0 +1,4 @@
+<map id="IDeviceStateUI" name="IDeviceStateUI">
+<area shape="rect" id="node1" title="Manages UI of the device state and informs the user via the board display." alt="" coords="5,5,160,97"/>
+<area shape="rect" id="node2" href="$classDeviceStateUI.html" title=" " alt="" coords="7,145,158,252"/>
+</map>

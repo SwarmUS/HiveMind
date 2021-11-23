@@ -1,0 +1,4 @@
+<map id="IUSB" name="IUSB">
+<area shape="rect" id="node1" title=" " alt="" coords="42,5,95,83"/>
+<area shape="rect" id="node2" href="$classUSBMock.html" title="mocking the USB, not working for now, only for compilation" alt="" coords="5,131,132,252"/>
+</map>

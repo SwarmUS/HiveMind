@@ -1,0 +1,9 @@
+<map id="IBittyBuzzClosureRegister::getRegisteredClosure" name="IBittyBuzzClosureRegister::getRegisteredClosure">
+<area shape="rect" id="node1" title="get the id of a stored function by it&#39;s associated name" alt="" coords="1275,39,1465,80"/>
+<area shape="rect" id="node2" href="$classBittyBuzzMessageHandler.html#ab1c0e44d3f59af51d07e78a83aeba0e5" title=" " alt="" coords="995,5,1202,47"/>
+<area shape="rect" id="node7" href="$classBittyBuzzMessageHandler.html#abe62224a14a9c720de42c926d05c1760" title=" " alt="" coords="971,71,1227,112"/>
+<area shape="rect" id="node3" href="$classBittyBuzzMessageHandler.html#a580922dc6d9a198ef1960551eabe821a" title=" " alt="" coords="729,39,923,80"/>
+<area shape="rect" id="node4" href="$classBittyBuzzMessageHandler.html#aeb2ef0af9e746e913c8823f2e1b1aa0e" title=" " alt="" coords="488,39,681,80"/>
+<area shape="rect" id="node5" href="$classBittyBuzzMessageHandler.html#a5ba2c848da6995ca8dfabc5317687ca4" title=" " alt="" coords="247,39,440,80"/>
+<area shape="rect" id="node6" href="$classBittyBuzzMessageHandler.html#a408cef3c7fe771e2b3859c4c4eb3c72f" title="process a message and sends a response if needed. A response is sent to the appropriate queue on a re..." alt="" coords="5,39,199,80"/>
+</map>

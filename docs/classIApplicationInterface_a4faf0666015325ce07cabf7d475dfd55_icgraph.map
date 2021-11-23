@@ -1,0 +1,4 @@
+<map id="IApplicationInterface::setSystemRemoteHandshaked" name="IApplicationInterface::setSystemRemoteHandshaked">
+<area shape="rect" id="node1" title="set the system Remote handshake and light the necessary LED" alt="" coords="220,5,451,47"/>
+<area shape="rect" id="node2" href="$classRemoteHandshakeUI.html#a9e585e7768a063cfb39d68b771716339" title="Sets the handshake status of the device." alt="" coords="5,5,172,47"/>
+</map>

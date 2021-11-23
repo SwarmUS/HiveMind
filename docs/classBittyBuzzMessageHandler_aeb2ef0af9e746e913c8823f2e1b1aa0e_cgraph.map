@@ -1,0 +1,13 @@
+<map id="BittyBuzzMessageHandler::handleRequest" name="BittyBuzzMessageHandler::handleRequest">
+<area shape="rect" id="node1" title=" " alt="" coords="5,264,199,305"/>
+<area shape="rect" id="node2" href="$classBittyBuzzMessageHandler.html#a580922dc6d9a198ef1960551eabe821a" title=" " alt="" coords="247,203,440,244"/>
+<area shape="rect" id="node7" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="850,333,949,359"/>
+<area shape="rect" id="node3" href="$classBittyBuzzMessageHandler.html#ab1c0e44d3f59af51d07e78a83aeba0e5" title=" " alt="" coords="513,235,719,276"/>
+<area shape="rect" id="node8" href="$classBittyBuzzMessageHandler.html#abe62224a14a9c720de42c926d05c1760" title=" " alt="" coords="488,169,744,211"/>
+<area shape="rect" id="node10" href="$classBittyBuzzMessageHandler.html#aa821d93609cfb7ade1a6414979dd7194" title=" " alt="" coords="491,39,741,80"/>
+<area shape="rect" id="node4" href="$classBittyBuzzFunctionDescription.html#a26f324df9301fc1af60d824f00931dc7" title="get the array of arguments description" alt="" coords="793,201,1006,243"/>
+<area shape="rect" id="node5" href="$classBittyBuzzFunctionDescription.html#a6a17609e3dcb8258dee2ec21546e5718" title="get the length of the array" alt="" coords="793,267,1006,308"/>
+<area shape="rect" id="node6" href="$classIBittyBuzzClosureRegister.html#abd507eb79dd2aedc0b2eada6c8e086e8" title="get the id of a stored function by it&#39;s associated name" alt="" coords="804,136,995,177"/>
+<area shape="rect" id="node9" href="$classBittyBuzzFunctionDescription.html#a178e6f488aa5ffd244c26fd7453f78a0" title="get the name of the function" alt="" coords="793,71,1006,112"/>
+<area shape="rect" id="node11" href="$classIBittyBuzzClosureRegister.html#ae25e6442762982cac31916aa2e68391b" title="get the length/number of the registered closures" alt="" coords="792,5,1007,47"/>
+</map>

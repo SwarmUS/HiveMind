@@ -1,0 +1,6 @@
+<map id="SettingsContainer::getHostPort" name="SettingsContainer::getHostPort">
+<area shape="rect" id="node1" title="Returns the TCP port on which the host has opened a port." alt="" coords="565,5,712,47"/>
+<area shape="rect" id="node2" href="$namespaceBSPContainer.html#aca354fab6e86fe2a9c0211d10f47913b" title="Return an instance of the connected host comm interface." alt="" coords="305,5,517,47"/>
+<area shape="rect" id="node3" href="$Main_8cpp.html#a52c988232a679057aec34265cd3ddfe6" title=" " alt="" coords="108,13,257,39"/>
+<area shape="rect" id="node4" href="$Main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="5,13,60,39"/>
+</map>

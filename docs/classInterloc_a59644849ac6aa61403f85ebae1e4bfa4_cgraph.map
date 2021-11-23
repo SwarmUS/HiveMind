@@ -1,0 +1,17 @@
+<map id="Interloc::process" name="Interloc::process">
+<area shape="rect" id="node1" title="Spins the interloc task checking if any updates happened. Processing them and pushing update values t..." alt="" coords="5,133,135,159"/>
+<area shape="rect" id="node2" href="$classInterloc.html#adb319c18af21de872e0ad4a05f7ec632" title=" " alt="" coords="183,91,400,118"/>
+<area shape="rect" id="node6" href="$classInterloc.html#ad9e0b163a0ccda8aebe18e5ce1403730" title=" " alt="" coords="201,155,382,196"/>
+<area shape="rect" id="node3" href="$classIInterlocMessageHandler.html#afd4d46fa488a06e9ee64d92677a271aa" title="Retrieves a flag to know if data dumps to the host should be done or not." alt="" coords="463,5,647,47"/>
+<area shape="rect" id="node4" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="506,137,605,163"/>
+<area shape="rect" id="node5" href="$classIInterlocMessageHandler.html#abdcdf8c96e3a1b3ae5cb7cccb8401500" title="Sends a history of interloc updates back to the host." alt="" coords="463,71,647,112"/>
+<area shape="rect" id="node7" href="$classInterloc.html#afbecfb5bff976984fe4439faa20613b3" title=" " alt="" coords="451,187,660,214"/>
+<area shape="rect" id="node8" href="$classInterloc.html#a44a7c992eef3807b11dd54e62f060060" title=" " alt="" coords="448,238,663,265"/>
+<area shape="rect" id="node9" href="$namespaceMath.html#ac118e51b307f872013e7f9ec54d866c7" title="calculate the arc of x/y" alt="" coords="765,162,865,189"/>
+<area shape="rect" id="node10" href="$namespaceBittyBuzzMathFunctions.html#a3f6b9222289db01611cc4db357e98aa0" title="Calculates the cosine Signature cos(arg1)" alt="" coords="711,213,920,239"/>
+<area shape="rect" id="node13" href="$classInterloc.html#adbf228dfdf184406179de206e8bbe606" title=" " alt="" coords="743,263,888,290"/>
+<area shape="rect" id="node14" href="$namespaceBittyBuzzMathFunctions.html#a9def25805cbecb1df1fabbee64b14f39" title="Calculates the sine Signature sin(arg1)" alt="" coords="712,314,919,341"/>
+<area shape="rect" id="node11" href="$namespaceMath.html#a5c9c4e393236268caa618fb339ee6862" title="calculate the cosine" alt="" coords="975,213,1060,239"/>
+<area shape="rect" id="node12" href="$BittyBuzzMathFunctions_8cpp.html#a4bfd55f852fffcd9b9c7abfa61c3f9e9" title=" " alt="" coords="968,263,1067,290"/>
+<area shape="rect" id="node15" href="$namespaceMath.html#a032efabc85988e4a8d278333fa42df4b" title="calculate the sine" alt="" coords="976,314,1059,341"/>
+</map>

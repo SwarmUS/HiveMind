@@ -1,0 +1,7 @@
+<map id="foreachFunctionCallback" name="foreachFunctionCallback">
+<area shape="rect" id="node1" title=" " alt="" coords="653,46,836,73"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzUserFunctions.html#aba8a342a78969783d412850d8a4e9faa" title="calls a function to a buzz Signature call_buzz_function(agent_id, fname, params)" alt="" coords="429,5,605,47"/>
+<area shape="rect" id="node5" href="$namespaceBittyBuzzUserFunctions.html#a83b2359b062198954a8acd65b044cc61" title="calls a function to a host Signature call_host_function(agent_id, fname, params)" alt="" coords="429,71,605,112"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzFactory.html#a364e6243f1119a53110679f9af79e818" title="Creates an array of FunctionRegister associated with the code from main.bzz." alt="" coords="203,39,381,80"/>
+<area shape="rect" id="node4" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,46,155,73"/>
+</map>

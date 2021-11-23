@@ -1,0 +1,4 @@
+<map id="BittyBuzzTask::resetVmButtonCallback" name="BittyBuzzTask::resetVmButtonCallback">
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,224,47"/>
+<area shape="rect" id="node2" href="$classBittyBuzzVm.html#a02930668c4e0fd22a72655dc6e7061ff" title="Stops the vm, can be called in another thread or in an interrupt." alt="" coords="272,13,415,39"/>
+</map>

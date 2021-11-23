@@ -1,0 +1,6 @@
+<map id="MessageDispatcher::dispatchUserCallRequest" name="MessageDispatcher::dispatchUserCallRequest">
+<area shape="rect" id="node1" title=" " alt="" coords="5,23,191,65"/>
+<area shape="rect" id="node2" href="$classMessageDispatcher.html#ada0ccf9c2ef2f3c33fd5aa004dd554d0" title=" " alt="" coords="239,23,397,65"/>
+<area shape="rect" id="node3" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="445,5,557,32"/>
+<area shape="rect" id="node4" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="452,56,551,83"/>
+</map>

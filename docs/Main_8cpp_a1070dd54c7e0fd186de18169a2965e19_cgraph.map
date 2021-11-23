@@ -1,0 +1,7 @@
+<map id="setHostConnectionState" name="setHostConnectionState">
+<area shape="rect" id="node1" title=" " alt="" coords="5,13,184,39"/>
+<area shape="rect" id="node2" href="$namespaceApplicationInterfaceContainer.html#a3c55516b6be0efa94b45ed6f2395654a" title="get the connection state UI" alt="" coords="232,5,448,47"/>
+<area shape="rect" id="node3" href="$ApplicationInterfaceContainer_8cpp.html#a13ad42c3c50d4f1f87f07b5ca4cadb2d" title=" " alt="" coords="496,13,671,39"/>
+<area shape="rect" id="node4" href="$namespaceBSPContainer.html#ab21aa4c040bcb98d5bbc83488c008fdd" title="Returns an instance of the platform dependent UserInterface." alt="" coords="719,13,945,39"/>
+<area shape="rect" id="node5" href="$namespaceBSPContainer.html#af0d55176bf6bb6f6c628b60b391f49f6" title="Returns an instance of the platform dependent BSP." alt="" coords="993,13,1157,39"/>
+</map>

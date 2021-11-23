@@ -1,0 +1,5 @@
+<map id="TCPServer::openSocket" name="TCPServer::openSocket">
+<area shape="rect" id="node1" title="opens the socket on a certain port" alt="" coords="389,13,560,39"/>
+<area shape="rect" id="node2" href="$namespaceBSPContainer.html#a67b9327b250447a2b29cf58e980c2aae" title="Return an instance of the connected remote comm interface." alt="" coords="108,5,341,47"/>
+<area shape="rect" id="node3" href="$Main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="5,13,60,39"/>
+</map>

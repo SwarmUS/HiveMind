@@ -1,0 +1,4 @@
+<map id="BittyBuzzVm::start" name="BittyBuzzVm::start">
+<area shape="rect" id="node1" title="Starts the vm." alt="" coords="5,5,149,32"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzSystem.html#aaaa3b4ee96aca935adb6db82b707d1cb" title="Call a bittybuzz function that takes not arguments (init, step, etc),." alt="" coords="197,5,416,32"/>
+</map>

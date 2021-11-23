@@ -1,0 +1,7 @@
+<map id="BittyBuzzSystem::logVmDump" name="BittyBuzzSystem::logVmDump">
+<area shape="rect" id="node1" title="Logs the vm dump which contains information about the vm state, heap, stack, etc." alt="" coords="701,31,924,57"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzSystem.html#aa754a6e295190dc75cfb95fb20eeeffb" title="Callback to handle errors on bittybuzz vm." alt="" coords="424,5,653,32"/>
+<area shape="rect" id="node5" href="$classBittyBuzzVm.html#a006f92f1792b9f07dac70247db651da5" title="Logs the virtual machine state, stack, heap and table segments." alt="" coords="203,56,376,83"/>
+<area shape="rect" id="node3" href="$classBittyBuzzVm.html#aedb286c5b5f42b95fc088bb7aeb7bd2e" title="Init the virtual machine." alt="" coords="222,5,357,32"/>
+<area shape="rect" id="node4" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,31,155,57"/>
+</map>

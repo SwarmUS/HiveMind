@@ -1,0 +1,6 @@
+<map id="InterlocMessageHandler::sendInterlocDump" name="InterlocMessageHandler::sendInterlocDump">
+<area shape="rect" id="node1" title="Sends a history of interloc updates back to the host." alt="" coords="5,64,185,105"/>
+<area shape="rect" id="node2" href="$classInterlocMessageHandler.html#a1a050085ff68140313e3a814f0eb3ff0" title=" " alt="" coords="233,5,421,47"/>
+<area shape="rect" id="node3" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="469,42,581,69"/>
+<area shape="rect" id="node4" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="278,122,377,149"/>
+</map>

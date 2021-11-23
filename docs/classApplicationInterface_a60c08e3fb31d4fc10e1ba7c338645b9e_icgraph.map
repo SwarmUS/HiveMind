@@ -1,0 +1,4 @@
+<map id="ApplicationInterface::setSystemDeviceState" name="ApplicationInterface::setSystemDeviceState">
+<area shape="rect" id="node1" title="set the system Connection state and set the seven segment accordingly" alt="" coords="207,5,385,47"/>
+<area shape="rect" id="node2" href="$classApplicationInterface.html#ac5d83ff5dd83bc67d24218a5a5950680" title="set the user seven segment" alt="" coords="5,5,159,47"/>
+</map>

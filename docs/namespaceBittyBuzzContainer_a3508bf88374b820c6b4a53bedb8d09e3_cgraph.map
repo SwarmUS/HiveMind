@@ -1,0 +1,12 @@
+<map id="BittyBuzzContainer::getBBZMessageService" name="BittyBuzzContainer::getBBZMessageService">
+<area shape="rect" id="node1" title="return an instance of a bittybuzz message service" alt="" coords="5,116,189,157"/>
+<area shape="rect" id="node2" href="$namespaceBSPContainer.html#af0d55176bf6bb6f6c628b60b391f49f6" title="Returns an instance of the platform dependent BSP." alt="" coords="965,123,1129,150"/>
+<area shape="rect" id="node3" href="$namespaceMessageHandlerContainer.html#a5657f306bac0cb17d1c95ba5e05b2a88" title="get the buzz message queue" alt="" coords="241,50,436,92"/>
+<area shape="rect" id="node4" href="$namespaceMessageHandlerContainer.html#ab8fa31b7a3f2934e7f2caf4b4c7301c7" title="get the host message queue" alt="" coords="241,116,436,157"/>
+<area shape="rect" id="node5" href="$namespaceLoggerContainer.html#a565f20495305a829becfc81ebe58957e" title="Return a reference to the global logger." alt="" coords="237,182,440,208"/>
+<area shape="rect" id="node10" href="$namespaceMessageHandlerContainer.html#ab2e1517e77a5f37bc3ff2690945dcf7c" title="get the remote message queue" alt="" coords="241,233,436,274"/>
+<area shape="rect" id="node6" href="$namespaceSettingsContainer.html#ab4185c5b2119ac81daf50e334a1d928c" title="Get the log level of the application." alt="" coords="488,174,635,216"/>
+<area shape="rect" id="node9" href="$namespaceBSPContainer.html#ab21aa4c040bcb98d5bbc83488c008fdd" title="Returns an instance of the platform dependent UserInterface." alt="" coords="683,123,909,150"/>
+<area shape="rect" id="node7" href="$SettingsContainer_8cpp.html#aa63a236fe3a758cf751aa3785be2699d" title=" " alt="" coords="723,178,869,204"/>
+<area shape="rect" id="node8" href="$classBSP.html#a7d2c52887b2902ceeed7b98f02dd0a14" title=" " alt="" coords="957,178,1137,204"/>
+</map>

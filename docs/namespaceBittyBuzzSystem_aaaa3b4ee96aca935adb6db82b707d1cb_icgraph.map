@@ -1,0 +1,6 @@
+<map id="BittyBuzzSystem::functionCall" name="BittyBuzzSystem::functionCall">
+<area shape="rect" id="node1" title="Call a bittybuzz function that takes not arguments (init, step, etc),." alt="" coords="395,31,613,57"/>
+<area shape="rect" id="node2" href="$classBittyBuzzVm.html#a106bff35f1e8b08d1f108e64ac76b847" title="Starts the vm." alt="" coords="203,5,347,32"/>
+<area shape="rect" id="node4" href="$classBittyBuzzVm.html#a79920232879c458ce76d8e7093a1c4bc" title="Does one execution step in the virtual machine. Thus execute the buzz code in the step function." alt="" coords="203,56,346,83"/>
+<area shape="rect" id="node3" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,31,155,57"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="Logger::log" name="Logger::log">
+<area shape="rect" id="node1" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="5,97,100,123"/>
+<area shape="rect" id="node2" href="$classIUserInterface.html#a73972c09ef6355f4cb7eb6f072a85fd5" title="get the mutex for printing. Note that the mutex is not used in any functions, the user needs to lock ..." alt="" coords="152,5,325,47"/>
+<area shape="rect" id="node3" href="$classLogger.html#a468964b824f4f2c4dd8b309d886c5489" title=" " alt="" coords="148,71,329,98"/>
+<area shape="rect" id="node4" href="$classIUserInterface.html#abd78d00aab73513e3089259985fe3982" title="Provides an interface to print to the console or serial port. The arguments and return values match t..." alt="" coords="163,122,315,149"/>
+<area shape="rect" id="node5" href="$classIUserInterface.html#a334c441568a18703971a88895f48ff99" title="Provides an interface to print a line to the console or serial port. Flushes the input and adds a new..." alt="" coords="149,173,328,199"/>
+</map>

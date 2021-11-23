@@ -1,0 +1,6 @@
+<map id="Math::log10" name="Math::log10">
+<area shape="rect" id="node1" title="Calculates the logarithm base 10." alt="" coords="656,13,755,39"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzMathFunctions.html#a4384a2d412502626484c40cf827e68a1" title="Calculates the logarithm base 10 Signature log10(arg1)" alt="" coords="429,5,608,47"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzFactory.html#a32af3eb6114aee64cb41cdda600b71b6" title="Creates a the math table library for the bvm." alt="" coords="203,5,381,47"/>
+<area shape="rect" id="node4" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,13,155,39"/>
+</map>

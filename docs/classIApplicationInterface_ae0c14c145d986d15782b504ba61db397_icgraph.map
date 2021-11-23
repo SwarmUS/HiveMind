@@ -1,0 +1,4 @@
+<map id="IApplicationInterface::setSystemButtonCallback" name="IApplicationInterface::setSystemButtonCallback">
+<area shape="rect" id="node1" title="set the systems button to a callback" alt="" coords="228,5,427,47"/>
+<area shape="rect" id="node2" href="$classButtonCallbackRegister.html#a2ae677e81887c5e9f0f53ba6caaae58f" title="sets the callback to the managed button" alt="" coords="5,5,180,47"/>
+</map>

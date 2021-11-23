@@ -1,0 +1,26 @@
+<map id="BittyBuzzUserFunctions::delay" name="BittyBuzzUserFunctions::delay">
+<area shape="rect" id="node1" title="wait for a certain delay Signature delay(arg1) Warning this function make the whole VM sleep which ca..." alt="" coords="1265,383,1441,425"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzFactory.html#a364e6243f1119a53110679f9af79e818" title="Creates an array of FunctionRegister associated with the code from main.bzz." alt="" coords="207,63,386,105"/>
+<area shape="rect" id="node4" href="$classInterlocMessageHandler.html#a49595c956e14e2b903ffab8da0b120e8" title=" " alt="" coords="1012,133,1192,174"/>
+<area shape="rect" id="node10" href="$classInterlocManager.html#a45ed8a605df6ebeb17151eb19f030362" title=" " alt="" coords="987,198,1217,239"/>
+<area shape="rect" id="node12" href="$BittyBuzzSystem_8cpp.html#ad309d50ba5e3508b18ed424e0f256082" title=" " alt="" coords="1070,264,1134,291"/>
+<area shape="rect" id="node13" href="$namespaceBittyBuzzSystem.html#a4749c7ec37a2b606137feccab0731588" title="Logs the vm dump which contains information about the vm state, heap, stack, etc." alt="" coords="716,289,939,316"/>
+<area shape="rect" id="node17" href="$BSP_8cpp.html#a11734ee7cef36cadfcc246b77fe1d85b" title="Task that kills OS when ROS node is stopped." alt="" coords="1055,365,1149,392"/>
+<area shape="rect" id="node18" href="$classTxTask.html#a47bafbd983cf19b0c63226b6160a2262" title=" " alt="" coords="1051,416,1153,443"/>
+<area shape="rect" id="node19" href="$classSpiTest.html#a40fd4467315846c60e1751510696a963" title=" " alt="" coords="1050,467,1154,493"/>
+<area shape="rect" id="node20" href="$classLedTest.html#ab45fc5af78e15073bddf627db0ef512c" title=" " alt="" coords="1049,517,1155,544"/>
+<area shape="rect" id="node21" href="$classCommMonitoringTask.html#a1d325cb290c5fd6fb5223b921773e856" title=" " alt="" coords="1020,569,1184,610"/>
+<area shape="rect" id="node22" href="$classLogInterlocTask.html#adde011a06dfb1224f113420ac0e540cf" title=" " alt="" coords="1023,635,1181,661"/>
+<area shape="rect" id="node23" href="$classTCPServer.html#a62b6ed85579b0e728ab3d00dbe271819" title=" " alt="" coords="1011,685,1193,712"/>
+<area shape="rect" id="node3" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,239,155,265"/>
+<area shape="rect" id="node5" href="$classInterlocMessageHandler.html#a74b40fe61cee22189a6c202c1d5d0620" title=" " alt="" coords="737,107,917,149"/>
+<area shape="rect" id="node8" href="$classInterlocMessageHandler.html#a084041093aea95367640eca66b7b1a48" title=" " alt="" coords="737,173,917,214"/>
+<area shape="rect" id="node6" href="$classInterlocMessageHandler.html#aad49c9dccd72f43ca9ae8d3514b437df" title=" " alt="" coords="446,107,661,149"/>
+<area shape="rect" id="node7" href="$classInterlocMessageHandler.html#a5d2b2ab9ab2e9c9a5d2305bb3f44fac0" title=" " alt="" coords="203,143,391,185"/>
+<area shape="rect" id="node9" href="$classInterlocMessageHandler.html#abfe816887a5c07c05fe9d5f97191cb2d" title=" " alt="" coords="451,173,656,214"/>
+<area shape="rect" id="node11" href="$classInterlocManager.html#a35d17c862ba78bc00a9aaefdf6cddf1a" title="Dummy function to demonstrate working DW1000s." alt="" coords="720,239,935,265"/>
+<area shape="rect" id="node14" href="$namespaceBittyBuzzSystem.html#aa754a6e295190dc75cfb95fb20eeeffb" title="Callback to handle errors on bittybuzz vm." alt="" coords="439,239,668,265"/>
+<area shape="rect" id="node16" href="$classBittyBuzzVm.html#a006f92f1792b9f07dac70247db651da5" title="Logs the virtual machine state, stack, heap and table segments." alt="" coords="210,289,383,316"/>
+<area shape="rect" id="node15" href="$classBittyBuzzVm.html#aedb286c5b5f42b95fc088bb7aeb7bd2e" title="Init the virtual machine." alt="" coords="229,239,364,265"/>
+<area shape="rect" id="node24" href="$classTCPServer.html#ace9cc51929e5f46f6d03fa15e2f6cff2" title=" " alt="" coords="747,685,908,712"/>
+</map>

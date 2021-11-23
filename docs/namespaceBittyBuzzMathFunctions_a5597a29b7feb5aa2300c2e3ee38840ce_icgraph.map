@@ -1,0 +1,6 @@
+<map id="BittyBuzzMathFunctions::acos" name="BittyBuzzMathFunctions::acos">
+<area shape="rect" id="node1" title="Calculates the arc cosine Signature acos(arg1)" alt="" coords="429,5,608,47"/>
+<area shape="rect" id="node2" href="$namespaceMath.html#a5f29c5070b9836eb16599f9c2667cadd" title="calculate the arc cosine" alt="" coords="245,13,339,39"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzFactory.html#a32af3eb6114aee64cb41cdda600b71b6" title="Creates a the math table library for the bvm." alt="" coords="203,64,381,105"/>
+<area shape="rect" id="node4" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,71,155,98"/>
+</map>

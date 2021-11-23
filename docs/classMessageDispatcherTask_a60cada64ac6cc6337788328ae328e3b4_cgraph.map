@@ -1,0 +1,34 @@
+<map id="MessageDispatcherTask::task" name="MessageDispatcherTask::task">
+<area shape="rect" id="node1" title=" " alt="" coords="5,713,184,754"/>
+<area shape="rect" id="node2" href="$namespaceMessageHandlerContainer.html#afb5fc7cf23f56b513fb224af1d2869d3" title="create a message handler" alt="" coords="755,632,992,688"/>
+<area shape="rect" id="node7" href="$namespaceBSPContainer.html#af0d55176bf6bb6f6c628b60b391f49f6" title="Returns an instance of the platform dependent BSP." alt="" coords="2077,396,2241,423"/>
+<area shape="rect" id="node11" href="$namespaceMessageHandlerContainer.html#a5d6396c6bff29e8218901b7bc87c6a9e" title="create a request handler" alt="" coords="232,436,469,492"/>
+<area shape="rect" id="node18" href="$namespaceMessageHandlerContainer.html#a973f90f5e99b1f3a50058df3a9732284" title="create a message dispatcher" alt="" coords="774,713,973,754"/>
+<area shape="rect" id="node20" href="$classMessageDispatcher.html#a693d6717814df88afaca56395f902a1d" title="deserialize a message and dispatches it in the appropriate queue" alt="" coords="263,954,438,995"/>
+<area shape="rect" id="node26" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="1624,1008,1723,1035"/>
+<area shape="rect" id="node32" href="$classICommInterface.html#a1a7fc1a0aaab097e499e1c022838d1cb" title="Tells if interface is connected and functionning." alt="" coords="243,1020,458,1047"/>
+<area shape="rect" id="node3" href="$namespaceMessageHandlerContainer.html#ab8fa31b7a3f2934e7f2caf4b4c7301c7" title="get the host message queue" alt="" coords="1071,597,1265,638"/>
+<area shape="rect" id="node4" href="$namespaceLoggerContainer.html#a565f20495305a829becfc81ebe58957e" title="Return a reference to the global logger." alt="" coords="1343,421,1546,448"/>
+<area shape="rect" id="node10" href="$namespaceMessageHandlerContainer.html#ab2e1517e77a5f37bc3ff2690945dcf7c" title="get the remote message queue" alt="" coords="1071,531,1265,573"/>
+<area shape="rect" id="node5" href="$namespaceSettingsContainer.html#ab4185c5b2119ac81daf50e334a1d928c" title="Get the log level of the application." alt="" coords="1600,614,1747,655"/>
+<area shape="rect" id="node9" href="$namespaceBSPContainer.html#ab21aa4c040bcb98d5bbc83488c008fdd" title="Returns an instance of the platform dependent UserInterface." alt="" coords="1795,421,2021,448"/>
+<area shape="rect" id="node6" href="$SettingsContainer_8cpp.html#aa63a236fe3a758cf751aa3785be2699d" title=" " alt="" coords="1835,815,1981,841"/>
+<area shape="rect" id="node8" href="$classBSP.html#a7d2c52887b2902ceeed7b98f02dd0a14" title=" " alt="" coords="2069,815,2249,841"/>
+<area shape="rect" id="node12" href="$namespaceInterlocContainer.html#ae90406010f66b4ef6ae2d03c9ea2d355" title=" " alt="" coords="537,330,680,371"/>
+<area shape="rect" id="node13" href="$namespaceBSPContainer.html#a5f94bca428cac0db9f625492a6dea694" title="Returns an instance of the interloc manager." alt="" coords="1074,195,1262,237"/>
+<area shape="rect" id="node14" href="$namespaceInterlocContainer.html#a468870fc2a4ac40393b1e5a0f4cbbf0d" title="Gets a queue in which to insert raw position updates from the BSP layer." alt="" coords="1337,195,1552,237"/>
+<area shape="rect" id="node15" href="$namespaceInterlocContainer.html#a40cf3e9bc6e87bf5de868c7b69826976" title=" " alt="" coords="773,362,974,403"/>
+<area shape="rect" id="node17" href="$namespaceInterlocContainer.html#a17864d52ed2f7c2742316bcb46d95559" title="get interloc position update msg queu" alt="" coords="761,297,986,338"/>
+<area shape="rect" id="node16" href="$namespaceMessageHandlerContainer.html#a4a0abeb4f314766df7e549dca6f78cc7" title="get the interloc message queue" alt="" coords="1071,414,1265,455"/>
+<area shape="rect" id="node19" href="$namespaceMessageHandlerContainer.html#a5657f306bac0cb17d1c95ba5e05b2a88" title="get the buzz message queue" alt="" coords="1071,815,1265,857"/>
+<area shape="rect" id="node21" href="$classMessageDispatcher.html#ab0ffe2e1d2c626396322bff9dbb74dab" title=" " alt="" coords="529,1059,688,1101"/>
+<area shape="rect" id="node25" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="1617,1332,1729,1359"/>
+<area shape="rect" id="node31" href="$classIGreetSender.html#ace5759e9a3d9a60303fa3352a5711093" title="send a greet to the output queue" alt="" coords="517,983,700,1009"/>
+<area shape="rect" id="node22" href="$classMessageDispatcher.html#a0533de485bd66d33661350eabab5c5a4" title=" " alt="" coords="794,1175,953,1217"/>
+<area shape="rect" id="node28" href="$classMessageDispatcher.html#acbedb854b1258cdb7ae5f5256b3e3086" title=" " alt="" coords="794,1059,953,1101"/>
+<area shape="rect" id="node30" href="$classIHiveConnectHiveMindApiMessageHandler.html#a6dc199f22ebd86f896987943be0505e4" title="handles HiveConnectHiveMindApi" alt="" coords="748,1241,999,1282"/>
+<area shape="rect" id="node23" href="$classMessageDispatcher.html#a09fb336f87222df932a55d3422e948dc" title=" " alt="" coords="1075,1201,1261,1242"/>
+<area shape="rect" id="node27" href="$classIHiveMindHostApiRequestHandler.html#adaa82fad56360b11ecb085fccde35600" title="handles HiveMindHostAPI request and sends a response to the approriate target" alt="" coords="1047,1266,1289,1307"/>
+<area shape="rect" id="node24" href="$classMessageDispatcher.html#ada0ccf9c2ef2f3c33fd5aa004dd554d0" title=" " alt="" coords="1365,1167,1524,1209"/>
+<area shape="rect" id="node29" href="$classMessageDispatcher.html#a222833370822947fe1d0673f99a94dde" title=" " alt="" coords="1071,1135,1265,1177"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="BittyBuzzMathFunctions::atan" name="BittyBuzzMathFunctions::atan">
+<area shape="rect" id="node1" title="Calculates the arc cosine Signature atan(arg1)" alt="" coords="429,27,608,69"/>
+<area shape="rect" id="node2" href="$namespaceMath.html#a88da9666e9721040c856671a18a9c86d" title="calculate the arc tangent" alt="" coords="246,5,338,32"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzFactory.html#a32af3eb6114aee64cb41cdda600b71b6" title="Creates a the math table library for the bvm." alt="" coords="203,57,381,98"/>
+<area shape="rect" id="node4" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,64,155,91"/>
+</map>

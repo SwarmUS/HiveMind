@@ -1,0 +1,13 @@
+<map id="Math::atan2" name="Math::atan2">
+<area shape="rect" id="node1" title="calculate the arc of x/y" alt="" coords="809,129,909,156"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzMathFunctions.html#a39fc17968ecfe8e578d76d49241aef4f" title="Calculates the arc cosine Signature atan(arg1)" alt="" coords="565,57,743,98"/>
+<area shape="rect" id="node6" href="$classInterlocManager.html#a5f9250090d278003572d7b07b333e00d" title=" " alt="" coords="557,122,751,163"/>
+<area shape="rect" id="node9" href="$classInterloc.html#a44a7c992eef3807b11dd54e62f060060" title=" " alt="" coords="547,191,761,217"/>
+<area shape="rect" id="node3" href="$namespaceMath.html#a88da9666e9721040c856671a18a9c86d" title="calculate the arc tangent" alt="" coords="337,5,429,32"/>
+<area shape="rect" id="node4" href="$namespaceBittyBuzzFactory.html#a32af3eb6114aee64cb41cdda600b71b6" title="Creates a the math table library for the bvm." alt="" coords="294,57,473,98"/>
+<area shape="rect" id="node5" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="38,64,187,91"/>
+<area shape="rect" id="node7" href="$classInterlocManager.html#a45ed8a605df6ebeb17151eb19f030362" title=" " alt="" coords="268,122,499,163"/>
+<area shape="rect" id="node8" href="$classInterlocManager.html#a35d17c862ba78bc00a9aaefdf6cddf1a" title="Dummy function to demonstrate working DW1000s." alt="" coords="5,129,220,156"/>
+<area shape="rect" id="node10" href="$classInterloc.html#ad9e0b163a0ccda8aebe18e5ce1403730" title=" " alt="" coords="293,187,474,229"/>
+<area shape="rect" id="node11" href="$classInterloc.html#a59644849ac6aa61403f85ebae1e4bfa4" title="Spins the interloc task checking if any updates happened. Processing them and pushing update values t..." alt="" coords="48,195,177,221"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="Math::pow" name="Math::pow">
+<area shape="rect" id="node1" title="Calculates the base raised to the power of the exponent." alt="" coords="5,31,96,57"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzMathFunctions.html#ae972145cb9224dd93949b1e0d78e85d1" title="Calculates the base raised to the power of the exponent. Signature pow(base, exponent)" alt="" coords="144,31,359,57"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzMathFunctions.html#ae328912590bf3cdbfaf52552c4c51feb" title="Calculates e^x Signature exp(x)" alt="" coords="407,5,617,32"/>
+<area shape="rect" id="node5" href="$BittyBuzzMathFunctions_8cpp.html#a4bfd55f852fffcd9b9c7abfa61c3f9e9" title=" " alt="" coords="665,56,764,83"/>
+<area shape="rect" id="node4" href="$namespaceMath.html#ad2201d4d97197f21e48461b453c25185" title="Calculates the exponent." alt="" coords="671,5,758,32"/>
+</map>

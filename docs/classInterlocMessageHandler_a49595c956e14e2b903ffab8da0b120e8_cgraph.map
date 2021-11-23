@@ -1,0 +1,6 @@
+<map id="InterlocMessageHandler::ensureSendMessage" name="InterlocMessageHandler::ensureSendMessage">
+<area shape="rect" id="node1" title=" " alt="" coords="5,39,185,80"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzUserFunctions.html#a3e415f31c00eb6becdf86104f101a812" title="wait for a certain delay Signature delay(arg1) Warning this function make the whole VM sleep which ca..." alt="" coords="239,5,415,47"/>
+<area shape="rect" id="node3" href="$classInterlocMessageHandler.html#a1a050085ff68140313e3a814f0eb3ff0" title=" " alt="" coords="233,71,421,112"/>
+<area shape="rect" id="node4" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="469,78,581,105"/>
+</map>

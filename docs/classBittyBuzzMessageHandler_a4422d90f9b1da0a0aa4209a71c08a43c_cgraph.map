@@ -1,0 +1,5 @@
+<map id="BittyBuzzMessageHandler::handleVmMessage" name="BittyBuzzMessageHandler::handleVmMessage">
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,199,47"/>
+<area shape="rect" id="node2" href="$classBittyBuzzMessageHandler.html#a09560d02c50d773bea9f5ba0b599d277" title=" " alt="" coords="247,5,440,47"/>
+<area shape="rect" id="node3" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="488,13,587,39"/>
+</map>

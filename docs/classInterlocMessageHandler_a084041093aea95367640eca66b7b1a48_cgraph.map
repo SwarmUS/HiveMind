@@ -1,0 +1,8 @@
+<map id="InterlocMessageHandler::stateChangeCallback" name="InterlocMessageHandler::stateChangeCallback">
+<area shape="rect" id="node1" title=" " alt="" coords="5,129,185,171"/>
+<area shape="rect" id="node2" href="$classInterlocMessageHandler.html#a49595c956e14e2b903ffab8da0b120e8" title=" " alt="" coords="233,71,413,112"/>
+<area shape="rect" id="node5" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="697,107,809,134"/>
+<area shape="rect" id="node6" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="274,187,373,214"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzUserFunctions.html#a3e415f31c00eb6becdf86104f101a812" title="wait for a certain delay Signature delay(arg1) Warning this function make the whole VM sleep which ca..." alt="" coords="467,5,643,47"/>
+<area shape="rect" id="node4" href="$classInterlocMessageHandler.html#a1a050085ff68140313e3a814f0eb3ff0" title=" " alt="" coords="461,71,649,112"/>
+</map>

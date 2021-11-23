@@ -1,0 +1,5 @@
+<map id="BittyBuzzVm::terminate" name="BittyBuzzVm::terminate">
+<area shape="rect" id="node1" title="Terminate the virtual machine and removes all messages that were supposed to be processed." alt="" coords="5,46,184,73"/>
+<area shape="rect" id="node2" href="$classIBittyBuzzClosureRegister.html#ac0628b6f097662a0fdf39af1bf758877" title="Clears all the registered closures." alt="" coords="235,5,426,47"/>
+<area shape="rect" id="node3" href="$classIBittyBuzzMessageHandler.html#ac7e1afef27b116b606e53698a54cd9fd" title="clears all the pending messages in the input queue without processing them" alt="" coords="232,71,429,112"/>
+</map>

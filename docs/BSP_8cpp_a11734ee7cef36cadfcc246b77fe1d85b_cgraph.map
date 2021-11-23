@@ -1,0 +1,4 @@
+<map id="rosWatcher" name="rosWatcher">
+<area shape="rect" id="node1" title="Task that kills OS when ROS node is stopped." alt="" coords="5,13,100,39"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzUserFunctions.html#a3e415f31c00eb6becdf86104f101a812" title="wait for a certain delay Signature delay(arg1) Warning this function make the whole VM sleep which ca..." alt="" coords="148,5,324,47"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="IUserInterface::setRGBLed" name="IUserInterface::setRGBLed">
+<area shape="rect" id="node1" title="Sets the RGB LED to a given color." alt="" coords="260,13,453,39"/>
+<area shape="rect" id="node2" href="$classApplicationInterface.html#a764996cb01f1461a9019389d0f90baf9" title="set the system Connection state and light the necessary LED the right color" alt="" coords="5,5,212,47"/>
+</map>

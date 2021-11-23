@@ -1,0 +1,5 @@
+<map id="BittyBuzzUIFunctions::setHex" name="BittyBuzzUIFunctions::setHex">
+<area shape="rect" id="node1" title="Sets the user sevent segment to a value Signature set_hex(arg1)" alt="" coords="5,23,165,65"/>
+<area shape="rect" id="node2" href="$BittyBuzzUIFunctions_8cpp.html#ac81f3e4f9d2134c238f3454a76c60d9e" title=" " alt="" coords="221,5,362,32"/>
+<area shape="rect" id="node3" href="$classIUserUI.html#a7e6dab2e83c7c0c55add9b13e025005a" title="Set the user seven segment to a value." alt="" coords="213,56,369,83"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="UserUI::setSegment" name="UserUI::setSegment">
+<area shape="rect" id="node1" title="Set the user seven segment to a value." alt="" coords="5,13,157,39"/>
+<area shape="rect" id="node2" href="$classIApplicationInterface.html#ae348398c4573b00fe9bf74ad179adaf0" title="set the user seven segment" alt="" coords="205,5,363,47"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="BittyBuzzVm::init" name="BittyBuzzVm::init">
+<area shape="rect" id="node1" title="Init the virtual machine." alt="" coords="5,235,140,262"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzSystem.html#aa754a6e295190dc75cfb95fb20eeeffb" title="Callback to handle errors on bittybuzz vm." alt="" coords="188,143,417,170"/>
+<area shape="rect" id="node13" href="$classIBittyBuzzBytecode.html#abf4b1937d79ebc985a81cd76e8f64a1e" title="Obtain the function that fetches the BittyBuzz byte code." alt="" coords="201,195,404,236"/>
+<area shape="rect" id="node14" href="$classIBittyBuzzBytecode.html#a2b1e8f497665cc92efaa6d2ed8ad804d" title="Get the size of the BittyBuzz byte code." alt="" coords="225,260,381,301"/>
+<area shape="rect" id="node15" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="247,326,359,353"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzSystem.html#ad75f5dec1d962311080aeffd1dfed170" title=" " alt="" coords="484,5,677,47"/>
+<area shape="rect" id="node4" href="$namespaceBittyBuzzSystem.html#af137cc4c46446bf57c37e56d27f8d64c" title=" " alt="" coords="465,71,696,112"/>
+<area shape="rect" id="node5" href="$namespaceBittyBuzzSystem.html#acba1f5eb19ac21b8a4465e5e1a844c18" title=" " alt="" coords="483,136,679,177"/>
+<area shape="rect" id="node6" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="895,202,993,229"/>
+<area shape="rect" id="node7" href="$namespaceBittyBuzzSystem.html#a4749c7ec37a2b606137feccab0731588" title="Logs the vm dump which contains information about the vm state, heap, stack, etc." alt="" coords="469,278,692,305"/>
+<area shape="rect" id="node8" href="$namespaceBittyBuzzUserFunctions.html#a3e415f31c00eb6becdf86104f101a812" title="wait for a certain delay Signature delay(arg1) Warning this function make the whole VM sleep which ca..." alt="" coords="856,355,1032,396"/>
+<area shape="rect" id="node9" href="$BittyBuzzSystem_8cpp.html#ad309d50ba5e3508b18ed424e0f256082" title=" " alt="" coords="744,303,808,330"/>
+<area shape="rect" id="node10" href="$namespaceBittyBuzzUtils.html#af39ca28c07269d2f2f2b90485bb445f0" title="Logs an bittybuzz object to a human readable format." alt="" coords="862,303,1026,330"/>
+<area shape="rect" id="node12" href="$BittyBuzzSystem_8cpp.html#acebd60bec46cda0b723f9b37da39e6e4" title=" " alt="" coords="916,253,972,279"/>
+<area shape="rect" id="node11" href="$classIBittyBuzzStringResolver.html#ac3355fa9dbc7241e57c7984608879360" title="Get the string from the stringId." alt="" coords="1080,296,1263,337"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="IBSP::initChip" name="IBSP::initChip">
+<area shape="rect" id="node1" title="Initialise the chip for usage. Needs to be called early in the program." alt="" coords="108,5,217,32"/>
+<area shape="rect" id="node2" href="$DecawaveTests_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="5,5,60,32"/>
+</map>

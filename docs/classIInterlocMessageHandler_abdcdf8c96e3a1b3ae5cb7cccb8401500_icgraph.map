@@ -1,0 +1,5 @@
+<map id="IInterlocMessageHandler::sendInterlocDump" name="IInterlocMessageHandler::sendInterlocDump">
+<area shape="rect" id="node1" title="Sends a history of interloc updates back to the host." alt="" coords="448,5,632,47"/>
+<area shape="rect" id="node2" href="$classInterloc.html#adb319c18af21de872e0ad4a05f7ec632" title=" " alt="" coords="183,13,400,39"/>
+<area shape="rect" id="node3" href="$classInterloc.html#a59644849ac6aa61403f85ebae1e4bfa4" title="Spins the interloc task checking if any updates happened. Processing them and pushing update values t..." alt="" coords="5,13,135,39"/>
+</map>

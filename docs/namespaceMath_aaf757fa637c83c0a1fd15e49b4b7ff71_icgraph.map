@@ -1,0 +1,9 @@
+<map id="Math::pow" name="Math::pow">
+<area shape="rect" id="node1" title="Calculates the base raised to the power of the exponent." alt="" coords="1072,42,1163,69"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzMathFunctions.html#ae972145cb9224dd93949b1e0d78e85d1" title="Calculates the base raised to the power of the exponent. Signature pow(base, exponent)" alt="" coords="809,42,1024,69"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzFactory.html#a32af3eb6114aee64cb41cdda600b71b6" title="Creates a the math table library for the bvm." alt="" coords="565,5,743,47"/>
+<area shape="rect" id="node5" href="$classInterlocManager.html#ab7c0635d85a955327020e495eac7966c" title=" " alt="" coords="547,71,761,98"/>
+<area shape="rect" id="node4" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="309,13,458,39"/>
+<area shape="rect" id="node6" href="$classInterlocManager.html#a45ed8a605df6ebeb17151eb19f030362" title=" " alt="" coords="268,64,499,105"/>
+<area shape="rect" id="node7" href="$classInterlocManager.html#a35d17c862ba78bc00a9aaefdf6cddf1a" title="Dummy function to demonstrate working DW1000s." alt="" coords="5,71,220,98"/>
+</map>

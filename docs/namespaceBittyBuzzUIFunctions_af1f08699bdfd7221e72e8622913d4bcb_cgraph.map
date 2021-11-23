@@ -1,0 +1,4 @@
+<map id="BittyBuzzUIFunctions::setLed" name="BittyBuzzUIFunctions::setLed">
+<area shape="rect" id="node1" title="Sets the user LED on or off Signature set_led(arg1)" alt="" coords="5,5,165,47"/>
+<area shape="rect" id="node2" href="$classIUserUI.html#acf77468a1a39185426ed0746f44a5a92" title="Set the led on or off." alt="" coords="213,13,335,39"/>
+</map>

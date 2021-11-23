@@ -1,0 +1,10 @@
+<map id="MessageSenderTask" name="MessageSenderTask">
+<area shape="rect" id="node1" title=" " alt="" coords="398,301,589,437"/>
+<area shape="rect" id="node2" href="$classAbstractTask.html" title=" " alt="" coords="5,139,192,231"/>
+<area shape="rect" id="node3" href="$classICommInterface.html" title=" " alt="" coords="216,132,379,239"/>
+<area shape="rect" id="node4" href="$classIProtobufStream.html" title=" " alt="" coords="233,5,361,83"/>
+<area shape="rect" id="node5" title=" " alt="" coords="403,147,453,224"/>
+<area shape="rect" id="node6" href="$classILogger.html" title="A logger class with basic logging capabilities." alt="" coords="485,132,592,239"/>
+<area shape="rect" id="node7" title=" " alt="" coords="616,139,768,231"/>
+<area shape="rect" id="node8" title=" " alt="" coords="793,147,983,224"/>
+</map>

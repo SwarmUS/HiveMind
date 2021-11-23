@@ -1,0 +1,5 @@
+<map id="IBittyBuzzMessageHandler::processMessage" name="IBittyBuzzMessageHandler::processMessage">
+<area shape="rect" id="node1" title="process a message and sends a response if needed. A response is sent to the appropriate queue on a re..." alt="" coords="393,5,591,47"/>
+<area shape="rect" id="node2" href="$classBittyBuzzVm.html#a79920232879c458ce76d8e7093a1c4bc" title="Does one execution step in the virtual machine. Thus execute the buzz code in the step function." alt="" coords="203,13,345,39"/>
+<area shape="rect" id="node3" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,13,155,39"/>
+</map>

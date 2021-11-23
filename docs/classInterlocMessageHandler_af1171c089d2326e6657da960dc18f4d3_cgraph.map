@@ -1,0 +1,6 @@
+<map id="InterlocMessageHandler::handleConfigurationMessage" name="InterlocMessageHandler::handleConfigurationMessage">
+<area shape="rect" id="node1" title=" " alt="" coords="5,71,224,112"/>
+<area shape="rect" id="node2" href="$classIInterlocManager.html#a6c776efa63b2de4afdd6b14a54222667" title="Sets the number of frames to accumulate when in angle calibration mode." alt="" coords="272,5,472,47"/>
+<area shape="rect" id="node3" href="$classIInterlocManager.html#ab04447b209e1ce505e433a524348af0d" title="Sets the targeted distance for calibration." alt="" coords="272,71,472,112"/>
+<area shape="rect" id="node4" href="$classIInterlocManager.html#a355cd1ca631928c60cebe5d7226821c8" title=" " alt="" coords="273,136,471,177"/>
+</map>

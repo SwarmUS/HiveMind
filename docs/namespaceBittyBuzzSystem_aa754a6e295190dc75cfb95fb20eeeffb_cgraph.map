@@ -1,0 +1,13 @@
+<map id="BittyBuzzSystem::errorReceiver" name="BittyBuzzSystem::errorReceiver">
+<area shape="rect" id="node1" title="Callback to handle errors on bittybuzz vm." alt="" coords="5,143,235,170"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzSystem.html#ad75f5dec1d962311080aeffd1dfed170" title=" " alt="" coords="301,5,495,47"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzSystem.html#af137cc4c46446bf57c37e56d27f8d64c" title=" " alt="" coords="283,71,513,112"/>
+<area shape="rect" id="node4" href="$namespaceBittyBuzzSystem.html#acba1f5eb19ac21b8a4465e5e1a844c18" title=" " alt="" coords="300,136,496,177"/>
+<area shape="rect" id="node5" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="712,202,811,229"/>
+<area shape="rect" id="node6" href="$namespaceBittyBuzzSystem.html#a4749c7ec37a2b606137feccab0731588" title="Logs the vm dump which contains information about the vm state, heap, stack, etc." alt="" coords="287,278,509,305"/>
+<area shape="rect" id="node7" href="$namespaceBittyBuzzUserFunctions.html#a3e415f31c00eb6becdf86104f101a812" title="wait for a certain delay Signature delay(arg1) Warning this function make the whole VM sleep which ca..." alt="" coords="673,355,849,396"/>
+<area shape="rect" id="node8" href="$BittyBuzzSystem_8cpp.html#ad309d50ba5e3508b18ed424e0f256082" title=" " alt="" coords="561,303,625,330"/>
+<area shape="rect" id="node9" href="$namespaceBittyBuzzUtils.html#af39ca28c07269d2f2f2b90485bb445f0" title="Logs an bittybuzz object to a human readable format." alt="" coords="679,303,843,330"/>
+<area shape="rect" id="node11" href="$BittyBuzzSystem_8cpp.html#acebd60bec46cda0b723f9b37da39e6e4" title=" " alt="" coords="733,253,789,279"/>
+<area shape="rect" id="node10" href="$classIBittyBuzzStringResolver.html#ac3355fa9dbc7241e57c7984608879360" title="Get the string from the stringId." alt="" coords="897,296,1080,337"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="IHandshakeUI" name="IHandshakeUI">
+<area shape="rect" id="node1" title="Manages the interface if a device was handshaked (greeted) with or not. Lights the appropriate LED to..." alt="" coords="123,5,271,97"/>
+<area shape="rect" id="node2" href="$classHostHandshakeUI.html" title=" " alt="" coords="5,145,180,252"/>
+<area shape="rect" id="node3" href="$classRemoteHandshakeUI.html" title=" " alt="" coords="205,145,399,252"/>
+</map>

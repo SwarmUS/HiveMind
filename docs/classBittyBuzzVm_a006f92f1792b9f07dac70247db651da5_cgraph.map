@@ -1,0 +1,10 @@
+<map id="BittyBuzzVm::logDump" name="BittyBuzzVm::logDump">
+<area shape="rect" id="node1" title="Logs the virtual machine state, stack, heap and table segments." alt="" coords="5,67,179,94"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzSystem.html#a4749c7ec37a2b606137feccab0731588" title="Logs the vm dump which contains information about the vm state, heap, stack, etc." alt="" coords="227,67,449,94"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzUserFunctions.html#a3e415f31c00eb6becdf86104f101a812" title="wait for a certain delay Signature delay(arg1) Warning this function make the whole VM sleep which ca..." alt="" coords="609,5,785,47"/>
+<area shape="rect" id="node4" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="648,71,747,98"/>
+<area shape="rect" id="node5" href="$BittyBuzzSystem_8cpp.html#ad309d50ba5e3508b18ed424e0f256082" title=" " alt="" coords="497,118,561,145"/>
+<area shape="rect" id="node6" href="$namespaceBittyBuzzUtils.html#af39ca28c07269d2f2f2b90485bb445f0" title="Logs an bittybuzz object to a human readable format." alt="" coords="615,122,779,149"/>
+<area shape="rect" id="node8" href="$BittyBuzzSystem_8cpp.html#acebd60bec46cda0b723f9b37da39e6e4" title=" " alt="" coords="669,173,725,199"/>
+<area shape="rect" id="node7" href="$classIBittyBuzzStringResolver.html#ac3355fa9dbc7241e57c7984608879360" title="Get the string from the stringId." alt="" coords="833,115,1016,156"/>
+</map>

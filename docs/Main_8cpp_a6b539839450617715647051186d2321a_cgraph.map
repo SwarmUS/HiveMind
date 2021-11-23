@@ -1,0 +1,10 @@
+<map id="setRemoteConnectionState" name="setRemoteConnectionState">
+<area shape="rect" id="node1" title=" " alt="" coords="5,67,205,94"/>
+<area shape="rect" id="node2" href="$namespaceLoggerContainer.html#a565f20495305a829becfc81ebe58957e" title="Return a reference to the global logger." alt="" coords="253,42,456,69"/>
+<area shape="rect" id="node8" href="$classLogger.html#acc252d372dbaefa2524dafcbc9c1eec3" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="307,93,402,119"/>
+<area shape="rect" id="node3" href="$namespaceSettingsContainer.html#ab4185c5b2119ac81daf50e334a1d928c" title="Get the log level of the application." alt="" coords="504,5,651,47"/>
+<area shape="rect" id="node7" href="$namespaceBSPContainer.html#ab21aa4c040bcb98d5bbc83488c008fdd" title="Returns an instance of the platform dependent UserInterface." alt="" coords="699,67,925,94"/>
+<area shape="rect" id="node4" href="$SettingsContainer_8cpp.html#aa63a236fe3a758cf751aa3785be2699d" title=" " alt="" coords="739,15,885,42"/>
+<area shape="rect" id="node5" href="$namespaceBSPContainer.html#af0d55176bf6bb6f6c628b60b391f49f6" title="Returns an instance of the platform dependent BSP." alt="" coords="981,66,1145,93"/>
+<area shape="rect" id="node6" href="$classBSP.html#a7d2c52887b2902ceeed7b98f02dd0a14" title=" " alt="" coords="973,15,1153,42"/>
+</map>

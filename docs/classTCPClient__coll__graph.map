@@ -1,0 +1,9 @@
+<map id="TCPClient" name="TCPClient">
+<area shape="rect" id="node1" title=" " alt="" coords="310,301,437,467"/>
+<area shape="rect" id="node2" href="$classICommInterface.html" title=" " alt="" coords="5,132,168,239"/>
+<area shape="rect" id="node3" href="$classIProtobufStream.html" title=" " alt="" coords="23,5,151,83"/>
+<area shape="rect" id="node4" title=" " alt="" coords="192,147,331,224"/>
+<area shape="rect" id="node5" title=" " alt="" coords="355,147,394,224"/>
+<area shape="rect" id="node6" title=" " alt="" coords="467,147,517,224"/>
+<area shape="rect" id="node7" href="$classILogger.html" title="A logger class with basic logging capabilities." alt="" coords="567,132,673,239"/>
+</map>

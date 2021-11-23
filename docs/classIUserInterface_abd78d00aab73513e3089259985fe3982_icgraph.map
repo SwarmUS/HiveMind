@@ -1,0 +1,7 @@
+<map id="IUserInterface::print" name="IUserInterface::print">
+<area shape="rect" id="node1" title="Provides an interface to print to the console or serial port. The arguments and return values match t..." alt="" coords="681,31,833,57"/>
+<area shape="rect" id="node2" href="$classLogger.html#a303d501c9251ab7173b8afc1436647d3" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="484,5,579,32"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzUserFunctions.html#a65c4ae451d706067e40ed2aa314b87b9" title="Logs to the default output Signature log(args...)" alt="" coords="429,56,633,83"/>
+<area shape="rect" id="node4" href="$namespaceBittyBuzzFactory.html#a364e6243f1119a53110679f9af79e818" title="Creates an array of FunctionRegister associated with the code from main.bzz." alt="" coords="203,49,381,90"/>
+<area shape="rect" id="node5" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,56,155,83"/>
+</map>

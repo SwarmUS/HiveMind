@@ -1,0 +1,6 @@
+<map id="LogInterlocTask::task" name="LogInterlocTask::task">
+<area shape="rect" id="node1" title=" " alt="" coords="5,71,164,98"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzUserFunctions.html#a3e415f31c00eb6becdf86104f101a812" title="wait for a certain delay Signature delay(arg1) Warning this function make the whole VM sleep which ca..." alt="" coords="223,5,399,47"/>
+<area shape="rect" id="node3" href="$classIInterloc.html#a52288c4f2f0dee3b847dd7ee804d01bc" title="Returns the position table for all robots in the swarm." alt="" coords="212,71,409,98"/>
+<area shape="rect" id="node4" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="261,122,360,149"/>
+</map>

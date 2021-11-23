@@ -1,0 +1,7 @@
+<map id="Interloc::getRobotArrayIndex" name="Interloc::getRobotArrayIndex">
+<area shape="rect" id="node1" title=" " alt="" coords="457,35,667,61"/>
+<area shape="rect" id="node2" href="$classInterloc.html#a84048663fa515f6db26c0eaa4cd56481" title="Returns the last known relative position of a given robot." alt="" coords="219,5,409,32"/>
+<area shape="rect" id="node4" href="$classInterloc.html#ad9e0b163a0ccda8aebe18e5ce1403730" title=" " alt="" coords="223,57,405,98"/>
+<area shape="rect" id="node3" href="$classInterloc.html#abbf666a1ebd81b293da49f8a248b7a5c" title="Tells if a robot is in line of sight." alt="" coords="5,5,171,32"/>
+<area shape="rect" id="node5" href="$classInterloc.html#a59644849ac6aa61403f85ebae1e4bfa4" title="Spins the interloc task checking if any updates happened. Processing them and pushing update values t..." alt="" coords="23,64,153,91"/>
+</map>

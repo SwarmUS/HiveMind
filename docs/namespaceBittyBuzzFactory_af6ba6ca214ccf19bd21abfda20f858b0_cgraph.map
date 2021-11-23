@@ -1,0 +1,8 @@
+<map id="BittyBuzzFactory::createBittyBuzzUILib" name="BittyBuzzFactory::createBittyBuzzUILib">
+<area shape="rect" id="node1" title="Creates a the ui table library for the bvm." alt="" coords="5,74,184,115"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzUIFunctions.html#abdeb1bd83aab31e356aae5c308935d17" title="Sets the user sevent segment to a value Signature set_hex(arg1)" alt="" coords="232,41,392,82"/>
+<area shape="rect" id="node5" href="$namespaceBittyBuzzUIFunctions.html#af1f08699bdfd7221e72e8622913d4bcb" title="Sets the user LED on or off Signature set_led(arg1)" alt="" coords="232,106,392,147"/>
+<area shape="rect" id="node3" href="$BittyBuzzUIFunctions_8cpp.html#ac81f3e4f9d2134c238f3454a76c60d9e" title=" " alt="" coords="447,5,589,32"/>
+<area shape="rect" id="node4" href="$classIUserUI.html#a7e6dab2e83c7c0c55add9b13e025005a" title="Set the user seven segment to a value." alt="" coords="440,56,596,83"/>
+<area shape="rect" id="node6" href="$classIUserUI.html#acf77468a1a39185426ed0746f44a5a92" title="Set the led on or off." alt="" coords="457,113,579,140"/>
+</map>

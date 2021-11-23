@@ -1,0 +1,4 @@
+<map id="ButtonCallbackRegister::setCallback" name="ButtonCallbackRegister::setCallback">
+<area shape="rect" id="node1" title="sets the callback to the managed button" alt="" coords="5,5,180,47"/>
+<area shape="rect" id="node2" href="$classIApplicationInterface.html#ae0c14c145d986d15782b504ba61db397" title="set the systems button to a callback" alt="" coords="228,5,427,47"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="BittyBuzzVm::step" name="BittyBuzzVm::step">
+<area shape="rect" id="node1" title="Does one execution step in the virtual machine. Thus execute the buzz code in the step function." alt="" coords="5,148,148,175"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzSystem.html#aaaa3b4ee96aca935adb6db82b707d1cb" title="Call a bittybuzz function that takes not arguments (init, step, etc),." alt="" coords="196,5,415,32"/>
+<area shape="rect" id="node3" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="256,56,355,83"/>
+<area shape="rect" id="node4" href="$classIBittyBuzzMessageHandler.html#a99d8be9ea3f00f966b126543165186e4" title="gets the number of message to be processed in the queue" alt="" coords="207,107,404,149"/>
+<area shape="rect" id="node5" href="$classIBittyBuzzMessageHandler.html#a08ce1fa093ce62577df54859326a13bb" title="process a message and sends a response if needed. A response is sent to the appropriate queue on a re..." alt="" coords="207,173,404,214"/>
+<area shape="rect" id="node6" href="$classIBittyBuzzMessageService.html#a5ecc2b4806c76069dfe215ee3703f62f" title="queues the buzz messages" alt="" coords="208,238,403,279"/>
+<area shape="rect" id="node7" href="$classIBittyBuzzNeighborsManager.html#a1065e9ed7a5437aa94b3bf3615b41a24" title=" " alt="" coords="200,303,411,345"/>
+</map>

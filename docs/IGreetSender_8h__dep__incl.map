@@ -1,0 +1,12 @@
+<map id="src/message&#45;handler/include/message&#45;handler/IGreetSender.h" name="src/message&#45;handler/include/message&#45;handler/IGreetSender.h">
+<area shape="rect" id="node1" title=" " alt="" coords="117,5,307,61"/>
+<area shape="rect" id="node2" href="$GreetSender_8h.html" title=" " alt="" coords="10,109,201,165"/>
+<area shape="rect" id="node5" href="$MessageDispatcher_8h.html" title=" " alt="" coords="247,109,438,165"/>
+<area shape="rect" id="node3" href="$Main_8cpp.html" title=" " alt="" coords="37,325,141,351"/>
+<area shape="rect" id="node4" href="$GreetSender_8cpp.html" title=" " alt="" coords="26,221,185,262"/>
+<area shape="rect" id="node6" href="$MessageHandlerContainer_8h.html" title=" " alt="" coords="261,213,470,269"/>
+<area shape="rect" id="node10" href="$MessageDispatcher_8cpp.html" title=" " alt="" coords="495,221,697,262"/>
+<area shape="rect" id="node7" href="$BittyBuzzContainer_8cpp.html" title=" " alt="" coords="165,317,360,359"/>
+<area shape="rect" id="node8" href="$InterlocContainer_8cpp.html" title=" " alt="" coords="384,317,555,359"/>
+<area shape="rect" id="node9" href="$MessageHandlerContainer_8cpp.html" title=" " alt="" coords="579,317,826,359"/>
+</map>

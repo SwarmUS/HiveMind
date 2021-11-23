@@ -1,0 +1,7 @@
+<map id="BittyBuzzMessageHandler::handleFunctionDescriptionRequest" name="BittyBuzzMessageHandler::handleFunctionDescriptionRequest">
+<area shape="rect" id="node1" title=" " alt="" coords="5,104,261,145"/>
+<area shape="rect" id="node2" href="$classBittyBuzzFunctionDescription.html#a26f324df9301fc1af60d824f00931dc7" title="get the array of arguments description" alt="" coords="309,5,523,47"/>
+<area shape="rect" id="node3" href="$classBittyBuzzFunctionDescription.html#a6a17609e3dcb8258dee2ec21546e5718" title="get the length of the array" alt="" coords="309,71,523,112"/>
+<area shape="rect" id="node4" href="$classBittyBuzzFunctionDescription.html#a178e6f488aa5ffd244c26fd7453f78a0" title="get the name of the function" alt="" coords="309,136,523,177"/>
+<area shape="rect" id="node5" href="$classIBittyBuzzClosureRegister.html#abd507eb79dd2aedc0b2eada6c8e086e8" title="get the id of a stored function by it&#39;s associated name" alt="" coords="321,201,511,243"/>
+</map>

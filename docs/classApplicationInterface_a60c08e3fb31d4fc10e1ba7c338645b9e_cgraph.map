@@ -1,0 +1,4 @@
+<map id="ApplicationInterface::setSystemDeviceState" name="ApplicationInterface::setSystemDeviceState">
+<area shape="rect" id="node1" title="set the system Connection state and set the seven segment accordingly" alt="" coords="5,5,184,47"/>
+<area shape="rect" id="node2" href="$classIUserInterface.html#a44c13a5ec15a4c8467174b88a715b51d" title="Sets the hex display to a given 8 bit value (not available on the HiveSight)" alt="" coords="232,13,449,39"/>
+</map>

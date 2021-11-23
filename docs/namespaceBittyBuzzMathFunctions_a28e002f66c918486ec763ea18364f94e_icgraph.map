@@ -1,0 +1,6 @@
+<map id="BittyBuzzMathFunctions::abs" name="BittyBuzzMathFunctions::abs">
+<area shape="rect" id="node1" title="Calculates the absolute value Signature abs(arg1)" alt="" coords="429,5,640,32"/>
+<area shape="rect" id="node2" href="$namespaceMath.html#a44e89e8d6a7e3c24685a1a50dac1c492" title="Return the absolute value." alt="" coords="249,5,335,32"/>
+<area shape="rect" id="node3" href="$namespaceBittyBuzzFactory.html#a32af3eb6114aee64cb41cdda600b71b6" title="Creates a the math table library for the bvm." alt="" coords="203,57,381,98"/>
+<area shape="rect" id="node4" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,64,155,91"/>
+</map>

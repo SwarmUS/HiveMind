@@ -1,0 +1,4 @@
+<map id="GreetHandler::greet" name="GreetHandler::greet">
+<area shape="rect" id="node1" title="wait for a greet and then send the greet response. Serializes directly to the stream and not the the ..." alt="" coords="5,5,156,32"/>
+<area shape="rect" id="node2" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="204,5,316,32"/>
+</map>

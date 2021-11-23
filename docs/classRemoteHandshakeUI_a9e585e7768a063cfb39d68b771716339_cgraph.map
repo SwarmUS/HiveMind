@@ -1,0 +1,4 @@
+<map id="RemoteHandshakeUI::handshake" name="RemoteHandshakeUI::handshake">
+<area shape="rect" id="node1" title="Sets the handshake status of the device." alt="" coords="5,5,172,47"/>
+<area shape="rect" id="node2" href="$classIApplicationInterface.html#a4faf0666015325ce07cabf7d475dfd55" title="set the system Remote handshake and light the necessary LED" alt="" coords="220,5,451,47"/>
+</map>

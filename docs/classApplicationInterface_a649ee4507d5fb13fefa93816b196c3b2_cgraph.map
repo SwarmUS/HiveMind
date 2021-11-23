@@ -1,0 +1,4 @@
+<map id="ApplicationInterface::setSystemButtonCallback" name="ApplicationInterface::setSystemButtonCallback">
+<area shape="rect" id="node1" title="set the systems button to a callback" alt="" coords="5,5,204,47"/>
+<area shape="rect" id="node2" href="$classIUserInterface.html#a7f5507345f69cd070d0321027b4cea58" title="Sets the callback associated with a given button press." alt="" coords="252,5,437,47"/>
+</map>

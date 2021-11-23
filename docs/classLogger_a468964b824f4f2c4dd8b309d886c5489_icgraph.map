@@ -1,0 +1,4 @@
+<map id="Logger::logLevelToString" name="Logger::logLevelToString">
+<area shape="rect" id="node1" title=" " alt="" coords="148,5,329,32"/>
+<area shape="rect" id="node2" href="$classLogger.html#a303d501c9251ab7173b8afc1436647d3" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="5,5,100,32"/>
+</map>

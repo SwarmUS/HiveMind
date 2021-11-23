@@ -1,0 +1,4 @@
+<map id="BittyBuzzVm::terminate" name="BittyBuzzVm::terminate">
+<area shape="rect" id="node1" title="Terminate the virtual machine and removes all messages that were supposed to be processed." alt="" coords="203,5,381,32"/>
+<area shape="rect" id="node2" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,5,155,32"/>
+</map>

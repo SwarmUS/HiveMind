@@ -1,0 +1,29 @@
+<map id="BittyBuzzFactory::createBittyBuzzGlobalLib" name="BittyBuzzFactory::createBittyBuzzGlobalLib">
+<area shape="rect" id="node1" title="Creates an array of FunctionRegister associated with the code from main.bzz." alt="" coords="5,715,184,756"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzUserFunctions.html#aba8a342a78969783d412850d8a4e9faa" title="calls a function to a buzz Signature call_buzz_function(agent_id, fname, params)" alt="" coords="246,115,422,156"/>
+<area shape="rect" id="node7" href="$namespaceBittyBuzzUserFunctions.html#a83b2359b062198954a8acd65b044cc61" title="calls a function to a host Signature call_host_function(agent_id, fname, params)" alt="" coords="246,232,422,273"/>
+<area shape="rect" id="node9" href="$namespaceBittyBuzzUserFunctions.html#a3e415f31c00eb6becdf86104f101a812" title="wait for a certain delay Signature delay(arg1) Warning this function make the whole VM sleep which ca..." alt="" coords="246,551,422,592"/>
+<area shape="rect" id="node10" href="$namespaceBittyBuzzUserFunctions.html#aa7246a869859ff0dab27d96340350a26" title="Checks if a variable is a function closure Signature isclosure(arg1)" alt="" coords="246,616,422,657"/>
+<area shape="rect" id="node11" href="$namespaceBittyBuzzUserFunctions.html#aa04d5559c190cb74075b1c3a3d8542b5" title="Checks if a variable is a float." alt="" coords="246,681,422,723"/>
+<area shape="rect" id="node12" href="$namespaceBittyBuzzUserFunctions.html#a6ea1d169ce6532da6e6acb817c0d1eba" title="Checks if a variable is an int Signature isint(arg1)" alt="" coords="246,747,422,788"/>
+<area shape="rect" id="node13" href="$namespaceBittyBuzzUserFunctions.html#a8a8b2ebe03c7195b957c5ce482fb70c6" title="Checks if a variable is a lambda, unamed closure Signature islambda_closure(arg1)" alt="" coords="246,812,422,853"/>
+<area shape="rect" id="node14" href="$namespaceBittyBuzzUserFunctions.html#aabfbb734bb203eee7036dc150db984f1" title="Checks if a variable is nil Signature isnil(arg1)" alt="" coords="246,877,422,919"/>
+<area shape="rect" id="node15" href="$namespaceBittyBuzzUserFunctions.html#a5440d48b6c17b99d512cca91c85ab3b6" title="Checks if a variable is a float Signature istable(arg1)" alt="" coords="246,943,422,984"/>
+<area shape="rect" id="node16" href="$namespaceBittyBuzzUserFunctions.html#a47f43221b7fd135259c540016ae55544" title="Checks if a variable is a table Signature istable(arg1)" alt="" coords="246,1008,422,1049"/>
+<area shape="rect" id="node17" href="$namespaceBittyBuzzUserFunctions.html#a65c4ae451d706067e40ed2aa314b87b9" title="Logs to the default output Signature log(args...)" alt="" coords="232,413,436,439"/>
+<area shape="rect" id="node21" href="$namespaceBittyBuzzUserFunctions.html#ac811216af659c79e67702c3de61a9d1b" title="register a new function, exposing it to the remote composant of the swarm Signature register_closure(..." alt="" coords="246,485,422,527"/>
+<area shape="rect" id="node26" href="$namespaceBittyBuzzUserFunctions.html#a11c270a69cd9ba5cb4cb2d63ea6fa42c" title="Casts a type to float Signature float(arg1)" alt="" coords="246,1073,422,1115"/>
+<area shape="rect" id="node27" href="$namespaceBittyBuzzUserFunctions.html#a77d2904db8db5cedc53327a3b589b51a" title="Casts a type to int Signature int(arg1)" alt="" coords="246,1139,422,1180"/>
+<area shape="rect" id="node3" href="$classIBittyBuzzMessageService.html#aa64c169a43c36706dbdb508a45378337" title="call a function to a buzz vm" alt="" coords="493,5,688,47"/>
+<area shape="rect" id="node4" href="$BittyBuzzUserFunctions_8cpp.html#ac2519637e342916ba9b5e70ff4d3cb11" title=" " alt="" coords="499,122,682,149"/>
+<area shape="rect" id="node5" href="$classIBittyBuzzStringResolver.html#ac3355fa9dbc7241e57c7984608879360" title="Get the string from the stringId." alt="" coords="745,283,928,324"/>
+<area shape="rect" id="node6" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="541,290,640,317"/>
+<area shape="rect" id="node8" href="$classIBittyBuzzMessageService.html#a96f07080d4f5e33d03c8d7986670225a" title="call a function to a host" alt="" coords="493,173,688,215"/>
+<area shape="rect" id="node18" href="$classIUserInterface.html#a513f198b1bf646291649494eb1717e67" title="Adds a newline and flushes the input to the serial port." alt="" coords="514,391,667,418"/>
+<area shape="rect" id="node19" href="$namespaceBittyBuzzUtils.html#af39ca28c07269d2f2f2b90485bb445f0" title="Logs an bittybuzz object to a human readable format." alt="" coords="509,341,673,367"/>
+<area shape="rect" id="node20" href="$classIUserInterface.html#abd78d00aab73513e3089259985fe3982" title="Provides an interface to print to the console or serial port. The arguments and return values match t..." alt="" coords="515,442,667,469"/>
+<area shape="rect" id="node22" href="$classBittyBuzzFunctionDescription.html#a277509fa9c0de16643927aedf5bd9124" title="add an argument to the list of the description" alt="" coords="484,544,697,585"/>
+<area shape="rect" id="node23" href="$BittyBuzzUserFunctions_8cpp.html#abc03dd076b0ab0367754a18a1889a268" title=" " alt="" coords="508,610,673,637"/>
+<area shape="rect" id="node24" href="$BittyBuzzUserFunctions_8cpp.html#a6d857b43342e43446f64abadc67b7fcf" title=" " alt="" coords="531,661,650,687"/>
+<area shape="rect" id="node25" href="$classIBittyBuzzClosureRegister.html#a3176a82a0b43f8273ad6c9ae635532c9" title="register a closure to the list" alt="" coords="495,712,686,753"/>
+</map>

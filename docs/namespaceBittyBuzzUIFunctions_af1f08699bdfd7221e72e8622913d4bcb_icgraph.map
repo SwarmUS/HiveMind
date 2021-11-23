@@ -1,0 +1,5 @@
+<map id="BittyBuzzUIFunctions::setLed" name="BittyBuzzUIFunctions::setLed">
+<area shape="rect" id="node1" title="Sets the user LED on or off Signature set_led(arg1)" alt="" coords="429,5,589,47"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzFactory.html#af6ba6ca214ccf19bd21abfda20f858b0" title="Creates a the ui table library for the bvm." alt="" coords="203,5,381,47"/>
+<area shape="rect" id="node3" href="$classBittyBuzzTask.html#a813171529845cd155c5e54cbc17fcb84" title=" " alt="" coords="5,13,155,39"/>
+</map>

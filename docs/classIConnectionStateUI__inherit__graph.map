@@ -1,0 +1,4 @@
+<map id="IConnectionStateUI" name="IConnectionStateUI">
+<area shape="rect" id="node1" title="Manages UI of the connection state with the host and informs the user via LEDs." alt="" coords="5,5,188,97"/>
+<area shape="rect" id="node2" href="$classConnectionStateUI.html" title=" " alt="" coords="7,145,186,252"/>
+</map>

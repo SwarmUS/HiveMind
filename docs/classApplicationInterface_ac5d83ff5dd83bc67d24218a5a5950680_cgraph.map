@@ -1,0 +1,5 @@
+<map id="ApplicationInterface::setUserSegment" name="ApplicationInterface::setUserSegment">
+<area shape="rect" id="node1" title="set the user seven segment" alt="" coords="5,5,159,47"/>
+<area shape="rect" id="node2" href="$classApplicationInterface.html#a60c08e3fb31d4fc10e1ba7c338645b9e" title="set the system Connection state and set the seven segment accordingly" alt="" coords="207,5,385,47"/>
+<area shape="rect" id="node3" href="$classIUserInterface.html#a44c13a5ec15a4c8467174b88a715b51d" title="Sets the hex display to a given 8 bit value (not available on the HiveSight)" alt="" coords="433,13,651,39"/>
+</map>

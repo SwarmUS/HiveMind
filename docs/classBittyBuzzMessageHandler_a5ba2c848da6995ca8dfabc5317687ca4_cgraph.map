@@ -1,0 +1,21 @@
+<map id="BittyBuzzMessageHandler::handleMessage" name="BittyBuzzMessageHandler::handleMessage">
+<area shape="rect" id="node1" title=" " alt="" coords="5,380,199,421"/>
+<area shape="rect" id="node2" href="$classIBSP.html#a09f83d9099c2828d46f97f5115f01d57" title="Returns the unique id associated with the board." alt="" coords="299,241,411,267"/>
+<area shape="rect" id="node3" href="$classBittyBuzzMessageHandler.html#aeb2ef0af9e746e913c8823f2e1b1aa0e" title=" " alt="" coords="259,292,452,333"/>
+<area shape="rect" id="node9" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="1115,358,1214,385"/>
+<area shape="rect" id="node14" href="$classBittyBuzzMessageHandler.html#a765317a0a75e994aa618206e2fd72ded" title=" " alt="" coords="259,475,452,516"/>
+<area shape="rect" id="node17" href="$classBittyBuzzMessageHandler.html#a4422d90f9b1da0a0aa4209a71c08a43c" title=" " alt="" coords="259,409,452,451"/>
+<area shape="rect" id="node19" href="$BittyBuzzMessageHandler_8cpp.html#a1c660589da3950697061bdfbaff6245d" title=" " alt="" coords="247,541,464,567"/>
+<area shape="rect" id="node4" href="$classBittyBuzzMessageHandler.html#a580922dc6d9a198ef1960551eabe821a" title=" " alt="" coords="512,208,705,249"/>
+<area shape="rect" id="node5" href="$classBittyBuzzMessageHandler.html#ab1c0e44d3f59af51d07e78a83aeba0e5" title=" " alt="" coords="778,176,985,217"/>
+<area shape="rect" id="node10" href="$classBittyBuzzMessageHandler.html#abe62224a14a9c720de42c926d05c1760" title=" " alt="" coords="753,111,1009,152"/>
+<area shape="rect" id="node12" href="$classBittyBuzzMessageHandler.html#aa821d93609cfb7ade1a6414979dd7194" title=" " alt="" coords="757,241,1006,283"/>
+<area shape="rect" id="node6" href="$classBittyBuzzFunctionDescription.html#a26f324df9301fc1af60d824f00931dc7" title="get the array of arguments description" alt="" coords="1058,71,1271,112"/>
+<area shape="rect" id="node7" href="$classBittyBuzzFunctionDescription.html#a6a17609e3dcb8258dee2ec21546e5718" title="get the length of the array" alt="" coords="1058,136,1271,177"/>
+<area shape="rect" id="node8" href="$classIBittyBuzzClosureRegister.html#abd507eb79dd2aedc0b2eada6c8e086e8" title="get the id of a stored function by it&#39;s associated name" alt="" coords="1069,201,1260,243"/>
+<area shape="rect" id="node11" href="$classBittyBuzzFunctionDescription.html#a178e6f488aa5ffd244c26fd7453f78a0" title="get the name of the function" alt="" coords="1058,5,1271,47"/>
+<area shape="rect" id="node13" href="$classIBittyBuzzClosureRegister.html#ae25e6442762982cac31916aa2e68391b" title="get the length/number of the registered closures" alt="" coords="1057,267,1272,308"/>
+<area shape="rect" id="node15" href="$classBittyBuzzMessageHandler.html#a4989651232a82f654ebb0b03fe62620f" title=" " alt="" coords="512,592,705,633"/>
+<area shape="rect" id="node16" href="$classBittyBuzzMessageHandler.html#aee8a8fbbf653e3cb555527ed3799d302" title=" " alt="" coords="512,527,705,568"/>
+<area shape="rect" id="node18" href="$classBittyBuzzMessageHandler.html#a09560d02c50d773bea9f5ba0b599d277" title=" " alt="" coords="785,409,978,451"/>
+</map>

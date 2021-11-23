@@ -1,0 +1,6 @@
+<map id="Math::atan" name="Math::atan">
+<area shape="rect" id="node1" title="calculate the arc tangent" alt="" coords="5,31,97,57"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzMathFunctions.html#a39fc17968ecfe8e578d76d49241aef4f" title="Calculates the arc cosine Signature atan(arg1)" alt="" coords="145,23,324,65"/>
+<area shape="rect" id="node3" href="$namespaceMath.html#ac118e51b307f872013e7f9ec54d866c7" title="calculate the arc of x/y" alt="" coords="372,5,472,32"/>
+<area shape="rect" id="node4" href="$BittyBuzzMathFunctions_8cpp.html#a4bfd55f852fffcd9b9c7abfa61c3f9e9" title=" " alt="" coords="373,56,471,83"/>
+</map>

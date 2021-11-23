@@ -1,0 +1,4 @@
+<map id="UserUI::setLed" name="UserUI::setLed">
+<area shape="rect" id="node1" title="Set the led on or off." alt="" coords="5,13,123,39"/>
+<area shape="rect" id="node2" href="$classIApplicationInterface.html#a0af2bc311287bd5a747b70f3423ca764" title="set the user LED" alt="" coords="171,5,328,47"/>
+</map>

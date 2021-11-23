@@ -1,0 +1,8 @@
+<map id="logObj" name="logObj">
+<area shape="rect" id="node1" title=" " alt="" coords="5,97,69,123"/>
+<area shape="rect" id="node2" href="$namespaceBittyBuzzUserFunctions.html#a3e415f31c00eb6becdf86104f101a812" title="wait for a certain delay Signature delay(arg1) Warning this function make the whole VM sleep which ca..." alt="" coords="117,5,293,47"/>
+<area shape="rect" id="node3" href="$classILogger.html#aff04c76a521d4515e4f805c423246e6a" title="Logs if the provided level is higher than the current log level (Thread&#45;safe)" alt="" coords="156,71,255,98"/>
+<area shape="rect" id="node4" href="$namespaceBittyBuzzUtils.html#af39ca28c07269d2f2f2b90485bb445f0" title="Logs an bittybuzz object to a human readable format." alt="" coords="123,122,287,149"/>
+<area shape="rect" id="node6" href="$BittyBuzzSystem_8cpp.html#acebd60bec46cda0b723f9b37da39e6e4" title=" " alt="" coords="177,173,233,199"/>
+<area shape="rect" id="node5" href="$classIBittyBuzzStringResolver.html#ac3355fa9dbc7241e57c7984608879360" title="Get the string from the stringId." alt="" coords="341,115,524,156"/>
+</map>

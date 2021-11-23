@@ -1,0 +1,9 @@
+<map id="ApplicationStates" name="ApplicationStates">
+<area shape="rect" id="node1" title=" " alt="" coords="298,300,434,377"/>
+<area shape="rect" id="node2" href="$structSystemStates.html" title=" " alt="" coords="209,160,321,237"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,135,83"/>
+<area shape="rect" id="node4" title=" " alt="" coords="159,5,261,83"/>
+<area shape="rect" id="node5" title=" " alt="" coords="390,5,441,83"/>
+<area shape="rect" id="node6" href="$structUserStates.html" title=" " alt="" coords="466,160,559,237"/>
+<area shape="rect" id="node7" title=" " alt="" coords="575,5,685,83"/>
+</map>

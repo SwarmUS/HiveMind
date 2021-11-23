@@ -1,0 +1,6 @@
+<map id="BittyBuzzMessageHandler::handleBuzzMessages" name="BittyBuzzMessageHandler::handleBuzzMessages">
+<area shape="rect" id="node1" title=" " alt="" coords="729,5,923,47"/>
+<area shape="rect" id="node2" href="$classBittyBuzzMessageHandler.html#a4422d90f9b1da0a0aa4209a71c08a43c" title=" " alt="" coords="488,5,681,47"/>
+<area shape="rect" id="node3" href="$classBittyBuzzMessageHandler.html#a5ba2c848da6995ca8dfabc5317687ca4" title=" " alt="" coords="247,5,440,47"/>
+<area shape="rect" id="node4" href="$classBittyBuzzMessageHandler.html#a408cef3c7fe771e2b3859c4c4eb3c72f" title="process a message and sends a response if needed. A response is sent to the appropriate queue on a re..." alt="" coords="5,5,199,47"/>
+</map>
