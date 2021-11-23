@@ -4,7 +4,7 @@ include "vec2.bzz"
 
 leader = nil
 
-MAX_LOS_ANGLE = 25.0
+MAX_LOS_ANGLE = 50.0
 
 function tick_follow_leader(stig){
     if(leader != id and leader != nil){
@@ -36,7 +36,6 @@ function tick_follow_leader(stig){
                 goal = math.vec2.norm(goal)
             }
 
-            goal = math.vec2.scale(goal, obstructing_neighbors.count() + 1)
             goal = math.vec2.add(goal, avoidance_vec)
 
             log("Avoidance vector: X ", avoidance_vec.x, " Y: ", avoidance_vec.y)
