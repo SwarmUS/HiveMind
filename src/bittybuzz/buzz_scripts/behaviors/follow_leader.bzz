@@ -54,7 +54,7 @@ function tick_follow_leader(stig){
 }
 
 function tick_update_leader(stig){
-    leader = 1
+    leader = stig.get("leader")
     if (leader){
         ui.set_hex(leader)
     }
