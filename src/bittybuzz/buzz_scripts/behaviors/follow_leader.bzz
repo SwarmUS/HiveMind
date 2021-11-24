@@ -23,7 +23,7 @@ function tick_follow_leader(stig){
 
                 # Cummulating the avoidance vector
                 var avoidance_vec = obstructing_neighbors.reduce(function(rid, data, accum){
-                        var vec_length = -1/math.pow(data.distance, 1.5)
+                        var vec_length = -0.8/data.distance
                         var vec = math.vec2.newp(vec_length, data.azimuth)
                         return math.vec2.add(vec, accum);
                     },
