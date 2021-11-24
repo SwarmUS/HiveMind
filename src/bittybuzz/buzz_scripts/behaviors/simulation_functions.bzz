@@ -1,0 +1,191 @@
+include "utils/executor.bzz"
+include "utils/types.bzz"
+include "vec2.bzz"
+
+###############################
+### leader
+###############################
+leader = nil
+
+MAX_LOS_ANGLE = 50.0
+
+function tick_follow_leader(stig){
+    if(leader != id and leader != nil and enable_leader == 1){
+        log("Trying to get leader: ", leader)
+        leader_obj = neighbors.get(leader) # Global to be accessible in filter
+        if (istable(leader_obj)){
+
+            # Getting neighbors in LOS
+            var obstructing_neighbors = neighbors.filter(function(rid, data){
+                    if(rid != leader and math.abs(data.azimuth) < MAX_LOS_ANGLE){
+                        return true
+                    }
+                    return false
+
+                })
+
+            # Cummulating the avoidance vector
+            var avoidance_vec = obstructing_neighbors.reduce(function(rid, data, accum){
+                    var vec_length = -1/math.pow(data.distance, 2)
+                    var vec = math.vec2.newp(vec_length, data.azimuth)
+                    return math.vec2.add(vec, accum);
+                },
+                math.vec2.new(0.0, 0.0))
+
+            # Goal to the leader and add the avoidance vector
+            var goal = math.vec2.newp(leader_obj.distance - 0.5, leader_obj.azimuth)
+
+            if(math.vec2.length(goal) > 1){
+                goal = math.vec2.norm(goal)
+            }
+
+            goal = math.vec2.add(goal, avoidance_vec)
+
+            log("Avoidance vector: X ", avoidance_vec.x, " Y: ", avoidance_vec.y)
+            log("Moving towards leader via: ", leader, " at x:", goal.x, " y:", goal.y)
+            call_host_function(id, "moveBy", {.0 = goal.x, .1 = goal.y})
+
+        }
+        else{
+            log("Neighbor not found!")
+        }
+    }
+}
+
+function tick_update_leader(stig){
+    leader = stig.get("leader")
+    if (leader){
+        ui.set_hex(leader)
+    }
+}
+
+###############################
+### square
+###############################
+
+# Lennard-Jones parameters
+TARGET_KIN     = 2.830
+EPSILON_KIN    = 1.500
+TARGET_NONKIN  = 2.000
+EPSILON_NONKIN = 1.000
+
+# Lennard-Jones interaction magnitude
+function lj_magnitude(dist, target, epsilon) {
+    var td_ratio = target/dist;
+    var ratio = -(epsilon / dist) * (math.pow(td_ratio, 4) - math.pow(td_ratio, 2))
+    if(ratio > 0){ # If too far, return 1/ratio. So the farther they are, the higher the force will be
+        return 0.01/ratio # so the pull force doesn't overwhelmed the push and avoid oscillations
+    }
+    return ratio # If too close, return ratio
+}
+
+# Accumulator function
+function lj_vector_accum(rid, vect, accum) {
+    return math.vec2.add(vect, accum);
+}
+
+# Neighbor data to LJ interaction vector
+function lj_vector_kin(rid, data) {
+    return math.vec2.newp(lj_magnitude(data.distance, TARGET_KIN, EPSILON_KIN), data.azimuth)
+}
+ 
+# Neighbor data to LJ interaction vector
+function lj_vector_nonkin(rid, data) {
+    return math.vec2.newp(lj_magnitude(data.distance, TARGET_NONKIN, EPSILON_NONKIN), data.azimuth)
+}
+ 
+function goto(x, y) {
+    call_host_function(id, "moveBy", {.0 = x, .1 = y});
+}
+
+function is_kin_lj_vector(robot_id, data){
+    if((robot_id % 2) == (id % 2)){
+        return lj_vector_kin(robot_id, data)
+    }
+    return lj_vector_nonkin(robot_id, data);
+}
+
+# Calculates and actuates the flocking interaction
+function square() {
+    # Calculate the vector
+    var accum = neighbors.map(is_kin_lj_vector).reduce(lj_vector_accum, math.vec2.new(0.0, 0.0))
+
+    # Scaling vector
+    if (neighbors.count() > 0) {
+        math.vec2.scale(accum, 1.0 / neighbors.count())
+    }
+    # Prevents going out of the world in simulation
+    if(math.vec2.length(accum) > 5){
+        accum = math.vec2.norm(accum);
+    }
+
+    # Add a tolerence to prevent perpetual moving
+    log("Vector length: ", math.vec2.length(accum));
+    if(math.vec2.length(accum) > 0.5){
+        log("Moving to X: ", accum.x, " Y: ", accum.y);
+        goto(accum.x, accum.y)
+    } else {
+        log("Stopping");
+        goto(0.0, 0.0)
+    }
+}
+
+# Executed every time step
+function square_tick(ctx) {
+    if ( enable_square == 1) {
+        square();
+    }
+}
+
+
+###############################
+### execution
+###############################
+
+enable_leader = 0
+enable_square = 0
+
+function create_exec(delay_ms) {
+    var stig = stigmergy.create(1)
+
+    # Setting the leader via callback
+    var set_leader_id_description = {.0 = {.leader_id=types.INT}}
+    var set_leader_id = function(leader_id){
+        log("Setting stig")
+        enable_leader = 1
+        enable_square = 0
+        self.stig.put("leader", leader_id)
+        log("Setting stig after self")
+    }
+    register_closure("setLeader", set_leader_id, set_leader_id_description, {.stig = stig})
+
+
+    var square_formation_return_description = {};
+    var set_square_formation = function() {
+        enable_leader = 0
+        enable_square = 1
+        log("Setting square")
+    }
+    # buzz_closure("functionName", function_to_call, function_to_call_description, where_to_save?)
+
+    register_closure("squareFormation", set_square_formation, square_formation_return_description, nil)
+    
+
+    # Creating exec
+    var follow_leader_exec = executor.new_ms(delay_ms, tick_follow_leader, stig)
+    var update_leader_exec = executor.new_ms(4*delay_ms, tick_update_leader, stig) # Refresh leader slower than following it
+    var tick_square_exec = executor.new_ms(delay_ms, square_tick, nil)
+
+    # Merging in a collection
+    var exec_collection = executor_collection.new()
+    exec_collection.append(follow_leader_exec)
+    exec_collection.append(update_leader_exec)
+    exec_collection.append(tick_square_exec)
+
+    return exec_collection
+}
+
+
+
+
+
