@@ -3,18 +3,26 @@ include "utils/executor.bzz"
 include "utils/types.bzz"
 
 # Lennard-Jones parameters
-TARGET_KIN     = 283.0
-EPSILON_KIN    = 150.0
-TARGET_NONKIN  = 200.0
-EPSILON_NONKIN = 100.0
+TARGET_KIN     = 2.830
+EPSILON_KIN    = 1.500
+TARGET_NONKIN  = 2.000
+EPSILON_NONKIN = 1.000
 
 # Lennard-Jones interaction magnitude
 function lj_magnitude(dist, target, epsilon) {
-    dist = dist * 100; # Meters to cm
     var td_ratio = target/dist;
-    return -(epsilon / dist) * (math.pow(td_ratio, 4) - math.pow(td_ratio, 2))
+    var ratio = -(epsilon / dist) * (math.pow(td_ratio, 4) - math.pow(td_ratio, 2))
+    if(ratio > 0){ # If too far, return 1/ratio. So the farther they are, the higher the force will be
+        return 0.01/ratio # so the pull force doesn't overwhelmed the push and avoid oscillations
+    }
+    return ratio # If too close, return ratio
 }
- 
+
+# Accumulator function
+function lj_vector_accum(rid, vect, accum) {
+    return math.vec2.add(vect, accum);
+}
+
 # Neighbor data to LJ interaction vector
 function lj_vector_kin(rid, data) {
     return math.vec2.newp(lj_magnitude(data.distance, TARGET_KIN, EPSILON_KIN), data.azimuth)
@@ -38,12 +46,8 @@ function is_kin_lj_vector(robot_id, data){
 
 # Calculates and actuates the flocking interaction
 function square() {
-    # Calculate accumulator
-    accum = math.vec2.new(0.0, 0.0); # Declaring global so it's accessible in the foreach
-    neighbors.foreach(function(rid, data){
-            var vect = is_kin_lj_vector(rid, data);
-            accum = math.vec2.add(vect, accum);
-        })
+    # Calculate the vector
+    var accum = neighbors.map(is_kin_lj_vector).reduce(lj_vector_accum, math.vec2.new(0.0, 0.0))
 
     # Scaling vector
     if (neighbors.count() > 0) {
@@ -54,8 +58,15 @@ function square() {
         accum = math.vec2.norm(accum);
     }
 
-    log("Moving to X: ", accum.x, " Y: ", accum.y);
-    goto(accum.x, accum.y)
+    # Add a tolerence to prevent perpetual moving
+    log("Vector length: ", math.vec2.length(accum));
+    if(math.vec2.length(accum) > 0.5){
+        log("Moving to X: ", accum.x, " Y: ", accum.y);
+        goto(accum.x, accum.y)
+    } else {
+        log("Stopping");
+        goto(0.0, 0.0)
+    }
 }
 
 # Executed every time step

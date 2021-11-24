@@ -1,7 +1,7 @@
-include "behaviors/blinky.bzz"
+include "behaviors/follow_leader.bzz"
 
 function init() {
-  exec = create_exec(1000);
+  exec = create_exec(500);
 }
 
 function step() {

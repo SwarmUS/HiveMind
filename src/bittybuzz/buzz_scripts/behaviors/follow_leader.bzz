@@ -4,42 +4,42 @@ include "vec2.bzz"
 
 leader = nil
 
-MAX_OK_ANGLE = 90.0
-MAX_OK_DISTANCE = 1.5
+MAX_LOS_ANGLE = 50.0
 
-function tick(stig){
+function tick_follow_leader(stig){
     if(leader != id and leader != nil){
         log("Trying to get leader: ", leader)
-        var leaderObj = neighbors.get(leader)
-        if (istable(leaderObj)){
-            validMove = 1;
-            avoidanceAngle = 0;
+        leader_obj = neighbors.get(leader) # Global to be accessible in filter
+        if (istable(leader_obj)){
 
-            neighbors.foreach(function (robotId, data) {
-                if (robotId != leader) {
-                    var degreeOffset = leaderObj.azimuth - data.azimuth
-                    var offsetSign = 1.0
-
-                    if (degreeOffset < 0.0) {
-                        offsetSign = -1.0
+            # Getting neighbors in LOS
+            var obstructing_neighbors = neighbors.filter(function(rid, data){
+                    if(rid != leader and math.abs(data.azimuth) < MAX_LOS_ANGLE){
+                        return true
                     }
+                    return false
 
-                    log("Other: ", robotId, " angle diff: ", degreeOffset)
+                })
 
-                    if (math.abs(degreeOffset) < MAX_OK_ANGLE)
-                    {
-                        if (data.distance < MAX_OK_DISTANCE) {
-                            log("Invalid move. ", robotId, " in the way at dist: ", data.distance, " angle: ", data.azimuth)
-                            validMove = 0
-                            avoidanceAngle = -1.0 * offsetSign * MAX_OK_ANGLE
-                        }
-                    }
-                }
-            })
+            # Cummulating the avoidance vector
+            var avoidance_vec = obstructing_neighbors.reduce(function(rid, data, accum){
+                    var vec_length = -1/math.pow(data.distance, 2)
+                    var vec = math.vec2.newp(vec_length, data.azimuth)
+                    return math.vec2.add(vec, accum);
+                },
+                math.vec2.new(0.0, 0.0))
 
-            var goal = math.vec2.newp(leaderObj.distance, leaderObj.azimuth + avoidanceAngle)
-            log("Avoidance angle: ", avoidanceAngle)
-            log("Moving to leader: ", leader, " at x:", goal.x, " y:", goal.y)
+            # Goal to the leader and add the avoidance vector
+            var goal = math.vec2.newp(leader_obj.distance - 0.5, leader_obj.azimuth)
+
+            if(math.vec2.length(goal) > 1){
+                goal = math.vec2.norm(goal)
+            }
+
+            goal = math.vec2.add(goal, avoidance_vec)
+
+            log("Avoidance vector: X ", avoidance_vec.x, " Y: ", avoidance_vec.y)
+            log("Moving towards leader via: ", leader, " at x:", goal.x, " y:", goal.y)
             call_host_function(id, "moveBy", {.0 = goal.x, .1 = goal.y})
 
         }
@@ -47,10 +47,9 @@ function tick(stig){
             log("Neighbor not found!")
         }
     }
-    update_leader_exec.step()
 }
 
-function update_leader(stig){
+function tick_update_leader(stig){
     leader = 1
     if (leader){
         ui.set_hex(leader)
@@ -60,6 +59,7 @@ function update_leader(stig){
 function create_exec(delay_ms) {
     var stig = stigmergy.create(1)
 
+    # Setting the leader via callback
     var set_leader_id_description = {.0 = {.leader_id=types.INT}}
     var set_leader_id = function(leader_id){
         log("Setting stig")
@@ -67,8 +67,14 @@ function create_exec(delay_ms) {
     }
     register_closure("setLeader", set_leader_id, set_leader_id_description, {.stig = stig})
 
-    update_leader_exec = executor.new(20, update_leader, stig)
+    # Creating exec
+    var follow_leader_exec = executor.new_ms(delay_ms, tick_follow_leader, stig)
+    var update_leader_exec = executor.new_ms(4*delay_ms, tick_update_leader, stig) # Refresh leader slower than following it
 
-    exec = executor.new_ms(delay_ms, tick, stig)
-    return exec
+    # Merging in a collection
+    var exec_collection = executor_collection.new()
+    exec_collection.append(follow_leader_exec)
+    exec_collection.append(update_leader_exec)
+
+    return exec_collection
 }
