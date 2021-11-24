@@ -14,7 +14,7 @@ function tick_follow_leader(stig){
 
             # Getting neighbors in LOS
             var obstructing_neighbors = neighbors.filter(function(rid, data){
-                    if(rid != leader and math.abs(data.azimuth) < MAX_LOS_ANGLE){
+                    if (rid != leader and data.distance < 0.8){
                         return true
                     }
                     return false
@@ -23,7 +23,7 @@ function tick_follow_leader(stig){
 
             # Cummulating the avoidance vector
             var avoidance_vec = obstructing_neighbors.reduce(function(rid, data, accum){
-                    var vec_length = -1/math.pow(data.distance, 2)
+                    var vec_length = -1/math.pow(data.distance, 0.5)
                     var vec = math.vec2.newp(vec_length, data.azimuth)
                     return math.vec2.add(vec, accum);
                 },
@@ -37,11 +37,15 @@ function tick_follow_leader(stig){
             }
 
             goal = math.vec2.add(goal, avoidance_vec)
-
-            log("Avoidance vector: X ", avoidance_vec.x, " Y: ", avoidance_vec.y)
-            log("Moving towards leader via: ", leader, " at x:", goal.x, " y:", goal.y)
-            call_host_function(id, "moveBy", {.0 = goal.x, .1 = goal.y})
-
+            if (leader_obj.distance > 1.3) {
+                log("Avoidance vector: X ", avoidance_vec.x, " Y: ", avoidance_vec.y)
+                log("Moving towards leader via: ", leader, " at x:", goal.x, " y:", goal.y)
+                call_host_function(id, "moveBy", {.0 = goal.x, .1 = goal.y})
+            }
+            else {
+                log("Reached leader")
+                call_host_function(id, "moveBy", {.0 = 0.0, .1 = 0.0})
+            }
         }
         else{
             log("Neighbor not found!")
