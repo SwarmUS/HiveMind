@@ -8,14 +8,19 @@ include "vec2.bzz"
 leader = nil
 
 MAX_LOS_ANGLE = 50.0
+MIN_LEADER_DISTANCE = 1.0
+NO_BEHAVIOR = 0
 FOLLOW_LEADER_BEHAVIOR = 1
 HEXAGON_BEHAVIO = 2
 
 function follow_leader(stig){
-    if(leader != id and leader != nil and enable_leader == 1){
+    if(leader != id and leader != nil){
         log("Trying to get leader: ", leader, " neighbors count:", neighbors.count())
         var leader_obj = neighbors.get(leader)
         if (istable(leader_obj)){
+            if (leader_obj.distance < MIN_LEADER_DISTANCE) {
+                return
+            }
             # Getting neighbors in LOS
             var obstructing_neighbors = neighbors.filter(function(rid, data){
                     if(rid != leader and math.abs(data.azimuth) < MAX_LOS_ANGLE){
@@ -39,8 +44,10 @@ function follow_leader(stig){
             if(math.vec2.length(goal) > 1){
                 goal = math.vec2.norm(goal)
             }
-
+            
             goal = math.vec2.add(goal, avoidance_vec)
+
+
 
             log("Avoidance vector: X ", avoidance_vec.x, " Y: ", avoidance_vec.y)
             log("Moving towards leader via: ", leader, " at x:", goal.x, " y:", goal.y)
@@ -65,7 +72,7 @@ function tick_update_leader(stig){
 ### hexagon
 ###############################
 
-TARGET = 2.830
+TARGET = 2.50
 EPSILON = 1.500
 
 # Lennard-Jones interaction magnitude
@@ -119,18 +126,6 @@ function hexagon() {
     }
 }
 
-# Executed every time step
-function tick(ctx) {
-    hexagon();
-}
-
-# Executed at init time
-function create_exec(delay_ms) {
-    exec = executor.new_ms(delay_ms, tick, nil);
-    return exec;
-
-}
-
 ###############################
 ### execution
 ###############################
@@ -149,20 +144,34 @@ function execute_behavior(stig){
 
 function create_exec(delay_ms) {
     var stig = stigmergy.create(1)
+    stig.put("behavior", NO_BEHAVIOR)
 
     # Setting the leader via callback
     var set_leader_id_description = {.0 = {.leader_id=types.INT}}
     var set_leader_id = function(leader_id){
-        self.stig.put("leader", leader_id)
-        self.stig.put("behavior", FOLLOW_LEADER_BEHAVIOR)
-        log("Setting leader to: ", leader_id)
+        if (leader_id == 0) {
+            self.stig.put("behavior", NO_BEHAVIOR)
+            log("Can't set id 0: No behavior mode.")
+        }
+        else {
+            self.stig.put("leader", leader_id)
+            self.stig.put("behavior", FOLLOW_LEADER_BEHAVIOR)
+            log("Setting leader to: ", leader_id)
+        }
     }
     register_closure("setLeader", set_leader_id, set_leader_id_description, {.stig = stig})
 
 
-    var hexagon_formation_return_description = {};
-    var set_hexagon_formation = function(stig) {
-        self.stig.put("behavior", HEXAGON_BEHAVIOR)
+    var hexagon_formation_return_description = {.0 = {.is_active=types.INT}}
+    var set_hexagon_formation = function(is_active) {
+        if (is_active == 1) {
+            self.stig.put("behavior", HEXAGON_BEHAVIOR)
+            log("Setting formation behavior active.")
+        }
+        else {
+            self.stig.put("behavior", NO_BEHAVIOR)
+            log("Setting no behavior.")
+        }
     }
     
     register_closure("setFormation", set_hexagon_formation, hexagon_formation_return_description, {.stig = stig})

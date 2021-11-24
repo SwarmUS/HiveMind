@@ -1,7 +1,7 @@
 include "behaviors/simulation_functions.bzz"
 
 function init() {
-  exec = create_exec(100);
+  exec = create_exec(250);
 }
 
 function step() {
