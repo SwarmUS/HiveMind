@@ -8,13 +8,14 @@ include "vec2.bzz"
 leader = nil
 
 MAX_LOS_ANGLE = 50.0
+FOLLOW_LEADER_BEHAVIOR = 1
+SQUARE_BEHAVIOR = 2
 
-function tick_follow_leader(stig){
+function follow_leader(stig){
     if(leader != id and leader != nil and enable_leader == 1){
-        log("Trying to get leader: ", leader)
-        leader_obj = neighbors.get(leader) # Global to be accessible in filter
+        log("Trying to get leader: ", leader, " neighbors count:", neighbors.count())
+        var leader_obj = neighbors.get(leader)
         if (istable(leader_obj)){
-
             # Getting neighbors in LOS
             var obstructing_neighbors = neighbors.filter(function(rid, data){
                     if(rid != leader and math.abs(data.azimuth) < MAX_LOS_ANGLE){
@@ -56,6 +57,7 @@ function tick_update_leader(stig){
     leader = stig.get("leader")
     if (leader){
         ui.set_hex(leader)
+        log("leader set to: ", leader)
     }
 }
 
@@ -130,20 +132,21 @@ function square() {
     }
 }
 
-# Executed every time step
-function square_tick(ctx) {
-    if ( enable_square == 1) {
-        square();
-    }
-}
-
-
 ###############################
 ### execution
 ###############################
 
-enable_leader = 0
-enable_square = 0
+function execute_behavior(stig){
+    var behavior = stig.get("behavior")
+    if(behavior == FOLLOW_LEADER_BEHAVIOR){
+        log("Following leader")
+        follow_leader(stig)
+    }
+    if(behavior == SQUARE_BEHAVIOR){
+        log("Doing square behavior")
+        square()
+    }
+}
 
 function create_exec(delay_ms) {
     var stig = stigmergy.create(1)
@@ -151,41 +154,31 @@ function create_exec(delay_ms) {
     # Setting the leader via callback
     var set_leader_id_description = {.0 = {.leader_id=types.INT}}
     var set_leader_id = function(leader_id){
-        log("Setting stig")
-        enable_leader = 1
-        enable_square = 0
         self.stig.put("leader", leader_id)
-        log("Setting stig after self")
+        self.stig.put("behavior", FOLLOW_LEADER_BEHAVIOR)
+        log("Setting leader to: ", leader_id)
     }
     register_closure("setLeader", set_leader_id, set_leader_id_description, {.stig = stig})
 
 
     var square_formation_return_description = {};
-    var set_square_formation = function() {
-        enable_leader = 0
-        enable_square = 1
-        log("Setting square")
+    var set_square_formation = function(stig) {
+        self.stig.put("behavior", SQUARE_BEHAVIOR)
+        log("Setting leader to: ", leader_id)
     }
     # buzz_closure("functionName", function_to_call, function_to_call_description, where_to_save?)
-
     register_closure("squareFormation", set_square_formation, square_formation_return_description, nil)
     
 
     # Creating exec
-    var follow_leader_exec = executor.new_ms(delay_ms, tick_follow_leader, stig)
+    var behavior_exec = executor.new_ms(delay_ms, execute_behavior, stig)
     var update_leader_exec = executor.new_ms(4*delay_ms, tick_update_leader, stig) # Refresh leader slower than following it
-    var tick_square_exec = executor.new_ms(delay_ms, square_tick, nil)
 
     # Merging in a collection
     var exec_collection = executor_collection.new()
-    exec_collection.append(follow_leader_exec)
+    exec_collection.append(behavior_exec)
     exec_collection.append(update_leader_exec)
-    exec_collection.append(tick_square_exec)
 
     return exec_collection
 }
-
-
-
-
 
