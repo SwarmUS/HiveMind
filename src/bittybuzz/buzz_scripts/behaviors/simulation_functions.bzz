@@ -9,50 +9,50 @@ leader = nil
 
 MAX_LOS_ANGLE = 50.0
 MIN_LEADER_DISTANCE = 1.0
-NO_BEHAVIOR = 0
-FOLLOW_LEADER_BEHAVIOR = 1
-HEXAGON_BEHAVIO = 2
+NO_BEHAVIOR = 1
+FOLLOW_LEADER_BEHAVIOR = 2
+HEXAGON_BEHAVIOR = 3
+
 
 function follow_leader(stig){
     if(leader != id and leader != nil){
-        log("Trying to get leader: ", leader, " neighbors count:", neighbors.count())
-        var leader_obj = neighbors.get(leader)
+        log("Trying to get leader: ", leader)
+        var leader_obj = neighbors.get(leader) # Global to be accessible in filter
         if (istable(leader_obj)){
-            if (leader_obj.distance < MIN_LEADER_DISTANCE) {
-                return
-            }
-            # Getting neighbors in LOS
-            var obstructing_neighbors = neighbors.filter(function(rid, data){
-                    if(rid != leader and math.abs(data.azimuth) < MAX_LOS_ANGLE){
-                        return true
-                    }
-                    return false
+            if(leader_obj.distance > 0.75){ # Final distance from leader to stop
+                # Getting neighbors in LOS
+                var obstructing_neighbors = neighbors.filter(function(rid, data){
+                        if(rid != leader and data.distance < 1){ 
+                            return true
+                        }
+                        return false
+                    })
 
-                })
+                # Cummulating the avoidance vector
+                var avoidance_vec = obstructing_neighbors.reduce(function(rid, data, accum){
+                        var vec_length = -0.75/data.distance
+                        var vec = math.vec2.newp(vec_length, data.azimuth)
+                        return math.vec2.add(vec, accum);
+                    },
+                    math.vec2.new(0.0, 0.0))
 
-            # Cummulating the avoidance vector
-            var avoidance_vec = obstructing_neighbors.reduce(function(rid, data, accum){
-                    var vec_length = -1/math.pow(data.distance, 2)
-                    var vec = math.vec2.newp(vec_length, data.azimuth)
-                    return math.vec2.add(vec, accum);
-                },
-                math.vec2.new(0.0, 0.0))
+                # Goal to the leader and add the avoidance vector
+                var goal = math.vec2.newp(leader_obj.distance, leader_obj.azimuth)
 
-            # Goal to the leader and add the avoidance vector
-            var goal = math.vec2.newp(leader_obj.distance - 0.5, leader_obj.azimuth)
+                if(math.vec2.length(goal) > 1){
+                    goal = math.vec2.norm(goal)
+                }
 
-            if(math.vec2.length(goal) > 1){
+                goal = math.vec2.add(goal, avoidance_vec)
                 goal = math.vec2.norm(goal)
+
+                log("Avoidance vector: X ", avoidance_vec.x, " Y: ", avoidance_vec.y)
+                log("Moving towards leader via: ", leader, " at x:", goal.x, " y:", goal.y)
+                call_host_function(id, "moveBy", {.0 = goal.x, .1 = goal.y})
             }
-            
-            goal = math.vec2.add(goal, avoidance_vec)
-
-
-
-            log("Avoidance vector: X ", avoidance_vec.x, " Y: ", avoidance_vec.y)
-            log("Moving towards leader via: ", leader, " at x:", goal.x, " y:", goal.y)
-            call_host_function(id, "moveBy", {.0 = goal.x, .1 = goal.y})
-
+            else {
+                call_host_function(id, "moveBy", {.0 = 0.0, .1 = 0.0})
+            }
         }
         else{
             log("Neighbor not found!")
@@ -62,7 +62,8 @@ function follow_leader(stig){
 
 function tick_update_leader(stig){
     leader = stig.get("leader")
-    if (leader){
+    var behavior = stig.get("behavior")
+    if (leader and behavior == FOLLOW_LEADER_BEHAVIOR){
         ui.set_hex(leader)
         log("leader set to: ", leader)
     }
@@ -80,7 +81,7 @@ function lj_magnitude(dist, target, epsilon) {
     var td_ratio = target/dist;
     var ratio = -(epsilon / dist) * (math.pow(td_ratio, 4) - math.pow(td_ratio, 2))
     if(ratio > 0){ # If too far, return 1/ratio. So the farther they are, the higher the force will be
-        return 0.01/ratio # so the pull force doesn't overwhelmed the push and avoid oscillations
+        return 0.1/ratio # so the pull force doesn't overwhelmed the push and avoid oscillations #0.01 working not best
     }
     return ratio # If too close, return ratio
 }
