@@ -11,7 +11,7 @@ function tick_follow_leader(stig){
         log("Trying to get leader: ", leader)
         leader_obj = neighbors.get(leader) # Global to be accessible in filter
         if (istable(leader_obj)){
-            if(leader_obj.distance > 1.25){
+            if(leader_obj.distance > 0.75){
                 # Getting neighbors in LOS
                 var obstructing_neighbors = neighbors.filter(function(rid, data){
                         if(rid != leader and data.distance < 1){

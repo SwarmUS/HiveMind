@@ -1,26 +1,19 @@
 include "utils/executor.bzz"
 
 ctx = {
-    .led = 0,
-    .hex = 0
+    .led = 0
 }
 
 function tick(context){
-    log("Led set to : ", context.led, " and hex set to :", context.hex);
+    log("Led set to : ", context.led);
     ui.set_led(context.led);
-    ui.set_hex(context.hex);
+    ui.set_hex(neighbors.count());
 
     # led = !led
     if(context.led){
         context.led = nil;
     } else{
         context.led = 1;
-    }
-
-    if(context.hex >= 15){
-        context.hex = 0;
-    } else {
-        context.hex = context.hex + 1;
     }
 }
 
