@@ -40,12 +40,12 @@ bool TCPServer::openSocket(int port) {
 
     if (::bind(m_serverFd, (struct sockaddr*)&m_address, static_cast<socklen_t>(m_addressLength)) <
         0) {
-        m_logger.log(LogLevel::Error, "TCP server server binding failed");
+        m_logger.log(LogLevel::Error, "TCP server binding failed on port %d", m_port);
         return false;
     }
 
     if (::listen(m_serverFd, 1) < 0) {
-        m_logger.log(LogLevel::Error, "TCP server server listen failed");
+        m_logger.log(LogLevel::Error, "TCP server listen failed on port %d", m_port);
         return false;
     }
 

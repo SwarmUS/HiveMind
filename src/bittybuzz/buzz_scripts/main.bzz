@@ -1,4 +1,4 @@
-include "behaviors/follow_leader.bzz"
+include "behaviors/stigmergy.bzz"
 
 function init() {
   exec = create_exec(100);

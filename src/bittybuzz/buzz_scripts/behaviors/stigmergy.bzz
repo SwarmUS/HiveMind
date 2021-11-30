@@ -9,12 +9,12 @@ function tick(context) {
     log("Key value: ", stig.get("key"));
 }
 
-function create_exec() {
+function create_exec(delay_ms) {
     context = {
         .counter = 0
     };
 
     stig = stigmergy.create(1);
-    exec = executor.new_ms(40, tick, context);
+    exec = executor.new_ms(delay_ms, tick, context);
     return exec;
 }

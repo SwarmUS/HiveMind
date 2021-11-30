@@ -5,7 +5,7 @@
 #include <cstring>
 
 void task(void* context) {
-    constexpr uint16_t loopRate = 20;
+    constexpr uint16_t loopRate = 5;
     while (true) {
         static_cast<SpiEsp*>(context)->execute();
         Task::delay(loopRate);
