@@ -1,7 +1,7 @@
 include "behaviors/blinky.bzz"
 
 function init() {
-  exec = create_exec(100);
+  exec = create_exec(2000);
 }
 
 function step() {

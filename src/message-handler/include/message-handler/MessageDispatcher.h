@@ -11,7 +11,7 @@
 #include <pheromones/IHiveMindHostDeserializer.h>
 #include <pheromones/MessageDTO.h>
 
-class MessageDispatcher : IMessageDispatcher {
+class MessageDispatcher : public IMessageDispatcher {
   public:
     MessageDispatcher(ICircularQueue<MessageDTO>& buzzOutputQ,
                       ICircularQueue<MessageDTO>& hostOutputQ,

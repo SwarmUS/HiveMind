@@ -34,32 +34,32 @@ using commInterfaceGetter = std::optional<std::reference_wrapper<ICommInterface>
 using connectionStateSetter = void (*)(ConnectionState state);
 
 class BittyBuzzTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
-  public:
+public:
     BittyBuzzTask(const char* taskName,
                   UBaseType_t priority,
                   IDeviceStateUI& deviceStateUI,
                   IButtonCallbackRegister& buttonCallbackRegister) :
 
-        AbstractTask(taskName, priority),
-        m_logger(LoggerContainer::getLogger()),
-        m_deviceStateUI(deviceStateUI),
-        m_buttonCallbackRegister(buttonCallbackRegister),
-        m_bytecode(BittyBuzzFactory::createBittyBuzzBytecode(m_logger)),
-        m_stringResolver(BittyBuzzFactory::createBittyBuzzStringResolver(m_logger)),
-        m_bittybuzzVm(m_bytecode,
-                      m_stringResolver,
-                      BittyBuzzContainer::getBBZMessageHandler(),
-                      BittyBuzzContainer::getBBZClosureRegister(),
-                      BittyBuzzContainer::getBBZMessageService(),
-                      BittyBuzzContainer::getBBZNeighborsManager(),
-                      ApplicationInterfaceContainer::getUserUI(),
-                      BSPContainer::getBSP(),
-                      m_logger,
-                      BSPContainer::getUserInterface()) {}
+            AbstractTask(taskName, priority),
+            m_logger(LoggerContainer::getLogger()),
+            m_deviceStateUI(deviceStateUI),
+            m_buttonCallbackRegister(buttonCallbackRegister),
+            m_bytecode(BittyBuzzFactory::createBittyBuzzBytecode(m_logger)),
+            m_stringResolver(BittyBuzzFactory::createBittyBuzzStringResolver(m_logger)),
+            m_bittybuzzVm(m_bytecode,
+                          m_stringResolver,
+                          BittyBuzzContainer::getBBZMessageHandler(),
+                          BittyBuzzContainer::getBBZClosureRegister(),
+                          BittyBuzzContainer::getBBZMessageService(),
+                          BittyBuzzContainer::getBBZNeighborsManager(),
+                          ApplicationInterfaceContainer::getUserUI(),
+                          BSPContainer::getBSP(),
+                          m_logger,
+                          BSPContainer::getUserInterface()) {}
 
     ~BittyBuzzTask() override = default;
 
-  private:
+private:
     ILogger& m_logger;
     IDeviceStateUI& m_deviceStateUI;
     IButtonCallbackRegister& m_buttonCallbackRegister;
@@ -86,7 +86,7 @@ class BittyBuzzTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
         auto uiLib = BittyBuzzFactory::createBittyBuzzUILib();
 
         std::array<std::reference_wrapper<IBittyBuzzLib>, 3> buzzLibraries{
-            {globalLib, mathLib, uiLib}};
+                {globalLib, mathLib, uiLib}};
 
         // register btn function
         m_buttonCallbackRegister.setCallback(resetVmButtonCallback, this);
@@ -110,27 +110,27 @@ class BittyBuzzTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
                 if (m_bittybuzzVm.getState() == BBZVM_STATE_READY) {
                     BBVMRet statusCode = m_bittybuzzVm.step();
                     switch (statusCode) {
-                    case BBVMRet::Ok:
-                        m_deviceStateUI.setDeviceState(DeviceState::Ok);
-                        break;
-                    case BBVMRet::Stopped: {
-                        m_logger.log(LogLevel::Warn, "BBZVM is stopped, cannot step");
-                        m_deviceStateUI.setDeviceState(DeviceState::Error);
-                        break;
-                    }
-                    case BBVMRet::OutMsgErr: {
-                        m_logger.log(LogLevel::Warn, "Buzz could not sent message");
-                        m_deviceStateUI.setDeviceState(DeviceState::Error);
-                        break;
-                    }
-                    case BBVMRet::VmErr: {
-                        m_logger.log(LogLevel::Error, "BBZVM failed to step. state: %s err: %s",
-                                     BittyBuzzSystem::getStateString(m_bittybuzzVm.getState()),
-                                     BittyBuzzSystem::getErrorString(m_bittybuzzVm.getError()));
-                        m_deviceStateUI.setDeviceState(
-                            vmErrorToDeviceState(m_bittybuzzVm.getError()));
-                        break;
-                    }
+                        case BBVMRet::Ok:
+                            m_deviceStateUI.setDeviceState(DeviceState::Ok);
+                            break;
+                        case BBVMRet::Stopped: {
+                            m_logger.log(LogLevel::Warn, "BBZVM is stopped, cannot step");
+                            m_deviceStateUI.setDeviceState(DeviceState::Error);
+                            break;
+                        }
+                        case BBVMRet::OutMsgErr: {
+                            m_logger.log(LogLevel::Warn, "Buzz could not sent message");
+                            m_deviceStateUI.setDeviceState(DeviceState::Error);
+                            break;
+                        }
+                        case BBVMRet::VmErr: {
+                            m_logger.log(LogLevel::Error, "BBZVM failed to step. state: %s err: %s",
+                                         BittyBuzzSystem::getStateString(m_bittybuzzVm.getState()),
+                                         BittyBuzzSystem::getErrorString(m_bittybuzzVm.getError()));
+                            m_deviceStateUI.setDeviceState(
+                                    vmErrorToDeviceState(m_bittybuzzVm.getError()));
+                            break;
+                        }
                     }
                 }
                 Task::delayUntil(prevWake, (uint16_t)stepDelay);
@@ -146,21 +146,21 @@ class BittyBuzzTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
 };
 
 class MessageDispatcherTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
-  public:
+public:
     MessageDispatcherTask(const char* taskName,
                           UBaseType_t priority,
                           ICommInterface* stream,
                           ICircularQueue<MessageDTO>& streamQueue) :
-        AbstractTask(taskName, priority),
-        m_stream(stream),
-        m_streamQueue(streamQueue),
-        m_logger(LoggerContainer::getLogger()) {}
+            AbstractTask(taskName, priority),
+            m_stream(stream),
+            m_streamQueue(streamQueue),
+            m_logger(LoggerContainer::getLogger()) {}
 
     ~MessageDispatcherTask() override = default;
 
     void setStream(ICommInterface* stream) { m_stream = stream; }
 
-  private:
+private:
     ICommInterface* m_stream;
     ICircularQueue<MessageDTO>& m_streamQueue;
     ILogger& m_logger;
@@ -171,13 +171,13 @@ class MessageDispatcherTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE>
             HiveMindHostDeserializer deserializer(*m_stream);
             HiveMindHostAccumulatorSerializer serializer(*m_stream);
             HiveMindHostApiRequestHandler hivemindApiReqHandler =
-                MessageHandlerContainer::createHiveMindHostApiRequestHandler();
+                    MessageHandlerContainer::createHiveMindHostApiRequestHandler();
             HiveConnectHiveMindApiMessageHandler hiveconnectApiMessageHandler =
-                MessageHandlerContainer::createHiveConnectHiveMindApiMessageHandler();
+                    MessageHandlerContainer::createHiveConnectHiveMindApiMessageHandler();
 
             GreetSender greetSender(m_streamQueue, BSPContainer::getBSP());
             MessageDispatcher messageDispatcher = MessageHandlerContainer::createMessageDispatcher(
-                deserializer, hivemindApiReqHandler, hiveconnectApiMessageHandler, greetSender);
+                    deserializer, hivemindApiReqHandler, hiveconnectApiMessageHandler, greetSender);
 
             while (m_stream->isConnected()) {
                 if (!messageDispatcher.deserializeAndDispatch()) {
@@ -190,24 +190,24 @@ class MessageDispatcherTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE>
 };
 
 class MessageSenderTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
-  public:
+public:
     MessageSenderTask(const char* taskName,
                       UBaseType_t priority,
                       ICommInterface* stream,
                       INotificationQueue<MessageDTO>& streamQueue,
                       bool keepRunning = false) :
-        AbstractTask(taskName, priority),
-        m_stream(stream),
-        m_streamQueue(streamQueue),
-        m_logger(LoggerContainer::getLogger()),
-        m_keepRunning(keepRunning) {}
+            AbstractTask(taskName, priority),
+            m_stream(stream),
+            m_streamQueue(streamQueue),
+            m_logger(LoggerContainer::getLogger()),
+            m_keepRunning(keepRunning) {}
 
     ~MessageSenderTask() override = default;
 
     void setStream(ICommInterface* stream) { m_stream = stream; }
     void setSerializer(IHiveMindHostSerializer* serializer) { m_serializer = serializer; }
 
-  private:
+private:
     ICommInterface* m_stream;
     INotificationQueue<MessageDTO>& m_streamQueue;
     ILogger& m_logger;
@@ -236,7 +236,7 @@ class MessageSenderTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
 
 template <typename SerializerType = HiveMindHostSerializer>
 class CommMonitoringTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
-  public:
+public:
     CommMonitoringTask<SerializerType>(const char* taskName,
                                        UBaseType_t priority,
                                        MessageDispatcherTask& dispatcherTask,
@@ -244,15 +244,15 @@ class CommMonitoringTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
                                        IHandshakeUI& handshakeUI,
                                        commInterfaceGetter commInterfaceGetter,
                                        connectionStateSetter connectionStateSetter) :
-        AbstractTask(taskName, priority),
-        m_dispatcherTask(dispatcherTask),
-        m_senderTask(senderTask),
-        m_handshakeUI(handshakeUI),
-        m_commInterfaceGetter(commInterfaceGetter),
-        m_connectionStateSetter(connectionStateSetter),
-        m_logger(LoggerContainer::getLogger()) {}
+            AbstractTask(taskName, priority),
+            m_dispatcherTask(dispatcherTask),
+            m_senderTask(senderTask),
+            m_handshakeUI(handshakeUI),
+            m_commInterfaceGetter(commInterfaceGetter),
+            m_connectionStateSetter(connectionStateSetter),
+            m_logger(LoggerContainer::getLogger()) {}
 
-  private:
+private:
     MessageDispatcherTask& m_dispatcherTask;
     MessageSenderTask& m_senderTask;
     IHandshakeUI& m_handshakeUI;
@@ -292,11 +292,11 @@ class CommMonitoringTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
                                 Task::delay(1000);
                                 if (m_dispatcherTask.isRunning() != m_senderTask.isRunning()) {
                                     const char* taskStuckRuning =
-                                        m_dispatcherTask.isRunning()
+                                            m_dispatcherTask.isRunning()
                                             ? m_dispatcherTask.getTaskName()
                                             : m_senderTask.getTaskName();
                                     const char* taskEndedRuning =
-                                        !m_dispatcherTask.isRunning()
+                                            !m_dispatcherTask.isRunning()
                                             ? m_dispatcherTask.getTaskName()
                                             : m_senderTask.getTaskName();
                                     m_logger.log(LogLevel::Warn,
@@ -316,26 +316,26 @@ class CommMonitoringTask : public AbstractTask<15 * configMINIMAL_STACK_SIZE> {
 };
 
 class HardwareInterlocTask : public AbstractTask<20 * configMINIMAL_STACK_SIZE> {
-  public:
+public:
     HardwareInterlocTask(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority) {}
+            AbstractTask(taskName, priority) {}
 
     ~HardwareInterlocTask() override = default;
 
-  private:
+private:
     void task() override { BSPContainer::getInterlocManager().startInterloc(); }
 };
 
 class InterlocMessageHandlerTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
-  public:
+public:
     InterlocMessageHandlerTask(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority),
-        m_interlocMessageQueue(MessageHandlerContainer::getInterlocMsgQueue()),
-        m_interlocMessageHandler(InterlocContainer::getInterlocMessageHandler()) {}
+            AbstractTask(taskName, priority),
+            m_interlocMessageQueue(MessageHandlerContainer::getInterlocMsgQueue()),
+            m_interlocMessageHandler(InterlocContainer::getInterlocMessageHandler()) {}
 
     ~InterlocMessageHandlerTask() override = default;
 
-  private:
+private:
     NotificationQueue<MessageDTO>& m_interlocMessageQueue;
     IInterlocMessageHandler& m_interlocMessageHandler;
 
@@ -351,13 +351,13 @@ class InterlocMessageHandlerTask : public AbstractTask<10 * configMINIMAL_STACK_
 };
 
 class InterlocDataHandlerTask : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
-  public:
+public:
     InterlocDataHandlerTask(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority), m_interloc(InterlocContainer::getInterloc()) {}
+            AbstractTask(taskName, priority), m_interloc(InterlocContainer::getInterloc()) {}
 
     ~InterlocDataHandlerTask() override = default;
 
-  private:
+private:
     IInterloc& m_interloc;
 
     void task() override {
@@ -368,15 +368,15 @@ class InterlocDataHandlerTask : public AbstractTask<10 * configMINIMAL_STACK_SIZ
 };
 
 class LogInterlocTask : public AbstractTask<4 * configMINIMAL_STACK_SIZE> {
-  public:
+public:
     LogInterlocTask(const char* taskName, UBaseType_t priority) :
-        AbstractTask(taskName, priority),
-        m_interloc(InterlocContainer::getInterloc()),
-        m_logger(LoggerContainer::getLogger()) {}
+            AbstractTask(taskName, priority),
+            m_interloc(InterlocContainer::getInterloc()),
+            m_logger(LoggerContainer::getLogger()) {}
 
     ~LogInterlocTask() override = default;
 
-  private:
+private:
     IInterloc& m_interloc;
     ILogger& m_logger;
 
@@ -394,6 +394,74 @@ class LogInterlocTask : public AbstractTask<4 * configMINIMAL_STACK_SIZE> {
     }
 };
 
+class Metrics : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
+public:
+    Metrics(const char* taskName, UBaseType_t priority, ILogger& logger, IBSP& bsp,
+            IHiveMindHostSerializer& hostSerializer, IHiveMindHostSerializer& remoteSerializer,
+            IMessageDispatcher& hostDispatcher, IMessageDispatcher& remoteDispatcher):
+            AbstractTask(taskName, priority), m_logger(logger), m_bsp(bsp),
+            m_hostSerializer(hostSerializer), m_remoteSerializer(remoteSerializer),
+            m_hostDispatcher(hostDispatcher), m_remoteDispatcher(remoteDispatcher) {}
+
+    ~Metrics() override = default;
+
+    Task::Time m_averageHostTime;
+    Task::Time m_averageRemoteTime;
+
+
+    void task() override {
+        // This handles greetings
+        m_logger.log(LogLevel::Warn, "Waiting for greetings");
+        m_hostDispatcher.deserializeAndDispatch();
+        m_logger.log(LogLevel::Warn, "Got host greeting");
+        m_remoteDispatcher.deserializeAndDispatch();
+        m_logger.log(LogLevel::Warn, "Got remote greeting");
+        while (true) {
+            uint8_t timingCounts = 10;
+            // Testing host
+            FunctionCallRequestDTO call("getStatus", nullptr, 0);
+            UserCallRequestDTO userCallRequestDto(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, call);
+            RequestDTO requestDto(0, userCallRequestDto);
+            MessageDTO hostMessageDto(m_bsp.getUUId(),m_bsp.getUUId(), requestDto);
+            for (uint8_t i = 0; i < timingCounts; i++) {
+                auto start = Task::getTime();
+                m_hostSerializer.serializeToStream(hostMessageDto);
+                m_hostDispatcher.deserializeAndDispatch();
+                auto finish = Task::getTime();
+                m_averageHostTime += (finish - start) / timingCounts;
+            }
+            m_logger.log(LogLevel::Warn, "Host took %d milliseconds per message", m_averageHostTime);
+            // Testing remote
+            GetAgentsListRequestDTO request;
+            HiveConnectHiveMindApiDTO hiveConnectHiveMindApiDto(0, request);
+            MessageDTO remoteMessage(m_bsp.getUUId(), m_bsp.getUUId(), hiveConnectHiveMindApiDto);
+            for (uint8_t i = 0; i < timingCounts; i++) {
+                auto start = Task::getTime();
+                m_remoteSerializer.serializeToStream(hostMessageDto);
+                m_remoteDispatcher.deserializeAndDispatch();
+                auto finish = Task::getTime();
+                m_averageRemoteTime += (finish - start) / timingCounts;
+            }
+            m_logger.log(LogLevel::Warn, "Remote took %d milliseconds per message", m_averageRemoteTime);
+            m_logger.log(LogLevel::Warn, "Metrics obtained, restarting in 5 seconds");
+            Task::delay(5000);
+        }
+    }
+
+
+private:
+    ILogger& m_logger;
+    IBSP& m_bsp;
+    IHiveMindHostSerializer& m_hostSerializer;
+    IHiveMindHostSerializer& m_remoteSerializer;
+    IMessageDispatcher& m_hostDispatcher;
+    IMessageDispatcher& m_remoteDispatcher;
+
+
+
+
+};
+
 // Gets the comm interface for the host and sets the UI for wich one was obtained
 std::optional<std::reference_wrapper<ICommInterface>> hostInterfaceGetter() {
     auto commInterface = BSPContainer::getHostCommInterface();
@@ -403,14 +471,14 @@ std::optional<std::reference_wrapper<ICommInterface>> hostInterfaceGetter() {
     if (commInterface) {
         ConnectionType type = commInterface.value().get().getType();
         switch (type) {
-        case ConnectionType::Ethernet:
-            connectionStateUI.setConnectionState(ConnectionState::Ethernet);
-            break;
-        case ConnectionType::USB:
-            connectionStateUI.setConnectionState(ConnectionState::USB);
-            break;
-        default:
-            connectionStateUI.setConnectionState(ConnectionState::Error);
+            case ConnectionType::Ethernet:
+                connectionStateUI.setConnectionState(ConnectionState::Ethernet);
+                break;
+            case ConnectionType::USB:
+                connectionStateUI.setConnectionState(ConnectionState::USB);
+                break;
+            default:
+                connectionStateUI.setConnectionState(ConnectionState::Error);
         }
     }
     return commInterface;
@@ -432,9 +500,9 @@ int main(int argc, char** argv) {
     bsp.initChip((void*)&cmdLineArgs);
 
     ApplicationInterfaceContainer::getConnectionStateUI().setConnectionState(
-        ConnectionState::Booting);
+            ConnectionState::Booting);
 
-    __attribute__((section(".cmbss"))) static BittyBuzzTask s_bittybuzzTask(
+    /*__attribute__((section(".cmbss"))) static BittyBuzzTask s_bittybuzzTask(
         "bittybuzz", gc_taskNormalPriority, ApplicationInterfaceContainer::getDeviceStateUI(),
         ApplicationInterfaceContainer::getButton1CallbackRegister());
 
@@ -465,15 +533,37 @@ int main(int argc, char** argv) {
     static CommMonitoringTask<HiveMindHostAccumulatorSerializer> s_remoteMonitorTask(
         "remote_monitor", gc_taskNormalPriority, s_remoteDispatchTask, s_remoteMessageSender,
         ApplicationInterfaceContainer::getRemoteHandshakeUI(), BSPContainer::getRemoteCommInterface,
-        setRemoteConnectionState);
+        setRemoteConnectionState);*/
 
-    s_bittybuzzTask.start();
+    while (!BSPContainer::getHostCommInterface().has_value() || !BSPContainer::getRemoteCommInterface().has_value()) {
+        LoggerContainer::getLogger().log(LogLevel::Warn, "Waiting for communication interfaces...");
+        Task::delay(500);
+    }
+    static HiveMindHostSerializer s_hostSerializer(BSPContainer::getHostCommInterface().value());
+    static HiveMindHostSerializer s_remoteSerializer(BSPContainer::getRemoteCommInterface().value());
+    static HiveMindHostDeserializer s_hostDeserializer(BSPContainer::getHostCommInterface().value());
+    static HiveMindHostDeserializer s_remoteDeserializer(BSPContainer::getRemoteCommInterface().value());
+    static GreetSender s_hostGreetSender(MessageHandlerContainer::getHostMsgQueue(), BSPContainer::getBSP());
+    static GreetSender s_remoteGreetSender(MessageHandlerContainer::getRemoteMsgQueue(), BSPContainer::getBSP());
+    static HiveMindHostApiRequestHandler s_hmHandler = MessageHandlerContainer::createHiveMindHostApiRequestHandler();
+    static HiveConnectHiveMindApiMessageHandler s_hcHandler = MessageHandlerContainer::createHiveConnectHiveMindApiMessageHandler();
+
+    static MessageDispatcher s_hostMessageDispatcher = MessageHandlerContainer::createMessageDispatcher(
+            s_hostDeserializer, s_hmHandler,  s_hcHandler, s_hostGreetSender);
+    static MessageDispatcher s_remoteMessageDispatcher = MessageHandlerContainer::createMessageDispatcher(
+            s_remoteDeserializer, s_hmHandler,  s_hcHandler, s_remoteGreetSender);
+    static Metrics s_metrics("metrics", gc_taskHighPriority, LoggerContainer::getLogger(),
+                             BSPContainer::getBSP(), s_hostSerializer, s_remoteSerializer,
+                             s_hostMessageDispatcher, s_remoteMessageDispatcher);
+
+    /*s_bittybuzzTask.start();
     s_hardwareInterlocTask.start();
     s_interlocDataTask.start();
     s_interlocMessageTask.start();
     s_logInterlocTask.start();
     s_hostMonitorTask.start();
-    s_remoteMonitorTask.start();
+    s_remoteMonitorTask.start();*/
+    s_metrics.start();
     Task::startScheduler();
 
     return 0;
