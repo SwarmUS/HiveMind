@@ -415,11 +415,11 @@ public:
     void task() override {
         acquireInterfaces();
         // This handles greetings
-        m_logger.log(LogLevel::Warn, "Waiting for greetings");
+        m_logger.log(LogLevel::Info, "Waiting for greetings");
         m_hostDispatcher->deserializeAndDispatch();
-        m_logger.log(LogLevel::Warn, "Got host greeting");
+        m_logger.log(LogLevel::Info, "Got host greeting");
         m_remoteDispatcher->deserializeAndDispatch();
-        m_logger.log(LogLevel::Warn, "Got remote greeting");
+        m_logger.log(LogLevel::Info, "Got remote greeting");
         while (true) {
             uint8_t timingCounts = 10;
             // Testing host
@@ -432,8 +432,9 @@ public:
                 m_hostSerializer->serializeToStream(hostMessageDto);
                 m_hostDispatcher->deserializeAndDispatch();
                 auto finish = Task::getTime();
-                m_averageHostTime += (finish - start) / timingCounts;
+                m_averageHostTime += (finish - start) ;
             }
+            m_averageHostTime /= timingCounts;
             m_logger.log(LogLevel::Warn, "Host took %d milliseconds per message", m_averageHostTime);
             // Testing remote
             GetAgentsListRequestDTO request;
@@ -444,8 +445,9 @@ public:
                 m_remoteSerializer->serializeToStream(hostMessageDto);
                 m_remoteDispatcher->deserializeAndDispatch();
                 auto finish = Task::getTime();
-                m_averageRemoteTime += (finish - start) / timingCounts;
+                m_averageRemoteTime += (finish - start);
             }
+            m_averageRemoteTime /= timingCounts;
             m_logger.log(LogLevel::Warn, "Remote took %d milliseconds per message", m_averageRemoteTime);
             m_logger.log(LogLevel::Warn, "Metrics obtained, restarting in 5 seconds");
             Task::delay(5000);

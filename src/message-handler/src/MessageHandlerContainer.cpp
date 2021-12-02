@@ -40,7 +40,7 @@ MessageDispatcher MessageHandlerContainer::createMessageDispatcher(
 MessageDispatcher& MessageHandlerContainer::createHostDispatcher() {
     while (!BSPContainer::getHostCommInterface().has_value()) {
         LoggerContainer::getLogger().log(LogLevel::Info, "Waiting on host interface");
-
+        Task::delay(300);
     }
     static HiveMindHostDeserializer s_hostDeserializer(BSPContainer::getHostCommInterface().value());
     static GreetSender s_hostGreeter(getHostMsgQueue(), BSPContainer::getBSP());
@@ -54,6 +54,7 @@ MessageDispatcher& MessageHandlerContainer::createHostDispatcher() {
 MessageDispatcher& MessageHandlerContainer::createRemoteDispatcher() {
     while (!BSPContainer::getRemoteCommInterface().has_value()) {
         LoggerContainer::getLogger().log(LogLevel::Info, "Waiting on remote interface");
+        Task::delay(300);
     }
     static HiveMindHostDeserializer s_remoteDeserializer(BSPContainer::getRemoteCommInterface().value());
     static GreetSender s_remoteGreeter(getRemoteMsgQueue(), BSPContainer::getBSP());
