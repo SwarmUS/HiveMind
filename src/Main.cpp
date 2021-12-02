@@ -396,25 +396,29 @@ private:
 
 class Metrics : public AbstractTask<10 * configMINIMAL_STACK_SIZE> {
 public:
-    Metrics(const char* taskName, UBaseType_t priority, ILogger& logger, IBSP& bsp,
-            IHiveMindHostSerializer& hostSerializer, IHiveMindHostSerializer& remoteSerializer,
-            IMessageDispatcher& hostDispatcher, IMessageDispatcher& remoteDispatcher):
-            AbstractTask(taskName, priority), m_logger(logger), m_bsp(bsp),
-            m_hostSerializer(hostSerializer), m_remoteSerializer(remoteSerializer),
-            m_hostDispatcher(hostDispatcher), m_remoteDispatcher(remoteDispatcher) {}
+    Metrics(const char* taskName, UBaseType_t priority, ILogger& logger, IBSP& bsp):
+            AbstractTask(taskName, priority), m_logger(logger), m_bsp(bsp) {}
 
     ~Metrics() override = default;
 
     Task::Time m_averageHostTime;
     Task::Time m_averageRemoteTime;
 
+    void acquireInterfaces() {
+        m_hostDispatcher = &MessageHandlerContainer::createHostDispatcher();
+        m_hostSerializer = &MessageHandlerContainer::createHostSerializer();
+        m_remoteDispatcher = &MessageHandlerContainer::createRemoteDispatcher();
+        m_remoteSerializer = &MessageHandlerContainer::createRemoteSerializer();
+    }
+
 
     void task() override {
+        acquireInterfaces();
         // This handles greetings
         m_logger.log(LogLevel::Warn, "Waiting for greetings");
-        m_hostDispatcher.deserializeAndDispatch();
+        m_hostDispatcher->deserializeAndDispatch();
         m_logger.log(LogLevel::Warn, "Got host greeting");
-        m_remoteDispatcher.deserializeAndDispatch();
+        m_remoteDispatcher->deserializeAndDispatch();
         m_logger.log(LogLevel::Warn, "Got remote greeting");
         while (true) {
             uint8_t timingCounts = 10;
@@ -425,8 +429,8 @@ public:
             MessageDTO hostMessageDto(m_bsp.getUUId(),m_bsp.getUUId(), requestDto);
             for (uint8_t i = 0; i < timingCounts; i++) {
                 auto start = Task::getTime();
-                m_hostSerializer.serializeToStream(hostMessageDto);
-                m_hostDispatcher.deserializeAndDispatch();
+                m_hostSerializer->serializeToStream(hostMessageDto);
+                m_hostDispatcher->deserializeAndDispatch();
                 auto finish = Task::getTime();
                 m_averageHostTime += (finish - start) / timingCounts;
             }
@@ -437,8 +441,8 @@ public:
             MessageDTO remoteMessage(m_bsp.getUUId(), m_bsp.getUUId(), hiveConnectHiveMindApiDto);
             for (uint8_t i = 0; i < timingCounts; i++) {
                 auto start = Task::getTime();
-                m_remoteSerializer.serializeToStream(hostMessageDto);
-                m_remoteDispatcher.deserializeAndDispatch();
+                m_remoteSerializer->serializeToStream(hostMessageDto);
+                m_remoteDispatcher->deserializeAndDispatch();
                 auto finish = Task::getTime();
                 m_averageRemoteTime += (finish - start) / timingCounts;
             }
@@ -452,10 +456,10 @@ public:
 private:
     ILogger& m_logger;
     IBSP& m_bsp;
-    IHiveMindHostSerializer& m_hostSerializer;
-    IHiveMindHostSerializer& m_remoteSerializer;
-    IMessageDispatcher& m_hostDispatcher;
-    IMessageDispatcher& m_remoteDispatcher;
+    IHiveMindHostSerializer* m_hostSerializer;
+    IHiveMindHostSerializer* m_remoteSerializer;
+    IMessageDispatcher* m_hostDispatcher;
+    IMessageDispatcher* m_remoteDispatcher;
 
 
 
@@ -535,26 +539,8 @@ int main(int argc, char** argv) {
         ApplicationInterfaceContainer::getRemoteHandshakeUI(), BSPContainer::getRemoteCommInterface,
         setRemoteConnectionState);*/
 
-    while (!BSPContainer::getHostCommInterface().has_value() || !BSPContainer::getRemoteCommInterface().has_value()) {
-        LoggerContainer::getLogger().log(LogLevel::Warn, "Waiting for communication interfaces...");
-        Task::delay(500);
-    }
-    static HiveMindHostSerializer s_hostSerializer(BSPContainer::getHostCommInterface().value());
-    static HiveMindHostSerializer s_remoteSerializer(BSPContainer::getRemoteCommInterface().value());
-    static HiveMindHostDeserializer s_hostDeserializer(BSPContainer::getHostCommInterface().value());
-    static HiveMindHostDeserializer s_remoteDeserializer(BSPContainer::getRemoteCommInterface().value());
-    static GreetSender s_hostGreetSender(MessageHandlerContainer::getHostMsgQueue(), BSPContainer::getBSP());
-    static GreetSender s_remoteGreetSender(MessageHandlerContainer::getRemoteMsgQueue(), BSPContainer::getBSP());
-    static HiveMindHostApiRequestHandler s_hmHandler = MessageHandlerContainer::createHiveMindHostApiRequestHandler();
-    static HiveConnectHiveMindApiMessageHandler s_hcHandler = MessageHandlerContainer::createHiveConnectHiveMindApiMessageHandler();
-
-    static MessageDispatcher s_hostMessageDispatcher = MessageHandlerContainer::createMessageDispatcher(
-            s_hostDeserializer, s_hmHandler,  s_hcHandler, s_hostGreetSender);
-    static MessageDispatcher s_remoteMessageDispatcher = MessageHandlerContainer::createMessageDispatcher(
-            s_remoteDeserializer, s_hmHandler,  s_hcHandler, s_remoteGreetSender);
     static Metrics s_metrics("metrics", gc_taskHighPriority, LoggerContainer::getLogger(),
-                             BSPContainer::getBSP(), s_hostSerializer, s_remoteSerializer,
-                             s_hostMessageDispatcher, s_remoteMessageDispatcher);
+                             BSPContainer::getBSP());
 
     /*s_bittybuzzTask.start();
     s_hardwareInterlocTask.start();
