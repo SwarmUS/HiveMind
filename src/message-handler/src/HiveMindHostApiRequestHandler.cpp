@@ -30,6 +30,9 @@ bool HiveMindHostApiRequestHandler::handleHiveMindHostApiRequest(
     uint16_t requestId, const MessageDTO& message, const HiveMindHostApiRequestDTO& request) {
 
     if (std::holds_alternative<BytesDTO>(request.getRequest())) {
+        if (m_bsp.getUUId() != message.getSourceId()) {
+            return m_remoteQueue.push(message);
+        }
         return m_hostQueue.push(message);
     }
 
@@ -48,6 +51,9 @@ bool HiveMindHostApiRequestHandler::handleHiveMindHostApiRequest(
         HiveMindHostApiResponseDTO hmResp(neighborResp);
         ResponseDTO resp(requestId, hmResp);
         MessageDTO msg(m_bsp.getUUId(), message.getSourceId(), resp);
+        if (m_bsp.getUUId() != message.getSourceId()) {
+            return m_remoteQueue.push(msg);
+        }
         return m_hostQueue.push(msg);
     }
 
@@ -65,6 +71,9 @@ bool HiveMindHostApiRequestHandler::handleHiveMindHostApiRequest(
         HiveMindHostApiResponseDTO hmResp(neighborResp);
         ResponseDTO resp(requestId, hmResp);
         MessageDTO msg(m_bsp.getUUId(), message.getSourceId(), resp);
+        if (m_bsp.getUUId() != message.getSourceId()) {
+            return m_remoteQueue.push(msg);
+        }
         return m_hostQueue.push(msg);
     }
 

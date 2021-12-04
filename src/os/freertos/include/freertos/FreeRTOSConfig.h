@@ -64,6 +64,7 @@
 #define configSUPPORT_DYNAMIC_ALLOCATION 1
 #define configSUPPORT_STATIC_ALLOCATION 1
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION 0
+#define configRECORD_STACK_HIGH_ADDRESS 1
 
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES 0

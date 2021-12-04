@@ -5,7 +5,8 @@
 #include <cstring>
 
 void task(void* context) {
-    constexpr uint16_t loopRate = 20;
+    // This is to give time for ESP to be ready for next transaction
+    constexpr uint16_t loopRate = 3;
     while (true) {
         static_cast<SpiEsp*>(context)->execute();
         Task::delay(loopRate);
@@ -54,14 +55,13 @@ bool SpiEsp::send(const uint8_t* buffer, uint16_t length) {
     m_txState = transmitState::SENDING_HEADER;
     // Wait for transmission to be over. Will be notified when ACK received or upon error
     m_sendingTaskHandle = xTaskGetCurrentTaskHandle();
-    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-    if (m_txState == transmitState::ERROR) {
-        m_logger.log(LogLevel::Error, "Error occurred...");
-        return false;
+    m_hasSentPayload = false;
+    while (!m_hasSentPayload) {
+        ulTaskNotifyTake(pdTRUE, 20);
     }
     m_logger.log(LogLevel::Debug, "Payload sent!");
     m_sendingTaskHandle = nullptr;
-    return m_crcOK;
+    return true;
 }
 bool SpiEsp::receive(uint8_t* buffer, uint16_t length) {
     if (buffer == nullptr || length > ESP_SPI_MAX_MESSAGE_LENGTH) {
@@ -82,21 +82,20 @@ bool SpiEsp::isConnected() const { return m_isConnected; }
 
 void SpiEsp::execute() {
     uint32_t txLengthBytes = 0;
-    uint32_t rxLengthBytes = 0;
+    uint32_t rxLengthBytes = EspHeader::sizeBytes;
     auto* txBuffer = (uint8_t*)&m_outboundHeader; // Send header by default;
+    if (m_driverTaskHandle == nullptr) {
+        m_driverTaskHandle = xTaskGetCurrentTaskHandle();
+    }
 
     switch (m_rxState) {
     case receiveState::IDLE:
-        if (!m_inboundRequest) {
-            m_inboundRequest = EspSpi_ReadCS();
-        }
+        m_inboundRequest = EspSpi_ReadUser0();
         if (m_inboundRequest || m_txState != transmitState::IDLE) {
-            rxLengthBytes = EspHeader::sizeBytes;
             m_rxState = receiveState::RECEIVING_HEADER;
         }
         break;
     case receiveState::RECEIVING_HEADER:
-        rxLengthBytes = EspHeader::sizeBytes;
         break;
     case receiveState::PARSING_HEADER:
         m_inboundHeader = (EspHeader::Header*)m_inboundMessage.m_data.data();
@@ -106,10 +105,8 @@ void SpiEsp::execute() {
             m_logger.log(LogLevel::Debug, "Bytes were: | %d | %d | %d | %d |",
                          m_inboundMessage.m_data[0], m_inboundMessage.m_data[1],
                          m_inboundMessage.m_data[2], m_inboundMessage.m_data[3]);
-            m_rxState = receiveState::ERROR;
-            if (m_hasSentPayload) {
-                m_txState = transmitState::ERROR;
-            }
+            m_inboundMessage.m_sizeBytes = 0;
+            m_rxState = receiveState::RECEIVING_HEADER;
             m_isConnected = false;
             break;
         }
@@ -135,16 +132,7 @@ void SpiEsp::execute() {
             m_outboundHeader.systemState.stmSystemState.failedCrc = 0;
             m_rxState = receiveState::RECEIVING_PAYLOAD;
         } else {
-            rxLengthBytes = EspHeader::sizeBytes;
             m_rxState = receiveState::RECEIVING_HEADER;
-        }
-        // Payload has been sent. Check crc and notify sending task
-        if (m_hasSentPayload) {
-            m_hasSentPayload = false;
-            m_crcOK = !m_inboundHeader->systemState.stmSystemState.failedCrc;
-            if (m_sendingTaskHandle != nullptr) {
-                xTaskNotifyGive(m_sendingTaskHandle);
-            }
         }
         break;
     case receiveState::RECEIVING_PAYLOAD:
@@ -172,17 +160,6 @@ void SpiEsp::execute() {
         m_inboundMessage.m_payloadSize = 0;
         m_inboundMessage.m_sizeBytes = 0;
         m_rxState = receiveState::RECEIVING_HEADER;
-        rxLengthBytes = EspHeader::sizeBytes;
-        break;
-    case receiveState::ERROR:
-        rxLengthBytes = EspHeader::sizeBytes;
-        m_inboundMessage.m_sizeBytes = 0;
-        m_rxState = receiveState::RECEIVING_HEADER;
-        CircularBuff_clear(&m_circularBuf);
-        if (m_receivingTaskHandle != nullptr) {
-            xTaskNotifyGive(m_receivingTaskHandle);
-        }
-        m_logger.log(LogLevel::Debug, "Error within Spi driver ESP - RX");
         break;
     }
     if (m_inboundRequest && m_txState == transmitState::IDLE) {
@@ -201,28 +178,19 @@ void SpiEsp::execute() {
     case transmitState::SENDING_PAYLOAD:
         txLengthBytes = m_outboundMessage.m_sizeBytes;
         txBuffer = m_outboundMessage.m_data.data();
-        m_hasSentPayload = false;
         m_crcOK = false;
-        break;
-    case transmitState::ERROR:
-        m_crcOK = false;
-        EspSpi_WriteCS(true);
-        if (m_sendingTaskHandle != nullptr) {
-            xTaskNotifyGive(m_sendingTaskHandle);
-        }
-        m_txState = transmitState::SENDING_HEADER;
-        m_logger.log(LogLevel::Debug, "Error within Spi driver ESP - TX");
         break;
     }
 
-    if ((m_inboundRequest || m_outboundMessage.m_sizeBytes != 0 ||
-         m_inboundMessage.m_sizeBytes != 0) &&
-        m_txState != transmitState::ERROR && m_rxState != receiveState::ERROR) {
+    if (m_inboundRequest || m_outboundMessage.m_sizeBytes != 0 ||
+        m_inboundMessage.m_sizeBytes != 0) {
+
         EspSpi_WriteCS(false);
         uint32_t finalSize = std::max(txLengthBytes, rxLengthBytes);
         m_inboundMessage.m_data.fill(0);
         EspSpi_TransmitReceiveDma(txBuffer, m_inboundMessage.m_data.data(), finalSize,
                                   SpiEsp::espTxRxCallback, this);
+        ulTaskNotifyTake(pdTRUE, 20);
     }
 }
 
@@ -237,7 +205,7 @@ void SpiEsp::updateOutboundHeader() {
 void SpiEsp::espInterruptCallback(void* context) {
     auto* instance = static_cast<SpiEsp*>(context);
     // Interrupt is on both falling edge and rising edge.
-    instance->m_inboundRequest = EspSpi_ReadCS();
+    instance->m_inboundRequest = EspSpi_ReadUser0();
 }
 
 void SpiEsp::espTxRxCallback(void* context) {
@@ -255,16 +223,18 @@ void SpiEsp::espTxRxCallback(void* context) {
         // This should never be called. The state machine should never be in any other state during
         // the ISR.
         instance->m_logger.log(LogLevel::Error, "Interrupted called on invalid state");
-        instance->m_txState = transmitState::ERROR;
         break;
     }
-
+    BaseType_t yield;
     if (instance->m_txState == transmitState::SENDING_PAYLOAD) {
         instance->m_txState = transmitState::IDLE;
         instance->m_outboundMessage.m_sizeBytes = 0;
         instance->m_outboundMessage.m_payloadSize = 0;
         instance->m_hasSentPayload = true;
+        vTaskNotifyGiveFromISR(instance->m_sendingTaskHandle, &yield);
     }
+    vTaskNotifyGiveFromISR(instance->m_driverTaskHandle, &yield);
+    portYIELD_FROM_ISR(yield);
 }
 
 ConnectionType SpiEsp::getType() const { return ConnectionType::SPI; }

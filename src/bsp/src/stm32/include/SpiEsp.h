@@ -33,14 +33,13 @@ class SpiEsp : public ICommInterface {
     ICRC& m_crc;
     ILogger& m_logger;
 
-    enum class transmitState { IDLE, SENDING_HEADER, SENDING_PAYLOAD, ERROR } m_txState;
+    enum class transmitState { IDLE, SENDING_HEADER, SENDING_PAYLOAD } m_txState;
     enum class receiveState {
         IDLE,
         RECEIVING_HEADER,
         PARSING_HEADER,
         RECEIVING_PAYLOAD,
-        VALIDATE_CRC,
-        ERROR
+        VALIDATE_CRC
     } m_rxState;
 
     struct message {
@@ -51,7 +50,7 @@ class SpiEsp : public ICommInterface {
 
     std::array<uint8_t, 4 * ESP_SPI_MAX_MESSAGE_LENGTH> m_data;
     CircularBuff m_circularBuf;
-    TaskHandle_t m_receivingTaskHandle, m_sendingTaskHandle = nullptr;
+    TaskHandle_t m_receivingTaskHandle, m_sendingTaskHandle, m_driverTaskHandle = nullptr;
     EspHeader::Header m_outboundHeader;
     EspHeader::Header* m_inboundHeader;
 
