@@ -74,6 +74,12 @@ void EspSpi_WriteCS(bool state);
 bool EspSpi_ReadCS();
 
 /**
+ * Read the USER0 pin
+ * @return Status of the pin
+ */
+bool EspSpi_ReadUser0();
+
+/**
  * @brief Callback used when reception has finished. Calls the user callback provided in
  * espSpiTransmitDma()
  */

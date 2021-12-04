@@ -33,14 +33,13 @@ class SpiEsp : public ICommInterface {
     ICRC& m_crc;
     ILogger& m_logger;
 
-    enum class transmitState { IDLE, SENDING_HEADER, SENDING_PAYLOAD, ERROR } m_txState;
+    enum class transmitState { IDLE, SENDING_HEADER, SENDING_PAYLOAD } m_txState;
     enum class receiveState {
         IDLE,
         RECEIVING_HEADER,
         PARSING_HEADER,
         RECEIVING_PAYLOAD,
-        VALIDATE_CRC,
-        ERROR
+        VALIDATE_CRC
     } m_rxState;
 
     struct message {

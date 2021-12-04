@@ -508,7 +508,7 @@ int main(int argc, char** argv) {
     ApplicationInterfaceContainer::getConnectionStateUI().setConnectionState(
             ConnectionState::Booting);
 
-    /*__attribute__((section(".cmbss"))) static BittyBuzzTask s_bittybuzzTask(
+    __attribute__((section(".cmbss"))) static BittyBuzzTask s_bittybuzzTask(
         "bittybuzz", gc_taskNormalPriority, ApplicationInterfaceContainer::getDeviceStateUI(),
         ApplicationInterfaceContainer::getButton1CallbackRegister());
 
@@ -539,19 +539,15 @@ int main(int argc, char** argv) {
     static CommMonitoringTask<HiveMindHostAccumulatorSerializer> s_remoteMonitorTask(
         "remote_monitor", gc_taskNormalPriority, s_remoteDispatchTask, s_remoteMessageSender,
         ApplicationInterfaceContainer::getRemoteHandshakeUI(), BSPContainer::getRemoteCommInterface,
-        setRemoteConnectionState);*/
+        setRemoteConnectionState);
 
-    static Metrics s_metrics("metrics", gc_taskHighPriority, LoggerContainer::getLogger(),
-                             BSPContainer::getBSP());
-
-    /*s_bittybuzzTask.start();
+    s_bittybuzzTask.start();
     s_hardwareInterlocTask.start();
     s_interlocDataTask.start();
     s_interlocMessageTask.start();
     s_logInterlocTask.start();
     s_hostMonitorTask.start();
-    s_remoteMonitorTask.start();*/
-    s_metrics.start();
+    s_remoteMonitorTask.start();
     Task::startScheduler();
 
     return 0;
