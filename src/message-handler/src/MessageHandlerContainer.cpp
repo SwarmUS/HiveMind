@@ -1,16 +1,11 @@
 #include "MessageHandlerContainer.h"
 #include "GreetSender.h"
-#include "IGreetHandler.h"
-#include "Task.h"
 #include <ConditionVariable.h>
 #include <Mutex.h>
 #include <bsp/BSPContainer.h>
 #include <cpp-common/CircularQueueStack.h>
 #include <interloc/InterlocContainer.h>
 #include <logger/LoggerContainer.h>
-#include <pheromones/HiveMindHostAccumulatorSerializer.h>
-#include <pheromones/HiveMindHostDeserializer.h>
-#include <pheromones/HiveMindHostSerializer.h>
 
 constexpr uint16_t gc_queueMaxSize = 16;
 
