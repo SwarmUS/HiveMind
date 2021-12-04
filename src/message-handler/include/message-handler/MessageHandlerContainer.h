@@ -32,11 +32,6 @@ namespace MessageHandlerContainer {
         IHiveConnectHiveMindApiMessageHandler& hiveconnectApiMessageHandler,
         IGreetSender& greetSender);
 
-    MessageDispatcher& createHostDispatcher();
-    MessageDispatcher& createRemoteDispatcher();
-    IHiveMindHostSerializer& createHostSerializer();
-    IHiveMindHostSerializer& createRemoteSerializer();
-
     /**
      *@brief get the buzz message queue
      *@return A reference to the buzz message queue */

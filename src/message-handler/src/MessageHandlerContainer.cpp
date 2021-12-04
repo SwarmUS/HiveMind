@@ -37,53 +37,6 @@ MessageDispatcher MessageHandlerContainer::createMessageDispatcher(
                              LoggerContainer::getLogger());
 }
 
-MessageDispatcher& MessageHandlerContainer::createHostDispatcher() {
-    while (!BSPContainer::getHostCommInterface().has_value()) {
-        LoggerContainer::getLogger().log(LogLevel::Info, "Waiting on host interface");
-        Task::delay(300);
-    }
-    static HiveMindHostDeserializer s_hostDeserializer(
-        BSPContainer::getHostCommInterface().value());
-    static GreetSender s_hostGreeter(getHostMsgQueue(), BSPContainer::getBSP());
-    static HiveMindHostApiRequestHandler s_hmHandler(createHiveMindHostApiRequestHandler());
-    static HiveConnectHiveMindApiMessageHandler s_hcHandler(
-        createHiveConnectHiveMindApiMessageHandler());
-    static MessageDispatcher s_hostDispatcher(
-        createMessageDispatcher(s_hostDeserializer, s_hmHandler, s_hcHandler, s_hostGreeter));
-    return s_hostDispatcher;
-}
-MessageDispatcher& MessageHandlerContainer::createRemoteDispatcher() {
-    while (!BSPContainer::getRemoteCommInterface().has_value()) {
-        LoggerContainer::getLogger().log(LogLevel::Info, "Waiting on remote interface");
-        Task::delay(300);
-    }
-    static HiveMindHostDeserializer s_remoteDeserializer(
-        BSPContainer::getRemoteCommInterface().value());
-    static GreetSender s_remoteGreeter(getRemoteMsgQueue(), BSPContainer::getBSP());
-    static HiveMindHostApiRequestHandler s_hmHandler(createHiveMindHostApiRequestHandler());
-    static HiveConnectHiveMindApiMessageHandler s_hcHandler(
-        createHiveConnectHiveMindApiMessageHandler());
-    static MessageDispatcher s_remoteDispatcher(
-        createMessageDispatcher(s_remoteDeserializer, s_hmHandler, s_hcHandler, s_remoteGreeter));
-    return s_remoteDispatcher;
-}
-IHiveMindHostSerializer& MessageHandlerContainer::createHostSerializer() {
-    while (!BSPContainer::getHostCommInterface().has_value()) {
-        LoggerContainer::getLogger().log(LogLevel::Info, "Waiting on host interface");
-    }
-    static HiveMindHostAccumulatorSerializer s_hostSerializer(
-        BSPContainer::getHostCommInterface().value());
-    return s_hostSerializer;
-}
-IHiveMindHostSerializer& MessageHandlerContainer::createRemoteSerializer() {
-    while (!BSPContainer::getRemoteCommInterface().has_value()) {
-        LoggerContainer::getLogger().log(LogLevel::Info, "Waiting on remote interface");
-    }
-    static HiveMindHostAccumulatorSerializer s_remoteSerializer(
-        BSPContainer::getRemoteCommInterface().value());
-    return s_remoteSerializer;
-}
-
 ThreadSafeQueue<MessageDTO>& MessageHandlerContainer::getBuzzMsgQueue() {
     __attribute__((section(".cmbss"))) static Mutex s_mutex(10);
     __attribute__((section(".cmbss"))) static CircularQueueStack<MessageDTO, gc_queueMaxSize>
