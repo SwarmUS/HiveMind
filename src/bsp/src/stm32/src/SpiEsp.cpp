@@ -182,7 +182,8 @@ void SpiEsp::execute() {
         break;
     }
 
-    if (m_inboundRequest || m_outboundMessage.m_sizeBytes != 0 || m_inboundMessage.m_sizeBytes != 0) {
+    if (m_inboundRequest || m_outboundMessage.m_sizeBytes != 0 ||
+        m_inboundMessage.m_sizeBytes != 0) {
 
         EspSpi_WriteCS(false);
         uint32_t finalSize = std::max(txLengthBytes, rxLengthBytes);

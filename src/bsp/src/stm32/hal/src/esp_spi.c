@@ -71,7 +71,7 @@ void EspSpi_WriteCS(bool state) {
 
 bool EspSpi_ReadCS() { return HAL_GPIO_ReadPin(ESP_CS_GPIO_Port, ESP_CS_Pin) == GPIO_PIN_SET; }
 
-bool EspSpi_ReadUser0() { return HAL_GPIO_ReadPin(ESP_USER0_Port, ESP_USER0_Pin) == GPIO_PIN_SET;}
+bool EspSpi_ReadUser0() { return HAL_GPIO_ReadPin(ESP_USER0_Port, ESP_USER0_Pin) == GPIO_PIN_SET; }
 
 void EspSpi_RxCallback() {
     if (rxCpltCallbackFct != NULL && rxCallbackContext != NULL) {
