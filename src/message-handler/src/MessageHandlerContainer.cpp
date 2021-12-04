@@ -1,5 +1,5 @@
 #include "MessageHandlerContainer.h"
-#include "IGreetSender.h"
+#include "IGreetHandler.h"
 #include <ConditionVariable.h>
 #include <Mutex.h>
 #include <bsp/BSPContainer.h>
