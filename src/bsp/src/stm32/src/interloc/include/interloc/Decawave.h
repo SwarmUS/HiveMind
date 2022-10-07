@@ -10,6 +10,7 @@
 #include <functional>
 #include <memory>
 #include <task.h>
+#include <optional>
 // calibration constants
 #define DEFAULT_TX_ANT_DLY 16505U // 247ns
 #define DEFAULT_RX_ANT_DLY 16505U
